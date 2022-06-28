@@ -1,0 +1,12 @@
+*.so filter=lfs diff=lfs merge=lfs -text
+*.a filter=lfs diff=lfs merge=lfs -text
+*.lib filter=lfs diff=lfs merge=lfs -text
+*.dll filter=lfs diff=lfs merge=lfs -text
+*.framework filter=lfs diff=lfs merge=lfs -text
+*.vnnmodel filter=lfs diff=lfs merge=lfs -text
+*.so !text !filter !merge !diff
+*.a !text !filter !merge !diff
+*.lib !text !filter !merge !diff
+*.dll !text !filter !merge !diff
+*.framework !text !filter !merge !diff
+*.vnnmodel !text !filter !merge !diff
