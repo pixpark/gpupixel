@@ -1,1 +1,1 @@
-# GPUImageCpp
+# GPUPixel
