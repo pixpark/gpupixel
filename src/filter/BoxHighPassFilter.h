@@ -1,0 +1,37 @@
+/*
+ * GPUPixel
+ *
+ * Created by gezhaoyou on 2021/6/24.
+ * Copyright © 2021 PixPark. All rights reserved.
+ */
+
+#pragma once
+
+#include "GPUPixelDef.h"
+
+#include "BoxBlurFilter.h"
+#include "BoxDifferenceFilter.h"
+#include "FilterGroup.h"
+NS_GPUPIXEL_BEGIN
+
+class BoxHighPassFilter : public FilterGroup {
+ public:
+  static std::shared_ptr<BoxHighPassFilter> create();
+  ~BoxHighPassFilter();
+  bool init();
+
+  void setRadius(float radius);
+  void setDelta(float delta);
+
+  virtual void setInputFramebuffer(std::shared_ptr<Framebuffer> framebuffer,
+                                   RotationMode rotationMode /* = NoRotation*/,
+                                   int texIdx /* = 0*/) override;
+
+ protected:
+  BoxHighPassFilter();
+
+  std::shared_ptr<BoxBlurFilter> boxBlurFilter;
+  std::shared_ptr<BoxDifferenceFilter> boxDifferenceFilter;
+};
+
+NS_GPUPIXEL_END
