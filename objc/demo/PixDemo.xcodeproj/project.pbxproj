@@ -16,8 +16,6 @@
 		84307E9C261F2CDC003EAC98 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84307E9B261F2CDC003EAC98 /* Assets.xcassets */; };
 		84307E9F261F2CDC003EAC98 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84307E9D261F2CDC003EAC98 /* LaunchScreen.storyboard */; };
 		84307EA2261F2CDC003EAC98 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 84307EA1261F2CDC003EAC98 /* main.m */; };
-		84307EAC261F2CDC003EAC98 /* PixDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 84307EAB261F2CDC003EAC98 /* PixDemoTests.m */; };
-		84307EB7261F2CDC003EAC98 /* PixDemoUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 84307EB6261F2CDC003EAC98 /* PixDemoUITests.m */; };
 		843580EE276352260053E16A /* ImageFilterController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 843580EC276352260053E16A /* ImageFilterController.mm */; };
 		843580EF276352260053E16A /* ImageFilterController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 843580ED276352260053E16A /* ImageFilterController.xib */; };
 		847244A12A6034BB009D1488 /* VideoPreview.mm in Sources */ = {isa = PBXBuildFile; fileRef = 847244A02A6033AB009D1488 /* VideoPreview.mm */; };
@@ -29,20 +27,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		84307EA8261F2CDC003EAC98 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 84307E84261F2CD9003EAC98 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 84307E8B261F2CD9003EAC98;
-			remoteInfo = PixDemo;
-		};
-		84307EB3261F2CDC003EAC98 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 84307E84261F2CD9003EAC98 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 84307E8B261F2CD9003EAC98;
-			remoteInfo = PixDemo;
-		};
 		847244942A60321E009D1488 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8472448F2A60321E009D1488 /* GPUPixel.xcodeproj */;
@@ -95,12 +79,6 @@
 		84307E9E261F2CDC003EAC98 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		84307EA0261F2CDC003EAC98 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		84307EA1261F2CDC003EAC98 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		84307EA7261F2CDC003EAC98 /* PixDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PixDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		84307EAB261F2CDC003EAC98 /* PixDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PixDemoTests.m; sourceTree = "<group>"; };
-		84307EAD261F2CDC003EAC98 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		84307EB2261F2CDC003EAC98 /* PixDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PixDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		84307EB6261F2CDC003EAC98 /* PixDemoUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PixDemoUITests.m; sourceTree = "<group>"; };
-		84307EB8261F2CDC003EAC98 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		843580EB276352260053E16A /* ImageFilterController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageFilterController.h; sourceTree = "<group>"; };
 		843580EC276352260053E16A /* ImageFilterController.mm */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.cpp.objcpp; path = ImageFilterController.mm; sourceTree = "<group>"; tabWidth = 2; };
 		843580ED276352260053E16A /* ImageFilterController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ImageFilterController.xib; sourceTree = "<group>"; };
@@ -127,20 +105,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		84307EA4261F2CDC003EAC98 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		84307EAF261F2CDC003EAC98 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -149,8 +113,6 @@
 			children = (
 				8472448F2A60321E009D1488 /* GPUPixel.xcodeproj */,
 				84307E8E261F2CD9003EAC98 /* PixDemo */,
-				84307EAA261F2CDC003EAC98 /* PixDemoTests */,
-				84307EB5261F2CDC003EAC98 /* PixDemoUITests */,
 				84307E8D261F2CD9003EAC98 /* Products */,
 				84EEBF41261F2DC5000AD4AE /* Frameworks */,
 			);
@@ -160,8 +122,6 @@
 			isa = PBXGroup;
 			children = (
 				84307E8C261F2CD9003EAC98 /* PixDemo.app */,
-				84307EA7261F2CDC003EAC98 /* PixDemoTests.xctest */,
-				84307EB2261F2CDC003EAC98 /* PixDemoUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -184,24 +144,6 @@
 				84307EA1261F2CDC003EAC98 /* main.m */,
 			);
 			path = PixDemo;
-			sourceTree = "<group>";
-		};
-		84307EAA261F2CDC003EAC98 /* PixDemoTests */ = {
-			isa = PBXGroup;
-			children = (
-				84307EAB261F2CDC003EAC98 /* PixDemoTests.m */,
-				84307EAD261F2CDC003EAC98 /* Info.plist */,
-			);
-			path = PixDemoTests;
-			sourceTree = "<group>";
-		};
-		84307EB5261F2CDC003EAC98 /* PixDemoUITests */ = {
-			isa = PBXGroup;
-			children = (
-				84307EB6261F2CDC003EAC98 /* PixDemoUITests.m */,
-				84307EB8261F2CDC003EAC98 /* Info.plist */,
-			);
-			path = PixDemoUITests;
 			sourceTree = "<group>";
 		};
 		843580E72763485B0053E16A /* ImagerFilter */ = {
@@ -270,42 +212,6 @@
 			productReference = 84307E8C261F2CD9003EAC98 /* PixDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
-		84307EA6261F2CDC003EAC98 /* PixDemoTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 84307EBE261F2CDC003EAC98 /* Build configuration list for PBXNativeTarget "PixDemoTests" */;
-			buildPhases = (
-				84307EA3261F2CDC003EAC98 /* Sources */,
-				84307EA4261F2CDC003EAC98 /* Frameworks */,
-				84307EA5261F2CDC003EAC98 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				84307EA9261F2CDC003EAC98 /* PBXTargetDependency */,
-			);
-			name = PixDemoTests;
-			productName = PixDemoTests;
-			productReference = 84307EA7261F2CDC003EAC98 /* PixDemoTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		84307EB1261F2CDC003EAC98 /* PixDemoUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 84307EC1261F2CDC003EAC98 /* Build configuration list for PBXNativeTarget "PixDemoUITests" */;
-			buildPhases = (
-				84307EAE261F2CDC003EAC98 /* Sources */,
-				84307EAF261F2CDC003EAC98 /* Frameworks */,
-				84307EB0261F2CDC003EAC98 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				84307EB4261F2CDC003EAC98 /* PBXTargetDependency */,
-			);
-			name = PixDemoUITests;
-			productName = PixDemoUITests;
-			productReference = 84307EB2261F2CDC003EAC98 /* PixDemoUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -316,14 +222,6 @@
 				TargetAttributes = {
 					84307E8B261F2CD9003EAC98 = {
 						CreatedOnToolsVersion = 12.4;
-					};
-					84307EA6261F2CDC003EAC98 = {
-						CreatedOnToolsVersion = 12.4;
-						TestTargetID = 84307E8B261F2CD9003EAC98;
-					};
-					84307EB1261F2CDC003EAC98 = {
-						CreatedOnToolsVersion = 12.4;
-						TestTargetID = 84307E8B261F2CD9003EAC98;
 					};
 				};
 			};
@@ -347,8 +245,6 @@
 			projectRoot = "";
 			targets = (
 				84307E8B261F2CD9003EAC98 /* PixDemo */,
-				84307EA6261F2CDC003EAC98 /* PixDemoTests */,
-				84307EB1261F2CDC003EAC98 /* PixDemoUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -383,20 +279,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		84307EA5261F2CDC003EAC98 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		84307EB0261F2CDC003EAC98 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -415,35 +297,9 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		84307EA3261F2CDC003EAC98 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				84307EAC261F2CDC003EAC98 /* PixDemoTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		84307EAE261F2CDC003EAC98 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				84307EB7261F2CDC003EAC98 /* PixDemoUITests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		84307EA9261F2CDC003EAC98 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 84307E8B261F2CD9003EAC98 /* PixDemo */;
-			targetProxy = 84307EA8261F2CDC003EAC98 /* PBXContainerItemProxy */;
-		};
-		84307EB4261F2CDC003EAC98 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 84307E8B261F2CD9003EAC98 /* PixDemo */;
-			targetProxy = 84307EB3261F2CDC003EAC98 /* PBXContainerItemProxy */;
-		};
 		8472449A2A60324E009D1488 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = GPUPixel;
@@ -661,86 +517,6 @@
 			};
 			name = Release;
 		};
-		84307EBF261F2CDC003EAC98 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = QFCE3TAQXQ;
-				INFOPLIST_FILE = PixDemoTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.pixpark.demo;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PixDemo.app/PixDemo";
-			};
-			name = Debug;
-		};
-		84307EC0261F2CDC003EAC98 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = QFCE3TAQXQ;
-				INFOPLIST_FILE = PixDemoTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.pixpark.demo;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PixDemo.app/PixDemo";
-			};
-			name = Release;
-		};
-		84307EC2261F2CDC003EAC98 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = QFCE3TAQXQ;
-				INFOPLIST_FILE = PixDemoUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.pixpark.demo;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = PixDemo;
-			};
-			name = Debug;
-		};
-		84307EC3261F2CDC003EAC98 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = QFCE3TAQXQ;
-				INFOPLIST_FILE = PixDemoUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.pixpark.demo;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = PixDemo;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -758,24 +534,6 @@
 			buildConfigurations = (
 				84307EBC261F2CDC003EAC98 /* Debug */,
 				84307EBD261F2CDC003EAC98 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		84307EBE261F2CDC003EAC98 /* Build configuration list for PBXNativeTarget "PixDemoTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				84307EBF261F2CDC003EAC98 /* Debug */,
-				84307EC0261F2CDC003EAC98 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		84307EC1261F2CDC003EAC98 /* Build configuration list for PBXNativeTarget "PixDemoUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				84307EC2261F2CDC003EAC98 /* Debug */,
-				84307EC3261F2CDC003EAC98 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
