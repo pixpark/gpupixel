@@ -8,7 +8,6 @@
 #import "CameraFilterController.h"
 #import "VideoCapturer.h"
 #import "VideoPreview.h"
-#import "FaceDetector.h"
 
 @interface CameraFilterController () <VCVideoCapturerDelegate> {
     bool captureYuvFrame;
@@ -66,9 +65,7 @@
   [self.faceBeautyVideoView setFaceSlimLevel:self.faceSlimSlider.value];
   [self.faceBeautyVideoView setEyeZoomLevel:self.bigEyeSlider.value];
   // Do any additional setup after loading the view from its nib.
-  
-  [self setupFacepp];
-  
+ 
   // start camera capture
   [self.capturer startCapture];
 }
@@ -126,15 +123,7 @@
     CVPixelBufferUnlockBaseAddress(imageBuffer, 0);
   }
 }
-
-// setup face++ detect
-- (void)setupFacepp {
-  [FaceDetector shareInstance].sampleBufferOrientation = FaceDetectorSampleBufferOrientationNoRatation;
-  [FaceDetector shareInstance].faceOrientation = 0;
-  [FaceDetector shareInstance].sampleType = FaceDetectorSampleTypeCamera;
-  
-}
-
+ 
 -(void)onSwitchBtnPress {
   if(self.faceBeautyVideoView) {
     [self.faceBeautyVideoView switchBeautyFace:false];
