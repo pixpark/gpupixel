@@ -124,15 +124,15 @@
   }
 }
  
--(void)onSwitchBtnPress {
+-(void)onToggleBtnPress {
   if(self.faceBeautyVideoView) {
-    [self.faceBeautyVideoView switchBeautyFace:false];
+    [self.faceBeautyVideoView toggleBeautyFace:false];
   }
 }
 
--(void)onSwitchBtnUpInside {
+-(void)onToggleBtnUpInside {
   if(self.faceBeautyVideoView) {
-    [self.faceBeautyVideoView switchBeautyFace:true];
+    [self.faceBeautyVideoView toggleBeautyFace:true];
   }
 }
 
@@ -285,8 +285,8 @@
                                             30,
                                             25);
         [_effectToggleBtn setBackgroundImage:[UIImage imageNamed:@"ToggleBtnIcon"] forState:UIControlStateNormal];
-        [_effectToggleBtn addTarget: self action: @selector(onSwitchBtnPress) forControlEvents: UIControlEventTouchDown];
-        [_effectToggleBtn addTarget: self action: @selector(onSwitchBtnUpInside) forControlEvents: UIControlEventTouchUpInside] ;
+        [_effectToggleBtn addTarget: self action: @selector(onToggleBtnPress) forControlEvents: UIControlEventTouchDown];
+        [_effectToggleBtn addTarget: self action: @selector(onToggleBtnUpInside) forControlEvents: UIControlEventTouchUpInside] ;
     }
     return _effectToggleBtn;
 }
