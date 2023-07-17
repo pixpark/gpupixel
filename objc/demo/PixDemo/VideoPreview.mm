@@ -26,7 +26,7 @@ using namespace GPUPixel;
   if (![super initWithFrame:frame]) {
     return nil;
   }
-
+  [self setBackgroundColor:[UIColor blackColor]];
   GPUPixel::GPUPixelContext::getInstance()->runSync([&] {
     gpuPixelRawInput = SourceRawDataInput::create();
     gpuPixelView = [[GPUPixelView alloc] initWithFrame:frame];
