@@ -43,7 +43,7 @@ using namespace GPUPixel;
   return self;
 }
 
-- (void)switchBeautyFace:(bool)state {
+- (void)toggleBeautyFace:(bool)state {
   gpuPixelRawInput->removeAllTargets();
   beauty_face_filter_->removeAllTargets();
   if (state) {
