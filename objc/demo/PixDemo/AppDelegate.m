@@ -6,7 +6,7 @@
  */
 
 #import "AppDelegate.h"
-#import "FaceDetector.h"
+
 @interface AppDelegate ()
 
 @end
@@ -16,7 +16,6 @@
 @synthesize window = _window;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    [[FaceDetector shareInstance] auth];
     return YES;
 }
 

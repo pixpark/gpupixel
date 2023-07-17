@@ -24,10 +24,6 @@
 		847244A22A6034BF009D1488 /* VideoCapturer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8472449E2A603368009D1488 /* VideoCapturer.m */; };
 		847244A32A60F709009D1488 /* GPUPixel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 847244952A60321E009D1488 /* GPUPixel.framework */; };
 		847244A42A60F709009D1488 /* GPUPixel.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 847244952A60321E009D1488 /* GPUPixel.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		847C1DBA2914FBAA009D6198 /* libMGLicMgrSDK-0.3.1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 847C1DB92914FBAA009D6198 /* libMGLicMgrSDK-0.3.1.a */; };
-		847C1DBC2914FBB0009D6198 /* libMGFacepp-0.5.2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 847C1DBB2914FBB0009D6198 /* libMGFacepp-0.5.2.a */; };
-		847C1DBE2914FD07009D6198 /* Face++LicenseHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 847C1DBD2914FD07009D6198 /* Face++LicenseHandler.m */; };
-		8492E61E2A612DFF0035AA09 /* FaceDetector.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8492E61C2A612DFF0035AA09 /* FaceDetector.mm */; };
 		84C1D161266F5D69006D1AB4 /* CameraFilterController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84C1D15F266F5D69006D1AB4 /* CameraFilterController.mm */; };
 		84C1D162266F5D69006D1AB4 /* VideoFilterController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84C1D160266F5D69006D1AB4 /* VideoFilterController.xib */; };
 /* End PBXBuildFile section */
@@ -115,9 +111,6 @@
 		847244A02A6033AB009D1488 /* VideoPreview.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = VideoPreview.mm; sourceTree = "<group>"; };
 		847C1DB92914FBAA009D6198 /* libMGLicMgrSDK-0.3.1.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libMGLicMgrSDK-0.3.1.a"; path = "PixDemo/Face++/MegviiLicMgr-iOS-SDK/libMGLicMgrSDK-0.3.1.a"; sourceTree = "<group>"; };
 		847C1DBB2914FBB0009D6198 /* libMGFacepp-0.5.2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libMGFacepp-0.5.2.a"; path = "PixDemo/Face++/MGFaceppSDK/libMGFacepp-0.5.2.a"; sourceTree = "<group>"; };
-		847C1DBD2914FD07009D6198 /* Face++LicenseHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Face++LicenseHandler.m"; path = "Face++/Face++LicenseHandler.m"; sourceTree = "<group>"; };
-		8492E61C2A612DFF0035AA09 /* FaceDetector.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = FaceDetector.mm; path = "Face++/FaceDetector.mm"; sourceTree = "<group>"; };
-		8492E61D2A612DFF0035AA09 /* FaceDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FaceDetector.h; path = "Face++/FaceDetector.h"; sourceTree = "<group>"; };
 		84C1D15E266F5D69006D1AB4 /* CameraFilterController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CameraFilterController.h; sourceTree = "<group>"; };
 		84C1D15F266F5D69006D1AB4 /* CameraFilterController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CameraFilterController.mm; sourceTree = "<group>"; };
 		84C1D160266F5D69006D1AB4 /* VideoFilterController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VideoFilterController.xib; sourceTree = "<group>"; };
@@ -128,8 +121,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				847C1DBC2914FBB0009D6198 /* libMGFacepp-0.5.2.a in Frameworks */,
-				847C1DBA2914FBAA009D6198 /* libMGLicMgrSDK-0.3.1.a in Frameworks */,
 				847244A32A60F709009D1488 /* GPUPixel.framework in Frameworks */,
 				8417C43C267F5B470074DDEF /* CoreMedia.framework in Frameworks */,
 				8417C43A267F5AF10074DDEF /* AVFoundation.framework in Frameworks */,
@@ -178,9 +169,8 @@
 		84307E8E261F2CD9003EAC98 /* PixDemo */ = {
 			isa = PBXGroup;
 			children = (
-				8492E61B2A612DAA0035AA09 /* Face++ */,
 				843580E72763485B0053E16A /* ImagerFilter */,
-				84C1D15B266F5D0B006D1AB4 /* VideoFilter */,
+				84C1D15B266F5D0B006D1AB4 /* CameraFilter */,
 				84307E8F261F2CD9003EAC98 /* AppDelegate.h */,
 				84307E90261F2CD9003EAC98 /* AppDelegate.m */,
 				84307E92261F2CD9003EAC98 /* SceneDelegate.h */,
@@ -233,17 +223,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		8492E61B2A612DAA0035AA09 /* Face++ */ = {
-			isa = PBXGroup;
-			children = (
-				8492E61D2A612DFF0035AA09 /* FaceDetector.h */,
-				8492E61C2A612DFF0035AA09 /* FaceDetector.mm */,
-				847C1DBD2914FD07009D6198 /* Face++LicenseHandler.m */,
-			);
-			name = "Face++";
-			sourceTree = "<group>";
-		};
-		84C1D15B266F5D0B006D1AB4 /* VideoFilter */ = {
+		84C1D15B266F5D0B006D1AB4 /* CameraFilter */ = {
 			isa = PBXGroup;
 			children = (
 				8472449F2A6033AB009D1488 /* VideoPreview.h */,
@@ -254,7 +234,7 @@
 				84C1D15F266F5D69006D1AB4 /* CameraFilterController.mm */,
 				84C1D160266F5D69006D1AB4 /* VideoFilterController.xib */,
 			);
-			name = VideoFilter;
+			name = CameraFilter;
 			sourceTree = "<group>";
 		};
 		84EEBF41261F2DC5000AD4AE /* Frameworks */ = {
@@ -424,11 +404,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				847C1DBE2914FD07009D6198 /* Face++LicenseHandler.m in Sources */,
 				84307E97261F2CD9003EAC98 /* ViewController.mm in Sources */,
 				84307E91261F2CD9003EAC98 /* AppDelegate.m in Sources */,
 				84307EA2261F2CDC003EAC98 /* main.m in Sources */,
-				8492E61E2A612DFF0035AA09 /* FaceDetector.mm in Sources */,
 				84307E94261F2CD9003EAC98 /* SceneDelegate.m in Sources */,
 				843580EE276352260053E16A /* ImageFilterController.mm in Sources */,
 				84C1D161266F5D69006D1AB4 /* CameraFilterController.mm in Sources */,
