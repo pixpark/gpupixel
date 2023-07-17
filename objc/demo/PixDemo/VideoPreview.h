@@ -23,7 +23,7 @@
 #else
 @interface BeautyFaceVideoView : NSView
 #endif
-- (void)switchBeautyFace:(bool)state;
+- (void)toggleBeautyFace:(bool)state;
 
 - (void)renderRGBA:(int)width
         withHeight:(int)height
