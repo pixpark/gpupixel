@@ -31,9 +31,12 @@ using namespace GPUPixel;
     gpuPixelRawInput = SourceRawDataInput::create();
     gpuPixelView = [[GPUPixelView alloc] initWithFrame:frame];
     [self addSubview:gpuPixelView];
- 
+    
+    // create filter
     targetRawOutput_ = TargetRawDataOutput::create();
     beauty_face_filter_ = FaceBeautyFilter::create();
+    
+    // filter pipline
     gpuPixelRawInput->addTarget(beauty_face_filter_);
     beauty_face_filter_->addTarget(gpuPixelView);
   });
@@ -43,7 +46,6 @@ using namespace GPUPixel;
 - (void)switchBeautyFace:(bool)state {
   gpuPixelRawInput->removeAllTargets();
   beauty_face_filter_->removeAllTargets();
-  face_reshape_filter_->removeAllTargets();
   if (state) {
       gpuPixelRawInput->addTarget(beauty_face_filter_);
       beauty_face_filter_->addTarget(gpuPixelView);

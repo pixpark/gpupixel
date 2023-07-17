@@ -284,7 +284,7 @@
                                             self.view.bounds.size.height - 270,
                                             30,
                                             25);
-        [_effectToggleBtn setBackgroundImage:[UIImage imageNamed:@"switch.png"] forState:UIControlStateNormal];
+        [_effectToggleBtn setBackgroundImage:[UIImage imageNamed:@"ToggleBtnIcon"] forState:UIControlStateNormal];
         [_effectToggleBtn addTarget: self action: @selector(onSwitchBtnPress) forControlEvents: UIControlEventTouchDown];
         [_effectToggleBtn addTarget: self action: @selector(onSwitchBtnUpInside) forControlEvents: UIControlEventTouchUpInside] ;
     }
