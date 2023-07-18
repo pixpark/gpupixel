@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  美颜
-
+ 
  @param beautyType 美颜类型，详情见PanelFiltersContants.h
  @param value 美颜参数
  */
@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  选中一键美颜功能的后，取消美颜选中状态
-
+ 
  @param type 选中的美颜类型
  */
 - (void)cancelSelectedBeautyType:(NSInteger)type;

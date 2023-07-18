@@ -35,7 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong) CameraFilterController* mRender;
 /**
  控制美颜菜单显示
-
+ 
  @param show YES表示显示，NO表示隐藏
  */
 - (void)showMenuView:(BOOL)show;
