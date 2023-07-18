@@ -2,7 +2,7 @@ GPUPixel@[PixPark](https://github.com/pixpark)
 
 [ENGLISH]() | [中文]()
 
-## Overview ##
+## Intro ##
 
 GPUPixel is a C++ version GPUImage Framework, which is an open-source project designed for performing GPU-accelerated image and video processing on Mac, iOS, and Android platforms.
 
