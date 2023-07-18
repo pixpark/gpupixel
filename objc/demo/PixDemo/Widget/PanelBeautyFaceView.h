@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  选中一键美颜功能的后，取消美型选中状态
-
+ 
  @param type 选中的美型类型
  */
 - (void)cancelSelectedFaceType:(NSInteger)type;

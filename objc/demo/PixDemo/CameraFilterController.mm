@@ -12,7 +12,7 @@
 #import "PanelBeautyParams.h"
 
 @interface CameraFilterController () <VCVideoCapturerDelegate, FilterMenuPanelDelegate> {
-    bool captureYuvFrame;
+  bool captureYuvFrame;
 }
 
 @property (strong, nonatomic) VideoPreview * faceBeautyVideoView;
@@ -45,7 +45,7 @@
   captureYuvFrame = false;
   self.faceBeautyVideoView = [[VideoPreview alloc] initWithFrame:self.view.bounds];
   [self.view addSubview:self.faceBeautyVideoView];
-
+  
   [self.view addSubview:self.effectToggleBtn];
   // start camera capture
   [self.capturer startCapture];
@@ -60,7 +60,7 @@
 }
 
 - (void) touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    [_menusView showMenuView:YES];
+  [_menusView showMenuView:YES];
 }
 
 #pragma mark - 属性赋值
@@ -85,7 +85,7 @@
   _eyeValue = eyeValue;
   [self.faceBeautyVideoView setEyeZoomLevel:eyeValue];
 }
- 
+
 // camera frame callback
 - (void)videoCaptureOutputDataCallback:(CMSampleBufferRef)sampleBuffer {
   if(captureYuvFrame) {
@@ -133,7 +133,7 @@
     CVPixelBufferUnlockBaseAddress(imageBuffer, 0);
   }
 }
- 
+
 -(void)onToggleBtnPress {
   if(self.faceBeautyVideoView) {
     [self.faceBeautyVideoView toggleBeautyFace:false];
@@ -166,36 +166,36 @@
   
   return _capturer;
 }
- 
+
 -(UIButton*)effectToggleBtn {
-    if(_effectToggleBtn == nil) {
-        _effectToggleBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-        _effectToggleBtn.frame = CGRectMake(self.view.bounds.size.width - 50,
-                                            self.view.bounds.size.height - 318,
-                                            26,
-                                            24);
-        [_effectToggleBtn setBackgroundImage:[UIImage imageNamed:@"ToggleBtnIcon"] forState:UIControlStateNormal];
-        [_effectToggleBtn addTarget: self action: @selector(onToggleBtnPress) forControlEvents: UIControlEventTouchDown];
-        [_effectToggleBtn addTarget: self action: @selector(onToggleBtnUpInside) forControlEvents: UIControlEventTouchUpInside] ;
-    }
-    return _effectToggleBtn;
+  if(_effectToggleBtn == nil) {
+    _effectToggleBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+    _effectToggleBtn.frame = CGRectMake(self.view.bounds.size.width - 50,
+                                        self.view.bounds.size.height - 318,
+                                        26,
+                                        24);
+    [_effectToggleBtn setBackgroundImage:[UIImage imageNamed:@"ToggleBtnIcon"] forState:UIControlStateNormal];
+    [_effectToggleBtn addTarget: self action: @selector(onToggleBtnPress) forControlEvents: UIControlEventTouchDown];
+    [_effectToggleBtn addTarget: self action: @selector(onToggleBtnUpInside) forControlEvents: UIControlEventTouchUpInside] ;
+  }
+  return _effectToggleBtn;
 }
 
 - (PanelMenuView *)menusView {
   if (!_menusView) {
-      _menusView = [[PanelMenuView alloc] initWithFrame:CGRectMake(0,
-                                                                       window_height - PanelMeiyanMenuHeight - BottomIndicatorHeight,
-                                                                       window_width,
-                                                                       PanelMeiyanMenuHeight)
-                                                  superView:self.view
-                                                   delegate:self  viewController:self];
-
-    }
-    return _menusView;
+    _menusView = [[PanelMenuView alloc] initWithFrame:CGRectMake(0,
+                                                                 window_height - PanelMeiyanMenuHeight - BottomIndicatorHeight,
+                                                                 window_width,
+                                                                 PanelMeiyanMenuHeight)
+                                            superView:self.view
+                                             delegate:self  viewController:self];
+    
+  }
+  return _menusView;
 }
 
 - (void)cameraAction {
-    
+  
 }
 
 - (void)recordAction {
