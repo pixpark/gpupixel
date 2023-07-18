@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol PanelBeautyAssembleViewDelegate <NSObject>
 @required
 /**
-
+ 
  美颜-腾讯直播SDK专用
  @param beauty 磨皮 0-9，数值越大，效果越明显
  @param white 美白 0-9，数值越大，效果越明显
@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  一键美颜
-
+ 
  @param model 一键美颜模型
  */
 - (void)handleQuickBeautyValue:(PannelBeautiesModel*)model;
@@ -40,7 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  美型
-
+ 
  @param type 美型类型
  @param value 数值
  */
@@ -48,7 +48,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  滤镜
-
+ 
  @param filter 滤镜
  */
 - (void)handleFiltersEffectWithType:(NSInteger)filter

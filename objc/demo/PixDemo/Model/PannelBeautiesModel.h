@@ -17,7 +17,7 @@ typedef NS_ENUM(NSInteger, PanelBeautyMenuType) {
   PanelBeautyMenuType_Specify,          // 特效
   PanelBeautyMenuType_Magnify,          // 哈哈镜
   PanelBeautyMenuType_Watermark,        // 水印
-
+  
 };
 @interface PannelBeautiesModel : NSObject
 @property(nonatomic, copy) NSString* imgName;
