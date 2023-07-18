@@ -71,11 +71,11 @@ using namespace GPUPixel;
 }
 
 - (void)setFaceSmoothLevel:(float)level {
-  beauty_face_filter_->setBlurAlpha(level / 10);  //[0.0, 1.0]
+  beauty_face_filter_->setBlurAlpha(level);  //[0.0, 1.0]
 }
 
 - (void)setWhitenLevel:(float)level {
-  beauty_face_filter_->setWhite(level / 30);  // [0.0, 0.01]
+  beauty_face_filter_->setWhite(level /3);  // [0.0, 0.01]
 }
 
 
