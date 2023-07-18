@@ -41,8 +41,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setTitle:(NSString*)title atIndex:(NSUInteger)index;
 - (void)setImage:(UIImage*)image atIndex:(NSUInteger)index;
 - (void)setImage:(UIImage*)image
-    selectedImage:(nullable UIImage*)selectedImage
-          atIndex:(NSUInteger)index;
+   selectedImage:(nullable UIImage*)selectedImage
+         atIndex:(NSUInteger)index;
 
 - (void)insertTitle:(NSString*)title atIndex:(NSUInteger)index;
 - (void)removeTitleAtIndex:(NSUInteger)index;
@@ -83,14 +83,14 @@ NS_ASSUME_NONNULL_BEGIN
  `NO`.
  */
 @property(nonatomic, assign, getter=isShowsItemSeparator)
-    BOOL showsItemSeparator;
+BOOL showsItemSeparator;
 
 /**
  A Boolean value that controls whether the bottom separator is visible. Default
  is `NO`.
  */
 @property(nonatomic, assign, getter=isShowsBottomSeparator)
-    BOOL showsBottomSeparator;
+BOOL showsBottomSeparator;
 
 /**
  A Boolean value that controls whether the bottom shadow is visible. Default is
@@ -103,7 +103,7 @@ NS_ASSUME_NONNULL_BEGIN
  segment. Default is `NO`.
  */
 @property(nonatomic, assign, getter=isShowsVerticalDivider)
-    BOOL showsVerticalDivider;
+BOOL showsVerticalDivider;
 
 /**
  A Boolean value that controls whether the indicator is visible. Default is
@@ -115,7 +115,7 @@ NS_ASSUME_NONNULL_BEGIN
  The width style of indicator. Default is full.
  */
 @property(nonatomic, assign)
-    WNSegmentedControlIndicatorWidthStyle indicatorWidthStyle;
+WNSegmentedControlIndicatorWidthStyle indicatorWidthStyle;
 
 /**
  * Default is YES. Set to NO to disable animation during user selection.
