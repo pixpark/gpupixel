@@ -139,7 +139,7 @@
 -(VideoCapturer*)capturer {
   if(_capturer == nil) {
     VCVideoCapturerParam *param = [[VCVideoCapturerParam alloc] init];
-    param.frameRate = 15;
+    param.frameRate = 30;
     
     param.sessionPreset = AVCaptureSessionPreset1280x720;
     if(captureYuvFrame) {

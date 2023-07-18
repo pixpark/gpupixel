@@ -217,10 +217,8 @@
   return error;
 }
 
-/** 抓图 block返回UIImage */
 #if TARGET_OS_IPHONE
 - (void)imageCapture:(void (^)(UIImage *image))completion {
-  // 根据连接取得设备输出的数据
   [self.captureStillImageOutput
       captureStillImageAsynchronouslyFromConnection:self.captureConnection
                                   completionHandler:^(CMSampleBufferRef imageDataSampleBuffer,
