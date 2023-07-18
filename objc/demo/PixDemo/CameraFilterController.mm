@@ -8,14 +8,17 @@
 #import "CameraFilterController.h"
 #import "VideoCapturer.h"
 #import "VideoPreview.h"
+#import "PanelMenuView.h"
+#import "PanelBeautyParams.h"
 
-@interface CameraFilterController () <VCVideoCapturerDelegate> {
+@interface CameraFilterController () <VCVideoCapturerDelegate, FilterMenuPanelDelegate> {
     bool captureYuvFrame;
 }
 
 @property (strong, nonatomic) VideoPreview * faceBeautyVideoView;
 @property (strong, nonatomic) VideoCapturer* capturer;
-
+//
+@property (nonatomic, strong) PanelMenuView *menusView;
 // Slider
 @property (strong, nonatomic) UISlider* faceSmoothSlider;
 @property (strong, nonatomic) UISlider* skinWhitenSlider;
@@ -36,38 +39,18 @@
 - (void)viewDidLoad {
   [super viewDidLoad];
   [self.view setBackgroundColor:UIColor.whiteColor];
-  captureYuvFrame = false;
+  // screen always light
+  [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
   
+  captureYuvFrame = false;
   self.faceBeautyVideoView = [[VideoPreview alloc] initWithFrame:self.view.bounds];
   [self.view addSubview:self.faceBeautyVideoView];
-  // slider
-  self.faceSmoothSlider.value = 0.0f;
-  self.skinWhitenSlider.value = 0.0f;
-  self.faceSlimSlider.value = 0.0f;
-  self.bigEyeSlider.value = 0.0f;
-  [self.view addSubview:self.faceSmoothSlider];
-  [self.view addSubview:self.skinWhitenSlider];
-  [self.view addSubview:self.faceSlimSlider];
-  [self.view addSubview:self.bigEyeSlider];
-  
-  // Label
-  [self.view addSubview:self.faceSmoothLabel];
-  [self.view addSubview:self.skinWhitenLabel];
-  [self.view addSubview:self.faceSlimLabel];
-  [self.view addSubview:self.bigEyeLabel];
-  
-  // toggle button
+
   [self.view addSubview:self.effectToggleBtn];
-  
-  
-  [self.faceBeautyVideoView setFaceSmoothLevel:self.faceSmoothSlider.value];
-  [self.faceBeautyVideoView setWhitenLevel:self.skinWhitenSlider.value];
-  [self.faceBeautyVideoView setFaceSlimLevel:self.faceSlimSlider.value];
-  [self.faceBeautyVideoView setEyeZoomLevel:self.bigEyeSlider.value];
-  // Do any additional setup after loading the view from its nib.
- 
   // start camera capture
   [self.capturer startCapture];
+  
+  [self.menusView showMenuView:YES];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -76,6 +59,33 @@
   [super viewWillDisappear:animated];
 }
 
+- (void) touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [_menusView showMenuView:YES];
+}
+
+#pragma mark - 属性赋值
+- (void)setBeautyValue:(CGFloat)beautyValue{
+  _beautyValue = beautyValue;
+  [self.faceBeautyVideoView setFaceSmoothLevel:beautyValue];
+}
+- (void)setWhithValue:(CGFloat)whithValue{
+  _whithValue = whithValue;
+  [self.faceBeautyVideoView setWhitenLevel:whithValue];
+}
+- (void)setSaturationValue:(CGFloat)saturationValue{
+  _saturationValue = saturationValue;
+}
+
+- (void)setThinFaceValue:(CGFloat)thinFaceValue{
+  _thinFaceValue = thinFaceValue;
+  [self.faceBeautyVideoView setFaceSlimLevel:thinFaceValue];
+}
+
+- (void)setEyeValue:(CGFloat)eyeValue{
+  _eyeValue = eyeValue;
+  [self.faceBeautyVideoView setEyeZoomLevel:eyeValue];
+}
+ 
 // camera frame callback
 - (void)videoCaptureOutputDataCallback:(CMSampleBufferRef)sampleBuffer {
   if(captureYuvFrame) {
@@ -156,138 +166,84 @@
   
   return _capturer;
 }
-
--(UISlider*)faceSmoothSlider {
-  if(_faceSmoothSlider == nil) {
-    _faceSmoothSlider = [[UISlider alloc] initWithFrame:CGRectMake(80.0,
-                                                                   self.view.bounds.size.height - 250,
-                                                                   self.view.bounds.size.width - 60.0 * 2,
-                                                                   60.0)];
-    _faceSmoothSlider.minimumValue = .0;
-    _faceSmoothSlider.maximumValue = 10.0;
-    
-    [_faceSmoothSlider addTarget:self action:@selector(sliderValueDidChanged:) forControlEvents:UIControlEventValueChanged];
-  }
-  
-  return _faceSmoothSlider;
-}
-
--(UISlider*)skinWhitenSlider {
-  if(_skinWhitenSlider == nil) {
-    _skinWhitenSlider = [[UISlider alloc] initWithFrame:CGRectMake(80.0,
-                                                                   self.view.bounds.size.height - 200,
-                                                                   self.view.bounds.size.width - 60.0 * 2,
-                                                                   60.0)];
-    _skinWhitenSlider.minimumValue = .0;
-    _skinWhitenSlider.maximumValue = 10.0;
-    
-    [_skinWhitenSlider addTarget:self action:@selector(sliderValueDidChanged:) forControlEvents:UIControlEventValueChanged];
-  }
-  
-  return _skinWhitenSlider;
-}
-
--(UISlider*)faceSlimSlider {
-  if(_faceSlimSlider == nil) {
-    _faceSlimSlider = [[UISlider alloc] initWithFrame:CGRectMake(80.0,
-                                                                 self.view.bounds.size.height - 150,
-                                                                 self.view.bounds.size.width - 60.0 * 2,
-                                                                 60.0)];
-    _faceSlimSlider.minimumValue = .0;
-    _faceSlimSlider.maximumValue = 10.0;
-    _faceSlimSlider.enabled = false;
-    
-    [_faceSlimSlider addTarget:self action:@selector(sliderValueDidChanged:) forControlEvents:UIControlEventValueChanged];
-  }
-  
-  return _faceSlimSlider;
-}
-
--(UISlider*)bigEyeSlider {
-  if(_bigEyeSlider == nil) {
-    _bigEyeSlider = [[UISlider alloc] initWithFrame:CGRectMake(80.0,
-                                                               self.view.bounds.size.height - 100,
-                                                               self.view.bounds.size.width - 60.0 * 2,
-                                                               60.0)];
-    _bigEyeSlider.minimumValue = .0;
-    _bigEyeSlider.maximumValue = 10.0;
-    _bigEyeSlider.enabled = false;
-    [_bigEyeSlider addTarget:self action:@selector(sliderValueDidChanged:) forControlEvents:UIControlEventValueChanged];
-  }
-  
-  return _bigEyeSlider;
-}
-
-- (void)sliderValueDidChanged:(UISlider *)slider {
-  if(slider == self.faceSmoothSlider) {
-    [self.faceBeautyVideoView setFaceSmoothLevel:slider.value];
-  } else if(slider == self.skinWhitenSlider) {
-    [self.faceBeautyVideoView setWhitenLevel:slider.value];
-  } else if(slider == self.faceSlimSlider) {
-    [self.faceBeautyVideoView setFaceSlimLevel:slider.value];
-  } else if(slider == self.bigEyeSlider) {
-    [self.faceBeautyVideoView setEyeZoomLevel:slider.value];
-  }
-}
-
--(UILabel*) faceSmoothLabel {
-  if(_faceSmoothLabel == nil) {
-    _faceSmoothLabel = [[UILabel alloc] initWithFrame:CGRectMake(35.0,
-                                                                 self.view.bounds.size.height - 250,
-                                                                 40,
-                                                                 60.0)];
-    _faceSmoothLabel.text = @"磨皮";
-    _faceSmoothLabel.textColor = [UIColor whiteColor];
-  }
-  return _faceSmoothLabel;
-}
-
--(UILabel*) skinWhitenLabel {
-  if(_skinWhitenLabel == nil) {
-    _skinWhitenLabel = [[UILabel alloc] initWithFrame:CGRectMake(35.0,
-                                                                 self.view.bounds.size.height - 200,
-                                                                 40,
-                                                                 60.0)];
-    _skinWhitenLabel.text = @"美白";
-    _skinWhitenLabel.textColor = [UIColor whiteColor];
-  }
-  return _skinWhitenLabel;
-}
--(UILabel*) faceSlimLabel {
-  if(_faceSlimLabel == nil) {
-    _faceSlimLabel = [[UILabel alloc] initWithFrame:CGRectMake(35.0,
-                                                               self.view.bounds.size.height - 150,
-                                                               40,
-                                                               60.0)];
-    _faceSlimLabel.text = @"瘦脸";
-    _faceSlimLabel.textColor = [UIColor whiteColor];
-  }
-  return _faceSlimLabel;
-}
-
--(UILabel*) bigEyeLabel {
-  if(_bigEyeLabel == nil) {
-    _bigEyeLabel = [[UILabel alloc] initWithFrame:CGRectMake(35.0,
-                                                             self.view.bounds.size.height - 100,
-                                                             40,
-                                                             60.0)];
-    _bigEyeLabel.text = @"大眼";
-    _bigEyeLabel.textColor = [UIColor whiteColor];
-  }
-  return _bigEyeLabel;
-}
  
--(UIButton*) effectToggleBtn {
+-(UIButton*)effectToggleBtn {
     if(_effectToggleBtn == nil) {
         _effectToggleBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-        _effectToggleBtn.frame = CGRectMake(self.view.bounds.size.width - 60,
-                                            self.view.bounds.size.height - 270,
-                                            30,
-                                            25);
+        _effectToggleBtn.frame = CGRectMake(self.view.bounds.size.width - 50,
+                                            self.view.bounds.size.height - 318,
+                                            26,
+                                            24);
         [_effectToggleBtn setBackgroundImage:[UIImage imageNamed:@"ToggleBtnIcon"] forState:UIControlStateNormal];
         [_effectToggleBtn addTarget: self action: @selector(onToggleBtnPress) forControlEvents: UIControlEventTouchDown];
         [_effectToggleBtn addTarget: self action: @selector(onToggleBtnUpInside) forControlEvents: UIControlEventTouchUpInside] ;
     }
     return _effectToggleBtn;
 }
+
+- (PanelMenuView *)menusView {
+  if (!_menusView) {
+      _menusView = [[PanelMenuView alloc] initWithFrame:CGRectMake(0,
+                                                                       window_height - PanelMeiyanMenuHeight - BottomIndicatorHeight,
+                                                                       window_width,
+                                                                       PanelMeiyanMenuHeight)
+                                                  superView:self.view
+                                                   delegate:self  viewController:self];
+
+    }
+    return _menusView;
+}
+
+- (void)cameraAction {
+    
+}
+
+- (void)recordAction {
+  
+}
+
+- (void)encodeWithCoder:(nonnull NSCoder *)coder {
+  
+}
+
+- (void)traitCollectionDidChange:(nullable UITraitCollection *)previousTraitCollection {
+  
+}
+
+- (void)preferredContentSizeDidChangeForChildContentContainer:(nonnull id<UIContentContainer>)container {
+  
+}
+
+- (CGSize)sizeForChildContentContainer:(nonnull id<UIContentContainer>)container withParentContainerSize:(CGSize)parentSize {
+  return CGSizeZero;
+}
+
+- (void)systemLayoutFittingSizeDidChangeForChildContentContainer:(nonnull id<UIContentContainer>)container {
+  
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(nonnull id<UIViewControllerTransitionCoordinator>)coordinator {
+  
+}
+
+- (void)willTransitionToTraitCollection:(nonnull UITraitCollection *)newCollection withTransitionCoordinator:(nonnull id<UIViewControllerTransitionCoordinator>)coordinator {
+  
+}
+
+- (void)didUpdateFocusInContext:(nonnull UIFocusUpdateContext *)context withAnimationCoordinator:(nonnull UIFocusAnimationCoordinator *)coordinator {
+  
+}
+
+- (void)setNeedsFocusUpdate {
+  
+}
+
+- (BOOL)shouldUpdateFocusInContext:(nonnull UIFocusUpdateContext *)context {
+  return NO;
+}
+
+- (void)updateFocusIfNeeded {
+  
+}
+
 @end

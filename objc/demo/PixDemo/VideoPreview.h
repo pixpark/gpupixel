@@ -37,7 +37,6 @@
          withWidth:(int)width
         withHeight:(int)height;
 
-
 - (void)setFaceSmoothLevel:(float)level;
 - (void)setWhitenLevel:(float)level;
 - (void)setFaceSlimLevel:(float)level;

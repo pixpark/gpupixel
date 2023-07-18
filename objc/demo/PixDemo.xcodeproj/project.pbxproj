@@ -7,6 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		840D23C42A6682FA00B59ABD /* PanelBeautySlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 840D23C12A6682FA00B59ABD /* PanelBeautySlider.m */; };
+		840D23C52A6682FA00B59ABD /* PanelBeautyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 840D23C32A6682FA00B59ABD /* PanelBeautyView.m */; };
+		840D23C92A66830D00B59ABD /* PannelBeautiesModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 840D23C62A66830D00B59ABD /* PannelBeautiesModel.m */; };
+		840D23CC2A66839C00B59ABD /* PannelBeautyMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 840D23CB2A66839C00B59ABD /* PannelBeautyMenuCell.m */; };
+		840D23CF2A66848500B59ABD /* PanelBeautyAssembleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 840D23CE2A66848500B59ABD /* PanelBeautyAssembleView.m */; };
+		840D23D82A66852F00B59ABD /* PanelFiltersView.m in Sources */ = {isa = PBXBuildFile; fileRef = 840D23D12A66852F00B59ABD /* PanelFiltersView.m */; };
+		840D23D92A66852F00B59ABD /* PanelSegmentControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 840D23D32A66852F00B59ABD /* PanelSegmentControl.m */; };
+		840D23DA2A66852F00B59ABD /* PanelBottomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 840D23D42A66852F00B59ABD /* PanelBottomView.m */; };
+		840D23DB2A66852F00B59ABD /* PanelBeautyFaceView.m in Sources */ = {isa = PBXBuildFile; fileRef = 840D23D62A66852F00B59ABD /* PanelBeautyFaceView.m */; };
+		840D23DE2A66855100B59ABD /* PanelSegmentItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 840D23DC2A66855100B59ABD /* PanelSegmentItem.m */; };
+		840D23E12A6685E000B59ABD /* PanelMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = 840D23E02A6685E000B59ABD /* PanelMenuView.m */; };
+		840D23ED2A668C0D00B59ABD /* PIXEL.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 840D23EC2A668C0D00B59ABD /* PIXEL.bundle */; };
 		8417C43A267F5AF10074DDEF /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8417C437267F5AF10074DDEF /* AVFoundation.framework */; };
 		8417C43C267F5B470074DDEF /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8417C43B267F5B470074DDEF /* CoreMedia.framework */; };
 		84307E91261F2CD9003EAC98 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 84307E90261F2CD9003EAC98 /* AppDelegate.m */; };
@@ -65,6 +77,30 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		840D23C02A6682FA00B59ABD /* PanelBeautySlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PanelBeautySlider.h; path = Widget/PanelBeautySlider.h; sourceTree = "<group>"; };
+		840D23C12A6682FA00B59ABD /* PanelBeautySlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PanelBeautySlider.m; path = Widget/PanelBeautySlider.m; sourceTree = "<group>"; };
+		840D23C22A6682FA00B59ABD /* PanelBeautyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PanelBeautyView.h; path = Widget/PanelBeautyView.h; sourceTree = "<group>"; };
+		840D23C32A6682FA00B59ABD /* PanelBeautyView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PanelBeautyView.m; path = Widget/PanelBeautyView.m; sourceTree = "<group>"; };
+		840D23C62A66830D00B59ABD /* PannelBeautiesModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PannelBeautiesModel.m; path = Model/PannelBeautiesModel.m; sourceTree = "<group>"; };
+		840D23C72A66830D00B59ABD /* PanelBeautyParams.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PanelBeautyParams.h; path = Model/PanelBeautyParams.h; sourceTree = "<group>"; };
+		840D23C82A66830D00B59ABD /* PannelBeautiesModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PannelBeautiesModel.h; path = Model/PannelBeautiesModel.h; sourceTree = "<group>"; };
+		840D23CA2A66839C00B59ABD /* PannelBeautyMenuCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PannelBeautyMenuCell.h; path = Widget/PannelBeautyMenuCell.h; sourceTree = "<group>"; };
+		840D23CB2A66839C00B59ABD /* PannelBeautyMenuCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PannelBeautyMenuCell.m; path = Widget/PannelBeautyMenuCell.m; sourceTree = "<group>"; };
+		840D23CD2A66848500B59ABD /* PanelBeautyAssembleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PanelBeautyAssembleView.h; path = Widget/PanelBeautyAssembleView.h; sourceTree = "<group>"; };
+		840D23CE2A66848500B59ABD /* PanelBeautyAssembleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PanelBeautyAssembleView.m; path = Widget/PanelBeautyAssembleView.m; sourceTree = "<group>"; };
+		840D23D02A66852F00B59ABD /* PanelBottomView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PanelBottomView.h; path = Widget/PanelBottomView.h; sourceTree = "<group>"; };
+		840D23D12A66852F00B59ABD /* PanelFiltersView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PanelFiltersView.m; path = Widget/PanelFiltersView.m; sourceTree = "<group>"; };
+		840D23D22A66852F00B59ABD /* PanelSegmentControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PanelSegmentControl.h; path = Widget/PanelSegmentControl.h; sourceTree = "<group>"; };
+		840D23D32A66852F00B59ABD /* PanelSegmentControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PanelSegmentControl.m; path = Widget/PanelSegmentControl.m; sourceTree = "<group>"; };
+		840D23D42A66852F00B59ABD /* PanelBottomView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PanelBottomView.m; path = Widget/PanelBottomView.m; sourceTree = "<group>"; };
+		840D23D52A66852F00B59ABD /* PanelBeautyFaceView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PanelBeautyFaceView.h; path = Widget/PanelBeautyFaceView.h; sourceTree = "<group>"; };
+		840D23D62A66852F00B59ABD /* PanelBeautyFaceView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PanelBeautyFaceView.m; path = Widget/PanelBeautyFaceView.m; sourceTree = "<group>"; };
+		840D23D72A66852F00B59ABD /* PanelFiltersView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PanelFiltersView.h; path = Widget/PanelFiltersView.h; sourceTree = "<group>"; };
+		840D23DC2A66855100B59ABD /* PanelSegmentItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PanelSegmentItem.m; path = Widget/PanelSegmentItem.m; sourceTree = "<group>"; };
+		840D23DD2A66855100B59ABD /* PanelSegmentItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PanelSegmentItem.h; path = Widget/PanelSegmentItem.h; sourceTree = "<group>"; };
+		840D23DF2A6685E000B59ABD /* PanelMenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PanelMenuView.h; path = Widget/PanelMenuView.h; sourceTree = "<group>"; };
+		840D23E02A6685E000B59ABD /* PanelMenuView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PanelMenuView.m; path = Widget/PanelMenuView.m; sourceTree = "<group>"; };
+		840D23EC2A668C0D00B59ABD /* PIXEL.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = PIXEL.bundle; sourceTree = "<group>"; };
 		8417C437267F5AF10074DDEF /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		8417C43B267F5B470074DDEF /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		84307E8C261F2CD9003EAC98 /* PixDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PixDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -108,6 +144,36 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		840D23BE2A6682EA00B59ABD /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+				840D23DF2A6685E000B59ABD /* PanelMenuView.h */,
+				840D23E02A6685E000B59ABD /* PanelMenuView.m */,
+				840D23DD2A66855100B59ABD /* PanelSegmentItem.h */,
+				840D23DC2A66855100B59ABD /* PanelSegmentItem.m */,
+				840D23D52A66852F00B59ABD /* PanelBeautyFaceView.h */,
+				840D23D62A66852F00B59ABD /* PanelBeautyFaceView.m */,
+				840D23D02A66852F00B59ABD /* PanelBottomView.h */,
+				840D23D42A66852F00B59ABD /* PanelBottomView.m */,
+				840D23D72A66852F00B59ABD /* PanelFiltersView.h */,
+				840D23D12A66852F00B59ABD /* PanelFiltersView.m */,
+				840D23D22A66852F00B59ABD /* PanelSegmentControl.h */,
+				840D23D32A66852F00B59ABD /* PanelSegmentControl.m */,
+				840D23CD2A66848500B59ABD /* PanelBeautyAssembleView.h */,
+				840D23CE2A66848500B59ABD /* PanelBeautyAssembleView.m */,
+				840D23CA2A66839C00B59ABD /* PannelBeautyMenuCell.h */,
+				840D23CB2A66839C00B59ABD /* PannelBeautyMenuCell.m */,
+				840D23C82A66830D00B59ABD /* PannelBeautiesModel.h */,
+				840D23C62A66830D00B59ABD /* PannelBeautiesModel.m */,
+				840D23C72A66830D00B59ABD /* PanelBeautyParams.h */,
+				840D23C02A6682FA00B59ABD /* PanelBeautySlider.h */,
+				840D23C12A6682FA00B59ABD /* PanelBeautySlider.m */,
+				840D23C22A6682FA00B59ABD /* PanelBeautyView.h */,
+				840D23C32A6682FA00B59ABD /* PanelBeautyView.m */,
+			);
+			name = "New Group";
+			sourceTree = "<group>";
+		};
 		84307E83261F2CD9003EAC98 = {
 			isa = PBXGroup;
 			children = (
@@ -129,6 +195,8 @@
 		84307E8E261F2CD9003EAC98 /* PixDemo */ = {
 			isa = PBXGroup;
 			children = (
+				840D23EC2A668C0D00B59ABD /* PIXEL.bundle */,
+				840D23BE2A6682EA00B59ABD /* New Group */,
 				843580E72763485B0053E16A /* ImagerFilter */,
 				84C1D15B266F5D0B006D1AB4 /* CameraFilter */,
 				84307E8F261F2CD9003EAC98 /* AppDelegate.h */,
@@ -271,6 +339,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				840D23ED2A668C0D00B59ABD /* PIXEL.bundle in Resources */,
 				84307E9F261F2CDC003EAC98 /* LaunchScreen.storyboard in Resources */,
 				84C1D162266F5D69006D1AB4 /* VideoFilterController.xib in Resources */,
 				84307E9C261F2CDC003EAC98 /* Assets.xcassets in Resources */,
@@ -287,13 +356,24 @@
 			buildActionMask = 2147483647;
 			files = (
 				84307E97261F2CD9003EAC98 /* ViewController.mm in Sources */,
+				840D23CC2A66839C00B59ABD /* PannelBeautyMenuCell.m in Sources */,
 				84307E91261F2CD9003EAC98 /* AppDelegate.m in Sources */,
+				840D23DB2A66852F00B59ABD /* PanelBeautyFaceView.m in Sources */,
 				84307EA2261F2CDC003EAC98 /* main.m in Sources */,
 				84307E94261F2CD9003EAC98 /* SceneDelegate.m in Sources */,
+				840D23D92A66852F00B59ABD /* PanelSegmentControl.m in Sources */,
 				843580EE276352260053E16A /* ImageFilterController.mm in Sources */,
 				84C1D161266F5D69006D1AB4 /* CameraFilterController.mm in Sources */,
+				840D23C92A66830D00B59ABD /* PannelBeautiesModel.m in Sources */,
+				840D23E12A6685E000B59ABD /* PanelMenuView.m in Sources */,
 				847244A12A6034BB009D1488 /* VideoPreview.mm in Sources */,
+				840D23CF2A66848500B59ABD /* PanelBeautyAssembleView.m in Sources */,
+				840D23C52A6682FA00B59ABD /* PanelBeautyView.m in Sources */,
+				840D23D82A66852F00B59ABD /* PanelFiltersView.m in Sources */,
 				847244A22A6034BF009D1488 /* VideoCapturer.m in Sources */,
+				840D23DA2A66852F00B59ABD /* PanelBottomView.m in Sources */,
+				840D23C42A6682FA00B59ABD /* PanelBeautySlider.m in Sources */,
+				840D23DE2A66855100B59ABD /* PanelSegmentItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -458,7 +538,11 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/PixDemo/Face++/**";
+				HEADER_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/PixDemo/Face++/**",
+					"$(PROJECT_DIR)/PixDemo/Model",
+					"$(PROJECT_DIR)/PixDemo/Widget",
+				);
 				INFOPLIST_FILE = PixDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -493,7 +577,11 @@
 				DEVELOPMENT_TEAM = QFCE3TAQXQ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "";
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/PixDemo/Face++/**";
+				HEADER_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/PixDemo/Face++/**",
+					"$(PROJECT_DIR)/PixDemo/Model",
+					"$(PROJECT_DIR)/PixDemo/Widget",
+				);
 				INFOPLIST_FILE = PixDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
