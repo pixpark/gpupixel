@@ -144,7 +144,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		840D23BE2A6682EA00B59ABD /* New Group */ = {
+		840D23BE2A6682EA00B59ABD /* PanelMenu */ = {
 			isa = PBXGroup;
 			children = (
 				840D23DF2A6685E000B59ABD /* PanelMenuView.h */,
@@ -171,7 +171,7 @@
 				840D23C22A6682FA00B59ABD /* PanelBeautyView.h */,
 				840D23C32A6682FA00B59ABD /* PanelBeautyView.m */,
 			);
-			name = "New Group";
+			name = PanelMenu;
 			sourceTree = "<group>";
 		};
 		84307E83261F2CD9003EAC98 = {
@@ -196,7 +196,7 @@
 			isa = PBXGroup;
 			children = (
 				840D23EC2A668C0D00B59ABD /* PIXEL.bundle */,
-				840D23BE2A6682EA00B59ABD /* New Group */,
+				840D23BE2A6682EA00B59ABD /* PanelMenu */,
 				843580E72763485B0053E16A /* ImagerFilter */,
 				84C1D15B266F5D0B006D1AB4 /* CameraFilter */,
 				84307E8F261F2CD9003EAC98 /* AppDelegate.h */,
