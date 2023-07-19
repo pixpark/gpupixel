@@ -1,20 +1,17 @@
-# GPUPixel
-<p align="center">
-<a href="./doc/README_en.md"> English &nbsp;&nbsp; </a>  
-<a href="./doc/README_zh-cn.md"> 简体中文 &nbsp;&nbsp; </a>  
+# GPUPixel - Realtime video and image processing library
+<p align="left">
+<a href="./doc/README_en.md"> English &nbsp;|&nbsp; </a>  
+<a href="./doc/README_zh-cn.md"> 简体中文 &nbsp;|&nbsp; </a>  
 <a href="./doc/README_zh-tw.md/"> 繁體中文 &nbsp;&nbsp; </a>
-<br>
 </p>
 
-
-<p align="center">
+<p align="left">
 <a href="https://github.com/pixpark/GPUPixel">GPUPixel</a>
 @
 <a href="https://github.com/pixpark">PixPark</a>
-<br>
 </p>
 
-<p align="center">
+<p align="left">
 
 [![GitHub Stars](https://img.shields.io/github/stars/pixpark/GPUPixel?style=social)](https://github.com/pixpark/GPUPixel/stargazers)
 [![Release](https://img.shields.io/github/v/release/pixpark/GPUPixel)](https://github.com/pixpark/GPUPixel/releases/latest)
