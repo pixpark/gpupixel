@@ -5,7 +5,7 @@ import { head, nav, sidebar } from './configs'
 export default defineConfig({
   base: '/gpupixel/',
   title: "GPUPixel",
-  description: "GPUPixel Docs",
+  description: "GPUPixel高性能跨平台图像处理SDK",
   lang: 'en-US',
   head,
   themeConfig: {
