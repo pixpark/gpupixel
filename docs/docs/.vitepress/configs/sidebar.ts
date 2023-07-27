@@ -1,13 +1,13 @@
 import type { DefaultTheme } from 'vitepress'
 
 export const sidebar: DefaultTheme.Config['sidebar'] = {
-  '/docs/gpupixel': [
+  '/guide/': [
     {
-      text: 'Introduction',
+      text: 'Getting Started',
       collapsed: false,
       items: [
-        { text: 'Quick Start', link: '/docs/gpupixel/start' },
-        { text: 'Build', link: '/docs/gpupixel/run' },
+        { text: 'Introduction', link: '/guide/introduction' },
+        { text: 'Quick Start', link: '/guide/quick-start' },
       ]
     },
     {
@@ -23,26 +23,40 @@ export const sidebar: DefaultTheme.Config['sidebar'] = {
       link: '/fe/coding/'
     }
   ],
-  '/docs/sphere-camera': [
+  '/filter': [
     {
       text: '简介',
       collapsed: false,
       items: [
-        { text: 'eee', link: '/docs/sphere-camera/start' },
-        { text: 'Build', link: '/docs/sphere-camera//run' },
+        { text: 'eee', link: '/filter/sphere-camera/start' },
+        { text: 'Build', link: '/filter/sphere-camera//run' },
       ]
     },
     {
       text: '编译',
       collapsed: false,
       items: [
-        { text: 'jjj', link: '/fe/html/' },
-        { text: 'mmmm', link: '/fe/css/' }
+        { text: 'jjj', link: '/filter/html/' },
+        { text: 'mmmm', link: '/filter/css/' }
+      ]
+    }
+  ],
+  '/demo': [
+    {
+      text: '简介',
+      collapsed: false,
+      items: [
+        { text: 'eee', link: '/demo/sphere-camera/start' },
+        { text: 'Build', link: '/demo/sphere-camera//run' },
       ]
     },
     {
-      text: 'iiii成',
-      link: '/fe/coding/'
+      text: '编译',
+      collapsed: false,
+      items: [
+        { text: 'jjj', link: '/demo/html/' },
+        { text: 'mmmm', link: '/demo/css/' }
+      ]
     }
   ]
 }

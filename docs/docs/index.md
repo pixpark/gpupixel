@@ -4,12 +4,12 @@ layout: home
 layoutClass: 'm-home-layout'
 
 hero:
-  name: "PixPark"
+  name: "GPUPixel"
   text: "Tools for audio and video"
   tagline: Welcome to contribute code and suggestions
   image:
     src: /book.svg
-    alt: PixPark
+    alt: GPUPixel
   actions:
     - theme: brand
       text: Docs
