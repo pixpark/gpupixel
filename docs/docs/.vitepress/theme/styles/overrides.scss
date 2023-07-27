@@ -1,0 +1,112 @@
+/***** vitepress 样式覆盖 ******/
+
+/* 大屏大一点 */
+@media (min-width: 1440px) {
+  .VPDoc.has-aside .content-container.content-container {
+    max-width: 100%;
+  }
+}
+
+/* nav 换行问题（6 个还是有点小多，后面看看怎么优化） */
+@media (max-width: 1080px) {
+  :root {
+    --vp-sidebar-width: 260px;
+  }
+  .VPNav {
+    // 借鉴 https://cn.vuejs.org 的处理
+    .DocSearch-Button-Placeholder {
+      display: none;
+    }
+    .VPNavBarMenuLink,
+    .VPNavBarMenuGroup .button {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+  }
+}
+@media (max-width: 992px) {
+  .VPNav {
+    .VPNavBar {
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+    .VPNavBarMenuLink,
+    .VPNavBarMenuGroup .button {
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+  }
+}
+@media (max-width: 800px) {
+  .VPNav {
+    .VPNavBarSearch {
+      padding-left: 16px;
+    }
+    .VPNavBarMenuLink,
+    .VPNavBarMenuGroup .button {
+      padding-left: 6px;
+      padding-right: 6px;
+    }
+  }
+}
+
+/* 版权信息 */
+.copyright {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 自定义块样式 */
+.custom-block .custom-block-title {
+  font-size: 16px;
+}
+.custom-block.tip .custom-block-title {
+  color: var(--vp-c-brand);
+}
+
+/* 首页样式修改 */
+.VPHero {
+  .image-bg {
+    opacity: 0.8;
+    transition: opacity 1s ease;
+  }
+  .image-container:hover .image-bg {
+    opacity: 0.4;
+  }
+}
+
+table {
+  width: 100% !important;
+  display: table;
+}
+
+/**
+ * VitePress: Custom fix
+ * -------------------------------------------------------------------------- */
+
+/*
+  Use lighter colors for links in dark mode for a11y.
+  Also specify some classes twice to have higher specificity
+  over scoped class data attribute.
+*/
+.dark .vp-doc a,
+.dark .vp-doc a > code,
+.dark .VPNavBarMenuLink.VPNavBarMenuLink:hover,
+.dark .VPNavBarMenuLink.VPNavBarMenuLink.active,
+.dark .link.link:hover,
+.dark .link.link.active,
+.dark .edit-link-button.edit-link-button,
+.dark .pager-link .title {
+  color: var(--vp-c-brand-lighter);
+}
+.dark .vp-doc a:hover,
+.dark .vp-doc a > code:hover {
+  color: var(--vp-c-brand-lightest);
+  opacity: 1;
+}
+
+/* Transition by color instead of opacity */
+.dark .vp-doc .custom-block a {
+  transition: color 0.25s;
+}
