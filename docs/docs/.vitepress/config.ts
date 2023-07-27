@@ -3,7 +3,7 @@ import { head, nav, sidebar } from './configs'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  base:'gpupixel',
+  base: '/gpupixel/',
   title: "GPUPixel",
   description: "GPUPixel Docs",
   lang: 'en-US',
