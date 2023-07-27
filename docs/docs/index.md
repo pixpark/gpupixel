@@ -5,35 +5,38 @@ layoutClass: 'm-home-layout'
 
 hero:
   name: "GPUPixel"
-  text: "Tools for audio and video"
-  tagline: Welcome to contribute code and suggestions
+  text: "高性能跨平台图像处理SDK"
+  tagline: ''
   image:
     src: /book.svg
     alt: GPUPixel
   actions:
     - theme: brand
-      text: Docs
+      text: 参考文档
       link: /docs
     - theme: alt
       text: Github
-      link: https://github.com/pixpark
+      link: https://github.com/pixpark/gpupixel
+    - theme: alt
+      text: Demo
+      link: https://github.com/pixpark/gpupixel
 
 features:
-  - icon: 💡
-    title: GPUPixel
-    details: Video and image processing library like GPUImage support iOS | macOS | Android
-    link: https://github.com/pixpark/gpupixel
-    linkText: Source code
-  - icon: 💡
-    title: SphereCamera
-    details: Pano Camera like google camera for Android.
-    link: https://github.com/pixpark/sphere-camera
-    linkText: Source code
-  - icon: 💡
-    title: AlitaPlayer
-    details: Yet another video player, support iOS | Android | macOS | Win
-    link: https://github.com/pixpark/alita-player
-    linkText: Source code
+  - icon: 🧚‍♀️
+    title: 美颜滤镜
+    details: 内置美颜滤镜，包括磨皮, 美白, 瘦脸, 大眼, 口红, 腮红等滤镜
+    link: http://localhost:5174/gpupixel/guide/introduction.html
+    linkText: 现在开始
+  - icon: 🏃‍♂️
+    title: 多输入输出
+    details: '输入支持: YUV420P, RGBA, JPEG, PNG; </br> 输出: YUV420, RGBA'
+    link: http://localhost:5174/gpupixel/guide/introduction.html
+    linkText: 现在开始
+  - icon: 🥳
+    title: 跨平台
+    details: '基于OpenGL/ES,高性能, 跨平台支持: iOS | Android | macOS'
+    link: http://localhost:5174/gpupixel/guide/introduction.html
+    linkText: 现在开始
 ---
 
 <style>
