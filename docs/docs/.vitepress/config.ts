@@ -11,8 +11,7 @@ export default defineConfig({
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     i18nRouting: true,
-    siteTitle: 'PixPark',
-    logo: '/logo.png',
+    siteTitle: 'GPUPixel',
     // nav and sidebar
     nav,
     sidebar,
@@ -24,11 +23,11 @@ export default defineConfig({
 
     footer: {
       message: 'Released under the MIT License.',
-      copyright: 'Copyright © 2023-present PixPark'
+      copyright: 'Copyright 2023 ©  <a href="https://pixpark.net" target="_blank"> PixPark</a>'
     },
     // 
     editLink: {
-      pattern: 'https://github.com/pixpark/pixpark.github.io/edit/main/docs/:path',
+      pattern: 'https://github.com/pixpark/gpupixel/edit/main/docs/:path',
       text: 'Edit this page on GitHub'
     },
 
