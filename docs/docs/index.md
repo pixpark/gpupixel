@@ -15,10 +15,10 @@ hero:
       text: 参考文档
       link: /docs
     - theme: alt
-      text: Github
+      text: View on GitHub
       link: https://github.com/pixpark/gpupixel
     - theme: alt
-      text: Demo
+      text: Downlaod Demo
       link: https://github.com/pixpark/gpupixel
 
 features:
