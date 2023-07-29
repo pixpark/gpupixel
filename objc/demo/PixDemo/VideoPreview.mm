@@ -35,10 +35,12 @@ using namespace GPUPixel;
     // create filter
     targetRawOutput_ = TargetRawDataOutput::create();
     beauty_face_filter_ = FaceBeautyFilter::create();
+    face_reshape_filter_ = FaceReshapeFilter::create();
     
     // filter pipline
-    gpuPixelRawInput->addTarget(beauty_face_filter_);
-    beauty_face_filter_->addTarget(gpuPixelView);
+    gpuPixelRawInput->addTarget(face_reshape_filter_)
+                    ->addTarget(beauty_face_filter_)
+                    ->addTarget(gpuPixelView);
   });
   return self;
 }
@@ -80,10 +82,24 @@ using namespace GPUPixel;
 
 
 - (void)setFaceSlimLevel:(float)level {
-
+  face_reshape_filter_->setFaceSlimLevel(level/20);
 }
 
 - (void)setEyeZoomLevel:(float)level {
     
+}
+
+- (void)setLandmarks:(NSArray*)landmarks {
+  if(face_reshape_filter_) {
+    std::vector<float> land_marks;
+    for (NSValue *value in landmarks) {
+        CGPoint point = [value CGPointValue];
+      land_marks.push_back(point.x);
+      land_marks.push_back(point.y);
+    }
+    
+    face_reshape_filter_->setLandmarks(land_marks);
+    face_reshape_filter_->setHasFace(true);
+  }
 }
 @end
