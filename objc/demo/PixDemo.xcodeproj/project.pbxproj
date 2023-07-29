@@ -34,6 +34,7 @@
 		84307EA2261F2CDC003EAC98 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 84307EA1261F2CDC003EAC98 /* main.m */; };
 		843580EE276352260053E16A /* ImageFilterController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 843580EC276352260053E16A /* ImageFilterController.mm */; };
 		843580EF276352260053E16A /* ImageFilterController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 843580ED276352260053E16A /* ImageFilterController.xib */; };
+		8462968D2A755D9800176896 /* megviifacepp_0_5_2_model in Resources */ = {isa = PBXBuildFile; fileRef = 8462968B2A755D9800176896 /* megviifacepp_0_5_2_model */; };
 		847244A12A6034BB009D1488 /* VideoPreview.mm in Sources */ = {isa = PBXBuildFile; fileRef = 847244A02A6033AB009D1488 /* VideoPreview.mm */; };
 		847244A22A6034BF009D1488 /* VideoCapturer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8472449E2A603368009D1488 /* VideoCapturer.m */; };
 		847244A32A60F709009D1488 /* GPUPixel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 847244952A60321E009D1488 /* GPUPixel.framework */; };
@@ -124,6 +125,7 @@
 		843580EB276352260053E16A /* ImageFilterController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageFilterController.h; sourceTree = "<group>"; };
 		843580EC276352260053E16A /* ImageFilterController.mm */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.cpp.objcpp; path = ImageFilterController.mm; sourceTree = "<group>"; tabWidth = 2; };
 		843580ED276352260053E16A /* ImageFilterController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ImageFilterController.xib; sourceTree = "<group>"; };
+		8462968B2A755D9800176896 /* megviifacepp_0_5_2_model */ = {isa = PBXFileReference; lastKnownFileType = file; name = megviifacepp_0_5_2_model; path = "Face++/MGFaceppSDK/megviifacepp_0_5_2_model"; sourceTree = "<group>"; };
 		8472448F2A60321E009D1488 /* GPUPixel.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GPUPixel.xcodeproj; path = ../../objc/GPUPixel.xcodeproj; sourceTree = "<group>"; };
 		8472449D2A603368009D1488 /* VideoCapturer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoCapturer.h; sourceTree = "<group>"; };
 		8472449E2A603368009D1488 /* VideoCapturer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VideoCapturer.m; sourceTree = "<group>"; };
@@ -157,6 +159,7 @@
 			children = (
 				1FBB65702A75597800B43AC4 /* Face++LicenseHandler.m */,
 				1FBB656F2A75597800B43AC4 /* FaceDetector.mm */,
+				8462968B2A755D9800176896 /* megviifacepp_0_5_2_model */,
 			);
 			name = "Face++";
 			sourceTree = "<group>";
@@ -358,6 +361,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				840D23ED2A668C0D00B59ABD /* PIXEL.bundle in Resources */,
+				8462968D2A755D9800176896 /* megviifacepp_0_5_2_model in Resources */,
 				84307E9F261F2CDC003EAC98 /* LaunchScreen.storyboard in Resources */,
 				84C1D162266F5D69006D1AB4 /* VideoFilterController.xib in Resources */,
 				84307E9C261F2CDC003EAC98 /* Assets.xcassets in Resources */,

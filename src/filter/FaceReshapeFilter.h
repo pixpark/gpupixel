@@ -19,7 +19,7 @@ class FaceReshapeFilter : public Filter {
   virtual bool proceed(bool bUpdateTargets = true,
                        int64_t frameTime = 0) override;
 
-  void setUniformWithLandmarks(const float* land_marks, int lenght);
+  void setLandmarks(const std::vector<float> landmarks);
   void setHasFace(bool has_face);
 
   void setFaceSlimLevel(float level);
@@ -28,7 +28,7 @@ class FaceReshapeFilter : public Filter {
  protected:
   FaceReshapeFilter();
   float thinFaceDelta_ = 0;
-  float eyeZoomLevel_ = 0;
+  float bigEyeDelta_ = 0;
 
   std::vector<float> face_land_marks_;
   int has_face_ = 0;
