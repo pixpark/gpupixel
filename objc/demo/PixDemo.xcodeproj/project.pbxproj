@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1FBB656C2A7558E900B43AC4 /* libMGLicMgrSDK-0.3.1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 847C1DB92914FBAA009D6198 /* libMGLicMgrSDK-0.3.1.a */; };
+		1FBB656E2A7558EF00B43AC4 /* libMGFacepp-0.5.2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 847C1DBB2914FBB0009D6198 /* libMGFacepp-0.5.2.a */; };
+		1FBB65712A75597800B43AC4 /* FaceDetector.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1FBB656F2A75597800B43AC4 /* FaceDetector.mm */; };
+		1FBB65722A75597800B43AC4 /* Face++LicenseHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FBB65702A75597800B43AC4 /* Face++LicenseHandler.m */; };
 		840D23C42A6682FA00B59ABD /* PanelBeautySlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 840D23C12A6682FA00B59ABD /* PanelBeautySlider.m */; };
 		840D23C52A6682FA00B59ABD /* PanelBeautyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 840D23C32A6682FA00B59ABD /* PanelBeautyView.m */; };
 		840D23C92A66830D00B59ABD /* PannelBeautiesModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 840D23C62A66830D00B59ABD /* PannelBeautiesModel.m */; };
@@ -77,6 +81,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1FBB656F2A75597800B43AC4 /* FaceDetector.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = FaceDetector.mm; path = "Face++/FaceDetector.mm"; sourceTree = "<group>"; };
+		1FBB65702A75597800B43AC4 /* Face++LicenseHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "Face++LicenseHandler.m"; path = "Face++/Face++LicenseHandler.m"; sourceTree = "<group>"; };
 		840D23C02A6682FA00B59ABD /* PanelBeautySlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PanelBeautySlider.h; path = Widget/PanelBeautySlider.h; sourceTree = "<group>"; };
 		840D23C12A6682FA00B59ABD /* PanelBeautySlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PanelBeautySlider.m; path = Widget/PanelBeautySlider.m; sourceTree = "<group>"; };
 		840D23C22A6682FA00B59ABD /* PanelBeautyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PanelBeautyView.h; path = Widget/PanelBeautyView.h; sourceTree = "<group>"; };
@@ -135,6 +141,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1FBB656C2A7558E900B43AC4 /* libMGLicMgrSDK-0.3.1.a in Frameworks */,
+				1FBB656E2A7558EF00B43AC4 /* libMGFacepp-0.5.2.a in Frameworks */,
 				847244A32A60F709009D1488 /* GPUPixel.framework in Frameworks */,
 				8417C43C267F5B470074DDEF /* CoreMedia.framework in Frameworks */,
 				8417C43A267F5AF10074DDEF /* AVFoundation.framework in Frameworks */,
@@ -144,6 +152,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1FBB65732A7559B300B43AC4 /* Face++ */ = {
+			isa = PBXGroup;
+			children = (
+				1FBB65702A75597800B43AC4 /* Face++LicenseHandler.m */,
+				1FBB656F2A75597800B43AC4 /* FaceDetector.mm */,
+			);
+			name = "Face++";
+			sourceTree = "<group>";
+		};
 		840D23BE2A6682EA00B59ABD /* PanelMenu */ = {
 			isa = PBXGroup;
 			children = (
@@ -196,6 +213,7 @@
 			isa = PBXGroup;
 			children = (
 				840D23EC2A668C0D00B59ABD /* PIXEL.bundle */,
+				1FBB65732A7559B300B43AC4 /* Face++ */,
 				840D23BE2A6682EA00B59ABD /* PanelMenu */,
 				843580E72763485B0053E16A /* ImagerFilter */,
 				84C1D15B266F5D0B006D1AB4 /* CameraFilter */,
@@ -374,6 +392,8 @@
 				840D23DA2A66852F00B59ABD /* PanelBottomView.m in Sources */,
 				840D23C42A6682FA00B59ABD /* PanelBeautySlider.m in Sources */,
 				840D23DE2A66855100B59ABD /* PanelSegmentItem.m in Sources */,
+				1FBB65712A75597800B43AC4 /* FaceDetector.mm in Sources */,
+				1FBB65722A75597800B43AC4 /* Face++LicenseHandler.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
