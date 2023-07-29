@@ -10,6 +10,7 @@
 #import "VideoPreview.h"
 #import "PanelMenuView.h"
 #import "PanelBeautyParams.h"
+#import "FaceDetector.h"
 
 @interface CameraFilterController () <VCVideoCapturerDelegate, FilterMenuPanelDelegate> {
   bool captureYuvFrame;
@@ -51,6 +52,12 @@
   [self.capturer startCapture];
   
   [self.menusView showMenuView:YES];
+  
+  // setup face++
+  [FaceDetector shareInstance].sampleBufferOrientation = FaceDetectorSampleBufferOrientationNoRatation;
+  [FaceDetector shareInstance].faceOrientation = 0;
+  [FaceDetector shareInstance].sampleType = FaceDetectorSampleTypeCamera;
+  [[FaceDetector shareInstance] auth];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
