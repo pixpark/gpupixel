@@ -78,7 +78,7 @@ typedef void (^TaskBlock)(void);
 NS_GPUPIXEL_BEGIN
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
-#define GL_CONTEXT_QUEUE "com.github.GPUPixel.openglContextQueue"
+#define GL_CONTEXT_QUEUE "net.gpupixel.openglContextQueue"
 iOSHelper* iosHelper;
 #elif defined(GPUPIXEL_ANDROID)
 const std::string kRtcLogTag = "Context";
