@@ -113,23 +113,15 @@
                               withHeight:height];
     CVPixelBufferUnlockBaseAddress(imageBuffer, 0);
   } else {
-#if 1
-    if (![FaceDetector shareInstance].isWorking) {
-      CMSampleBufferRef detectSampleBufferRef = NULL;
-      CMSampleBufferCreateCopy(kCFAllocatorDefault, sampleBuffer, &detectSampleBufferRef);
+    if (self.thinFaceValue != 0 && ![FaceDetector shareInstance].isWorking) {
+      [[FaceDetector shareInstance] getLandmarksFromSampleBuffer:sampleBuffer];
       
-      
-      [[FaceDetector shareInstance] getLandmarksFromSampleBuffer:detectSampleBufferRef];
-      
-      CFRelease(detectSampleBufferRef);
-      
+      NSArray *landmarks = [FaceDetector shareInstance].oneFace.landmarks;
+      if(landmarks) {
+        [self.faceBeautyVideoView setLandmarks:landmarks];
+      }
     }
-    
-    NSArray *landmarks = [FaceDetector shareInstance].oneFace.landmarks;
-    if(landmarks) {
-      [self.faceBeautyVideoView setLandmarks:landmarks];
-    }
-#endif
+ 
     //
     CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
     CVPixelBufferLockBaseAddress(imageBuffer, 0);
