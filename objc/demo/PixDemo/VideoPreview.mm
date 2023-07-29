@@ -82,7 +82,7 @@ using namespace GPUPixel;
 
 
 - (void)setFaceSlimLevel:(float)level {
-  face_reshape_filter_->setFaceSlimLevel(level/20);
+  face_reshape_filter_->setFaceSlimLevel(level/2000);
 }
 
 - (void)setEyeZoomLevel:(float)level {
