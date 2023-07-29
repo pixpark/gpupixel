@@ -113,7 +113,7 @@
                               withHeight:height];
     CVPixelBufferUnlockBaseAddress(imageBuffer, 0);
   } else {
-#if 0
+#if 1
     if (![FaceDetector shareInstance].isWorking) {
       CMSampleBufferRef detectSampleBufferRef = NULL;
       CMSampleBufferCreateCopy(kCFAllocatorDefault, sampleBuffer, &detectSampleBufferRef);
@@ -127,7 +127,7 @@
     
     NSArray *landmarks = [FaceDetector shareInstance].oneFace.landmarks;
     if(landmarks) {
-      [self.beautyFaceVideoView setFacePoint: landmarks];
+      [self.faceBeautyVideoView setLandmarks:landmarks];
     }
 #endif
     //

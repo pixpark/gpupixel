@@ -41,6 +41,9 @@
 - (void)setWhitenLevel:(float)level;
 - (void)setFaceSlimLevel:(float)level;
 - (void)setEyeZoomLevel:(float)level;
+
+//
+- (void)setLandmarks:(NSArray*)landmarks;
 @end
 
 #endif /* BEAUTY_VIDEO_VIEW_H */
