@@ -33,6 +33,8 @@
 
 // Button
 @property (strong, nonatomic) UIButton* effectToggleBtn;
+
+@property BOOL needSetupFaceDetector;
 @end
 
 @implementation CameraFilterController
@@ -42,7 +44,7 @@
   [self.view setBackgroundColor:UIColor.whiteColor];
   // screen always light
   [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
-  
+  self.needSetupFaceDetector = TRUE;
   captureYuvFrame = false;
   self.faceBeautyVideoView = [[VideoPreview alloc] initWithFrame:self.view.bounds];
   [self.view addSubview:self.faceBeautyVideoView];
@@ -52,12 +54,6 @@
   [self.capturer startCapture];
   
   [self.menusView showMenuView:YES];
-  
-  // setup face++
-  [FaceDetector shareInstance].sampleBufferOrientation = FaceDetectorSampleBufferOrientationNoRatation;
-  [FaceDetector shareInstance].faceOrientation = 0;
-  [FaceDetector shareInstance].sampleType = FaceDetectorSampleTypeCamera;
-  [[FaceDetector shareInstance] auth];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -84,6 +80,15 @@
 }
 
 - (void)setThinFaceValue:(CGFloat)thinFaceValue{
+  if(self.needSetupFaceDetector) {
+    // setup face++
+    [FaceDetector shareInstance].sampleBufferOrientation = FaceDetectorSampleBufferOrientationNoRatation;
+    [FaceDetector shareInstance].faceOrientation = 0;
+    [FaceDetector shareInstance].sampleType = FaceDetectorSampleTypeCamera;
+    [[FaceDetector shareInstance] auth];
+    
+    self.needSetupFaceDetector = NO;
+  }
   _thinFaceValue = thinFaceValue;
   [self.faceBeautyVideoView setFaceSlimLevel:thinFaceValue];
 }
