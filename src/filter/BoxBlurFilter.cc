@@ -52,7 +52,7 @@ void BoxBlurFilter::setSigma(float sigma) {
 }
 
 void BoxBlurFilter::setTexelSpacingMultiplier(float value) {
-  _vBlurFilter->setTexelSpacingMultiplier(value);
+  _hBlurFilter->setTexelSpacingMultiplier(value);
   _vBlurFilter->setTexelSpacingMultiplier(value);
 }
 
