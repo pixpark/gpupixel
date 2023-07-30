@@ -7,31 +7,26 @@
 
 #import "CameraFilterController.h"
 #import "VideoCapturer.h"
-#import "VideoPreview.h"
 #import "PanelMenuView.h"
 #import "PanelBeautyParams.h"
 #import "FaceDetector.h"
+#import <GPUPixel/GPUPixel.h>
+
+using namespace GPUPixel;
 
 @interface CameraFilterController () <VCVideoCapturerDelegate, FilterMenuPanelDelegate> {
   bool captureYuvFrame;
+  std::shared_ptr<SourceRawDataInput> gpuPixelRawInput;
+  GPUPixelView *gpuPixelView;
+  std::shared_ptr<FaceBeautyFilter> beauty_face_filter_;
+  std::shared_ptr<TargetRawDataOutput> targetRawOutput_;
+  std::shared_ptr<FaceReshapeFilter> face_reshape_filter_;
+
 }
 
-@property (strong, nonatomic) VideoPreview * faceBeautyVideoView;
 @property (strong, nonatomic) VideoCapturer* capturer;
 //
 @property (nonatomic, strong) PanelMenuView *menusView;
-// Slider
-@property (strong, nonatomic) UISlider* faceSmoothSlider;
-@property (strong, nonatomic) UISlider* skinWhitenSlider;
-@property (strong, nonatomic) UISlider* faceSlimSlider;
-@property (strong, nonatomic) UISlider* bigEyeSlider;
-// Label
-@property (strong, nonatomic) UILabel* faceSmoothLabel;
-@property (strong, nonatomic) UILabel* skinWhitenLabel;
-@property (strong, nonatomic) UILabel* faceSlimLabel;
-@property (strong, nonatomic) UILabel* bigEyeLabel;
-
-// Button
 @property (strong, nonatomic) UIButton* effectToggleBtn;
 
 @property BOOL needSetupFaceDetector;
@@ -44,22 +39,40 @@
   [self.view setBackgroundColor:UIColor.whiteColor];
   // screen always light
   [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
-  self.needSetupFaceDetector = TRUE;
-  captureYuvFrame = false;
-  self.faceBeautyVideoView = [[VideoPreview alloc] initWithFrame:self.view.bounds];
-  [self.view addSubview:self.faceBeautyVideoView];
+  // init video filter
+  [self initVideoFilter];
   
   [self.view addSubview:self.effectToggleBtn];
+  [self.menusView showMenuView:YES];
+  
+  self.needSetupFaceDetector = TRUE;
+  captureYuvFrame = false;
   // start camera capture
   [self.capturer startCapture];
-  
-  [self.menusView showMenuView:YES];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
   [self.capturer stopCapture];
   
   [super viewWillDisappear:animated];
+}
+
+-(void) initVideoFilter {
+  GPUPixel::GPUPixelContext::getInstance()->runSync([&] {
+    gpuPixelRawInput = SourceRawDataInput::create();
+    gpuPixelView = [[GPUPixelView alloc] initWithFrame:self.view.frame];
+    [self.view addSubview:gpuPixelView];
+    
+    // create filter
+    targetRawOutput_ = TargetRawDataOutput::create();
+    beauty_face_filter_ = FaceBeautyFilter::create();
+    face_reshape_filter_ = FaceReshapeFilter::create();
+    
+    // filter pipline
+    gpuPixelRawInput->addTarget(face_reshape_filter_)
+                    ->addTarget(beauty_face_filter_)
+                    ->addTarget(gpuPixelView);
+  });
 }
 
 - (void) touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
@@ -69,33 +82,24 @@
 #pragma mark - 属性赋值
 - (void)setBeautyValue:(CGFloat)beautyValue{
   _beautyValue = beautyValue;
-  [self.faceBeautyVideoView setFaceSmoothLevel:beautyValue];
+  beauty_face_filter_->setBlurAlpha(beautyValue);  //[0.0, 1.0]
 }
 - (void)setWhithValue:(CGFloat)whithValue{
   _whithValue = whithValue;
-  [self.faceBeautyVideoView setWhitenLevel:whithValue];
+  beauty_face_filter_->setWhite(whithValue /3);  // [0.0, 0.01]
 }
 - (void)setSaturationValue:(CGFloat)saturationValue{
   _saturationValue = saturationValue;
 }
 
 - (void)setThinFaceValue:(CGFloat)thinFaceValue{
-  if(self.needSetupFaceDetector) {
-    // setup face++
-    [FaceDetector shareInstance].sampleBufferOrientation = FaceDetectorSampleBufferOrientationNoRatation;
-    [FaceDetector shareInstance].faceOrientation = 0;
-    [FaceDetector shareInstance].sampleType = FaceDetectorSampleTypeCamera;
-    [[FaceDetector shareInstance] auth];
-    
-    self.needSetupFaceDetector = NO;
-  }
   _thinFaceValue = thinFaceValue;
-  [self.faceBeautyVideoView setFaceSlimLevel:thinFaceValue];
+  face_reshape_filter_->setFaceSlimLevel(thinFaceValue/2000);
 }
 
 - (void)setEyeValue:(CGFloat)eyeValue{
   _eyeValue = eyeValue;
-  [self.faceBeautyVideoView setEyeZoomLevel:eyeValue];
+  face_reshape_filter_->setEyeZoomLevel(eyeValue/700);
 }
 
 // camera frame callback
@@ -110,44 +114,60 @@
     size_t width = CVPixelBufferGetWidth(imageBuffer);
     size_t height = CVPixelBufferGetHeight(imageBuffer);
     
-    [self.faceBeautyVideoView renderNV12:dataY
-                             withStrideY:strideY
-                              withDataUV:dataUV
-                            withStrideUV:strideUV
-                               withWidth:width
-                              withHeight:height];
+    // todo render nv12
     CVPixelBufferUnlockBaseAddress(imageBuffer, 0);
   } else {
-    if (self.thinFaceValue != 0 && ![FaceDetector shareInstance].isWorking) {
+    if ([self isFaceDetectorEnable] && ![FaceDetector shareInstance].isWorking) {
+      if(self.needSetupFaceDetector) {
+        // setup face++
+        [FaceDetector shareInstance].sampleBufferOrientation = FaceDetectorSampleBufferOrientationNoRatation;
+        [FaceDetector shareInstance].faceOrientation = 0;
+        [FaceDetector shareInstance].sampleType = FaceDetectorSampleTypeCamera;
+        [[FaceDetector shareInstance] auth];
+        
+        self.needSetupFaceDetector = NO;
+      }
+      
       [[FaceDetector shareInstance] getLandmarksFromSampleBuffer:sampleBuffer];
       
       NSArray *landmarks = [FaceDetector shareInstance].oneFace.landmarks;
-      if(landmarks) {
-        [self.faceBeautyVideoView setLandmarks:landmarks];
+      if(landmarks && face_reshape_filter_) {
+        std::vector<float> land_marks;
+        for (NSValue *value in landmarks) {
+            CGPoint point = [value CGPointValue];
+          land_marks.push_back(point.x);
+          land_marks.push_back(point.y);
+        }
+        
+        face_reshape_filter_->setLandmarks(land_marks);
+        face_reshape_filter_->setHasFace(true);
+      } else {
+        face_reshape_filter_->setHasFace(false);
       }
     }
  
     //
     CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
     CVPixelBufferLockBaseAddress(imageBuffer, 0);
-    [self.faceBeautyVideoView renderRGBA:CVPixelBufferGetWidth(imageBuffer)
-                              withHeight:CVPixelBufferGetHeight(imageBuffer)
-                              withStride:CVPixelBufferGetBytesPerRow(imageBuffer)/4
-                              withPixels:(const uint8_t *)CVPixelBufferGetBaseAddress(imageBuffer)];
+    auto width = CVPixelBufferGetWidth(imageBuffer);
+    auto height = CVPixelBufferGetHeight(imageBuffer);
+    auto stride = CVPixelBufferGetBytesPerRow(imageBuffer)/4;
+    auto pixels = (const uint8_t *)CVPixelBufferGetBaseAddress(imageBuffer);
+    gpuPixelRawInput->uploadBytes(pixels, width, height, stride);
     CVPixelBufferUnlockBaseAddress(imageBuffer, 0);
   }
 }
 
 -(void)onToggleBtnPress {
-  if(self.faceBeautyVideoView) {
-    [self.faceBeautyVideoView toggleBeautyFace:false];
-  }
+ 
+}
+
+-(bool)isFaceDetectorEnable {
+  return self.thinFaceValue != 0 || self.eyeValue != 0;
 }
 
 -(void)onToggleBtnUpInside {
-  if(self.faceBeautyVideoView) {
-    [self.faceBeautyVideoView toggleBeautyFace:true];
-  }
+
 }
 
 -(VideoCapturer*)capturer {
