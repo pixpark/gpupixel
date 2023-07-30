@@ -20,12 +20,13 @@ std::shared_ptr<SourceImage> SourceImage::create(int width,
 }
 
 std::shared_ptr<SourceImage> SourceImage::create(const std::string name) {
-  auto sourceImage = std::shared_ptr<SourceImage>(new SourceImage());
 #if defined(GPUPIXEL_ANDROID)
-  // Todo(Jeayo)
+  // Todo(Jeayo) @see https://developer.android.com/ndk/guides/image-decoder?hl=zh-cn
+  auto sourceImage = std::shared_ptr<SourceImage>(new SourceImage());
   return sourceImage;
 #elif defined(GPUPIXEL_MAC)
   // Todo(Jeayo)
+  auto sourceImage = std::shared_ptr<SourceImage>(new SourceImage());
   return sourceImage;
 #elif defined(GPUPIXEL_IOS)
   auto path = Util::getResourcePath(name);
@@ -37,6 +38,10 @@ std::shared_ptr<SourceImage> SourceImage::create(const std::string name) {
  
 #else
 #endif
+}
+
+SourceImage::~SourceImage() {
+  
 }
 
 SourceImage* SourceImage::setImage(int width, int height, const void* pixels) {
@@ -80,10 +85,9 @@ std::shared_ptr<SourceImage> SourceImage::create(UIImage* image) {
   return sourceImage;
 }
 
-SourceImage* SourceImage::setImage(UIImage* image) {
+void SourceImage::setImage(UIImage* image) {
   UIImage* img = _adjustImageOrientation(image);
   setImage([img CGImage]);
-  return this;
 }
 
 std::shared_ptr<SourceImage> SourceImage::create(CGImageRef image) {
