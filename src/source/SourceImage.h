@@ -14,6 +14,7 @@ NS_GPUPIXEL_BEGIN
 class SourceImage : public Source {
  public:
   SourceImage() {}
+  ~SourceImage();
   static std::shared_ptr<SourceImage> create(int width,
                                              int height,
                                              const void* pixels);
@@ -28,7 +29,7 @@ class SourceImage : public Source {
   SourceImage* setImage(NSData* imageData);
 
   static std::shared_ptr<SourceImage> create(UIImage* image);
-  SourceImage* setImage(UIImage* image);
+  void setImage(UIImage* image);
 
   static std::shared_ptr<SourceImage> create(CGImageRef image);
   SourceImage* setImage(CGImageRef image);

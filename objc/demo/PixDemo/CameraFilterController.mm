@@ -21,7 +21,8 @@ using namespace GPUPixel;
   std::shared_ptr<FaceBeautyFilter> beauty_face_filter_;
   std::shared_ptr<TargetRawDataOutput> targetRawOutput_;
   std::shared_ptr<FaceReshapeFilter> face_reshape_filter_;
-
+  std::shared_ptr<GPUPixel::FaceMakeupFilter> lipstick_filter_;
+  std::shared_ptr<GPUPixel::FaceMakeupFilter> blusher_filter_;
 }
 
 @property (strong, nonatomic) VideoCapturer* capturer;
@@ -63,13 +64,29 @@ using namespace GPUPixel;
     gpuPixelView = [[GPUPixelView alloc] initWithFrame:self.view.frame];
     [self.view addSubview:gpuPixelView];
     
+ 
+    auto mouth = SourceImage::create("mouth.png");
+    lipstick_filter_ = FaceMakeupFilter::create();
+    lipstick_filter_->setImageTexture(mouth);
+    lipstick_filter_->setTextureBounds(FrameBounds{502.5, 710, 262.5, 167.5});
+
+    auto blusher = SourceImage::create("blusher.png");
+    blusher_filter_ = FaceMakeupFilter::create();
+    blusher_filter_->setImageTexture(blusher);
+    blusher_filter_->setTextureBounds(FrameBounds{395, 520, 489, 209});
+
     // create filter
     targetRawOutput_ = TargetRawDataOutput::create();
     beauty_face_filter_ = FaceBeautyFilter::create();
     face_reshape_filter_ = FaceReshapeFilter::create();
     
+    
+    
+    
     // filter pipline
-    gpuPixelRawInput->addTarget(face_reshape_filter_)
+    gpuPixelRawInput->addTarget(lipstick_filter_)
+                    ->addTarget(blusher_filter_)
+                    ->addTarget(face_reshape_filter_)
                     ->addTarget(beauty_face_filter_)
                     ->addTarget(gpuPixelView);
   });
@@ -141,8 +158,16 @@ using namespace GPUPixel;
         
         face_reshape_filter_->setLandmarks(land_marks);
         face_reshape_filter_->setHasFace(true);
+        
+        lipstick_filter_->setFaceLandmarks(land_marks);
+        lipstick_filter_->setHasFace(true);
+        
+        blusher_filter_->setFaceLandmarks(land_marks);
+        blusher_filter_->setHasFace(true);
       } else {
         face_reshape_filter_->setHasFace(false);
+        lipstick_filter_->setHasFace(false);
+        blusher_filter_->setHasFace(false);
       }
     }
  
@@ -163,7 +188,8 @@ using namespace GPUPixel;
 }
 
 -(bool)isFaceDetectorEnable {
-  return self.thinFaceValue != 0 || self.eyeValue != 0;
+  return true;
+//  return self.thinFaceValue != 0 || self.eyeValue != 0;
 }
 
 -(void)onToggleBtnUpInside {

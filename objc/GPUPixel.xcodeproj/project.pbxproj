@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		84414F6A2A762916005D378C /* mouth.png in Resources */ = {isa = PBXBuildFile; fileRef = 84414F682A762916005D378C /* mouth.png */; };
+		84414F6B2A762916005D378C /* blusher.png in Resources */ = {isa = PBXBuildFile; fileRef = 84414F692A762916005D378C /* blusher.png */; };
 		847243D92A600DAF009D1488 /* GPUPixelDef.h in Headers */ = {isa = PBXBuildFile; fileRef = 84CD75E827BA5EB300408934 /* GPUPixelDef.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		847243DA2A600DAF009D1488 /* GPUPixel.h in Headers */ = {isa = PBXBuildFile; fileRef = 84CD75DF27BA5EB300408934 /* GPUPixel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		847243DB2A600DAF009D1488 /* FaceMakeupFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 847C1DC4291A31BE009D6198 /* FaceMakeupFilter.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -295,6 +297,8 @@
 		8417CBB92A5FC72A00BD7B78 /* GPUPixel.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = GPUPixel.docc; sourceTree = "<group>"; };
 		8417CC512A5FD09000BD7B78 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/System/Library/Frameworks/CoreMedia.framework; sourceTree = DEVELOPER_DIR; };
 		8417CC532A5FD09600BD7B78 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
+		84414F682A762916005D378C /* mouth.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = mouth.png; path = ../resources/mouth.png; sourceTree = "<group>"; };
+		84414F692A762916005D378C /* blusher.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = blusher.png; path = ../resources/blusher.png; sourceTree = "<group>"; };
 		84646496291E8028005B1C49 /* BaseBeautyFaceFilter.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = BaseBeautyFaceFilter.cc; path = ../../src/filter/BaseBeautyFaceFilter.cc; sourceTree = "<group>"; };
 		84646497291E8029005B1C49 /* BaseBeautyFaceFilter.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = BaseBeautyFaceFilter.h; path = ../../src/filter/BaseBeautyFaceFilter.h; sourceTree = "<group>"; };
 		847243332A5FD8B6009D1488 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
@@ -631,6 +635,8 @@
 		3CFDD5651D7AB2F500E37EA3 = {
 			isa = PBXGroup;
 			children = (
+				84414F692A762916005D378C /* blusher.png */,
+				84414F682A762916005D378C /* mouth.png */,
 				3CFDD5701D7AB2F500E37EA3 /* GPUPixel */,
 				3CA4B3C11D8A62CD00D1E7B4 /* Frameworks */,
 				3CFDD56F1D7AB2F500E37EA3 /* Products */,
@@ -924,6 +930,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84414F6A2A762916005D378C /* mouth.png in Resources */,
+				84414F6B2A762916005D378C /* blusher.png in Resources */,
 				84AEA25B2A643918003DE462 /* lookup2.png in Resources */,
 				84AEA25C2A643918003DE462 /* lookUpCustom.png in Resources */,
 				84AEA25D2A643918003DE462 /* lookUpSkin.png in Resources */,
