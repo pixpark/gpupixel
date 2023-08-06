@@ -1,8 +1,7 @@
 # GPUPixel - Realtime video and image processing library
 <p align="left">
 <a href="./doc/README_en.md"> English &nbsp;|&nbsp; </a>  
-<a href="./doc/README_zh-cn.md"> 简体中文 &nbsp;|&nbsp; </a>  
-<a href="./doc/README_zh-tw.md/"> 繁體中文 &nbsp;&nbsp; </a>
+<a href="./README.md"> 简体中文 &nbsp; </a>
 </p>
 
 <p align="left">
