@@ -36,7 +36,7 @@
     if ([menuModel.beautyTitle isEqualToString:@""]) {//仅限菜单页，@""的时候是相机功能
       self.beautyLabel.hidden = YES;
       //            UIImage *img = BundleImg(@"cameraBG");
-      UIImage * img  = BundleImg(@"beautyCamera")
+      UIImage * img  = BundleImg(@"video_record")
       self.imgView.image = img;
       self.imgView.frame = CGRectMake((self.frame.size.width - 60)/2, (self.frame.size.height - 60)/2, 60, 60);
       //            [self.imgView addSubview:self.animationView];

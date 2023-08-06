@@ -7,7 +7,7 @@
 //
 
 #import "ViewController.h"
-#import "CameraFilterController.h"
+#import "VideoFilterController.h"
 #import "ImageFilterController.h"
 
 @interface ViewController ()
@@ -34,11 +34,8 @@
 
 -(UITableView*)tableView {
     if(_tableView == nil) {
-        self.tableTitleArr = [[NSArray alloc] initWithObjects:@"🧚‍♀️美颜相机",
-                                                              @"🧘‍♀️滤镜相机",
-                                                              @"🏂图片美颜",
-                                                              @"⛹️‍♀️图片滤镜",
-                                                              @"🐹相机贴纸",
+        self.tableTitleArr = [[NSArray alloc] initWithObjects:@"🧚‍♀️视频滤镜",
+                                                              @"🧘‍♀️图片滤镜",
                                                               nil];
         
         _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,
@@ -63,7 +60,7 @@
     UIViewController* vc = nil;
     switch ((int)indexPath.row) {
         case 0:
-            vc = [[CameraFilterController alloc] init];
+            vc = [[VideoFilterController alloc] init];
             break;
         case 1:
             vc = [[ImageFilterController alloc] init];

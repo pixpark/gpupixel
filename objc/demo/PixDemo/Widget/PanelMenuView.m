@@ -16,7 +16,7 @@
 static NSString *StickerImg = @"stickerFace";
 static NSString *BeautyImg = @"beauty1";
 static NSString *FaceImg = @"face";
-static NSString *CameraImg = @"beautyCamera";
+static NSString *CameraImg = @"video_record";
 static NSString *FilterImg = @"filter";
 static NSString *SpecificImg = @"specific";
 static NSString *HahaImg = @"haha";
@@ -37,7 +37,7 @@ static NSString *HahaImg = @"haha";
 - (instancetype)initWithFrame:(CGRect)frame
                     superView:(UIView *)superView
                      delegate:(id<FilterMenuPanelDelegate>)delegate
-               viewController:(CameraFilterController*)vc {
+               viewController:(VideoFilterController*)vc {
   if (self = [super initWithFrame:frame]) {
     self.superView = superView;
     self.delegate = delegate;
