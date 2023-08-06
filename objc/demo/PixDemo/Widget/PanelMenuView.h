@@ -6,7 +6,7 @@
  */
 
 #import <UIKit/UIKit.h>
-#import "CameraFilterController.h"
+#import "VideoFilterController.h"
 NS_ASSUME_NONNULL_BEGIN
 @protocol FilterMenuPanelDelegate <NSObject>
 @required
@@ -28,11 +28,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithFrame:(CGRect)frame
                     superView:(UIView*)superView
                      delegate:(id<FilterMenuPanelDelegate>)delegate
-               viewController:(CameraFilterController*)vc;
+               viewController:(VideoFilterController*)vc;
 
 @property(nonatomic, weak) id<FilterMenuPanelDelegate> delegate;
 
-@property(nonatomic, strong) CameraFilterController* mRender;
+@property(nonatomic, strong) VideoFilterController* mRender;
 /**
  控制美颜菜单显示
  
