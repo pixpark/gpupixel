@@ -48,7 +48,7 @@
   _takePhotoBtn.frame = CGRectMake((width-takePhotoWidth)/2, 0, takePhotoWidth, takePhotoHeight);
   
   _takePhotoBtn.tag = 1000;
-  UIImage * image  = BundleImg(@"beautyCamera");
+  UIImage * image  = BundleImg(@"video_record");
   [_takePhotoBtn setBackgroundImage:image forState:UIControlStateNormal];
   [_takePhotoBtn addTarget:self action:@selector(cameraAction:) forControlEvents:UIControlEventTouchUpInside];
   [self addSubview:_takePhotoBtn];

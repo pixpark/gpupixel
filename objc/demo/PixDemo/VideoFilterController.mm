@@ -5,7 +5,7 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#import "CameraFilterController.h"
+#import "VideoFilterController.h"
 #import "VideoCapturer.h"
 #import "PanelMenuView.h"
 #import "PanelBeautyParams.h"
@@ -14,7 +14,7 @@
 
 using namespace GPUPixel;
 
-@interface CameraFilterController () <VCVideoCapturerDelegate, FilterMenuPanelDelegate> {
+@interface VideoFilterController () <VCVideoCapturerDelegate, FilterMenuPanelDelegate> {
   bool captureYuvFrame;
   std::shared_ptr<SourceRawDataInput> gpuPixelRawInput;
   GPUPixelView *gpuPixelView;
@@ -33,7 +33,7 @@ using namespace GPUPixel;
 @property BOOL needSetupFaceDetector;
 @end
 
-@implementation CameraFilterController
+@implementation VideoFilterController
 
 - (void)viewDidLoad {
   [super viewDidLoad];
