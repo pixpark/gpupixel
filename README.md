@@ -3,7 +3,6 @@
 <a href="./doc/README_en.md"> English &nbsp;|&nbsp; </a>  
 <a href="./README.md"> 简体中文 &nbsp; </a>
 </p>
-
 <p align="left">
 <a href="https://github.com/pixpark/GPUPixel">GPUPixel</a>
 @
@@ -25,7 +24,21 @@
 GPUPixel是一个由C++11编写的高性能图像和视频处理库, 基于GPU, 内置美颜特效滤镜, 效果可以达到商用级别.
 支持的平台包括iOS, Mac, Android, 理论上可以移植到所有支持OpenGL/ES的平台.
 
+## 效果
+
+**美白&磨皮**
+<div style="text-align: center;">
+<img src="https://io.fifo.site/sample-2.png" width="500px">
+</div>
+
+## 架构
+
+<div style="text-align: center;">
+<img src="https://io.fifo.site/arch-zh.jpg" width="800px">
+</div>
+
 ## 功能 ##
+
 ### 美颜滤镜
 - [x] 磨皮滤镜 
 - [x] 美白滤镜
@@ -51,11 +64,11 @@ GPUPixel是一个由C++11编写的高性能图像和视频处理库, 基于GPU, 
 [基础滤镜列表]()
 
 ### 其他滤镜
-- [ ] 图片水印
+- [x] 图片水印
 - [ ] 贴纸特效
 - [ ] 文字水印
 - [ ] 风格滤镜
- 
+
 ## 效果预览
 
 
@@ -77,8 +90,6 @@ GPUPixel是一个由C++11编写的高性能图像和视频处理库, 基于GPU, 
 |耗时|-ms|-ms|-ms|-|-|
 
 
-## 架构 ##
-![Architecture](./doc/architecture.png "GPUPixel Architecture")
 
 ## 编译 ##
 ### iOS
@@ -86,9 +97,8 @@ GPUPixel是一个由C++11编写的高性能图像和视频处理库, 基于GPU, 
 
 ### Android
 Android Studio 打开目录 `./android`, 配置 `NDK r21+`
-## 使用 ##
+## 接口调用 ##
 参考`./objc/demo` 或 `./android` demo
-### iOS
 **`.h` file**
 
 ```c++
@@ -114,7 +124,7 @@ std::shared_ptr<TargetRawDataOutput> target_raw_output_;
  }
 ```
 
-**Feed I420 or RGBA data**
+**输入图像数据 I420 or RGBA**
 
 ```c++
 // ...
@@ -135,7 +145,7 @@ std::shared_ptr<TargetRawDataOutput> target_raw_output_;
                                 stride);
 ```
 
-**Data Output**
+**输出数据回调**
 
 ```c++
 // I420 callback
@@ -160,7 +170,3 @@ target_raw_output_->setPixelsCallbck([=](const uint8_t *data,
 
 // Output data callbck
 ```
-
-## 自定义滤镜
-### 创建自己的滤镜
-> // In writing
