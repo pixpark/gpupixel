@@ -1,13 +1,14 @@
 # GPUPixel - Realtime video and image processing library
 <p align="left">
-<a href="./doc/README.md"> English &nbsp;|&nbsp; </a>  
-<a href="./README_cn.md"> 简体中文 &nbsp; </a>
+<a href="./doc/README_en.md"> English &nbsp;|&nbsp; </a>  
+<a href="./README.md"> 简体中文 &nbsp; </a>
 </p>
 <p align="left">
 <a href="https://github.com/pixpark/gpupixel">gpupixel</a>
 @
 <a href="https://github.com/pixpark">PixPark</a> 
 </p>
+
 <p align="left">
 
 [![GitHub Stars](https://img.shields.io/github/stars/pixpark/gpupixel?style=social)](https://github.com/pixpark/gpupixel/stargazers)
@@ -18,80 +19,85 @@
 
 </p> 
 
-## Introduction
-GPUPixel is a high-performance image and video processing library written in C++11. It is GPU-based and comes with built-in beauty effects filters that can achieve commercial-grade results. It supports platforms including iOS, Mac, Android, and theoretically can be ported to any platform that supports OpenGL/ES.
+## 简介 ##
 
-## Effects
-Whitening & Smoothing
+GPUPixel是一个由C++11编写的高性能图像和视频处理库, 基于GPU, 内置美颜特效滤镜, 效果可以达到商用级别.
+支持的平台包括iOS, Mac, Android, 理论上可以移植到所有支持OpenGL/ES的平台.
+
+## 效果
+
+**美白&磨皮**
 
  ![sample-1](./docs/sample-1.jpg)
 
 
-## Architecture
+## 架构
   ![sample-1](./docs/arch-zh.jpg)
 
-## Features
+## 功能 ##
 
-### Beauty Filters
-- [x] Smoothing Filter
-- [x] Whitening Filter
-- [x] Rosy Filter
-- [x] Face Slimming Filter
-- [x] Big Eyes Filter
-- [x] Lipstick Filter
-- [x] Blush Filter
+### 美颜滤镜
+- [x] 磨皮滤镜 
+- [x] 美白滤镜
+- [x] 红润滤镜
+- [x] 瘦脸滤镜
+- [x] 大眼滤镜
+- [x] 口红滤镜
+- [x] 腮红滤镜
 
-### Input Formats
+### 输入格式
 - [x] YUV420P(I420)
 - [x] RGBA
 - [x] JPEG
 - [x] PNG
 - [ ] NV12
 
-### Output Formats
+### 输出格式
 - [x] RGBA
 - [ ] YUV420P
 - [ ] NV12
 
-### Basic Filters
-[Basic Filters]()
+### 基础滤镜
+[基础滤镜列表]()
 
-### Other Filters
-- [x] Image Watermark
-- [ ] Sticker Effects
-- [ ] Text Watermark
-- [ ] Style Filters
+### 其他滤镜
+- [x] 图片水印
+- [ ] 贴纸特效
+- [ ] 文字水印
+- [ ] 风格滤镜
 
-## System Requirements
-|OS|iOS|OSX|Android|Windows| Linux |
+## 效果预览
+
+
+## 系统要求
+|系统|iOS|OSX|Android|Windows| Linux |
 |:----:|:----:|:----:|:----:|:----:|:----:|
-|Min Version|10.0+|10.13+|5.0+|-|-|
+|最低版本|10.0+|10.13+|5.0+|-|-|
 
-##  Performance
+## 性能 ##
 ### iPhone
 |-|iPhone 6P|iPhone 8|iPhone X|iPhone 11 | iPhone 14 pro |
 |:----:|:----:|:----:|:----:|:----:|:----:|
 |CPU|-|-|-|-|-|
-|Time Taken|-ms|-ms|-ms|-|-|
+|耗时|-ms|-ms|-ms|-|-|
 ### Android
 |-|Xiaomi 10| Huawei Meta30|Vivo|SAMSUNG| Google Pixel |
 |:----:|:----:|:----:|:----:|:----:|:----:|
 |CPU|-|-|-|-|-|
-|Time Taken|-ms|-ms|-ms|-|-|
+|耗时|-ms|-ms|-ms|-|-|
 
 
 
-## Compilation
+## 编译 ##
 ### iOS
-Open `objc/gpupixel.xcodeproj` or `objc/demo/PixDemo.xcodeproj`  Xcode project and select the corresponding platform for compilation
+打开 `objc/gpupixel.xcodeproj` 或 `objc/demo/PixDemo.xcodeproj`  Xcode工程, 选择对应平台编译.
 
 ### Android
-Open the directory ./android in Android Studio and configure NDK r21+
-
-## API Call
-Refer to `./objc/demo` or `./android` demo
-
+Android Studio 打开目录 `./android`, 配置 `NDK r21+`
+## 接口调用 ##
+参考`./objc/demo` 或 `./android` demo
 **`.h` file**
+
 ```c++
 // video data input
 std::shared_ptr<SourceRawDataInput> source_raw_input_;
@@ -115,7 +121,7 @@ std::shared_ptr<TargetRawDataOutput> target_raw_output_;
  }
 ```
 
-**Input Image Data I420 or RGBA**
+**输入图像数据 I420 or RGBA**
 
 ```c++
 // ...
@@ -136,7 +142,7 @@ std::shared_ptr<TargetRawDataOutput> target_raw_output_;
                                 stride);
 ```
 
-**Output Data Callback**
+**输出数据回调**
 
 
 ```c++
