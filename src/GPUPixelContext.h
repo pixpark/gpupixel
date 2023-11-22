@@ -10,41 +10,42 @@
 #include <mutex>
 #include "FramebufferCache.h"
 #include "GPUPixelDef.h"
-#if !defined(GPUPIXEL_WIN)
-#include <pthread.h>
-#endif
+#include "DispatchQueue.h"
+
 #include "Filter.h"
 #include "GLProgram.h"
 
 #if defined(GPUPIXEL_IOS)
-#import <OpenGLES/EAGL.h>
-#import <OpenGLES/ES3/gl.h>
+  #import <OpenGLES/EAGL.h>
+  #import <OpenGLES/ES3/gl.h>
+#endif
 
-#elif defined(GPUPIXEL_MAC)
-#import <AppKit/NSOpenGL.h>
-#import <CoreMedia/CoreMedia.h>
-#import <OpenGL/gl.h>
-#import <QuartzCore/QuartzCore.h>
+#if defined(GPUPIXEL_MAC)
+  #import <AppKit/NSOpenGL.h>
+  #import <CoreMedia/CoreMedia.h>
+  #import <OpenGL/gl.h>
+  #import <QuartzCore/QuartzCore.h>
+#endif
 
-#elif defined(GPUPIXEL_ANDROID)
-#include <EGL/egl.h>
-#include <GLES/gl.h>
-#include <GLES/glext.h>
-#include <GLES3/gl3.h>
-#include <GLES3/gl3ext.h>
-#include <android/log.h>
-#include <jni.h>
+#if defined(GPUPIXEL_ANDROID)
+  #include <EGL/egl.h>
+  #include <GLES/gl.h>
+  #include <GLES/glext.h>
+  #include <GLES3/gl3.h>
+  #include <GLES3/gl3ext.h>
+  #include <android/log.h>
+  #include <jni.h>
 
-typedef struct _gpu_context_t {
-  EGLDisplay egldisplay;
-  EGLSurface eglsurface;
-  EGLContext eglcontext;
-} _gpu_context_t;
+  typedef struct _gpu_context_t {
+    EGLDisplay egldisplay;
+    EGLSurface eglsurface;
+    EGLContext eglcontext;
+  } _gpu_context_t;
+#endif
 
-#elif defined(GPUPIXEL_WIN)
-#include <glew/glew.h>
-#include <glfw/glfw3.h>
-#else
+#if defined(GPUPIXEL_WIN)
+  #include <glew/glew.h>
+  #include <glfw/glfw3.h>
 #endif
  
 NS_GPUPIXEL_BEGIN
@@ -58,29 +59,27 @@ class GPUPixelContext {
   void setActiveShaderProgram(GLProgram* shaderProgram);
   void purge();
 
+
+  void runSync(std::function<void(void)> func);
+  void runAsync(std::function<void(void)> func);
+  void useAsCurrent(void);
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
-  void runSync(std::function<void(void)> func);
-  void runAsync(std::function<void(void)> func);
-  void useAsCurrent(void);
-  dispatch_queue_t getContextQueue() const { return _contextQueue; };
   void presentBufferForDisplay();
-#elif defined(GPUPIXEL_ANDROID)
-  void runSync(std::function<void(void)> func);
-  void runAsync(std::function<void(void)> func);
-  void useAsCurrent(void);
-#elif defined(GPUPIXEL_WIN)
-  void runSync(std::function<void(void)> func);
-  void runAsync(std::function<void(void)> func);
-  void useAsCurrent();
 #endif
 
 #if defined(GPUPIXEL_IOS)
   EAGLContext* getEglContext() const { return _eglContext; };
-#elif defined(GPUPIXEL_MAC)
+#endif
+  
+#if defined(GPUPIXEL_MAC)
   NSOpenGLContext* getOpenGLContext() const { return imageProcessingContext; };
-#elif defined(GPUPIXEL_WIN)
+#endif
+  
+#if defined(GPUPIXEL_WIN)
   GLFWwindow* getShareContext() const { return _wglShareContext; };
-#elif defined(GPUPIXEL_ANDROID)
+#endif
+  
+#if defined(GPUPIXEL_ANDROID)
 
 #endif
 
@@ -97,7 +96,7 @@ class GPUPixelContext {
 
   void init();
 
-#if (defined __ANDROID__) || (defined GPUPIXEL_WIN)
+#if defined(GPUPIXEL_ANDROID) || (defined GPUPIXEL_WIN)
   void createContext();
   void releaseContext();
 #endif
@@ -107,28 +106,30 @@ class GPUPixelContext {
   FramebufferCache* _framebufferCache;
   GLProgram* _curShaderProgram;
 
-#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
-  dispatch_queue_t _contextQueue;
-#elif (defined __ANDROID__)
- 
+  
+#if defined(GPUPIXEL_ANDROID)
   bool context_inited = false;
-#elif defined(GPUPIXEL_WIN)
-
 #endif
 
 #if defined(GPUPIXEL_IOS)
   EAGLContext* _eglContext;
-#elif defined(GPUPIXEL_MAC)
+#endif
+  
+#if defined(GPUPIXEL_MAC)
   NSOpenGLContext* imageProcessingContext;
   NSOpenGLPixelFormat* _pixelFormat;
-#elif defined(GPUPIXEL_ANDROID)
+#endif
+  
+#if defined(GPUPIXEL_ANDROID)
   int m_surfacewidth;
   int m_surfaceheight;
   _gpu_context_t* m_gpu_context;
-#elif defined(GPUPIXEL_WIN)
-  GLFWwindow* _wglShareContext = nullptr;
-#else
 #endif
+  
+#if defined(GPUPIXEL_WIN)
+  GLFWwindow* _wglShareContext = nullptr;
+#endif
+ std::shared_ptr<LocalDispatchQueue> task_queue_;
 };
 
 NS_GPUPIXEL_END
