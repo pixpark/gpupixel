@@ -212,9 +212,8 @@
 #endif
 }
  
-- (void)presentFramebuffer;
-{
-    GPUPixel::GPUPixelContext::getInstance()->runAsync([&] {
+- (void)presentFramebuffer {
+    GPUPixel::GPUPixelContext::getInstance()->runSync([&] {
 #if defined(GPUPIXEL_IOS)
         glBindRenderbuffer(GL_RENDERBUFFER, displayRenderbuffer);
         GPUPixel::GPUPixelContext::getInstance()->presentBufferForDisplay();
