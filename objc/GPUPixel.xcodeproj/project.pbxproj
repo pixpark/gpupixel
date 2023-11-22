@@ -3,10 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 53;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		84413EBD2B0CD35C008A7641 /* DispatchQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 84413EBB2B0CD35C008A7641 /* DispatchQueue.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		84413EBE2B0CD35C008A7641 /* DispatchQueue.cc in Sources */ = {isa = PBXBuildFile; fileRef = 84413EBC2B0CD35C008A7641 /* DispatchQueue.cc */; };
 		84414F6A2A762916005D378C /* mouth.png in Resources */ = {isa = PBXBuildFile; fileRef = 84414F682A762916005D378C /* mouth.png */; };
 		84414F6B2A762916005D378C /* blusher.png in Resources */ = {isa = PBXBuildFile; fileRef = 84414F692A762916005D378C /* blusher.png */; };
 		847243D92A600DAF009D1488 /* GPUPixelDef.h in Headers */ = {isa = PBXBuildFile; fileRef = 84CD75E827BA5EB300408934 /* GPUPixelDef.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -297,6 +299,8 @@
 		8417CBB92A5FC72A00BD7B78 /* GPUPixel.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = GPUPixel.docc; sourceTree = "<group>"; };
 		8417CC512A5FD09000BD7B78 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/System/Library/Frameworks/CoreMedia.framework; sourceTree = DEVELOPER_DIR; };
 		8417CC532A5FD09600BD7B78 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
+		84413EBB2B0CD35C008A7641 /* DispatchQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DispatchQueue.h; path = ../../src/DispatchQueue.h; sourceTree = "<group>"; };
+		84413EBC2B0CD35C008A7641 /* DispatchQueue.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DispatchQueue.cc; path = ../../src/DispatchQueue.cc; sourceTree = "<group>"; };
 		84414F682A762916005D378C /* mouth.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = mouth.png; path = ../resources/mouth.png; sourceTree = "<group>"; };
 		84414F692A762916005D378C /* blusher.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = blusher.png; path = ../resources/blusher.png; sourceTree = "<group>"; };
 		84646496291E8028005B1C49 /* BaseBeautyFaceFilter.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = BaseBeautyFaceFilter.cc; path = ../../src/filter/BaseBeautyFaceFilter.cc; sourceTree = "<group>"; };
@@ -683,6 +687,8 @@
 		8472447C2A602C7D009D1488 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				84413EBC2B0CD35C008A7641 /* DispatchQueue.cc */,
+				84413EBB2B0CD35C008A7641 /* DispatchQueue.h */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -717,6 +723,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84413EBD2B0CD35C008A7641 /* DispatchQueue.h in Headers */,
 				8492E6C72A618B0E0035AA09 /* MathToolbox.h in Headers */,
 				847244172A600DAF009D1488 /* Framebuffer.h in Headers */,
 				847244182A600DAF009D1488 /* FramebufferCache.h in Headers */,
@@ -1014,6 +1021,7 @@
 				847244522A600DAF009D1488 /* SmoothToonFilter.cc in Sources */,
 				847244532A600DAF009D1488 /* SobelEdgeDetectionFilter.cc in Sources */,
 				847244542A600DAF009D1488 /* SphereRefractionFilter.cc in Sources */,
+				84413EBE2B0CD35C008A7641 /* DispatchQueue.cc in Sources */,
 				847244552A600DAF009D1488 /* ToonFilter.cc in Sources */,
 				847244562A600DAF009D1488 /* WeakPixelInclusionFilter.cc in Sources */,
 				847244572A600DAF009D1488 /* WhiteBalanceFilter.cc in Sources */,
@@ -1208,7 +1216,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_COMMA = YES;
@@ -1277,7 +1285,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_COMMA = YES;
@@ -1343,7 +1351,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_COMMA = YES;
@@ -1412,7 +1420,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_COMMA = YES;
