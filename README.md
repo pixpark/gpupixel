@@ -4,7 +4,7 @@
 <a href="./README_cn.md"> 简体中文 &nbsp; </a>
 </p>
 <p align="left">
-<a href="https://github.com/pixpark/gpupixel">gpupixel</a>
+<a href="https://github.com/pixpark/gpupixel">GPUPixel</a>
 @
 <a href="https://github.com/pixpark">PixPark</a> 
 </p>
@@ -53,8 +53,8 @@ Whitening & Smoothing
 - [ ] YUV420P
 - [ ] NV12
 
-### Basic Filters
-[Basic Filters]()
+### Build In Filters
+[Build In Filters]()
 
 ### Other Filters
 - [x] Image Watermark
