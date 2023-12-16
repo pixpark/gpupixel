@@ -4,15 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import com.pixpark.PixDemo.databinding.ActivityMainBinding;
 import com.pixpark.gpupixel.GPUPixelFilter;
 import com.pixpark.gpupixel.GPUPixelSourceCamera;
-import com.pixpark.gpupixel.GPUPixelSourceRawInput;
 import com.pixpark.gpupixel.GPUPixelView;
 
 public class MainActivity extends AppCompatActivity implements SurfaceHolder.Callback {
@@ -22,12 +21,10 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         System.loadLibrary("gpupixel");
     }
 
-    private GPUPixelSourceCamera gpuImageSourceCamera;
-    private GPUPixelSourceRawInput gpuImageSourceRawInput;
+    private GPUPixelSourceCamera sourceCamera;
     private GPUPixelView surfaceView;
     private GPUPixelFilter filter;
     private Button btnStart;
-    private boolean isBeautyFaceOpen;
 
     private ActivityMainBinding binding;
 
@@ -38,39 +35,33 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        isBeautyFaceOpen = true;
+        // 保持屏幕常亮
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        gpuImageSourceCamera = new GPUPixelSourceCamera(this.getApplicationContext());
-        gpuImageSourceRawInput = new GPUPixelSourceRawInput();
-        gpuImageSourceCamera.SetSourceRawInput(gpuImageSourceRawInput);
+        // preview
         surfaceView = findViewById(R.id.surfaceView);
+
+        // 美颜滤镜
+        filter = GPUPixelFilter.create("BeautifyFilter");
+
+        // camera
+        sourceCamera = new GPUPixelSourceCamera(this.getApplicationContext());
+        sourceCamera.addTarget(surfaceView);
+
+        //
         btnStart = findViewById(R.id.btnStart);
-        String path =  getExternalFilesDir("gpupixel").getAbsolutePath();
-        Log.i("GPUPixel", path);
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isBeautyFaceOpen) {
-                    isBeautyFaceOpen = false;
-                    filter = GPUPixelFilter.create("BeautifyFilter");
-                    //gpuImageSourceCamera.addTarget(filter);
-                    gpuImageSourceRawInput.addTarget(filter);
-                    filter.addTarget(surfaceView);
-                } else {
-                    isBeautyFaceOpen = true;
-//                    gpuImageSourceCamera.addTarget(surfaceView);
-                }
 
             }
         });
-
-//        surfaceView.getHolder().addCallback(this);
     }
 
 
 
     public void surfaceCreated(SurfaceHolder holder) {
-        gpuImageSourceCamera.setPreviewHolder(holder);
+        sourceCamera.setPreviewHolder(holder);
     }
 
     @Override
