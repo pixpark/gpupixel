@@ -13,6 +13,7 @@ import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.opengl.GLES20;
 import android.os.Build;
+import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.WindowManager;
@@ -56,25 +57,11 @@ public class GPUPixelSourceCamera extends GPUPixelSource implements Camera.Previ
                 if (mNativeClassID != 0) {
                     GPUPixel.nativeYUVtoRBGA(data, previewSize.width, previewSize.height, mRGBABuffer.array());
                     cam.addCallbackBuffer(data);
-                    SourceRawDataInput.SetRotation(mRotation);
-                    SourceRawDataInput.uploadBytes(mRGBABuffer.array(), previewSize.width, previewSize.height, previewSize.width * previewSize.height * 4);
+                    GPUPixel.nativeSourceCameraSetFrame(mNativeClassID, previewSize.width, previewSize.height, mRGBABuffer.array(), mRotation);
                 }
             }
         });
-        GPUPixel.getInstance().requestRender();
-        //proceed(true, true);
-
-//         GPUPixel.getInstance().runOnDraw(new Runnable() {
-//             @Override
-//             public void run() {
-//                 if (mNativeClassID != 0) {
-//                     GPUPixel.nativeYUVtoRBGA(data, previewSize.width, previewSize.height, mRGBABuffer.array());
-//                     cam.addCallbackBuffer(data);
-//                     GPUPixel.nativeSourceCameraSetFrame(mNativeClassID, previewSize.width, previewSize.height, mRGBABuffer.array(), mRotation);
-//                 }
-//             }
-//         });
-//        proceed(true, true);
+        proceed(true, true);
     }
 
     public void onResume() {
