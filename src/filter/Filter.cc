@@ -11,7 +11,14 @@
 
 NS_GPUPIXEL_BEGIN
 
-std::map<std::string, std::shared_ptr<Filter>> Filter::_filterFactories;
+
+std::map<std::string, std::function<std::shared_ptr<Filter>()>> initFilterFactory() {
+    std::map<std::string, std::function<std::shared_ptr<Filter>()>> mmap;
+    mmap["FaceBeautyFilter"] = FaceBeautyFilter::create;
+    return  mmap;
+}
+
+std::map<std::string, std::function<std::shared_ptr<Filter>()>> Filter::_filterFactories = initFilterFactory();
 Filter::Filter() : _filterProgram(0), _filterClassName("") {
   _backgroundColor.r = 0.0;
   _backgroundColor.g = 0.0;
@@ -27,11 +34,12 @@ Filter::~Filter() {
 }
 
 std::shared_ptr<Filter> Filter::create(const std::string& filterClassName) {
-  std::shared_ptr<Filter> filter;
-  // todo(Jeayo) create a filter factory with filtername
-
-  _filterFactories.insert(std::make_pair(filterClassName, filter));
-  return filter;
+  for(auto filter : _filterFactories) {
+    if(filter.first == filterClassName) {
+      return filter.second();
+    }
+  }
+  return nullptr;
 }
 
 std::shared_ptr<Filter> Filter::createWithShaderString(
@@ -474,5 +482,6 @@ bool Filter::getPropertyType(const std::string& name, std::string& retType) {
   retType = property->type;
   return true;
 }
+
 
 NS_GPUPIXEL_END
