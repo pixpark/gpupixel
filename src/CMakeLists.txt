@@ -44,6 +44,12 @@ add_library( # Sets the name of the library.
         GPUPixelJNI.cc
         MathToolbox.cc
         Util.cc
+        filter/BaseBeautyFaceFilter.cc
+        filter/FaceBeautyFilter.cc
+        filter/BoxHighPassFilter.cc
+        filter/BoxDifferenceFilter.cc
+        filter/BoxBlurFilter.cc
+        filter/BoxMonoBlurFilter.cc
         filter/BilateralFilter.cc
         filter/BrightnessFilter.cc
         filter/CannyEdgeDetectionFilter.cc
