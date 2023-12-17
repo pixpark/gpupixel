@@ -42,11 +42,12 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         surfaceView = findViewById(R.id.surfaceView);
 
         // 美颜滤镜
-        filter = GPUPixelFilter.create("BeautifyFilter");
+        filter = GPUPixelFilter.create("FaceBeautyFilter");
 
         // camera
         sourceCamera = new GPUPixelSourceCamera(this.getApplicationContext());
-        sourceCamera.addTarget(surfaceView);
+        sourceCamera.addTarget(filter);
+        filter.addTarget(surfaceView);
 
         //
         btnStart = findViewById(R.id.btnStart);
