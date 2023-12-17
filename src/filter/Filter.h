@@ -156,7 +156,7 @@ class Filter : public Source, public Target {
   std::map<std::string, StringProperty> _stringProperties;
 
  private:
-  static std::map<std::string, std::shared_ptr<Filter>> _filterFactories;
+  static std::map<std::string, std::function<std::shared_ptr<Filter>()>> _filterFactories;
 };
 
 #define REGISTER_FILTER_CLASS(className)

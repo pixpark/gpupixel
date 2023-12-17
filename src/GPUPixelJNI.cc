@@ -3,6 +3,7 @@
 #include <android/bitmap.h>
 #include <jni.h>
 #include <string>
+#include <list>
 #include "GPUPixelContext.h"
 #include "filter/Filter.h"
 #include "source/SourceCamera.h"
@@ -10,6 +11,7 @@
 #include "source/SourceRawDataInput.h"
 #include "target/TargetView.h"
 USING_NS_GPUPIXEL
+std::list<std::shared_ptr<Filter>>  filter_list_;
 
 extern "C" jlong Java_com_pixpark_gpupixel_GPUPixel_nativeSourceImageNew(
     JNIEnv* env,
@@ -236,7 +238,10 @@ extern "C" jlong Java_com_pixpark_gpupixel_GPUPixel_nativeFilterCreate(
     jobject obj,
     jstring jFilterClassName) {
   const char* filterClassName = env->GetStringUTFChars(jFilterClassName, 0);
-  long ret = (uintptr_t)(Filter::create(filterClassName)).get();
+
+  auto ft = Filter::create(filterClassName);
+  filter_list_.push_back(ft);
+  jlong ret = (jlong)ft.get();
   env->ReleaseStringUTFChars(jFilterClassName, filterClassName);
   return ret;
 };
@@ -244,7 +249,13 @@ extern "C" jlong Java_com_pixpark_gpupixel_GPUPixel_nativeFilterCreate(
 extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeFilterDestroy(
     JNIEnv* env,
     jobject obj,
-    jlong classId){};
+    jlong classId){
+    for(auto ft : filter_list_) {
+        if(classId == (jlong)ft.get()){
+            filter_list_.remove(ft);
+        }
+    }
+};
 
 extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeFilterFinalize(
     JNIEnv* env,
