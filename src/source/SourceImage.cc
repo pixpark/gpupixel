@@ -8,6 +8,11 @@
 #include "SourceImage.h"
 #include "GPUPixelContext.h"
 #include "Util.h"
+#if defined(GPUPIXEL_ANDROID)
+#include <android/bitmap.h>
+
+#include "jni_helpers.h"
+#endif
 
 USING_NS_GPUPIXEL
 
@@ -21,9 +26,47 @@ std::shared_ptr<SourceImage> SourceImage::create(int width,
 
 std::shared_ptr<SourceImage> SourceImage::create(const std::string name) {
 #if defined(GPUPIXEL_ANDROID)
-  // Todo(Jeayo) @see https://developer.android.com/ndk/guides/image-decoder?hl=zh-cn
-  auto sourceImage = std::shared_ptr<SourceImage>(new SourceImage());
-  return sourceImage;
+    auto sourceImage = std::shared_ptr<SourceImage>(new SourceImage());
+    // Todo(Jeayo) @see https://developer.android.com/ndk/guides/image-decoder?hl=zh-cn
+    JavaVM *jvm = GetJVM();
+    JNIEnv* env  = GetEnv(jvm);
+    // 定义类路径和方法签名
+    const char *className = "com/pixpark/gpupixel/GPUPixelSourceImage";
+    const char *methodName = "createBitmap";
+    const char *methodSignature = "(Ljava/lang/String;)Landroid/graphics/Bitmap;";
+
+    // GPUPixelSourceImage
+    jclass jSourceImageClass = env->FindClass(className);
+    if (jSourceImageClass == NULL) {
+        return NULL;
+    }
+
+    // 找到createBitmap方法
+    jmethodID createBitmapMethod = env->GetStaticMethodID(jSourceImageClass, methodName, methodSignature);
+    if (createBitmapMethod == NULL) {
+        return NULL;
+    }
+
+    // 创建Java字符串作为参数
+    jstring imgName = env->NewStringUTF(name.c_str());
+
+    // 调用createBitmap方法
+    jobject bitmap = env->CallStaticObjectMethod(jSourceImageClass, createBitmapMethod, imgName);
+
+    AndroidBitmapInfo info;
+    GLvoid* pixels;
+    AndroidBitmap_getInfo(env, bitmap, &info);
+    if(info.format != ANDROID_BITMAP_FORMAT_RGBA_8888) {
+        return nullptr;
+    }
+    AndroidBitmap_lockPixels(env, bitmap, &pixels);
+    sourceImage->setImage(info.width, info.height, pixels);
+    AndroidBitmap_unlockPixels(env, bitmap);
+
+    // 释放资源
+    env->DeleteLocalRef(imgName);
+    env->DeleteLocalRef(jSourceImageClass);
+    return sourceImage;
 #elif defined(GPUPIXEL_MAC)
   // Todo(Jeayo)
   auto sourceImage = std::shared_ptr<SourceImage>(new SourceImage());

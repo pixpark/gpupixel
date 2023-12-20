@@ -5,11 +5,14 @@
 #include <string>
 #include <list>
 #include "GPUPixelContext.h"
+#include "jni_helpers.h"
+
 #include "filter/Filter.h"
 #include "source/SourceCamera.h"
 #include "source/SourceImage.h"
 #include "source/SourceRawDataInput.h"
 #include "target/TargetView.h"
+
 USING_NS_GPUPIXEL
 std::list<std::shared_ptr<Filter>>  filter_list_;
 
@@ -408,6 +411,15 @@ extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeYUVtoRBGA(
 
   env->ReleasePrimitiveArrayCritical(rgbOut, rgbData, 0);
   env->ReleasePrimitiveArrayCritical(yuv420sp, yuv, 0);
+}
+
+extern "C" jint JNIEXPORT JNICALL JNI_OnLoad(JavaVM* jvm, void* reserved) {
+  SetJVM(jvm);
+  return JNI_VERSION_1_6;
+}
+
+extern "C" void JNIEXPORT JNICALL JNI_OnUnLoad(JavaVM* jvm, void* reserved) {
+//  RTC_CHECK(rtc::CleanupSSL()) << "Failed to CleanupSSL()";
 }
 
 #endif

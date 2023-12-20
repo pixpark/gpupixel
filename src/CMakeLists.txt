@@ -42,6 +42,7 @@ add_library( # Sets the name of the library.
         FramebufferCache.cc
         GLProgram.cc
         GPUPixelJNI.cc
+        jni_helpers.cc
         MathToolbox.cc
         Util.cc
         filter/BaseBeautyFaceFilter.cc
