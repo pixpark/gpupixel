@@ -11,14 +11,13 @@
 
 NS_GPUPIXEL_BEGIN
 
-
 std::map<std::string, std::function<std::shared_ptr<Filter>()>> initFilterFactory() {
-    std::map<std::string, std::function<std::shared_ptr<Filter>()>> mmap;
-    mmap["FaceBeautyFilter"] = FaceBeautyFilter::create;
-    return  mmap;
+    std::map<std::string, std::function<std::shared_ptr<Filter>()>> factory;
+    factory["FaceBeautyFilter"] = FaceBeautyFilter::create;
+    return  factory;
 }
-
 std::map<std::string, std::function<std::shared_ptr<Filter>()>> Filter::_filterFactories = initFilterFactory();
+
 Filter::Filter() : _filterProgram(0), _filterClassName("") {
   _backgroundColor.r = 0.0;
   _backgroundColor.g = 0.0;
