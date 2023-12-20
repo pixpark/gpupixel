@@ -55,6 +55,7 @@ public class GPUPixelSourceCamera extends GPUPixelSource implements Camera.Previ
             @Override
             public void run() {
                 if (mNativeClassID != 0) {
+                    // todo(jeayo yuv to texture)
                     GPUPixel.nativeYUVtoRBGA(data, previewSize.width, previewSize.height, mRGBABuffer.array());
                     cam.addCallbackBuffer(data);
                     GPUPixel.nativeSourceCameraSetFrame(mNativeClassID, previewSize.width, previewSize.height, mRGBABuffer.array(), mRotation);
