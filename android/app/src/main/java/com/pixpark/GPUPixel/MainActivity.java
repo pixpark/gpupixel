@@ -10,8 +10,10 @@ import android.view.WindowManager;
 import android.widget.Button;
 
 import com.pixpark.PixDemo.databinding.ActivityMainBinding;
+import com.pixpark.gpupixel.GPUPixel;
 import com.pixpark.gpupixel.GPUPixelFilter;
 import com.pixpark.gpupixel.GPUPixelSourceCamera;
+import com.pixpark.gpupixel.GPUPixelSourceImage;
 import com.pixpark.gpupixel.GPUPixelView;
 
 public class MainActivity extends AppCompatActivity implements SurfaceHolder.Callback {
@@ -38,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         // 保持屏幕常亮
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+        // must call fist
+        GPUPixel.setAppContext(this);
         // preview
         surfaceView = findViewById(R.id.surfaceView);
 
@@ -54,7 +58,9 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+//                static int white = 0;
+//                filter.setProperty("whiteness", 1.0);
+                filter.setProperty("skin_smoothing", 1.0);
             }
         });
     }

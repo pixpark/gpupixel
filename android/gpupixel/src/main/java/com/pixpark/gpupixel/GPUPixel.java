@@ -7,6 +7,7 @@
 
 package com.pixpark.gpupixel;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.opengl.GLSurfaceView;
 import android.graphics.PixelFormat;
@@ -22,6 +23,7 @@ public class GPUPixel {
     public static final int RotateRightFlipHorizontal = 6;
     public static final int Rotate180 = 7;
 
+    private static Context context_;
     private GPUPixelRenderer mRenderer = null;
     private GLSurfaceView mGLSurfaceView = null;
     private int mGLSurfaceViewRenderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY;
@@ -30,6 +32,7 @@ public class GPUPixel {
         private static final GPUPixel INSTANCE = new GPUPixel();
     }
 
+
     private GPUPixel(){ init(); }
     public static final GPUPixel getInstance() {
         GPUPixel instance = SingletonHolder.INSTANCE;
@@ -37,6 +40,14 @@ public class GPUPixel {
             instance.init();
         }
         return instance;
+    }
+
+    public static void setAppContext(Context context) {
+        context_ = context;
+    }
+
+    public static Context getAppContext() {
+        return context_;
     }
 
     public boolean isInited() {

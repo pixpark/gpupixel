@@ -41,12 +41,15 @@ bool FaceBeautyFilter::init() {
   setTerminalFilter(beautyFilter);
 
   boxBlurFilter->setTexelSpacingMultiplier(4);
-
   setRadius(4);
 
-  //    setBlurAlpha(0.5);
-  //    setWhite(0.2);
-  //    setSharpen(0.5);
+  registerProperty("whiteness", 0, "The whiteness of filter with range between -1 and 1.", [this](float& val) {
+      setWhite(val);
+  });
+
+  registerProperty("skin_smoothing", 0, "The smoothing of filter with range between -1 and 1.", [this](float& val) {
+      setBlurAlpha(val);
+  });
   return true;
 }
 
