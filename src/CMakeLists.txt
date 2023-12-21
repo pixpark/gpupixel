@@ -17,7 +17,8 @@ include_directories(
                     ./filter
                     ./target
                     ./source
-                    ./utils)
+                    ./utils
+                    ../third-party/libyuv/include)
 
 # lib search path, support static and shared lib
 #link_directories(
@@ -95,6 +96,49 @@ add_library( # Sets the name of the library.
         target/Target.cc
         target/TargetRawDataOutput.cc
         target/TargetView.cc
+        ../third-party/libyuv/source/compare.cc           
+        ../third-party/libyuv/source/compare_common.cc    
+        ../third-party/libyuv/source/compare_gcc.cc       
+        ../third-party/libyuv/source/compare_msa.cc       
+        ../third-party/libyuv/source/compare_neon.cc      
+        ../third-party/libyuv/source/compare_neon64.cc    
+        ../third-party/libyuv/source/compare_win.cc       
+        ../third-party/libyuv/source/convert.cc           
+        ../third-party/libyuv/source/convert_argb.cc      
+        ../third-party/libyuv/source/convert_from.cc      
+        ../third-party/libyuv/source/convert_from_argb.cc 
+        ../third-party/libyuv/source/convert_to_argb.cc   
+        ../third-party/libyuv/source/convert_to_i420.cc   
+        ../third-party/libyuv/source/cpu_id.cc            
+        ../third-party/libyuv/source/planar_functions.cc  
+        ../third-party/libyuv/source/rotate.cc            
+        ../third-party/libyuv/source/rotate_any.cc        
+        ../third-party/libyuv/source/rotate_argb.cc       
+        ../third-party/libyuv/source/rotate_common.cc     
+        ../third-party/libyuv/source/rotate_gcc.cc        
+        ../third-party/libyuv/source/rotate_msa.cc        
+        ../third-party/libyuv/source/rotate_neon.cc       
+        ../third-party/libyuv/source/rotate_neon64.cc     
+        ../third-party/libyuv/source/rotate_win.cc        
+        ../third-party/libyuv/source/row_any.cc           
+        ../third-party/libyuv/source/row_common.cc        
+        ../third-party/libyuv/source/row_gcc.cc           
+        ../third-party/libyuv/source/row_msa.cc           
+        ../third-party/libyuv/source/row_neon.cc          
+        ../third-party/libyuv/source/row_neon64.cc        
+        ../third-party/libyuv/source/row_win.cc           
+        ../third-party/libyuv/source/scale.cc             
+        ../third-party/libyuv/source/scale_any.cc         
+        ../third-party/libyuv/source/scale_argb.cc        
+        ../third-party/libyuv/source/scale_common.cc      
+        ../third-party/libyuv/source/scale_gcc.cc         
+        ../third-party/libyuv/source/scale_msa.cc         
+        ../third-party/libyuv/source/scale_neon.cc        
+        ../third-party/libyuv/source/scale_neon64.cc      
+        ../third-party/libyuv/source/scale_rgb.cc         
+        ../third-party/libyuv/source/scale_uv.cc          
+        ../third-party/libyuv/source/scale_win.cc         
+        ../third-party/libyuv/source/video_common.cc
         )
 
 # Searches for a specified prebuilt library and stores the path as a
