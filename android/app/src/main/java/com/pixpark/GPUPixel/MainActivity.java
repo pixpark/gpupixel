@@ -4,16 +4,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.SurfaceHolder;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.SeekBar;
 
 import com.pixpark.PixDemo.databinding.ActivityMainBinding;
 import com.pixpark.gpupixel.GPUPixel;
 import com.pixpark.gpupixel.GPUPixelFilter;
 import com.pixpark.gpupixel.GPUPixelSourceCamera;
-import com.pixpark.gpupixel.GPUPixelSourceImage;
 import com.pixpark.gpupixel.GPUPixelView;
 
 public class MainActivity extends AppCompatActivity implements SurfaceHolder.Callback {
@@ -27,6 +27,8 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     private GPUPixelView surfaceView;
     private GPUPixelFilter filter;
     private Button btnStart;
+    private SeekBar smooth_seekbar;
+    private SeekBar whiteness_seekbar;
 
     private ActivityMainBinding binding;
 
@@ -36,6 +38,9 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        String path =  getExternalFilesDir("gpupixel").getAbsolutePath();
+        Log.i("GPUPixel", path);
 
         // 保持屏幕常亮
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -53,14 +58,43 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         sourceCamera.addTarget(filter);
         filter.addTarget(surfaceView);
 
-        //
-        btnStart = findViewById(R.id.btnStart);
-        btnStart.setOnClickListener(new View.OnClickListener() {
+        // set default value
+        filter.setProperty("skin_smoothing", 0.5);
+        filter.setProperty("whiteness", 0.4);
+
+        smooth_seekbar = findViewById(R.id.smooth_seekbar);
+        smooth_seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void onClick(View v) {
-//                static int white = 0;
-//                filter.setProperty("whiteness", 1.0);
-                filter.setProperty("skin_smoothing", 1.0);
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                filter.setProperty("skin_smoothing", progress/10.0);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        whiteness_seekbar = findViewById(R.id.whiteness_seekbar);
+        whiteness_seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                filter.setProperty("whiteness", progress/10.0);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
             }
         });
     }
