@@ -6,7 +6,7 @@
 #include <list>
 #include "GPUPixelContext.h"
 #include "jni_helpers.h"
-
+#include "libyuv.h"
 #include "filter/Filter.h"
 #include "source/SourceCamera.h"
 #include "source/SourceImage.h"
@@ -321,6 +321,7 @@ extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeContextPurge(
   GPUPixelContext::getInstance()->purge();
 };
 
+FILE* yuv_file_zz = NULL;
 extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeYUVtoRBGA(
     JNIEnv* env,
     jobject obj,
@@ -328,89 +329,31 @@ extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeYUVtoRBGA(
     jint width,
     jint height,
     jintArray rgbOut) {
-  int sz;
-  int i;
-  int j;
-  int Y;
-  int Cr = 0;
-  int Cb = 0;
-  int pixPtr = 0;
-  int jDiv2 = 0;
-  int R = 0;
-  int G = 0;
-  int B = 0;
-  int cOff;
-  int w = width;
-  int h = height;
-  sz = w * h;
 
-  jint* rgbData = (jint*)(env->GetPrimitiveArrayCritical(rgbOut, 0));
-  jbyte* yuv = (jbyte*)env->GetPrimitiveArrayCritical(yuv420sp, 0);
+    jint* rgbData = (jint*)(env->GetPrimitiveArrayCritical(rgbOut, 0));
+    jbyte* nv21 = (jbyte*)env->GetPrimitiveArrayCritical(yuv420sp, 0);
 
-  //    libyuv::NV21ToARGB(reinterpret_cast<const uint8 *>(yuv),
-  //                       width,
-  //                       reinterpret_cast<const uint8 *>(yuv + width *
-  //                       height), width / 2, reinterpret_cast<uint8
-  //                       *>(rgbData), width, width, height);
-  //
-  //    ((SourceCamera*)classId)->setFrameData(width, height, rgbData,
-  //    RotateRightFlipHorizontal);
+    uint8_t* src_rgba = (uint8_t*) malloc(width*height*4);
+    libyuv::NV21ToABGR(reinterpret_cast<const uint8_t *>(nv21),
+                     width,
+                     reinterpret_cast<const uint8_t *>(nv21 + width * height),
+                     width,
+                     reinterpret_cast<uint8_t*>(src_rgba),
+                     width*4,
+                     width,
+                     height);
 
-  for (j = 0; j < h; j++) {
-    pixPtr = j * w;
-    jDiv2 = j >> 1;
-    for (i = 0; i < w; i++) {
-      Y = yuv[pixPtr];
-      if (Y < 0) {
-        Y += 255;
-      }
-      if ((i & 0x1) != 1) {
-        cOff = sz + jDiv2 * w + (i >> 1) * 2;
-        Cb = yuv[cOff];
-        if (Cb < 0) {
-          Cb += 127;
-        } else {
-          Cb -= 128;
-        }
-        Cr = yuv[cOff + 1];
-        if (Cr < 0) {
-          Cr += 127;
-        } else {
-          Cr -= 128;
-        }
-      }
+    libyuv::ARGBRotate(src_rgba,
+                     width*4,
+                     reinterpret_cast<uint8_t*>(rgbData),
+                     height*4,
+                     width,
+                     height,
+                     libyuv::kRotate270);
 
-      // ITU-R BT.601 conversion
-      //
-      // R = 1.164*(Y-16) + 2.018*(Cr-128);
-      // G = 1.164*(Y-16) - 0.813*(Cb-128) - 0.391*(Cr-128);
-      // B = 1.164*(Y-16) + 1.596*(Cb-128);
-      //
-      Y = Y + (Y >> 3) + (Y >> 5) + (Y >> 7);
-      R = Y + (Cr << 1) + (Cr >> 6);
-      if (R < 0) {
-        R = 0;
-      } else if (R > 255) {
-        R = 255;
-      }
-      G = Y - Cb + (Cb >> 3) + (Cb >> 4) - (Cr >> 1) + (Cr >> 3);
-      if (G < 0) {
-        G = 0;
-      } else if (G > 255) {
-        G = 255;
-      }
-      B = Y + Cb + (Cb >> 1) + (Cb >> 4) + (Cb >> 5);
-      if (B < 0) {
-        B = 0;
-      } else if (B > 255) {
-        B = 255;
-      }
-      rgbData[pixPtr++] = 0xff000000 + (R << 16) + (G << 8) + B;
-    }
-  }
-
-  env->ReleasePrimitiveArrayCritical(rgbOut, rgbData, 0);
-  env->ReleasePrimitiveArrayCritical(yuv420sp, yuv, 0);
+    free(src_rgba);
+    env->ReleasePrimitiveArrayCritical(rgbOut, rgbData, 0);
+    env->ReleasePrimitiveArrayCritical(yuv420sp, nv21, 0);
 }
 
 extern "C" jint JNIEXPORT JNICALL JNI_OnLoad(JavaVM* jvm, void* reserved) {
