@@ -9,6 +9,7 @@ package com.pixpark.gpupixel;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.ImageFormat;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.opengl.GLES20;
@@ -58,7 +59,7 @@ public class GPUPixelSourceCamera extends GPUPixelSource implements Camera.Previ
                     // todo(jeayo yuv to texture)
                     GPUPixel.nativeYUVtoRBGA(data, previewSize.width, previewSize.height, mRGBABuffer.array());
                     cam.addCallbackBuffer(data);
-                    GPUPixel.nativeSourceCameraSetFrame(mNativeClassID, previewSize.width, previewSize.height, mRGBABuffer.array(), mRotation);
+                    GPUPixel.nativeSourceCameraSetFrame(mNativeClassID, previewSize.height, previewSize.width, mRGBABuffer.array(), GPUPixel.NoRotation);
                 }
             }
         });
@@ -90,8 +91,8 @@ public class GPUPixelSourceCamera extends GPUPixelSource implements Camera.Previ
                 Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
             parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
         }
-
         parameters.setPreviewSize(1280, 720);
+        parameters.setPreviewFormat(ImageFormat.NV21);
         mCamera.setParameters(parameters);
 
         int deviceRotation = ((WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay()
