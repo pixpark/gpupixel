@@ -36,7 +36,6 @@ class BaseBeautyFaceFilter : public Filter {
   float sharpen_ = 0.0;
   float blurAlpha_ = 0.0;
   float white_ = 0.0;
-  int doProcess_ = 0;
 };
 
 NS_GPUPIXEL_END
