@@ -1,7 +1,7 @@
 # GPUPixel - Realtime video and image processing library
 <p align="left">
-<a href="./doc/README_en.md"> English &nbsp;|&nbsp; </a>  
-<a href="./README.md"> 简体中文 &nbsp; </a>
+<a href="./README.md"> English &nbsp;|&nbsp; </a>  
+<a href="./README_cn.md"> 简体中文 &nbsp; </a>
 </p>
 <p align="left">
 <a href="https://github.com/pixpark/gpupixel">gpupixel</a>
@@ -28,11 +28,16 @@ GPUPixel是一个由C++11编写的高性能图像和视频处理库, 基于GPU, 
 
 **美白&磨皮**
 
- ![sample-1](./docs/sample-1.jpg)
+<p align="center">
+ <img src="./docs/sample-1.jpg" width="50%" height="auto" style="display: block; margin: 0 auto;">
+</p>
+
 
 
 ## 架构
-  ![sample-1](./docs/arch-zh.jpg)
+<p align="center">
+ <img src="./docs/arch-zh.jpg" width="80%" height="auto" style="display: block; margin: 0 auto;">
+</p>
 
 ## 功能 ##
 
