@@ -88,10 +88,10 @@ public class GPUPixelSourceImage extends GPUPixelSource {
         }
     }
 
-    public static Bitmap createBitmap(String img_name) {
+    public static Bitmap createBitmap(Context context, String img_name) {
         Bitmap bitmap = null;
         try {
-            bitmap = BitmapFactory.decodeStream(GPUPixel.getAppContext().getAssets().open(img_name));
+            bitmap = BitmapFactory.decodeStream(context.getAssets().open(img_name));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -99,9 +99,9 @@ public class GPUPixelSourceImage extends GPUPixelSource {
         return bitmap;
     }
 
-    private int kkkkk(String img_name) {
+    private int createTexture(Context context, String img_name) {
         try {
-            bitmap = BitmapFactory.decodeStream(GPUPixel.getAppContext().getAssets().open(img_name));
+            bitmap = BitmapFactory.decodeStream(context.getAssets().open(img_name));
             int[] textureIds = new int[1];
             GLES20.glGenTextures(1, textureIds, 0);
             int error;
