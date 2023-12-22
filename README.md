@@ -1,6 +1,6 @@
 # GPUPixel - Realtime video and image processing library
 <p align="left">
-<a href="./doc/README.md"> English &nbsp;|&nbsp; </a>  
+<a href="./README.md"> English &nbsp;|&nbsp; </a>  
 <a href="./README_cn.md"> 简体中文 &nbsp; </a>
 </p>
 <p align="left">
@@ -22,16 +22,19 @@
 GPUPixel is a high-performance image and video processing library written in C++11. It is GPU-based and comes with built-in beauty effects filters that can achieve commercial-grade results. It supports platforms including iOS, Mac, Android, and theoretically can be ported to any platform that supports OpenGL/ES.
 
 ## Effects
-Whitening & Smoothing
+Whitening & Smoothing 
 
- ![sample-1](./docs/sample-1.jpg)
+<p align="center">
+ <img src="./docs/sample-1.jpg" width="50%" height="auto" style="display: block; margin: 0 auto;">
+</p>
 
 
 ## Architecture
-  ![sample-1](./docs/arch-zh.jpg)
+<p align="center">
+ <img src="./docs/arch-zh.jpg" width="80%" height="auto" style="display: block; margin: 0 auto;">
+</p>
 
 ## Features
-
 ### Beauty Filters
 - [x] Smoothing Filter
 - [x] Whitening Filter
@@ -56,8 +59,8 @@ Whitening & Smoothing
 ### Build In Filters
 [Build In Filters]()
 
-### Other Filters
-- [x] Image Watermark
+### Todo Filters
+- [ ] Image Watermark
 - [ ] Sticker Effects
 - [ ] Text Watermark
 - [ ] Style Filters
