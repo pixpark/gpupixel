@@ -45,8 +45,6 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         // 保持屏幕常亮
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        // must call fist
-        GPUPixel.setAppContext(this);
         // preview
         surfaceView = findViewById(R.id.surfaceView);
 
