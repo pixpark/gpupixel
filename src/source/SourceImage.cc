@@ -8,32 +8,76 @@
 #include "SourceImage.h"
 #include "GPUPixelContext.h"
 #include "Util.h"
+
 #if defined(GPUPIXEL_ANDROID)
+
 #include <android/bitmap.h>
 
 #include "jni_helpers.h"
+
 #endif
 
 USING_NS_GPUPIXEL
 
 std::shared_ptr<SourceImage> SourceImage::create(int width,
                                                  int height,
-                                                 const void* pixels) {
-  auto sourceImage = std::shared_ptr<SourceImage>(new SourceImage());
-  sourceImage->setImage(width, height, pixels);
-  return sourceImage;
+                                                 const void *pixels) {
+    auto sourceImage = std::shared_ptr<SourceImage>(new SourceImage());
+    sourceImage->setImage(width, height, pixels);
+    return sourceImage;
 }
 
 std::shared_ptr<SourceImage> SourceImage::create(const std::string name) {
 #if defined(GPUPIXEL_ANDROID)
+    auto sourceImage = createImageForAndroid(name);
+    return sourceImage;
+#elif defined(GPUPIXEL_MAC)
+    // Todo(Jeayo)
+    auto sourceImage = std::shared_ptr<SourceImage>(new SourceImage());
+    return sourceImage;
+#elif defined(GPUPIXEL_IOS)
+    auto path = Util::getResourcePath(name);
+    UIImage* img =
+        [UIImage imageNamed:[NSString stringWithUTF8String:path.c_str()]];
+    return SourceImage::create(img);
+
+#elif defined(GPUPIXEL_WIN)
+
+#else
+#endif
+}
+
+SourceImage::~SourceImage() {
+
+}
+
+SourceImage *SourceImage::setImage(int width, int height, const void *pixels) {
+    this->setFramebuffer(0);
+    if (!_framebuffer || (_framebuffer->getWidth() != width ||
+                          _framebuffer->getHeight() != height)) {
+        _framebuffer =
+                GPUPixelContext::getInstance()->getFramebufferCache()->fetchFramebuffer(
+                        width, height, true);
+    }
+    this->setFramebuffer(_framebuffer);
+    CHECK_GL(glBindTexture(GL_TEXTURE_2D, this->getFramebuffer()->getTexture()));
+    CHECK_GL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
+                          GL_UNSIGNED_BYTE, pixels));
+    CHECK_GL(glBindTexture(GL_TEXTURE_2D, 0));
+    return this;
+}
+
+#if defined(GPUPIXEL_ANDROID)
+std::shared_ptr<SourceImage> SourceImage::createImageForAndroid(std::string name) {
     auto sourceImage = std::shared_ptr<SourceImage>(new SourceImage());
     // Todo(Jeayo) @see https://developer.android.com/ndk/guides/image-decoder?hl=zh-cn
     JavaVM *jvm = GetJVM();
-    JNIEnv* env  = GetEnv(jvm);
+    JNIEnv *env = GetEnv(jvm);
+
     // 定义类路径和方法签名
     const char *className = "com/pixpark/gpupixel/GPUPixelSourceImage";
     const char *methodName = "createBitmap";
-    const char *methodSignature = "(Ljava/lang/String;)Landroid/graphics/Bitmap;";
+    const char *methodSignature = "(Landroid/content/Context;Ljava/lang/String;)Landroid/graphics/Bitmap;";
 
     // GPUPixelSourceImage
     jclass jSourceImageClass = env->FindClass(className);
@@ -42,21 +86,40 @@ std::shared_ptr<SourceImage> SourceImage::create(const std::string name) {
     }
 
     // 找到createBitmap方法
-    jmethodID createBitmapMethod = env->GetStaticMethodID(jSourceImageClass, methodName, methodSignature);
+    jmethodID createBitmapMethod = env->GetStaticMethodID(jSourceImageClass, methodName,
+                                                          methodSignature);
     if (createBitmapMethod == NULL) {
         return NULL;
     }
-
+    // get app context
+    jobject jAppContext = NULL;
+    const char *context_name = "android/app/ActivityThread";
+    jclass activity_thread_clz = env->FindClass(context_name);
+    if (activity_thread_clz != NULL) {
+        jmethodID currentApplication = env->GetStaticMethodID(
+                activity_thread_clz, "currentApplication", "()Landroid/app/Application;");
+        if (currentApplication != NULL) {
+            jAppContext = env->CallStaticObjectMethod(activity_thread_clz, currentApplication);
+        } else {
+            //todo
+        }
+        env->DeleteLocalRef(activity_thread_clz);
+    } else {
+        // todo
+    }
     // 创建Java字符串作为参数
     jstring imgName = env->NewStringUTF(name.c_str());
 
     // 调用createBitmap方法
-    jobject bitmap = env->CallStaticObjectMethod(jSourceImageClass, createBitmapMethod, imgName);
+    jobject bitmap = env->CallStaticObjectMethod(jSourceImageClass,
+                                                 createBitmapMethod,
+                                                 jAppContext,
+                                                 imgName);
 
     AndroidBitmapInfo info;
-    GLvoid* pixels;
+    GLvoid *pixels;
     AndroidBitmap_getInfo(env, bitmap, &info);
-    if(info.format != ANDROID_BITMAP_FORMAT_RGBA_8888) {
+    if (info.format != ANDROID_BITMAP_FORMAT_RGBA_8888) {
         return nullptr;
     }
     AndroidBitmap_lockPixels(env, bitmap, &pixels);
@@ -67,42 +130,9 @@ std::shared_ptr<SourceImage> SourceImage::create(const std::string name) {
     env->DeleteLocalRef(imgName);
     env->DeleteLocalRef(jSourceImageClass);
     return sourceImage;
-#elif defined(GPUPIXEL_MAC)
-  // Todo(Jeayo)
-  auto sourceImage = std::shared_ptr<SourceImage>(new SourceImage());
-  return sourceImage;
-#elif defined(GPUPIXEL_IOS)
-  auto path = Util::getResourcePath(name);
-  UIImage* img =
-      [UIImage imageNamed:[NSString stringWithUTF8String:path.c_str()]];
-  return SourceImage::create(img);
+}
 
-#elif defined(GPUPIXEL_WIN)
- 
-#else
 #endif
-}
-
-SourceImage::~SourceImage() {
-  
-}
-
-SourceImage* SourceImage::setImage(int width, int height, const void* pixels) {
-  this->setFramebuffer(0);
-  if (!_framebuffer || (_framebuffer->getWidth() != width ||
-                        _framebuffer->getHeight() != height)) {
-    _framebuffer =
-        GPUPixelContext::getInstance()->getFramebufferCache()->fetchFramebuffer(
-            width, height, true);
-  }
-  this->setFramebuffer(_framebuffer);
-  CHECK_GL(glBindTexture(GL_TEXTURE_2D, this->getFramebuffer()->getTexture()));
-  CHECK_GL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
-                        GL_UNSIGNED_BYTE, pixels));
-  CHECK_GL(glBindTexture(GL_TEXTURE_2D, 0));
-  return this;
-}
-
 #if defined(GPUPIXEL_IOS)
 std::shared_ptr<SourceImage> SourceImage::create(NSURL* imageUrl) {
   auto sourceImage = std::shared_ptr<SourceImage>(new SourceImage());

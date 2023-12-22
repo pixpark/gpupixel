@@ -33,9 +33,14 @@ class SourceImage : public Source {
 
   static std::shared_ptr<SourceImage> create(CGImageRef image);
   SourceImage* setImage(CGImageRef image);
+#endif
 
  private:
+#if defined(GPUPIXEL_IOS)
   UIImage* _adjustImageOrientation(UIImage* image);
+#endif
+#if defined(GPUPIXEL_ANDROID)
+    static std::shared_ptr<SourceImage> createImageForAndroid(std::string name);
 #endif
 };
 
