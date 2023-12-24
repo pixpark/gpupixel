@@ -286,6 +286,7 @@
 		8492E7552A6197640035AA09 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8417CC512A5FD09000BD7B78 /* CoreMedia.framework */; };
 		8492E7602A6197B80035AA09 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 847244702A60157C009D1488 /* AppKit.framework */; };
 		8492E7612A6197BD0035AA09 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8472446D2A6014B7009D1488 /* OpenGL.framework */; };
+		8493C41B2B380C7500E164B4 /* DispatchQueue.cc in Sources */ = {isa = PBXBuildFile; fileRef = 84413EBC2B0CD35C008A7641 /* DispatchQueue.cc */; };
 		84AEA25B2A643918003DE462 /* lookup2.png in Resources */ = {isa = PBXBuildFile; fileRef = 84AEA2562A643917003DE462 /* lookup2.png */; };
 		84AEA25C2A643918003DE462 /* lookUpCustom.png in Resources */ = {isa = PBXBuildFile; fileRef = 84AEA2572A643918003DE462 /* lookUpCustom.png */; };
 		84AEA25D2A643918003DE462 /* lookUpSkin.png in Resources */ = {isa = PBXBuildFile; fileRef = 84AEA2582A643918003DE462 /* lookUpSkin.png */; };
@@ -1037,6 +1038,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8493C41B2B380C7500E164B4 /* DispatchQueue.cc in Sources */,
 				8492E70E2A6197640035AA09 /* GPUPixel.docc in Sources */,
 				8492E70F2A6197640035AA09 /* FaceMakeupFilter.cc in Sources */,
 				8492E7102A6197640035AA09 /* FaceReshapeFilter.cc in Sources */,
