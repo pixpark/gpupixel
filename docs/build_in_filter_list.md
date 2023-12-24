@@ -1,0 +1,50 @@
+# GPUPixel Build in Filter List
+
+[Filter src code](https://github.com/pixpark/gpupixel/tree/main/src/filter)
+
+- BaseBeautyFaceFilter
+- BilateralFilter
+- BoxBlurFilter
+- BoxDifferenceFilter
+- BoxHighPassFilter
+- BoxMonoBlurFilter
+- BrightnessFilter
+- CannyEdgeDetectionFilter
+- ColorInvertFilter
+- ColorMatrixFilter
+- ContrastFilter
+- Convolution3x3Filter
+- CrosshatchFilter
+- DirectionalNonMaximumSuppressionFilter
+- DirectionalSobelEdgeDetectionFilter
+- EmbossFilter
+- ExposureFilter
+- FaceBeautyFilter
+- FaceMakeupFilter
+- FaceReshapeFilter
+- Filter
+- FilterGroup
+- GaussianBlurFilter
+- GaussianBlurMonoFilter
+- GlassSphereFilter
+- GrayscaleFilter
+- HSBFilter
+- HalftoneFilter
+- HueFilter
+- IOSBlurFilter
+- LuminanceRangeFilter
+- NearbySampling3x3Filter
+- NonMaximumSuppressionFilter
+- PixellationFilter
+- PosterizeFilter
+- RGBFilter
+- SaturationFilter
+- SingleComponentGaussianBlurFilter
+- SingleComponentGaussianBlurMonoFilter
+- SketchFilter
+- SmoothToonFilter
+- SobelEdgeDetectionFilter
+- SphereRefractionFilter
+- ToonFilter
+- WeakPixelInclusionFilter
+- WhiteBalanceFilter

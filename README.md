@@ -19,10 +19,12 @@
 </p> 
 
 ## Introduction
-GPUPixel is a high-performance image and video processing library written in C++11. It is GPU-based and comes with built-in beauty effects filters that can achieve commercial-grade results. It supports platforms including iOS, Mac, Android, and theoretically can be ported to any platform that supports OpenGL/ES.
+GPUPixel is a high-performance image and video processing library written in C++11. It is GPU-based and comes with built-in beauty effects filters that can achieve commercial-grade results. It supports platforms including iOS, Mac, Android, and it can theoretically be ported to any platform that supports OpenGL/ES.
 
-## Effects
-Whitening & Smoothing 
+Very easy to compile and use.
+
+## Effects Preview
+**Skin whitening & smoothing**: 
 
 <p align="center">
  <img src="./docs/sample-1.jpg" width="50%" height="auto" style="display: block; margin: 0 auto;">
@@ -34,36 +36,42 @@ Whitening & Smoothing
  <img src="./docs/arch-zh.jpg" width="80%" height="auto" style="display: block; margin: 0 auto;">
 </p>
 
-## Features
-### Beauty Filters
-- [x] Smoothing Filter
-- [x] Whitening Filter
-- [x] Rosy Filter
-- [x] Face Slimming Filter
-- [x] Big Eyes Filter
-- [x] Lipstick Filter
-- [x] Blush Filter
+## Features Compared
 
-### Input Formats
-- [x] YUV420P(I420)
-- [x] RGBA
-- [x] JPEG
-- [x] PNG
-- [ ] NV12
+This table compares the features supported by **GPUPixel** and **GPUImage**:
 
-### Output Formats
-- [x] RGBA
-- [ ] YUV420P
-- [ ] NV12
+✅: Supported
 
-### Build In Filters
-[Build In Filters]()
+❌: Not supported
 
-### Todo Filters
-- [ ] Image Watermark
-- [ ] Sticker Effects
-- [ ] Text Watermark
-- [ ] Style Filters
+✏️: Planning
+
+|             | [GPUPixel](https://github.com/pixpark/gpupixel) | [GPUImage](https://github.com/BradLarson/GPUImage) |
+| :-------------------- | :------------------------------------------------: | :---------------------------------------------: |
+| **Filters:** |                         ✅                          |                        ❌                        |
+| Skin Smoothing Filter |                         ✅                          |                        ❌                        |
+| Skin Whitening Filter |                         ✅                          |                        ❌                        |
+| Face Slimming Filter  |                         ✅                          |                        ❌                        |
+| Big Eyes Filter       |                         ✅                          |                        ❌                        |
+| Lipstick Filter       |                         ✅                          |                        ❌                        |
+| Blush Filter          |                         ✅                          |                        ❌                        |
+| More Build in Filter  |                         ✅                          |                        ✅                        |
+| **Platform:**         |                                                    |                                                 |
+| iOS                   |                         ✅                          |                        ✅                        |
+| Mac                   |                         ✅                          | ✅ |
+| Android               |                         ✅                          |                        ❌                        |
+| Win                   |                         ✏️                          |                        ❌                        |
+| Linux                 |                         ❌                         |                        ❌                        |
+| **Input Formats**     |                                                    |                                                 |
+| YUV420P(I420)         |                         ✅                          |                        ❌                        |
+| RGBA                  |                         ✅                          |                        ✅                        |
+| JPEG                  |                         ✅                          |                        ✅                        |
+| PNG                   |                         ✅                          |                        ✅                        |
+| NV21(for Android)     |                         ✏️                          |                        ❌                        |
+| **Output Formats**    |                                                    |                                                 |
+| RGBA                  |                         ✅                          |                        ✅                        |
+| YUV420P(I420)         |                         ✏️                          | ❌ |
+|  |                                                    |                                                 |
 
 ## System Requirements
 |OS|iOS|OSX|Android|Windows| Linux |
@@ -74,14 +82,13 @@ Whitening & Smoothing
 ### iPhone
 |-|iPhone 6P|iPhone 8|iPhone X|iPhone 11 | iPhone 14 pro |
 |:----:|:----:|:----:|:----:|:----:|:----:|
-|CPU|-|-|-|-|-|
-|Time Taken|-ms|-ms|-ms|-|-|
+|CPU|5%|5%|3%|3%|3%|
+|Time Taken|10ms|4ms|3ms|3ms|3ms|
 ### Android
 |-|Xiaomi 10| Huawei Meta30|Vivo|SAMSUNG| Google Pixel |
 |:----:|:----:|:----:|:----:|:----:|:----:|
-|CPU|-|-|-|-|-|
-|Time Taken|-ms|-ms|-ms|-|-|
-
+|CPU|3%|5%|-|-|-|
+|Time Taken|6ms|5ms|-|-|-|
 
 
 ## Compilation
@@ -91,10 +98,19 @@ Open `objc/gpupixel.xcodeproj` or `objc/demo/PixDemo.xcodeproj`  Xcode project a
 ### Android
 Open the directory ./android in Android Studio and configure NDK r21+
 
-## API Call
+## Library Size
+
+|      | iOS(.framework) | MacOS(.framework) | Android(.aar) |
+| :--: | :-------------: | :---------------: | :-----------: |
+| Size |     2.4 MB      |      2.6 MB       |    2.1 MB     |
+|      |                 |                   |               |
+
+
+## How to Use
 Refer to `./objc/demo` or `./android` demo
 
 **`.h` file**
+
 ```c++
 // video data input
 std::shared_ptr<SourceRawDataInput> source_raw_input_;
@@ -165,3 +181,4 @@ target_raw_output_->setPixelsCallbck([=](const uint8_t *data,
 
 // Output data callbck
 ```
+
