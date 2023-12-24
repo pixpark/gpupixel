@@ -33,8 +33,9 @@ Very easy to compile and use.
 
 ## Architecture
 <p align="center">
- <img src="./docs/arch-zh.jpg" width="80%" height="auto" style="display: block; margin: 0 auto;">
+ <img src="./docs/arch-en.jpg" width="75%" height="auto" style="display: block; margin: 0 auto;">
 </p>
+
 
 ## Features Compared
 
@@ -56,27 +57,27 @@ This table compares the features supported by **GPUPixel** and **GPUImage**:
 | Lipstick Filter       |                         ✅                          |                        ❌                        |
 | Blush Filter          |                         ✅                          |                        ❌                        |
 | More Build in Filter  |                         ✅                          |                        ✅                        |
+| **Input Formats:**     |                                                    |                                                 |
+| YUV420P(I420)         |                         ✅                          |                        ❌                        |
+| RGBA                  |                         ✅                          |                        ✅                        |
+| JPEG                  |                         ✅                          |                        ✅                        |
+| PNG                   |                         ✅                          |                        ✅                        |
+| NV21(for Android)     |                         ✏️                          |                        ❌                        |
+| **Output Formats:**    |                                                    |                                                 |
+| RGBA                  |                         ✅                          |                        ✅                        |
+| YUV420P(I420)         |                         ✏️                          | ❌ |
 | **Platform:**         |                                                    |                                                 |
 | iOS                   |                         ✅                          |                        ✅                        |
 | Mac                   |                         ✅                          | ✅ |
 | Android               |                         ✅                          |                        ❌                        |
 | Win                   |                         ✏️                          |                        ❌                        |
 | Linux                 |                         ❌                         |                        ❌                        |
-| **Input Formats**     |                                                    |                                                 |
-| YUV420P(I420)         |                         ✅                          |                        ❌                        |
-| RGBA                  |                         ✅                          |                        ✅                        |
-| JPEG                  |                         ✅                          |                        ✅                        |
-| PNG                   |                         ✅                          |                        ✅                        |
-| NV21(for Android)     |                         ✏️                          |                        ❌                        |
-| **Output Formats**    |                                                    |                                                 |
-| RGBA                  |                         ✅                          |                        ✅                        |
-| YUV420P(I420)         |                         ✏️                          | ❌ |
-|  |                                                    |                                                 |
+
 
 ## System Requirements
 |OS|iOS|OSX|Android|Windows| Linux |
 |:----:|:----:|:----:|:----:|:----:|:----:|
-|Min Version|10.0+|10.13+|5.0+|-|-|
+|Min Support OS Version|10.0|10.13|5.0 (API 21)|-|-|
 
 ##  Performance
 ### iPhone
@@ -103,7 +104,6 @@ Open the directory ./android in Android Studio and configure NDK r21+
 |      | iOS(.framework) | MacOS(.framework) | Android(.aar) |
 | :--: | :-------------: | :---------------: | :-----------: |
 | Size |     2.4 MB      |      2.6 MB       |    2.1 MB     |
-|      |                 |                   |               |
 
 
 ## How to Use
