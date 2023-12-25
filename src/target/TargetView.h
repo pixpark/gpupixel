@@ -30,6 +30,7 @@ class TargetView : public Target {
                                    RotationMode rotationMode = NoRotation,
                                    int texIdx = 0) override;
   void setFillMode(FillMode fillMode);
+  void setMirror(bool mirror);
   void onSizeChanged(int width, int height);
   virtual void update(int64_t frameTime) override;
 
@@ -37,6 +38,7 @@ class TargetView : public Target {
   int _viewWidth;
   int _viewHeight;
   FillMode _fillMode;
+  bool _mirror = false;
   GLProgram* _displayProgram;
   GLuint _positionAttribLocation;
   GLuint _texCoordAttribLocation;
