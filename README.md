@@ -27,6 +27,8 @@ It is GPU-based and comes with built-in beauty effects filters that can achieve 
 
 It supports platforms including iOS, Mac, Android, and it can theoretically be ported to any platform that supports OpenGL/ES.
 
+The face key points detection currently utilizes the [Face++](https://www.faceplusplus.com.cn/) library, but it will be replaced with either ncnn or mnn in the future.
+
 ## Effects Preview
 **Skin whitening & smoothing**: 
 

@@ -72,6 +72,16 @@ public class GPUPixelView extends FrameLayout implements GPUPixelTarget {
         });
     }
 
+    public void setMirror(final boolean mirror) {
+        GPUPixel.getInstance().runOnDraw(new Runnable() {
+            @Override
+            public void run() {
+                if (mNativeClassID != 0)
+                    GPUPixel.nativeTargetViewSetMirror(mNativeClassID, mirror);
+            }
+        });
+    }
+
     public int getSurfaceWidth() {
         return mGLSurfaceView.getWidth();
     }
