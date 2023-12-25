@@ -76,6 +76,13 @@ void TargetView::setFillMode(FillMode fillMode) {
   }
 }
 
+void TargetView::setMirror(bool mirror) {
+  if (_mirror != mirror) {
+    _mirror = mirror;
+  }
+}
+
+
 void TargetView::onSizeChanged(int width, int height) {
   if (_viewWidth != width || _viewHeight != height) {
     _viewWidth = width;
@@ -214,8 +221,13 @@ const GLfloat* TargetView::_getTexureCoordinate(RotationMode rotationMode) {
   };
 
   switch (rotationMode) {
-    case NoRotation:
-      return noRotationTextureCoordinates;
+    case NoRotation: {
+      if(_mirror) {
+        return horizontalFlipTextureCoordinates;
+      } else {
+        return noRotationTextureCoordinates;
+      }
+    }
     case RotateLeft:
       return rotateLeftTextureCoordinates;
     case RotateRight:

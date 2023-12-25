@@ -182,6 +182,7 @@ public class GPUPixel {
     public static native void nativeTargetViewFinalize(final long classID);
     public static native void nativeTargetViewOnSizeChanged(final long classID, final int width, final int height);
     public static native void nativeTargetViewSetFillMode(final long classID, final int fillMode);
+    public static native void nativeTargetViewSetMirror(final long classID, final boolean mirror);
     // context
     public static native void nativeContextInit();
     public static native void nativeContextDestroy();
