@@ -236,6 +236,14 @@ extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeTargetViewSetFillMode(
   ((TargetView*)classId)->setFillMode((TargetView::FillMode)fillMode);
 };
 
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_pixpark_gpupixel_GPUPixel_nativeTargetViewSetMirror(JNIEnv *env, jclass clazz,
+                                                             jlong class_id, jboolean mirror) {
+    ((TargetView*)class_id)->setMirror(mirror);
+}
+
 extern "C" jlong Java_com_pixpark_gpupixel_GPUPixel_nativeFilterCreate(
     JNIEnv* env,
     jobject obj,
