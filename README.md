@@ -188,3 +188,8 @@ target_raw_output_->setPixelsCallbck([=](const uint8_t *data,
 // Output data callbck
 ```
 
+
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=pixpark/gpupixel&type=Date)](https://star-history.com/#pixpark/gpupixel&Date)
