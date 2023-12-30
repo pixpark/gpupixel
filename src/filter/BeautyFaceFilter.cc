@@ -5,23 +5,23 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "FaceBeautyFilter.h"
+#include "BeautyFaceFilter.h"
 
 NS_GPUPIXEL_BEGIN
 
-FaceBeautyFilter::FaceBeautyFilter() {}
+BeautyFaceFilter::BeautyFaceFilter() {}
 
-FaceBeautyFilter::~FaceBeautyFilter() {}
+BeautyFaceFilter::~BeautyFaceFilter() {}
 
-std::shared_ptr<FaceBeautyFilter> FaceBeautyFilter::create() {
-  auto ret = std::shared_ptr<FaceBeautyFilter>(new FaceBeautyFilter());
+std::shared_ptr<BeautyFaceFilter> BeautyFaceFilter::create() {
+  auto ret = std::shared_ptr<BeautyFaceFilter>(new BeautyFaceFilter());
   if (ret && !ret->init()) {
     ret.reset();
   }
   return ret;
 }
 
-bool FaceBeautyFilter::init() {
+bool BeautyFaceFilter::init() {
   if (!FilterGroup::init()) {
     return false;
   }
@@ -32,7 +32,7 @@ bool FaceBeautyFilter::init() {
   boxHighPassFilter = BoxHighPassFilter::create();
   addFilter(boxHighPassFilter);
 
-  beautyFilter = BaseBeautyFaceFilter::create();
+  beautyFilter = BeautyFaceUnitFilter::create();
   addFilter(beautyFilter);
 
   boxBlurFilter->addTarget(beautyFilter, 1);
@@ -53,7 +53,7 @@ bool FaceBeautyFilter::init() {
   return true;
 }
 
-void FaceBeautyFilter::setInputFramebuffer(
+void BeautyFaceFilter::setInputFramebuffer(
     std::shared_ptr<Framebuffer> framebuffer,
     RotationMode rotationMode /* = NoRotation*/,
     int texIdx /* = 0*/) {
@@ -62,23 +62,23 @@ void FaceBeautyFilter::setInputFramebuffer(
   }
 }
 
-void FaceBeautyFilter::setHighPassDelta(float highPassDelta) {
+void BeautyFaceFilter::setHighPassDelta(float highPassDelta) {
   boxHighPassFilter->setDelta(highPassDelta);
 }
 
-void FaceBeautyFilter::setSharpen(float sharpen) {
+void BeautyFaceFilter::setSharpen(float sharpen) {
   beautyFilter->setSharpen(sharpen);
 }
 
-void FaceBeautyFilter::setBlurAlpha(float blurAlpha) {
+void BeautyFaceFilter::setBlurAlpha(float blurAlpha) {
   beautyFilter->setBlurAlpha(blurAlpha);
 }
 
-void FaceBeautyFilter::setWhite(float white) {
+void BeautyFaceFilter::setWhite(float white) {
   beautyFilter->setWhite(white);
 }
 
-void FaceBeautyFilter::setRadius(float radius) {
+void BeautyFaceFilter::setRadius(float radius) {
   boxBlurFilter->setRadius(radius);
   boxHighPassFilter->setRadius(radius);
 }

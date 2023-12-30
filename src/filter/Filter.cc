@@ -13,7 +13,7 @@ NS_GPUPIXEL_BEGIN
 
 std::map<std::string, std::function<std::shared_ptr<Filter>()>> initFilterFactory() {
     std::map<std::string, std::function<std::shared_ptr<Filter>()>> factory;
-    factory["FaceBeautyFilter"] = FaceBeautyFilter::create;
+    factory["BeautyFaceFilter"] = BeautyFaceFilter::create;
     return  factory;
 }
 std::map<std::string, std::function<std::shared_ptr<Filter>()>> Filter::_filterFactories = initFilterFactory();

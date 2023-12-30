@@ -26,8 +26,8 @@
 		847243E62A600DAF009D1488 /* Source.h in Headers */ = {isa = PBXBuildFile; fileRef = 84CD769B27BA5F1200408934 /* Source.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		847243E72A600DAF009D1488 /* SourceCamera.h in Headers */ = {isa = PBXBuildFile; fileRef = 84CD769A27BA5F1200408934 /* SourceCamera.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		847243E82A600DAF009D1488 /* SourceRawDataInput.h in Headers */ = {isa = PBXBuildFile; fileRef = 84CD769D27BA5F1200408934 /* SourceRawDataInput.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		847243E92A600DAF009D1488 /* FaceBeautyFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 847C1DDE291DECB3009D6198 /* FaceBeautyFilter.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		847243EA2A600DAF009D1488 /* BaseBeautyFaceFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 84646497291E8029005B1C49 /* BaseBeautyFaceFilter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		847243E92A600DAF009D1488 /* BeautyFaceFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 847C1DDE291DECB3009D6198 /* BeautyFaceFilter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		847243EA2A600DAF009D1488 /* BeautyFaceUnitFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 84646497291E8029005B1C49 /* BeautyFaceUnitFilter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		847243EB2A600DAF009D1488 /* BoxMonoBlurFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 847C1DEF291E67E4009D6198 /* BoxMonoBlurFilter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		847243EC2A600DAF009D1488 /* BoxBlurFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 847C1DEB291E5A0F009D6198 /* BoxBlurFilter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		847243ED2A600DAF009D1488 /* BoxDifferenceFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 847C1DE5291DF408009D6198 /* BoxDifferenceFilter.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -88,8 +88,8 @@
 		847244282A600DAF009D1488 /* Source.cc in Sources */ = {isa = PBXBuildFile; fileRef = 84CD769C27BA5F1200408934 /* Source.cc */; };
 		847244292A600DAF009D1488 /* SourceCamera.cc in Sources */ = {isa = PBXBuildFile; fileRef = 84CD769827BA5F1200408934 /* SourceCamera.cc */; };
 		8472442A2A600DAF009D1488 /* SourceRawDataInput.cc in Sources */ = {isa = PBXBuildFile; fileRef = 84CD769E27BA5F1200408934 /* SourceRawDataInput.cc */; };
-		8472442B2A600DAF009D1488 /* FaceBeautyFilter.cc in Sources */ = {isa = PBXBuildFile; fileRef = 847C1DDF291DECB3009D6198 /* FaceBeautyFilter.cc */; };
-		8472442C2A600DAF009D1488 /* BaseBeautyFaceFilter.cc in Sources */ = {isa = PBXBuildFile; fileRef = 84646496291E8028005B1C49 /* BaseBeautyFaceFilter.cc */; };
+		8472442B2A600DAF009D1488 /* BeautyFaceFilter.cc in Sources */ = {isa = PBXBuildFile; fileRef = 847C1DDF291DECB3009D6198 /* BeautyFaceFilter.cc */; };
+		8472442C2A600DAF009D1488 /* BeautyFaceUnitFilter.cc in Sources */ = {isa = PBXBuildFile; fileRef = 84646496291E8028005B1C49 /* BeautyFaceUnitFilter.cc */; };
 		8472442D2A600DAF009D1488 /* BoxMonoBlurFilter.cc in Sources */ = {isa = PBXBuildFile; fileRef = 847C1DEE291E67E4009D6198 /* BoxMonoBlurFilter.cc */; };
 		8472442E2A600DAF009D1488 /* BoxBlurFilter.cc in Sources */ = {isa = PBXBuildFile; fileRef = 847C1DEC291E5A0F009D6198 /* BoxBlurFilter.cc */; };
 		8472442F2A600DAF009D1488 /* BoxDifferenceFilter.cc in Sources */ = {isa = PBXBuildFile; fileRef = 847C1DE6291DF408009D6198 /* BoxDifferenceFilter.cc */; };
@@ -164,8 +164,8 @@
 		8492E6D62A6197640035AA09 /* Source.h in Headers */ = {isa = PBXBuildFile; fileRef = 84CD769B27BA5F1200408934 /* Source.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8492E6D72A6197640035AA09 /* SourceCamera.h in Headers */ = {isa = PBXBuildFile; fileRef = 84CD769A27BA5F1200408934 /* SourceCamera.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8492E6D82A6197640035AA09 /* SourceRawDataInput.h in Headers */ = {isa = PBXBuildFile; fileRef = 84CD769D27BA5F1200408934 /* SourceRawDataInput.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8492E6D92A6197640035AA09 /* FaceBeautyFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 847C1DDE291DECB3009D6198 /* FaceBeautyFilter.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8492E6DA2A6197640035AA09 /* BaseBeautyFaceFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 84646497291E8029005B1C49 /* BaseBeautyFaceFilter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8492E6D92A6197640035AA09 /* BeautyFaceFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 847C1DDE291DECB3009D6198 /* BeautyFaceFilter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8492E6DA2A6197640035AA09 /* BeautyFaceUnitFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 84646497291E8029005B1C49 /* BeautyFaceUnitFilter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8492E6DB2A6197640035AA09 /* BoxMonoBlurFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 847C1DEF291E67E4009D6198 /* BoxMonoBlurFilter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8492E6DC2A6197640035AA09 /* BoxBlurFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 847C1DEB291E5A0F009D6198 /* BoxBlurFilter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8492E6DD2A6197640035AA09 /* BoxDifferenceFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 847C1DE5291DF408009D6198 /* BoxDifferenceFilter.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -229,8 +229,8 @@
 		8492E7192A6197640035AA09 /* Source.cc in Sources */ = {isa = PBXBuildFile; fileRef = 84CD769C27BA5F1200408934 /* Source.cc */; };
 		8492E71A2A6197640035AA09 /* SourceCamera.cc in Sources */ = {isa = PBXBuildFile; fileRef = 84CD769827BA5F1200408934 /* SourceCamera.cc */; };
 		8492E71B2A6197640035AA09 /* SourceRawDataInput.cc in Sources */ = {isa = PBXBuildFile; fileRef = 84CD769E27BA5F1200408934 /* SourceRawDataInput.cc */; };
-		8492E71C2A6197640035AA09 /* FaceBeautyFilter.cc in Sources */ = {isa = PBXBuildFile; fileRef = 847C1DDF291DECB3009D6198 /* FaceBeautyFilter.cc */; };
-		8492E71D2A6197640035AA09 /* BaseBeautyFaceFilter.cc in Sources */ = {isa = PBXBuildFile; fileRef = 84646496291E8028005B1C49 /* BaseBeautyFaceFilter.cc */; };
+		8492E71C2A6197640035AA09 /* BeautyFaceFilter.cc in Sources */ = {isa = PBXBuildFile; fileRef = 847C1DDF291DECB3009D6198 /* BeautyFaceFilter.cc */; };
+		8492E71D2A6197640035AA09 /* BeautyFaceUnitFilter.cc in Sources */ = {isa = PBXBuildFile; fileRef = 84646496291E8028005B1C49 /* BeautyFaceUnitFilter.cc */; };
 		8492E71E2A6197640035AA09 /* BoxMonoBlurFilter.cc in Sources */ = {isa = PBXBuildFile; fileRef = 847C1DEE291E67E4009D6198 /* BoxMonoBlurFilter.cc */; };
 		8492E71F2A6197640035AA09 /* BoxBlurFilter.cc in Sources */ = {isa = PBXBuildFile; fileRef = 847C1DEC291E5A0F009D6198 /* BoxBlurFilter.cc */; };
 		8492E7202A6197640035AA09 /* BoxDifferenceFilter.cc in Sources */ = {isa = PBXBuildFile; fileRef = 847C1DE6291DF408009D6198 /* BoxDifferenceFilter.cc */; };
@@ -304,8 +304,8 @@
 		84413EBC2B0CD35C008A7641 /* DispatchQueue.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DispatchQueue.cc; path = ../../src/DispatchQueue.cc; sourceTree = "<group>"; };
 		84414F682A762916005D378C /* mouth.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = mouth.png; path = ../resources/mouth.png; sourceTree = "<group>"; };
 		84414F692A762916005D378C /* blusher.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = blusher.png; path = ../resources/blusher.png; sourceTree = "<group>"; };
-		84646496291E8028005B1C49 /* BaseBeautyFaceFilter.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = BaseBeautyFaceFilter.cc; path = ../../src/filter/BaseBeautyFaceFilter.cc; sourceTree = "<group>"; };
-		84646497291E8029005B1C49 /* BaseBeautyFaceFilter.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = BaseBeautyFaceFilter.h; path = ../../src/filter/BaseBeautyFaceFilter.h; sourceTree = "<group>"; };
+		84646496291E8028005B1C49 /* BeautyFaceUnitFilter.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = BeautyFaceUnitFilter.cc; path = ../../src/filter/BeautyFaceUnitFilter.cc; sourceTree = "<group>"; };
+		84646497291E8029005B1C49 /* BeautyFaceUnitFilter.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = BeautyFaceUnitFilter.h; path = ../../src/filter/BeautyFaceUnitFilter.h; sourceTree = "<group>"; };
 		847243332A5FD8B6009D1488 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
 		847243352A5FD926009D1488 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/System/Library/Frameworks/CoreVideo.framework; sourceTree = DEVELOPER_DIR; };
 		847243372A5FD961009D1488 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
@@ -319,8 +319,8 @@
 		847C1DC4291A31BE009D6198 /* FaceMakeupFilter.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = FaceMakeupFilter.h; path = ../../src/filter/FaceMakeupFilter.h; sourceTree = "<group>"; };
 		847C1DD3291C8E45009D6198 /* SourceImage.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = SourceImage.h; path = ../../src/source/SourceImage.h; sourceTree = "<group>"; };
 		847C1DD4291C8E45009D6198 /* SourceImage.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = SourceImage.cc; path = ../../src/source/SourceImage.cc; sourceTree = "<group>"; };
-		847C1DDE291DECB3009D6198 /* FaceBeautyFilter.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = FaceBeautyFilter.h; path = ../../src/filter/FaceBeautyFilter.h; sourceTree = "<group>"; };
-		847C1DDF291DECB3009D6198 /* FaceBeautyFilter.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = FaceBeautyFilter.cc; path = ../../src/filter/FaceBeautyFilter.cc; sourceTree = "<group>"; };
+		847C1DDE291DECB3009D6198 /* BeautyFaceFilter.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = BeautyFaceFilter.h; path = ../../src/filter/BeautyFaceFilter.h; sourceTree = "<group>"; };
+		847C1DDF291DECB3009D6198 /* BeautyFaceFilter.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = BeautyFaceFilter.cc; path = ../../src/filter/BeautyFaceFilter.cc; sourceTree = "<group>"; };
 		847C1DE1291DF20D009D6198 /* BoxHighPassFilter.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = BoxHighPassFilter.h; path = ../../src/filter/BoxHighPassFilter.h; sourceTree = "<group>"; };
 		847C1DE2291DF20D009D6198 /* BoxHighPassFilter.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = BoxHighPassFilter.cc; path = ../../src/filter/BoxHighPassFilter.cc; sourceTree = "<group>"; };
 		847C1DE5291DF408009D6198 /* BoxDifferenceFilter.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = BoxDifferenceFilter.h; path = ../../src/filter/BoxDifferenceFilter.h; sourceTree = "<group>"; };
@@ -496,10 +496,10 @@
 		3C938F5B1E74356F00EE753C /* Filter */ = {
 			isa = PBXGroup;
 			children = (
-				847C1DDF291DECB3009D6198 /* FaceBeautyFilter.cc */,
-				847C1DDE291DECB3009D6198 /* FaceBeautyFilter.h */,
-				84646496291E8028005B1C49 /* BaseBeautyFaceFilter.cc */,
-				84646497291E8029005B1C49 /* BaseBeautyFaceFilter.h */,
+				847C1DDF291DECB3009D6198 /* BeautyFaceFilter.cc */,
+				847C1DDE291DECB3009D6198 /* BeautyFaceFilter.h */,
+				84646496291E8028005B1C49 /* BeautyFaceUnitFilter.cc */,
+				84646497291E8029005B1C49 /* BeautyFaceUnitFilter.h */,
 				847C1DEE291E67E4009D6198 /* BoxMonoBlurFilter.cc */,
 				847C1DEF291E67E4009D6198 /* BoxMonoBlurFilter.h */,
 				847C1DEC291E5A0F009D6198 /* BoxBlurFilter.cc */,
@@ -738,8 +738,8 @@
 				847243E62A600DAF009D1488 /* Source.h in Headers */,
 				847243E72A600DAF009D1488 /* SourceCamera.h in Headers */,
 				847243E82A600DAF009D1488 /* SourceRawDataInput.h in Headers */,
-				847243E92A600DAF009D1488 /* FaceBeautyFilter.h in Headers */,
-				847243EA2A600DAF009D1488 /* BaseBeautyFaceFilter.h in Headers */,
+				847243E92A600DAF009D1488 /* BeautyFaceFilter.h in Headers */,
+				847243EA2A600DAF009D1488 /* BeautyFaceUnitFilter.h in Headers */,
 				847243EB2A600DAF009D1488 /* BoxMonoBlurFilter.h in Headers */,
 				847243EC2A600DAF009D1488 /* BoxBlurFilter.h in Headers */,
 				847243ED2A600DAF009D1488 /* BoxDifferenceFilter.h in Headers */,
@@ -810,8 +810,8 @@
 				8492E6D62A6197640035AA09 /* Source.h in Headers */,
 				8492E6D72A6197640035AA09 /* SourceCamera.h in Headers */,
 				8492E6D82A6197640035AA09 /* SourceRawDataInput.h in Headers */,
-				8492E6D92A6197640035AA09 /* FaceBeautyFilter.h in Headers */,
-				8492E6DA2A6197640035AA09 /* BaseBeautyFaceFilter.h in Headers */,
+				8492E6D92A6197640035AA09 /* BeautyFaceFilter.h in Headers */,
+				8492E6DA2A6197640035AA09 /* BeautyFaceUnitFilter.h in Headers */,
 				8492E6DB2A6197640035AA09 /* BoxMonoBlurFilter.h in Headers */,
 				8492E6DC2A6197640035AA09 /* BoxBlurFilter.h in Headers */,
 				8492E6DD2A6197640035AA09 /* BoxDifferenceFilter.h in Headers */,
@@ -980,8 +980,8 @@
 				847244282A600DAF009D1488 /* Source.cc in Sources */,
 				847244292A600DAF009D1488 /* SourceCamera.cc in Sources */,
 				8472442A2A600DAF009D1488 /* SourceRawDataInput.cc in Sources */,
-				8472442B2A600DAF009D1488 /* FaceBeautyFilter.cc in Sources */,
-				8472442C2A600DAF009D1488 /* BaseBeautyFaceFilter.cc in Sources */,
+				8472442B2A600DAF009D1488 /* BeautyFaceFilter.cc in Sources */,
+				8472442C2A600DAF009D1488 /* BeautyFaceUnitFilter.cc in Sources */,
 				8472442D2A600DAF009D1488 /* BoxMonoBlurFilter.cc in Sources */,
 				8472442E2A600DAF009D1488 /* BoxBlurFilter.cc in Sources */,
 				8472442F2A600DAF009D1488 /* BoxDifferenceFilter.cc in Sources */,
@@ -1052,8 +1052,8 @@
 				8492E7192A6197640035AA09 /* Source.cc in Sources */,
 				8492E71A2A6197640035AA09 /* SourceCamera.cc in Sources */,
 				8492E71B2A6197640035AA09 /* SourceRawDataInput.cc in Sources */,
-				8492E71C2A6197640035AA09 /* FaceBeautyFilter.cc in Sources */,
-				8492E71D2A6197640035AA09 /* BaseBeautyFaceFilter.cc in Sources */,
+				8492E71C2A6197640035AA09 /* BeautyFaceFilter.cc in Sources */,
+				8492E71D2A6197640035AA09 /* BeautyFaceUnitFilter.cc in Sources */,
 				8492E71E2A6197640035AA09 /* BoxMonoBlurFilter.cc in Sources */,
 				8492E71F2A6197640035AA09 /* BoxBlurFilter.cc in Sources */,
 				8492E7202A6197640035AA09 /* BoxDifferenceFilter.cc in Sources */,
