@@ -10,16 +10,16 @@
 #include "FilterGroup.h"
 #include "GPUPixelDef.h"
 
-#include "BaseBeautyFaceFilter.h"
+#include "BeautyFaceUnitFilter.h"
 #include "BoxBlurFilter.h"
 #include "BoxHighPassFilter.h"
 #include "GaussianBlurFilter.h"
 NS_GPUPIXEL_BEGIN
 
-class FaceBeautyFilter : public FilterGroup {
+class BeautyFaceFilter : public FilterGroup {
  public:
-  static std::shared_ptr<FaceBeautyFilter> create();
-  ~FaceBeautyFilter();
+  static std::shared_ptr<BeautyFaceFilter> create();
+  ~BeautyFaceFilter();
   bool init();
 
   void setHighPassDelta(float highPassDelta);
@@ -33,11 +33,11 @@ class FaceBeautyFilter : public FilterGroup {
                                    int texIdx /* = 0*/) override;
 
  protected:
-  FaceBeautyFilter();
+  BeautyFaceFilter();
 
   std::shared_ptr<BoxBlurFilter> boxBlurFilter;
   std::shared_ptr<BoxHighPassFilter> boxHighPassFilter;
-  std::shared_ptr<BaseBeautyFaceFilter> beautyFilter;
+  std::shared_ptr<BeautyFaceUnitFilter> beautyFilter;
 };
 
 NS_GPUPIXEL_END

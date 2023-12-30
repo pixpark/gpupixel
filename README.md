@@ -1,6 +1,6 @@
 # GPUPixel - Realtime video and image processing library
 <p align="left">
-<a href="./README.md"> English &nbsp;|&nbsp; </a>  
+ English | 
 <a href="./README_cn.md"> 简体中文 &nbsp; </a>
 </p>
 <p align="left">
@@ -19,15 +19,13 @@
 </p> 
 
 ## Introduction
-GPUPixel is a high-performance image and video processing library written in C++11.
-
-Extremely easy to compile and integrate, with a very small library size.
+GPUPixel is a high-performance image and video processing library written in C++11. Extremely easy to compile and integrate, with a very small library size.
 
 It is GPU-based and comes with built-in beauty effects filters that can achieve commercial-grade results. 
 
 It supports platforms including iOS, Mac, Android, and it can theoretically be ported to any platform that supports OpenGL/ES.
 
-The face key points detection currently utilizes the [Face++](https://www.faceplusplus.com.cn/) library, but it will be replaced with either ncnn or mnn in the future.
+The face key points detection currently utilizes the [Face++](https://www.faceplusplus.com.cn/) library, but it will be replaced with either **VNN** in the future.
 
 ## Effects Preview
 **Skin whitening & smoothing**: 

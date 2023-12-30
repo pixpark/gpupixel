@@ -18,7 +18,7 @@ using namespace GPUPixel;
   bool captureYuvFrame;
   std::shared_ptr<SourceRawDataInput> gpuPixelRawInput;
   GPUPixelView *gpuPixelView;
-  std::shared_ptr<FaceBeautyFilter> beauty_face_filter_;
+  std::shared_ptr<BeautyFaceFilter> beauty_face_filter_;
   std::shared_ptr<TargetRawDataOutput> targetRawOutput_;
   std::shared_ptr<FaceReshapeFilter> face_reshape_filter_;
   std::shared_ptr<GPUPixel::FaceMakeupFilter> lipstick_filter_;
@@ -77,7 +77,7 @@ using namespace GPUPixel;
 
     // create filter
     targetRawOutput_ = TargetRawDataOutput::create();
-    beauty_face_filter_ = FaceBeautyFilter::create();
+    beauty_face_filter_ = BeautyFaceFilter::create();
     face_reshape_filter_ = FaceReshapeFilter::create();
     
     
