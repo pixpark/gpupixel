@@ -46,8 +46,8 @@ add_library( # Sets the name of the library.
         jni_helpers.cc
         MathToolbox.cc
         Util.cc
-        filter/BaseBeautyFaceFilter.cc
-        filter/FaceBeautyFilter.cc
+        filter/BeautyFaceUnitFilter.cc
+        filter/BeautyFaceFilter.cc
         filter/BoxHighPassFilter.cc
         filter/BoxDifferenceFilter.cc
         filter/BoxBlurFilter.cc

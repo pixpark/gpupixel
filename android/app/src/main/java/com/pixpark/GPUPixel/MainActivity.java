@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         surfaceView = findViewById(R.id.surfaceView);
         surfaceView.setMirror(true);
         // 美颜滤镜
-        filter = GPUPixelFilter.create("FaceBeautyFilter");
+        filter = GPUPixelFilter.create("BeautyFaceFilter");
 
         // camera
         sourceCamera = new GPUPixelSourceCamera(this.getApplicationContext());

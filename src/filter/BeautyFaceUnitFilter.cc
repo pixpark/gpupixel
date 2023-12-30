@@ -5,7 +5,7 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "BaseBeautyFaceFilter.h"
+#include "BeautyFaceUnitFilter.h"
 #include "GPUPixelContext.h"
 #include "source/SourceImage.h"
 
@@ -282,19 +282,20 @@ const std::string kGPUImageBaseBeautyFaceFragmentShaderString = SHADER_STRING(
       
     });
 #endif
-BaseBeautyFaceFilter::BaseBeautyFaceFilter() {}
 
-BaseBeautyFaceFilter::~BaseBeautyFaceFilter() {}
+BeautyFaceUnitFilter::BeautyFaceUnitFilter() {}
 
-std::shared_ptr<BaseBeautyFaceFilter> BaseBeautyFaceFilter::create() {
-  auto ret = std::shared_ptr<BaseBeautyFaceFilter>(new BaseBeautyFaceFilter());
+BeautyFaceUnitFilter::~BeautyFaceUnitFilter() {}
+
+std::shared_ptr<BeautyFaceUnitFilter> BeautyFaceUnitFilter::create() {
+  auto ret = std::shared_ptr<BeautyFaceUnitFilter>(new BeautyFaceUnitFilter());
   if (ret && !ret->init()) {
     ret.reset();
   }
   return ret;
 }
 
-bool BaseBeautyFaceFilter::init() {
+bool BeautyFaceUnitFilter::init() {
   if (!Filter::initWithShaderString(kGPUImageBaseBeautyFaceVertexShaderString,
                                     kGPUImageBaseBeautyFaceFragmentShaderString,
                                     3)) {
@@ -308,7 +309,7 @@ bool BaseBeautyFaceFilter::init() {
   return true;
 }
 
-bool BaseBeautyFaceFilter::proceed(bool bUpdateTargets, int64_t frameTime) {
+bool BeautyFaceUnitFilter::proceed(bool bUpdateTargets, int64_t frameTime) {
   static const GLfloat imageVertices[] = {
       -1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f,
   };
@@ -374,15 +375,15 @@ bool BaseBeautyFaceFilter::proceed(bool bUpdateTargets, int64_t frameTime) {
   return Source::proceed(bUpdateTargets, frameTime);
 }
 
-void BaseBeautyFaceFilter::setSharpen(float sharpen) {
+void BeautyFaceUnitFilter::setSharpen(float sharpen) {
   sharpen_ = sharpen;
 }
 
-void BaseBeautyFaceFilter::setBlurAlpha(float blurAlpha) {
+void BeautyFaceUnitFilter::setBlurAlpha(float blurAlpha) {
   blurAlpha_ = blurAlpha;
 }
 
-void BaseBeautyFaceFilter::setWhite(float white) {
+void BeautyFaceUnitFilter::setWhite(float white) {
 #if defined(GPUPIXEL_MAC)
   white_ = white / 10;
 #else
