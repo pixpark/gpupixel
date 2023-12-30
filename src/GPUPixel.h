@@ -41,7 +41,7 @@
 #include "FilterGroup.h"
 
 // Face Filters
-#include "FaceBeautyFilter.h"
+#include "BeautyFaceFilter.h"
 #include "FaceMakeupFilter.h"
 #include "FaceReshapeFilter.h"
 

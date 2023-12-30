@@ -13,10 +13,10 @@
 NS_GPUPIXEL_BEGIN
 class SourceImage;
 
-class BaseBeautyFaceFilter : public Filter {
+class BeautyFaceUnitFilter : public Filter {
  public:
-  static std::shared_ptr<BaseBeautyFaceFilter> create();
-  ~BaseBeautyFaceFilter();
+  static std::shared_ptr<BeautyFaceUnitFilter> create();
+  ~BeautyFaceUnitFilter();
   bool init();
   bool proceed(bool bUpdateTargets = true, int64_t frameTime = 0) override;
 
@@ -25,7 +25,7 @@ class BaseBeautyFaceFilter : public Filter {
   void setWhite(float white);
 
  protected:
-  BaseBeautyFaceFilter();
+  BeautyFaceUnitFilter();
 
   std::shared_ptr<SourceImage> grayImage_;
   std::shared_ptr<SourceImage> originImage_;
