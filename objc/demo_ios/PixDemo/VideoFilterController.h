@@ -16,7 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, assign) CGFloat saturationValue;
 @property(nonatomic, assign) CGFloat thinFaceValue;
 @property(nonatomic, assign) CGFloat eyeValue;
-
+@property(nonatomic, assign) CGFloat lipstickValue;
+@property(nonatomic, assign) CGFloat blusherValue;
 @end
 
 NS_ASSUME_NONNULL_END

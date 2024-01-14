@@ -20,8 +20,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.navigationController.navigationBarHidden = true;
-    [self.view addSubview:self.tableView];
+    self.navigationController.navigationBarHidden = false;
+//    [self.view addSubview:self.tableView];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

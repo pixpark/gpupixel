@@ -7,14 +7,12 @@
 
 #import "VideoFilterController.h"
 #import "VideoCapturer.h"
-#import "PanelMenuView.h"
-#import "PanelBeautyParams.h"
 #import "FaceDetector.h"
 #import <GPUPixel/GPUPixel.h>
 
 using namespace GPUPixel;
 
-@interface VideoFilterController () <VCVideoCapturerDelegate, FilterMenuPanelDelegate> {
+@interface VideoFilterController () <VCVideoCapturerDelegate> {
   bool captureYuvFrame;
   std::shared_ptr<SourceRawDataInput> gpuPixelRawInput;
   GPUPixelView *gpuPixelView;
@@ -27,8 +25,10 @@ using namespace GPUPixel;
 
 @property (strong, nonatomic) VideoCapturer* capturer;
 //
-@property (nonatomic, strong) PanelMenuView *menusView;
 @property (strong, nonatomic) UIButton* effectToggleBtn;
+@property (strong, nonatomic) UIButton* cameraSwitchBtn;
+@property (strong, nonatomic) UISegmentedControl* segment;
+@property (strong, nonatomic) UISlider *slider;
 
 @property BOOL needSetupFaceDetector;
 @end
@@ -40,17 +40,86 @@ using namespace GPUPixel;
   [self.view setBackgroundColor:UIColor.whiteColor];
   // screen always light
   [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
+  
   // init video filter
   [self initVideoFilter];
-  
-  [self.view addSubview:self.effectToggleBtn];
-  [self.menusView showMenuView:YES];
-  
+  [self initUI];
+
   self.needSetupFaceDetector = TRUE;
   captureYuvFrame = false;
   // start camera capture
   [self.capturer startCapture];
 }
+
+-(void)initUI {
+  NSArray *array = [NSArray arrayWithObjects:@"磨皮",@"美白",@"瘦脸",@"大眼", @"口红", @"腮红", nil];
+  //初始化UISegmentedControl
+  self.segment = [[UISegmentedControl alloc]initWithItems:array];
+  //设置frame
+  self.segment.frame = CGRectMake(10,
+                                 self.view.frame.size.height - 150,
+                                 self.view.frame.size.width - 20,
+                                 30);
+  self.segment.apportionsSegmentWidthsByContent = YES;
+  self.segment.selectedSegmentIndex = 0;
+  //添加事件
+  [self.segment addTarget:self action:@selector(change:) forControlEvents:UIControlEventValueChanged];
+  
+  //添加到视图
+  [self.view addSubview:self.segment];
+  
+  [self.view addSubview:self.effectToggleBtn];
+  [self.view addSubview:self.cameraSwitchBtn];
+  
+  // 初始化
+  self.slider = [[UISlider alloc] initWithFrame:CGRectMake(10,
+                                                                self.view.frame.size.height - 200,
+                                                                self.view.frame.size.width - 20,
+                                                                30)];
+
+  // 设置最小值
+  self.slider.minimumValue = 0;
+  // 设置最大值
+  self.slider.maximumValue = 10;
+  self.slider.value = 3;
+  [self.slider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
+
+  [self.view addSubview:self.slider];
+}
+
+-(void)sliderValueChanged:(UISlider*) slider {
+  if (self.segment.selectedSegmentIndex == 0) {         // 磨皮
+    [self setBeautyValue: slider.value];
+  } else if (self.segment.selectedSegmentIndex == 1) {  // 美白
+    [self setWhithValue: slider.value];
+  } else if (self.segment.selectedSegmentIndex == 2) {  // 瘦脸
+    [self setThinFaceValue: slider.value];
+  } else if (self.segment.selectedSegmentIndex == 3) {  // 大眼
+    [self setEyeValue: slider.value];
+  } else if (self.segment.selectedSegmentIndex == 4) {  // 口红
+    [self setLipstickValue: slider.value];
+  } else if (self.segment.selectedSegmentIndex == 5) {  // 腮红
+    [self setBlusherValue: slider.value];
+  }
+}
+
+//点击不同分段就会有不同的事件进行相应
+-(void)change:(UISegmentedControl *)sender{
+  if (self.segment.selectedSegmentIndex == 0) {         // 磨皮
+    self.slider.value = _beautyValue;
+  } else if (self.segment.selectedSegmentIndex == 1) {  // 美白
+    self.slider.value = _whithValue;
+  } else if (self.segment.selectedSegmentIndex == 2) {  // 瘦脸
+    self.slider.value = _thinFaceValue;
+  } else if (self.segment.selectedSegmentIndex == 3) {  // 大眼
+    self.slider.value = _eyeValue;
+  } else if (self.segment.selectedSegmentIndex == 4) {  // 口红
+    self.slider.value = _lipstickValue;
+  } else if (self.segment.selectedSegmentIndex == 5) {  // 腮红
+    self.slider.value = _blusherValue;
+  }
+}
+  
 
 - (void)viewWillDisappear:(BOOL)animated {
   [self.capturer stopCapture];
@@ -91,32 +160,38 @@ using namespace GPUPixel;
                     ->addTarget(gpuPixelView);
   });
 }
-
-- (void) touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-  [_menusView showMenuView:YES];
-}
-
+ 
 #pragma mark - 属性赋值
-- (void)setBeautyValue:(CGFloat)beautyValue{
-  _beautyValue = beautyValue;
-  beauty_face_filter_->setBlurAlpha(beautyValue);  //[0.0, 1.0]
+- (void)setBeautyValue:(CGFloat)value {
+  _beautyValue = value;
+  beauty_face_filter_->setBlurAlpha(value/10);
 }
-- (void)setWhithValue:(CGFloat)whithValue{
-  _whithValue = whithValue;
-  beauty_face_filter_->setWhite(whithValue /3);  // [0.0, 0.01]
+- (void)setWhithValue:(CGFloat)value{
+  _whithValue = value;
+  beauty_face_filter_->setWhite(value/20);
 }
-- (void)setSaturationValue:(CGFloat)saturationValue{
-  _saturationValue = saturationValue;
-}
-
-- (void)setThinFaceValue:(CGFloat)thinFaceValue{
-  _thinFaceValue = thinFaceValue;
-  face_reshape_filter_->setFaceSlimLevel(thinFaceValue/2000);
+- (void)setSaturationValue:(CGFloat)value{
+  _saturationValue = value;
 }
 
-- (void)setEyeValue:(CGFloat)eyeValue{
-  _eyeValue = eyeValue;
-  face_reshape_filter_->setEyeZoomLevel(eyeValue/700);
+- (void)setThinFaceValue:(CGFloat)value{
+  _thinFaceValue = value;
+  face_reshape_filter_->setFaceSlimLevel(value/100);
+}
+
+- (void)setEyeValue:(CGFloat)value{
+  _eyeValue = value;
+  face_reshape_filter_->setEyeZoomLevel(value/50);
+}
+
+- (void)setLipstickValue:(CGFloat)value{
+  _lipstickValue = value;
+  lipstick_filter_->setBlendLevel(value/10);
+}
+
+- (void)setBlusherValue:(CGFloat)value{
+  _blusherValue = value;
+  blusher_filter_->setBlendLevel(value/10);
 }
 
 // camera frame callback
@@ -196,6 +271,11 @@ using namespace GPUPixel;
 
 }
 
+
+-(void)onCameraSwitchBtnPress {
+  
+}
+
 -(VideoCapturer*)capturer {
   if(_capturer == nil) {
     VCVideoCapturerParam *param = [[VCVideoCapturerParam alloc] init];
@@ -220,10 +300,10 @@ using namespace GPUPixel;
 -(UIButton*)effectToggleBtn {
   if(_effectToggleBtn == nil) {
     _effectToggleBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-    _effectToggleBtn.frame = CGRectMake(self.view.bounds.size.width - 50,
-                                        self.view.bounds.size.height - 318,
-                                        26,
-                                        24);
+    _effectToggleBtn.frame = CGRectMake(self.view.bounds.size.width - 35,
+                                        self.view.bounds.size.height - 225,
+                                        25,
+                                        25);
     [_effectToggleBtn setBackgroundImage:[UIImage imageNamed:@"ToggleBtnIcon"] forState:UIControlStateNormal];
     [_effectToggleBtn addTarget: self action: @selector(onToggleBtnPress) forControlEvents: UIControlEventTouchDown];
     [_effectToggleBtn addTarget: self action: @selector(onToggleBtnUpInside) forControlEvents: UIControlEventTouchUpInside] ;
@@ -231,69 +311,21 @@ using namespace GPUPixel;
   return _effectToggleBtn;
 }
 
-- (PanelMenuView *)menusView {
-  if (!_menusView) {
-    _menusView = [[PanelMenuView alloc] initWithFrame:CGRectMake(0,
-                                                                 window_height - PanelMeiyanMenuHeight - BottomIndicatorHeight,
-                                                                 window_width,
-                                                                 PanelMeiyanMenuHeight)
-                                            superView:self.view
-                                             delegate:self  viewController:self];
+-(UIButton*)cameraSwitchBtn {
+  if(_cameraSwitchBtn == nil) {
+    _cameraSwitchBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+    _cameraSwitchBtn.frame = CGRectMake(self.view.bounds.size.width - 35,
+                                        self.view.bounds.size.height - 225,
+                                        25,
+                                        25);
     
+    [_cameraSwitchBtn setBackgroundImage:[UIImage imageNamed:@"ToggleBtnIcon"] forState:UIControlStateNormal];
+    [_cameraSwitchBtn addTarget: self action: @selector(onCameraSwitchBtnPress) forControlEvents: UIControlEventTouchDown];
+    [_cameraSwitchBtn addTarget: self action: @selector(onToggleBtnUpInside) forControlEvents: UIControlEventTouchUpInside] ;
   }
-  return _menusView;
+  return _cameraSwitchBtn;
 }
 
-- (void)cameraAction {
-  
-}
 
-- (void)recordAction {
-  
-}
-
-- (void)encodeWithCoder:(nonnull NSCoder *)coder {
-  
-}
-
-- (void)traitCollectionDidChange:(nullable UITraitCollection *)previousTraitCollection {
-  
-}
-
-- (void)preferredContentSizeDidChangeForChildContentContainer:(nonnull id<UIContentContainer>)container {
-  
-}
-
-- (CGSize)sizeForChildContentContainer:(nonnull id<UIContentContainer>)container withParentContainerSize:(CGSize)parentSize {
-  return CGSizeZero;
-}
-
-- (void)systemLayoutFittingSizeDidChangeForChildContentContainer:(nonnull id<UIContentContainer>)container {
-  
-}
-
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(nonnull id<UIViewControllerTransitionCoordinator>)coordinator {
-  
-}
-
-- (void)willTransitionToTraitCollection:(nonnull UITraitCollection *)newCollection withTransitionCoordinator:(nonnull id<UIViewControllerTransitionCoordinator>)coordinator {
-  
-}
-
-- (void)didUpdateFocusInContext:(nonnull UIFocusUpdateContext *)context withAnimationCoordinator:(nonnull UIFocusAnimationCoordinator *)coordinator {
-  
-}
-
-- (void)setNeedsFocusUpdate {
-  
-}
-
-- (BOOL)shouldUpdateFocusInContext:(nonnull UIFocusUpdateContext *)context {
-  return NO;
-}
-
-- (void)updateFocusIfNeeded {
-  
-}
-
+ 
 @end
