@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="00K-Ms-Gjb">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="00K-Ms-Gjb">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -12,13 +12,13 @@
         <!--Navigation Controller-->
         <scene sceneID="VRK-sO-b6Z">
             <objects>
-                <navigationController id="00K-Ms-Gjb" sceneMemberID="viewController">
+                <navigationController autoresizesArchivedViewToFullSize="NO" id="00K-Ms-Gjb" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="eIs-wa-4jD">
-                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <rect key="frame" x="0.0" y="48" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="Gzh-ND-EMZ" kind="relationship" relationship="rootViewController" id="CTU-Mb-qh9"/>
+                        <segue destination="Gzh-ND-EMZ" kind="relationship" relationship="rootViewController" id="raA-bc-il3"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nV5-yL-1jp" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -32,6 +32,26 @@
                     <view key="view" contentMode="scaleToFill" id="eY7-cK-h5j">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MJN-nm-sml">
+                                <rect key="frame" x="178" y="152" width="59" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="视频"/>
+                                <connections>
+                                    <segue destination="wKd-1l-hyO" kind="show" id="lnM-hf-Erb"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nxs-CJ-hCI">
+                                <rect key="frame" x="178" y="207" width="59" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="图片"/>
+                                <connections>
+                                    <segue destination="Uua-xU-9Z8" kind="show" id="nc7-ru-BY9"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="hQC-qE-vcX"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
@@ -39,7 +59,39 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rLw-dV-q0l" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="448" y="5"/>
+            <point key="canvasLocation" x="650.72463768115949" y="136.60714285714286"/>
+        </scene>
+        <!--视频滤镜-->
+        <scene sceneID="pmW-rM-uTh">
+            <objects>
+                <viewController id="wKd-1l-hyO" customClass="VideoFilterController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="1cC-1w-Rgs">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="arW-EX-z7K"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="视频滤镜" id="HgI-OU-Tda"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xFM-jc-zfM" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1794" y="-55"/>
+        </scene>
+        <!--图片滤镜-->
+        <scene sceneID="riN-KP-Mcp">
+            <objects>
+                <viewController id="Uua-xU-9Z8" customClass="ImageFilterController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="FOe-9w-Mtp">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="kCi-cS-zcX"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="图片滤镜" id="Dl8-Tb-qdM"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6gb-89-I1L" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1814" y="672"/>
         </scene>
     </scenes>
     <resources>
