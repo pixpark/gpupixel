@@ -31,8 +31,9 @@ The face key points detection currently utilizes the [Face++](https://www.facepl
 **Skin whitening & smoothing**: 
 
 <p align="center">
- <img src="./docs/sample-1.jpg" width="50%" height="auto" style="display: block; margin: 0 auto;">
+ <img src="./docs/effects-preview.jpg" width="75%" height="auto" style="display: block; margin: 0 auto;">
 </p>
+
 
 
 ## Architecture
