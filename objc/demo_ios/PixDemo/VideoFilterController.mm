@@ -57,7 +57,7 @@ using namespace GPUPixel;
   self.segment = [[UISegmentedControl alloc]initWithItems:array];
   //设置frame
   self.segment.frame = CGRectMake(10,
-                                 self.view.frame.size.height - 150,
+                                 self.view.frame.size.height - 120,
                                  self.view.frame.size.width - 20,
                                  30);
   self.segment.apportionsSegmentWidthsByContent = YES;
@@ -73,15 +73,15 @@ using namespace GPUPixel;
   
   // 初始化
   self.slider = [[UISlider alloc] initWithFrame:CGRectMake(10,
-                                                                self.view.frame.size.height - 200,
+                                                                self.view.frame.size.height - 170,
                                                                 self.view.frame.size.width - 20,
                                                                 30)];
 
   // 设置最小值
   self.slider.minimumValue = 0;
-  // 设置最大值
+
   self.slider.maximumValue = 10;
-  self.slider.value = 3;
+  self.slider.value = 0;
   [self.slider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
 
   [self.view addSubview:self.slider];
@@ -268,12 +268,12 @@ using namespace GPUPixel;
 }
 
 -(void)onToggleBtnUpInside {
-
+  
 }
 
 
--(void)onCameraSwitchBtnPress {
-  
+-(void)onCameraSwitchBtnUpInside {
+  [self.capturer reverseCamera];
 }
 
 -(VideoCapturer*)capturer {
@@ -301,7 +301,7 @@ using namespace GPUPixel;
   if(_effectToggleBtn == nil) {
     _effectToggleBtn = [UIButton buttonWithType:UIButtonTypeSystem];
     _effectToggleBtn.frame = CGRectMake(self.view.bounds.size.width - 35,
-                                        self.view.bounds.size.height - 225,
+                                        self.view.bounds.size.height - 200,
                                         25,
                                         25);
     [_effectToggleBtn setBackgroundImage:[UIImage imageNamed:@"ToggleBtnIcon"] forState:UIControlStateNormal];
@@ -315,13 +315,12 @@ using namespace GPUPixel;
   if(_cameraSwitchBtn == nil) {
     _cameraSwitchBtn = [UIButton buttonWithType:UIButtonTypeSystem];
     _cameraSwitchBtn.frame = CGRectMake(self.view.bounds.size.width - 35,
-                                        self.view.bounds.size.height - 225,
+                                        100,
                                         25,
-                                        25);
+                                        20);
     
-    [_cameraSwitchBtn setBackgroundImage:[UIImage imageNamed:@"ToggleBtnIcon"] forState:UIControlStateNormal];
-    [_cameraSwitchBtn addTarget: self action: @selector(onCameraSwitchBtnPress) forControlEvents: UIControlEventTouchDown];
-    [_cameraSwitchBtn addTarget: self action: @selector(onToggleBtnUpInside) forControlEvents: UIControlEventTouchUpInside] ;
+    [_cameraSwitchBtn setBackgroundImage:[UIImage imageNamed:@"CameraIcon"] forState:UIControlStateNormal];
+    [_cameraSwitchBtn addTarget: self action: @selector(onCameraSwitchBtnUpInside) forControlEvents: UIControlEventTouchUpInside] ;
   }
   return _cameraSwitchBtn;
 }

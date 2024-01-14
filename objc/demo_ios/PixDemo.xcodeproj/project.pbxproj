@@ -143,8 +143,12 @@
 			isa = PBXGroup;
 			children = (
 				1FBB65732A7559B300B43AC4 /* Face++ */,
-				843580E72763485B0053E16A /* ImagerFilter */,
-				84C1D15B266F5D0B006D1AB4 /* VideoFilter */,
+				8472449D2A603368009D1488 /* VideoCapturer.h */,
+				8472449E2A603368009D1488 /* VideoCapturer.m */,
+				843580EB276352260053E16A /* ImageFilterController.h */,
+				843580EC276352260053E16A /* ImageFilterController.mm */,
+				84C1D15E266F5D69006D1AB4 /* VideoFilterController.h */,
+				84C1D15F266F5D69006D1AB4 /* VideoFilterController.mm */,
 				84307E8F261F2CD9003EAC98 /* AppDelegate.h */,
 				84307E90261F2CD9003EAC98 /* AppDelegate.m */,
 				84307E92261F2CD9003EAC98 /* SceneDelegate.h */,
@@ -160,15 +164,6 @@
 			path = PixDemo;
 			sourceTree = "<group>";
 		};
-		843580E72763485B0053E16A /* ImagerFilter */ = {
-			isa = PBXGroup;
-			children = (
-				843580EB276352260053E16A /* ImageFilterController.h */,
-				843580EC276352260053E16A /* ImageFilterController.mm */,
-			);
-			name = ImagerFilter;
-			sourceTree = "<group>";
-		};
 		847244902A60321E009D1488 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -176,17 +171,6 @@
 				847244972A60321E009D1488 /* GPUPixel-Mac.framework */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		84C1D15B266F5D0B006D1AB4 /* VideoFilter */ = {
-			isa = PBXGroup;
-			children = (
-				8472449D2A603368009D1488 /* VideoCapturer.h */,
-				8472449E2A603368009D1488 /* VideoCapturer.m */,
-				84C1D15E266F5D69006D1AB4 /* VideoFilterController.h */,
-				84C1D15F266F5D69006D1AB4 /* VideoFilterController.mm */,
-			);
-			name = VideoFilter;
 			sourceTree = "<group>";
 		};
 		84EEBF41261F2DC5000AD4AE /* Frameworks */ = {
