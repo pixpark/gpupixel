@@ -29,8 +29,9 @@ GPUPixel是一个由C++11编写的高性能图像和视频处理库, 基于GPU, 
 **美白&磨皮**
 
 <p align="center">
- <img src="./docs/sample-1.jpg" width="50%" height="auto" style="display: block; margin: 0 auto;">
+ <img src="./docs/effects-preview.jpg" width="75%" height="auto" style="display: block; margin: 0 auto;">
 </p>
+
 
 
 
