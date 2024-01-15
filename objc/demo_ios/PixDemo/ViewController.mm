@@ -1,6 +1,6 @@
 //
 //  ViewController.m
-//  BeautyFaceDemo
+//  GPUPixelDemo
 //
 //  Created by gezhaoyou on 2021/3/31.
 //
@@ -11,8 +11,9 @@
 #import "ImageFilterController.h"
 
 @interface ViewController ()
-@property(strong, nonatomic) UITableView* tableView;
-@property(strong, nonatomic) NSArray* tableTitleArr;
+@property (weak, nonatomic) IBOutlet UIButton *videoFilterTestBtn;
+@property (weak, nonatomic) IBOutlet UIButton *imageFilterTestBtn;
+
 @end
 
 @implementation ViewController
@@ -21,7 +22,26 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.navigationController.navigationBarHidden = false;
-//    [self.view addSubview:self.tableView];
+    NSInteger btnWidth = 300;
+    NSInteger btnheight = 150;
+    self.videoFilterTestBtn.frame = CGRectMake((self.view.frame.size.width - btnWidth)/2,
+                                               100, 
+                                               btnWidth,
+                                               btnheight);
+ 
+  self.videoFilterTestBtn.layer.cornerRadius = 10;
+  [self.videoFilterTestBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+  [self.videoFilterTestBtn setBackgroundColor:[[UIColor alloc] initWithRed:62/255.0 green:173/255.0 blue:247/255.0 alpha:1]];
+  
+ 
+  self.imageFilterTestBtn.frame = CGRectMake((self.view.frame.size.width - btnWidth)/2,
+                                             120 + btnheight,
+                                             btnWidth,
+                                             btnheight);
+  [self.imageFilterTestBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+  [self.imageFilterTestBtn setBackgroundColor:[[UIColor alloc] initWithRed:214/255.0 green:82/255.0 blue:64/255.0 alpha:0.9]];
+  
+  self.imageFilterTestBtn.layer.cornerRadius = 10;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -31,77 +51,4 @@
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
 }
-
--(UITableView*)tableView {
-    if(_tableView == nil) {
-        self.tableTitleArr = [[NSArray alloc] initWithObjects:@"🧚‍♀️视频滤镜",
-                                                              @"🧘‍♀️图片滤镜",
-                                                              nil];
-        
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,
-                                                                   0,
-                                                                   self.view.frame.size.width,
-                                                                   self.view.frame.size.height)
-                                                  style:UITableViewStyleGrouped];
-        
-        _tableView.delegate = self;
-        _tableView.dataSource = self;
-        _tableView.rowHeight = 80;
-    }
-    return _tableView;
-}
-
--(nullable NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    return @"Function List";
-}
-
-#pragma mark
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    UIViewController* vc = nil;
-    switch ((int)indexPath.row) {
-        case 0:
-            vc = [[VideoFilterController alloc] init];
-            break;
-        case 1:
-            vc = [[ImageFilterController alloc] init];
-            break;
-        case 2:
-            
-            break;
-        case 3:
-            
-            break;
-        default:
-            break;
-    }
-    if(vc) {
-        [self.navigationController pushViewController:vc  animated:YES];
-    } else {
-        NSLog(@"Warning! vc is nil, noting to do.");
-    }
-}
-
-#pragma mark
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
-}
-
-#pragma mark
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.tableTitleArr.count;
-}
-
-#pragma mark
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *cellIdentity=@"cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentity];
-    if(cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentity];
-    }
-    cell.textLabel.text = self.tableTitleArr[indexPath.row];
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    return cell;
-}
-
 @end

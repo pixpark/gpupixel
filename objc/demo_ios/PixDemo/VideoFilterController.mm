@@ -1,5 +1,5 @@
 /*
- * PixDemo
+ * GPUPixelDemo
  *
  * Created by gezhaoyou on 2021/6/24.
  * Copyright © 2021 PixPark. All rights reserved.
@@ -23,12 +23,22 @@ using namespace GPUPixel;
   std::shared_ptr<GPUPixel::FaceMakeupFilter> blusher_filter_;
 }
 
-@property (strong, nonatomic) VideoCapturer* capturer;
 //
-@property (strong, nonatomic) UIButton* effectToggleBtn;
+@property(nonatomic, assign) CGFloat beautyValue;
+@property(nonatomic, assign) CGFloat whithValue;
+@property(nonatomic, assign) CGFloat saturationValue;
+@property(nonatomic, assign) CGFloat thinFaceValue;
+@property(nonatomic, assign) CGFloat eyeValue;
+@property(nonatomic, assign) CGFloat lipstickValue;
+@property(nonatomic, assign) CGFloat blusherValue;
+
+// UI
+@property (strong, nonatomic) VideoCapturer* capturer;
 @property (strong, nonatomic) UIButton* cameraSwitchBtn;
 @property (strong, nonatomic) UISegmentedControl* segment;
+@property (strong, nonatomic) UISegmentedControl* effectSwitch;
 @property (strong, nonatomic) UISlider *slider;
+
 
 @property BOOL needSetupFaceDetector;
 @end
@@ -57,23 +67,23 @@ using namespace GPUPixel;
   self.segment = [[UISegmentedControl alloc]initWithItems:array];
   //设置frame
   self.segment.frame = CGRectMake(10,
-                                 self.view.frame.size.height - 120,
+                                 self.view.frame.size.height - 70,
                                  self.view.frame.size.width - 20,
                                  30);
   self.segment.apportionsSegmentWidthsByContent = YES;
   self.segment.selectedSegmentIndex = 0;
   //添加事件
-  [self.segment addTarget:self action:@selector(change:) forControlEvents:UIControlEventValueChanged];
+  [self.segment addTarget:self action:@selector(onFilterSelectChange:) forControlEvents:UIControlEventValueChanged];
   
   //添加到视图
   [self.view addSubview:self.segment];
+  [self.view addSubview:self.effectSwitch];
   
-  [self.view addSubview:self.effectToggleBtn];
   [self.view addSubview:self.cameraSwitchBtn];
   
   // 初始化
   self.slider = [[UISlider alloc] initWithFrame:CGRectMake(10,
-                                                                self.view.frame.size.height - 170,
+                                                                self.view.frame.size.height - 120,
                                                                 self.view.frame.size.width - 20,
                                                                 30)];
 
@@ -85,6 +95,8 @@ using namespace GPUPixel;
   [self.slider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
 
   [self.view addSubview:self.slider];
+  
+ 
 }
 
 -(void)sliderValueChanged:(UISlider*) slider {
@@ -104,7 +116,7 @@ using namespace GPUPixel;
 }
 
 //点击不同分段就会有不同的事件进行相应
--(void)change:(UISegmentedControl *)sender{
+-(void)onFilterSelectChange:(UISegmentedControl *)sender{
   if (self.segment.selectedSegmentIndex == 0) {         // 磨皮
     self.slider.value = _beautyValue;
   } else if (self.segment.selectedSegmentIndex == 1) {  // 美白
@@ -124,6 +136,7 @@ using namespace GPUPixel;
 - (void)viewWillDisappear:(BOOL)animated {
   [self.capturer stopCapture];
   
+  [[FaceDetector shareInstance] resetFacepp];
   [super viewWillDisappear:animated];
 }
 
@@ -132,7 +145,6 @@ using namespace GPUPixel;
     gpuPixelRawInput = SourceRawDataInput::create();
     gpuPixelView = [[GPUPixelView alloc] initWithFrame:self.view.frame];
     [self.view addSubview:gpuPixelView];
-    
  
     auto mouth = SourceImage::create("mouth.png");
     lipstick_filter_ = FaceMakeupFilter::create();
@@ -149,15 +161,15 @@ using namespace GPUPixel;
     beauty_face_filter_ = BeautyFaceFilter::create();
     face_reshape_filter_ = FaceReshapeFilter::create();
     
-    
-    
-    
     // filter pipline
     gpuPixelRawInput->addTarget(lipstick_filter_)
                     ->addTarget(blusher_filter_)
                     ->addTarget(face_reshape_filter_)
                     ->addTarget(beauty_face_filter_)
                     ->addTarget(gpuPixelView);
+    [gpuPixelView setBackgroundColor:[UIColor grayColor]];
+    [gpuPixelView setFillMode:(GPUPixel::TargetView::PreserveAspectRatioAndFill)];
+  
   });
 }
  
@@ -193,82 +205,93 @@ using namespace GPUPixel;
   _blusherValue = value;
   blusher_filter_->setBlendLevel(value/10);
 }
-
+ 
 // camera frame callback
 - (void)videoCaptureOutputDataCallback:(CMSampleBufferRef)sampleBuffer {
   if(captureYuvFrame) {
-    CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
-    CVPixelBufferLockBaseAddress(imageBuffer, 0);
-    const uint8_t* dataY = (const uint8_t*)CVPixelBufferGetBaseAddressOfPlane(imageBuffer, 0);//YYYYYYYY
-    size_t strideY = CVPixelBufferGetBytesPerRowOfPlane(imageBuffer, 0);
-    const uint8_t* dataUV = (const uint8_t*)CVPixelBufferGetBaseAddressOfPlane(imageBuffer, 1);//UVUVUVUV
-    size_t strideUV = CVPixelBufferGetBytesPerRowOfPlane(imageBuffer, 1);
-    size_t width = CVPixelBufferGetWidth(imageBuffer);
-    size_t height = CVPixelBufferGetHeight(imageBuffer);
-    
-    // todo render nv12
-    CVPixelBufferUnlockBaseAddress(imageBuffer, 0);
-  } else {
-    if ([self isFaceDetectorEnable] && ![FaceDetector shareInstance].isWorking) {
-      if(self.needSetupFaceDetector) {
-        // setup face++
-        [FaceDetector shareInstance].sampleBufferOrientation = FaceDetectorSampleBufferOrientationNoRatation;
-        [FaceDetector shareInstance].faceOrientation = 0;
-        [FaceDetector shareInstance].sampleType = FaceDetectorSampleTypeCamera;
-        [[FaceDetector shareInstance] auth];
-        
-        self.needSetupFaceDetector = NO;
-      }
-      
-      [[FaceDetector shareInstance] getLandmarksFromSampleBuffer:sampleBuffer];
-      
-      NSArray *landmarks = [FaceDetector shareInstance].oneFace.landmarks;
-      if(landmarks && face_reshape_filter_) {
-        std::vector<float> land_marks;
-        for (NSValue *value in landmarks) {
-            CGPoint point = [value CGPointValue];
-          land_marks.push_back(point.x);
-          land_marks.push_back(point.y);
+      CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
+      CVPixelBufferLockBaseAddress(imageBuffer, 0);
+      const uint8_t* dataY = (const uint8_t*)CVPixelBufferGetBaseAddressOfPlane(imageBuffer, 0);//YYYYYYYY
+      size_t strideY = CVPixelBufferGetBytesPerRowOfPlane(imageBuffer, 0);
+      const uint8_t* dataUV = (const uint8_t*)CVPixelBufferGetBaseAddressOfPlane(imageBuffer, 1);//UVUVUVUV
+      size_t strideUV = CVPixelBufferGetBytesPerRowOfPlane(imageBuffer, 1);
+      size_t width = CVPixelBufferGetWidth(imageBuffer);
+      size_t height = CVPixelBufferGetHeight(imageBuffer);
+
+      // todo render nv12
+      CVPixelBufferUnlockBaseAddress(imageBuffer, 0);
+    } else {
+      if ([self isFaceDetectorEnable] && ![FaceDetector shareInstance].isWorking) {
+        if(self.needSetupFaceDetector) {
+          // setup face++
+          [FaceDetector shareInstance].sampleBufferOrientation = FaceDetectorSampleBufferOrientationNoRatation;
+          [FaceDetector shareInstance].faceOrientation = 0;
+          [FaceDetector shareInstance].sampleType = FaceDetectorSampleTypeCamera;
+          [[FaceDetector shareInstance] auth];
+          
+          self.needSetupFaceDetector = NO;
         }
         
-        face_reshape_filter_->setLandmarks(land_marks);
-        face_reshape_filter_->setHasFace(true);
+        [[FaceDetector shareInstance] getLandmarksFromSampleBuffer:sampleBuffer];
+
         
-        lipstick_filter_->setFaceLandmarks(land_marks);
-        lipstick_filter_->setHasFace(true);
-        
-        blusher_filter_->setFaceLandmarks(land_marks);
-        blusher_filter_->setHasFace(true);
-      } else {
-        face_reshape_filter_->setHasFace(false);
-        lipstick_filter_->setHasFace(false);
-        blusher_filter_->setHasFace(false);
+        NSArray *landmarks = [FaceDetector shareInstance].oneFace.landmarks;
+        if(landmarks && face_reshape_filter_) {
+          std::vector<float> land_marks;
+          for (NSValue *value in landmarks) {
+              CGPoint point = [value CGPointValue];
+            land_marks.push_back(point.x);
+            land_marks.push_back(point.y);
+          }
+          
+          face_reshape_filter_->setLandmarks(land_marks);
+          face_reshape_filter_->setHasFace(true);
+          
+          lipstick_filter_->setFaceLandmarks(land_marks);
+          lipstick_filter_->setHasFace(true);
+          
+          blusher_filter_->setFaceLandmarks(land_marks);
+          blusher_filter_->setHasFace(true);
+        } else {
+          face_reshape_filter_->setHasFace(false);
+          lipstick_filter_->setHasFace(false);
+          blusher_filter_->setHasFace(false);
+        }
       }
+   
+      //
+      CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
+      CVPixelBufferLockBaseAddress(imageBuffer, 0);
+      auto width = CVPixelBufferGetWidth(imageBuffer);
+      auto height = CVPixelBufferGetHeight(imageBuffer);
+      auto stride = CVPixelBufferGetBytesPerRow(imageBuffer)/4;
+      auto pixels = (const uint8_t *)CVPixelBufferGetBaseAddress(imageBuffer);
+      gpuPixelRawInput->uploadBytes(pixels, width, height, stride);
+      CVPixelBufferUnlockBaseAddress(imageBuffer, 0);
     }
- 
-    //
-    CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
-    CVPixelBufferLockBaseAddress(imageBuffer, 0);
-    auto width = CVPixelBufferGetWidth(imageBuffer);
-    auto height = CVPixelBufferGetHeight(imageBuffer);
-    auto stride = CVPixelBufferGetBytesPerRow(imageBuffer)/4;
-    auto pixels = (const uint8_t *)CVPixelBufferGetBaseAddress(imageBuffer);
-    gpuPixelRawInput->uploadBytes(pixels, width, height, stride);
-    CVPixelBufferUnlockBaseAddress(imageBuffer, 0);
-  }
 }
-
--(void)onToggleBtnPress {
  
-}
-
 -(bool)isFaceDetectorEnable {
   return true;
-//  return self.thinFaceValue != 0 || self.eyeValue != 0;
 }
 
--(void)onToggleBtnUpInside {
-  
+//点击不同分段就会有不同的事件进行相应
+-(void)onFilterSwitchChange:(UISegmentedControl *)sender{
+  if (sender.selectedSegmentIndex == 0) {
+    [self setBeautyValue: self.beautyValue];
+    [self setWhithValue:self.whithValue];
+    [self setThinFaceValue:self.thinFaceValue];
+    [self setEyeValue: self.eyeValue];
+    [self setLipstickValue: self.lipstickValue];
+    [self setBlusherValue: self.blusherValue];
+  } else {
+    beauty_face_filter_->setBlurAlpha(0);
+    beauty_face_filter_->setWhite(0);
+    face_reshape_filter_->setFaceSlimLevel(0);
+    face_reshape_filter_->setEyeZoomLevel(0);
+    lipstick_filter_->setBlendLevel(0);
+    blusher_filter_->setBlendLevel(0);
+  }
 }
 
 
@@ -297,25 +320,11 @@ using namespace GPUPixel;
   return _capturer;
 }
 
--(UIButton*)effectToggleBtn {
-  if(_effectToggleBtn == nil) {
-    _effectToggleBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-    _effectToggleBtn.frame = CGRectMake(self.view.bounds.size.width - 35,
-                                        self.view.bounds.size.height - 200,
-                                        25,
-                                        25);
-    [_effectToggleBtn setBackgroundImage:[UIImage imageNamed:@"ToggleBtnIcon"] forState:UIControlStateNormal];
-    [_effectToggleBtn addTarget: self action: @selector(onToggleBtnPress) forControlEvents: UIControlEventTouchDown];
-    [_effectToggleBtn addTarget: self action: @selector(onToggleBtnUpInside) forControlEvents: UIControlEventTouchUpInside] ;
-  }
-  return _effectToggleBtn;
-}
-
 -(UIButton*)cameraSwitchBtn {
   if(_cameraSwitchBtn == nil) {
     _cameraSwitchBtn = [UIButton buttonWithType:UIButtonTypeSystem];
     _cameraSwitchBtn.frame = CGRectMake(self.view.bounds.size.width - 35,
-                                        100,
+                                        105,
                                         25,
                                         20);
     
@@ -325,6 +334,22 @@ using namespace GPUPixel;
   return _cameraSwitchBtn;
 }
 
+-(UISegmentedControl*)effectSwitch {
+  if(_effectSwitch == nil) {
+    NSArray *array = [NSArray arrayWithObjects:@"ON",@"OFF", nil];
+    _effectSwitch = [[UISegmentedControl alloc]initWithItems:array];
+    _effectSwitch.frame = CGRectMake(self.view.frame.size.width - 90,
+                                     self.view.frame.size.height - 160,
+                                    80,
+                                    30);
+    _effectSwitch.apportionsSegmentWidthsByContent = YES;
+    _effectSwitch.selectedSegmentIndex = 0;
+    
+    [_effectSwitch addTarget:self action:@selector(onFilterSwitchChange:) forControlEvents:UIControlEventValueChanged];
+ 
+  }
+  return _effectSwitch;
+}
 
  
 @end

@@ -50,6 +50,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)shareInstance;
 - (void)getLandmarksFromSampleBuffer:(CMSampleBufferRef)detectSampleBufferRef;
 - (void)auth;
+- (void)resetFacepp;
 @end
 
 NS_ASSUME_NONNULL_END
