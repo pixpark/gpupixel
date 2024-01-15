@@ -1,20 +1,13 @@
 # GPUPixel - Realtime video and image processing library
-English | [中文](./README_cn.md)
+English | [中文](./README_cn.md) 
 
-<p align="left">
-<a href="https://github.com/pixpark/gpupixel">GPUPixel</a>
-@
-<a href="https://github.com/pixpark">PixPark</a> 
-</p>
-<p align="left">
+[GPUPixel](https://github.com/pixpark/gpupixel) @ [PixPark](https://github.com/pixpark) 
 
 [![GitHub Stars](https://img.shields.io/github/stars/pixpark/gpupixel?style=social)](https://github.com/pixpark/gpupixel/stargazers)
 [![Release](https://img.shields.io/github/v/release/pixpark/gpupixel)](https://github.com/pixpark/gpupixel/releases/latest)
 ![Static Badge](https://img.shields.io/badge/Platform-iOS_%7C%20macOS%20%7C%20Android-red)
 [![GitHub](https://img.shields.io/github/license/pixpark/gpupixel)
 ](https://github.com/pixpark/gpupixel/blob/main/LICENSE)
-
-</p> 
 
 ## Introduction
 GPUPixel is a high-performance image and video processing library written in C++11. Extremely easy to compile and integrate, with a very small library size.
@@ -27,7 +20,7 @@ The face key points detection currently utilizes the [Face++](https://www.facepl
 
 ## Effects Preview
 
-👉 **Video: <a href="https://youtu.be/9BY1Qx1NEPs" target="_blank">YouTube</a> | <a href="https://www.bilibili.com/video/BV1xQ4y1L7Fh/?share_source=copy_web&vd_source=46adcb1014fa989cfcbb4cc1e866831e" target="_blank">BiliBili</a>**
+👉👉 **Video: <a href="https://youtu.be/9BY1Qx1NEPs" target="_blank">YouTube</a> | <a href="https://www.bilibili.com/video/BV1xQ4y1L7Fh/?share_source=copy_web&vd_source=46adcb1014fa989cfcbb4cc1e866831e" target="_blank">BiliBili</a>**
 
 | ![](./docs/src.jpg) | ![](./docs/soomth.jpg) | ![](./docs/white.jpg) | ![](./docs/thin-face.jpg) |
 | :--------------------------------------: | :--------------------------------------------------: | :-------------------------------------------: | :------------------------------------: |
