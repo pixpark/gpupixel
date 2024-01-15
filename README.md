@@ -1,8 +1,6 @@
 # GPUPixel - Realtime video and image processing library
-<p align="left">
- English | 
-<a href="./README_cn.md"> 简体中文 &nbsp; </a>
-</p>
+English | [中文](./README_cn.md)
+
 <p align="left">
 <a href="https://github.com/pixpark/gpupixel">GPUPixel</a>
 @
@@ -33,10 +31,10 @@ The face key points detection currently utilizes the [Face++](https://www.facepl
 
 | ![](./docs/src.jpg) | ![](./docs/soomth.jpg) | ![](./docs/white.jpg) | ![](./docs/thin-face.jpg) |
 | :--------------------------------------: | :--------------------------------------------------: | :-------------------------------------------: | :------------------------------------: |
-|               Srouce Image               |                        White                         |                    Smooth                     |               Thin face                |
+|               **Srouce Image**               |                        **White**                     |                    **Smooth**                 |               **Thin face**            |
 | ![](./docs/big-eye.jpg)  | ![](./docs/lipstick.jpg) | ![](./docs/blush.jpg) | ![](./docs/src.jpg) |
-|                 Big eye                  |                       Lipstick                       |                     Blush                     |                  Srouce Image                       |
- 
+|                 **Big eye**              |                       **Lipstick**                       |                     **Blush**                     |                  **Srouce Image**                   |
+
 ## Architecture
 <p align="center">
  <img src="./docs/arch-en.jpg" width="75%" height="auto" style="display: block; margin: 0 auto;">
@@ -189,7 +187,13 @@ target_raw_output_->setPixelsCallbck([=](const uint8_t *data,
 ```
 
 
-
 ## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=pixpark/gpupixel&type=Date)](https://star-history.com/#pixpark/gpupixel&Date)
+
+## Acknowledgement
+### Reference Project
+1. [GPUImage](https://github.com/BradLarson/GPUImage) 
+2. [CainCamera](https://github.com/CainKernel/CainCamera)
+3. [AwemeLike](https://github.com/ZZZZou/AwemeLike)
+4. [VNN](https://github.com/joyycom/VNN)
