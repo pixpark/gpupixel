@@ -56,12 +56,16 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <navigationItem key="navigationItem" id="TuV-IG-qGy"/>
+                    <connections>
+                        <outlet property="imageFilterTestBtn" destination="Nxs-CJ-hCI" id="QQN-en-xub"/>
+                        <outlet property="videoFilterTestBtn" destination="MJN-nm-sml" id="Jhc-wf-22P"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rLw-dV-q0l" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="650.72463768115949" y="136.60714285714286"/>
         </scene>
-        <!--视频滤镜-->
+        <!--Video FIlter Test-->
         <scene sceneID="pmW-rM-uTh">
             <objects>
                 <viewController id="wKd-1l-hyO" customClass="VideoFilterController" sceneMemberID="viewController">
@@ -71,13 +75,13 @@
                         <viewLayoutGuide key="safeArea" id="arW-EX-z7K"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <navigationItem key="navigationItem" title="视频滤镜" id="HgI-OU-Tda"/>
+                    <navigationItem key="navigationItem" title="Video FIlter Test" id="HgI-OU-Tda"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xFM-jc-zfM" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1794" y="-55"/>
         </scene>
-        <!--图片滤镜-->
+        <!--Image Filter Test-->
         <scene sceneID="riN-KP-Mcp">
             <objects>
                 <viewController id="Uua-xU-9Z8" customClass="ImageFilterController" sceneMemberID="viewController">
@@ -87,7 +91,7 @@
                         <viewLayoutGuide key="safeArea" id="kCi-cS-zcX"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <navigationItem key="navigationItem" title="图片滤镜" id="Dl8-Tb-qdM"/>
+                    <navigationItem key="navigationItem" title="Image Filter Test" id="Dl8-Tb-qdM"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6gb-89-I1L" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
