@@ -24,13 +24,13 @@ The face key points detection currently utilizes the [Face++](https://www.facepl
 
 | ![](./docs/src.jpg) | ![](./docs/soomth.jpg) | ![](./docs/white.jpg) | ![](./docs/thin-face.jpg) |
 | :--------------------------------------: | :--------------------------------------------------: | :-------------------------------------------: | :------------------------------------: |
-|               **Srouce Image**               |                        **White**                     |                    **Smooth**                 |               **Thin face**            |
+|               **Original Image**               |                        **White**                     |                    **Smooth**                 |               **Thin face**            |
 | ![](./docs/big-eye.jpg)  | ![](./docs/lipstick.jpg) | ![](./docs/blush.jpg) | ![](./docs/src.jpg) |
-|                 **Big eye**              |                       **Lipstick**                       |                     **Blush**                     |                  **Srouce Image**                   |
+|                 **Big eye**              |                       **Lipstick**                       |                     **Blush**                     |                  **Original Image**                   |
 
 ## Architecture
 <p align="center">
- <img src="./docs/arch-en.jpg" width="75%" height="auto" style="display: block; margin: 0 auto;">
+ <img src="./docs/arch-en.jpg" width="80%" height="auto" style="display: block; margin: 0 auto;">
 </p>
 
 
