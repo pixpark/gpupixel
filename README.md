@@ -28,7 +28,9 @@ It supports platforms including iOS, Mac, Android, and it can theoretically be p
 The face key points detection currently utilizes the [Face++](https://www.faceplusplus.com.cn/) library, but it will be replaced with either **VNN** in the future.
 
 ## Effects Preview
-**Skin whitening & smoothing**: 
+👉 **Video: [Youtube](https://youtu.be/9BY1Qx1NEPs) | [Bilibili](https://www.bilibili.com/video/BV1xQ4y1L7Fh/?share_source=copy_web&vd_source=46adcb1014fa989cfcbb4cc1e866831e)**
+
+👉 **Whitening & Smoothing & Thin face & Big eye & Lipstick & Blush **: 
 
 <p align="center">
  <img src="./docs/effects-preview.jpg" width="75%" height="auto" style="display: block; margin: 0 auto;">
