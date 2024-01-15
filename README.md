@@ -28,16 +28,15 @@ It supports platforms including iOS, Mac, Android, and it can theoretically be p
 The face key points detection currently utilizes the [Face++](https://www.faceplusplus.com.cn/) library, but it will be replaced with either **VNN** in the future.
 
 ## Effects Preview
-👉 **Video: [Youtube](https://youtu.be/9BY1Qx1NEPs) | [Bilibili](https://www.bilibili.com/video/BV1xQ4y1L7Fh/?share_source=copy_web&vd_source=46adcb1014fa989cfcbb4cc1e866831e)**
 
-👉 **Whitening & Smoothing & Thin face & Big eye & Lipstick & Blush **: 
+👉 **Video: <a href="https://youtu.be/9BY1Qx1NEPs" target="_blank">YouTube</a> | <a href="https://www.bilibili.com/video/BV1xQ4y1L7Fh/?share_source=copy_web&vd_source=46adcb1014fa989cfcbb4cc1e866831e" target="_blank">BiliBili</a>**
 
-<p align="center">
- <img src="./docs/effects-preview.jpg" width="75%" height="auto" style="display: block; margin: 0 auto;">
-</p>
-
-
-
+| ![](./docs/src.jpg) | ![](./docs/soomth.jpg) | ![](./docs/white.jpg) | ![](./docs/thin-face.jpg) |
+| :--------------------------------------: | :--------------------------------------------------: | :-------------------------------------------: | :------------------------------------: |
+|               Srouce Image               |                        White                         |                    Smooth                     |               Thin face                |
+| ![](./docs/big-eye.jpg)  | ![](./docs/lipstick.jpg) | ![](./docs/blush.jpg) | ![](./docs/src.jpg) |
+|                 Big eye                  |                       Lipstick                       |                     Blush                     |                  Srouce Image                       |
+ 
 ## Architecture
 <p align="center">
  <img src="./docs/arch-en.jpg" width="75%" height="auto" style="display: block; margin: 0 auto;">
