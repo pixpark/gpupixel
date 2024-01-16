@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "84307E8B261F2CD9003EAC98"
-               BuildableName = "PixDemo.app"
-               BlueprintName = "PixDemo"
-               ReferencedContainer = "container:PixDemo.xcodeproj">
+               BuildableName = "GPUPixelDemo.app"
+               BlueprintName = "GPUPixelDemo"
+               ReferencedContainer = "container:GPUPixelDemo.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -45,9 +45,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "84307E8B261F2CD9003EAC98"
-            BuildableName = "PixDemo.app"
-            BlueprintName = "PixDemo"
-            ReferencedContainer = "container:PixDemo.xcodeproj">
+            BuildableName = "GPUPixelDemo.app"
+            BlueprintName = "GPUPixelDemo"
+            ReferencedContainer = "container:GPUPixelDemo.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -62,9 +62,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "84307E8B261F2CD9003EAC98"
-            BuildableName = "PixDemo.app"
-            BlueprintName = "PixDemo"
-            ReferencedContainer = "container:PixDemo.xcodeproj">
+            BuildableName = "GPUPixelDemo.app"
+            BlueprintName = "GPUPixelDemo"
+            ReferencedContainer = "container:GPUPixelDemo.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
