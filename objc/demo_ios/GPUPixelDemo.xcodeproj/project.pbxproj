@@ -71,7 +71,7 @@
 		1FBB65702A75597800B43AC4 /* Face++LicenseHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "Face++LicenseHandler.m"; path = "Face++/Face++LicenseHandler.m"; sourceTree = "<group>"; };
 		8417C437267F5AF10074DDEF /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		8417C43B267F5B470074DDEF /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
-		84307E8C261F2CD9003EAC98 /* PixDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PixDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		84307E8C261F2CD9003EAC98 /* GPUPixelDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GPUPixelDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84307E8F261F2CD9003EAC98 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		84307E90261F2CD9003EAC98 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		84307E92261F2CD9003EAC98 /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
@@ -125,7 +125,7 @@
 			isa = PBXGroup;
 			children = (
 				8472448F2A60321E009D1488 /* GPUPixel.xcodeproj */,
-				84307E8E261F2CD9003EAC98 /* PixDemo */,
+				84307E8E261F2CD9003EAC98 /* GPUPixelDemo */,
 				84307E8D261F2CD9003EAC98 /* Products */,
 				84EEBF41261F2DC5000AD4AE /* Frameworks */,
 			);
@@ -134,12 +134,12 @@
 		84307E8D261F2CD9003EAC98 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				84307E8C261F2CD9003EAC98 /* PixDemo.app */,
+				84307E8C261F2CD9003EAC98 /* GPUPixelDemo.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		84307E8E261F2CD9003EAC98 /* PixDemo */ = {
+		84307E8E261F2CD9003EAC98 /* GPUPixelDemo */ = {
 			isa = PBXGroup;
 			children = (
 				1FBB65732A7559B300B43AC4 /* Face++ */,
@@ -161,7 +161,7 @@
 				84307EA0261F2CDC003EAC98 /* Info.plist */,
 				84307EA1261F2CDC003EAC98 /* main.m */,
 			);
-			path = PixDemo;
+			path = GPUPixelDemo;
 			sourceTree = "<group>";
 		};
 		847244902A60321E009D1488 /* Products */ = {
@@ -187,9 +187,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		84307E8B261F2CD9003EAC98 /* PixDemo */ = {
+		84307E8B261F2CD9003EAC98 /* GPUPixelDemo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 84307EBB261F2CDC003EAC98 /* Build configuration list for PBXNativeTarget "PixDemo" */;
+			buildConfigurationList = 84307EBB261F2CDC003EAC98 /* Build configuration list for PBXNativeTarget "GPUPixelDemo" */;
 			buildPhases = (
 				84307E88261F2CD9003EAC98 /* Sources */,
 				84307E89261F2CD9003EAC98 /* Frameworks */,
@@ -201,9 +201,9 @@
 			dependencies = (
 				8472449A2A60324E009D1488 /* PBXTargetDependency */,
 			);
-			name = PixDemo;
+			name = GPUPixelDemo;
 			productName = PixDemo;
-			productReference = 84307E8C261F2CD9003EAC98 /* PixDemo.app */;
+			productReference = 84307E8C261F2CD9003EAC98 /* GPUPixelDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -219,7 +219,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 84307E87261F2CD9003EAC98 /* Build configuration list for PBXProject "PixDemo" */;
+			buildConfigurationList = 84307E87261F2CD9003EAC98 /* Build configuration list for PBXProject "GPUPixelDemo" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -238,7 +238,7 @@
 			);
 			projectRoot = "";
 			targets = (
-				84307E8B261F2CD9003EAC98 /* PixDemo */,
+				84307E8B261F2CD9003EAC98 /* GPUPixelDemo */,
 			);
 		};
 /* End PBXProject section */
@@ -454,12 +454,8 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				HEADER_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/PixDemo/Face++/**",
-					"$(PROJECT_DIR)/PixDemo/Model",
-					"$(PROJECT_DIR)/PixDemo/Widget",
-				);
-				INFOPLIST_FILE = PixDemo/Info.plist;
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/GPUPixelDemo/Face++\"/**";
+				INFOPLIST_FILE = GPUPixelDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -467,8 +463,8 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/PixDemo/Face++/MegviiLicMgr-iOS-SDK",
-					"$(PROJECT_DIR)/PixDemo/Face++/MGFaceppSDK",
+					"$(PROJECT_DIR)/GPUPixelDemo/Face++/MegviiLicMgr-iOS-SDK",
+					"$(PROJECT_DIR)/GPUPixelDemo/Face++/MGFaceppSDK",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MARKETING_VERSION = 1.0.3;
@@ -497,12 +493,8 @@
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = HR6V4MC5N2;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "";
-				HEADER_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/PixDemo/Face++/**",
-					"$(PROJECT_DIR)/PixDemo/Model",
-					"$(PROJECT_DIR)/PixDemo/Widget",
-				);
-				INFOPLIST_FILE = PixDemo/Info.plist;
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/GPUPixelDemo/Face++\"/**";
+				INFOPLIST_FILE = GPUPixelDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -510,8 +502,8 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/PixDemo/Face++/MegviiLicMgr-iOS-SDK",
-					"$(PROJECT_DIR)/PixDemo/Face++/MGFaceppSDK",
+					"$(PROJECT_DIR)/GPUPixelDemo/Face++/MegviiLicMgr-iOS-SDK",
+					"$(PROJECT_DIR)/GPUPixelDemo/Face++/MGFaceppSDK",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MARKETING_VERSION = 1.0.3;
@@ -530,7 +522,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		84307E87261F2CD9003EAC98 /* Build configuration list for PBXProject "PixDemo" */ = {
+		84307E87261F2CD9003EAC98 /* Build configuration list for PBXProject "GPUPixelDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				84307EB9261F2CDC003EAC98 /* Debug */,
@@ -539,7 +531,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		84307EBB261F2CDC003EAC98 /* Build configuration list for PBXNativeTarget "PixDemo" */ = {
+		84307EBB261F2CDC003EAC98 /* Build configuration list for PBXNativeTarget "GPUPixelDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				84307EBC261F2CDC003EAC98 /* Debug */,
