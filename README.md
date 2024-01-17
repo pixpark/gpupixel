@@ -1,4 +1,4 @@
-##  GPUPixel Cross-Platform Real-Time Beauty Effects Library
+##  GPUPixel: Cross-Platform Real-Time Beauty Effects Library
 
 English | [中文](./README_cn.md) 
 
