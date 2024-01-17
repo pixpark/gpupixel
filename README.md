@@ -1,13 +1,9 @@
-##  GPUPixel: Cross-Platform Real-Time Beauty Effects Library
+# GPUPixel - Cross-Platform Real-Time Beauty Effects Library
+English | [简体中文](./README_cn.md) 
 
-English | [中文](./README_cn.md) 
+ [GPUPixel](https://github.com/pixpark/gpupixel) @ [PixPark](https://github.com/pixpark) 
 
-[GPUPixel](https://github.com/pixpark/gpupixel) @ [PixPark](https://github.com/pixpark) 
-
-[![GitHub Stars](https://img.shields.io/github/stars/pixpark/gpupixel?style=social)](https://github.com/pixpark/gpupixel/stargazers)
-[![Release](https://img.shields.io/github/v/release/pixpark/gpupixel)](https://github.com/pixpark/gpupixel/releases/latest)
-![Static Badge](https://img.shields.io/badge/Platform-iOS_%7C%20macOS%20%7C%20Android-red)
-[![GitHub](https://img.shields.io/github/license/pixpark/gpupixel)
+[![GitHub Stars](https://img.shields.io/github/stars/pixpark/gpupixel?style=social)](https://github.com/pixpark/gpupixel/stargazers)[![Release](https://img.shields.io/github/v/release/pixpark/gpupixel)](https://github.com/pixpark/gpupixel/releases/latest) ![Static Badge](https://img.shields.io/badge/Platform-iOS_%7C%20macOS%20%7C%20Android-red)[![GitHub](https://img.shields.io/github/license/pixpark/gpupixel)
 ](https://github.com/pixpark/gpupixel/blob/main/LICENSE)
 
 ## Introduction
@@ -21,90 +17,90 @@ The face key points detection currently utilizes the [Face++](https://www.facepl
 
 ## Effects Preview
 
-👉👉 **Video: <a href="https://youtu.be/9BY1Qx1NEPs" target="_blank">YouTube</a> | <a href="https://www.bilibili.com/video/BV1xQ4y1L7Fh/?share_source=copy_web&vd_source=46adcb1014fa989cfcbb4cc1e866831e" target="_blank">BiliBili</a>**
+👉 **Video: <a href="https://youtu.be/9BY1Qx1NEPs" target="_blank">YouTube</a> | <a href="https://www.bilibili.com/video/BV1xQ4y1L7Fh/?share_source=copy_web&vd_source=46adcb1014fa989cfcbb4cc1e866831e" target="_blank">BiliBili</a>**
 
-| ![](./docs/src.jpg) | ![](./docs/soomth.jpg) | ![](./docs/white.jpg) | ![](./docs/thin-face.jpg) |
-| :--------------------------------------: | :--------------------------------------------------: | :-------------------------------------------: | :------------------------------------: |
-|               **Original Image**               |                        **White**                     |                    **Smooth**                 |               **Thin face**            |
-| ![](./docs/big-eye.jpg)  | ![](./docs/lipstick.jpg) | ![](./docs/blush.jpg) | ![](./docs/src.jpg) |
-|                 **Big eye**              |                       **Lipstick**                       |                     **Blush**                     |                  **Original Image**                   |
+|                    **origin**                    |                     **smooth**                     |                     **white**                     |                    **thinface**                    |
+| :----------------------------------------------: | :------------------------------------------------: | :-----------------------------------------------: | :------------------------------------------------: |
+| <img src="./docs/image/origin.gif" width="180"/> |  <img src="./docs/image/smooth.gif" width="180"/>  |  <img src="./docs/image/white.gif" width="180"/>  | <img src="./docs/image/thinface.gif" width="180"/> |
+|                    **bigeye**                    |                    **lipstick**                    |                    **blusher**                    |                     **on-off**                     |
+| <img src="./docs/image/bigeye.gif" width="180"/> | <img src="./docs/image/lipstick.gif" width="180"/> | <img src="./docs/image/blusher.gif" width="180"/> |  <img src="./docs/image/on-off.gif" width="180"/>  |
+
 
 ## Architecture
-<p align="center">
- <img src="./docs/arch-en.jpg" width="80%" height="auto" style="display: block; margin: 0 auto;">
-</p>
+![](./docs/arch-en.jpg)
+
 
 
 ## Features Compared
 
 This table compares the features supported by **GPUPixel** and **GPUImage**:
 
-✅: Supported
+✅: Supported | ❌: Not supported | ✏️: Planning
 
-❌: Not supported
-
-✏️: Planning
-
-|             | [GPUPixel](https://github.com/pixpark/gpupixel) | [GPUImage](https://github.com/BradLarson/GPUImage) |
-| :-------------------- | :------------------------------------------------: | :---------------------------------------------: |
-| **Filters:** |                         ✅                          |                        ❌                        |
-| Skin Smoothing Filter |                         ✅                          |                        ❌                        |
-| Skin Whitening Filter |                         ✅                          |                        ❌                        |
-| Face Slimming Filter  |                         ✅                          |                        ❌                        |
-| Big Eyes Filter       |                         ✅                          |                        ❌                        |
-| Lipstick Filter       |                         ✅                          |                        ❌                        |
-| Blush Filter          |                         ✅                          |                        ❌                        |
-| More Build in Filter  |                         ✅                          |                        ✅                        |
-| **Input Formats:**     |                                                    |                                                 |
-| YUV420P(I420)         |                         ✅                          |                        ❌                        |
-| RGBA                  |                         ✅                          |                        ✅                        |
-| JPEG                  |                         ✅                          |                        ✅                        |
-| PNG                   |                         ✅                          |                        ✅                        |
-| NV21(for Android)     |                         ✏️                          |                        ❌                        |
-| **Output Formats:**    |                                                    |                                                 |
-| RGBA                  |                         ✅                          |                        ✅                        |
-| YUV420P(I420)         |                         ✏️                          | ❌ |
-| **Platform:**         |                                                    |                                                 |
-| iOS                   |                         ✅                          |                        ✅                        |
-| Mac                   |                         ✅                          | ✅ |
-| Android               |                         ✅                          |                        ❌                        |
-| Win                   |                         ✏️                          |                        ❌                        |
-| Linux                 |                         ❌                         |                        ❌                        |
+|                       | [GPUPixel](https://github.com/pixpark/gpupixel) | [GPUImage](https://github.com/BradLarson/GPUImage) |
+| :-------------------- | :---------------------------------------------: | :------------------------------------------------: |
+| 🍎**Filters:**         |                        ✅                        |                         ❌                          |
+| Skin Smoothing Filter |                        ✅                        |                         ❌                          |
+| Skin Whitening Filter |                        ✅                        |                         ❌                          |
+| Face Slimming Filter  |                        ✅                        |                         ❌                          |
+| Big Eyes Filter       |                        ✅                        |                         ❌                          |
+| Lipstick Filter       |                        ✅                        |                         ❌                          |
+| Blush Filter          |                        ✅                        |                         ❌                          |
+| More Build in Filter  |                        ✅                        |                         ✅                          |
+| 🍓**Input Formats:**   |                                                 |                                                    |
+| YUV420P(I420)         |                        ✅                        |                         ❌                          |
+| RGBA                  |                        ✅                        |                         ✅                          |
+| JPEG                  |                        ✅                        |                         ✅                          |
+| PNG                   |                        ✅                        |                         ✅                          |
+| NV21(for Android)     |                        ✏️                        |                         ❌                          |
+| 🍉**Output Formats:**  |                                                 |                                                    |
+| RGBA                  |                        ✅                        |                         ✅                          |
+| YUV420P(I420)         |                        ✏️                        |                         ❌                          |
+| 🥑**Platform:**        |                                                 |                                                    |
+| iOS                   |                        ✅                        |                         ✅                          |
+| Mac                   |                        ✅                        |                         ✅                          |
+| Android               |                        ✅                        |                         ❌                          |
+| Win                   |                        ✏️                        |                         ❌                          |
+| Linux                 |                        ✏️                        |                         ❌                          |
 
 
 ## System Requirements
-|OS|iOS|OSX|Android|Windows| Linux |
-|:----:|:----:|:----:|:----:|:----:|:----:|
-|Min Support OS Version|10.0|10.13|5.0 (API 21)|-|-|
+|           OS           |  iOS  |  OSX  |   Android    | Windows | Linux |
+| :--------------------: | :---: | :---: | :----------: | :-----: | :---: |
+| Min Support OS Version | 10.0  | 10.13 | 5.0 (API 21) |    -    |   -   |
 
 ##  Performance
 ### iPhone
-|-|iPhone 6P|iPhone 8|iPhone X|iPhone 11 | iPhone 14 pro |
-|:----:|:----:|:----:|:----:|:----:|:----:|
-|**CPU**|5%|5%|3%|3%|3%|
-|**Time Taken**|10ms|4ms|3ms|3ms|3ms|
+|       -        | iPhone 6P | iPhone 8 | iPhone X | iPhone 11 | iPhone 14 pro |
+| :------------: | :-------: | :------: | :------: | :-------: | :-----------: |
+|    **CPU**     |    5%     |    5%    |    3%    |    3%     |      3%       |
+| **Time Taken** |   10ms    |   4ms    |   3ms    |    3ms    |      3ms      |
 ### Android
-|-|Xiaomi 10| Huawei Meta30|Vivo|SAMSUNG| Google Pixel |
-|:----:|:----:|:----:|:----:|:----:|:----:|
-|CPU|3%|5%|-|-|-|
-|Time Taken|6ms|5ms|-|-|-|
+|     -      | Xiaomi 10 | Huawei Meta30 | Vivo  | SAMSUNG | Google Pixel |
+| :--------: | :-------: | :-----------: | :---: | :-----: | :----------: |
+|    CPU     |    3%     |      5%       |   -   |    -    |      -       |
+| Time Taken |    6ms    |      5ms      |   -   |    -    |      -       |
 
 
 ## Compilation
 ### iOS
-Open `objc/gpupixel.xcodeproj` or `objc/demo/PixDemo.xcodeproj`  Xcode project and select the corresponding platform for compilation
+1. Open `objc/gpupixel.xcodeproj` or `objc/demo/PixDemo.xcodeproj`  Xcode project ;
+
+2. Select the corresponding platform for compilation;
 
 ### Android
-Open the directory ./android in Android Studio and configure NDK r21+
+1. Open the directory ./android in Android Studio 
+
+2. Configure NDK r21+
 
 ## Library Size
 
-|      | iOS(.framework) | MacOS(.framework) | Android(.aar) |
-| :--: | :-------------: | :---------------: | :-----------: |
-| Size |     2.4 MB      |      2.6 MB       |    2.1 MB     |
+|       | iOS(.framework) | MacOS(.framework) | Android(.aar) |
+| :---: | :-------------: | :---------------: | :-----------: |
+| Size  |     2.4 MB      |      2.6 MB       |    2.1 MB     |
 
 
-## How to Use
+## Usage
 Refer to `./objc/demo` or `./android` demo
 
 **`.h` file**
@@ -117,7 +113,7 @@ std::shared_ptr<FaceBeautyFilter> face_beauty_filter_;
 // video data output 
 std::shared_ptr<TargetRawDataOutput> target_raw_output_;
 ```
-**Create Filter, `.c++` file**
+**Create Filter, `.cpp` file**
 
 ```c++
  GPUPixel::GPUPixelContext::getInstance()->runSync([&] {

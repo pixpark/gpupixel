@@ -26,51 +26,44 @@ GPUPixel是一个由C++11编写的高性能图像和视频处理库, 基于GPU, 
 
 ## 效果
 
-**美白&磨皮**
-
-<p align="center">
- <img src="./docs/effects-preview.jpg" width="75%" height="auto" style="display: block; margin: 0 auto;">
-</p>
-
-
+| ![](./docs/src.jpg) | ![](./docs/soomth.jpg) | ![](./docs/white.jpg) | ![](./docs/thin-face.jpg) |
+| :--------------------------------------: | :--------------------------------------------------: | :-------------------------------------------: | :------------------------------------: |
+|               **原图**               |                        **美白**                     |                    **磨皮**                 |               **瘦脸**            |
+| ![](./docs/big-eye.jpg)  | ![](./docs/lipstick.jpg) | ![](./docs/blush.jpg) | ![](./docs/src.jpg) |
+|                 **大眼**              |                       **口红**                       |                     **腮红**                     |                  **原图**                   |
 
 
 ## 架构
-<p align="center">
- <img src="./docs/arch-zh.jpg" width="80%" height="auto" style="display: block; margin: 0 auto;">
-</p>
+![](./docs/arch-zh.jpg)
 
-## 功能 ##
+## 与GPUImage对比
+✅: 支持 | ❌: 不支持 | ✏️: 计划
 
-### 美颜滤镜
-- [x] 磨皮滤镜 
-- [x] 美白滤镜
-- [x] 红润滤镜
-- [x] 瘦脸滤镜
-- [x] 大眼滤镜
-- [x] 口红滤镜
-- [x] 腮红滤镜
-
-### 输入格式
-- [x] YUV420P(I420)
-- [x] RGBA
-- [x] JPEG
-- [x] PNG
-- [ ] NV12
-
-### 输出格式
-- [x] RGBA
-- [ ] YUV420P
-- [ ] NV12
-
-### 基础滤镜
-[基础滤镜列表]()
-
-### 其他滤镜
-- [x] 图片水印
-- [ ] 贴纸特效
-- [ ] 文字水印
-- [ ] 风格滤镜
+|             | [GPUPixel](https://github.com/pixpark/gpupixel) | [GPUImage](https://github.com/BradLarson/GPUImage) |
+| :-------------------- | :------------------------------------------------: | :---------------------------------------------: |
+| **滤镜:** |                         ✅                          |                        ❌                        |
+| 磨皮 |                         ✅                          |                        ❌                        |
+| 美白 |                         ✅                          |                        ❌                        |
+| 瘦脸 |                         ✅                          |                        ❌                        |
+| 大眼       |                         ✅                          |                        ❌                        |
+| 口红       |                         ✅                          |                        ❌                        |
+| 腮红          |                         ✅                          |                        ❌                        |
+| 内建滤镜 |                         ✅                          |                        ✅                        |
+| **输入格式:**     |                                                    |                                                 |
+| YUV420P(I420)         |                         ✅                          |                        ❌                        |
+| RGBA                  |                         ✅                          |                        ✅                        |
+| JPEG                  |                         ✅                          |                        ✅                        |
+| PNG                   |                         ✅                          |                        ✅                        |
+| NV21(for Android)     |                         ✏️                          |                        ❌                        |
+| **输出格式:**    |                                                    |                                                 |
+| RGBA                  |                         ✅                          |                        ✅                        |
+| YUV420P(I420)         |                         ✏️                          | ❌ |
+| **系统支持:**         |                                                    |                                                 |
+| iOS                   |                         ✅                          |                        ✅                        |
+| Mac                   |                         ✅                          | ✅ |
+| Android               |                         ✅                          |                        ❌                        |
+| Win                   |                         ✏️                          |                        ❌                        |
+| Linux                 |                         ❌                         |                        ❌                        |
 
 ## 效果预览
 
