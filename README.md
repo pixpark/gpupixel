@@ -1,4 +1,4 @@
-# GPUPixel - Cross-Platform Real-Time Beauty Effects Library
+## GPUPixel - Cross-Platform Real-Time AI Beauty Effects Library
 English | [简体中文](./README_cn.md) 
 
  [GPUPixel](https://github.com/pixpark/gpupixel) @ [PixPark](https://github.com/pixpark) 
@@ -6,24 +6,29 @@ English | [简体中文](./README_cn.md)
 [![GitHub Stars](https://img.shields.io/github/stars/pixpark/gpupixel?style=social)](https://github.com/pixpark/gpupixel/stargazers)[![Release](https://img.shields.io/github/v/release/pixpark/gpupixel)](https://github.com/pixpark/gpupixel/releases/latest) ![Static Badge](https://img.shields.io/badge/Platform-iOS_%7C%20macOS%20%7C%20Android-red)[![GitHub](https://img.shields.io/github/license/pixpark/gpupixel)
 ](https://github.com/pixpark/gpupixel/blob/main/LICENSE)
 
+---
+
 ## Introduction
-GPUPixel is a high-performance image and video beauty effect library written in C++11. Achieving Commercial-Grade beauty effects. Extremely easy to compile and integrate, with a very small library size.
+GPUPixel is a high-performance image and video AI beauty effect library written in C++11, Extremely easy to compile and integrate, with a very small library size.
 
 It is GPU-based and comes with built-in beauty effects filters that can achieve commercial-grade results. 
 
 It supports platforms including iOS, Mac, Android, and it can theoretically be ported to any platform that supports OpenGL/ES.
 
-The face key points detection currently utilizes the [Face++](https://www.faceplusplus.com.cn/) library, but it will be replaced with either **VNN** in the future.
+> The face key points detection currently utilizes the [Face++](https://www.faceplusplus.com.cn/) library, but it will be replaced with either **VNN** in the future.
 
 ## Effects Preview
 
 👉 **Video: <a href="https://youtu.be/9BY1Qx1NEPs" target="_blank">YouTube</a> | <a href="https://www.bilibili.com/video/BV1xQ4y1L7Fh/?share_source=copy_web&vd_source=46adcb1014fa989cfcbb4cc1e866831e" target="_blank">BiliBili</a>**
 
-|                    **origin**                    |                     **smooth**                     |                     **white**                     |                    **thinface**                    |
-| :----------------------------------------------: | :------------------------------------------------: | :-----------------------------------------------: | :------------------------------------------------: |
-| <img src="./docs/image/origin.gif" width="180"/> |  <img src="./docs/image/smooth.gif" width="180"/>  |  <img src="./docs/image/white.gif" width="180"/>  | <img src="./docs/image/thinface.gif" width="180"/> |
-|                    **bigeye**                    |                    **lipstick**                    |                    **blusher**                    |                     **on-off**                     |
-| <img src="./docs/image/bigeye.gif" width="180"/> | <img src="./docs/image/lipstick.gif" width="180"/> | <img src="./docs/image/blusher.gif" width="180"/> |  <img src="./docs/image/on-off.gif" width="180"/>  |
+
+|             **Origin**             |          **Smooth**           |          **White**          |             **ThinFace**              |
+| :--------------------------------: | :--------------------------------: | :------------------------------: | :------------------------------------: |
+| ![origin](./docs/image/origin.gif) | ![smooth](./docs/image/smooth.gif) | ![white](./docs/image/white.gif) | ![thinface](./docs/image/thinface.gif) |
+|            **BigEye**            |            **Lipstick**            |            **Blusher**            |               **ON-OFF**              |
+| ![bigeye](./docs/image/bigeye.gif) | ![lipstick](./docs/image/lipstick.gif) | ![blusher](./docs/image/blusher.gif) | ![on-off](./docs/image/on-off.gif) |
+
+
 
 
 ## Architecture
