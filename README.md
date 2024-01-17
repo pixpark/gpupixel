@@ -1,4 +1,5 @@
-# GPUPixel - Realtime video and image processing library
+##  GPUPixel Cross-Platform Real-Time Beauty Effects Library
+
 English | [中文](./README_cn.md) 
 
 [GPUPixel](https://github.com/pixpark/gpupixel) @ [PixPark](https://github.com/pixpark) 
@@ -10,7 +11,7 @@ English | [中文](./README_cn.md)
 ](https://github.com/pixpark/gpupixel/blob/main/LICENSE)
 
 ## Introduction
-GPUPixel is a high-performance image and video processing library written in C++11. Extremely easy to compile and integrate, with a very small library size.
+GPUPixel is a high-performance image and video beauty effect library written in C++11. Achieving Commercial-Grade beauty effects. Extremely easy to compile and integrate, with a very small library size.
 
 It is GPU-based and comes with built-in beauty effects filters that can achieve commercial-grade results. 
 
