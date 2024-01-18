@@ -1,7 +1,7 @@
-## GPUPixel - Cross-Platform Real-Time AI Beauty Effects Library
+## GPUPixel
 English | [简体中文](./README_cn.md) 
 
- [GPUPixel](https://github.com/pixpark/gpupixel) @ [PixPark](https://github.com/pixpark) 
+[GPUPixel](https://github.com/pixpark/gpupixel) @ [PixPark](https://github.com/pixpark) 
 
 [![GitHub Stars](https://img.shields.io/github/stars/pixpark/gpupixel?style=social)](https://github.com/pixpark/gpupixel/stargazers)[![Release](https://img.shields.io/github/v/release/pixpark/gpupixel)](https://github.com/pixpark/gpupixel/releases/latest) ![Static Badge](https://img.shields.io/badge/Platform-iOS_%7C%20macOS%20%7C%20Android-red)[![GitHub](https://img.shields.io/github/license/pixpark/gpupixel)
 ](https://github.com/pixpark/gpupixel/blob/main/LICENSE)
@@ -9,13 +9,13 @@ English | [简体中文](./README_cn.md)
 ---
 
 ## Introduction
-GPUPixel is a high-performance image and video AI beauty effect library written in C++11, Extremely easy to compile and integrate, with a very small library size.
+⛰️ GPUPixel is a high-performance image and video AI beauty effect library written in C++11, Extremely easy to compile and integrate, with a very small library size.
 
-It is GPU-based and comes with built-in beauty effects filters that can achieve commercial-grade results. 
+🔑 It is GPU-based and comes with built-in beauty effects filters that can achieve commercial-grade results. 
 
-It supports platforms including iOS, Mac, Android, and it can theoretically be ported to any platform that supports OpenGL/ES.
+🔌 It supports platforms including iOS, Mac, Android, and it can theoretically be ported to any platform that supports OpenGL/ES.
 
-> The face key points detection currently utilizes the [Face++](https://www.faceplusplus.com.cn/) library, but it will be replaced with either **VNN** in the future.
+>💡 The face key points detection currently utilizes the [Face++](https://www.faceplusplus.com.cn/) library, but it will be replaced with either **[VNN](https://github.com/joyycom/VNN)** in the future.
 
 ## Effects Preview
 
@@ -25,17 +25,12 @@ It supports platforms including iOS, Mac, Android, and it can theoretically be p
 |             **Origin**             |          **Smooth**           |          **White**          |             **ThinFace**              |
 | :--------------------------------: | :--------------------------------: | :------------------------------: | :------------------------------------: |
 | ![origin](./docs/image/origin.gif) | ![smooth](./docs/image/smooth.gif) | ![white](./docs/image/white.gif) | ![thinface](./docs/image/thinface.gif) |
-|            **BigEye**            |            **Lipstick**            |            **Blusher**            |               **ON-OFF**              |
+|            **BigEye**            |            **Lipstick**            |            **Blusher**            |               **On|Off**              |
 | ![bigeye](./docs/image/bigeye.gif) | ![lipstick](./docs/image/lipstick.gif) | ![blusher](./docs/image/blusher.gif) | ![on-off](./docs/image/on-off.gif) |
-
-
-
-
+ 
 ## Architecture
 ![](./docs/arch-en.jpg)
-
-
-
+ 
 ## Features Compared
 
 This table compares the features supported by **GPUPixel** and **GPUImage**:
@@ -180,8 +175,7 @@ target_raw_output_->setPixelsCallbck([=](const uint8_t *data,
 
 // Output data callbck
 ```
-
-
+ 
 ## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=pixpark/gpupixel&type=Date)](https://star-history.com/#pixpark/gpupixel&Date)

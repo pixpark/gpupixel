@@ -1,99 +1,99 @@
-# GPUPixel - Realtime video and image processing library
-<p align="left">
-<a href="./README.md"> English &nbsp;|&nbsp; </a>  
-<a href="./README_cn.md"> 简体中文 &nbsp; </a>
-</p>
-<p align="left">
-<a href="https://github.com/pixpark/gpupixel">gpupixel</a>
-@
-<a href="https://github.com/pixpark">PixPark</a> 
-</p>
+## GPUPixel
+English | [简体中文](./README_cn.md) 
 
-<p align="left">
+[GPUPixel](https://github.com/pixpark/gpupixel) @ [PixPark](https://github.com/pixpark) 
 
-[![GitHub Stars](https://img.shields.io/github/stars/pixpark/gpupixel?style=social)](https://github.com/pixpark/gpupixel/stargazers)
-[![Release](https://img.shields.io/github/v/release/pixpark/gpupixel)](https://github.com/pixpark/gpupixel/releases/latest)
-![Static Badge](https://img.shields.io/badge/Platform-iOS_%7C%20macOS%20%7C%20Android-red)
-[![GitHub](https://img.shields.io/github/license/pixpark/gpupixel)
+[![GitHub Stars](https://img.shields.io/github/stars/pixpark/gpupixel?style=social)](https://github.com/pixpark/gpupixel/stargazers)[![Release](https://img.shields.io/github/v/release/pixpark/gpupixel)](https://github.com/pixpark/gpupixel/releases/latest) ![Static Badge](https://img.shields.io/badge/Platform-iOS_%7C%20macOS%20%7C%20Android-red)[![GitHub](https://img.shields.io/github/license/pixpark/gpupixel)
 ](https://github.com/pixpark/gpupixel/blob/main/LICENSE)
 
-</p> 
-
+---
+ 
 ## 简介 ##
 
-GPUPixel是一个由C++11编写的高性能图像和视频处理库, 基于GPU, 内置美颜特效滤镜, 效果可以达到商用级别.
-支持的平台包括iOS, Mac, Android, 理论上可以移植到所有支持OpenGL/ES的平台.
+⛰️ GPUPixel是一个使用C++11编写的高性能图像和视频AI美颜效果库，非常容易编译和集成，并且库文件非常小。
+
+🔑 它是基于GPU的，并且带有内置的美颜效果滤镜，可以实现商业级别的效果。
+
+🔌 它支持的平台包括iOS、Mac和Android，理论上可以移植到任何支持OpenGL/ES的平台。
+
+>💡 人脸关键点检测目前使用的是 [Face++](https://www.faceplusplus.com.cn/) 库，但未来将替换为 [VNN](https://github.com/joyycom/VNN)
 
 ## 效果
-
-| ![](./docs/src.jpg) | ![](./docs/soomth.jpg) | ![](./docs/white.jpg) | ![](./docs/thin-face.jpg) |
-| :--------------------------------------: | :--------------------------------------------------: | :-------------------------------------------: | :------------------------------------: |
-|               **原图**               |                        **美白**                     |                    **磨皮**                 |               **瘦脸**            |
-| ![](./docs/big-eye.jpg)  | ![](./docs/lipstick.jpg) | ![](./docs/blush.jpg) | ![](./docs/src.jpg) |
-|                 **大眼**              |                       **口红**                       |                     **腮红**                     |                  **原图**                   |
+👉 **视频: <a href="https://youtu.be/9BY1Qx1NEPs" target="_blank">YouTube</a> | <a href="https://www.bilibili.com/video/BV1xQ4y1L7Fh/?share_source=copy_web&vd_source=46adcb1014fa989cfcbb4cc1e866831e" target="_blank">BiliBili</a>**
 
 
-## 架构
+|              **原图**              |                **磨皮**                |               **美白**               |              **ThinFace**              |
+| :--------------------------------: | :------------------------------------: | :----------------------------------: | :------------------------------------: |
+| ![origin](./docs/image/origin.gif) |   ![smooth](./docs/image/smooth.gif)   |   ![white](./docs/image/white.gif)   | ![thinface](./docs/image/thinface.gif) |
+|              **大眼**              |                **口红**                |               **腮红**               |                  **开                  | 关** |
+| ![bigeye](./docs/image/bigeye.gif) | ![lipstick](./docs/image/lipstick.gif) | ![blusher](./docs/image/blusher.gif) |   ![on-off](./docs/image/on-off.gif)   |
+ 
+## 架构流程
 ![](./docs/arch-zh.jpg)
+ 
+## 特性对比
 
-## 与GPUImage对比
-✅: 支持 | ❌: 不支持 | ✏️: 计划
+✅: 支持 | ❌: 不支持 | ✏️: 计划中
 
-|             | [GPUPixel](https://github.com/pixpark/gpupixel) | [GPUImage](https://github.com/BradLarson/GPUImage) |
-| :-------------------- | :------------------------------------------------: | :---------------------------------------------: |
-| **滤镜:** |                         ✅                          |                        ❌                        |
-| 磨皮 |                         ✅                          |                        ❌                        |
-| 美白 |                         ✅                          |                        ❌                        |
-| 瘦脸 |                         ✅                          |                        ❌                        |
-| 大眼       |                         ✅                          |                        ❌                        |
-| 口红       |                         ✅                          |                        ❌                        |
-| 腮红          |                         ✅                          |                        ❌                        |
-| 内建滤镜 |                         ✅                          |                        ✅                        |
-| **输入格式:**     |                                                    |                                                 |
-| YUV420P(I420)         |                         ✅                          |                        ❌                        |
-| RGBA                  |                         ✅                          |                        ✅                        |
-| JPEG                  |                         ✅                          |                        ✅                        |
-| PNG                   |                         ✅                          |                        ✅                        |
-| NV21(for Android)     |                         ✏️                          |                        ❌                        |
-| **输出格式:**    |                                                    |                                                 |
-| RGBA                  |                         ✅                          |                        ✅                        |
-| YUV420P(I420)         |                         ✏️                          | ❌ |
-| **系统支持:**         |                                                    |                                                 |
-| iOS                   |                         ✅                          |                        ✅                        |
-| Mac                   |                         ✅                          | ✅ |
-| Android               |                         ✅                          |                        ❌                        |
-| Win                   |                         ✏️                          |                        ❌                        |
-| Linux                 |                         ❌                         |                        ❌                        |
-
-## 效果预览
+|                   | [GPUPixel](https://github.com/pixpark/gpupixel) | [GPUImage](https://github.com/BradLarson/GPUImage) |
+| :---------------- | :---------------------------------------------: | :------------------------------------------------: |
+| 🍎**滤镜:**        |                        ✅                        |                         ❌                          |
+| 磨皮              |                        ✅                        |                         ❌                          |
+| 美白              |                        ✅                        |                         ❌                          |
+| 瘦脸              |                        ✅                        |                         ❌                          |
+| 大眼              |                        ✅                        |                         ❌                          |
+| 口红              |                        ✅                        |                         ❌                          |
+| 腮红              |                        ✅                        |                         ❌                          |
+| 内建滤镜          |                        ✅                        |                         ✅                          |
+| 🍓**输入格式：**   |                                                 |                                                    |
+| YUV420P(I420)     |                        ✅                        |                         ❌                          |
+| RGBA              |                        ✅                        |                         ✅                          |
+| JPEG              |                        ✅                        |                         ✅                          |
+| PNG               |                        ✅                        |                         ✅                          |
+| NV21(for Android) |                        ✏️                        |                         ❌                          |
+| 🍉**输出格式 :**   |                                                 |                                                    |
+| RGBA              |                        ✅                        |                         ✅                          |
+| YUV420P(I420)     |                        ✏️                        |                         ❌                          |
+| 🥑**平台系统:**    |                                                 |                                                    |
+| iOS               |                        ✅                        |                         ✅                          |
+| Mac               |                        ✅                        |                         ✅                          |
+| Android           |                        ✅                        |                         ❌                          |
+| Win               |                        ✏️                        |                         ❌                          |
+| Linux             |                        ✏️                        |                         ❌                          |
 
 
-## 系统要求
-|系统|iOS|OSX|Android|Windows| Linux |
-|:----:|:----:|:----:|:----:|:----:|:----:|
-|最低版本|10.0+|10.13+|5.0+|-|-|
+## 系统最低版本
+|           OS           |  iOS  |  OSX  |   Android    | Windows | Linux |
+| :--------------------: | :---: | :---: | :----------: | :-----: | :---: |
+| Min Support OS Version | 10.0  | 10.13 | 5.0 (API 21) |    -    |   -   |
 
-## 性能 ##
+##  性能
 ### iPhone
-|-|iPhone 6P|iPhone 8|iPhone X|iPhone 11 | iPhone 14 pro |
-|:----:|:----:|:----:|:----:|:----:|:----:|
-|CPU|-|-|-|-|-|
-|耗时|-ms|-ms|-ms|-|-|
+|       -        | iPhone 6P | iPhone 8 | iPhone X | iPhone 11 | iPhone 14 pro |
+| :------------: | :-------: | :------: | :------: | :-------: | :-----------: |
+|    **CPU**     |    5%     |    5%    |    3%    |    3%     |      3%       |
+| **Time Taken** |   10ms    |   4ms    |   3ms    |    3ms    |      3ms      |
 ### Android
-|-|Xiaomi 10| Huawei Meta30|Vivo|SAMSUNG| Google Pixel |
-|:----:|:----:|:----:|:----:|:----:|:----:|
-|CPU|-|-|-|-|-|
-|耗时|-ms|-ms|-ms|-|-|
+|     -      | Xiaomi 10 | Huawei Meta30 | Vivo  | SAMSUNG | Google Pixel |
+| :--------: | :-------: | :-----------: | :---: | :-----: | :----------: |
+|    CPU     |    3%     |      5%       |   -   |    -    |      -       |
+| Time Taken |    6ms    |      5ms      |   -   |    -    |      -       |
+ 
+## 库体积
 
+|       | iOS(.framework) | MacOS(.framework) | Android(.aar) |
+| :---: | :-------------: | :---------------: | :-----------: |
+| Size  |     2.4 MB      |      2.6 MB       |    2.1 MB     |
 
-
-## 编译 ##
+ 
+## 编译
 ### iOS
-打开 `objc/gpupixel.xcodeproj` 或 `objc/demo/PixDemo.xcodeproj`  Xcode工程, 选择对应平台编译.
+打开 `objc/gpupixel.xcodeproj` 或 `objc/demo/PixDemo.xcodeproj`  Xcode工程
 
 ### Android
 Android Studio 打开目录 `./android`, 配置 `NDK r21+`
-## 接口调用 ##
+
+## 接口调用
 参考`./objc/demo` 或 `./android` demo
 **`.h` file**
 
@@ -142,7 +142,6 @@ std::shared_ptr<TargetRawDataOutput> target_raw_output_;
 ```
 
 **输出数据回调**
-
 
 ```c++
 // I420 callback
