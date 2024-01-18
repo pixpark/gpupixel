@@ -1,13 +1,18 @@
-## GPUPixel
-English | [简体中文](./README_cn.md) 
+<h1 align="center">
+  <a href="https://github.com/pixpark/gpupixel">GPUPixel</a>
+</h1>
 
-[GPUPixel](https://github.com/pixpark/gpupixel) @ [PixPark](https://github.com/pixpark) 
-
-[![GitHub Stars](https://img.shields.io/github/stars/pixpark/gpupixel?style=social)](https://github.com/pixpark/gpupixel/stargazers)[![Release](https://img.shields.io/github/v/release/pixpark/gpupixel)](https://github.com/pixpark/gpupixel/releases/latest) ![Static Badge](https://img.shields.io/badge/Platform-iOS_%7C%20macOS%20%7C%20Android-red)[![GitHub](https://img.shields.io/github/license/pixpark/gpupixel)
-](https://github.com/pixpark/gpupixel/blob/main/LICENSE)
+<p align="center">
+   <a href="https://github.com/pixpark/gpupixel/stargazers"><img alt="GPUPixel Stars" src="https://img.shields.io/github/stars/pixpark/gpupixel?style=social"/></a>
+    <a href="https://github.com/pixpark/gpupixel/releases/latest"><img alt="GPUPixel Release" src="https://img.shields.io/github/v/release/pixpark/gpupixel"/></a>
+    <a href="#"><img alt="GPUPixel Stars" src="https://img.shields.io/badge/Platform-iOS_%7C%20macOS%20%7C%20Android-red"/></a>
+    <a href="https://github.com/pixpark/gpupixel/blob/main/LICENSE"><img alt="GPUPixel Stars" src="https://img.shields.io/github/license/pixpark/gpupixel"/></a>
+</p>
 
 ---
- 
+
+[English](./README.md) | 简体中文
+  
 ## 简介 ##
 
 ⛰️ GPUPixel是一个使用C++11编写的高性能图像和视频AI美颜效果库，非常容易编译和集成，并且库文件非常小。
