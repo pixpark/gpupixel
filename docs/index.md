@@ -4,8 +4,8 @@ layout: home
 
 hero:
   name: "GPUPixel"
-  text: "GPUJJJJJJ"
-  tagline: My great project tagline
+  text: "Cross-Platform AI Beauty Effects Library"
+  tagline: Achieving Commercial-Grade Beauty Effects. Written in C++11, Based on OpenGL/ES and VNN
   actions:
     - theme: brand
       text: Markdown Examples
