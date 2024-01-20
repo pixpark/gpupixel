@@ -11,7 +11,7 @@
 
 ---
 English | [简体中文](./README_cn.md) 
- 
+
 
 [GPUPixel]() @ [PixPark](https://github.com/pixpark) 
 
@@ -32,12 +32,12 @@ English | [简体中文](./README_cn.md)
 |             **Origin**             |          **Smooth**           |          **White**          |             **ThinFace**              |
 | :--------------------------------: | :--------------------------------: | :------------------------------: | :------------------------------------: |
 | ![origin](./docs/image/origin.gif) | ![smooth](./docs/image/smooth.gif) | ![white](./docs/image/white.gif) | ![thinface](./docs/image/thinface.gif) |
-|            **BigEye**            |            **Lipstick**            |            **Blusher**            |               **On|Off**              |
+|            **BigEye**            |            **Lipstick**            |            **Blusher**            | **ON-OFF** |
 | ![bigeye](./docs/image/bigeye.gif) | ![lipstick](./docs/image/lipstick.gif) | ![blusher](./docs/image/blusher.gif) | ![on-off](./docs/image/on-off.gif) |
- 
+
 ## Architecture
-![](./docs/arch-en.jpg)
- 
+![](./docs/image/arch-en.jpg)
+
 ## Features Compared
 
 This table compares the features supported by **GPUPixel** and **GPUImage**:
@@ -182,7 +182,7 @@ target_raw_output_->setPixelsCallbck([=](const uint8_t *data,
 
 // Output data callbck
 ```
- 
+
 ## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=pixpark/gpupixel&type=Date)](https://star-history.com/#pixpark/gpupixel&Date)
