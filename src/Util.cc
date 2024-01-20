@@ -18,7 +18,7 @@
 #include <stdio.h>
 #endif
  
-#if defined(GPUPIXEL_IOS)
+#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
 @interface ObjcHelper : NSObject
 + (NSString*)getResourcePath:(NSString*)name;
 + (NSString*)getBundleResourceWithName:(NSString*)bundleName
@@ -58,7 +58,7 @@
 
 NS_GPUPIXEL_BEGIN
 
-#if defined(GPUPIXEL_IOS)
+#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
 std::string Util::getResourcePath(std::string name) {
   NSString* oc_path = [ObjcHelper
       getResourcePath:[[NSString alloc] initWithUTF8String:name.c_str()]];
