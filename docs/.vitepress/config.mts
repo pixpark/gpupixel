@@ -2,10 +2,11 @@ import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
+  base: '/gpupixel/',
   title: "GPUPixel",
-  description: "GPUJJJJJJ",
+  description: "Cross-Platform AI Beauty Effects Library",
   themeConfig: {
-    // https://vitepress.dev/reference/default-theme-config
+    // https://vitepress.dev/reference/default-theme-config,
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Examples', link: '/markdown-examples' }
