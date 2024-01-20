@@ -33,7 +33,44 @@ std::shared_ptr<SourceImage> SourceImage::create(const std::string name) {
     return sourceImage;
 #elif defined(GPUPIXEL_MAC)
     // Todo(Jeayo)
-    auto sourceImage = std::shared_ptr<SourceImage>(new SourceImage());
+  auto sourceImage = std::shared_ptr<SourceImage>(new SourceImage());
+  auto path = Util::getResourcePath(name);
+//  NSImage *image = [NSImage imageNamed:[NSString stringWithUTF8String:path.c_str()]];
+  NSImage *image = [[NSImage alloc] initWithContentsOfFile:[NSString stringWithUTF8String:path.c_str()]];
+  // 将 NSImage 转换为 NSBitmapImageRep
+  NSBitmapImageRep *imageRep = [NSBitmapImageRep imageRepWithData:[image TIFFRepresentation]];
+
+  // 获取图像的像素宽度和高度
+  NSInteger width = [imageRep pixelsWide];
+  NSInteger height = [imageRep pixelsHigh];
+
+  // 创建一个用于存储 RGBA 数据的缓冲区
+  unsigned char *rgbaBuffer = (unsigned char *)malloc(width * height * 4);
+
+  // 提取图像的 RGBA 数据
+  [imageRep getBitmapDataPlanes:&rgbaBuffer];
+
+  // 访问 RGBA 数据
+  for (NSInteger y = 0; y < height; y++) {
+     for (NSInteger x = 0; x < width; x++) {
+         // 计算像素在缓冲区中的索引
+         NSInteger pixelIndex = (y * width + x) * 4;
+         
+         // 访问 RGBA 值
+         unsigned char red = rgbaBuffer[pixelIndex];
+         unsigned char green = rgbaBuffer[pixelIndex + 1];
+         unsigned char blue = rgbaBuffer[pixelIndex + 2];
+         unsigned char alpha = rgbaBuffer[pixelIndex + 3];
+         
+         // 在这里进行 RGBA 数据的处理或使用
+         // 例如，可以打印 RGBA 值
+//         NSLog(@"Pixel at (%ld, %ld): R:%hhu G:%hhu B:%hhu A:%hhu", x, y, red, green, blue, alpha);
+     }
+  }
+  sourceImage->setImage(width, height, rgbaBuffer);
+  // 释放缓冲区内存
+//  free(rgbaBuffer);
+  
     return sourceImage;
 #elif defined(GPUPIXEL_IOS)
     auto path = Util::getResourcePath(name);

@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8492E6C92A6197640035AA09"
-               BuildableName = "GPUPixel-Mac.framework"
-               BlueprintName = "GPUPixel-Mac"
+               BuildableName = "GPUPixelMac.framework"
+               BlueprintName = "GPUPixelMac"
                ReferencedContainer = "container:GPUPixel.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -50,8 +50,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8492E6C92A6197640035AA09"
-            BuildableName = "GPUPixel-Mac.framework"
-            BlueprintName = "GPUPixel-Mac"
+            BuildableName = "GPUPixelMac.framework"
+            BlueprintName = "GPUPixelMac"
             ReferencedContainer = "container:GPUPixel.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
