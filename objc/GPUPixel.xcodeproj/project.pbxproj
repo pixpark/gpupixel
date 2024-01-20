@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		840303482B5C079E001A8B3C /* DispatchQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 84413EBB2B0CD35C008A7641 /* DispatchQueue.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8403034D2B5C0D07001A8B3C /* blusher.png in Resources */ = {isa = PBXBuildFile; fileRef = 84414F692A762916005D378C /* blusher.png */; };
+		8403034E2B5C0D07001A8B3C /* mouth.png in Resources */ = {isa = PBXBuildFile; fileRef = 84414F682A762916005D378C /* mouth.png */; };
+		8403034F2B5C0D07001A8B3C /* lookup2.png in Resources */ = {isa = PBXBuildFile; fileRef = 84AEA2562A643917003DE462 /* lookup2.png */; };
+		840303502B5C0D07001A8B3C /* lookUpCustom.png in Resources */ = {isa = PBXBuildFile; fileRef = 84AEA2572A643918003DE462 /* lookUpCustom.png */; };
+		840303512B5C0D07001A8B3C /* lookUpGray.png in Resources */ = {isa = PBXBuildFile; fileRef = 84AEA25A2A643918003DE462 /* lookUpGray.png */; };
+		840303522B5C0D07001A8B3C /* lookUpOrigin.png in Resources */ = {isa = PBXBuildFile; fileRef = 84AEA2592A643918003DE462 /* lookUpOrigin.png */; };
+		840303532B5C0D07001A8B3C /* lookUpSkin.png in Resources */ = {isa = PBXBuildFile; fileRef = 84AEA2582A643918003DE462 /* lookUpSkin.png */; };
 		84413EBD2B0CD35C008A7641 /* DispatchQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 84413EBB2B0CD35C008A7641 /* DispatchQueue.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		84413EBE2B0CD35C008A7641 /* DispatchQueue.cc in Sources */ = {isa = PBXBuildFile; fileRef = 84413EBC2B0CD35C008A7641 /* DispatchQueue.cc */; };
 		84414F6A2A762916005D378C /* mouth.png in Resources */ = {isa = PBXBuildFile; fileRef = 84414F682A762916005D378C /* mouth.png */; };
@@ -144,11 +152,6 @@
 		847244632A600DAF009D1488 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84A62EA4268CACF80028B144 /* OpenGLES.framework */; platformFilter = ios; };
 		847244642A600DAF009D1488 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8417CC532A5FD09600BD7B78 /* AVFoundation.framework */; };
 		847244652A600DAF009D1488 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8417CC512A5FD09000BD7B78 /* CoreMedia.framework */; };
-		847EBD122A64D8E400A0E3C8 /* lookup2.png in Resources */ = {isa = PBXBuildFile; fileRef = 84AEA2562A643917003DE462 /* lookup2.png */; };
-		847EBD132A64D8E400A0E3C8 /* lookUpCustom.png in Resources */ = {isa = PBXBuildFile; fileRef = 84AEA2572A643918003DE462 /* lookUpCustom.png */; };
-		847EBD142A64D8E400A0E3C8 /* lookUpGray.png in Resources */ = {isa = PBXBuildFile; fileRef = 84AEA25A2A643918003DE462 /* lookUpGray.png */; };
-		847EBD152A64D8E400A0E3C8 /* lookUpOrigin.png in Resources */ = {isa = PBXBuildFile; fileRef = 84AEA2592A643918003DE462 /* lookUpOrigin.png */; };
-		847EBD162A64D8E400A0E3C8 /* lookUpSkin.png in Resources */ = {isa = PBXBuildFile; fileRef = 84AEA2582A643918003DE462 /* lookUpSkin.png */; };
 		8492E6C62A618B0E0035AA09 /* MathToolbox.cc in Sources */ = {isa = PBXBuildFile; fileRef = 8492E6C42A618B0E0035AA09 /* MathToolbox.cc */; };
 		8492E6C72A618B0E0035AA09 /* MathToolbox.h in Headers */ = {isa = PBXBuildFile; fileRef = 8492E6C52A618B0E0035AA09 /* MathToolbox.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8492E6CB2A6197640035AA09 /* MathToolbox.h in Headers */ = {isa = PBXBuildFile; fileRef = 8492E6C52A618B0E0035AA09 /* MathToolbox.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -300,10 +303,10 @@
 		8417CBB92A5FC72A00BD7B78 /* GPUPixel.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = GPUPixel.docc; sourceTree = "<group>"; };
 		8417CC512A5FD09000BD7B78 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/System/Library/Frameworks/CoreMedia.framework; sourceTree = DEVELOPER_DIR; };
 		8417CC532A5FD09600BD7B78 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
-		84413EBB2B0CD35C008A7641 /* DispatchQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DispatchQueue.h; path = ../../src/DispatchQueue.h; sourceTree = "<group>"; };
-		84413EBC2B0CD35C008A7641 /* DispatchQueue.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DispatchQueue.cc; path = ../../src/DispatchQueue.cc; sourceTree = "<group>"; };
-		84414F682A762916005D378C /* mouth.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = mouth.png; path = ../resources/mouth.png; sourceTree = "<group>"; };
-		84414F692A762916005D378C /* blusher.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = blusher.png; path = ../resources/blusher.png; sourceTree = "<group>"; };
+		84413EBB2B0CD35C008A7641 /* DispatchQueue.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = DispatchQueue.h; path = ../../src/DispatchQueue.h; sourceTree = "<group>"; };
+		84413EBC2B0CD35C008A7641 /* DispatchQueue.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = DispatchQueue.cc; path = ../../src/DispatchQueue.cc; sourceTree = "<group>"; };
+		84414F682A762916005D378C /* mouth.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = mouth.png; path = ../../resources/mouth.png; sourceTree = "<group>"; };
+		84414F692A762916005D378C /* blusher.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = blusher.png; path = ../../resources/blusher.png; sourceTree = "<group>"; };
 		84646496291E8028005B1C49 /* BeautyFaceUnitFilter.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = BeautyFaceUnitFilter.cc; path = ../../src/filter/BeautyFaceUnitFilter.cc; sourceTree = "<group>"; };
 		84646497291E8029005B1C49 /* BeautyFaceUnitFilter.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = BeautyFaceUnitFilter.h; path = ../../src/filter/BeautyFaceUnitFilter.h; sourceTree = "<group>"; };
 		847243332A5FD8B6009D1488 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
@@ -331,7 +334,7 @@
 		847C1DEF291E67E4009D6198 /* BoxMonoBlurFilter.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = BoxMonoBlurFilter.h; path = ../../src/filter/BoxMonoBlurFilter.h; sourceTree = "<group>"; };
 		8492E6C42A618B0E0035AA09 /* MathToolbox.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = MathToolbox.cc; path = ../../src/MathToolbox.cc; sourceTree = "<group>"; };
 		8492E6C52A618B0E0035AA09 /* MathToolbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MathToolbox.h; path = ../../src/MathToolbox.h; sourceTree = "<group>"; };
-		8492E75F2A6197640035AA09 /* GPUPixel-Mac.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "GPUPixel-Mac.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8492E75F2A6197640035AA09 /* GPUPixelMac.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = GPUPixelMac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		84A62EA4268CACF80028B144 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		84AEA2562A643917003DE462 /* lookup2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = lookup2.png; path = ../../resources/lookup2.png; sourceTree = "<group>"; };
 		84AEA2572A643918003DE462 /* lookUpCustom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = lookUpCustom.png; path = ../../resources/lookUpCustom.png; sourceTree = "<group>"; };
@@ -640,8 +643,6 @@
 		3CFDD5651D7AB2F500E37EA3 = {
 			isa = PBXGroup;
 			children = (
-				84414F692A762916005D378C /* blusher.png */,
-				84414F682A762916005D378C /* mouth.png */,
 				3CFDD5701D7AB2F500E37EA3 /* GPUPixel */,
 				3CA4B3C11D8A62CD00D1E7B4 /* Frameworks */,
 				3CFDD56F1D7AB2F500E37EA3 /* Products */,
@@ -652,7 +653,7 @@
 			isa = PBXGroup;
 			children = (
 				8472446A2A600DAF009D1488 /* GPUPixel.framework */,
-				8492E75F2A6197640035AA09 /* GPUPixel-Mac.framework */,
+				8492E75F2A6197640035AA09 /* GPUPixelMac.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -697,6 +698,8 @@
 		847244AF2A60F816009D1488 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				84414F692A762916005D378C /* blusher.png */,
+				84414F682A762916005D378C /* mouth.png */,
 				84AEA2562A643917003DE462 /* lookup2.png */,
 				84AEA2572A643918003DE462 /* lookUpCustom.png */,
 				84AEA25A2A643918003DE462 /* lookUpGray.png */,
@@ -797,6 +800,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				840303482B5C079E001A8B3C /* DispatchQueue.h in Headers */,
 				8492E6CB2A6197640035AA09 /* MathToolbox.h in Headers */,
 				8492E6CC2A6197640035AA09 /* Framebuffer.h in Headers */,
 				8492E6CD2A6197640035AA09 /* FramebufferCache.h in Headers */,
@@ -886,9 +890,9 @@
 			productReference = 8472446A2A600DAF009D1488 /* GPUPixel.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		8492E6C92A6197640035AA09 /* GPUPixel-Mac */ = {
+		8492E6C92A6197640035AA09 /* GPUPixelMac */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8492E75C2A6197640035AA09 /* Build configuration list for PBXNativeTarget "GPUPixel-Mac" */;
+			buildConfigurationList = 8492E75C2A6197640035AA09 /* Build configuration list for PBXNativeTarget "GPUPixelMac" */;
 			buildPhases = (
 				8492E6CA2A6197640035AA09 /* Headers */,
 				8492E70D2A6197640035AA09 /* Sources */,
@@ -899,9 +903,9 @@
 			);
 			dependencies = (
 			);
-			name = "GPUPixel-Mac";
+			name = GPUPixelMac;
 			productName = GPUPixelCpp;
-			productReference = 8492E75F2A6197640035AA09 /* GPUPixel-Mac.framework */;
+			productReference = 8492E75F2A6197640035AA09 /* GPUPixelMac.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -915,7 +919,7 @@
 				ORGANIZATIONNAME = Jin;
 			};
 			buildConfigurationList = 3CFDD5691D7AB2F500E37EA3 /* Build configuration list for PBXProject "GPUPixel" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 12.0";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -928,7 +932,7 @@
 			projectRoot = "";
 			targets = (
 				847243D72A600DAF009D1488 /* GPUPixel */,
-				8492E6C92A6197640035AA09 /* GPUPixel-Mac */,
+				8492E6C92A6197640035AA09 /* GPUPixelMac */,
 			);
 		};
 /* End PBXProject section */
@@ -952,11 +956,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				847EBD122A64D8E400A0E3C8 /* lookup2.png in Resources */,
-				847EBD132A64D8E400A0E3C8 /* lookUpCustom.png in Resources */,
-				847EBD142A64D8E400A0E3C8 /* lookUpGray.png in Resources */,
-				847EBD152A64D8E400A0E3C8 /* lookUpOrigin.png in Resources */,
-				847EBD162A64D8E400A0E3C8 /* lookUpSkin.png in Resources */,
+				8403034D2B5C0D07001A8B3C /* blusher.png in Resources */,
+				8403034E2B5C0D07001A8B3C /* mouth.png in Resources */,
+				8403034F2B5C0D07001A8B3C /* lookup2.png in Resources */,
+				840303502B5C0D07001A8B3C /* lookUpCustom.png in Resources */,
+				840303512B5C0D07001A8B3C /* lookUpGray.png in Resources */,
+				840303522B5C0D07001A8B3C /* lookUpOrigin.png in Resources */,
+				840303532B5C0D07001A8B3C /* lookUpSkin.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1505,7 +1511,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8492E75C2A6197640035AA09 /* Build configuration list for PBXNativeTarget "GPUPixel-Mac" */ = {
+		8492E75C2A6197640035AA09 /* Build configuration list for PBXNativeTarget "GPUPixelMac" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8492E75D2A6197640035AA09 /* Debug */,
