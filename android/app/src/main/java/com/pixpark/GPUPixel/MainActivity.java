@@ -18,24 +18,17 @@ import android.widget.SeekBar;
 import android.widget.Toast;
 
 import com.pixpark.PixDemo.databinding.ActivityMainBinding;
-import com.pixpark.gpupixel.GPUPixel;
 import com.pixpark.gpupixel.GPUPixelFilter;
 import com.pixpark.gpupixel.GPUPixelSourceCamera;
 import com.pixpark.gpupixel.GPUPixelView;
 
 public class MainActivity extends AppCompatActivity implements SurfaceHolder.Callback {
-    // 在Activity中定义一个常量以便在权限请求结果中识别相机权限请求
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 200;
-
-
-    // Used to load the 'gpupixel' library on application startup.
-    static {
-        System.loadLibrary("gpupixel");
-    }
+    private static final String TAG = "GPUPixelDemo";
 
     private GPUPixelSourceCamera sourceCamera;
     private GPUPixelView surfaceView;
-    private GPUPixelFilter filter;
+    private GPUPixelFilter beautyFaceFilter;
     private Button btnStart;
     private SeekBar smooth_seekbar;
     private SeekBar whiteness_seekbar;
@@ -51,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
         // get log path
         String path =  getExternalFilesDir("gpupixel").getAbsolutePath();
-        Log.i("GPUPixel", path);
+        Log.i(TAG, path);
 
         // 保持屏幕常亮
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -64,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         smooth_seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                filter.setProperty("skin_smoothing", progress/10.0);
+                beautyFaceFilter.setProperty("skin_smoothing", progress/10.0);
             }
 
             @Override
@@ -82,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         whiteness_seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                filter.setProperty("whiteness", progress/10.0);
+                beautyFaceFilter.setProperty("whiteness", progress/10.0);
             }
 
             @Override
@@ -101,18 +94,17 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
     public void startCameraFilter() {
         // 美颜滤镜
-        filter = GPUPixelFilter.create("BeautyFaceFilter");
+        beautyFaceFilter = GPUPixelFilter.create(GPUPixelFilter.BeautyFaceFilter.name);
 
         // camera
         sourceCamera = new GPUPixelSourceCamera(this.getApplicationContext());
-        sourceCamera.addTarget(filter);
-        filter.addTarget(surfaceView);
+        sourceCamera.addTarget(beautyFaceFilter);
+        beautyFaceFilter.addTarget(surfaceView);
 
         // set default value
-        filter.setProperty("skin_smoothing", 0.5);
-        filter.setProperty("whiteness", 0.4);
+        beautyFaceFilter.setProperty(GPUPixelFilter.BeautyFaceFilter.propSmoothLevel, 0.5);
+        beautyFaceFilter.setProperty(GPUPixelFilter.BeautyFaceFilter.propWhiteLevel, 0.4);
     }
-
 
     public void checkCameraPermission() {
         // 检查相机权限是否已授予
@@ -122,10 +114,8 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         } else {
             startCameraFilter();
         }
-
     }
 
-    // 处理权限请求结果
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);

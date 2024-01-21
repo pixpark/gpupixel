@@ -30,6 +30,9 @@ public class GPUPixelView extends FrameLayout implements GPUPixelTarget {
 
     public GPUPixelView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        if (isInEditMode()) { //防止布局界面显示为空白
+            return;
+        }
         init(context, attrs);
     }
 
