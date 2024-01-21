@@ -10,7 +10,7 @@
 #include <memory>
 
 // version
-#define GPUPIXEL_SDK_VERSION "v1.0.5"
+#define GPUPIXEL_SDK_VERSION "v1.0.6"
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
    //define something for Windows (32-bit and 64-bit, this part is common)
