@@ -119,7 +119,7 @@ using namespace GPUPixel;
 	videoOutput = [[AVCaptureVideoDataOutput alloc] init];
 	[videoOutput setAlwaysDiscardsLateVideoFrames:NO];
 
-    if (captureAsYUV && [GPUImageContext supportsFastTextureUpload])
+    if (captureAsYUV)
     {
         BOOL supportsFullYUVRange = NO;
         NSArray *supportedPixelFormats = videoOutput.availableVideoCVPixelFormatTypes;
@@ -407,7 +407,7 @@ using namespace GPUPixel;
         int width = (int)CVPixelBufferGetWidth(imageBuffer);
         int height = (int)CVPixelBufferGetHeight(imageBuffer);
         int stride = (int)CVPixelBufferGetBytesPerRow(imageBuffer)/4;
-        gpuPixelsRawInput->uploadBytes(bytes, width, height, stride);
+        // gpuPixelsRawInput->uploadBytes(bytes, width, height, stride);
         CVPixelBufferUnlockBaseAddress(imageBuffer, 0);
     }
 }
