@@ -7,7 +7,7 @@
 
 #include "FaceMakeupFilter.h"
 #include "GPUPixelContext.h"
-#include "source/SourceImage.h"
+#include "SourceImage.h"
 
 NS_GPUPIXEL_BEGIN
 

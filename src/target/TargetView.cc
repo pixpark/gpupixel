@@ -8,7 +8,7 @@
 #include "TargetView.h"
 #include "GPUPixelContext.h"
 #include "Util.h"
-#include "filter/Filter.h"
+#include "Filter.h"
 
 USING_NS_GPUPIXEL
 

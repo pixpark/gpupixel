@@ -7,11 +7,11 @@
 #include "GPUPixelContext.h"
 #include "jni_helpers.h"
 #include "libyuv.h"
-#include "filter/Filter.h"
-#include "source/SourceCamera.h"
-#include "source/SourceImage.h"
-#include "source/SourceRawDataInput.h"
-#include "target/TargetView.h"
+#include "Filter.h"
+#include "SourceCamera.h"
+#include "SourceImage.h"
+#include "SourceRawDataInput.h"
+#include "TargetView.h"
 
 USING_NS_GPUPIXEL
 std::list<std::shared_ptr<Filter>>  filter_list_;
