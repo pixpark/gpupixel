@@ -126,6 +126,13 @@ bool FaceReshapeFilter::init() {
   if (!initWithFragmentShaderString(kGPUPixelThinFaceFragmentShaderString)) {
     return false;
   }
+    registerProperty("thin_face", 0, "The smoothing of filter with range between -1 and 1.", [this](float& val) {
+        setFaceSlimLevel(val);
+    }
+
+    registerProperty("big_eye", 0, "The smoothing of filter with range between -1 and 1.", [this](float& val) {
+        setEyeZoomLevel(val);
+    }
 
   this->thinFaceDelta_ = 0.0;
   // [0, 0.15]
