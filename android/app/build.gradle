@@ -6,7 +6,7 @@ android {
     compileSdk 31
 
     defaultConfig {
-        applicationId "com.pixpark.gpupixel"
+        applicationId "com.pixpark.gpupixeldemo"
         minSdk 21
         targetSdk 31
         versionCode 1
