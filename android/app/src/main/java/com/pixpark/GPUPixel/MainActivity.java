@@ -1,4 +1,4 @@
-package com.pixpark.PixDemo;
+package com.pixpark.GPUPixelApp;
 
 import static android.widget.Toast.LENGTH_LONG;
 
@@ -17,7 +17,7 @@ import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
-import com.pixpark.PixDemo.databinding.ActivityMainBinding;
+import com.pixpark.GPUPixelApp.databinding.ActivityMainBinding;
 import com.pixpark.gpupixel.GPUPixelFilter;
 import com.pixpark.gpupixel.GPUPixelSourceCamera;
 import com.pixpark.gpupixel.GPUPixelView;
