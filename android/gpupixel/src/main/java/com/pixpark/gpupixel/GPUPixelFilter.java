@@ -111,4 +111,17 @@ public class GPUPixelFilter extends GPUPixelSource implements GPUPixelTarget {
             super.finalize();
         }
     }
+
+    //
+    public final class BeautyFaceFilter {
+        public static final String name = "BeautyFaceFilter";
+        public static final String propSmoothLevel = "skin_smoothing";
+        public static final String propWhiteLevel = "whiteness";
+    }
+
+    public final class FaceReshapeFilter {
+        public static final String name = "FaceReshapeFilter";
+        public static final String propThinLevel = "thin_face";
+        public static final String propBigeyeLevel = "big_eye";
+    }
 }
