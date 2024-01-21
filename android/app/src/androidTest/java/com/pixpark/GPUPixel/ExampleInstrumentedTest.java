@@ -1,4 +1,4 @@
-package com.pixpark.PixDemo;
+package com.pixpark.GPUPixelApp;
 
 import android.content.Context;
 
