@@ -9,8 +9,6 @@ cmake_minimum_required(VERSION 3.10.2)
 
 project("gpupixel")
 
-add_compile_definitions(GPUPIXEL_ANDROID)
-
 # header search path
 include_directories(
                     ./
