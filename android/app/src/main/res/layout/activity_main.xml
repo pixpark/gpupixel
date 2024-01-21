@@ -15,9 +15,9 @@
 
     <TextView
         android:id="@+id/mopi"
-        android:layout_width="40dp"
+        android:layout_width="100dp"
         android:layout_height="30dp"
-        android:text="磨皮"
+        android:text="Skin Smooth"
         android:textColor="@color/white"
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="20dp"
@@ -35,9 +35,9 @@
 
     <TextView
         android:id="@+id/meibai"
-        android:layout_width="40dp"
+        android:layout_width="100dp"
         android:layout_height="30dp"
-        android:text="美白"
+        android:text="Skin White"
         android:textColor="@color/white"
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="20dp"
