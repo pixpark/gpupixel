@@ -82,7 +82,7 @@ std::string Util::getResourcePath(std::string bundle_name,
 
 #endif
 
-#ifdef _WIN32
+#ifdef GPUPIXEL_WIN
 int vasprintf(char** strp, const char* fmt, va_list ap) {
   // _vscprintf tells you how big the buffer needs to be
   int len = _vscprintf(fmt, ap);
