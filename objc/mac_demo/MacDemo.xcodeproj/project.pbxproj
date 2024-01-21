@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		840303612B5C148F001A8B3C /* GPUPixel-Mac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8403035D2B5C147E001A8B3C /* GPUPixel-Mac.framework */; };
-		840303622B5C148F001A8B3C /* GPUPixel-Mac.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8403035D2B5C147E001A8B3C /* GPUPixel-Mac.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		840303612B5C148F001A8B3C /* GPUPixelMac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8403035D2B5C147E001A8B3C /* GPUPixelMac.framework */; };
+		840303622B5C148F001A8B3C /* GPUPixelMac.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8403035D2B5C147E001A8B3C /* GPUPixelMac.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		84AE136B26FCBCAA00E215AE /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84AE136A26FCBCAA00E215AE /* AVFoundation.framework */; };
 		84AE137526FCBCDA00E215AE /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84AE137426FCBCDA00E215AE /* CoreMedia.framework */; };
 		84AE137A26FCBCFA00E215AE /* VideoCameraManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84AE137926FCBCFA00E215AE /* VideoCameraManager.mm */; };
@@ -66,7 +66,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				840303622B5C148F001A8B3C /* GPUPixel-Mac.framework in Embed Frameworks */,
+				840303622B5C148F001A8B3C /* GPUPixelMac.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -104,7 +104,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				840303612B5C148F001A8B3C /* GPUPixel-Mac.framework in Frameworks */,
+				840303612B5C148F001A8B3C /* GPUPixelMac.framework in Frameworks */,
 				84AE137526FCBCDA00E215AE /* CoreMedia.framework in Frameworks */,
 				84AE136B26FCBCAA00E215AE /* AVFoundation.framework in Frameworks */,
 			);
@@ -131,7 +131,7 @@
 			isa = PBXGroup;
 			children = (
 				8403035B2B5C147E001A8B3C /* GPUPixel.framework */,
-				8403035D2B5C147E001A8B3C /* GPUPixel-Mac.framework */,
+				8403035D2B5C147E001A8B3C /* GPUPixelMac.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -318,10 +318,10 @@
 			remoteRef = 8403035A2B5C147E001A8B3C /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		8403035D2B5C147E001A8B3C /* GPUPixel-Mac.framework */ = {
+		8403035D2B5C147E001A8B3C /* GPUPixelMac.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
-			path = "GPUPixel-Mac.framework";
+			path = GPUPixelMac.framework;
 			remoteRef = 8403035C2B5C147E001A8B3C /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -542,7 +542,6 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
-					GPUPIXEL_MAC,
 				);
 				INFOPLIST_FILE = MacDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -570,7 +569,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/MacDemo",
 				);
-				GCC_PREPROCESSOR_DEFINITIONS = GPUPIXEL_MAC;
+				GCC_PREPROCESSOR_DEFINITIONS = "";
 				INFOPLIST_FILE = MacDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

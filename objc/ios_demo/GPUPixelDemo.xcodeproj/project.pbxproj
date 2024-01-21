@@ -29,19 +29,19 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		8403036A2B5C2F90001A8B3C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8472448F2A60321E009D1488 /* GPUPixel.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8492E75F2A6197640035AA09;
+			remoteInfo = GPUPixelMac;
+		};
 		847244942A60321E009D1488 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8472448F2A60321E009D1488 /* GPUPixel.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 8472446A2A600DAF009D1488;
 			remoteInfo = GPUPixel;
-		};
-		847244962A60321E009D1488 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8472448F2A60321E009D1488 /* GPUPixel.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 847243CE2A5FE43A009D1488;
-			remoteInfo = "GPUPixel-Mac";
 		};
 		847244992A60324E009D1488 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -168,7 +168,7 @@
 			isa = PBXGroup;
 			children = (
 				847244952A60321E009D1488 /* GPUPixel.framework */,
-				847244972A60321E009D1488 /* GPUPixel-Mac.framework */,
+				8403036B2B5C2F90001A8B3C /* GPUPixelMac.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -244,18 +244,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		8403036B2B5C2F90001A8B3C /* GPUPixelMac.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = GPUPixelMac.framework;
+			remoteRef = 8403036A2B5C2F90001A8B3C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		847244952A60321E009D1488 /* GPUPixel.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = GPUPixel.framework;
 			remoteRef = 847244942A60321E009D1488 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		847244972A60321E009D1488 /* GPUPixel-Mac.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = "GPUPixel-Mac.framework";
-			remoteRef = 847244962A60321E009D1488 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -442,15 +442,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				COMPRESS_PNG_FILES = NO;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = HR6V4MC5N2;
+				DEVELOPMENT_TEAM = QFCE3TAQXQ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					GPUPIXEL_IOS,
 					"DEBUG=1",
 					"$(inherited)",
 				);
@@ -468,10 +465,9 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MARKETING_VERSION = 1.0.3;
-				PRODUCT_BUNDLE_IDENTIFIER = com.nebula.gpupixeldemo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pixpark.gpupixeldemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "nebula-develop-profile-new";
 				STRIP_PNG_TEXT = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TVOS_DEPLOYMENT_TARGET = 11.0;
@@ -486,11 +482,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				COMPRESS_PNG_FILES = NO;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = HR6V4MC5N2;
+				DEVELOPMENT_TEAM = QFCE3TAQXQ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "";
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/GPUPixelDemo/Face++\"/**";
@@ -508,10 +502,9 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MARKETING_VERSION = 1.0.3;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.nebula.gpupixeldemo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pixpark.gpupixeldemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "nebula-develop-profile-new";
 				STRIP_PNG_TEXT = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TVOS_DEPLOYMENT_TARGET = 11.0;
