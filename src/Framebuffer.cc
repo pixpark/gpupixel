@@ -14,7 +14,7 @@
 NS_GPUPIXEL_BEGIN
 
 // std::vector<std::shared_ptr<Framebuffer>> Framebuffer::_framebuffers;
-#ifndef _WIN32
+#ifndef GPUPIXEL_WIN
 TextureAttributes Framebuffer::defaultTextureAttribures = {
     .minFilter = GL_LINEAR,
     .magFilter = GL_LINEAR,
