@@ -22,7 +22,7 @@ English | [简体中文](./README_cn.md)
 
 🔌 It supports platforms including iOS, Mac, Android, and it can theoretically be ported to any platform that supports OpenGL/ES.
 
->💡 The face key points detection currently utilizes the [Face++](https://www.faceplusplus.com.cn/) library, but it will be replaced with either **[VNN](https://github.com/joyycom/VNN)** in the future.
+>💡 The face key points detection currently utilizes the [Face++](https://www.faceplusplus.com.cn/) library, but it will be replaced with either **[VNN](https://github.com/joyycom/VNN)** or **[NCNN](https://github.com/Tencent/ncnn)** in the future.
 
 ## Effects Preview
 
