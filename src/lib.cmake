@@ -102,16 +102,22 @@ IF(${CURRENT_OS} STREQUAL "linux")
 ELSEIF(${CURRENT_OS} STREQUAL "windows")
 
 ELSEIF(${CURRENT_OS} STREQUAL "macos" OR ${CURRENT_OS} STREQUAL "ios")
+	# Header
 	list(APPEND EXPORT_HEADER 	"${CMAKE_CURRENT_SOURCE_DIR}/target/objc/GPUPixelTarget.h"
 	 							"${CMAKE_CURRENT_SOURCE_DIR}/target/objc/GPUPixelView.h"
 	 							"${CMAKE_CURRENT_SOURCE_DIR}/target/objc/ObjcTarget.h")
-
-	list(APPEND SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/target/objc/GPUPixelTarget.mm" 
-	"${CMAKE_CURRENT_SOURCE_DIR}/target/objc/GPUPixelView.mm"
-	"${CMAKE_CURRENT_SOURCE_DIR}/target/objc/ObjcTarget.cc")
+	# Source 
+	list(APPEND SOURCE_FILES 	"${CMAKE_CURRENT_SOURCE_DIR}/target/objc/GPUPixelTarget.mm" 
+								"${CMAKE_CURRENT_SOURCE_DIR}/target/objc/GPUPixelView.mm"
+								"${CMAKE_CURRENT_SOURCE_DIR}/target/objc/ObjcTarget.cc")
 		
 ELSEIF(${CURRENT_OS} STREQUAL "android")
+	# Header
+	list(APPEND EXPORT_HEADER 	"${CMAKE_CURRENT_SOURCE_DIR}/android/jni_helpers.h")
 
+	# Source 
+	list(APPEND SOURCE_FILES 	"${CMAKE_CURRENT_SOURCE_DIR}/android/jni_helpers.cc" 
+							  	"${CMAKE_CURRENT_SOURCE_DIR}/android/GPUPixelJNI.cc")
 ENDIF()
 # message(STATUS "Variable: ${EXPORT_HEADER}")
 
@@ -179,5 +185,10 @@ TARGET_LINK_LIBRARIES(
 					-framework CoreMedia"
 	)
 ELSEIF(${CURRENT_OS} STREQUAL "android")
-
+TARGET_LINK_LIBRARIES(
+					${PROJECT_NAME}  
+					log
+					GLESv3
+					EGL
+					jnigraphics)
 ENDIF()
