@@ -137,10 +137,8 @@ public class GPUPixel {
         mRenderer.runOnPostDraw(runnable);
     }
 
-
-
     static {
-        System.loadLibrary("gpupixel");
+        System.loadLibrary("GPUPixel");
     }
 
     // Filter
