@@ -39,7 +39,7 @@ const std::string kHalftoneFragmentShaderString = SHADER_STRING(
 
       gl_FragColor = vec4(vec3(checkForPresenceWithinDot), 1.0);
     });
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN)
+#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
 const std::string kHalftoneFragmentShaderString = SHADER_STRING(
     uniform float pixelSize; uniform float aspectRatio;
 

@@ -21,6 +21,8 @@
 #elif defined(GPUPIXEL_WIN)
 #include <glew/glew.h>
 #include <windows.h>
+#elif defined(GPUPIXEL_LINUX)
+#include <GL/glut.h>
 #endif
 #include <vector>
 #include "MathToolbox.h"

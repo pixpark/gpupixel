@@ -37,7 +37,7 @@ const std::string kBoxDifferenceFragmentShaderString = SHADER_STRING(
       diffColor = min(diffColor * diffColor, 1.0);
       gl_FragColor = vec4(diffColor, 1.0);
     });
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN)
+#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
 const std::string kBoxDifferenceFragmentShaderString = SHADER_STRING(
     varying vec2 textureCoordinate; varying vec2 textureCoordinate2;
     uniform sampler2D inputImageTexture;

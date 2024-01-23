@@ -43,7 +43,7 @@ const std::string kSphereRefractionShaderString = SHADER_STRING(
     }
 
 );
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN)
+#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
 const std::string kSphereRefractionShaderString = SHADER_STRING(
 
     uniform sampler2D inputImageTexture; uniform vec2 center;
