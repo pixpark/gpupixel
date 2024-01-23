@@ -33,7 +33,7 @@ const std::string kDefaultFragmentShader = SHADER_STRING(
     void main() {
       gl_FragColor = texture2D(inputImageTexture, textureCoordinate);
     });
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN)
+#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
 const std::string kDefaultFragmentShader = SHADER_STRING(
     varying vec2 textureCoordinate; uniform sampler2D inputImageTexture;
 

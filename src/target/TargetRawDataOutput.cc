@@ -25,7 +25,7 @@ const std::string kRGBToI420FragmentShaderString = SHADER_STRING(
     varying mediump vec2 textureCoordinate; uniform sampler2D sTexture;
     void main() { gl_FragColor = texture2D(sTexture, textureCoordinate); });
 
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN)
+#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
 const std::string kRGBToI420FragmentShaderString = SHADER_STRING(
     varying vec2 textureCoordinate; uniform sampler2D sTexture;
 
@@ -326,7 +326,7 @@ void TargetRawDataOutput::readPixelsWithPBO(int width, int height) {
   // map the PBO to process its data by CPU
   CHECK_GL(glBindBuffer(GL_PIXEL_PACK_BUFFER, pboIds[nextIndex]));
 
-#if defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN)
+#if defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
   GLubyte* ptr = (GLubyte*)glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY);
 #elif defined(GPUPIXEL_ANDROID) || defined(GPUPIXEL_IOS)
   GLubyte* ptr = (GLubyte*)glMapBufferRange(

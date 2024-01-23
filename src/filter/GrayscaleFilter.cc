@@ -21,7 +21,7 @@ const std::string kGrayscaleFragmentShaderString = SHADER_STRING(
       float luminance = dot(color.rgb, vec3(0.2125, 0.7154, 0.0721));
       gl_FragColor = vec4(vec3(luminance), color.a);
     });
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN)
+#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
 const std::string kGrayscaleFragmentShaderString = SHADER_STRING(
     uniform sampler2D inputImageTexture; varying vec2 textureCoordinate;
 

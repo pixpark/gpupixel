@@ -50,7 +50,7 @@ const std::string kWeakPixelInclusionFragmentShaderString = SHADER_STRING(
 
       gl_FragColor = vec4(vec3(sumTest * pixelTest), 1.0);
     });
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN)
+#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
 const std::string kWeakPixelInclusionFragmentShaderString = SHADER_STRING(
     uniform sampler2D inputImageTexture;
 

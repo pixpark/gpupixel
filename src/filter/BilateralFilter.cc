@@ -119,7 +119,7 @@ const std::string kBilateralBlurFragmentShaderString = SHADER_STRING(
 
       gl_FragColor = sum / gaussianWeightTotal;
     });
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN)
+#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
 const std::string kBilateralBlurFragmentShaderString = SHADER_STRING(
     uniform sampler2D inputImageTexture;
 

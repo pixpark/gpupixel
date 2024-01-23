@@ -46,10 +46,13 @@
     // linux
     #define GPUPIXEL_LINUX
 #elif __unix__ // all unices not caught above
+#   error "Unknown compiler"
     #define GPUPIXEL_UNIX
     // Unix
 #elif defined(_POSIX_VERSION)
     // POSIX
+#   error "Unknown compiler"
+    #define GPUPIXEL_POSIX
 #else
 #   error "Unknown compiler"
 #endif
@@ -98,6 +101,7 @@
       GPUPixel::Util::Log("ERROR", "GL ERROR 0x%04X %s in %s at line %i\n", e, \
                           errorString.c_str(), __FUNCTION__, __LINE__);        \
     }                                                                          \
+    assert(e == 0);                                                            \
   }
 #else
   #define CHECK_GL(glFunc) glFunc;

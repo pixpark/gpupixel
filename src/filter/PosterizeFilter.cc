@@ -21,7 +21,7 @@ const std::string kPosterizeFragmentShaderString = SHADER_STRING(
 
       gl_FragColor = floor((color * colorLevels) + vec4(0.5)) / colorLevels;
     });
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN)
+#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
 const std::string kPosterizeFragmentShaderString = SHADER_STRING(
     uniform sampler2D inputImageTexture; uniform float colorLevels;
     varying vec2 textureCoordinate;

@@ -190,7 +190,7 @@ std::string GaussianBlurMonoFilter::_generateFragmentShaderString(int radius,
            {\n\
                gl_FragColor = vec4(0.0);\n",
       radius * 2 + 1);
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN)
+#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
   std::string shaderStr = Util::str_format(
       "\
            uniform sampler2D inputImageTexture;\n\
@@ -271,7 +271,7 @@ std::string GaussianBlurMonoFilter::_generateOptimizedVertexShaderString(
                vec2 texelSpacing = vec2(texelWidthOffset, texelHeightOffset);\n\
                ",
       numberOfOptimizedOffsets * 2 + 1);
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN)
+#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
   std::string shaderStr = Util::str_format(
       "\
                attribute vec4 position;\n\
@@ -348,7 +348,7 @@ std::string GaussianBlurMonoFilter::_generateOptimizedFragmentShaderString(
                {\n\
                gl_FragColor = vec4(0.0);\n",
       numberOfOptimizedOffsets * 2 + 1);
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN)
+#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
   std::string shaderStr = Util::str_format(
       "\
                uniform sampler2D inputImageTexture;\n\
@@ -386,7 +386,7 @@ std::string GaussianBlurMonoFilter::_generateOptimizedFragmentShaderString(
     shaderStr += Util::str_format(
         "highp vec2 texelSpacing = vec2(texelWidthOffset, "
         "texelHeightOffset);\n");
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN)
+#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
     shaderStr += Util::str_format(
         "vec2 texelSpacing = vec2(texelWidthOffset, texelHeightOffset);\n");
 #endif

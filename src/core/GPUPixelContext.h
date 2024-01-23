@@ -25,6 +25,8 @@
   #import <CoreMedia/CoreMedia.h>
   #import <OpenGL/gl.h>
   #import <QuartzCore/QuartzCore.h>
+#elif defined(GPUPIXEL_LINUX)
+  #include <GL/glut.h>
 #endif
 
 #if defined(GPUPIXEL_ANDROID)

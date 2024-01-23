@@ -63,7 +63,7 @@ const std::string kGlassSphereFragmentShaderString = SHADER_STRING(
 
       gl_FragColor = vec4(finalSphereColor, 1.0) * checkForPresenceWithinSphere;
     });
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN)
+#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
 const std::string kGlassSphereFragmentShaderString = SHADER_STRING(
 
     uniform sampler2D inputImageTexture; varying vec2 textureCoordinate;
