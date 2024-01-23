@@ -9,10 +9,10 @@
 
 #include <functional>
 #include <map>
-#include "GPUPixelDef.h"
-#include "Target.h"
+#include "gpupixel_macros.h"
+#include "target.h"
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
-#import "GPUPixelTarget.h"
+#import "gpupixel_target.h"
 #endif
 NS_GPUPIXEL_BEGIN
 
