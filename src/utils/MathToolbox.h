@@ -8,6 +8,8 @@
 #pragma once
 
 #include "GPUPixelDef.h"
+#include <cmath>
+#include <cstring>
 
 NS_GPUPIXEL_BEGIN
 

@@ -7,7 +7,7 @@
 
 #include "Util.h"
 #include "GPUPixelContext.h"
-
+#include <cstdarg>
 #if defined(GPUPIXEL_ANDROID)
 #include <android/log.h>
 #elif defined(GPUPIXEL_IOS)
