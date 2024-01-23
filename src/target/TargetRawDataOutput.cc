@@ -8,7 +8,7 @@
 
 #include "TargetRawDataOutput.h"
 #include "GPUPixelContext.h"
-
+#include <cstring>
 USING_NS_GPUPIXEL
 
 const std::string kRGBToI420VertexShaderString = SHADER_STRING(

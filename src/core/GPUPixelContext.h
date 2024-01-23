@@ -26,7 +26,8 @@
   #import <OpenGL/gl.h>
   #import <QuartzCore/QuartzCore.h>
 #elif defined(GPUPIXEL_LINUX)
-  #include <GL/glut.h>
+#define GL_GLEXT_PROTOTYPES
+    #include <GLFW/glfw3.h>
 #endif
 
 #if defined(GPUPIXEL_ANDROID)

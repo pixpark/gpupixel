@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include "GLProgram.h"
 #include "Target.h"
+#include <functional>
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
 #import <AVFoundation/AVFoundation.h>
