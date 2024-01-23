@@ -59,7 +59,7 @@
   #define GPUPIXEL_LINUX
 //
 #if defined(GPUPIXEL_WIN)
-#include <corecrt_math_defines.h>
+// #include <corecrt_math_defines.h>
 #include <algorithm>
 #endif
 
