@@ -51,7 +51,7 @@ const std::string kCrosshatchFragmentShaderString = SHADER_STRING(
 
       gl_FragColor = colorToDisplay;
     });
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN)
+#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
 const std::string kCrosshatchFragmentShaderString = SHADER_STRING(
     uniform sampler2D inputImageTexture; varying vec2 textureCoordinate;
     uniform float crossHatchSpacing;

@@ -54,7 +54,7 @@ const std::string kConvolution3x3FragmentShaderString = SHADER_STRING(
 
       gl_FragColor = vec4(resultColor, centerColor.a);
     });
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN)
+#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
 const std::string kConvolution3x3FragmentShaderString = SHADER_STRING(
     precision float; uniform sampler2D inputImageTexture;
     uniform mat3 convolutionMatrix;
