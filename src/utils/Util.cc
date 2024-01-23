@@ -5,13 +5,13 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "Util.h"
-#include "GPUPixelContext.h"
+#include "util.h"
+#include "gpupixel_context.h"
 #include <cstdarg>
 #if defined(GPUPIXEL_ANDROID)
 #include <android/log.h>
 #elif defined(GPUPIXEL_IOS)
-#import <Foundation/Foundation.h>
+#import <Foundation/foundation.h>
 #import <UIKit/UIKit.h>
 #elif defined(GPUPIXEL_WIN)
 #include <malloc.h>

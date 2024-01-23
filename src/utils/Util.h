@@ -9,7 +9,7 @@
 
 #include <stdlib.h>
 #include <string>
-#include "GPUPixelDef.h"
+#include "gpupixel_macros.h"
 
 NS_GPUPIXEL_BEGIN
 #define rotationSwapsSize(rotation)                   \

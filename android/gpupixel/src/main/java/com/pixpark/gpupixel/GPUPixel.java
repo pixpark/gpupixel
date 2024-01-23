@@ -138,7 +138,7 @@ public class GPUPixel {
     }
 
     static {
-        System.loadLibrary("GPUPixel");
+        System.loadLibrary("gpupixel");
     }
 
     // Filter
