@@ -9,7 +9,7 @@
 
 #include "Filter.h"
 #include "GLProgram.h"
-
+#include <functional>
 NS_GPUPIXEL_BEGIN
 class SourceRawDataInput : public Filter {
  public:
