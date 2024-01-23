@@ -157,7 +157,7 @@ const std::string kGPUImageBaseBeautyFaceFragmentShaderString = SHADER_STRING(
 
       gl_FragColor = vec4(color, 1.0);
     });
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN)
+#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
 const std::string kGPUImageBaseBeautyFaceFragmentShaderString = SHADER_STRING(
     float; varying vec2 textureCoordinate; varying vec4 textureShift_1;
     varying vec4 textureShift_2;

@@ -84,7 +84,7 @@ SingleComponentGaussianBlurMonoFilter::_generateOptimizedVertexShaderString(
                vec2 texelSpacing = vec2(texelWidthOffset, texelHeightOffset);\n\
                ",
       numberOfOptimizedOffsets * 2 + 1);
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN)
+#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
   std::string shaderStr = Util::str_format(
       "\
                attribute vec4 position;\n\
@@ -164,7 +164,7 @@ SingleComponentGaussianBlurMonoFilter::_generateOptimizedFragmentShaderString(
                {\n\
                lowp float sum = 0.0;\n",
       numberOfOptimizedOffsets * 2 + 1);
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN)
+#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
   std::string shaderStr = Util::str_format(
       "\
                uniform sampler2D inputImageTexture;\n\
