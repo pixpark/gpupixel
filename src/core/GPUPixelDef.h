@@ -56,7 +56,7 @@
 #else
 #   error "Unknown compiler"
 #endif
- 
+  #define GPUPIXEL_LINUX
 //
 #if defined(GPUPIXEL_WIN)
 #include <corecrt_math_defines.h>
@@ -101,7 +101,6 @@
       GPUPixel::Util::Log("ERROR", "GL ERROR 0x%04X %s in %s at line %i\n", e, \
                           errorString.c_str(), __FUNCTION__, __LINE__);        \
     }                                                                          \
-    assert(e == 0);                                                            \
   }
 #else
   #define CHECK_GL(glFunc) glFunc;

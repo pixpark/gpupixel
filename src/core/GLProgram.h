@@ -22,7 +22,8 @@
 #include <glew/glew.h>
 #include <windows.h>
 #elif defined(GPUPIXEL_LINUX)
-#include <GL/glut.h>
+#define GL_GLEXT_PROTOTYPES
+  #include <GLFW/glfw3.h>
 #endif
 #include <vector>
 #include "MathToolbox.h"

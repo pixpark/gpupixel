@@ -203,7 +203,7 @@ bool FaceMakeupFilter::proceed(bool bUpdateTargets, int64_t frameTime) {
   _filterProgram->setUniformValue("inputImageTexture", 0);  // origin image
 
   glActiveTexture(GL_TEXTURE3);
-  assert(image_texture_);
+  // assert(image_texture_);
   glBindTexture(GL_TEXTURE_2D, image_texture_->getFramebuffer()->getTexture());
   _filterProgram->setUniformValue("inputImageTexture2", 3);
 

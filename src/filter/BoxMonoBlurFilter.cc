@@ -6,7 +6,7 @@
  */
 
 #include "BoxMonoBlurFilter.h"
-
+#include <cmath>
 NS_GPUPIXEL_BEGIN
 
 BoxMonoBlurFilter::BoxMonoBlurFilter(Type type)
@@ -35,7 +35,7 @@ bool BoxMonoBlurFilter::init(int radius, float sigma) {
 
 void BoxMonoBlurFilter::setRadius(int radius) {
   float newBlurRadius =
-      round(round(radius / 2.0) * 2.0);  // For now, only do even radii
+      std::round(std::round(radius / 2.0) * 2.0);  // For now, only do even radii
 
   if (newBlurRadius != _radius) {
     _radius = newBlurRadius;
