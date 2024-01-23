@@ -23,7 +23,7 @@ const std::string kColorMatrixFragmentShaderString = SHADER_STRING(
       gl_FragColor =
           (intensity * outputColor) + ((1.0 - intensity) * textureColor);
     });
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN)
+#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
 const std::string kColorMatrixFragmentShaderString = SHADER_STRING(
     uniform sampler2D inputImageTexture; uniform mat4 colorMatrix;
     uniform float intensity;

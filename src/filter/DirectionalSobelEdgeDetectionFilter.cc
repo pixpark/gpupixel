@@ -62,7 +62,7 @@ const std::string kDirectionalSobelEdgeDetectionFragmentShaderString =
           gl_FragColor = vec4(gradientMagnitude, normalizedDirection.x,
                               normalizedDirection.y, 1.0);
         });
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN)
+#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
 const std::string kDirectionalSobelEdgeDetectionFragmentShaderString =
     SHADER_STRING(
         uniform sampler2D inputImageTexture;

@@ -25,7 +25,7 @@ const std::string kLuminanceRangeFragmentShaderString = SHADER_STRING(
       mediump float luminanceRatio = ((0.5 - luminance) * rangeReductionFactor);
       gl_FragColor = vec4((color.rgb) + (luminanceRatio), color.a);
     });
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN)
+#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
 const std::string kLuminanceRangeFragmentShaderString = SHADER_STRING(
     uniform sampler2D inputImageTexture; uniform float rangeReductionFactor;
     varying vec2 textureCoordinate;

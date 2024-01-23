@@ -19,6 +19,8 @@
 #include <GLES3/gl3ext.h>
 #elif defined(GPUPIXEL_WIN)
 #include <glew/glew.h>
+#elif defined(GPUPIXEL_LINUX)
+#include <GL/glut.h>
 #endif
 
 #include <vector>
