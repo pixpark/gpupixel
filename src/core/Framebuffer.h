@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "GPUPixelDef.h"
+#include "gpupixel_macros.h"
 
 #if defined(GPUPIXEL_IOS)
 #import <OpenGLES/ES3/gl.h>

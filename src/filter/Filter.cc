@@ -5,9 +5,9 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "Filter.h"
-#include "GPUPixel.h"
-#include "GPUPixelContext.h"
+#include "filter.h"
+#include "gpupixel.h"
+#include "gpupixel_context.h"
 
 NS_GPUPIXEL_BEGIN
 
