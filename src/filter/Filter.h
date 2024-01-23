@@ -7,11 +7,11 @@
 
 #pragma once
 
-#include "GLProgram.h"
-#include "GPUPixelDef.h"
-#include "Source.h"
-#include "Target.h"
-#include "Util.h"
+#include "gl_program.h"
+#include "gpupixel_macros.h"
+#include "source.h"
+#include "target.h"
+#include "util.h"
 #include "string"
 
 NS_GPUPIXEL_BEGIN

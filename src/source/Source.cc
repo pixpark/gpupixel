@@ -5,12 +5,12 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "Source.h"
-#include "GPUPixelContext.h"
-#include "Util.h"
+#include "source.h"
+#include "gpupixel_context.h"
+#include "util.h"
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
-#include "ObjcTarget.h"
+#include "objc_target.h"
 #endif
 
 NS_GPUPIXEL_BEGIN

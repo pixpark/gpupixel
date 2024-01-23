@@ -5,8 +5,8 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "Target.h"
-#include "Util.h"
+#include "target.h"
+#include "util.h"
 
 NS_GPUPIXEL_BEGIN
 

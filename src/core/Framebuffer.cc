@@ -5,11 +5,11 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "Framebuffer.h"
+#include "framebuffer.h"
 #include <assert.h>
 #include <algorithm>
-#include "GPUPixelContext.h"
-#include "Util.h"
+#include "gpupixel_context.h"
+#include "util.h"
 
 NS_GPUPIXEL_BEGIN
 
