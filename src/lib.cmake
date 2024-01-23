@@ -2,15 +2,6 @@
 IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 	# 以操作系统名称作为编译输出、安装目录
     SET(CURRENT_OS "linux")
-	
-	# 在应用程序中可以使用这个宏定义
-    ADD_DEFINITIONS(-DMY_LINUX)
-	
-	# 设置编译参数
-	SET(CMAKE_C_FLAGS_DEBUG     "${CMAKE_C_FLAGS} -O0 -g -fPIC -Wall")
-	SET(CMAKE_C_FLAGS_RELEASE   "${CMAKE_C_FLAGS} -O3 -fPIC -DNDEBUG -Wall")
-	SET(CMAKE_CXX_FLAGS_DEBUG   "${CMAKE_CXX_FLAGS} -O0 -g -fPIC -Wall")
-	SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -O3 -fPIC -DNDEBUG -Wall")
 ELSEIF(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 	# 以操作系统名称作为编译输出、安装目录
     SET(CURRENT_OS "windows")
