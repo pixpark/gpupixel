@@ -88,13 +88,12 @@ ELSEIF(${CURRENT_OS} STREQUAL "windows")
 
 ELSEIF(${CURRENT_OS} STREQUAL "macos" OR ${CURRENT_OS} STREQUAL "ios")
 	# Header
-	list(APPEND EXPORT_HEADER 	"${CMAKE_CURRENT_SOURCE_DIR}/target/objc/GPUPixelTarget.h"
-	 							"${CMAKE_CURRENT_SOURCE_DIR}/target/objc/GPUPixelView.h"
-	 							"${CMAKE_CURRENT_SOURCE_DIR}/target/objc/ObjcTarget.h")
+	FILE(GLOB OBJC_HEADER_FILE  "${CMAKE_CURRENT_SOURCE_DIR}/target/objc/*.h")
+	list(APPEND EXPORT_HEADER 	${OBJC_HEADER_FILE})
+	
 	# Source 
-	list(APPEND SOURCE_FILES 	"${CMAKE_CURRENT_SOURCE_DIR}/target/objc/GPUPixelTarget.mm" 
-								"${CMAKE_CURRENT_SOURCE_DIR}/target/objc/GPUPixelView.mm"
-								"${CMAKE_CURRENT_SOURCE_DIR}/target/objc/ObjcTarget.cc")
+	FILE(GLOB OBJC_SOURCE_FILE  "${CMAKE_CURRENT_SOURCE_DIR}/target/objc/*")
+	list(APPEND SOURCE_FILES ${OBJC_SOURCE_FILE})
 		
 ELSEIF(${CURRENT_OS} STREQUAL "android")
 	# Header
@@ -102,7 +101,7 @@ ELSEIF(${CURRENT_OS} STREQUAL "android")
 
 	# Source 
 	list(APPEND SOURCE_FILES 	"${CMAKE_CURRENT_SOURCE_DIR}/android/jni_helpers.cc" 
-							  	"${CMAKE_CURRENT_SOURCE_DIR}/android/GPUPixelJNI.cc")
+							  	"${CMAKE_CURRENT_SOURCE_DIR}/android/gpupixel_jni.cc")
 ENDIF()
 # message(STATUS "Variable: ${EXPORT_HEADER}")
 

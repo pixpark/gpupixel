@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include "Framebuffer.h"
-#include "GPUPixelDef.h"
+#include "framebuffer.h"
+#include "gpupixel_macros.h"
 
 #include <map>
 
