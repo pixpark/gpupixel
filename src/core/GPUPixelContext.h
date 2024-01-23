@@ -27,7 +27,8 @@
   #import <QuartzCore/QuartzCore.h>
 #elif defined(GPUPIXEL_LINUX)
 #define GL_GLEXT_PROTOTYPES
-    #include <GLFW/glfw3.h>
+  #define GLEW_STATIC
+  #include <GLFW/glfw3.h>
 #endif
 
 #if defined(GPUPIXEL_ANDROID)
@@ -47,8 +48,9 @@
 #endif
 
 #if defined(GPUPIXEL_WIN)
-  #include <glew/glew.h>
-  #include <glfw/glfw3.h>
+#define GLEW_STATIC
+  #include <GL/glew.h>
+  #include <GLFW/glfw3.h>
 #endif
  
 NS_GPUPIXEL_BEGIN

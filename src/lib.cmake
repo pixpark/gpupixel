@@ -14,18 +14,10 @@ IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 ELSEIF(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 	# 以操作系统名称作为编译输出、安装目录
     SET(CURRENT_OS "windows")
-	
-	# 在应用程序中可以使用这个宏定义
-    ADD_DEFINITIONS(-DMY_WINDOWS)
-	
-	# 设置编译参数
-	ADD_COMPILE_OPTIONS("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
-	ADD_COMPILE_OPTIONS("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
-
-	SET(CMAKE_C_FLAGS_DEBUG     "/O0")
-	SET(CMAKE_C_FLAGS_RELEASE   "/O3")
-	SET(CMAKE_CXX_FLAGS_DEBUG   "/O0")
-	SET(CMAKE_CXX_FLAGS_RELEASE "/O3")
+	# 引入动态库的路径，因为此模块有可能依赖第三方库
+	LINK_DIRECTORIES(
+		${CMAKE_CURRENT_SOURCE_DIR}/third_party/glfw-3.3.9/lib-mingw-w64
+	${CMAKE_CURRENT_SOURCE_DIR}/third_party/glew-2.1.0/lib/Release/x64)
 ELSEIF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 	SET(CURRENT_OS "macos")
 ELSEIF(${CMAKE_SYSTEM_NAME} MATCHES "iOS")
@@ -59,6 +51,8 @@ INCLUDE_DIRECTORIES(
 	${CMAKE_CURRENT_SOURCE_DIR}/third_party/libyuv/include
 	${CMAKE_CURRENT_SOURCE_DIR}/android
 	${CMAKE_CURRENT_SOURCE_DIR}/target/objc
+	${CMAKE_CURRENT_SOURCE_DIR}/third_party/glfw-3.3.9/include
+	${CMAKE_CURRENT_SOURCE_DIR}/third_party/glew-2.1.0/include
 )
  
 IF(MY_DEBUG)
@@ -168,6 +162,11 @@ TARGET_LINK_LIBRARIES(
 					GL
 					glfw)
 ELSEIF(${CURRENT_OS} STREQUAL "windows")
+TARGET_LINK_LIBRARIES(
+					${PROJECT_NAME}  
+					glfw3
+					glew32
+					opengl32)
 ELSEIF(${CURRENT_OS} STREQUAL "macos")
 	TARGET_LINK_LIBRARIES(
 		${PROJECT_NAME} "-framework OpenGL 		\

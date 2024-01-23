@@ -19,10 +19,13 @@
 #import <AppKit/NSOpenGL.h>
 #import <OpenGL/gl3.h>
 #elif defined(GPUPIXEL_WIN)
-#include <glew/glew.h>
+#define GLEW_STATIC
+  #include <GL/glew.h>
+  #include <GLFW/glfw3.h>
 #include <windows.h>
 #elif defined(GPUPIXEL_LINUX)
 #define GL_GLEXT_PROTOTYPES
+#define GLEW_STATIC
   #include <GLFW/glfw3.h>
 #endif
 #include <vector>
