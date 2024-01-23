@@ -20,7 +20,7 @@ const std::string kBrightnessFragmentShaderString = SHADER_STRING(
       lowp vec4 color = texture2D(inputImageTexture, textureCoordinate);
       gl_FragColor = vec4((color.rgb + vec3(brightness_para)), color.a);
     });
-#elif defined(GPUPIXEL_WIN)
+#elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_MAC) || defined(GPUPIXEL_LINUX)
 const std::string kBrightnessFragmentShaderString = SHADER_STRING(
     uniform sampler2D inputImageTexture; uniform float brightness_para;
     varying vec2 textureCoordinate;

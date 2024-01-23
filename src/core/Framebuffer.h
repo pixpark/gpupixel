@@ -8,6 +8,7 @@
 #pragma once
 
 #include "GPUPixelDef.h"
+
 #if defined(GPUPIXEL_IOS)
 #import <OpenGLES/ES3/gl.h>
 #import <OpenGLES/ES3/glext.h>
@@ -20,7 +21,8 @@
 #elif defined(GPUPIXEL_WIN)
 #include <glew/glew.h>
 #elif defined(GPUPIXEL_LINUX)
-#include <GL/glut.h>
+#define GL_GLEXT_PROTOTYPES
+  #include <GLFW/glfw3.h>
 #endif
 
 #include <vector>
