@@ -40,7 +40,7 @@ INCLUDE_DIRECTORIES(
 	${CMAKE_CURRENT_SOURCE_DIR}/target
 	${CMAKE_CURRENT_SOURCE_DIR}/utils
 	${CMAKE_CURRENT_SOURCE_DIR}/third_party/libyuv/include
-	${CMAKE_CURRENT_SOURCE_DIR}/android
+	${CMAKE_CURRENT_SOURCE_DIR}/android/jni
 	${CMAKE_CURRENT_SOURCE_DIR}/target/objc
 	${CMAKE_CURRENT_SOURCE_DIR}/third_party/glfw-3.3.9/include
 	${CMAKE_CURRENT_SOURCE_DIR}/third_party/glew-2.1.0/include
@@ -97,11 +97,12 @@ ELSEIF(${CURRENT_OS} STREQUAL "macos" OR ${CURRENT_OS} STREQUAL "ios")
 		
 ELSEIF(${CURRENT_OS} STREQUAL "android")
 	# Header
-	list(APPEND EXPORT_HEADER 	"${CMAKE_CURRENT_SOURCE_DIR}/android/jni_helpers.h")
-
+	FILE(GLOB OBJC_HEADER_FILE  "${CMAKE_CURRENT_SOURCE_DIR}/android/jni/*.h")
+	list(APPEND EXPORT_HEADER 	${OBJC_HEADER_FILE})
+	
 	# Source 
-	list(APPEND SOURCE_FILES 	"${CMAKE_CURRENT_SOURCE_DIR}/android/jni_helpers.cc" 
-							  	"${CMAKE_CURRENT_SOURCE_DIR}/android/gpupixel_jni.cc")
+	FILE(GLOB OBJC_SOURCE_FILE  "${CMAKE_CURRENT_SOURCE_DIR}/android/jni/*")
+	list(APPEND SOURCE_FILES ${OBJC_SOURCE_FILE})
 ENDIF()
 # message(STATUS "Variable: ${EXPORT_HEADER}")
 
