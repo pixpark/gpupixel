@@ -11,7 +11,7 @@
 #import "VideoFilterController.h"
 #import "VideoCapturer.h"
 #import "FaceDetector.h"
-#import <GPUPixel/gpupixel.h>
+#import <gpupixel/gpupixel.h>
 
 using namespace GPUPixel;
 
