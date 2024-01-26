@@ -13,10 +13,10 @@
 
 NS_GPUPIXEL_BEGIN
 #define rotationSwapsSize(rotation)                   \
-  ((rotation) == GPUPixel::RotateLeft ||              \
-   (rotation) == GPUPixel::RotateRight ||             \
-   (rotation) == GPUPixel::RotateRightFlipVertical || \
-   (rotation) == GPUPixel::RotateRightFlipHorizontal)
+  ((rotation) == gpupixel::RotateLeft ||              \
+   (rotation) == gpupixel::RotateRight ||             \
+   (rotation) == gpupixel::RotateRightFlipVertical || \
+   (rotation) == gpupixel::RotateRightFlipHorizontal)
 
 class Util {
  public:

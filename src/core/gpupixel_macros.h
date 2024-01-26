@@ -63,9 +63,9 @@
 #include <algorithm>
 #endif
 
-#define NS_GPUPIXEL_BEGIN namespace GPUPixel {
+#define NS_GPUPIXEL_BEGIN namespace gpupixel {
 #define NS_GPUPIXEL_END }
-#define USING_NS_GPUPIXEL using namespace GPUPixel;
+#define USING_NS_GPUPIXEL using namespace gpupixel;
 
 #define STRINGIZE(x) #x
 #define SHADER_STRING(text) STRINGIZE(text)

@@ -20,6 +20,6 @@
 #else
 @interface GPUPixelView : NSOpenGLView <GPUPixelTarget>
 #endif
-@property(readwrite, nonatomic) GPUPixel::TargetView::FillMode fillMode;
+@property(readwrite, nonatomic) gpupixel::TargetView::FillMode fillMode;
 @property(readonly, nonatomic) CGSize sizeInPixels;
 @end

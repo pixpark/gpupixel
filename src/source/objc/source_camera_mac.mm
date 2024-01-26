@@ -3,7 +3,7 @@
 
 #pragma mark -
 #pragma mark Private methods and instance variables
-using namespace GPUPixel;
+using namespace gpupixel;
 
 @interface SourceCameraMac ()
 {
