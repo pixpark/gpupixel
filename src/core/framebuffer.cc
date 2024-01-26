@@ -47,7 +47,7 @@ Framebuffer::Framebuffer(
 }
 
 Framebuffer::~Framebuffer() {
-  GPUPixel::GPUPixelContext::getInstance()->runSync([&] {
+  gpupixel::GPUPixelContext::getInstance()->runSync([&] {
     bool bDeleteTex = (_texture != -1);
     bool bDeleteFB = (_framebuffer != -1);
 

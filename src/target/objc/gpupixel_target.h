@@ -21,8 +21,8 @@
 @required
 - (void)update:(float)frameTime;
 - (void)setInputFramebuffer:
-            (std::shared_ptr<GPUPixel::Framebuffer>)inputFramebuffer
-               withRotation:(GPUPixel::RotationMode)rotationMode
+            (std::shared_ptr<gpupixel::Framebuffer>)inputFramebuffer
+               withRotation:(gpupixel::RotationMode)rotationMode
                     atIndex:(NSInteger)texIdx;
 @optional
 - (bool)isPrepared;

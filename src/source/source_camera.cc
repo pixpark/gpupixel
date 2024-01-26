@@ -74,8 +74,8 @@ bool SourceCamera::init() {
 
 bool SourceCamera::init(NSString* sessionPreset,
                         AVCaptureDevicePosition cameraPosition) {
-  _outputRotation = GPUPixel::NoRotation;
-  // internalRotation = GPUPixel::NoRotation;
+  _outputRotation = gpupixel::NoRotation;
+  // internalRotation = gpupixel::NoRotation;
   _capturePaused = NO;
 
   _captureSession = [[AVCaptureSession alloc] init];
@@ -231,72 +231,72 @@ void SourceCamera::_updateOutputRotation() {
     if (_horizontallyMirrorRearFacingCamera) {
       switch (_outputImageOrientation) {
         case UIInterfaceOrientationPortrait:
-          _outputRotation = GPUPixel::RotateRightFlipVertical;
+          _outputRotation = gpupixel::RotateRightFlipVertical;
           break;
         case UIInterfaceOrientationPortraitUpsideDown:
-          _outputRotation = GPUPixel::Rotate180;
+          _outputRotation = gpupixel::Rotate180;
           break;
         case UIInterfaceOrientationLandscapeLeft:
-          _outputRotation = GPUPixel::FlipHorizontal;
+          _outputRotation = gpupixel::FlipHorizontal;
           break;
         case UIInterfaceOrientationLandscapeRight:
-          _outputRotation = GPUPixel::FlipVertical;
+          _outputRotation = gpupixel::FlipVertical;
           break;
         default:
-          _outputRotation = GPUPixel::NoRotation;
+          _outputRotation = gpupixel::NoRotation;
       }
     } else {
       switch (_outputImageOrientation) {
         case UIInterfaceOrientationPortrait:
-          _outputRotation = GPUPixel::RotateRight;
+          _outputRotation = gpupixel::RotateRight;
           break;
         case UIInterfaceOrientationPortraitUpsideDown:
-          _outputRotation = GPUPixel::RotateLeft;
+          _outputRotation = gpupixel::RotateLeft;
           break;
         case UIInterfaceOrientationLandscapeLeft:
-          _outputRotation = GPUPixel::Rotate180;
+          _outputRotation = gpupixel::Rotate180;
           break;
         case UIInterfaceOrientationLandscapeRight:
-          _outputRotation = GPUPixel::NoRotation;
+          _outputRotation = gpupixel::NoRotation;
           break;
         default:
-          _outputRotation = GPUPixel::NoRotation;
+          _outputRotation = gpupixel::NoRotation;
       }
     }
   } else {
     if (_horizontallyMirrorFrontFacingCamera) {
       switch (_outputImageOrientation) {
         case UIInterfaceOrientationPortrait:
-          _outputRotation = GPUPixel::RotateRightFlipVertical;
+          _outputRotation = gpupixel::RotateRightFlipVertical;
           break;
         case UIInterfaceOrientationPortraitUpsideDown:
-          _outputRotation = GPUPixel::RotateRightFlipHorizontal;
+          _outputRotation = gpupixel::RotateRightFlipHorizontal;
           break;
         case UIInterfaceOrientationLandscapeLeft:
-          _outputRotation = GPUPixel::FlipHorizontal;
+          _outputRotation = gpupixel::FlipHorizontal;
           break;
         case UIInterfaceOrientationLandscapeRight:
-          _outputRotation = GPUPixel::FlipVertical;
+          _outputRotation = gpupixel::FlipVertical;
           break;
         default:
-          _outputRotation = GPUPixel::NoRotation;
+          _outputRotation = gpupixel::NoRotation;
       }
     } else {
       switch (_outputImageOrientation) {
         case UIInterfaceOrientationPortrait:
-          _outputRotation = GPUPixel::RotateRight;
+          _outputRotation = gpupixel::RotateRight;
           break;
         case UIInterfaceOrientationPortraitUpsideDown:
-          _outputRotation = GPUPixel::RotateLeft;
+          _outputRotation = gpupixel::RotateLeft;
           break;
         case UIInterfaceOrientationLandscapeLeft:
-          _outputRotation = GPUPixel::NoRotation;
+          _outputRotation = gpupixel::NoRotation;
           break;
         case UIInterfaceOrientationLandscapeRight:
-          _outputRotation = GPUPixel::Rotate180;
+          _outputRotation = gpupixel::Rotate180;
           break;
         default:
-          _outputRotation = GPUPixel::NoRotation;
+          _outputRotation = gpupixel::NoRotation;
       }
     }
   }
