@@ -50,8 +50,8 @@ class SourceCamera : public Source {
   VideoDataOutputSampleBufferDelegate* _videoDataOutputSampleBufferDelegate;
   AVCaptureSession* _captureSession;
   BOOL _capturePaused;
-  GPUPixel::RotationMode _outputRotation;
-  // GPUPixel::RotationMode internalRotation;
+  gpupixel::RotationMode _outputRotation;
+  // gpupixel::RotationMode internalRotation;
   AVCaptureDeviceInput* _captureDeviceInput;
   AVCaptureVideoDataOutput* _captureVideoDataOutput;
   /// This determines the rotation applied to the output image, based on the
@@ -71,7 +71,7 @@ NS_GPUPIXEL_END
 #if defined(GPUPIXEL_IOS)
 @interface VideoDataOutputSampleBufferDelegate
     : NSObject <AVCaptureVideoDataOutputSampleBufferDelegate>
-@property(nonatomic) GPUPixel::SourceCamera* sourceCamera;
-@property(nonatomic) GPUPixel::RotationMode rotation;
+@property(nonatomic) gpupixel::SourceCamera* sourceCamera;
+@property(nonatomic) gpupixel::RotationMode rotation;
 @end
 #endif
