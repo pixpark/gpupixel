@@ -14,11 +14,11 @@
 
 @interface GPUPixelView()
 {
-    std::shared_ptr<GPUPixel::Framebuffer> inputFramebuffer;
-    GPUPixel::RotationMode inputRotation;
+    std::shared_ptr<gpupixel::Framebuffer> inputFramebuffer;
+    gpupixel::RotationMode inputRotation;
     GLuint displayFramebuffer;
     GLuint displayRenderbuffer;
-    GPUPixel::GLProgram* displayProgram;
+    gpupixel::GLProgram* displayProgram;
     GLuint positionAttribLocation;
     GLuint texCoordAttribLocation;
     GLuint colorMapUniformLocation;
@@ -62,7 +62,7 @@
 
 - (void)commonInit;
 {
-    inputRotation = GPUPixel::NoRotation;
+    inputRotation = gpupixel::NoRotation;
 #if defined(GPUPIXEL_IOS)
     self.opaque = YES;
     self.hidden = NO;
@@ -71,7 +71,7 @@
     eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], kEAGLDrawablePropertyRetainedBacking, kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
     
 #else
-    [self setOpenGLContext:GPUPixel::GPUPixelContext::getInstance()->getOpenGLContext()];
+    [self setOpenGLContext:gpupixel::GPUPixelContext::getInstance()->getOpenGLContext()];
     if ([self respondsToSelector:@selector(setWantsBestResolutionOpenGLSurface:)])
     {
         [self  setWantsBestResolutionOpenGLSurface:YES];
@@ -79,19 +79,19 @@
     //    inputRotation = kGPUImageNoRotation;
     self.hidden = NO;
 #endif
-    GPUPixel::GPUPixelContext::getInstance()->runSync([&]{
-        displayProgram = GPUPixel::GLProgram::createByShaderString(GPUPixel::kDefaultVertexShader, GPUPixel::kDefaultFragmentShader);
+    gpupixel::GPUPixelContext::getInstance()->runSync([&]{
+        displayProgram = gpupixel::GLProgram::createByShaderString(gpupixel::kDefaultVertexShader, gpupixel::kDefaultFragmentShader);
         
         positionAttribLocation = displayProgram->getAttribLocation("position");
         texCoordAttribLocation = displayProgram->getAttribLocation("inputTextureCoordinate");
         colorMapUniformLocation = displayProgram->getUniformLocation("inputImageTexture");
         
-        GPUPixel::GPUPixelContext::getInstance()->setActiveShaderProgram(displayProgram);
+        gpupixel::GPUPixelContext::getInstance()->setActiveShaderProgram(displayProgram);
         glEnableVertexAttribArray(positionAttribLocation);
         glEnableVertexAttribArray(texCoordAttribLocation);
         
         [self setBackgroundColorRed:0.0 green:0.0 blue:0.0 alpha:0.0];
-        _fillMode = GPUPixel::TargetView::FillMode::PreserveAspectRatio;
+        _fillMode = gpupixel::TargetView::FillMode::PreserveAspectRatio;
         [self createDisplayFramebuffer];
     });
 }
@@ -139,12 +139,12 @@
 
 - (void)createDisplayFramebuffer;
 {
-    GPUPixel::GPUPixelContext::getInstance()->runSync([&]{
+    gpupixel::GPUPixelContext::getInstance()->runSync([&]{
 #if defined(GPUPIXEL_IOS)
         glGenRenderbuffers(1, &displayRenderbuffer);
         glBindRenderbuffer(GL_RENDERBUFFER, displayRenderbuffer);
         
-        [GPUPixel::GPUPixelContext::getInstance()->getEglContext() renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer*)self.layer];
+        [gpupixel::GPUPixelContext::getInstance()->getEglContext() renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer*)self.layer];
         
         glGenFramebuffers(1, &displayFramebuffer);
         glBindFramebuffer(GL_FRAMEBUFFER, displayFramebuffer);
@@ -172,7 +172,7 @@
 
 - (void)destroyDisplayFramebuffer;
 {
-    GPUPixel::GPUPixelContext::getInstance()->runSync([&]{
+    gpupixel::GPUPixelContext::getInstance()->runSync([&]{
 #if defined(GPUPIXEL_IOS)
         if (displayFramebuffer)
         {
@@ -199,12 +199,12 @@
         [self createDisplayFramebuffer];
     }
     
-    GPUPixel::GPUPixelContext::getInstance()->runSync([&]{
+    gpupixel::GPUPixelContext::getInstance()->runSync([&]{
         glBindFramebuffer(GL_FRAMEBUFFER, displayFramebuffer);
         glViewport(0, 0, framebufferWidth, framebufferHeight);
     });
 #else
-    GPUPixel::GPUPixelContext::getInstance()->runSync([&]{
+    gpupixel::GPUPixelContext::getInstance()->runSync([&]{
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         glBindRenderbuffer(GL_RENDERBUFFER, 0);
         glViewport(0, 0, self.sizeInPixels.width, self.sizeInPixels.height);
@@ -213,10 +213,10 @@
 }
  
 - (void)presentFramebuffer {
-    GPUPixel::GPUPixelContext::getInstance()->runSync([&] {
+    gpupixel::GPUPixelContext::getInstance()->runSync([&] {
 #if defined(GPUPIXEL_IOS)
         glBindRenderbuffer(GL_RENDERBUFFER, displayRenderbuffer);
-        GPUPixel::GPUPixelContext::getInstance()->presentBufferForDisplay();
+        gpupixel::GPUPixelContext::getInstance()->presentBufferForDisplay();
 #else
         [self.openGLContext flushBuffer];
 #endif
@@ -232,8 +232,8 @@
 }
 
 - (void)update:(float)frameTime {
-    GPUPixel::GPUPixelContext::getInstance()->runSync([&]{
-        GPUPixel::GPUPixelContext::getInstance()->setActiveShaderProgram(displayProgram);
+    gpupixel::GPUPixelContext::getInstance()->runSync([&]{
+        gpupixel::GPUPixelContext::getInstance()->setActiveShaderProgram(displayProgram);
         [self setDisplayFramebuffer];
         glClearColor(backgroundColorRed, backgroundColorGreen, backgroundColorBlue, backgroundColorAlpha);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -279,11 +279,11 @@
     });
 }
 
-- (void)setInputFramebuffer:(std::shared_ptr<GPUPixel::Framebuffer>)newInputFramebuffer
-               withRotation:(GPUPixel::RotationMode)rotation
+- (void)setInputFramebuffer:(std::shared_ptr<gpupixel::Framebuffer>)newInputFramebuffer
+               withRotation:(gpupixel::RotationMode)rotation
                     atIndex:(NSInteger)texIdx {
-    std::shared_ptr<GPUPixel::Framebuffer> lastFramebuffer = inputFramebuffer;
-    GPUPixel::RotationMode lastInputRotation = inputRotation;
+    std::shared_ptr<gpupixel::Framebuffer> lastFramebuffer = inputFramebuffer;
+    gpupixel::RotationMode lastInputRotation = inputRotation;
     
     inputRotation = rotation;
     inputFramebuffer = newInputFramebuffer;
@@ -299,7 +299,7 @@
     }
 }
 
-- (void)setFillMode:(GPUPixel::TargetView::FillMode)newValue;
+- (void)setFillMode:(gpupixel::TargetView::FillMode)newValue;
 {
     if (_fillMode != newValue) {
         _fillMode = newValue;
@@ -324,10 +324,10 @@
     
     CGRect insetRect = AVMakeRectWithAspectRatioInsideRect(CGSizeMake(rotatedFramebufferWidth, rotatedFramebufferHeight), self.bounds);
     
-    if (_fillMode == GPUPixel::TargetView::FillMode::PreserveAspectRatio) {
+    if (_fillMode == gpupixel::TargetView::FillMode::PreserveAspectRatio) {
         scaledWidth = insetRect.size.width / self.bounds.size.width;
         scaledHeight = insetRect.size.height / self.bounds.size.height;
-    } else if (_fillMode == GPUPixel::TargetView::FillMode::PreserveAspectRatioAndFill) {
+    } else if (_fillMode == gpupixel::TargetView::FillMode::PreserveAspectRatioAndFill) {
         scaledWidth = self.bounds.size.height / insetRect.size.height;
         scaledHeight = self.bounds.size.width / insetRect.size.width;
     }
@@ -343,7 +343,7 @@
 }
 
 
-- (const GLfloat *)textureCoordinatesForRotation:(GPUPixel::RotationMode)rotationMode;
+- (const GLfloat *)textureCoordinatesForRotation:(gpupixel::RotationMode)rotationMode;
 {
     static const GLfloat noRotationTextureCoordinates[] = {
         0.0f, 1.0f,
@@ -403,14 +403,14 @@
     
     switch(inputRotation)
     {
-        case GPUPixel::NoRotation: return noRotationTextureCoordinates;
-        case GPUPixel::RotateLeft: return rotateLeftTextureCoordinates;
-        case GPUPixel::RotateRight: return rotateRightTextureCoordinates;
-        case GPUPixel::FlipVertical: return verticalFlipTextureCoordinates;
-        case GPUPixel::FlipHorizontal: return horizontalFlipTextureCoordinates;
-        case GPUPixel::RotateRightFlipVertical: return rotateRightVerticalFlipTextureCoordinates;
-        case GPUPixel::RotateRightFlipHorizontal: return rotateRightHorizontalFlipTextureCoordinates;
-        case GPUPixel::Rotate180: return rotate180TextureCoordinates;
+        case gpupixel::NoRotation: return noRotationTextureCoordinates;
+        case gpupixel::RotateLeft: return rotateLeftTextureCoordinates;
+        case gpupixel::RotateRight: return rotateRightTextureCoordinates;
+        case gpupixel::FlipVertical: return verticalFlipTextureCoordinates;
+        case gpupixel::FlipHorizontal: return horizontalFlipTextureCoordinates;
+        case gpupixel::RotateRightFlipVertical: return rotateRightVerticalFlipTextureCoordinates;
+        case gpupixel::RotateRightFlipHorizontal: return rotateRightHorizontalFlipTextureCoordinates;
+        case gpupixel::Rotate180: return rotate180TextureCoordinates;
     }
 }
 

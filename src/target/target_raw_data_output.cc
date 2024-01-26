@@ -56,7 +56,7 @@ TargetRawDataOutput::~TargetRawDataOutput() {
   }
   _yuvFrameBuffer = nullptr;
 
-  GPUPixel::GPUPixelContext::getInstance()->runSync([=] {
+  gpupixel::GPUPixelContext::getInstance()->runSync([=] {
 #if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
     if (_framebuffer) {
       CHECK_GL(glDeleteFramebuffers(1, &_framebuffer));

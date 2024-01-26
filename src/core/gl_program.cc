@@ -82,7 +82,7 @@ bool GLProgram::_initWithShaderString(const std::string& vertexShaderSource,
 #else
 
 #endif
-    GPUPixel::Util::Log(
+    gpupixel::Util::Log(
         "ERROR", "GL ERROR GLProgram::_initWithShaderString vertex shader %s",
         messages);
     return -1;
@@ -103,7 +103,7 @@ bool GLProgram::_initWithShaderString(const std::string& vertexShaderSource,
 #else
 
 #endif
-    GPUPixel::Util::Log(
+    gpupixel::Util::Log(
         "ERROR", "GL ERROR GLProgram::_initWithShaderString frag shader %s",
         messages);
     return -1;

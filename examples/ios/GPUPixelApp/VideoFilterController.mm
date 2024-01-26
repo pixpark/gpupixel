@@ -10,7 +10,7 @@
 #import "FaceDetector.h"
 #import <gpupixel/gpupixel.h>
 
-using namespace GPUPixel;
+using namespace gpupixel;
 
 @interface VideoFilterController () <VCVideoCapturerDelegate> {
   bool captureYuvFrame;
@@ -19,8 +19,8 @@ using namespace GPUPixel;
   std::shared_ptr<BeautyFaceFilter> beauty_face_filter_;
   std::shared_ptr<TargetRawDataOutput> targetRawOutput_;
   std::shared_ptr<FaceReshapeFilter> face_reshape_filter_;
-  std::shared_ptr<GPUPixel::FaceMakeupFilter> lipstick_filter_;
-  std::shared_ptr<GPUPixel::FaceMakeupFilter> blusher_filter_;
+  std::shared_ptr<gpupixel::FaceMakeupFilter> lipstick_filter_;
+  std::shared_ptr<gpupixel::FaceMakeupFilter> blusher_filter_;
 }
 
 //
@@ -141,7 +141,7 @@ using namespace GPUPixel;
 }
 
 -(void) initVideoFilter {
-  GPUPixel::GPUPixelContext::getInstance()->runSync([&] {
+  gpupixel::GPUPixelContext::getInstance()->runSync([&] {
     gpuPixelRawInput = SourceRawDataInput::create();
     gpuPixelView = [[GPUPixelView alloc] initWithFrame:self.view.frame];
     [self.view addSubview:gpuPixelView];
@@ -168,7 +168,7 @@ using namespace GPUPixel;
                     ->addTarget(beauty_face_filter_)
                     ->addTarget(gpuPixelView);
     [gpuPixelView setBackgroundColor:[UIColor grayColor]];
-    [gpuPixelView setFillMode:(GPUPixel::TargetView::PreserveAspectRatioAndFill)];
+    [gpuPixelView setFillMode:(gpupixel::TargetView::PreserveAspectRatioAndFill)];
   
   });
 }
