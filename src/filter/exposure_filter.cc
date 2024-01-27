@@ -9,14 +9,14 @@
 
 USING_NS_GPUPIXEL
 
-const std::string kExposureFragmentShaderString = SHADER_STRING(
+const std::string kExposureFragmentShaderString = R"(
     uniform sampler2D inputImageTexture; uniform lowp float exposure;
     varying highp vec2 textureCoordinate;
 
     void main() {
       lowp vec4 color = texture2D(inputImageTexture, textureCoordinate);
       gl_FragColor = vec4(color.rgb * pow(2.0, exposure), color.a);
-    });
+    })";
 
 std::shared_ptr<ExposureFilter> ExposureFilter::create() {
   auto ret = std::shared_ptr<ExposureFilter>(new ExposureFilter());

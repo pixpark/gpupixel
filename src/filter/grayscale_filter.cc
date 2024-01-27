@@ -10,7 +10,7 @@
 NS_GPUPIXEL_BEGIN
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
-const std::string kGrayscaleFragmentShaderString = SHADER_STRING(
+const std::string kGrayscaleFragmentShaderString = R"(
     precision highp float; uniform sampler2D inputImageTexture;
     varying highp vec2 textureCoordinate;
 
@@ -20,9 +20,9 @@ const std::string kGrayscaleFragmentShaderString = SHADER_STRING(
       lowp vec4 color = texture2D(inputImageTexture, textureCoordinate);
       float luminance = dot(color.rgb, vec3(0.2125, 0.7154, 0.0721));
       gl_FragColor = vec4(vec3(luminance), color.a);
-    });
+    })";
 #elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
-const std::string kGrayscaleFragmentShaderString = SHADER_STRING(
+const std::string kGrayscaleFragmentShaderString = R"(
     uniform sampler2D inputImageTexture; varying vec2 textureCoordinate;
 
     const vec3 W = vec3(0.2125, 0.7154, 0.0721);
@@ -31,7 +31,7 @@ const std::string kGrayscaleFragmentShaderString = SHADER_STRING(
       vec4 color = texture2D(inputImageTexture, textureCoordinate);
       float luminance = dot(color.rgb, vec3(0.2125, 0.7154, 0.0721));
       gl_FragColor = vec4(vec3(luminance), color.a);
-    });
+    })";
 #endif
 
 std::shared_ptr<GrayscaleFilter> GrayscaleFilter::create() {

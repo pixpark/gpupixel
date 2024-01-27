@@ -7,17 +7,17 @@
 
 #import "ViewController.h"
 #import "VideoCameraManager.h"
-#import <GPUPixelMac/GPUPixel.h>
+#import <gpupixel/gpupixel.h>
  
-using namespace GPUPixel;
+using namespace gpupixel;
 @interface ViewController() <GPUImageVideoCameraDelegate> {
   std::shared_ptr<SourceRawDataInput> gpuPixelRawInput;
   GPUPixelView *gpuPixelView;
   std::shared_ptr<BeautyFaceFilter> beauty_face_filter_;
   std::shared_ptr<TargetRawDataOutput> targetRawOutput_;
   std::shared_ptr<FaceReshapeFilter> face_reshape_filter_;
-  std::shared_ptr<GPUPixel::FaceMakeupFilter> lipstick_filter_;
-  std::shared_ptr<GPUPixel::FaceMakeupFilter> blusher_filter_;
+  std::shared_ptr<gpupixel::FaceMakeupFilter> lipstick_filter_;
+  std::shared_ptr<gpupixel::FaceMakeupFilter> blusher_filter_;
 }
 
 @property (weak) IBOutlet NSSlider *levelSlider;
@@ -91,18 +91,18 @@ using namespace GPUPixel;
 }
  
 -(void) initVideoFilter {
-  GPUPixel::GPUPixelContext::getInstance()->runSync([&] {
+  gpupixel::GPUPixelContext::getInstance()->runSync([&] {
     gpuPixelRawInput = SourceRawDataInput::create();
     gpuPixelView = [[GPUPixelView alloc] initWithFrame: self.view.frame];
     [self.view addSubview:gpuPixelView positioned:NSWindowBelow relativeTo:nil];
  
 #if 0 // todo
-    auto mouth = SourceImage::create("mouth.png");
+    auto mouth = SourceImage::create(Util::getResourcePath("mouth.png"));
     lipstick_filter_ = FaceMakeupFilter::create();
     lipstick_filter_->setImageTexture(mouth);
     lipstick_filter_->setTextureBounds(FrameBounds{502.5, 710, 262.5, 167.5});
 
-    auto blusher = SourceImage::create("blusher.png");
+    auto blusher = SourceImage::create(Util::getResourcePath("blusher.png"));
     blusher_filter_ = FaceMakeupFilter::create();
     blusher_filter_->setImageTexture(blusher);
     blusher_filter_->setTextureBounds(FrameBounds{395, 520, 489, 209});
@@ -110,14 +110,13 @@ using namespace GPUPixel;
     // create filter
     targetRawOutput_ = TargetRawDataOutput::create();
     beauty_face_filter_ = BeautyFaceFilter::create();
-    face_reshape_filter_ = FaceReshapeFilter::create();
+//    face_reshape_filter_ = FaceReshapeFilter::create();
     
     // filter pipline
     gpuPixelRawInput->addTarget(beauty_face_filter_)
-                    ->addTarget(face_reshape_filter_)
                     ->addTarget(gpuPixelView);
   
-    [gpuPixelView setFillMode:(GPUPixel::TargetView::PreserveAspectRatioAndFill)];
+    [gpuPixelView setFillMode:(gpupixel::TargetView::PreserveAspectRatioAndFill)];
   
   });
 }

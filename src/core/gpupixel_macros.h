@@ -67,8 +67,6 @@
 #define NS_GPUPIXEL_END }
 #define USING_NS_GPUPIXEL using namespace gpupixel;
 
-#define STRINGIZE(x) #x
-#define SHADER_STRING(text) STRINGIZE(text)
 
 // Pi
 #define PI 3.14159265358979323846264338327950288
@@ -98,8 +96,8 @@
         default:                                                               \
           break;                                                               \
       }                                                                        \
-      GPUPixel::Util::Log("ERROR", "GL ERROR 0x%04X %s in %s at line %i\n", e, \
-                          errorString.c_str(), __FUNCTION__, __LINE__);        \
+      gpupixel::Util::Log("ERROR", "GL ERROR 0x%04X %s in func:%s(), in file:%s, at line %i", e, \
+                          errorString.c_str(), __FUNCTION__, __FILE__, __LINE__);        \
     }                                                                          \
   }
 #else

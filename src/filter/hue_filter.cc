@@ -13,7 +13,7 @@ USING_NS_GPUPIXEL
 // Adapted from
 // http://stackoverflow.com/questions/9234724/how-to-change-hue-of-a-texture-with-glsl
 // - see for code and discussion
-const std::string kHueFragmentShaderString = SHADER_STRING(
+const std::string kHueFragmentShaderString = R"(
     precision highp float; uniform sampler2D inputImageTexture;
     uniform mediump float hueAdjustment;
     varying highp vec2 textureCoordinate;
@@ -52,7 +52,7 @@ const std::string kHueFragmentShaderString = SHADER_STRING(
 
       // Save the result
       gl_FragColor = color;
-    });
+    })";
 
 std::shared_ptr<HueFilter> HueFilter::create() {
   auto ret = std::shared_ptr<HueFilter>(new HueFilter());

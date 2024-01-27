@@ -9,7 +9,7 @@
 
 USING_NS_GPUPIXEL
 
-const std::string kSaturationFragmentShaderString = SHADER_STRING(
+const std::string kSaturationFragmentShaderString = R"(
     uniform sampler2D inputImageTexture; uniform lowp float saturation;
     varying highp vec2 textureCoordinate;
 
@@ -23,7 +23,7 @@ const std::string kSaturationFragmentShaderString = SHADER_STRING(
       lowp vec3 greyScaleColor = vec3(luminance);
 
       gl_FragColor = vec4(mix(greyScaleColor, color.rgb, saturation), color.a);
-    });
+    })";
 
 std::shared_ptr<SaturationFilter> SaturationFilter::create() {
   auto ret = std::shared_ptr<SaturationFilter>(new SaturationFilter());

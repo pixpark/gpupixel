@@ -16,30 +16,31 @@
 
 NS_GPUPIXEL_BEGIN
 
-const std::string kDefaultVertexShader = SHADER_STRING(
-    attribute vec4 position; attribute vec4 inputTextureCoordinate;
+const std::string kDefaultVertexShader = R"(
+    attribute vec4 position;
+    attribute vec4 inputTextureCoordinate;
 
     varying vec2 textureCoordinate;
 
     void main() {
       gl_Position = position;
       textureCoordinate = inputTextureCoordinate.xy;
-    });
+    })";
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
-const std::string kDefaultFragmentShader = SHADER_STRING(
+const std::string kDefaultFragmentShader = R"(
     varying highp vec2 textureCoordinate; uniform sampler2D inputImageTexture;
 
     void main() {
       gl_FragColor = texture2D(inputImageTexture, textureCoordinate);
-    });
+    })";
 #elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
-const std::string kDefaultFragmentShader = SHADER_STRING(
+const std::string kDefaultFragmentShader = R"(
     varying vec2 textureCoordinate; uniform sampler2D inputImageTexture;
 
     void main() {
       gl_FragColor = texture2D(inputImageTexture, textureCoordinate);
-    });
+    })";
 #endif
 
 class Filter : public Source, public Target {
