@@ -10,7 +10,7 @@
 NS_GPUPIXEL_BEGIN
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
-const std::string kColorMatrixFragmentShaderString = SHADER_STRING(
+const std::string kColorMatrixFragmentShaderString = R"(
     uniform sampler2D inputImageTexture; uniform lowp mat4 colorMatrix;
     uniform lowp float intensity;
 
@@ -22,9 +22,9 @@ const std::string kColorMatrixFragmentShaderString = SHADER_STRING(
 
       gl_FragColor =
           (intensity * outputColor) + ((1.0 - intensity) * textureColor);
-    });
+    })";
 #elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
-const std::string kColorMatrixFragmentShaderString = SHADER_STRING(
+const std::string kColorMatrixFragmentShaderString = R"(
     uniform sampler2D inputImageTexture; uniform mat4 colorMatrix;
     uniform float intensity;
 
@@ -36,7 +36,7 @@ const std::string kColorMatrixFragmentShaderString = SHADER_STRING(
 
       gl_FragColor =
           (intensity * outputColor) + ((1.0 - intensity) * textureColor);
-    });
+    })";
 #endif
 
 ColorMatrixFilter::ColorMatrixFilter()

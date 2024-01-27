@@ -11,25 +11,25 @@
 #include <cstring>
 USING_NS_GPUPIXEL
 
-const std::string kRGBToI420VertexShaderString = SHADER_STRING(
+const std::string kRGBToI420VertexShaderString = R"(
     attribute vec4 position; attribute vec4 inputTextureCoordinate;
     varying vec2 textureCoordinate;
 
     void main() {
       gl_Position = position;
       textureCoordinate = inputTextureCoordinate.xy;
-    });
+    })";
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
-const std::string kRGBToI420FragmentShaderString = SHADER_STRING(
+const std::string kRGBToI420FragmentShaderString = R"(
     varying mediump vec2 textureCoordinate; uniform sampler2D sTexture;
-    void main() { gl_FragColor = texture2D(sTexture, textureCoordinate); });
+    void main() { gl_FragColor = texture2D(sTexture, textureCoordinate); })";
 
 #elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
-const std::string kRGBToI420FragmentShaderString = SHADER_STRING(
+const std::string kRGBToI420FragmentShaderString = R"(
     varying vec2 textureCoordinate; uniform sampler2D sTexture;
 
-    void main() { gl_FragColor = texture2D(sTexture, textureCoordinate); });
+    void main() { gl_FragColor = texture2D(sTexture, textureCoordinate); })";
 #endif
 
 std::shared_ptr<TargetRawDataOutput> TargetRawDataOutput::create() {

@@ -39,11 +39,11 @@ INCLUDE_DIRECTORIES(
 	${CMAKE_CURRENT_SOURCE_DIR}/source
 	${CMAKE_CURRENT_SOURCE_DIR}/target
 	${CMAKE_CURRENT_SOURCE_DIR}/utils
-	${CMAKE_CURRENT_SOURCE_DIR}/third_party/libyuv/include
 	${CMAKE_CURRENT_SOURCE_DIR}/android/jni
 	${CMAKE_CURRENT_SOURCE_DIR}/target/objc
-	${CMAKE_CURRENT_SOURCE_DIR}/third_party/glfw-3.3.9/include
-	${CMAKE_CURRENT_SOURCE_DIR}/third_party/glew-2.1.0/include
+	${CMAKE_CURRENT_SOURCE_DIR}/third_party/glfw/include
+	${CMAKE_CURRENT_SOURCE_DIR}/third_party/stb
+	${CMAKE_CURRENT_SOURCE_DIR}/third_party/libyuv/include
 )
  
 IF(MY_DEBUG)
@@ -149,8 +149,13 @@ EXPORT_INCLUDE()
 IF(${CURRENT_OS} STREQUAL "linux")
 TARGET_LINK_LIBRARIES(
 					${PROJECT_NAME}  
-					${OPENGL_LIBRARIES}
-					GL
+					"-framework OpenGL 		\
+						-framework AppKit 		\
+						-framework QuartzCore  	\
+						-framework CoreVideo  	\
+						-framework CoreGraphics \
+						-framework AVFoundation \
+						-framework CoreMedia"
 					glfw)
 ELSEIF(${CURRENT_OS} STREQUAL "windows")
 TARGET_LINK_LIBRARIES(
@@ -182,6 +187,7 @@ ELSEIF(${CURRENT_OS} STREQUAL "android")
 TARGET_LINK_LIBRARIES(
 					${PROJECT_NAME}  
 					log
+					android
 					GLESv3
 					EGL
 					jnigraphics)

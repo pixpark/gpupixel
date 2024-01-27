@@ -10,7 +10,7 @@
 USING_NS_GPUPIXEL
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
-const std::string kCrosshatchFragmentShaderString = SHADER_STRING(
+const std::string kCrosshatchFragmentShaderString = R"(
     uniform sampler2D inputImageTexture; varying highp vec2 textureCoordinate;
     uniform highp float crossHatchSpacing;
     uniform highp float lineWidth;
@@ -50,9 +50,9 @@ const std::string kCrosshatchFragmentShaderString = SHADER_STRING(
       }
 
       gl_FragColor = colorToDisplay;
-    });
+    })";
 #elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
-const std::string kCrosshatchFragmentShaderString = SHADER_STRING(
+const std::string kCrosshatchFragmentShaderString = R"(
     uniform sampler2D inputImageTexture; varying vec2 textureCoordinate;
     uniform float crossHatchSpacing;
     uniform float lineWidth;
@@ -92,7 +92,7 @@ const std::string kCrosshatchFragmentShaderString = SHADER_STRING(
       }
 
       gl_FragColor = colorToDisplay;
-    });
+    })";
 #endif
 
 std::shared_ptr<CrosshatchFilter> CrosshatchFilter::create() {

@@ -11,17 +11,18 @@
 
 USING_NS_GPUPIXEL
 
-const std::string kI420VertexShaderString = SHADER_STRING(
-    attribute vec4 position; attribute vec4 inputTextureCoordinate;
+const std::string kI420VertexShaderString = R"(
+    attribute vec4 position; 
+    attribute vec4 inputTextureCoordinate;
     varying vec2 textureCoordinate;
 
     void main() {
       textureCoordinate = (inputTextureCoordinate).xy;
       gl_Position = position;
-    });
+    })";
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
-const std::string kI420FragmentShaderString = SHADER_STRING(
+const std::string kI420FragmentShaderString = R"(
     varying mediump vec2 textureCoordinate; uniform sampler2D yTexture;
     uniform sampler2D uTexture;
     uniform sampler2D vTexture;
@@ -43,9 +44,9 @@ const std::string kI420FragmentShaderString = SHADER_STRING(
       } else {
         gl_FragColor = texture2D(inputImageTexture, textureCoordinate);
       }
-    });
+    })";
 #elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
-const std::string kI420FragmentShaderString = SHADER_STRING(
+const std::string kI420FragmentShaderString = R"(
     varying vec2 textureCoordinate; uniform sampler2D yTexture;
     uniform sampler2D uTexture;
     uniform sampler2D vTexture;
@@ -66,7 +67,7 @@ const std::string kI420FragmentShaderString = SHADER_STRING(
       } else {
         gl_FragColor = texture2D(inputImageTexture, textureCoordinate);
       }
-    });
+    })";
 #endif
 
 std::shared_ptr<SourceRawDataInput> SourceRawDataInput::create() {
@@ -183,12 +184,12 @@ int SourceRawDataInput::genTextureWithI420(int width,
   const int widths[3] = {width, width / 2, width / 2};
   const int heights[3] = {height, height / 2, height / 2};
 
-  for (int i = 0; i < 3; ++i) {
-    glActiveTexture(GL_TEXTURE0 + i);
-    glBindTexture(GL_TEXTURE_2D, _textures[i]);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, widths[i], heights[i], 0,
-                 GL_LUMINANCE, GL_UNSIGNED_BYTE, pixels[i]);
-  }
+  // for (int i = 0; i < 3; ++i) {
+  //   glActiveTexture(GL_TEXTURE0 + i);
+  //   glBindTexture(GL_TEXTURE_2D, _textures[i]);
+  //   glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, widths[i], heights[i], 0,
+  //                GL_LUMINANCE, GL_UNSIGNED_BYTE, pixels[i]);
+  // }
   _filterProgram->setUniformValue("texture_type", 0);
   // draw frame buffer
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);

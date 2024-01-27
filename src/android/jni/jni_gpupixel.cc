@@ -48,7 +48,7 @@ extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeSourceImageSetImage(
   }
 
   if ((AndroidBitmap_lockPixels(env, bitmap, &pixels)) >= 0) {
-    ((SourceImage*)classId)->setImage(info.width, info.height, pixels);
+    ((SourceImage*)classId)->init(info.width, info.height, 4, (const unsigned char *)pixels);
   }
 
   AndroidBitmap_unlockPixels(env, bitmap);

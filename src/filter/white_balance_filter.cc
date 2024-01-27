@@ -11,7 +11,7 @@ USING_NS_GPUPIXEL
 
 REGISTER_FILTER_CLASS(WhiteBalanceFilter)
 
-const std::string kWhiteBalanceFragmentShaderString = SHADER_STRING(
+const std::string kWhiteBalanceFragmentShaderString = R"(
     uniform sampler2D inputImageTexture; uniform lowp float temperature;
     uniform lowp float tint;
     varying highp vec2 textureCoordinate;
@@ -41,7 +41,7 @@ const std::string kWhiteBalanceFragmentShaderString = SHADER_STRING(
                        : (1.0 - 2.0 * (1.0 - rgb.b) * (1.0 - warmFilter.b))));
 
       gl_FragColor = vec4(mix(rgb, processed, temperature), color.a);
-    });
+    })";
 
 std::shared_ptr<WhiteBalanceFilter> WhiteBalanceFilter::create() {
   auto ret = std::shared_ptr<WhiteBalanceFilter>(new WhiteBalanceFilter());

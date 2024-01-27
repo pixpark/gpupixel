@@ -9,7 +9,7 @@
 
 NS_GPUPIXEL_BEGIN
 
-const std::string kNearbySampling3x3SamplingVertexShaderString = SHADER_STRING(
+const std::string kNearbySampling3x3SamplingVertexShaderString = R"(
     attribute vec4 position; attribute vec4 inputTextureCoordinate;
 
     uniform float texelWidth;
@@ -46,7 +46,7 @@ const std::string kNearbySampling3x3SamplingVertexShaderString = SHADER_STRING(
       vBottomTexCoord = inputTextureCoordinate.xy + heightStep;
       vBottomLeftTexCoord = inputTextureCoordinate.xy - widthNegativeHeightStep;
       vBottomRightTexCoord = inputTextureCoordinate.xy + widthHeightStep;
-    });
+    })";
 
 bool NearbySampling3x3Filter::initWithFragmentShaderString(
     const std::string& fragmentShaderSource,

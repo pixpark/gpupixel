@@ -12,7 +12,7 @@ USING_NS_GPUPIXEL
 REGISTER_FILTER_CLASS(GlassSphereFilter)
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
-const std::string kGlassSphereFragmentShaderString = SHADER_STRING(
+const std::string kGlassSphereFragmentShaderString = R"(
 
     uniform sampler2D inputImageTexture; varying highp vec2 textureCoordinate;
 
@@ -62,9 +62,9 @@ const std::string kGlassSphereFragmentShaderString = SHADER_STRING(
       // finalSphereColor += vec3(0.8, 0.8, 0.8) * lightingIntensity;
 
       gl_FragColor = vec4(finalSphereColor, 1.0) * checkForPresenceWithinSphere;
-    });
+    })";
 #elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
-const std::string kGlassSphereFragmentShaderString = SHADER_STRING(
+const std::string kGlassSphereFragmentShaderString = R"(
 
     uniform sampler2D inputImageTexture; varying vec2 textureCoordinate;
 
@@ -113,7 +113,7 @@ const std::string kGlassSphereFragmentShaderString = SHADER_STRING(
       // finalSphereColor += vec3(0.8, 0.8, 0.8) * lightingIntensity;
 
       gl_FragColor = vec4(finalSphereColor, 1.0) * checkForPresenceWithinSphere;
-    });
+    })";
 
 #endif
 

@@ -13,7 +13,7 @@ REGISTER_FILTER_CLASS(DirectionalNonMaximumSuppressionFilter)
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
 const std::string kDirectionalNonmaximumSuppressionFragmentShaderString =
-    SHADER_STRING(
+    R"(
         precision mediump float;
 
         uniform sampler2D inputImageTexture;
@@ -50,10 +50,10 @@ const std::string kDirectionalNonmaximumSuppressionFragmentShaderString =
           multiplier = multiplier * thresholdCompliance;
 
           gl_FragColor = vec4(multiplier, multiplier, multiplier, 1.0);
-        });
+        })";
 #elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
 const std::string kDirectionalNonmaximumSuppressionFragmentShaderString =
-    SHADER_STRING(
+    R"(
         uniform sampler2D inputImageTexture; uniform float texelWidth;
         uniform float texelHeight;
         uniform float upperThreshold;
@@ -87,7 +87,7 @@ const std::string kDirectionalNonmaximumSuppressionFragmentShaderString =
           multiplier = multiplier * thresholdCompliance;
 
           gl_FragColor = vec4(multiplier, multiplier, multiplier, 1.0);
-        });
+        })";
 #endif
 
 std::shared_ptr<DirectionalNonMaximumSuppressionFilter>

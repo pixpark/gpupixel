@@ -11,7 +11,7 @@ USING_NS_GPUPIXEL
 
 REGISTER_FILTER_CLASS(ToonFilter)
 
-const std::string kToonFragmentShaderString = SHADER_STRING(
+const std::string kToonFragmentShaderString = R"(
     precision mediump float; uniform sampler2D inputImageTexture;
     uniform float threshold;
     uniform float quantizationLevels;
@@ -55,7 +55,7 @@ const std::string kToonFragmentShaderString = SHADER_STRING(
       float thresholdTest = 1.0 - step(threshold, mag);
 
       gl_FragColor = vec4(posterizedImageColor * thresholdTest, color.a);
-    });
+    })";
 
 std::shared_ptr<ToonFilter> ToonFilter::create() {
   auto ret = std::shared_ptr<ToonFilter>(new ToonFilter());

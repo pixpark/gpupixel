@@ -37,7 +37,6 @@ using namespace gpupixel;
 @property(nonatomic, assign) Boolean needSetupFaceDetector;
 
 //
-@property (strong, nonatomic) UIButton* cameraSwitchBtn;
 @property (strong, nonatomic) UISegmentedControl* segment;
 @property (strong, nonatomic) UISegmentedControl* effectSwitch;
 @property (strong, nonatomic) UISlider *slider;
@@ -54,8 +53,10 @@ using namespace gpupixel;
   // init video filter
   [self initVideoFilter];
   [self initUI];
-  
-  UIImage *image = [UIImage imageNamed:@"SampleImage"];
+ 
+  NSString *imagePath = [[NSBundle mainBundle] pathForResource:@"sample_face" ofType:@"jpg"];
+  UIImage *image = [UIImage imageWithContentsOfFile:imagePath];
+ 
   sampleImageBuffer = [self uiImageToCMSampleBuffer:image];
   self.needSetupFaceDetector = TRUE;
   
@@ -77,7 +78,6 @@ using namespace gpupixel;
   [self.view addSubview:self.segment];
   [self.view addSubview:self.effectSwitch];
   
-  [self.view addSubview:self.cameraSwitchBtn];
  
   self.slider = [[UISlider alloc] initWithFrame:CGRectMake(10,
                                                                 self.view.frame.size.height - 120,
@@ -117,21 +117,22 @@ using namespace gpupixel;
     gpuPixelView = [[GPUPixelView alloc] initWithFrame:self.view.frame];
     [self.view addSubview:gpuPixelView];
     
- 
-    auto mouth = SourceImage::create("mouth.png");
+    auto mouth = SourceImage::create(Util::getResourcePath("mouth.png"));
     lipstick_filter_ = FaceMakeupFilter::create();
     lipstick_filter_->setImageTexture(mouth);
     lipstick_filter_->setTextureBounds(FrameBounds{502.5, 710, 262.5, 167.5});
 
-    auto blusher = SourceImage::create("blusher.png");
+    auto blusher = SourceImage::create(Util::getResourcePath("blusher.png"));
     blusher_filter_ = FaceMakeupFilter::create();
     blusher_filter_->setImageTexture(blusher);
     blusher_filter_->setTextureBounds(FrameBounds{395, 520, 489, 209});
- 
+
     beauty_face_filter_ = BeautyFaceFilter::create();
     face_reshape_filter_ = FaceReshapeFilter::create();
- 
-    gpuSourceImage = SourceImage::create([UIImage imageNamed:@"SampleImage"]);
+    
+    NSString *imagePath = [[NSBundle mainBundle] pathForResource:@"sample_face" ofType:@"jpg"];
+
+    gpuSourceImage = SourceImage::create([imagePath UTF8String]);
     
     // filter pipline
     gpuSourceImage->addTarget(lipstick_filter_)
@@ -139,6 +140,7 @@ using namespace gpupixel;
                     ->addTarget(face_reshape_filter_)
                     ->addTarget(beauty_face_filter_)
                     ->addTarget(gpuPixelView);
+ 
     [gpuPixelView setBackgroundColor:[UIColor grayColor]];
     [gpuPixelView setFillMode:(gpupixel::TargetView::PreserveAspectRatioAndFill)];
   

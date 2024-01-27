@@ -10,7 +10,7 @@
 NS_GPUPIXEL_BEGIN
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
-const std::string kConvolution3x3FragmentShaderString = SHADER_STRING(
+const std::string kConvolution3x3FragmentShaderString = R"(
     precision highp float; uniform sampler2D inputImageTexture;
     uniform mediump mat3 convolutionMatrix;
 
@@ -53,9 +53,9 @@ const std::string kConvolution3x3FragmentShaderString = SHADER_STRING(
                      bottomRightColor * convolutionMatrix[2][2];
 
       gl_FragColor = vec4(resultColor, centerColor.a);
-    });
+    })";
 #elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
-const std::string kConvolution3x3FragmentShaderString = SHADER_STRING(
+const std::string kConvolution3x3FragmentShaderString = R"(
     precision float; uniform sampler2D inputImageTexture;
     uniform mat3 convolutionMatrix;
 
@@ -93,7 +93,7 @@ const std::string kConvolution3x3FragmentShaderString = SHADER_STRING(
                      bottomRightColor * convolutionMatrix[2][2];
 
       gl_FragColor = vec4(resultColor, centerColor.a);
-    });
+    })";
 #endif
 
 bool Convolution3x3Filter::init() {

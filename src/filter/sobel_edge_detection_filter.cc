@@ -13,7 +13,7 @@ REGISTER_FILTER_CLASS(SobelEdgeDetectionFilter)
 
 //   Code from "Graphics Shaders: Theory and Practice" by M. Bailey and S.
 //   Cunningham
-const std::string kSobelEdgeDetectionFragmentShaderString = SHADER_STRING(
+const std::string kSobelEdgeDetectionFragmentShaderString = R"(
     precision mediump float; uniform sampler2D inputImageTexture;
     uniform float edgeStrength;
 
@@ -49,7 +49,7 @@ const std::string kSobelEdgeDetectionFragmentShaderString = SHADER_STRING(
 
       float mag = length(vec2(h, v)) * edgeStrength;
       gl_FragColor = vec4(vec3(mag), 1.0);
-    });
+    })";
 
 SobelEdgeDetectionFilter::SobelEdgeDetectionFilter()
     : _grayscaleFilter(0), _sobelEdgeDetectionFilter(0) {}

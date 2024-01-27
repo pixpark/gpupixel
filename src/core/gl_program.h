@@ -8,7 +8,8 @@
 #pragma once
 
 #include "gpupixel_macros.h"
-#include "string"
+
+
 #if defined(GPUPIXEL_ANDROID)
 #include <GLES3/gl3.h>
 #include <GLES3/gl3ext.h>
@@ -16,20 +17,17 @@
 #import <OpenGLES/ES3/gl.h>
 #import <OpenGLES/ES3/glext.h>
 #elif defined(GPUPIXEL_MAC)
-#import <AppKit/NSOpenGL.h>
 #import <OpenGL/gl3.h>
-#elif defined(GPUPIXEL_WIN)
-#define GLEW_STATIC
-  #include <GL/glew.h>
-  #include <GLFW/glfw3.h>
-#include <windows.h>
-#elif defined(GPUPIXEL_LINUX)
-#define GL_GLEXT_PROTOTYPES
-#define GLEW_STATIC
+#elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
+  #define GL_GLEXT_PROTOTYPES
+  #define GLEW_STATIC
+  #define GLFW_INCLUDE_GLCOREARB
   #include <GLFW/glfw3.h>
 #endif
-#include <vector>
+
 #include "math_toolbox.h"
+#include <vector>
+#include <string>
 
 NS_GPUPIXEL_BEGIN
 

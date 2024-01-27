@@ -21,13 +21,13 @@
 #endif
 
 #if defined(GPUPIXEL_MAC)
-  #import <AppKit/NSOpenGL.h>
-  #import <CoreMedia/CoreMedia.h>
-  #import <OpenGL/gl.h>
-  #import <QuartzCore/QuartzCore.h>
-#elif defined(GPUPIXEL_LINUX)
+//  #import <CoreMedia/CoreMedia.h>
+  #import <OpenGL/gl3.h>
+//  #import <QuartzCore/QuartzCore.h>
+#elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
   #define GL_GLEXT_PROTOTYPES
   #define GLEW_STATIC
+  #define GLFW_INCLUDE_GLCOREARB
   #include <GLFW/glfw3.h>
 #endif
 
@@ -46,12 +46,7 @@
     EGLContext eglcontext;
   } _gpu_context_t;
 #endif
-
-#if defined(GPUPIXEL_WIN)
-#define GLEW_STATIC
-  #include <GL/glew.h>
-  #include <GLFW/glfw3.h>
-#endif
+ 
  
 NS_GPUPIXEL_BEGIN
 
@@ -61,32 +56,23 @@ class GPUPixelContext {
   static void destroy();
 
   FramebufferCache* getFramebufferCache() const;
+  //todo(zhaoyou)
   void setActiveShaderProgram(GLProgram* shaderProgram);
   void purge();
-
 
   void runSync(std::function<void(void)> func);
   void runAsync(std::function<void(void)> func);
   void useAsCurrent(void);
-#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
   void presentBufferForDisplay();
-#endif
-
+ 
 #if defined(GPUPIXEL_IOS)
   EAGLContext* getEglContext() const { return _eglContext; };
-#endif
-  
-#if defined(GPUPIXEL_MAC)
+#elif defined(GPUPIXEL_MAC)
   NSOpenGLContext* getOpenGLContext() const { return imageProcessingContext; };
-#endif
-  
-#if defined(GPUPIXEL_WIN)
+#elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
   GLFWwindow* getShareContext() const { return _wglShareContext; };
 #endif
-  
-#if defined(GPUPIXEL_ANDROID)
-
-#endif
+ 
 
   // used for capturing a processed frame data
   bool isCapturingFrame;
@@ -101,40 +87,29 @@ class GPUPixelContext {
 
   void init();
 
-#if defined(GPUPIXEL_ANDROID) || (defined GPUPIXEL_WIN)
   void createContext();
   void releaseContext();
-#endif
  private:
   static GPUPixelContext* _instance;
   static std::mutex _mutex;
   FramebufferCache* _framebufferCache;
   GLProgram* _curShaderProgram;
-
+  std::shared_ptr<LocalDispatchQueue> task_queue_;
   
 #if defined(GPUPIXEL_ANDROID)
   bool context_inited = false;
-#endif
-
-#if defined(GPUPIXEL_IOS)
-  EAGLContext* _eglContext;
-#endif
-  
-#if defined(GPUPIXEL_MAC)
-  NSOpenGLContext* imageProcessingContext;
-  NSOpenGLPixelFormat* _pixelFormat;
-#endif
-  
-#if defined(GPUPIXEL_ANDROID)
   int m_surfacewidth;
   int m_surfaceheight;
   _gpu_context_t* m_gpu_context;
-#endif
-  
-#if defined(GPUPIXEL_WIN)
+#elif defined(GPUPIXEL_IOS)
+  EAGLContext* _eglContext;
+#elif defined(GPUPIXEL_MAC)
+  NSOpenGLContext* imageProcessingContext;
+  NSOpenGLPixelFormat* _pixelFormat;
+#elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
   GLFWwindow* _wglShareContext = nullptr;
 #endif
- std::shared_ptr<LocalDispatchQueue> task_queue_;
+
 };
 
 NS_GPUPIXEL_END

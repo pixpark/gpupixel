@@ -12,7 +12,7 @@ USING_NS_GPUPIXEL
 REGISTER_FILTER_CLASS(PosterizeFilter)
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
-const std::string kPosterizeFragmentShaderString = SHADER_STRING(
+const std::string kPosterizeFragmentShaderString = R"(
     uniform sampler2D inputImageTexture; uniform highp float colorLevels;
     varying highp vec2 textureCoordinate;
 
@@ -20,9 +20,9 @@ const std::string kPosterizeFragmentShaderString = SHADER_STRING(
       lowp vec4 color = texture2D(inputImageTexture, textureCoordinate);
 
       gl_FragColor = floor((color * colorLevels) + vec4(0.5)) / colorLevels;
-    });
+    })";
 #elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
-const std::string kPosterizeFragmentShaderString = SHADER_STRING(
+const std::string kPosterizeFragmentShaderString = R"(
     uniform sampler2D inputImageTexture; uniform float colorLevels;
     varying vec2 textureCoordinate;
 
@@ -30,7 +30,7 @@ const std::string kPosterizeFragmentShaderString = SHADER_STRING(
       vec4 color = texture2D(inputImageTexture, textureCoordinate);
 
       gl_FragColor = floor((color * colorLevels) + vec4(0.5)) / colorLevels;
-    });
+    })";
 #endif
 
 std::shared_ptr<PosterizeFilter> PosterizeFilter::create() {

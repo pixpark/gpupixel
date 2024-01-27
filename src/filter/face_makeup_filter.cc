@@ -11,7 +11,7 @@
 
 NS_GPUPIXEL_BEGIN
 
-const std::string FaceMakeupFilterVertexShaderString = SHADER_STRING(
+const std::string FaceMakeupFilterVertexShaderString = R"(
     attribute vec3 position; attribute vec2 inputTextureCoordinate;
     varying vec2 textureCoordinate;
     varying vec2 textureCoordinate2;
@@ -20,9 +20,9 @@ const std::string FaceMakeupFilterVertexShaderString = SHADER_STRING(
       gl_Position = vec4(position, 1.);
       textureCoordinate = inputTextureCoordinate;
       textureCoordinate2 = position.xy * 0.5 + 0.5;  // landmark
-    });
+    })";
 
-const std::string FaceMakeupFilterFragmentShaderString = SHADER_STRING(
+const std::string FaceMakeupFilterFragmentShaderString = R"(
     precision mediump float; varying highp vec2 textureCoordinate;
     varying highp vec2 textureCoordinate2;
     uniform sampler2D inputImageTexture;
@@ -89,7 +89,7 @@ const std::string FaceMakeupFilterFragmentShaderString = SHADER_STRING(
       //    color = color * intensity;
       gl_FragColor =
           vec4(bgColor.rgb * (1.0 - fgColor.a) + color.rgb * fgColor.a, 1.0);
-    });
+    })";
 
 FaceMakeupFilter::FaceMakeupFilter() {}
 
