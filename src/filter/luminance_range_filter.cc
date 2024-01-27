@@ -10,7 +10,7 @@
 USING_NS_GPUPIXEL
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
-const std::string kLuminanceRangeFragmentShaderString = SHADER_STRING(
+const std::string kLuminanceRangeFragmentShaderString = R"(
     uniform sampler2D inputImageTexture;
     uniform lowp float rangeReductionFactor;
     varying highp vec2 textureCoordinate;
@@ -24,9 +24,9 @@ const std::string kLuminanceRangeFragmentShaderString = SHADER_STRING(
       mediump float luminance = dot(color.rgb, luminanceWeighting);
       mediump float luminanceRatio = ((0.5 - luminance) * rangeReductionFactor);
       gl_FragColor = vec4((color.rgb) + (luminanceRatio), color.a);
-    });
+    })";
 #elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
-const std::string kLuminanceRangeFragmentShaderString = SHADER_STRING(
+const std::string kLuminanceRangeFragmentShaderString = R"(
     uniform sampler2D inputImageTexture; uniform float rangeReductionFactor;
     varying vec2 textureCoordinate;
 
@@ -39,7 +39,7 @@ const std::string kLuminanceRangeFragmentShaderString = SHADER_STRING(
       float luminance = dot(color.rgb, luminanceWeighting);
       float luminanceRatio = ((0.5 - luminance) * rangeReductionFactor);
       gl_FragColor = vec4((color.rgb) + (luminanceRatio), color.a);
-    });
+    })";
 #endif
 
 std::shared_ptr<LuminanceRangeFilter> LuminanceRangeFilter::create() {

@@ -11,7 +11,7 @@ NS_GPUPIXEL_BEGIN
 
 REGISTER_FILTER_CLASS(BilateralMonoFilter)
 
-const std::string kBilateralBlurVertexShaderString = SHADER_STRING(
+const std::string kBilateralBlurVertexShaderString = R"(
     attribute vec4 position; attribute vec4 inputTextureCoordinate;
 
     const int GAUSSIAN_SAMPLES = 9;
@@ -29,10 +29,10 @@ const std::string kBilateralBlurVertexShaderString = SHADER_STRING(
             inputTextureCoordinate.xy +
             texelSpacing * float((i - ((GAUSSIAN_SAMPLES - 1) / 2)));
       }
-    });
+    })";
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
-const std::string kBilateralBlurFragmentShaderString = SHADER_STRING(
+const std::string kBilateralBlurFragmentShaderString = R"(
     uniform sampler2D inputImageTexture;
 
     const lowp int GAUSSIAN_SAMPLES = 9;
@@ -118,9 +118,9 @@ const std::string kBilateralBlurFragmentShaderString = SHADER_STRING(
       sum += sampleColor * gaussianWeight;
 
       gl_FragColor = sum / gaussianWeightTotal;
-    });
+    })";
 #elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
-const std::string kBilateralBlurFragmentShaderString = SHADER_STRING(
+const std::string kBilateralBlurFragmentShaderString = R"(
     uniform sampler2D inputImageTexture;
 
     const int GAUSSIAN_SAMPLES = 9;
@@ -206,7 +206,7 @@ const std::string kBilateralBlurFragmentShaderString = SHADER_STRING(
       sum += sampleColor * gaussianWeight;
 
       gl_FragColor = sum / gaussianWeightTotal;
-    });
+    })";
 #endif
 BilateralMonoFilter::BilateralMonoFilter(Type type)
     : _type(type),

@@ -152,6 +152,8 @@ void Util::Log(const std::string& tag, const std::string& format, ...) {
   __android_log_print(ANDROID_LOG_INFO, tag.c_str(), "%s", buffer);
 #elif defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
   NSLog(@"%s", buffer);
+#elif defined(GPUPIXEL_LINUX)
+ printf("%s\n", buffer);
 #endif
 }
 

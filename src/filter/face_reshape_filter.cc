@@ -10,8 +10,7 @@
 
 NS_GPUPIXEL_BEGIN
 
-const std::string kGPUPixelThinFaceFragmentShaderString = SHADER_STRING
-(
+const std::string kGPUPixelThinFaceFragmentShaderString = R"(
  precision highp float;
  varying highp vec2 textureCoordinate;
  uniform sampler2D inputImageTexture;
@@ -108,7 +107,7 @@ const std::string kGPUPixelThinFaceFragmentShaderString = SHADER_STRING
      gl_FragColor = texture2D(inputImageTexture, positionToUse);
 
  }
- );
+ )";
 
 FaceReshapeFilter::FaceReshapeFilter() {}
 

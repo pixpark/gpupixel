@@ -11,7 +11,7 @@ USING_NS_GPUPIXEL
 
 REGISTER_FILTER_CLASS(PixellationFilter)
 
-const std::string kPixellationFragmentShaderString = SHADER_STRING(
+const std::string kPixellationFragmentShaderString = R"(
     uniform highp float pixelSize; uniform highp float aspectRatio;
 
     uniform sampler2D inputImageTexture;
@@ -23,7 +23,7 @@ const std::string kPixellationFragmentShaderString = SHADER_STRING(
           floor(textureCoordinate / pixelSizeVec) * pixelSizeVec +
           0.5 * pixelSizeVec;
       gl_FragColor = texture2D(inputImageTexture, samplePos);
-    });
+    })";
 
 std::shared_ptr<PixellationFilter> PixellationFilter::create() {
   auto ret = std::shared_ptr<PixellationFilter>(new PixellationFilter());

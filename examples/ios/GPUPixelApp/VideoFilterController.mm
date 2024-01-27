@@ -146,12 +146,12 @@ using namespace gpupixel;
     gpuPixelView = [[GPUPixelView alloc] initWithFrame:self.view.frame];
     [self.view addSubview:gpuPixelView];
  
-    auto mouth = SourceImage::create("mouth.png");
+    auto mouth = SourceImage::create(Util::getResourcePath("mouth.png"));
     lipstick_filter_ = FaceMakeupFilter::create();
     lipstick_filter_->setImageTexture(mouth);
     lipstick_filter_->setTextureBounds(FrameBounds{502.5, 710, 262.5, 167.5});
 
-    auto blusher = SourceImage::create("blusher.png");
+    auto blusher = SourceImage::create(Util::getResourcePath("blusher.png"));
     blusher_filter_ = FaceMakeupFilter::create();
     blusher_filter_->setImageTexture(blusher);
     blusher_filter_->setTextureBounds(FrameBounds{395, 520, 489, 209});

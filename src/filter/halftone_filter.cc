@@ -10,7 +10,7 @@
 USING_NS_GPUPIXEL
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
-const std::string kHalftoneFragmentShaderString = SHADER_STRING(
+const std::string kHalftoneFragmentShaderString = R"(
     uniform highp float pixelSize; uniform highp float aspectRatio;
 
     uniform sampler2D inputImageTexture;
@@ -38,9 +38,9 @@ const std::string kHalftoneFragmentShaderString = SHADER_STRING(
           1.0 - step(distanceFromSamplePoint, (pixelSize * 0.5) * dotScaling);
 
       gl_FragColor = vec4(vec3(checkForPresenceWithinDot), 1.0);
-    });
+    })";
 #elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
-const std::string kHalftoneFragmentShaderString = SHADER_STRING(
+const std::string kHalftoneFragmentShaderString = R"(
     uniform float pixelSize; uniform float aspectRatio;
 
     uniform sampler2D inputImageTexture;
@@ -67,7 +67,7 @@ const std::string kHalftoneFragmentShaderString = SHADER_STRING(
           1.0 - step(distanceFromSamplePoint, (pixelSize * 0.5) * dotScaling);
 
       gl_FragColor = vec4(vec3(checkForPresenceWithinDot), 1.0);
-    });
+    })";
 #endif
 
 std::shared_ptr<HalftoneFilter> HalftoneFilter::create() {

@@ -10,7 +10,7 @@
 USING_NS_GPUPIXEL
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
-const std::string kSphereRefractionShaderString = SHADER_STRING(
+const std::string kSphereRefractionShaderString = R"(
 
     uniform sampler2D inputImageTexture; uniform highp vec2 center;
     uniform highp float radius;
@@ -42,9 +42,9 @@ const std::string kSphereRefractionShaderString = SHADER_STRING(
           checkForPresenceWithinSphere;
     }
 
-);
+)";
 #elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
-const std::string kSphereRefractionShaderString = SHADER_STRING(
+const std::string kSphereRefractionShaderString = R"(
 
     uniform sampler2D inputImageTexture; uniform vec2 center;
     uniform float radius;
@@ -75,7 +75,7 @@ const std::string kSphereRefractionShaderString = SHADER_STRING(
           checkForPresenceWithinSphere;
     }
 
-);
+)";
 #endif
 
 std::shared_ptr<SphereRefractionFilter> SphereRefractionFilter::create() {
