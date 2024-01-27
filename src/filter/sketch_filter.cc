@@ -11,7 +11,7 @@ NS_GPUPIXEL_BEGIN
 
 REGISTER_FILTER_CLASS(SketchFilter)
 
-const std::string kSketchFilterFragmentShaderString = SHADER_STRING(
+const std::string kSketchFilterFragmentShaderString = R"(
     precision mediump float; uniform sampler2D inputImageTexture;
     uniform float edgeStrength;
 
@@ -47,7 +47,7 @@ const std::string kSketchFilterFragmentShaderString = SHADER_STRING(
 
       float mag = 1.0 - length(vec2(h, v)) * edgeStrength;
       gl_FragColor = vec4(vec3(mag), 1.0);
-    });
+    })";
 
 SketchFilter::SketchFilter() : _grayscaleFilter(0), _sketchFilter(0) {}
 

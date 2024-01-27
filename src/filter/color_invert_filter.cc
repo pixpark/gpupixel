@@ -11,14 +11,14 @@ NS_GPUPIXEL_BEGIN
 
 REGISTER_FILTER_CLASS(ColorInvertFilter)
 
-const std::string kColorInvertFragmentShaderString = SHADER_STRING(
+const std::string kColorInvertFragmentShaderString = R"(
 
     uniform sampler2D inputImageTexture; varying highp vec2 textureCoordinate;
 
     void main() {
       lowp vec4 color = texture2D(inputImageTexture, textureCoordinate);
       gl_FragColor = vec4((1.0 - color.rgb), color.a);
-    });
+    })";
 
 std::shared_ptr<ColorInvertFilter> ColorInvertFilter::create() {
   auto ret = std::shared_ptr<ColorInvertFilter>(new ColorInvertFilter());

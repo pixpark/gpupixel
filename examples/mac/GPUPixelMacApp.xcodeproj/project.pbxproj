@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		840303612B5C148F001A8B3C /* GPUPixelMac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8403035D2B5C147E001A8B3C /* GPUPixelMac.framework */; };
-		840303622B5C148F001A8B3C /* GPUPixelMac.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8403035D2B5C147E001A8B3C /* GPUPixelMac.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		84278A002B64959200455587 /* gpupixel.framework/gpupixel in Frameworks */ = {isa = PBXBuildFile; fileRef = 842789FC2B64957F00455587 /* gpupixel.framework/gpupixel */; };
+		84278A012B64959200455587 /* gpupixel.framework/gpupixel in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 842789FC2B64957F00455587 /* gpupixel.framework/gpupixel */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		84AE136B26FCBCAA00E215AE /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84AE136A26FCBCAA00E215AE /* AVFoundation.framework */; };
 		84AE137526FCBCDA00E215AE /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84AE137426FCBCDA00E215AE /* CoreMedia.framework */; };
 		84AE137A26FCBCFA00E215AE /* VideoCameraManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84AE137926FCBCFA00E215AE /* VideoCameraManager.mm */; };
@@ -22,26 +22,19 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		8403035A2B5C147E001A8B3C /* PBXContainerItemProxy */ = {
+		842789FB2B64957F00455587 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 840303552B5C147E001A8B3C /* GPUPixel.xcodeproj */;
+			containerPortal = 842789F52B64957F00455587 /* gpupixel.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 8472446A2A600DAF009D1488;
-			remoteInfo = GPUPixel;
+			remoteGlobalIDString = 4DF48C071B714EFAB3772EFC;
+			remoteInfo = gpupixel;
 		};
-		8403035C2B5C147E001A8B3C /* PBXContainerItemProxy */ = {
+		842789FD2B64958800455587 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 840303552B5C147E001A8B3C /* GPUPixel.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 8492E75F2A6197640035AA09;
-			remoteInfo = "GPUPixel-Mac";
-		};
-		8403035E2B5C1486001A8B3C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 840303552B5C147E001A8B3C /* GPUPixel.xcodeproj */;
+			containerPortal = 842789F52B64957F00455587 /* gpupixel.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 8492E6C92A6197640035AA09;
-			remoteInfo = "GPUPixel-Mac";
+			remoteGlobalIDString = AFCBAF2D19354B2EBFF9853F;
+			remoteInfo = gpupixel;
 		};
 		84C0F7C026FCBA8D004E1FD6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -66,7 +59,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				840303622B5C148F001A8B3C /* GPUPixelMac.framework in Embed Frameworks */,
+				84278A012B64959200455587 /* gpupixel.framework/gpupixel in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -74,8 +67,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		840303552B5C147E001A8B3C /* GPUPixel.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GPUPixel.xcodeproj; path = ../GPUPixel.xcodeproj; sourceTree = "<group>"; };
 		840303632B5C2737001A8B3C /* VideoCameraManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoCameraManager.h; sourceTree = "<group>"; };
+		842789F52B64957F00455587 /* gpupixel.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = gpupixel.xcodeproj; path = ../../src/build/gpupixel.xcodeproj; sourceTree = "<group>"; };
 		84AE136A26FCBCAA00E215AE /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		84AE136F26FCBCBB00E215AE /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		84AE137426FCBCDA00E215AE /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
@@ -104,7 +97,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				840303612B5C148F001A8B3C /* GPUPixelMac.framework in Frameworks */,
+				84278A002B64959200455587 /* gpupixel.framework/gpupixel in Frameworks */,
 				84AE137526FCBCDA00E215AE /* CoreMedia.framework in Frameworks */,
 				84AE136B26FCBCAA00E215AE /* AVFoundation.framework in Frameworks */,
 			);
@@ -127,11 +120,10 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		840303562B5C147E001A8B3C /* Products */ = {
+		842789F62B64957F00455587 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8403035B2B5C147E001A8B3C /* GPUPixel.framework */,
-				8403035D2B5C147E001A8B3C /* GPUPixelMac.framework */,
+				842789FC2B64957F00455587 /* gpupixel.framework/gpupixel */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -150,7 +142,7 @@
 		84C0F7A026FCBA8C004E1FD6 = {
 			isa = PBXGroup;
 			children = (
-				840303552B5C147E001A8B3C /* GPUPixel.xcodeproj */,
+				842789F52B64957F00455587 /* gpupixel.xcodeproj */,
 				84C0F7AB26FCBA8C004E1FD6 /* GPUPixelMacApp */,
 				84C0F7C226FCBA8D004E1FD6 /* GPUPixelMacAppTests */,
 				84C0F7CD26FCBA8D004E1FD6 /* GPUPixelMacAppUITests */,
@@ -220,7 +212,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				8403035F2B5C1486001A8B3C /* PBXTargetDependency */,
+				842789FE2B64958800455587 /* PBXTargetDependency */,
 			);
 			name = GPUPixelMacApp;
 			productName = SimpleVideoFilter;
@@ -297,8 +289,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 840303562B5C147E001A8B3C /* Products */;
-					ProjectRef = 840303552B5C147E001A8B3C /* GPUPixel.xcodeproj */;
+					ProductGroup = 842789F62B64957F00455587 /* Products */;
+					ProjectRef = 842789F52B64957F00455587 /* gpupixel.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -311,18 +303,12 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		8403035B2B5C147E001A8B3C /* GPUPixel.framework */ = {
+		842789FC2B64957F00455587 /* gpupixel.framework/gpupixel */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
-			path = GPUPixel.framework;
-			remoteRef = 8403035A2B5C147E001A8B3C /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		8403035D2B5C147E001A8B3C /* GPUPixelMac.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = GPUPixelMac.framework;
-			remoteRef = 8403035C2B5C147E001A8B3C /* PBXContainerItemProxy */;
+			name = gpupixel.framework/gpupixel;
+			path = gpupixel.framework;
+			remoteRef = 842789FB2B64957F00455587 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -384,10 +370,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		8403035F2B5C1486001A8B3C /* PBXTargetDependency */ = {
+		842789FE2B64958800455587 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = "GPUPixel-Mac";
-			targetProxy = 8403035E2B5C1486001A8B3C /* PBXContainerItemProxy */;
+			name = gpupixel;
+			targetProxy = 842789FD2B64958800455587 /* PBXContainerItemProxy */;
 		};
 		84C0F7C126FCBA8D004E1FD6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -538,6 +524,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/GPUPixelMacApp",
+					"$(PROJECT_DIR)/../../output/library/macos/debug",
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -568,6 +555,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/GPUPixelMacApp",
+					"$(PROJECT_DIR)/../../output/library/macos/debug",
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = "";
 				INFOPLIST_FILE = GPUPixelMacApp/Info.plist;

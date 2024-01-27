@@ -12,7 +12,7 @@ NS_GPUPIXEL_BEGIN
 REGISTER_FILTER_CLASS(WeakPixelInclusionFilter)
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
-const std::string kWeakPixelInclusionFragmentShaderString = SHADER_STRING(
+const std::string kWeakPixelInclusionFragmentShaderString = R"(
     precision mediump float; uniform sampler2D inputImageTexture;
 
     varying vec2 textureCoordinate;
@@ -49,9 +49,9 @@ const std::string kWeakPixelInclusionFragmentShaderString = SHADER_STRING(
       float pixelTest = step(0.01, centerIntensity);
 
       gl_FragColor = vec4(vec3(sumTest * pixelTest), 1.0);
-    });
+    })";
 #elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
-const std::string kWeakPixelInclusionFragmentShaderString = SHADER_STRING(
+const std::string kWeakPixelInclusionFragmentShaderString = R"(
     uniform sampler2D inputImageTexture;
 
     varying vec2 textureCoordinate;
@@ -88,7 +88,7 @@ const std::string kWeakPixelInclusionFragmentShaderString = SHADER_STRING(
       float pixelTest = step(0.01, centerIntensity);
 
       gl_FragColor = vec4(vec3(sumTest * pixelTest), 1.0);
-    });
+    })";
 #endif
 
 std::shared_ptr<WeakPixelInclusionFilter> WeakPixelInclusionFilter::create() {

@@ -10,7 +10,7 @@
 
 NS_GPUPIXEL_BEGIN
 
-const std::string kBoxDifferenceVertexShaderString = SHADER_STRING(
+const std::string kBoxDifferenceVertexShaderString = R"(
     attribute vec4 position; attribute vec4 inputTextureCoordinate;
     attribute vec4 inputTextureCoordinate2;
 
@@ -21,9 +21,9 @@ const std::string kBoxDifferenceVertexShaderString = SHADER_STRING(
       gl_Position = position;
       textureCoordinate = inputTextureCoordinate.xy;
       textureCoordinate2 = inputTextureCoordinate2.xy;
-    });
+    })";
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
-const std::string kBoxDifferenceFragmentShaderString = SHADER_STRING(
+const std::string kBoxDifferenceFragmentShaderString = R"(
     varying highp vec2 textureCoordinate; varying highp vec2 textureCoordinate2;
     uniform sampler2D inputImageTexture;
     uniform sampler2D inputImageTexture2;
@@ -36,9 +36,9 @@ const std::string kBoxDifferenceFragmentShaderString = SHADER_STRING(
       highp vec3 diffColor = (iColor - meanColor) * delta;
       diffColor = min(diffColor * diffColor, 1.0);
       gl_FragColor = vec4(diffColor, 1.0);
-    });
+    })";
 #elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
-const std::string kBoxDifferenceFragmentShaderString = SHADER_STRING(
+const std::string kBoxDifferenceFragmentShaderString = R"(
     varying vec2 textureCoordinate; varying vec2 textureCoordinate2;
     uniform sampler2D inputImageTexture;
     uniform sampler2D inputImageTexture2;
@@ -50,7 +50,7 @@ const std::string kBoxDifferenceFragmentShaderString = SHADER_STRING(
       vec3 diffColor = (iColor - meanColor) * delta;
       diffColor = min(diffColor * diffColor, 1.0);
       gl_FragColor = vec4(diffColor, 1.0);
-    });
+    })";
 #endif
 
 BoxDifferenceFilter::BoxDifferenceFilter() {}
