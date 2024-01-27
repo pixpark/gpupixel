@@ -11,7 +11,7 @@ USING_NS_GPUPIXEL
 
 REGISTER_FILTER_CLASS(ContrastFilter)
 
-const std::string kContrastFragmentShaderString = SHADER_STRING(
+const std::string kContrastFragmentShaderString = R"(
     uniform sampler2D inputImageTexture; uniform lowp float contrast;
     varying highp vec2 textureCoordinate;
 
@@ -19,7 +19,7 @@ const std::string kContrastFragmentShaderString = SHADER_STRING(
       lowp vec4 color = texture2D(inputImageTexture, textureCoordinate);
       gl_FragColor =
           vec4(((color.rgb - vec3(0.5)) * contrast + vec3(0.5)), color.a);
-    });
+    })";
 
 std::shared_ptr<ContrastFilter> ContrastFilter::create() {
   auto ret = std::shared_ptr<ContrastFilter>(new ContrastFilter());

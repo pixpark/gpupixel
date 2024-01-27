@@ -10,7 +10,7 @@
 #include "source_image.h"
 
 NS_GPUPIXEL_BEGIN
-const std::string kGPUImageBaseBeautyFaceVertexShaderString = SHADER_STRING(
+const std::string kGPUImageBaseBeautyFaceVertexShaderString = R"(
     attribute vec3 position; attribute vec2 inputTextureCoordinate;
 
     varying vec2 textureCoordinate;
@@ -34,10 +34,11 @@ const std::string kGPUImageBaseBeautyFaceVertexShaderString = SHADER_STRING(
       textureShift_4 =
           vec4(inputTextureCoordinate + vec2(-widthOffset, heightOffset),
                inputTextureCoordinate + vec2(widthOffset, -heightOffset));
-    });
+    })";
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
-const std::string kGPUImageBaseBeautyFaceFragmentShaderString = SHADER_STRING(
-    precision highp float; varying highp vec2 textureCoordinate;
+const std::string kGPUImageBaseBeautyFaceFragmentShaderString = R"(
+    precision highp float; 
+    varying highp vec2 textureCoordinate;
     varying highp vec4 textureShift_1;
     varying highp vec4 textureShift_2;
     varying highp vec4 textureShift_3;
@@ -156,9 +157,9 @@ const std::string kGPUImageBaseBeautyFaceFragmentShaderString = SHADER_STRING(
       }
 
       gl_FragColor = vec4(color, 1.0);
-    });
+    })";
 #elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
-const std::string kGPUImageBaseBeautyFaceFragmentShaderString = SHADER_STRING(
+const std::string kGPUImageBaseBeautyFaceFragmentShaderString = R"(
     float; varying vec2 textureCoordinate; varying vec4 textureShift_1;
     varying vec4 textureShift_2;
     varying vec4 textureShift_3;
@@ -280,7 +281,7 @@ const std::string kGPUImageBaseBeautyFaceFragmentShaderString = SHADER_STRING(
       
       gl_FragColor = vec4(color, 1.0);
       
-    });
+    })";
 #endif
 
 BeautyFaceUnitFilter::BeautyFaceUnitFilter() {}
@@ -302,10 +303,10 @@ bool BeautyFaceUnitFilter::init() {
     return false;
   }
 
-  grayImage_ = SourceImage::create("lookUpGray.png");
-  originImage_ = SourceImage::create("lookUpOrigin.png");
-  skinImage_ = SourceImage::create("lookUpSkin.png");
-  customImage_ = SourceImage::create("lookup2.png");
+  grayImage_ = SourceImage::create(Util::getResourcePath("lookUpGray.png"));
+  originImage_ = SourceImage::create(Util::getResourcePath("lookUpOrigin.png"));
+  skinImage_ = SourceImage::create(Util::getResourcePath("lookUpSkin.png"));
+  customImage_ = SourceImage::create(Util::getResourcePath("lookup2.png"));
   return true;
 }
 

@@ -12,23 +12,23 @@ USING_NS_GPUPIXEL
 REGISTER_FILTER_CLASS(BrightnessFilter)
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID) || defined(GPUPIXEL_MAC)
-const std::string kBrightnessFragmentShaderString = SHADER_STRING(
+const std::string kBrightnessFragmentShaderString = R"(
     uniform sampler2D inputImageTexture; uniform lowp float brightness_para;
     varying highp vec2 textureCoordinate;
 
     void main() {
       lowp vec4 color = texture2D(inputImageTexture, textureCoordinate);
       gl_FragColor = vec4((color.rgb + vec3(brightness_para)), color.a);
-    });
+    })";
 #elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_MAC) || defined(GPUPIXEL_LINUX)
-const std::string kBrightnessFragmentShaderString = SHADER_STRING(
+const std::string kBrightnessFragmentShaderString = R"(
     uniform sampler2D inputImageTexture; uniform float brightness_para;
     varying vec2 textureCoordinate;
 
     void main() {
       vec4 color = texture2D(inputImageTexture, textureCoordinate);
       gl_FragColor = vec4((color.rgb + vec3(brightness_para)), color.a);
-    });
+    })";
 #endif
 
 std::shared_ptr<BrightnessFilter> BrightnessFilter::create(

@@ -11,7 +11,7 @@ USING_NS_GPUPIXEL
 
 REGISTER_FILTER_CLASS(RGBFilter)
 
-const std::string kRGBFragmentShaderString = SHADER_STRING(
+const std::string kRGBFragmentShaderString = R"(
     uniform sampler2D inputImageTexture; uniform highp float redAdjustment;
     uniform highp float greenAdjustment;
     uniform highp float blueAdjustment;
@@ -21,7 +21,7 @@ const std::string kRGBFragmentShaderString = SHADER_STRING(
       lowp vec4 color = texture2D(inputImageTexture, textureCoordinate);
       gl_FragColor = vec4(color.r * redAdjustment, color.g * greenAdjustment,
                           color.b * blueAdjustment, color.a);
-    });
+    })";
 
 std::shared_ptr<RGBFilter> RGBFilter::create() {
   auto ret = std::shared_ptr<RGBFilter>(new RGBFilter());

@@ -9,7 +9,7 @@
 
 NS_GPUPIXEL_BEGIN
 
-const std::string kNonMaximumSuppressionShaderString = SHADER_STRING(
+const std::string kNonMaximumSuppressionShaderString = R"(
     precision mediump float; uniform sampler2D inputImageTexture;
 
     varying vec2 textureCoordinate;
@@ -52,7 +52,7 @@ const std::string kNonMaximumSuppressionShaderString = SHADER_STRING(
 
       gl_FragColor = vec4(
           (centerColor.rgb * step(maxValue, centerColor.r) * multiplier), 1.0);
-    });
+    })";
 
 std::shared_ptr<NonMaximumSuppressionFilter>
 NonMaximumSuppressionFilter::create() {
