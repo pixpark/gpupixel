@@ -42,7 +42,7 @@ INCLUDE_DIRECTORIES(
 	${CMAKE_CURRENT_SOURCE_DIR}/target/objc
 	${CMAKE_CURRENT_SOURCE_DIR}/third_party/glfw/include
 	${CMAKE_CURRENT_SOURCE_DIR}/third_party/stb
-	${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad
+	${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/include
 	${CMAKE_CURRENT_SOURCE_DIR}/third_party/libyuv/include
 )
  

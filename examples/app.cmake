@@ -39,7 +39,7 @@ INCLUDE_DIRECTORIES(
 	${CMAKE_INCLUDE_OUTPUT_DIRECTORY}
 	${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/glfw/include
 	${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/stb
-	${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/glad
+	${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/glad/include
 )
  
 # Add common source file
