@@ -23,8 +23,9 @@ class Util {
   static std::string str_format(const char* fmt, ...);
   static void Log(const std::string& tag, const std::string& format, ...);
   static int64_t nowTimeMs();
-#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
+
   static std::string getResourcePath(std::string name);
+#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
   static std::string getResourcePath(std::string bundle_name,
                                      std::string file_name,
                                      std::string type);

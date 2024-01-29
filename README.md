@@ -106,9 +106,16 @@ This table compares the features supported by **GPUPixel** and **GPUImage**:
 | :---: | :-------------: | :---------------: | :-----------: |
 | Size  |     2.4 MB      |      2.6 MB       |    2.1 MB     |
 
-
+## Before You Start
+Star us on GitHub, and be instantly notified for new releases!
+- Website
+- Docs
+- Deployment Docs
+- FAQ
 ## Usage
 Refer to `./objc/demo` or `./android` demo
+
+## Quick Start
 
 **`.h` file**
 
@@ -123,7 +130,7 @@ std::shared_ptr<TargetRawDataOutput> target_raw_output_;
 **Create Filter, `.cpp` file**
 
 ```c++
- GPUPixel::GPUPixelContext::getInstance()->runSync([&] {
+ gpupixel::GPUPixelContext::getInstance()->runSync([&] {
     // Create filter
     source_raw_input_ = SourceRawDataInput::create();
     target_raw_output_ = TargetRawDataOutput::create();
@@ -187,9 +194,19 @@ target_raw_output_->setPixelsCallbck([=](const uint8_t *data,
 
 [![Star History Chart](https://api.star-history.com/svg?repos=pixpark/gpupixel&type=Date)](https://star-history.com/#pixpark/gpupixel&Date)
 
+## Contributing
+For those who'd like to contribute code, see our Contribution Guide.
+
+At the same time, please consider supporting Dify by sharing it on social media and at events and conferences.
+
+
+
 ## Acknowledgement
 ### Reference Project
 1. [GPUImage](https://github.com/BradLarson/GPUImage) 
 2. [CainCamera](https://github.com/CainKernel/CainCamera)
 3. [AwemeLike](https://github.com/ZZZZou/AwemeLike)
 4. [VNN](https://github.com/joyycom/VNN)
+
+## License
+This repository is available under the MIT License.
