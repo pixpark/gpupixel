@@ -18,9 +18,10 @@
 #include <GLES3/gl3.h>
 #include <GLES3/gl3ext.h>
 #elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
+#include <glad/glad.h>
   #define GL_GLEXT_PROTOTYPES
-  #define GLEW_STATIC
   #define GLFW_INCLUDE_GLCOREARB
+  #define GLEW_STATIC
   #include <GLFW/glfw3.h>
 #endif
 

@@ -1,14 +1,9 @@
-# 侦测操作系统
+# Detect platform
+# --------
 IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-	# 以操作系统名称作为编译输出、安装目录
     SET(CURRENT_OS "linux")
 ELSEIF(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-	# 以操作系统名称作为编译输出、安装目录
     SET(CURRENT_OS "windows")
-	# 引入动态库的路径，因为此模块有可能依赖第三方库
-	LINK_DIRECTORIES(
-		${CMAKE_CURRENT_SOURCE_DIR}/third_party/glfw-3.3.9/lib-mingw-w64
-	${CMAKE_CURRENT_SOURCE_DIR}/third_party/glew-2.1.0/lib/Release/x64)
 ELSEIF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 	SET(CURRENT_OS "macos")
 ELSEIF(${CMAKE_SYSTEM_NAME} MATCHES "iOS")
@@ -19,12 +14,13 @@ ELSE()
     MESSAGE(FATAL_ERROR "NOT SUPPORT THIS SYSTEM")
 ENDIF()
 
-# 设置编译结果的输出、安装路径
+# Config build output path
+# --------
 SET(OUTPUT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../output")
 SET(CMAKE_INCLUDE_OUTPUT_DIRECTORY "${OUTPUT_PATH}/include")
 SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${OUTPUT_PATH}/library/${CURRENT_OS}")
 SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${OUTPUT_PATH}/library/${CURRENT_OS}")
-SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${OUTPUT_PATH}/bin/${CURRENT_OS}")
+SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${OUTPUT_PATH}/app/${CURRENT_OS}")
 SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG   ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/debug)
 SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG   ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/debug)
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG   ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/debug)
@@ -32,7 +28,18 @@ SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/rel
 SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/release)
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/release)
 
-# 引入头文件的路径
+IF(BUILD_DEBUG)
+	# 编译 Debug 版本
+	SET(CMAKE_BUILD_TYPE Debug)
+ELSE()
+	# 编译 Release 版本
+	SET(CMAKE_BUILD_TYPE Release)
+ENDIF(BUILD_DEBUG)
+
+ 
+# Config source and header file
+# ---------
+# header include path
 INCLUDE_DIRECTORIES(
 	${CMAKE_CURRENT_SOURCE_DIR}/core
 	${CMAKE_CURRENT_SOURCE_DIR}/filter
@@ -43,33 +50,21 @@ INCLUDE_DIRECTORIES(
 	${CMAKE_CURRENT_SOURCE_DIR}/target/objc
 	${CMAKE_CURRENT_SOURCE_DIR}/third_party/glfw/include
 	${CMAKE_CURRENT_SOURCE_DIR}/third_party/stb
+	${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad
 	${CMAKE_CURRENT_SOURCE_DIR}/third_party/libyuv/include
 )
  
-IF(MY_DEBUG)
-	# 编译 Debug 版本
-	SET(CMAKE_BUILD_TYPE Debug)
-	
-	# 引入动态库的路径，因为此模块有可能依赖第三方库
-	LINK_DIRECTORIES(${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/debug)
-ELSE()
-	# 编译 Release 版本
-	SET(CMAKE_BUILD_TYPE Release)
-	
-	# 引入动态库的路径，因为此模块有可能依赖第三方库
-	LINK_DIRECTORIES(${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/release)
-ENDIF(MY_DEBUG)
-
-# 参与编译的源文件
+# Add common source file
 FILE(GLOB SOURCE_FILES     
-	"${CMAKE_CURRENT_SOURCE_DIR}/core/*"         
+	"${CMAKE_CURRENT_SOURCE_DIR}/core/*"        
 	"${CMAKE_CURRENT_SOURCE_DIR}/filter/*"         
 	"${CMAKE_CURRENT_SOURCE_DIR}/source/*"       
 	"${CMAKE_CURRENT_SOURCE_DIR}/target/*"                               
 	"${CMAKE_CURRENT_SOURCE_DIR}/utils/*"                 
 	"${CMAKE_CURRENT_SOURCE_DIR}/third_party/libyuv/source/*"
 )
-# message(STATUS "Variable: ${SOURCE_FILES}")
+
+# Add export header file
 FILE(GLOB EXPORT_HEADER 
 	"${CMAKE_CURRENT_SOURCE_DIR}/core/*.h"         
 	"${CMAKE_CURRENT_SOURCE_DIR}/filter/*.h"         
@@ -78,15 +73,19 @@ FILE(GLOB EXPORT_HEADER
 	"${CMAKE_CURRENT_SOURCE_DIR}/utils/*.h"                 
 )
 
+# Add resource file
 FILE(GLOB RESOURCE_FILES 
 	"${CMAKE_CURRENT_SOURCE_DIR}/resources/*"               
 )
- 
-IF(${CURRENT_OS} STREQUAL "linux")
 
-ELSEIF(${CURRENT_OS} STREQUAL "windows")
+# Add platform source and header file
+IF(${CURRENT_OS} STREQUAL "windows") 														# windows
+	# Source 
+	FILE(GLOB GLAD_SOURCE_FILE  "${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/src/*.c" )
+	list(APPEND SOURCE_FILES ${GLAD_SOURCE_FILE})
+ELSEIF(${CURRENT_OS} STREQUAL "linux")														# linux 
 
-ELSEIF(${CURRENT_OS} STREQUAL "macos" OR ${CURRENT_OS} STREQUAL "ios")
+ELSEIF(${CURRENT_OS} STREQUAL "macos" OR ${CURRENT_OS} STREQUAL "ios")						# ios and mac
 	# Header
 	FILE(GLOB OBJC_HEADER_FILE  "${CMAKE_CURRENT_SOURCE_DIR}/target/objc/*.h")
 	list(APPEND EXPORT_HEADER 	${OBJC_HEADER_FILE})
@@ -94,28 +93,28 @@ ELSEIF(${CURRENT_OS} STREQUAL "macos" OR ${CURRENT_OS} STREQUAL "ios")
 	# Source 
 	FILE(GLOB OBJC_SOURCE_FILE  "${CMAKE_CURRENT_SOURCE_DIR}/target/objc/*")
 	list(APPEND SOURCE_FILES ${OBJC_SOURCE_FILE})
-		
-ELSEIF(${CURRENT_OS} STREQUAL "android")
+ELSEIF(${CURRENT_OS} STREQUAL "android")													# android 
 	# Header
 	FILE(GLOB OBJC_HEADER_FILE  "${CMAKE_CURRENT_SOURCE_DIR}/android/jni/*.h")
 	list(APPEND EXPORT_HEADER 	${OBJC_HEADER_FILE})
 	
 	# Source 
-	FILE(GLOB OBJC_SOURCE_FILE  "${CMAKE_CURRENT_SOURCE_DIR}/android/jni/*")
-	list(APPEND SOURCE_FILES ${OBJC_SOURCE_FILE})
+	FILE(GLOB JNI_SOURCE_FILE  "${CMAKE_CURRENT_SOURCE_DIR}/android/jni/*")
+	list(APPEND SOURCE_FILES ${JNI_SOURCE_FILE})
 ENDIF()
-# message(STATUS "Variable: ${EXPORT_HEADER}")
+ 
+# Config project 
+# ----------
 
-# 编译出动态链接库
+# build shared or static lib
 ADD_LIBRARY(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${RESOURCE_FILES})
  
- 
+# set platform project 
 IF(${CURRENT_OS} STREQUAL "linux")
 
 ELSEIF(${CURRENT_OS} STREQUAL "windows")
 
 ELSEIF(${CURRENT_OS} STREQUAL "macos" OR ${CURRENT_OS} STREQUAL "ios")
-
 	set_target_properties(${PROJECT_NAME} PROPERTIES
 		COMPILE_FLAGS "-x objective-c++"
 		FRAMEWORK TRUE
@@ -135,34 +134,22 @@ ELSEIF(${CURRENT_OS} STREQUAL "android")
 ENDIF()
 
 
-# 用来把头文件复制到安装路径中
-MACRO(EXPORT_INCLUDE)
-ADD_CUSTOM_COMMAND(TARGET ${PROJECT_NAME} PRE_BUILD 
-				COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_INCLUDE_OUTPUT_DIRECTORY}
-				COMMAND ${CMAKE_COMMAND} -E copy 
-				${EXPORT_HEADER} ${CMAKE_INCLUDE_OUTPUT_DIRECTORY}
-				COMMENT "Copying export headers to output/include directory.")
-ENDMACRO()
-EXPORT_INCLUDE()
-
-# 链接三方库
+# link libs
+# -------
 IF(${CURRENT_OS} STREQUAL "linux")
-TARGET_LINK_LIBRARIES(
-					${PROJECT_NAME}  
-					"-framework OpenGL 		\
-						-framework AppKit 		\
-						-framework QuartzCore  	\
-						-framework CoreVideo  	\
-						-framework CoreGraphics \
-						-framework AVFoundation \
-						-framework CoreMedia"
-					glfw)
+	TARGET_LINK_LIBRARIES(
+						${PROJECT_NAME}  
+						GL
+						glfw)
 ELSEIF(${CURRENT_OS} STREQUAL "windows")
-TARGET_LINK_LIBRARIES(
-					${PROJECT_NAME}  
-					glfw3
-					glew32
-					opengl32)
+	# link libs find path
+	LINK_DIRECTORIES( 
+		${CMAKE_CURRENT_SOURCE_DIR}/third_party/glfw/lib-mingw-w64)
+		
+	TARGET_LINK_LIBRARIES(
+						${PROJECT_NAME} 
+						opengl32
+						glfw3)
 ELSEIF(${CURRENT_OS} STREQUAL "macos")
 	TARGET_LINK_LIBRARIES(
 		${PROJECT_NAME} "-framework OpenGL 		\
@@ -174,7 +161,7 @@ ELSEIF(${CURRENT_OS} STREQUAL "macos")
 						-framework CoreMedia"
 	)
 ELSEIF(${CURRENT_OS} STREQUAL "ios")
-TARGET_LINK_LIBRARIES(
+	TARGET_LINK_LIBRARIES(
 	${PROJECT_NAME} "-framework OpenGLES 		\
 					-framework UIKit 		\
 					-framework QuartzCore  	\
@@ -184,7 +171,7 @@ TARGET_LINK_LIBRARIES(
 					-framework CoreMedia"
 	)
 ELSEIF(${CURRENT_OS} STREQUAL "android")
-TARGET_LINK_LIBRARIES(
+	TARGET_LINK_LIBRARIES(
 					${PROJECT_NAME}  
 					log
 					android
@@ -192,3 +179,15 @@ TARGET_LINK_LIBRARIES(
 					EGL
 					jnigraphics)
 ENDIF()
+
+
+# copy header to install dir
+# --------
+MACRO(EXPORT_INCLUDE)
+ADD_CUSTOM_COMMAND(TARGET ${PROJECT_NAME} PRE_BUILD 
+				COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_INCLUDE_OUTPUT_DIRECTORY}
+				COMMAND ${CMAKE_COMMAND} -E copy 
+				${EXPORT_HEADER} ${CMAKE_INCLUDE_OUTPUT_DIRECTORY}
+				COMMENT "Copying export headers to output/include directory.")
+ENDMACRO()
+EXPORT_INCLUDE()

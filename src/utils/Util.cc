@@ -58,14 +58,17 @@
 
 NS_GPUPIXEL_BEGIN
 
-#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
 std::string Util::getResourcePath(std::string name) {
+  #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
   NSString* oc_path = [ObjcHelper
       getResourcePath:[[NSString alloc] initWithUTF8String:name.c_str()]];
   std::string path = [oc_path UTF8String];
+  #else
+    std::string path = name;
+  #endif
   return path;
 }
-
+#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
 std::string Util::getResourcePath(std::string bundle_name,
                                   std::string file_name,
                                   std::string type) {

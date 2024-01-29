@@ -25,9 +25,10 @@
   #import <OpenGL/gl3.h>
 //  #import <QuartzCore/QuartzCore.h>
 #elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
+#include <glad/glad.h>
   #define GL_GLEXT_PROTOTYPES
-  #define GLEW_STATIC
   #define GLFW_INCLUDE_GLCOREARB
+  #define GLEW_STATIC
   #include <GLFW/glfw3.h>
 #endif
 
@@ -70,7 +71,7 @@ class GPUPixelContext {
 #elif defined(GPUPIXEL_MAC)
   NSOpenGLContext* getOpenGLContext() const { return imageProcessingContext; };
 #elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
-  GLFWwindow* getShareContext() const { return _wglShareContext; };
+  GLFWwindow* GetGLContext() const { return gl_context_; };
 #endif
  
 
@@ -107,7 +108,7 @@ class GPUPixelContext {
   NSOpenGLContext* imageProcessingContext;
   NSOpenGLPixelFormat* _pixelFormat;
 #elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
-  GLFWwindow* _wglShareContext = nullptr;
+  GLFWwindow* gl_context_ = nullptr;
 #endif
 
 };

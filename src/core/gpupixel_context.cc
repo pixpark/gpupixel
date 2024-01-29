@@ -8,10 +8,6 @@
 #include "gpupixel_context.h"
 #include "util.h"
 
-#if defined(GPUPIXEL_ANDROID) || defined(GPUPIXEL_WIN)
-//#include "thread_task.h"
-#endif
-
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
 
 typedef void (^TaskBlock)(void);
@@ -82,9 +78,8 @@ iOSHelper* iosHelper;
 #elif defined(GPUPIXEL_ANDROID)
 const std::string kRtcLogTag = "Context";
 #elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
-// win settings
-const unsigned int SCR_WIDTH = 1280;
-const unsigned int SCR_HEIGHT = 720;
+const unsigned int VIEW_WIDTH = 1280;
+const unsigned int VIEW_HEIGHT = 720;
 
 #endif
 
@@ -124,8 +119,10 @@ void GPUPixelContext::destroy() {
 }
 
 void GPUPixelContext::init() {
-  Util::Log("INFO", "GPUPixelContext::init, start");
-  createContext();
+  runSync([=] {
+    Util::Log("INFO", "start init GPUPixelContext");
+    this->createContext();
+  });
 }
 
 FramebufferCache* GPUPixelContext::getFramebufferCache() const {
@@ -252,28 +249,25 @@ void GPUPixelContext::createContext() {
             m_surfaceheight);
 #elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
   int ret = glfwInit();
-  
+
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-
-  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+  // must use legacy opengl profile
+  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
 
   if (ret) {
-    glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
+    glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
   } else {
+    // todo log error
     return;
   }
-  _wglShareContext =
-      glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "win opengl", NULL, NULL);
-  if (!_wglShareContext) {
+  gl_context_ = glfwCreateWindow(VIEW_WIDTH, VIEW_HEIGHT, "gpupixel opengl context", NULL, NULL);
+  if (!gl_context_) {
+    // todo log error
     glfwTerminate();
     return;
   }
-  glfwMakeContextCurrent(_wglShareContext);
-  if (!glfwInit()) {
-    return;
-  }
+  glfwMakeContextCurrent(gl_context_);
 #endif
 }
 
@@ -293,8 +287,8 @@ void GPUPixelContext::useAsCurrent() {
     Util::Log("ERROR", "Set Current Context Error!");
   }
 #elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
-   if (glfwGetCurrentContext() != _wglShareContext) {
-    glfwMakeContextCurrent(_wglShareContext);
+   if (glfwGetCurrentContext() != gl_context_) {
+    glfwMakeContextCurrent(gl_context_);
   }
 #endif
 }
@@ -309,8 +303,8 @@ void GPUPixelContext::presentBufferForDisplay() {
 
 void GPUPixelContext::releaseContext() {
 #if defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
-  if (_wglShareContext) {
-    glfwDestroyWindow(_wglShareContext);
+  if (gl_context_) {
+    glfwDestroyWindow(gl_context_);
   }
   glfwTerminate();
 #elif defined(GPUPIXEL_ANDROID)
@@ -342,11 +336,17 @@ void GPUPixelContext::releaseContext() {
 }
  
 void GPUPixelContext::runSync(std::function<void(void)> func) {
+  // todo fix android 
+#if defined(GPUPIXEL_ANDROID)
+  func();
+#else
   task_queue_->add([=]() {
-    useAsCurrent();
-    func();
+      useAsCurrent();
+      func();
   });
   task_queue_->processOne();
+#endif
+
 }
 
 NS_GPUPIXEL_END

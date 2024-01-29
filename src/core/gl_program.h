@@ -19,9 +19,10 @@
 #elif defined(GPUPIXEL_MAC)
 #import <OpenGL/gl3.h>
 #elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
+#include <glad/glad.h>
   #define GL_GLEXT_PROTOTYPES
-  #define GLEW_STATIC
   #define GLFW_INCLUDE_GLCOREARB
+  #define GLEW_STATIC
   #include <GLFW/glfw3.h>
 #endif
 
