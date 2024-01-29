@@ -17,8 +17,7 @@
 NS_GPUPIXEL_BEGIN
 
 const std::string kDefaultVertexShader = R"(
-    attribute vec4 position;
-    attribute vec4 inputTextureCoordinate;
+    attribute vec4 position; attribute vec4 inputTextureCoordinate;
 
     varying vec2 textureCoordinate;
 

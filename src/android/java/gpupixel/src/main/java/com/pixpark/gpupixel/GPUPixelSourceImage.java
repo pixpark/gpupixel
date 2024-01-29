@@ -18,7 +18,7 @@ import android.util.Log;
 import java.io.IOException;
 
 public class GPUPixelSourceImage extends GPUPixelSource {
-
+    private static final String TAG = "GPUPixelSourceImage";
     protected  Bitmap bitmap;
     public GPUPixelSourceImage(Bitmap bitmap) {
         if (mNativeClassID != 0) return;
@@ -106,7 +106,7 @@ public class GPUPixelSourceImage extends GPUPixelSource {
             GLES20.glGenTextures(1, textureIds, 0);
             int error;
             while ((error = GLES20.glGetError()) != GLES20.GL_NO_ERROR) {
-                Log.e("gezhaoyou", "OpenGL error: " + error);
+                Log.e(TAG, "OpenGL error: " + error);
             }
             int textureId = textureIds[0];
 

@@ -113,7 +113,7 @@ std::shared_ptr<TargetRawDataOutput> target_raw_output_;
 **Create Filter, `.c++` file**
 
 ```c++
- GPUPixel::GPUPixelContext::getInstance()->runSync([&] {
+ gpupixel::GPUPixelContext::getInstance()->runSync([&] {
     // Create filter
     source_raw_input_ = SourceRawDataInput::create();
     target_raw_output_ = TargetRawDataOutput::create();
