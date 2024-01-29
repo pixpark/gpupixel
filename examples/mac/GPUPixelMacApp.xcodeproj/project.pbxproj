@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		84278A002B64959200455587 /* gpupixel.framework/gpupixel in Frameworks */ = {isa = PBXBuildFile; fileRef = 842789FC2B64957F00455587 /* gpupixel.framework/gpupixel */; };
-		84278A012B64959200455587 /* gpupixel.framework/gpupixel in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 842789FC2B64957F00455587 /* gpupixel.framework/gpupixel */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		8453D7052B67BE5B009C0532 /* gpupixel.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8453D7032B67BE5B009C0532 /* gpupixel.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		8453D7062B67C1C9009C0532 /* gpupixel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8453D7032B67BE5B009C0532 /* gpupixel.framework */; };
 		84AE136B26FCBCAA00E215AE /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84AE136A26FCBCAA00E215AE /* AVFoundation.framework */; };
 		84AE137526FCBCDA00E215AE /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84AE137426FCBCDA00E215AE /* CoreMedia.framework */; };
 		84AE137A26FCBCFA00E215AE /* VideoCameraManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84AE137926FCBCFA00E215AE /* VideoCameraManager.mm */; };
@@ -17,40 +17,7 @@
 		84C0F7B326FCBA8D004E1FD6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84C0F7B226FCBA8D004E1FD6 /* Assets.xcassets */; };
 		84C0F7B626FCBA8D004E1FD6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84C0F7B426FCBA8D004E1FD6 /* Main.storyboard */; };
 		84C0F7B926FCBA8D004E1FD6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C0F7B826FCBA8D004E1FD6 /* main.m */; };
-		84C0F7C426FCBA8D004E1FD6 /* GPUPixelMacAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C0F7C326FCBA8D004E1FD6 /* GPUPixelMacAppTests.m */; };
-		84C0F7CF26FCBA8D004E1FD6 /* GPUPixelMacAppUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C0F7CE26FCBA8D004E1FD6 /* GPUPixelMacAppUITests.m */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		842789FB2B64957F00455587 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 842789F52B64957F00455587 /* gpupixel.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4DF48C071B714EFAB3772EFC;
-			remoteInfo = gpupixel;
-		};
-		842789FD2B64958800455587 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 842789F52B64957F00455587 /* gpupixel.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = AFCBAF2D19354B2EBFF9853F;
-			remoteInfo = gpupixel;
-		};
-		84C0F7C026FCBA8D004E1FD6 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 84C0F7A126FCBA8C004E1FD6 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 84C0F7A826FCBA8C004E1FD6;
-			remoteInfo = SimpleVideoFilter;
-		};
-		84C0F7CB26FCBA8D004E1FD6 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 84C0F7A126FCBA8C004E1FD6 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 84C0F7A826FCBA8C004E1FD6;
-			remoteInfo = SimpleVideoFilter;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		84DDB516282E5236002D5327 /* Embed Frameworks */ = {
@@ -59,7 +26,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				84278A012B64959200455587 /* gpupixel.framework/gpupixel in Embed Frameworks */,
+				8453D7052B67BE5B009C0532 /* gpupixel.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -68,7 +35,7 @@
 
 /* Begin PBXFileReference section */
 		840303632B5C2737001A8B3C /* VideoCameraManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoCameraManager.h; sourceTree = "<group>"; };
-		842789F52B64957F00455587 /* gpupixel.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = gpupixel.xcodeproj; path = ../../src/build/gpupixel.xcodeproj; sourceTree = "<group>"; };
+		8453D7032B67BE5B009C0532 /* gpupixel.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = gpupixel.framework; path = ../../output/library/macos/Debug/gpupixel.framework; sourceTree = "<group>"; };
 		84AE136A26FCBCAA00E215AE /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		84AE136F26FCBCBB00E215AE /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		84AE137426FCBCDA00E215AE /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
@@ -83,13 +50,6 @@
 		84C0F7B726FCBA8D004E1FD6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		84C0F7B826FCBA8D004E1FD6 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		84C0F7BA26FCBA8D004E1FD6 /* MacDemo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MacDemo.entitlements; sourceTree = "<group>"; };
-		84C0F7BF26FCBA8D004E1FD6 /* GPUPixelMacAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GPUPixelMacAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		84C0F7C326FCBA8D004E1FD6 /* GPUPixelMacAppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GPUPixelMacAppTests.m; sourceTree = "<group>"; };
-		84C0F7C526FCBA8D004E1FD6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		84C0F7CA26FCBA8D004E1FD6 /* GPUPixelMacAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GPUPixelMacAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		84C0F7CE26FCBA8D004E1FD6 /* GPUPixelMacAppUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GPUPixelMacAppUITests.m; sourceTree = "<group>"; };
-		84C0F7D026FCBA8D004E1FD6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		84CD76DF27BA791D00408934 /* zp-sdk-matrix-mac.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "zp-sdk-matrix-mac.framework"; path = "SimpleVideoFilter/zp-sdk-matrix-mac.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,41 +57,19 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				84278A002B64959200455587 /* gpupixel.framework/gpupixel in Frameworks */,
+				8453D7062B67C1C9009C0532 /* gpupixel.framework in Frameworks */,
 				84AE137526FCBCDA00E215AE /* CoreMedia.framework in Frameworks */,
 				84AE136B26FCBCAA00E215AE /* AVFoundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		84C0F7BC26FCBA8D004E1FD6 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		84C0F7C726FCBA8D004E1FD6 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		842789F62B64957F00455587 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				842789FC2B64957F00455587 /* gpupixel.framework/gpupixel */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		84AE136526FCBC9B00E215AE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				84CD76DF27BA791D00408934 /* zp-sdk-matrix-mac.framework */,
+				8453D7032B67BE5B009C0532 /* gpupixel.framework */,
 				84AE137426FCBCDA00E215AE /* CoreMedia.framework */,
 				84AE136F26FCBCBB00E215AE /* CoreImage.framework */,
 				84AE136A26FCBCAA00E215AE /* AVFoundation.framework */,
@@ -142,10 +80,7 @@
 		84C0F7A026FCBA8C004E1FD6 = {
 			isa = PBXGroup;
 			children = (
-				842789F52B64957F00455587 /* gpupixel.xcodeproj */,
 				84C0F7AB26FCBA8C004E1FD6 /* GPUPixelMacApp */,
-				84C0F7C226FCBA8D004E1FD6 /* GPUPixelMacAppTests */,
-				84C0F7CD26FCBA8D004E1FD6 /* GPUPixelMacAppUITests */,
 				84C0F7AA26FCBA8C004E1FD6 /* Products */,
 				84AE136526FCBC9B00E215AE /* Frameworks */,
 			);
@@ -155,8 +90,6 @@
 			isa = PBXGroup;
 			children = (
 				84C0F7A926FCBA8C004E1FD6 /* GPUPixelMacApp.app */,
-				84C0F7BF26FCBA8D004E1FD6 /* GPUPixelMacAppTests.xctest */,
-				84C0F7CA26FCBA8D004E1FD6 /* GPUPixelMacAppUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -179,24 +112,6 @@
 			path = GPUPixelMacApp;
 			sourceTree = "<group>";
 		};
-		84C0F7C226FCBA8D004E1FD6 /* GPUPixelMacAppTests */ = {
-			isa = PBXGroup;
-			children = (
-				84C0F7C326FCBA8D004E1FD6 /* GPUPixelMacAppTests.m */,
-				84C0F7C526FCBA8D004E1FD6 /* Info.plist */,
-			);
-			path = GPUPixelMacAppTests;
-			sourceTree = "<group>";
-		};
-		84C0F7CD26FCBA8D004E1FD6 /* GPUPixelMacAppUITests */ = {
-			isa = PBXGroup;
-			children = (
-				84C0F7CE26FCBA8D004E1FD6 /* GPUPixelMacAppUITests.m */,
-				84C0F7D026FCBA8D004E1FD6 /* Info.plist */,
-			);
-			path = GPUPixelMacAppUITests;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -212,48 +127,11 @@
 			buildRules = (
 			);
 			dependencies = (
-				842789FE2B64958800455587 /* PBXTargetDependency */,
 			);
 			name = GPUPixelMacApp;
 			productName = SimpleVideoFilter;
 			productReference = 84C0F7A926FCBA8C004E1FD6 /* GPUPixelMacApp.app */;
 			productType = "com.apple.product-type.application";
-		};
-		84C0F7BE26FCBA8D004E1FD6 /* GPUPixelMacAppTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 84C0F7D626FCBA8D004E1FD6 /* Build configuration list for PBXNativeTarget "GPUPixelMacAppTests" */;
-			buildPhases = (
-				84C0F7BB26FCBA8D004E1FD6 /* Sources */,
-				84C0F7BC26FCBA8D004E1FD6 /* Frameworks */,
-				84C0F7BD26FCBA8D004E1FD6 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				84C0F7C126FCBA8D004E1FD6 /* PBXTargetDependency */,
-			);
-			name = GPUPixelMacAppTests;
-			productName = SimpleVideoFilterTests;
-			productReference = 84C0F7BF26FCBA8D004E1FD6 /* GPUPixelMacAppTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		84C0F7C926FCBA8D004E1FD6 /* GPUPixelMacAppUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 84C0F7D926FCBA8D004E1FD6 /* Build configuration list for PBXNativeTarget "GPUPixelMacAppUITests" */;
-			buildPhases = (
-				84C0F7C626FCBA8D004E1FD6 /* Sources */,
-				84C0F7C726FCBA8D004E1FD6 /* Frameworks */,
-				84C0F7C826FCBA8D004E1FD6 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				84C0F7CC26FCBA8D004E1FD6 /* PBXTargetDependency */,
-			);
-			name = GPUPixelMacAppUITests;
-			productName = SimpleVideoFilterUITests;
-			productReference = 84C0F7CA26FCBA8D004E1FD6 /* GPUPixelMacAppUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
 
@@ -265,14 +143,6 @@
 				TargetAttributes = {
 					84C0F7A826FCBA8C004E1FD6 = {
 						CreatedOnToolsVersion = 12.4;
-					};
-					84C0F7BE26FCBA8D004E1FD6 = {
-						CreatedOnToolsVersion = 12.4;
-						TestTargetID = 84C0F7A826FCBA8C004E1FD6;
-					};
-					84C0F7C926FCBA8D004E1FD6 = {
-						CreatedOnToolsVersion = 12.4;
-						TestTargetID = 84C0F7A826FCBA8C004E1FD6;
 					};
 				};
 			};
@@ -287,31 +157,12 @@
 			mainGroup = 84C0F7A026FCBA8C004E1FD6;
 			productRefGroup = 84C0F7AA26FCBA8C004E1FD6 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 842789F62B64957F00455587 /* Products */;
-					ProjectRef = 842789F52B64957F00455587 /* gpupixel.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				84C0F7A826FCBA8C004E1FD6 /* GPUPixelMacApp */,
-				84C0F7BE26FCBA8D004E1FD6 /* GPUPixelMacAppTests */,
-				84C0F7C926FCBA8D004E1FD6 /* GPUPixelMacAppUITests */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		842789FC2B64957F00455587 /* gpupixel.framework/gpupixel */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			name = gpupixel.framework/gpupixel;
-			path = gpupixel.framework;
-			remoteRef = 842789FB2B64957F00455587 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		84C0F7A726FCBA8C004E1FD6 /* Resources */ = {
@@ -320,20 +171,6 @@
 			files = (
 				84C0F7B326FCBA8D004E1FD6 /* Assets.xcassets in Resources */,
 				84C0F7B626FCBA8D004E1FD6 /* Main.storyboard in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		84C0F7BD26FCBA8D004E1FD6 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		84C0F7C826FCBA8D004E1FD6 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -351,41 +188,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		84C0F7BB26FCBA8D004E1FD6 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				84C0F7C426FCBA8D004E1FD6 /* GPUPixelMacAppTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		84C0F7C626FCBA8D004E1FD6 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				84C0F7CF26FCBA8D004E1FD6 /* GPUPixelMacAppUITests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		842789FE2B64958800455587 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = gpupixel;
-			targetProxy = 842789FD2B64958800455587 /* PBXContainerItemProxy */;
-		};
-		84C0F7C126FCBA8D004E1FD6 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 84C0F7A826FCBA8C004E1FD6 /* GPUPixelMacApp */;
-			targetProxy = 84C0F7C026FCBA8D004E1FD6 /* PBXContainerItemProxy */;
-		};
-		84C0F7CC26FCBA8D004E1FD6 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 84C0F7A826FCBA8C004E1FD6 /* GPUPixelMacApp */;
-			targetProxy = 84C0F7CB26FCBA8D004E1FD6 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		84C0F7B426FCBA8D004E1FD6 /* Main.storyboard */ = {
@@ -524,7 +327,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/GPUPixelMacApp",
-					"$(PROJECT_DIR)/../../output/library/macos/debug",
+					"$(PROJECT_DIR)/../../output/library/macos/$(CONFIGURATION)",
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -534,6 +337,10 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
+				);
+				OTHER_LDFLAGS = (
+					"-framework",
+					gpupixel,
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.pixpark.GPUPixelMacApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -555,7 +362,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/GPUPixelMacApp",
-					"$(PROJECT_DIR)/../../output/library/macos/debug",
+					"$(PROJECT_DIR)/../../output/library/macos/$(CONFIGURATION)",
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = "";
 				INFOPLIST_FILE = GPUPixelMacApp/Info.plist;
@@ -564,85 +371,13 @@
 					"@executable_path/../Frameworks",
 				);
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-framework",
+					gpupixel,
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.pixpark.GPUPixelMacApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-			};
-			name = Release;
-		};
-		84C0F7D726FCBA8D004E1FD6 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = QFCE3TAQXQ;
-				INFOPLIST_FILE = SimpleVideoFilterTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/../Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 11.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.nebula.SimpleVideoFilterTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GPUPixelMacApp.app/Contents/MacOS/GPUPixelMacApp";
-			};
-			name = Debug;
-		};
-		84C0F7D826FCBA8D004E1FD6 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = QFCE3TAQXQ;
-				INFOPLIST_FILE = SimpleVideoFilterTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/../Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 11.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.nebula.SimpleVideoFilterTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GPUPixelMacApp.app/Contents/MacOS/GPUPixelMacApp";
-			};
-			name = Release;
-		};
-		84C0F7DA26FCBA8D004E1FD6 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = QFCE3TAQXQ;
-				INFOPLIST_FILE = SimpleVideoFilterUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.nebula.SimpleVideoFilterUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_TARGET_NAME = SimpleVideoFilter;
-			};
-			name = Debug;
-		};
-		84C0F7DB26FCBA8D004E1FD6 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = QFCE3TAQXQ;
-				INFOPLIST_FILE = SimpleVideoFilterUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.nebula.SimpleVideoFilterUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_TARGET_NAME = SimpleVideoFilter;
 			};
 			name = Release;
 		};
@@ -663,24 +398,6 @@
 			buildConfigurations = (
 				84C0F7D426FCBA8D004E1FD6 /* Debug */,
 				84C0F7D526FCBA8D004E1FD6 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		84C0F7D626FCBA8D004E1FD6 /* Build configuration list for PBXNativeTarget "GPUPixelMacAppTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				84C0F7D726FCBA8D004E1FD6 /* Debug */,
-				84C0F7D826FCBA8D004E1FD6 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		84C0F7D926FCBA8D004E1FD6 /* Build configuration list for PBXNativeTarget "GPUPixelMacAppUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				84C0F7DA26FCBA8D004E1FD6 /* Debug */,
-				84C0F7DB26FCBA8D004E1FD6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
