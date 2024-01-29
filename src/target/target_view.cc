@@ -35,14 +35,6 @@ TargetView::~TargetView() {
 }
 
 void TargetView::init() {
-  GLuint vbo;
-  glGenBuffers(1, &vbo);
-  glBindBuffer(GL_ARRAY_BUFFER, vbo);
- 
-  // vertex array object
-  GLuint vao;
-  glGenVertexArrays(1, &vao);
-  glBindVertexArray(vao);
   _displayProgram = GLProgram::createByShaderString(kDefaultVertexShader,
                                                     kDefaultFragmentShader);
   _positionAttribLocation = _displayProgram->getAttribLocation("position");
@@ -101,10 +93,8 @@ void TargetView::onSizeChanged(int width, int height) {
 
 void TargetView::update(int64_t frameTime) {
   CHECK_GL(glBindFramebuffer(GL_FRAMEBUFFER, 0));
-  _viewWidth = 1280;
-  _viewHeight = 720;
+
   CHECK_GL(glViewport(0, 0, _viewWidth, _viewHeight));
-  printf("gezhaoyou _viewWidth:%d hei: %d\n",_viewWidth,  _viewHeight);
   CHECK_GL(glClearColor(_backgroundColor.r, _backgroundColor.g,
                         _backgroundColor.b, _backgroundColor.a));
   CHECK_GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));

@@ -32,10 +32,13 @@ std::shared_ptr<SourceImage> SourceImage::create(const std::string name) {
 #if defined(GPUPIXEL_ANDROID)
     auto sourceImage = createImageForAndroid(name);
     return sourceImage;
-#elif defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
+#else
   int width, height, channel_count;
   unsigned char *data = stbi_load(name.c_str(), &width, &height, &channel_count, 0);
-  return SourceImage::create_from_memory(width, height, channel_count, data);
+//   todo(logo info)
+  auto image = SourceImage::create_from_memory(width, height, channel_count, data);
+  stbi_image_free(data);
+  return image;
 #endif
 }
 
@@ -44,18 +47,15 @@ void SourceImage::init(int width, int height, int channel_count, const unsigned 
     Util::Log("SourceImage", "input pixels in null!");
     return;
   }
-  
     this->setFramebuffer(0);
     if (!_framebuffer || (_framebuffer->getWidth() != width ||
-                          _framebuffer->getHeight() != height)) {
+                            _framebuffer->getHeight() != height)) {
         _framebuffer =
                 GPUPixelContext::getInstance()->getFramebufferCache()->fetchFramebuffer(
                         width, height, true);
     }
     this->setFramebuffer(_framebuffer);
     CHECK_GL(glBindTexture(GL_TEXTURE_2D, this->getFramebuffer()->getTexture()));
-  
-  
   if(channel_count == 3) {
     CHECK_GL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB,
                           GL_UNSIGNED_BYTE, pixels));
@@ -64,7 +64,9 @@ void SourceImage::init(int width, int height, int channel_count, const unsigned 
                           GL_UNSIGNED_BYTE, pixels));
   }
   CHECK_GL(glBindTexture(GL_TEXTURE_2D, 0));
+  
 }
+
 
 #if defined(GPUPIXEL_ANDROID)
 std::shared_ptr<SourceImage> SourceImage::createImageForAndroid(std::string name) {
