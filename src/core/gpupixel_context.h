@@ -15,32 +15,7 @@
 #include "filter.h"
 #include "gl_program.h"
 
-#if defined(GPUPIXEL_IOS)
-  #import <OpenGLES/EAGL.h>
-  #import <OpenGLES/ES3/gl.h>
-#endif
-
-#if defined(GPUPIXEL_MAC)
-//  #import <CoreMedia/CoreMedia.h>
-  #import <OpenGL/gl3.h>
-//  #import <QuartzCore/QuartzCore.h>
-#elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
-#include <glad/glad.h>
-  #define GL_GLEXT_PROTOTYPES
-  #define GLFW_INCLUDE_GLCOREARB
-  #define GLEW_STATIC
-  #include <GLFW/glfw3.h>
-#endif
-
 #if defined(GPUPIXEL_ANDROID)
-  #include <EGL/egl.h>
-  #include <GLES/gl.h>
-  #include <GLES/glext.h>
-  #include <GLES3/gl3.h>
-  #include <GLES3/gl3ext.h>
-  #include <android/log.h>
-  #include <jni.h>
-
   typedef struct _gpu_context_t {
     EGLDisplay egldisplay;
     EGLSurface eglsurface;

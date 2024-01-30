@@ -9,22 +9,6 @@
 
 #include "gpupixel_macros.h"
 
-#if defined(GPUPIXEL_IOS)
-#import <OpenGLES/ES3/gl.h>
-#import <OpenGLES/ES3/glext.h>
-#elif defined(GPUPIXEL_MAC)
-#import <OpenGL/gl3.h>
-#elif defined(GPUPIXEL_ANDROID)
-#include <GLES3/gl3.h>
-#include <GLES3/gl3ext.h>
-#elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
-#include <glad/glad.h>
-  #define GL_GLEXT_PROTOTYPES
-  #define GLFW_INCLUDE_GLCOREARB
-  #define GLEW_STATIC
-  #include <GLFW/glfw3.h>
-#endif
-
 #include <vector>
 
 NS_GPUPIXEL_BEGIN
