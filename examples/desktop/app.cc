@@ -25,10 +25,8 @@ void processInput(GLFWwindow *window);
 
 int main()
 {
-
      GLFWwindow* window = GPUPixelContext::getInstance()->GetGLContext();
-     glfwSetErrorCallback( error_callback );
-    
+  
     if (window == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
