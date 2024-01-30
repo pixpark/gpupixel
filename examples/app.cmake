@@ -54,6 +54,18 @@ FILE(GLOB SOURCE_FILES
 	"${CMAKE_CURRENT_SOURCE_DIR}/desktop/*" 
 	)
  
+
+# Add platform source and header and lib link search path
+IF(${CURRENT_OS} STREQUAL "windows") 														# windows
+	# link libs find path
+	LINK_DIRECTORIES( 
+		${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/glfw/lib-mingw-w64)
+ELSEIF(${CURRENT_OS} STREQUAL "linux")	
+	# # Source 
+	# FILE(GLOB GLAD_SOURCE_FILE  "${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/src/*.c" )
+	# list(APPEND SOURCE_FILES ${GLAD_SOURCE_FILE})
+ENDIF()
+
 # build type: executable
 # ------
 ADD_EXECUTABLE(${PROJECT_NAME} ${SOURCE_FILES})
