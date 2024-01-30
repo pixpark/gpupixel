@@ -58,9 +58,25 @@
 #endif
 
 //
-#if defined(GPUPIXEL_WIN)
-// #include <corecrt_math_defines.h>
-#include <algorithm>
+#if defined(GPUPIXEL_IOS)
+  #import <OpenGLES/ES3/gl.h>
+  #import <OpenGLES/ES3/glext.h>
+#elif defined(GPUPIXEL_MAC)
+  #import <OpenGL/gl3.h>
+#elif defined(GPUPIXEL_ANDROID)
+  #include <GLES3/gl3.h>
+  #include <GLES3/gl3ext.h>
+  #include <EGL/egl.h>
+  #include <GLES/gl.h>
+  #include <GLES/glext.h>
+  #include <android/log.h>
+  #include <jni.h>
+#elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
+  #include <glad/glad.h>
+  #define GL_GLEXT_PROTOTYPES
+  #define GLFW_INCLUDE_GLCOREARB
+  #define GLEW_STATIC
+  #include <GLFW/glfw3.h>
 #endif
 
 #define NS_GPUPIXEL_BEGIN namespace gpupixel {

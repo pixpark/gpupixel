@@ -36,6 +36,10 @@ std::shared_ptr<SourceImage> SourceImage::create(const std::string name) {
   int width, height, channel_count;
   unsigned char *data = stbi_load(name.c_str(), &width, &height, &channel_count, 0);
 //   todo(logo info)
+  if(data == nullptr) {
+    Util::Log("SourceImage", "SourceImage: input data in null! file name: %s", name.c_str());
+    return nullptr;
+  }
   auto image = SourceImage::create_from_memory(width, height, channel_count, data);
   stbi_image_free(data);
   return image;
@@ -43,10 +47,6 @@ std::shared_ptr<SourceImage> SourceImage::create(const std::string name) {
 }
 
 void SourceImage::init(int width, int height, int channel_count, const unsigned char* pixels) {
-  if(pixels == nullptr) {
-    Util::Log("SourceImage", "input pixels in null!");
-    return;
-  }
     this->setFramebuffer(0);
     if (!_framebuffer || (_framebuffer->getWidth() != width ||
                             _framebuffer->getHeight() != height)) {
