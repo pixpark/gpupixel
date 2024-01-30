@@ -17,14 +17,15 @@
 ---
 
 
-> 👏🏻👏🏻 GPUPixel has added support for the **Windows** and **Linux** from [v1.1.0](https://github.com/pixpark/gpupixel/releases/tag/1.1.0). And now it is fully cross-platform supported: **iOS | Android | Mac | Win | Linux** 🎉🎉🎉 
+> 👏🏻👏🏻 GPUPixel has added support for the `Windows` and `Linux` from [v1.1.0](https://github.com/pixpark/gpupixel/releases/tag/v1.1.0). 
+> Now it is fully cross-platform supported: `iOS`, `Android`, `Mac`, `Win` and `Linux` 🎉🎉🎉 
 
 ## Introduction
-⛰️ GPUPixel is a high-performance image and video AI beauty effect library written in C++11, Extremely easy to compile and integrate, with a very small library size.
+⛰️ GPUPixel is a real-time, high-performance image and video filter library, extremely easy to compile and integrate with  small library size.
 
-🔑 It is GPU-based and comes with built-in beauty effects filters that can achieve commercial-grade results. 
+🔑 GPUPixel  is written in C++11 and is based on OpenGL/ES, incorporating a built-in beauty face filter that achieves commercial-grade beauty effects.
 
-🔌 It supports platforms including `iOS`, `Android`, `Mac`, `Win` and `Linux`. It can theoretically be ported to any platform that supports OpenGL/ES.
+🔌 GPUPixel supports platforms including `iOS`, `Android`, `Mac`, `Win` and `Linux`. It can theoretically be ported to any platform that supports OpenGL/ES.
 
 >💡 The face key points detection currently utilizes the [Face++](https://www.faceplusplus.com.cn/) library, but it will be replaced with either **[VNN](https://github.com/joyycom/VNN)** or **[NCNN](https://github.com/Tencent/ncnn)** in the future.
 
@@ -44,35 +45,35 @@
 
 ## Features Compared
 
-This table compares the features supported by **GPUPixel** and **GPUImage**:
+This table compares the features supported by **GPUPixel** and **GPUImage** and **Android-GPUImage**:
 
 ✅: Supported | ❌: Not supported | ✏️: Planning
 
-|                       | [GPUPixel](https://github.com/pixpark/gpupixel) | [GPUImage](https://github.com/BradLarson/GPUImage) |
-| :-------------------- | :---------------------------------------------: | :------------------------------------------------: |
-| 🍎**Filters:**         |                        ✅                        |                         ❌                          |
-| Skin Smoothing Filter |                        ✅                        |                         ❌                          |
-| Skin Whitening Filter |                        ✅                        |                         ❌                          |
-| Face Slimming Filter  |                        ✅                        |                         ❌                          |
-| Big Eyes Filter       |                        ✅                        |                         ❌                          |
-| Lipstick Filter       |                        ✅                        |                         ❌                          |
-| Blush Filter          |                        ✅                        |                         ❌                          |
-| More Build in Filter  |                        ✅                        |                         ✅                          |
-| 🍓**Input Formats:**   |                                                 |                                                    |
-| YUV420P(I420)         |                        ✅                        |                         ❌                          |
-| RGBA                  |                        ✅                        |                         ✅                          |
-| JPEG                  |                        ✅                        |                         ✅                          |
-| PNG                   |                        ✅                        |                         ✅                          |
-| NV21(for Android)     |                        ✏️                        |                         ❌                          |
-| 🍉**Output Formats:**  |                                                 |                                                    |
-| RGBA                  |                        ✅                        |                         ✅                          |
-| YUV420P(I420)         |                        ✏️                        |                         ❌                          |
-| 🥑**Platform:**        |                                                 |                                                    |
-| iOS                   |                        ✅                        |                         ✅                          |
-| Mac                   |                        ✅                        |                         ✅                          |
-| Android               |                        ✅                        |                         ❌                          |
-| Win                   |                       👉 ✅                       |                         ❌                          |
-| Linux                 |                       👉 ✅                       |                         ❌                          |
+|                       | [GPUPixel](https://github.com/pixpark/gpupixel) | [GPUImage](https://github.com/BradLarson/GPUImage) | [Android-GPUImage](https://github.com/cats-oss/android-gpuimage) |
+| :-------------------- | :---------------------------------------------: | :------------------------------------------------: | :----------------------------------------------------------: |
+| 📷 **Filters:**        |                        ✅                        |                         ❌                          |                              ❌                               |
+| Skin Smoothing Filter |                        ✅                        |                         ❌                          |                              ❌                               |
+| Skin Whitening Filter |                        ✅                        |                         ❌                          |                              ❌                               |
+| Face Slimming Filter  |                        ✅                        |                         ❌                          |                              ❌                               |
+| Big Eyes Filter       |                        ✅                        |                         ❌                          |                              ❌                               |
+| Lipstick Filter       |                        ✅                        |                         ❌                          |                              ❌                               |
+| Blush Filter          |                        ✅                        |                         ❌                          |                              ❌                               |
+| More Build in Filter  |                        ✅                        |                         ✅                          |                              ✅                               |
+| 🎥 **Input Formats:**  |                                                 |                                                    |                                                              |
+| YUV420P(I420)         |                        ✅                        |                         ❌                          |                              ❌                               |
+| RGBA                  |                        ✅                        |                         ✅                          |                              ✅                               |
+| JPEG                  |                        ✅                        |                         ✅                          |                              ✅                               |
+| PNG                   |                        ✅                        |                         ✅                          |                              ✅                               |
+| NV21(for Android)     |                        ✏️                        |                         ❌                          |                              ❌                               |
+| 🎥 **Output Formats:** |                                                 |                                                    |                                                              |
+| RGBA                  |                        ✅                        |                         ✅                          |                              ✅                               |
+| YUV420P(I420)         |                        ✏️                        |                         ❌                          |                              ❌                               |
+| 💻 **Platform:**       |                                                 |                                                    |                                                              |
+| iOS                   |                        ✅                        |                         ✅                          |                              ❌                               |
+| Mac                   |                        ✅                        |                         ✅                          |                              ❌                               |
+| Android               |                        ✅                        |                         ❌                          |                              ✅                               |
+| Win                   |                        ✅                        |                         ❌                          |                              ❌                               |
+| Linux                 |                        ✅                        |                         ❌                          |                              ❌                               |
 
 
 ##  Performance
@@ -99,7 +100,7 @@ This table compares the features supported by **GPUPixel** and **GPUImage**:
 ⭐️ Star us on GitHub, and be instantly notified for new releases!
 
 ## Quick Start
-### 🌰 How to Build
+### 📱 How to Build
 Compile using CMake frome v1.1.0. Please search for instructions on how to install and configure CMake. 
 
 The generated libraries and app will be located in the "output" directory of the project's root folder.
@@ -183,6 +184,17 @@ Refer to `examples/desktop`
 
 The compilation method is the same as compiling the library.
 
+```shell
+cd examples
+mkdir build
+cd build
+
+# Generate project
+cmake -G "MinGW Makefiles" ..
+
+# Build
+mingw32-make
+```
 ## 🏂 How to Use
 
 **Declear filters**
@@ -191,7 +203,7 @@ The compilation method is the same as compiling the library.
 // video data input
 std::shared_ptr<SourceRawDataInput> source_raw_input_;
 // beauty filter
-std::shared_ptr<FaceBeautyFilter> face_beauty_filter_;
+std::shared_ptr<BeautyFaceFilter> beauty_face_filter_;
 // video data output 
 std::shared_ptr<TargetRawDataOutput> target_raw_output_;
 ```
@@ -203,10 +215,10 @@ std::shared_ptr<TargetRawDataOutput> target_raw_output_;
     source_raw_input_ = SourceRawDataInput::create();
     target_raw_output_ = TargetRawDataOutput::create();
     // Face Beauty Filter
-    face_beauty_filter_ = FaceBeautyFilter::create();
+    beauty_face_filter_ = BeautyFaceFilter::create();
     
     // Add filter
-    source_raw_input_->addTarget(face_beauty_filter_)
+    source_raw_input_->addTarget(beauty_face_filter_)
                      ->addTarget(target_raw_output_);
  }
 ```
@@ -258,17 +270,17 @@ target_raw_output_->setPixelsCallbck([=](const uint8_t *data,
 // Output data callbck
 ```
 
-## 🚙 Star History
+## 🌠 Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=pixpark/gpupixel&type=Date)](https://star-history.com/#pixpark/gpupixel&Date)
 
-## 🍒 Contributing
+## 🧑‍💻 Contributing
 Welcome to contribute code 👏🏻.
 
 At the same time, please consider supporting GPUPixel by sharing it on social media and at events and conferences.
 
 
-## 📔Acknowledgement
+## 👜 Acknowledgement
 ### Reference Project
 1. [GPUImage](https://github.com/BradLarson/GPUImage) 
 2. [CainCamera](https://github.com/CainKernel/CainCamera)
