@@ -47,7 +47,7 @@ INCLUDE_DIRECTORIES(
 	${CMAKE_CURRENT_SOURCE_DIR}/utils
 	${CMAKE_CURRENT_SOURCE_DIR}/android/jni
 	${CMAKE_CURRENT_SOURCE_DIR}/target/objc
-	${CMAKE_CURRENT_SOURCE_DIR}/third_party/glfw/include
+	${CMAKE_CURRENT_SOURCE_DIR}/third_party/glfw-3.3.8-win64/include
 	${CMAKE_CURRENT_SOURCE_DIR}/third_party/stb
 	${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/include
 	${CMAKE_CURRENT_SOURCE_DIR}/third_party/libyuv/include
@@ -85,7 +85,7 @@ IF(${CURRENT_OS} STREQUAL "windows") 														# windows
 
 	# link libs find path
 	LINK_DIRECTORIES( 
-		${CMAKE_CURRENT_SOURCE_DIR}/third_party/glfw/lib-mingw-w64)
+		${CMAKE_CURRENT_SOURCE_DIR}/third_party/glfw-3.3.8-win64/lib-mingw-w64)
 ELSEIF(${CURRENT_OS} STREQUAL "linux")	
 	# Source 
 	FILE(GLOB GLAD_SOURCE_FILE  "${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/src/*.c" )
