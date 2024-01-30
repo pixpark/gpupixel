@@ -3,6 +3,11 @@
 </h1>
 
 <p align="center">
+  <a href="./README.md">English</a> |
+  <a href="./README_CN.md">简体中文</a>
+</p>
+
+<p align="center">
    <a href="https://github.com/pixpark/gpupixel/stargazers"><img alt="GPUPixel Stars" src="https://img.shields.io/github/stars/pixpark/gpupixel?style=social"/></a>
     <a href="https://github.com/pixpark/gpupixel/releases/latest"><img alt="GPUPixel Release" src="https://img.shields.io/github/v/release/pixpark/gpupixel"/></a>
     <a href="#"><img alt="GPUPixel Stars" src="https://img.shields.io/badge/Platform-iOS_%7C%20macOS%20%7C%20Android-red"/></a>
@@ -10,8 +15,9 @@
 </p>
 
 ---
-English | [简体中文](./README_cn.md) 
 
+
+> 🎉🎉🎉 GPUPixel has added support for the Windows and Linux from [v1.1.0](https://github.com/pixpark/gpupixel/releases/tag/1.1.0), and now it is fully cross-platform supported: iOS | Android | Mac | Win | Linux 👏🏻👏🏻
 
 [GPUPixel]() @ [PixPark](https://github.com/pixpark) 
 
@@ -20,7 +26,7 @@ English | [简体中文](./README_cn.md)
 
 🔑 It is GPU-based and comes with built-in beauty effects filters that can achieve commercial-grade results. 
 
-🔌 It supports platforms including iOS, Mac, Android, and it can theoretically be ported to any platform that supports OpenGL/ES.
+🔌 It supports platforms including `iOS`, `Android`, `Mac`, `Win`, `Linux` and it can theoretically be ported to any platform that supports OpenGL/ES.
 
 >💡 The face key points detection currently utilizes the [Face++](https://www.faceplusplus.com.cn/) library, but it will be replaced with either **[VNN](https://github.com/joyycom/VNN)** or **[NCNN](https://github.com/Tencent/ncnn)** in the future.
 
@@ -31,11 +37,11 @@ English | [简体中文](./README_cn.md)
 👉 **Video: <a href="https://youtu.be/9BY1Qx1NEPs" target="_blank">YouTube</a> | <a href="https://www.bilibili.com/video/BV1xQ4y1L7Fh/?share_source=copy_web&vd_source=46adcb1014fa989cfcbb4cc1e866831e" target="_blank">BiliBili</a>**
 
 
-|             **Origin**             |          **Smooth**           |          **White**          |             **ThinFace**              |
-| :--------------------------------: | :--------------------------------: | :------------------------------: | :------------------------------------: |
-| ![origin](./docs/image/origin.gif) | ![smooth](./docs/image/smooth.gif) | ![white](./docs/image/white.gif) | ![thinface](./docs/image/thinface.gif) |
-|            **BigEye**            |            **Lipstick**            |            **Blusher**            | **ON-OFF** |
-| ![bigeye](./docs/image/bigeye.gif) | ![lipstick](./docs/image/lipstick.gif) | ![blusher](./docs/image/blusher.gif) | ![on-off](./docs/image/on-off.gif) |
+|                   **Origin**                    |                    **Smooth**                     |                    **White**                     |                   **ThinFace**                    |
+| :---------------------------------------------: | :-----------------------------------------------: | :----------------------------------------------: | :-----------------------------------------------: |
+| <img src="./docs/image/origin.gif" width="180"> |  <img src="./docs/image/smooth.gif" width="180">  |  <img src="./docs/image/white.gif" width="180">  | <img src="./docs/image/thinface.gif" width="180"> |
+|                   **BigEye**                    |                   **Lipstick**                    |                   **Blusher**                    |                    **ON-OFF**                     |
+| <img src="./docs/image/bigeye.gif" width="180"> | <img src="./docs/image/lipstick.gif" width="180"> | <img src="./docs/image/blusher.gif" width="180"> |  <img src="./docs/image/on-off.gif" width="180">  |
 
 ## Architecture
 ![](./docs/image/arch-en.jpg)
@@ -69,14 +75,9 @@ This table compares the features supported by **GPUPixel** and **GPUImage**:
 | iOS                   |                        ✅                        |                         ✅                          |
 | Mac                   |                        ✅                        |                         ✅                          |
 | Android               |                        ✅                        |                         ❌                          |
-| Win                   |                        ✏️                        |                         ❌                          |
-| Linux                 |                        ✏️                        |                         ❌                          |
+| Win                   |                       👉 ✅                       |                         ❌                          |
+| Linux                 |                       👉 ✅                       |                         ❌                          |
 
-
-## System Requirements
-|           OS           |  iOS  |  OSX  |   Android    | Windows | Linux |
-| :--------------------: | :---: | :---: | :----------: | :-----: | :---: |
-| Min Support OS Version | 10.0  | 10.13 | 5.0 (API 21) |    -    |   -   |
 
 ##  Performance
 ### iPhone
@@ -91,26 +92,102 @@ This table compares the features supported by **GPUPixel** and **GPUImage**:
 | Time Taken |    6ms    |      5ms      |   -   |    -    |      -       |
 
 
-## Compilation
-### iOS
-1. Open `objc/gpupixel.xcodeproj` or `objc/demo/PixDemo.xcodeproj`  Xcode project ;
-
-2. Select the corresponding platform for compilation;
-
-### Android
-1. Open the directory ./android in Android Studio 
-
-2. Configure NDK r21+
-
 ## Library Size
 
 |       | iOS(.framework) | MacOS(.framework) | Android(.aar) |
 | :---: | :-------------: | :---------------: | :-----------: |
 | Size  |     2.4 MB      |      2.6 MB       |    2.1 MB     |
 
+## Before You Start
+Star us on GitHub, and be instantly notified for new releases!
+- Website
+- Docs
+- Deployment Docs
+- FAQ
 
-## Usage
-Refer to `./objc/demo` or `./android` demo
+## Quick Start
+### How to Build
+Compile using CMake frome v1.1.0. Please search for instructions on how to install and configure CMake.
+The generated libraries and applications will be located in the "output" directory of the project's root folder.
+### iOS
+```shell
+cd src
+mkdir build
+cd build
+
+# Generate project
+## for iOS arm64
+cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=../../toolchain/ios.toolchain.cmake -DPLATFORM=OS64 ..
+ 
+# Build
+cmake --build . --config Debug
+```
+### Mac
+
+```shell
+cd src
+mkdir build
+cd build
+
+# Generate project
+## for Mac Apple Silicon
+cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=../../toolchain/ios.toolchain.cmake -DPLATFORM=MAC_ARM64 ..
+## for Mac Intel
+cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=../../toolchain/ios.toolchain.cmake -DPLATFORM=MAC ..
+
+# Build
+cmake --build . --config Debug
+```
+
+### Android
+1. Open the directory `src/android/java` in Android Studio 
+
+### Windows
+You need install and config Cmake and MinGW64
+```shell
+cd src
+mkdir build
+cd build
+
+# Generate project
+cmake -G "MinGW Makefiles" ..
+
+# Build
+mingw32-make
+```
+### Linux (only test on ubuntu 22.04 lts)
+
+```shell
+# install cmake 
+sudo apt-get install cmake pkg-config
+# install glfw lib
+sudo apt-get install mesa-utils libglu1-mesa-dev freeglut3-dev mesa-common-dev libglfw3-dev
+
+# start build
+cd src
+mkdir build
+cd build
+
+# Generate project
+cmake ..
+
+# Build
+make
+```
+---
+
+### App demo
+### iOS
+Refer to `examples/ios`
+### Mac
+Refer to `examples/mac`
+### Android
+Refer to `examples/android` or `src/android/java`
+### Window and Linux
+Refer to `examples/desktop`
+The compilation method is the same as compiling the library.
+
+## How to Use
 
 **`.h` file**
 
@@ -125,7 +202,7 @@ std::shared_ptr<TargetRawDataOutput> target_raw_output_;
 **Create Filter, `.cpp` file**
 
 ```c++
- GPUPixel::GPUPixelContext::getInstance()->runSync([&] {
+ gpupixel::GPUPixelContext::getInstance()->runSync([&] {
     // Create filter
     source_raw_input_ = SourceRawDataInput::create();
     target_raw_output_ = TargetRawDataOutput::create();
@@ -160,7 +237,6 @@ std::shared_ptr<TargetRawDataOutput> target_raw_output_;
 
 **Output Data Callback**
 
-
 ```c++
 // I420 callback
 target_raw_output_->setI420Callbck([=](const uint8_t *data, 
@@ -189,9 +265,18 @@ target_raw_output_->setPixelsCallbck([=](const uint8_t *data,
 
 [![Star History Chart](https://api.star-history.com/svg?repos=pixpark/gpupixel&type=Date)](https://star-history.com/#pixpark/gpupixel&Date)
 
+## Contributing
+Welcome to contribute code🙏🏻.
+
+At the same time, please consider supporting Dify by sharing it on social media and at events and conferences.
+
+
 ## Acknowledgement
 ### Reference Project
 1. [GPUImage](https://github.com/BradLarson/GPUImage) 
 2. [CainCamera](https://github.com/CainKernel/CainCamera)
 3. [AwemeLike](https://github.com/ZZZZou/AwemeLike)
 4. [VNN](https://github.com/joyycom/VNN)
+
+## License
+This repository is available under the [MIT License](https://github.com/pixpark/gpupixel?tab=MIT-1-ov-file#readme).
