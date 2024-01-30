@@ -3,9 +3,11 @@
 </h1>
 
 <p align="center">
+  <a href="./README.md">English</a> |
+  <a href="./README_CN.md">简体中文</a>
+</p>
 
-  English | [简体中文](./README_cn.md) 
-
+<p align="center">
    <a href="https://github.com/pixpark/gpupixel/stargazers"><img alt="GPUPixel Stars" src="https://img.shields.io/github/stars/pixpark/gpupixel?style=social"/></a>
     <a href="https://github.com/pixpark/gpupixel/releases/latest"><img alt="GPUPixel Release" src="https://img.shields.io/github/v/release/pixpark/gpupixel"/></a>
     <a href="#"><img alt="GPUPixel Stars" src="https://img.shields.io/badge/Platform-iOS_%7C%20macOS%20%7C%20Android-red"/></a>
