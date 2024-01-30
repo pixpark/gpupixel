@@ -77,8 +77,16 @@ FILE(GLOB RESOURCE_FILES
 	"${CMAKE_CURRENT_SOURCE_DIR}/resources/*"               
 )
 
-# Add platform source and header file
-IF(${CURRENT_OS} STREQUAL "windows" OR ${CURRENT_OS} STREQUAL "linux") 														# windows
+# Add platform source and header and lib link search path
+IF(${CURRENT_OS} STREQUAL "windows") 														# windows
+	# Source 
+	FILE(GLOB GLAD_SOURCE_FILE  "${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/src/*.c" )
+	list(APPEND SOURCE_FILES ${GLAD_SOURCE_FILE})
+
+	# link libs find path
+	LINK_DIRECTORIES( 
+		${CMAKE_CURRENT_SOURCE_DIR}/third_party/glfw/lib-mingw-w64)
+ELSEIF(${CURRENT_OS} STREQUAL "linux")	
 	# Source 
 	FILE(GLOB GLAD_SOURCE_FILE  "${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/src/*.c" )
 	list(APPEND SOURCE_FILES ${GLAD_SOURCE_FILE})
@@ -99,10 +107,9 @@ ELSEIF(${CURRENT_OS} STREQUAL "android")													# android
 	FILE(GLOB JNI_SOURCE_FILE  "${CMAKE_CURRENT_SOURCE_DIR}/android/jni/*")
 	list(APPEND SOURCE_FILES ${JNI_SOURCE_FILE})
 ENDIF()
- 
+
 # Config project 
 # ----------
-
 # build shared or static lib
 ADD_LIBRARY(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${RESOURCE_FILES})
  
@@ -143,10 +150,6 @@ IF(${CURRENT_OS} STREQUAL "linux")
 						GL
 						glfw)
 ELSEIF(${CURRENT_OS} STREQUAL "windows")
-	# link libs find path
-	LINK_DIRECTORIES( 
-		${CMAKE_CURRENT_SOURCE_DIR}/third_party/glfw/lib-mingw-w64)
-		
 	TARGET_LINK_LIBRARIES(
 						${PROJECT_NAME} 
 						opengl32
