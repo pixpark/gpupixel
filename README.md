@@ -10,27 +10,23 @@
 <p align="center">
    <a href="https://github.com/pixpark/gpupixel/stargazers"><img alt="GPUPixel Stars" src="https://img.shields.io/github/stars/pixpark/gpupixel?style=social"/></a>
     <a href="https://github.com/pixpark/gpupixel/releases/latest"><img alt="GPUPixel Release" src="https://img.shields.io/github/v/release/pixpark/gpupixel"/></a>
-    <a href="#"><img alt="GPUPixel Stars" src="https://img.shields.io/badge/Platform-iOS_%7C%20macOS%20%7C%20Android-red"/></a>
+    <a href="#"><img alt="GPUPixel Stars" src="https://img.shields.io/badge/Platform-iOS_%7C_Android_%7C_Mac_%7C_Win_%7C_Linux-red"/></a>
     <a href="https://github.com/pixpark/gpupixel/blob/main/LICENSE"><img alt="GPUPixel Stars" src="https://img.shields.io/github/license/pixpark/gpupixel"/></a>
 </p>
 
 ---
 
 
-> 🎉🎉🎉 GPUPixel has added support for the Windows and Linux from [v1.1.0](https://github.com/pixpark/gpupixel/releases/tag/1.1.0), and now it is fully cross-platform supported: iOS | Android | Mac | Win | Linux 👏🏻👏🏻
-
-[GPUPixel]() @ [PixPark](https://github.com/pixpark) 
+> 👏🏻👏🏻 GPUPixel has added support for the **Windows** and **Linux** from [v1.1.0](https://github.com/pixpark/gpupixel/releases/tag/1.1.0). And now it is fully cross-platform supported: **iOS | Android | Mac | Win | Linux** 🎉🎉🎉 
 
 ## Introduction
 ⛰️ GPUPixel is a high-performance image and video AI beauty effect library written in C++11, Extremely easy to compile and integrate, with a very small library size.
 
 🔑 It is GPU-based and comes with built-in beauty effects filters that can achieve commercial-grade results. 
 
-🔌 It supports platforms including `iOS`, `Android`, `Mac`, `Win`, `Linux` and it can theoretically be ported to any platform that supports OpenGL/ES.
+🔌 It supports platforms including `iOS`, `Android`, `Mac`, `Win` and `Linux`. It can theoretically be ported to any platform that supports OpenGL/ES.
 
 >💡 The face key points detection currently utilizes the [Face++](https://www.faceplusplus.com.cn/) library, but it will be replaced with either **[VNN](https://github.com/joyycom/VNN)** or **[NCNN](https://github.com/Tencent/ncnn)** in the future.
-
-> The supported versions for Linux and Windows is expected to be completed before the Chinese 2024 New Year.
 
 ## Effects Preview
 
@@ -39,9 +35,9 @@
 
 |                   **Origin**                    |                    **Smooth**                     |                    **White**                     |                   **ThinFace**                    |
 | :---------------------------------------------: | :-----------------------------------------------: | :----------------------------------------------: | :-----------------------------------------------: |
-| <img src="./docs/image/origin.gif" width="180"> |  <img src="./docs/image/smooth.gif" width="180">  |  <img src="./docs/image/white.gif" width="180">  | <img src="./docs/image/thinface.gif" width="180"> |
+| <img src="./docs/image/origin.gif" width="180px"> |  <img src="./docs/image/smooth.gif" width="180px">  |  <img src="./docs/image/white.gif" width="180px">  | <img src="./docs/image/thinface.gif" width="180px"> |
 |                   **BigEye**                    |                   **Lipstick**                    |                   **Blusher**                    |                    **ON-OFF**                     |
-| <img src="./docs/image/bigeye.gif" width="180"> | <img src="./docs/image/lipstick.gif" width="180"> | <img src="./docs/image/blusher.gif" width="180"> |  <img src="./docs/image/on-off.gif" width="180">  |
+| <img src="./docs/image/bigeye.gif" width="180px"> | <img src="./docs/image/lipstick.gif" width="180px"> | <img src="./docs/image/blusher.gif" width="180px"> |  <img src="./docs/image/on-off.gif" width="180px">  |
 
 ## Architecture
 ![](./docs/image/arch-en.jpg)
@@ -92,23 +88,22 @@ This table compares the features supported by **GPUPixel** and **GPUImage**:
 | Time Taken |    6ms    |      5ms      |   -   |    -    |      -       |
 
 
-## Library Size
+## Lib Size
 
 |       | iOS(.framework) | MacOS(.framework) | Android(.aar) |
 | :---: | :-------------: | :---------------: | :-----------: |
 | Size  |     2.4 MB      |      2.6 MB       |    2.1 MB     |
 
+
 ## Before You Start
-Star us on GitHub, and be instantly notified for new releases!
-- Website
-- Docs
-- Deployment Docs
-- FAQ
+⭐️ Star us on GitHub, and be instantly notified for new releases!
 
 ## Quick Start
-### How to Build
-Compile using CMake frome v1.1.0. Please search for instructions on how to install and configure CMake.
-The generated libraries and applications will be located in the "output" directory of the project's root folder.
+### 🌰 How to Build
+Compile using CMake frome v1.1.0. Please search for instructions on how to install and configure CMake. 
+
+The generated libraries and app will be located in the "output" directory of the project's root folder.
+
 ### iOS
 ```shell
 cd src
@@ -140,10 +135,10 @@ cmake --build . --config Debug
 ```
 
 ### Android
-1. Open the directory `src/android/java` in Android Studio 
+Open the directory `src/android/java` in Android Studio.
 
 ### Windows
-You need install and config Cmake and MinGW64
+You need install and config Cmake and MinGW64 by yourself.
 ```shell
 cd src
 mkdir build
@@ -155,12 +150,12 @@ cmake -G "MinGW Makefiles" ..
 # Build
 mingw32-make
 ```
-### Linux (only test on ubuntu 22.04 lts)
+### Linux (Test on ubuntu)
 
 ```shell
 # install cmake 
 sudo apt-get install cmake pkg-config
-# install glfw lib
+# install dependent lib
 sudo apt-get install mesa-utils libglu1-mesa-dev freeglut3-dev mesa-common-dev libglfw3-dev
 
 # start build
@@ -176,7 +171,7 @@ make
 ```
 ---
 
-### App demo
+### 🌵 App demo
 ### iOS
 Refer to `examples/ios`
 ### Mac
@@ -184,12 +179,13 @@ Refer to `examples/mac`
 ### Android
 Refer to `examples/android` or `src/android/java`
 ### Window and Linux
-Refer to `examples/desktop`
+Refer to `examples/desktop` 
+
 The compilation method is the same as compiling the library.
 
-## How to Use
+## 🏂 How to Use
 
-**`.h` file**
+**Declear filters**
 
 ```c++
 // video data input
@@ -199,7 +195,7 @@ std::shared_ptr<FaceBeautyFilter> face_beauty_filter_;
 // video data output 
 std::shared_ptr<TargetRawDataOutput> target_raw_output_;
 ```
-**Create Filter, `.cpp` file**
+**Create and link filters**
 
 ```c++
  gpupixel::GPUPixelContext::getInstance()->runSync([&] {
@@ -210,11 +206,12 @@ std::shared_ptr<TargetRawDataOutput> target_raw_output_;
     face_beauty_filter_ = FaceBeautyFilter::create();
     
     // Add filter
-    source_raw_input_->addTarget(face_beauty_filter_)->addTarget(target_raw_output_);
+    source_raw_input_->addTarget(face_beauty_filter_)
+                     ->addTarget(target_raw_output_);
  }
 ```
 
-**Input Image Data I420 or RGBA**
+**Input YUV420P or RGBA**
 
 ```c++
 // ...
@@ -261,17 +258,17 @@ target_raw_output_->setPixelsCallbck([=](const uint8_t *data,
 // Output data callbck
 ```
 
-## Star History
+## 🚙 Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=pixpark/gpupixel&type=Date)](https://star-history.com/#pixpark/gpupixel&Date)
 
-## Contributing
-Welcome to contribute code🙏🏻.
+## 🍒 Contributing
+Welcome to contribute code 👏🏻.
 
-At the same time, please consider supporting Dify by sharing it on social media and at events and conferences.
+At the same time, please consider supporting GPUPixel by sharing it on social media and at events and conferences.
 
 
-## Acknowledgement
+## 📔Acknowledgement
 ### Reference Project
 1. [GPUImage](https://github.com/BradLarson/GPUImage) 
 2. [CainCamera](https://github.com/CainKernel/CainCamera)
