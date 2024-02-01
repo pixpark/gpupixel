@@ -184,12 +184,13 @@ int SourceRawDataInput::genTextureWithI420(int width,
   const int widths[3] = {width, width / 2, width / 2};
   const int heights[3] = {height, height / 2, height / 2};
 
-  // for (int i = 0; i < 3; ++i) {
-  //   glActiveTexture(GL_TEXTURE0 + i);
-  //   glBindTexture(GL_TEXTURE_2D, _textures[i]);
-  //   glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, widths[i], heights[i], 0,
-  //                GL_LUMINANCE, GL_UNSIGNED_BYTE, pixels[i]);
-  // }
+  for (int i = 0; i < 3; ++i) {
+    glActiveTexture(GL_TEXTURE0 + i);
+    glBindTexture(GL_TEXTURE_2D, _textures[i]);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, widths[i], heights[i], 0,
+                 GL_LUMINANCE, GL_UNSIGNED_BYTE, pixels[i]);
+  }
+  
   _filterProgram->setUniformValue("texture_type", 0);
   // draw frame buffer
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);

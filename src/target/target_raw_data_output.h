@@ -24,7 +24,9 @@ NS_GPUPIXEL_BEGIN
 typedef std::function<
     void(const uint8_t* data, int width, int height, int64_t ts)>
     RawOutputCallback;
+    
 #define PBO_SIZE 2
+
 class TargetRawDataOutput : public Target {
  public:
   TargetRawDataOutput();
@@ -33,8 +35,6 @@ class TargetRawDataOutput : public Target {
   void update(int64_t frameTime) override;
   void setI420Callbck(RawOutputCallback cb);
   void setPixelsCallbck(RawOutputCallback cb);
-  void SetCurrentFrameInvalid();  // when re_enable_ is true, do not deliver the
-                                  // frame, then set it false.
  private:
   int renderToOutput();
   bool initWithShaderString(const std::string& vertexShaderSource,
