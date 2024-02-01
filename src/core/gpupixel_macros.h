@@ -62,7 +62,7 @@
   #import <OpenGLES/ES3/gl.h>
   #import <OpenGLES/ES3/glext.h>
 #elif defined(GPUPIXEL_MAC)
-  #import <OpenGL/gl3.h>
+  #import <OpenGL/gl.h>
 #elif defined(GPUPIXEL_ANDROID)
   #include <GLES3/gl3.h>
   #include <GLES3/gl3ext.h>
