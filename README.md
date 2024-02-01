@@ -1,5 +1,5 @@
 <h1 align="center">
-  <a href="https://github.com/pixpark/gpupixel">GPUPixel</a>
+  <a href="https://github.com/pixpark/gpupixel"><img src="./docs/image/describe.png"></a>
 </h1>
 
 <p align="center">
@@ -98,6 +98,8 @@ This table compares the features supported by **GPUPixel** and **GPUImage** and 
 
 ## Before You Start
 ⭐️ Star us on GitHub, and be instantly notified for new releases!
+
+![](./docs/image/give-star.gif)
 
 ## Quick Start
 ### 📱 How to Build
