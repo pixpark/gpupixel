@@ -9,6 +9,7 @@
 #include "target_raw_data_output.h"
 #include "gpupixel_context.h"
 #include <cstring>
+#include "libyuv.h"
 USING_NS_GPUPIXEL
 
 const std::string kRGBToI420VertexShaderString = R"(
@@ -94,7 +95,6 @@ void TargetRawDataOutput::update(int64_t frameTime) {
   int width = _inputFramebuffers[0].frameBuffer->getWidth();
   int height = _inputFramebuffers[0].frameBuffer->getHeight();
   if (_width != width || _height != height) {
-    SetCurrentFrameInvalid();
     _width = width;
     _height = height;
 #if defined(GPUPIXEL_IOS)
@@ -180,8 +180,22 @@ void TargetRawDataOutput::setPixelsCallbck(RawOutputCallback cb) {
   pixels_callback_ = cb;
 }
 
-void TargetRawDataOutput::SetCurrentFrameInvalid() {
-  current_frame_invalid_ = true;
+void TargetRawDataOutput::initOutputBuffer(int width, int height) {
+  uint32_t rgb_size = width * height * 4;
+  uint32_t yuv_size = width * height * 3 / 2;
+
+  // alloc rgba frame buffer
+  if (_readPixelData != nullptr) {
+    delete[] _readPixelData;
+  }
+  _readPixelData = new uint8_t[rgb_size];
+  std::memset(_readPixelData, 0, rgb_size);
+  // alloc yuv frame buffer
+  if (_yuvFrameBuffer != nullptr) {
+    delete[] _yuvFrameBuffer;
+  }
+  _yuvFrameBuffer = new uint8_t[yuv_size];
+  std::memset(_yuvFrameBuffer, 0, yuv_size);
 }
 
 #if defined(GPUPIXEL_IOS)
@@ -193,20 +207,19 @@ void TargetRawDataOutput::readPixelsFromCVPixelBuffer() {
 
     // process pixels how you like
     if (pixels && i420_callback_) {
-      if (!current_frame_invalid_) {
-        // callback i420
-        //        libyuv::ARGBToI420(pixels, stride, _yuvFrameBuffer, _width,
-        //                           _yuvFrameBuffer + _width * _height, _width
-        //                           / 2, _yuvFrameBuffer + _width * _height * 5
-        //                           / 4, _width / 2, _width, _height);
-        //        i420_callback_(_yuvFrameBuffer, _width, _height, _frame_ts);
-      }
+      libyuv::ARGBToI420(pixels, stride, _yuvFrameBuffer, _width,
+                        _yuvFrameBuffer + _width * _height, _width
+                        / 2, _yuvFrameBuffer + _width * _height * 5
+                        / 4, _width / 2, _width, _height);
+      i420_callback_(_yuvFrameBuffer, _width, _height, _frame_ts);
     }
-    if (current_frame_invalid_) {
-      current_frame_invalid_ = false;
+
+    if(pixels_callback_) {
+      pixels_callback_(pixels, _width, _height, _frame_ts);
     }
+
     CVPixelBufferUnlockBaseAddress(renderTarget, kCVPixelBufferLock_ReadOnly);
-  }
+  } 
 }
 
 void TargetRawDataOutput::initTextureCache(int width, int height) {
@@ -294,25 +307,6 @@ void TargetRawDataOutput::initPBO(int width, int height) {
   }
   CHECK_GL(glBindBuffer(GL_PIXEL_PACK_BUFFER, 0));
 }
-#endif
-
-void TargetRawDataOutput::initOutputBuffer(int width, int height) {
-  uint32_t rgb_size = width * height * 4;
-  uint32_t yuv_size = width * height * 3 / 2;
-
-  // alloc rgba frame buffer
-  if (_readPixelData != nullptr) {
-    delete[] _readPixelData;
-  }
-  _readPixelData = new uint8_t[rgb_size];
-  std::memset(_readPixelData, 0, rgb_size);
-  // alloc yuv frame buffer
-  if (_yuvFrameBuffer != nullptr) {
-    delete[] _yuvFrameBuffer;
-  }
-  _yuvFrameBuffer = new uint8_t[yuv_size];
-  std::memset(_yuvFrameBuffer, 0, yuv_size);
-}
 
 // read pixel with pbo
 void TargetRawDataOutput::readPixelsWithPBO(int width, int height) {
@@ -328,20 +322,26 @@ void TargetRawDataOutput::readPixelsWithPBO(int width, int height) {
 
 #if defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
   GLubyte* ptr = (GLubyte*)glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY);
-#elif defined(GPUPIXEL_ANDROID) || defined(GPUPIXEL_IOS)
+#elif defined(GPUPIXEL_ANDROID)
   GLubyte* ptr = (GLubyte*)glMapBufferRange(
-      GL_PIXEL_PACK_BUFFER, 0, width * height * 4, GL_MAP_READ_BIT);
+                  GL_PIXEL_PACK_BUFFER, 0, width * height * 4, GL_MAP_READ_BIT);
 #endif
   if (ptr) {
-    //    libyuv::ABGRToI420(ptr, width * 4, _yuvFrameBuffer, _width,
-    //                       _yuvFrameBuffer + _width * _height, _width / 2,
-    //                       _yuvFrameBuffer + _width * _height * 5 / 4, _width
-    //                       / 2, _width, _height);
+       libyuv::ABGRToI420(ptr, width * 4, _yuvFrameBuffer, _width,
+                          _yuvFrameBuffer + _width * _height, _width / 2,
+                          _yuvFrameBuffer + _width * _height * 5 / 4, _width
+                          / 2, _width, _height);
     if (i420_callback_) {
       i420_callback_(_yuvFrameBuffer, _width, _height, _frame_ts);
+    }
+
+    if(pixels_callback_) {
+      pixels_callback_(ptr, _width, _height, _frame_ts);
     }
 
     glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
   }
   glBindBuffer(GL_PIXEL_PACK_BUFFER, GL_NONE);
 }
+
+#endif
