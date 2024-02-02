@@ -4,7 +4,7 @@ layout: home
 
 hero:
   name: "GPUPixel"
-  text: "AI Beauty Effects Library"
+  text: "Real-Time AI Image Beauty Filter Library"
   tagline: Achieving Commercial-Grade Beauty Effects
   actions:
     - theme: brand
