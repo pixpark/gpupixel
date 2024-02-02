@@ -20,7 +20,8 @@
 > 👏🏻👏🏻 GPUPixel has added support for the `Windows` and `Linux` from [v1.1.0](https://github.com/pixpark/gpupixel/releases/tag/v1.1.0). 
 > Now it is fully cross-platform supported: `iOS`, `Android`, `Mac`, `Win` and `Linux` 🎉🎉🎉 
 
-## Introduction
+## Description
+
 ⛰️ GPUPixel is a real-time, high-performance image and video filter library, extremely easy to compile and integrate with  small library size.
 
 🔑 GPUPixel  is written in C++11 and is based on OpenGL/ES, incorporating a built-in beauty face filter that achieves commercial-grade beauty effects.
@@ -59,7 +60,7 @@ This table compares the features supported by **GPUPixel** and **GPUImage** and 
 | Lipstick Filter       |                        ✅                        |                         ❌                          |                              ❌                               |
 | Blush Filter          |                        ✅                        |                         ❌                          |                              ❌                               |
 | More Build in Filter  |                        ✅                        |                         ✅                          |                              ✅                               |
-| 🎥 **Input Formats:**  |                                                 |                                                    |                                                              |
+| 🎬 **Input Formats:**  |                                                 |                                                    |                                                              |
 | YUV420P(I420)         |                        ✅                        |                         ❌                          |                              ❌                               |
 | RGBA                  |                        ✅                        |                         ✅                          |                              ✅                               |
 | JPEG                  |                        ✅                        |                         ✅                          |                              ✅                               |
