@@ -6,9 +6,9 @@ hero:
   name: "GPUPixel"
   text: "基于GPU 实时 AI 图像美滤镜库"
   tagline: 高性能, 跨平台, 达到商业级美颜滤镜效果
-  # image:
-  #     src: /image/beauty.png
-  #     alt: avatar
+  image:
+      src: /cover.svg
+      alt: cover
   actions:
     - theme: brand
       text: 快速开始

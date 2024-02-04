@@ -6,7 +6,7 @@ export default defineConfig({
   title: "GPUPixel",
   titleTemplate: ':title - GPUPixel',
   description: "Cross-Platform AI Beauty Effects Library, Achieving Commercial-Grade Beauty Effects. Written in C++11, Based on OpenGL/ES and VNN.",
-  head: [['link', { rel: 'icon', href: 'image/favicon/favicon.ico' }]],
+  head: [['link', { rel: 'icon', href: '/favicon.ico' }]],
 
   locales: {
     root: {
@@ -47,7 +47,7 @@ export default defineConfig({
   },
 
   themeConfig: {
-    logo: '/image/logo.png',
+    logo: '/logo.png',
     i18nRouting: true,
     lastUpdatedText: '最近更新时间',
     outline: 'deep',
