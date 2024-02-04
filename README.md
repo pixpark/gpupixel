@@ -20,7 +20,7 @@
 > 👏🏻👏🏻 GPUPixel has added support for the `Windows` and `Linux` from [v1.1.0](https://github.com/pixpark/gpupixel/releases/tag/v1.1.0). 
 > Now it is fully cross-platform supported: `iOS`, `Android`, `Mac`, `Win` and `Linux` 🎉🎉🎉 
 
-## Description
+## Introduction
 
 ⛰️ GPUPixel is a real-time, high-performance image and video filter library, extremely easy to compile and integrate with  small library size.
 
@@ -44,7 +44,7 @@
 ## Architecture
 ![](./docs/image/arch-en.jpg)
 
-## Features Compared
+## Features
 
 This table compares the features supported by **GPUPixel** and **GPUImage** and **Android-GPUImage**:
 
@@ -102,8 +102,9 @@ This table compares the features supported by **GPUPixel** and **GPUImage** and 
 
 ![](./docs/image/give-star.gif)
 
-## Quick Start
-### 📱 How to Build
+## Getting Started
+
+### How to Build
 Compile using CMake frome v1.1.0. Please search for instructions on how to install and configure CMake. 
 
 The generated libraries and app will be located in the "output" directory of the project's root folder.
@@ -175,7 +176,7 @@ make
 ```
 ---
 
-### 🌵 App demo
+### App demo
 ### iOS
 Refer to `examples/ios`
 ### Mac
@@ -198,7 +199,7 @@ cmake -G "MinGW Makefiles" ..
 # Build
 mingw32-make
 ```
-## 🏂 How to Use
+## How to Use
 
 **Declear filters**
 
@@ -273,17 +274,17 @@ target_raw_output_->setPixelsCallbck([=](const uint8_t *data,
 // Output data callbck
 ```
 
-## 🌠 Star History
+## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=pixpark/gpupixel&type=Date)](https://star-history.com/#pixpark/gpupixel&Date)
 
-## 🧑‍💻 Contributing
+## Contributing
 Welcome to contribute code 👏🏻.
 
 At the same time, please consider supporting GPUPixel by sharing it on social media and at events and conferences.
 
 
-## 👜 Acknowledgement
+## Acknowledgement
 ### Reference Project
 1. [GPUImage](https://github.com/BradLarson/GPUImage) 
 2. [CainCamera](https://github.com/CainKernel/CainCamera)
