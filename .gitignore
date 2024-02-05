@@ -2,7 +2,9 @@ node_modules/
 .vitepress/dist/
 .vitepress/cache/
 docs/.vitepress/cache/
-dist/
+docs/.vitepress/dist/
+docs/docs/.vitepress/cache/
+docs/docs/.vitepress/dist/
 output/
 
 # Xcode
@@ -637,5 +639,4 @@ $RECYCLE.BIN/
 
 .vscode
 android/gpupixel/.cxx
-output
 output
