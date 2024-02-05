@@ -110,6 +110,7 @@ function nav() {
   return [ 
       { text: '主页', link: '/' },
       { text: '文档', link: '/intro' },
+      { text: '博客', link: 'https://pixpark.net' },
       // { text: '1.1.x',
       //    items: [
       //      { text: '变更日志', link: 'https://github.com/vuejs/vitepress/blob/main/CHANGELOG.md' },
