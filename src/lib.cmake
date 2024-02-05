@@ -10,6 +10,9 @@ ELSEIF(${CMAKE_SYSTEM_NAME} MATCHES "iOS")
 	SET(CURRENT_OS "ios")
 ELSEIF(${CMAKE_SYSTEM_NAME} MATCHES "Android")
 	SET(CURRENT_OS "android")
+ELSEIF(${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
+	SET(CURRENT_OS "wasm")
+	add_definitions(-D__emscripten__)
 ELSE()
     MESSAGE(FATAL_ERROR "NOT SUPPORT THIS SYSTEM")
 ENDIF()
@@ -86,7 +89,7 @@ IF(${CURRENT_OS} STREQUAL "windows") 														# windows
 	# link libs find path
 	LINK_DIRECTORIES( 
 		${CMAKE_CURRENT_SOURCE_DIR}/third_party/glfw/lib-mingw-w64)
-ELSEIF(${CURRENT_OS} STREQUAL "linux")	
+ELSEIF(${CURRENT_OS} STREQUAL "linux" OR ${CURRENT_OS} STREQUAL "wasm")	
 	# Source 
 	FILE(GLOB GLAD_SOURCE_FILE  "${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/src/*.c" )
 	list(APPEND SOURCE_FILES ${GLAD_SOURCE_FILE})
@@ -112,6 +115,7 @@ ENDIF()
 # ----------
 # build shared or static lib
 ADD_LIBRARY(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${RESOURCE_FILES})
+# ADD_EXECUTABLE(${PROJECT_NAME} ${SOURCE_FILES} ${RESOURCE_FILES})
  
 # set platform project 
 IF(${CURRENT_OS} STREQUAL "linux")
@@ -139,12 +143,16 @@ ELSEIF(${CURRENT_OS} STREQUAL "macos" OR ${CURRENT_OS} STREQUAL "ios")
 	)
 ELSEIF(${CURRENT_OS} STREQUAL "android")
 
+ELSEIF(${CURRENT_OS} STREQUAL "wasm")
+	set_target_properties(${PROJECT_NAME} PROPERTIES 
+						SUFFIX ".wasm"
+    					LINK_FLAGS "-Os -s USE_WEBGL2=1 -s FULL_ES3=1 -s USE_GLFW=3  -s WASM=1")
 ENDIF()
 
 
 # link libs
 # -------
-IF(${CURRENT_OS} STREQUAL "linux")
+IF(${CURRENT_OS} STREQUAL "linux" OR ${CURRENT_OS} STREQUAL "wasm")
 	TARGET_LINK_LIBRARIES(
 						${PROJECT_NAME}  
 						GL
