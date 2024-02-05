@@ -45,10 +45,11 @@
 #elif __linux__
     // linux
     #define GPUPIXEL_LINUX
+#elif __emscripten__
+  #define GPUPIXEL_LINUX
 #elif __unix__ // all unices not caught above
-#   error "Unknown compiler"
-    #define GPUPIXEL_UNIX
     // Unix
+    #define GPUPIXEL_LINUX
 #elif defined(_POSIX_VERSION)
     // POSIX
 #   error "Unknown compiler"
