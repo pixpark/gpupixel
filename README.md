@@ -102,6 +102,8 @@ This table compares the features supported by **GPUPixel** and **GPUImage** and 
 
 ![](./docs/image/give-star.gif)
 
+
+
 ## Getting Started
 
 ### How to Build
@@ -109,7 +111,11 @@ Compile using CMake frome v1.1.0. Please search for instructions on how to insta
 
 The generated libraries and app will be located in the "output" directory of the project's root folder.
 
-### iOS
+<details>
+<summary>Click to expand</summary>
+
+### iOS 
+
 ```shell
 cd src
 mkdir build
@@ -174,9 +180,16 @@ cmake ..
 # Build
 make
 ```
+
+</details>
+
 ---
 
 ### App demo
+
+<details>
+<summary>Click to expand</summary>
+
 ### iOS
 Refer to `examples/ios`
 ### Mac
@@ -199,7 +212,13 @@ cmake -G "MinGW Makefiles" ..
 # Build
 mingw32-make
 ```
+
+</details>
+
 ## How to Use
+
+<details>
+<summary>Click to expand</summary>
 
 **Declear filters**
 
@@ -273,6 +292,8 @@ target_raw_output_->setPixelsCallbck([=](const uint8_t *data,
 
 // Output data callbck
 ```
+
+</details>
 
 ## Star History
 
