@@ -48,12 +48,14 @@ INCLUDE_DIRECTORIES(
 	${CMAKE_CURRENT_SOURCE_DIR}/source
 	${CMAKE_CURRENT_SOURCE_DIR}/target
 	${CMAKE_CURRENT_SOURCE_DIR}/utils
+	${CMAKE_CURRENT_SOURCE_DIR}/face_detect
 	${CMAKE_CURRENT_SOURCE_DIR}/android/jni
 	${CMAKE_CURRENT_SOURCE_DIR}/target/objc
 	${CMAKE_CURRENT_SOURCE_DIR}/third_party/glfw/include
 	${CMAKE_CURRENT_SOURCE_DIR}/third_party/stb
 	${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/include
 	${CMAKE_CURRENT_SOURCE_DIR}/third_party/libyuv/include
+	${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/include
 )
  
 # Add common source file
@@ -62,6 +64,7 @@ FILE(GLOB SOURCE_FILES
 	"${CMAKE_CURRENT_SOURCE_DIR}/filter/*"         
 	"${CMAKE_CURRENT_SOURCE_DIR}/source/*"       
 	"${CMAKE_CURRENT_SOURCE_DIR}/target/*"                               
+	"${CMAKE_CURRENT_SOURCE_DIR}/face_detect/*"                 
 	"${CMAKE_CURRENT_SOURCE_DIR}/utils/*"                 
 	"${CMAKE_CURRENT_SOURCE_DIR}/third_party/libyuv/source/*"
 )
@@ -78,6 +81,7 @@ FILE(GLOB EXPORT_HEADER
 # Add resource file
 FILE(GLOB RESOURCE_FILES 
 	"${CMAKE_CURRENT_SOURCE_DIR}/resources/*"               
+	"${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/models/vnn_face278_data/*"               
 )
 
 # Add platform source and header and lib link search path
@@ -87,8 +91,7 @@ IF(${CURRENT_OS} STREQUAL "windows") 														# windows
 	list(APPEND SOURCE_FILES ${GLAD_SOURCE_FILE})
 
 	# link libs find path
-	LINK_DIRECTORIES( 
-		${CMAKE_CURRENT_SOURCE_DIR}/third_party/glfw/lib-mingw-w64)
+	LINK_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/third_party/glfw/lib-mingw-w64)
 ELSEIF(${CURRENT_OS} STREQUAL "linux" OR ${CURRENT_OS} STREQUAL "wasm")	
 	# Source 
 	FILE(GLOB GLAD_SOURCE_FILE  "${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/src/*.c" )
@@ -139,6 +142,7 @@ ELSEIF(${CURRENT_OS} STREQUAL "macos" OR ${CURRENT_OS} STREQUAL "ios")
 		SOVERSION 1.0.1
 		PUBLIC_HEADER "${EXPORT_HEADER}"
 		RESOURCE "${RESOURCE_FILES}"
+		LINK_FLAGS "-Wl,-F${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/libs/${CURRENT_OS}"
 		#XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "iPhone Developer"
 	)
 ELSEIF(${CURRENT_OS} STREQUAL "android")
@@ -170,7 +174,10 @@ ELSEIF(${CURRENT_OS} STREQUAL "macos")
 						-framework CoreVideo  	\
 						-framework CoreGraphics \
 						-framework AVFoundation \
-						-framework CoreMedia"
+						-framework CoreMedia
+						-framework vnn_kit_osx \
+						-framework vnn_core_osx \
+						-framework vnn_face_osx"
 	)
 ELSEIF(${CURRENT_OS} STREQUAL "ios")
 	TARGET_LINK_LIBRARIES(
@@ -180,7 +187,10 @@ ELSEIF(${CURRENT_OS} STREQUAL "ios")
 					-framework CoreVideo  	\
 					-framework CoreGraphics \
 					-framework AVFoundation \
-					-framework CoreMedia"
+					-framework CoreMedia \
+					-framework vnn_kit_ios \
+					-framework vnn_core_ios \
+					-framework vnn_face_ios"
 	)
 ELSEIF(${CURRENT_OS} STREQUAL "android")
 	TARGET_LINK_LIBRARIES(
