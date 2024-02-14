@@ -8,6 +8,7 @@
 #include "face_makeup_filter.h"
 #include "gpupixel_context.h"
 #include "source_image.h"
+#include "face_detector.h"
 
 NS_GPUPIXEL_BEGIN
 
@@ -121,6 +122,18 @@ bool FaceMakeupFilter::init() {
   _filterTexCoordAttribute2 =
       _filterProgram2->getAttribLocation("inputTextureCoordinate");
 
+  FaceDetector::RegCallback([=](std::vector<float> landmarks) {
+    if (landmarks.size() == 0) {
+      setHasFace(false);
+      return;
+    }
+    std::vector<float> vect;
+    for (auto it : landmarks) {
+      vect.push_back(2 * it - 1);
+    }
+    face_land_marks_ = vect;
+    setHasFace(true);
+  });
   return true;
 }
 
@@ -129,14 +142,14 @@ void FaceMakeupFilter::setImageTexture(std::shared_ptr<SourceImage> texture) {
 }
 
 void FaceMakeupFilter::setFaceLandmarks(const std::vector<float> landmarks) {
-  if (landmarks.size() == 0) {
-    return;
-  }
-  std::vector<float> vect;
-  for (auto it : landmarks) {
-    vect.push_back(2 * it - 1);
-  }
-  face_land_marks_ = vect;
+//  if (landmarks.size() == 0) {
+//    return;
+//  }
+//  std::vector<float> vect;
+//  for (auto it : landmarks) {
+//    vect.push_back(2 * it - 1);
+//  }
+//  face_land_marks_ = vect;
 }
 
 bool FaceMakeupFilter::proceed(bool bUpdateTargets, int64_t frameTime) {
