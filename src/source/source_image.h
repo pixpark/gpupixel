@@ -26,13 +26,13 @@ class SourceImage : public Source {
                                             int height,
                                             int channel_count,
                                             const unsigned char* pixels);
-
+  void Render();
  private:
 #if defined(GPUPIXEL_ANDROID)
     static std::shared_ptr<SourceImage> createImageForAndroid(std::string name);
 #endif
-
-
+  std::vector<unsigned char> image_bytes;
+  int image_channel_count_ = 0;
 };
 
 NS_GPUPIXEL_END

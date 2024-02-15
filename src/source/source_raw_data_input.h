@@ -11,7 +11,7 @@
 #include "gl_program.h"
 #include <functional>
 NS_GPUPIXEL_BEGIN
-class FaceDetector;
+
 class SourceRawDataInput : public Filter {
  public:
   ~SourceRawDataInput();
@@ -61,7 +61,6 @@ class SourceRawDataInput : public Filter {
   GLuint _textures[4] = {0};
   RotationMode _rotation = NoRotation;
   std::shared_ptr<Framebuffer> _framebuffer;
-  std::shared_ptr<FaceDetector> _face_detector;
 };
 
 NS_GPUPIXEL_END
