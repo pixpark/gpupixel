@@ -10,7 +10,6 @@
 
 #import "VideoFilterController.h"
 #import "VideoCapturer.h"
-#import "FaceDetector.h"
 #import <gpupixel/gpupixel.h>
 
 using namespace gpupixel;
@@ -22,7 +21,6 @@ using namespace gpupixel;
   std::shared_ptr<gpupixel::FaceMakeupFilter> lipstick_filter_;
   std::shared_ptr<gpupixel::FaceMakeupFilter> blusher_filter_;
   std::shared_ptr<SourceImage> gpuSourceImage;
-  CMSampleBufferRef sampleImageBuffer;
   CADisplayLink *_displayLink;
 }
  
@@ -34,7 +32,6 @@ using namespace gpupixel;
 @property(nonatomic, assign) CGFloat eyeValue;
 @property(nonatomic, assign) CGFloat lipstickValue;
 @property(nonatomic, assign) CGFloat blusherValue;
-@property(nonatomic, assign) Boolean needSetupFaceDetector;
 
 //
 @property (strong, nonatomic) UISegmentedControl* segment;
@@ -54,12 +51,6 @@ using namespace gpupixel;
   [self initVideoFilter];
   [self initUI];
  
-  NSString *imagePath = [[NSBundle mainBundle] pathForResource:@"sample_face" ofType:@"jpg"];
-  UIImage *image = [UIImage imageWithContentsOfFile:imagePath];
- 
-  sampleImageBuffer = [self uiImageToCMSampleBuffer:image];
-  self.needSetupFaceDetector = TRUE;
-  
   //
   _displayLink.paused = NO;
 }
@@ -108,7 +99,6 @@ using namespace gpupixel;
 
 - (void)viewWillDisappear:(BOOL)animated {
   _displayLink.paused = YES;
-  [[FaceDetector shareInstance] resetFacepp];
   [super viewWillDisappear:animated];
 }
 
@@ -117,22 +107,23 @@ using namespace gpupixel;
     gpuPixelView = [[GPUPixelView alloc] initWithFrame:self.view.frame];
     [self.view addSubview:gpuPixelView];
     
-    auto mouth = SourceImage::create(Util::getResourcePath("mouth.png"));
-    lipstick_filter_ = FaceMakeupFilter::create();
-    lipstick_filter_->setImageTexture(mouth);
-    lipstick_filter_->setTextureBounds(FrameBounds{502.5, 710, 262.5, 167.5});
-
-    auto blusher = SourceImage::create(Util::getResourcePath("blusher.png"));
-    blusher_filter_ = FaceMakeupFilter::create();
-    blusher_filter_->setImageTexture(blusher);
-    blusher_filter_->setTextureBounds(FrameBounds{395, 520, 489, 209});
-
+    
+    lipstick_filter_ = LipstickFilter::create();
+    blusher_filter_ = BlusherFilter::create();
+ 
+   
     beauty_face_filter_ = BeautyFaceFilter::create();
     face_reshape_filter_ = FaceReshapeFilter::create();
     
-    NSString *imagePath = [[NSBundle mainBundle] pathForResource:@"sample_face" ofType:@"jpg"];
+    NSString *imagePath = [[NSBundle mainBundle] pathForResource:@"sample_face" ofType:@"png"];
 
     gpuSourceImage = SourceImage::create([imagePath UTF8String]);
+    
+    gpuSourceImage->RegLandmarkCallback([=](std::vector<float> landmarks) {
+      lipstick_filter_->SetFaceLandmarks(landmarks);
+      blusher_filter_->SetFaceLandmarks(landmarks);
+      face_reshape_filter_->SetFaceLandmarks(landmarks);
+    });
     
     // filter pipline
     gpuSourceImage->addTarget(lipstick_filter_)
@@ -212,82 +203,10 @@ using namespace gpupixel;
   _blusherValue = value;
   blusher_filter_->setBlendLevel(value/10);
 }
- 
-// for face detect
--(CMSampleBufferRef)uiImageToCMSampleBuffer:(UIImage*) image {
-  CGImageRef cgImage = [image CGImage];
   
-  size_t width = CGImageGetWidth(cgImage);
-  size_t height = CGImageGetHeight(cgImage);
-
-  NSDictionary *pixelAttributes = @{
-      (__bridge NSString *)kCVPixelBufferCGImageCompatibilityKey: @YES,
-      (__bridge NSString *)kCVPixelBufferCGBitmapContextCompatibilityKey: @YES
-  };
-
-  CVPixelBufferRef pixelBuffer;
-  CVPixelBufferCreate(kCFAllocatorDefault, width, height, kCVPixelFormatType_32ARGB, (__bridge CFDictionaryRef)pixelAttributes, &pixelBuffer);
-  
-  CVPixelBufferLockBaseAddress(pixelBuffer, 0);
-  void *baseAddress = CVPixelBufferGetBaseAddress(pixelBuffer);
-
-  size_t bytesPerRow = CVPixelBufferGetBytesPerRow(pixelBuffer);
-  CGContextRef context = CGBitmapContextCreate(baseAddress, width, height, 8, bytesPerRow, CGImageGetColorSpace(cgImage), kCGImageAlphaNoneSkipFirst);
-  CGContextDrawImage(context, CGRectMake(0, 0, width, height), cgImage);
-  CGContextRelease(context);
-  CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
-  
-  CMSampleBufferRef sampleBuffer;
-  CMVideoFormatDescriptionRef formatDescription;
-  CMVideoFormatDescriptionCreateForImageBuffer(kCFAllocatorDefault, pixelBuffer, &formatDescription);
-
-  CMSampleTimingInfo timingInfo = {kCMTimeInvalid, kCMTimeInvalid, kCMTimeInvalid};
-  CMSampleBufferCreateForImageBuffer(kCFAllocatorDefault, pixelBuffer, true, NULL, NULL, formatDescription, &timingInfo, &sampleBuffer);
-
-  CFRelease(formatDescription);
-  
-  return sampleBuffer;
-}
-
 - (void)displayLinkDidFire:(CADisplayLink *)displayLink {
-  if (![FaceDetector shareInstance].isWorking) {
-    if(self.needSetupFaceDetector) {
-      // setup face++
-      [FaceDetector shareInstance].sampleBufferOrientation = FaceDetectorSampleBufferOrientationNoRatation;
-      [FaceDetector shareInstance].faceOrientation = 0;
-      [FaceDetector shareInstance].sampleType = FaceDetectorSampleTypeCamera;
-      [[FaceDetector shareInstance] auth];
-      
-      self.needSetupFaceDetector = NO;
-    }
-    
-    [[FaceDetector shareInstance] getLandmarksFromSampleBuffer:sampleImageBuffer];
-    
-    NSArray *landmarks = [FaceDetector shareInstance].oneFace.landmarks;
-    if(landmarks && face_reshape_filter_) {
-      std::vector<float> land_marks;
-      for (NSValue *value in landmarks) {
-          CGPoint point = [value CGPointValue];
-        land_marks.push_back(point.x);
-        land_marks.push_back(point.y);
-      }
-      
-      face_reshape_filter_->setLandmarks(land_marks);
-      face_reshape_filter_->setHasFace(true);
-      
-      lipstick_filter_->setFaceLandmarks(land_marks);
-      lipstick_filter_->setHasFace(true);
-      
-      blusher_filter_->setFaceLandmarks(land_marks);
-      blusher_filter_->setHasFace(true);
-    } else {
-      face_reshape_filter_->setHasFace(false);
-      lipstick_filter_->setHasFace(false);
-      blusher_filter_->setHasFace(false);
-    }
-  }
-  // must call proceed function
-  gpuSourceImage->proceed();
+  // must call function
+  gpuSourceImage->Render();
 }
  
 -(void)onFilterSwitchChange:(UISegmentedControl *)sender{
