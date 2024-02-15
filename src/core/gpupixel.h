@@ -43,6 +43,8 @@
 // face filters
 #include "beauty_face_filter.h"
 #include "face_makeup_filter.h"
+#include "lipstick_filter.h"
+#include "blusher_filter.h"
 #include "face_reshape_filter.h"
 
 #include "box_blur_filter.h"
