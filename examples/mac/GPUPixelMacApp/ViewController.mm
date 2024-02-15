@@ -96,25 +96,28 @@ using namespace gpupixel;
     gpuPixelView = [[GPUPixelView alloc] initWithFrame: self.view.frame];
     [self.view addSubview:gpuPixelView positioned:NSWindowBelow relativeTo:nil];
  
-#if 0 // todo
-    auto mouth = SourceImage::create(Util::getResourcePath("mouth.png"));
-    lipstick_filter_ = FaceMakeupFilter::create();
-    lipstick_filter_->setImageTexture(mouth);
-    lipstick_filter_->setTextureBounds(FrameBounds{502.5, 710, 262.5, 167.5});
-
-    auto blusher = SourceImage::create(Util::getResourcePath("blusher.png"));
-    blusher_filter_ = FaceMakeupFilter::create();
-    blusher_filter_->setImageTexture(blusher);
-    blusher_filter_->setTextureBounds(FrameBounds{395, 520, 489, 209});
-#endif
+    // create filter
+ 
+    lipstick_filter_ = LipstickFilter::create();
+    blusher_filter_ = BlusherFilter::create();
+    face_reshape_filter_ = FaceReshapeFilter::create();
+    
+    gpuPixelRawInput->RegLandmarkCallback([=](std::vector<float> landmarks) {
+       lipstick_filter_->SetFaceLandmarks(landmarks);
+       blusher_filter_->SetFaceLandmarks(landmarks);
+       face_reshape_filter_->SetFaceLandmarks(landmarks);
+     });
+ 
     // create filter
     targetRawOutput_ = TargetRawDataOutput::create();
     beauty_face_filter_ = BeautyFaceFilter::create();
-//    face_reshape_filter_ = FaceReshapeFilter::create();
+  
     
-    // filter pipline
-    gpuPixelRawInput->addTarget(beauty_face_filter_)
-                    ->addTarget(gpuPixelView);
+    gpuPixelRawInput->addTarget(lipstick_filter_)
+                       ->addTarget(blusher_filter_)
+                       ->addTarget(face_reshape_filter_)
+                       ->addTarget(beauty_face_filter_)
+                       ->addTarget(gpuPixelView);
   
     [gpuPixelView setFillMode:(gpupixel::TargetView::PreserveAspectRatioAndFill)];
   
