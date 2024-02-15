@@ -27,16 +27,13 @@ class FaceMakeupFilter : public Filter {
   virtual bool proceed(bool bUpdateTargets = true,
                        int64_t frameTime = 0) override;
 
-  void setFaceLandmarks(const std::vector<float> landmarks);
-  
+ 
   inline void setBlendLevel(float level) { this->blend_level_ = level; }
-  void setImageTexture(std::shared_ptr<SourceImage> texture);
-
-  void setTextureBounds(FrameBounds bounds) { texture_bounds_ = bounds; }
-  void setHasFace(bool hasFace) { has_face_ = hasFace; }
-
+  void SetFaceLandmarks(std::vector<float> landmarks);
  protected:
   FaceMakeupFilter();
+  void setImageTexture(std::shared_ptr<SourceImage> texture);
+  void setTextureBounds(FrameBounds bounds) { texture_bounds_ = bounds; }
 
  private:
   std::vector<GLuint> getFaceIndexs();

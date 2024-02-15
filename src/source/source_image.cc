@@ -16,7 +16,7 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
-
+#include "face_detector.h"
 USING_NS_GPUPIXEL
 
 std::shared_ptr<SourceImage> SourceImage::create_from_memory(int width,
@@ -56,17 +56,37 @@ void SourceImage::init(int width, int height, int channel_count, const unsigned 
     }
     this->setFramebuffer(_framebuffer);
     CHECK_GL(glBindTexture(GL_TEXTURE_2D, this->getFramebuffer()->getTexture()));
+  
+  image_channel_count_ = channel_count;
   if(channel_count == 3) {
     CHECK_GL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB,
                           GL_UNSIGNED_BYTE, pixels));
+    image_bytes.assign(pixels, pixels + width * height *3);
+   
   } else if(channel_count == 4) {
     CHECK_GL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
                           GL_UNSIGNED_BYTE, pixels));
+    image_bytes.assign(pixels, pixels + width * height *4);
   }
   CHECK_GL(glBindTexture(GL_TEXTURE_2D, 0));
-  
 }
 
+void SourceImage::Render() {
+  GPUPIXEL_FRAME_TYPE type;
+  if(_face_detector) {
+    if(image_channel_count_ == 3) {
+      type = GPUPIXEL_FRAME_TYPE_RGB888;
+      // todo vnn not support, only support png picture.
+      std::terminate();
+    } else if(image_channel_count_ == 4) {
+      type = GPUPIXEL_FRAME_TYPE_RGBA8888;
+    }
+    _face_detector->Detect(image_bytes.data(), _framebuffer->getWidth(), _framebuffer->getHeight(), type);
+  }
+  
+  Source::proceed();
+
+}
 
 #if defined(GPUPIXEL_ANDROID)
 std::shared_ptr<SourceImage> SourceImage::createImageForAndroid(std::string name) {

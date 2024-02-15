@@ -136,6 +136,15 @@ int Source::getRotatedFramebufferWidth() const {
     return 0;
   }
 }
+ 
+int Source::RegLandmarkCallback(FaceDetectorCallback callback) {
+  if(_face_detector == nullptr) {
+    // init face detector
+    _face_detector = std::make_shared<FaceDetector>();
+  }
+
+  _face_detector->RegCallback(callback);
+}
 
 int Source::getRotatedFramebufferHeight() const {
   if (_framebuffer) {
