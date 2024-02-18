@@ -127,7 +127,21 @@ ADD_LIBRARY(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${RESOURCE_FILES})
  
 # set platform project 
 IF(${CURRENT_OS} STREQUAL "linux")
+	# 设置要构建的目标库的名称和类型
+	add_library(vnn_kit SHARED IMPORTED)
+	# 设置目标库的实际路径
+	set_target_properties(vnn_kit PROPERTIES IMPORTED_LOCATION
+	${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/libs/${CURRENT_OS}/libvnn_kit.so)
 
+	add_library(vnn_core SHARED IMPORTED)
+	# 设置目标库的实际路径
+	set_target_properties(vnn_core PROPERTIES IMPORTED_LOCATION
+	${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/libs/${CURRENT_OS}/libvnn_core.so)
+
+	add_library(vnn_face SHARED IMPORTED)
+	# 设置目标库的实际路径
+	set_target_properties(vnn_face PROPERTIES IMPORTED_LOCATION
+	${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/libs/${CURRENT_OS}/libvnn_face.so)
 ELSEIF(${CURRENT_OS} STREQUAL "windows")
 	# 设置要构建的目标库的名称和类型
 	add_library(vnn_kit SHARED IMPORTED)
@@ -193,7 +207,10 @@ IF(${CURRENT_OS} STREQUAL "linux" OR ${CURRENT_OS} STREQUAL "wasm")
 	TARGET_LINK_LIBRARIES(
 						${PROJECT_NAME}  
 						GL
-						glfw)
+						glfw
+						vnn_core
+						vnn_kit
+						vnn_face)
 ELSEIF(${CURRENT_OS} STREQUAL "windows")
 	TARGET_LINK_LIBRARIES(
 						${PROJECT_NAME} 

@@ -81,11 +81,19 @@ IF(${CURRENT_OS} STREQUAL "linux")
 						gpupixel
 						GL
 						glfw)
+
+	FIlE(GLOB VNN_LIBS 
+		${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/vnn/libs/${CURRENT_OS}/*
+	)
 ELSEIF(${CURRENT_OS} STREQUAL "windows")
 	TARGET_LINK_LIBRARIES(${PROJECT_NAME} 
 						gpupixel
 						opengl32
 						glfw3)
+						
+	FIlE(GLOB VNN_LIBS 
+		${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/vnn/libs/${CURRENT_OS}/x64/*
+	)
 ENDIF()
 
 # copy resource file
@@ -95,9 +103,7 @@ FILE(GLOB RESOURCE_FILES
 	"${CMAKE_CURRENT_SOURCE_DIR}/../src/resources/*"
 	"${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/vnn/models/vnn_face278_data/face_pc[1.0.0].vnnmodel"           
 )
-FIlE(GLOB VNN_LIBS 
-	${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/vnn/libs/${CURRENT_OS}/x64/*
-)
+
 
 MACRO(EXPORT_INCLUDE)
 ADD_CUSTOM_COMMAND(TARGET ${PROJECT_NAME} PRE_BUILD 
