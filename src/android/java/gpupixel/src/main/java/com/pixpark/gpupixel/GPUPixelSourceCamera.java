@@ -44,6 +44,16 @@ public class GPUPixelSourceCamera extends GPUPixelSource implements Camera.Previ
         setUpCamera(mCurrentCameraId);
     }
 
+    public void setLandmarkCallbck(GPUPixelFilter filter) {
+        GPUPixel.getInstance().runOnDraw(new Runnable() {
+            @Override
+            public void run() {
+                GPUPixel.nativeSetLandmarkCallback(mNativeClassID, filter.getNativeClassID());
+            }
+        });
+
+    }
+
     @Override
     public void onPreviewFrame(final byte[] data, Camera camera) {
         final Camera.Size previewSize = camera.getParameters().getPreviewSize();

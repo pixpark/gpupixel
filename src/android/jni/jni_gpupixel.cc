@@ -4,6 +4,7 @@
 #include <jni.h>
 #include <string>
 #include <list>
+#include <face_reshape_filter.h>
 #include "gpupixel_context.h"
 #include "jni_helpers.h"
 #include "libyuv.h"
@@ -329,7 +330,6 @@ extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeContextPurge(
   GPUPixelContext::getInstance()->purge();
 };
 
-FILE* yuv_file_zz = NULL;
 extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeYUVtoRBGA(
     JNIEnv* env,
     jobject obj,
@@ -363,6 +363,17 @@ extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeYUVtoRBGA(
     env->ReleasePrimitiveArrayCritical(rgbOut, rgbData, 0);
     env->ReleasePrimitiveArrayCritical(yuv420sp, nv21, 0);
 }
+
+extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeSetLandmarkCallback (
+        JNIEnv* env,
+        jobject,
+        jlong classId,
+        jlong filterClassId) {
+  ((SourceCamera*)classId)->RegLandmarkCallback([=](std::vector<float> landmarks) {
+      ((FaceReshapeFilter*)filterClassId)->SetFaceLandmarks(landmarks);
+  });
+
+};
 
 extern "C" jint JNIEXPORT JNICALL JNI_OnLoad(JavaVM* jvm, void* reserved) {
   SetJVM(jvm);

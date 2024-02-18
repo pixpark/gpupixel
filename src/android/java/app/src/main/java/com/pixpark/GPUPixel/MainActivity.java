@@ -18,6 +18,7 @@ import android.widget.SeekBar;
 import android.widget.Toast;
 
 import com.pixpark.GPUPixelApp.databinding.ActivityMainBinding;
+import com.pixpark.gpupixel.GPUPixel;
 import com.pixpark.gpupixel.GPUPixelFilter;
 import com.pixpark.gpupixel.GPUPixelSourceCamera;
 import com.pixpark.gpupixel.GPUPixelView;
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     private GPUPixelSourceCamera sourceCamera;
     private GPUPixelView surfaceView;
     private GPUPixelFilter beautyFaceFilter;
+    private GPUPixelFilter thinfaceFilter;
     private Button btnStart;
     private SeekBar smooth_seekbar;
     private SeekBar whiteness_seekbar;
@@ -46,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         String path =  getExternalFilesDir("gpupixel").getAbsolutePath();
         Log.i(TAG, path);
 
+        GPUPixel.CopyModel(this);
         // 保持屏幕常亮
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -95,12 +98,16 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     public void startCameraFilter() {
         // 美颜滤镜
         beautyFaceFilter = GPUPixelFilter.create(GPUPixelFilter.BeautyFaceFilter.name);
+        thinfaceFilter = GPUPixelFilter.create(GPUPixelFilter.FaceReshapeFilter.name);
+//        beautyFaceFilter = GPUPixelFilter.create(GPUPixelFilter.BeautyFaceFilter.name);
 
         // camera
         sourceCamera = new GPUPixelSourceCamera(this.getApplicationContext());
         sourceCamera.addTarget(beautyFaceFilter);
+//        thinfaceFilter.addTarget(beautyFaceFilter);
         beautyFaceFilter.addTarget(surfaceView);
 
+        sourceCamera.setLandmarkCallbck(thinfaceFilter);
         // set default value
         beautyFaceFilter.setProperty(GPUPixelFilter.BeautyFaceFilter.propSmoothLevel, 0.5);
         beautyFaceFilter.setProperty(GPUPixelFilter.BeautyFaceFilter.propWhiteLevel, 0.4);

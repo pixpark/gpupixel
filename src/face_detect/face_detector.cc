@@ -7,30 +7,71 @@
 
 #include "face_detector.h"
 
-#import "vnn_kit.h"
-#import "vnn_face.h"
+#include "vnn_kit.h"
+#include "vnn_face.h"
 
 #include "util.h"
-
+#if defined(GPUPIXEL_ANDROID)
+#include "jni_helpers.h"
+#endif
 NS_GPUPIXEL_BEGIN
 
 
 FaceDetector::FaceDetector() {
   //  init 
   VNN_SetLogLevel(VNN_LOG_LEVEL_ALL);
+#if defined(GPUPIXEL_ANDROID)
+  auto model_path = getModelPath() + "/face_mobile[1.0.0].vnnmodel";
+#else
   auto model_path = Util::getResourcePath("face_mobile[1.0.0].vnnmodel");
+#endif
     const void *argv[] = {
       model_path.c_str(),
     };
   
   const int argc = sizeof(argv)/sizeof(argv[0]);
   VNN_Result  ret = VNN_Create_Face(&vnn_handle_, argc, argv);
+  int aa = 0;
+  aa++;
 }
 
 FaceDetector::~FaceDetector() {
   
 }
 
+#if defined(GPUPIXEL_ANDROID)
+  std::string FaceDetector::getModelPath() {
+    // Todo(Jeayo) @see https://developer.android.com/ndk/guides/image-decoder?hl=zh-cn
+    JavaVM *jvm = GetJVM();
+    JNIEnv *env = GetEnv(jvm);
+
+    // 定义类路径和方法签名
+    const char *className = "com/pixpark/gpupixel/GPUPixel";
+    const char *methodName = "getModel_path";
+    const char *methodSignature = "()Ljava/lang/String;";
+
+    // GPUPixel
+    jclass jSourceImageClass = env->FindClass(className);
+    if (jSourceImageClass == NULL) {
+      return NULL;
+    }
+
+    // 找到 getModel_path 方法
+    jmethodID createBitmapMethod = env->GetStaticMethodID(jSourceImageClass, methodName,
+                                                          methodSignature);
+    if (createBitmapMethod == NULL) {
+      return NULL;
+    }
+
+    // 调用createBitmap方法
+    jstring path = (jstring)env->CallStaticObjectMethod(jSourceImageClass,
+                                                 createBitmapMethod);
+
+    const char* str = env->GetStringUTFChars(path, nullptr);
+    env->DeleteLocalRef(jSourceImageClass);
+    return str;
+  }
+#endif
 int FaceDetector::RegCallback(FaceDetectorCallback callback) {
   _face_detector_callbacks.push_back(callback);
   return 0;
