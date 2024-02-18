@@ -81,6 +81,7 @@ void SourceImage::Render() {
     } else if(image_channel_count_ == 4) {
       type = GPUPIXEL_FRAME_TYPE_RGBA8888;
     }
+
     _face_detector->Detect(image_bytes.data(), _framebuffer->getWidth(), _framebuffer->getHeight(), type);
   }
   
