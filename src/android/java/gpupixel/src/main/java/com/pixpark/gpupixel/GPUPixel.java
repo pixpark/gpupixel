@@ -7,10 +7,15 @@
 
 package com.pixpark.gpupixel;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.opengl.GLSurfaceView;
 import android.graphics.PixelFormat;
 import android.os.Build;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 
 public class GPUPixel {
     public static final int NoRotation = 0;
@@ -22,6 +27,7 @@ public class GPUPixel {
     public static final int RotateRightFlipHorizontal = 6;
     public static final int Rotate180 = 7;
 
+    public static String model_path;
     private GPUPixelRenderer mRenderer = null;
     private GLSurfaceView mGLSurfaceView = null;
     private int mGLSurfaceViewRenderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY;
@@ -139,6 +145,58 @@ public class GPUPixel {
 
     static {
         System.loadLibrary("gpupixel");
+        System.loadLibrary("vnn_core");
+        System.loadLibrary("vnn_kit");
+        System.loadLibrary("vnn_face");
+    }
+
+    public static void CopyModel(Context context) {
+        String exPath = context.getExternalFilesDir(null).getAbsolutePath();
+        copyAssetsToFiles(context, "vnn_models", exPath + "/vnn_models");
+        model_path = exPath + "/vnn_models";
+    }
+
+    public static String getModel_path() {
+        return model_path;
+    }
+
+    public static void  copyAssetsToFiles(Context context, String oldPath, String newPath) {
+        try {
+            String fileNames[] = context.getAssets().list(oldPath);//获取assets目录下的所有文件及目录名
+            if (fileNames.length > 0) {//如果是目录
+                File file = new File(newPath);
+                if(!file.exists()) {
+                    file.mkdirs();//如果文件夹不存在，则递归
+                }
+                for (String fileName : fileNames) {
+                    String srcPath = oldPath + "/" + fileName;
+                    String dstPath = newPath+"/"+fileName;
+                    File f = new File(dstPath);
+                    if(f.exists()) continue;
+                    copyAssetsToFiles(context, srcPath, dstPath);
+                }
+
+            } else {//如果是文件
+                File file = new File(newPath);
+                if(!file.exists()) {
+                    InputStream is = context.getAssets().open(oldPath);
+                    FileOutputStream fos = new FileOutputStream(file);
+                    byte[] buffer = new byte[1024];
+                    int byteCount=0;
+                    while((byteCount=is.read(buffer))!=-1) {//循环从输入流读取 buffer字节
+                        fos.write(buffer, 0, byteCount);//将读取的输入流写入到输出流
+                    }
+                    fos.flush();//刷新缓冲区
+                    is.close();
+                    fos.close();
+                }
+
+            }
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+
+        }
     }
 
     // Filter
@@ -188,5 +246,7 @@ public class GPUPixel {
 
     // utils
     public static native void nativeYUVtoRBGA(byte[] yuv, int width, int height, int[] out);
+
+    public static native void nativeSetLandmarkCallback(final long classID, final long filterID);
 
 }

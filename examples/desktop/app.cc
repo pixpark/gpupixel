@@ -64,7 +64,7 @@ int main()
  
     //  filter pipline
     // ----
-    gpuSourceImage = SourceImage::create("demo.jpg");
+    gpuSourceImage = SourceImage::create("demo.png");
     target_view = std::make_shared<TargetView>();
     
     gpuSourceImage->addTarget(beauty_face_filter_)
