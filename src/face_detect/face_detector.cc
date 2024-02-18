@@ -21,7 +21,7 @@ FaceDetector::FaceDetector() {
   //  init 
   VNN_SetLogLevel(VNN_LOG_LEVEL_ALL);
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
-  auto model_path = getModelPath() + "/face_mobile[1.0.0].vnnmodel";
+  auto model_path = Util::getResourcePath("face_mobile[1.0.0].vnnmodel"); //getModelPath() + "/face_mobile[1.0.0].vnnmodel";
 #elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_MAC) || defined(GPUPIXEL_LINUX)
   auto model_path = Util::getResourcePath("face_pc[1.0.0].vnnmodel");
 #endif
