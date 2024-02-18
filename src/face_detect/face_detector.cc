@@ -20,10 +20,10 @@ NS_GPUPIXEL_BEGIN
 FaceDetector::FaceDetector() {
   //  init 
   VNN_SetLogLevel(VNN_LOG_LEVEL_ALL);
-#if defined(GPUPIXEL_ANDROID)
+#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
   auto model_path = getModelPath() + "/face_mobile[1.0.0].vnnmodel";
-#else
-  auto model_path = Util::getResourcePath("face_mobile[1.0.0].vnnmodel");
+#elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_MAC) || defined(GPUPIXEL_LINUX)
+  auto model_path = Util::getResourcePath("face_pc[1.0.0].vnnmodel");
 #endif
     const void *argv[] = {
       model_path.c_str(),
@@ -31,8 +31,6 @@ FaceDetector::FaceDetector() {
   
   const int argc = sizeof(argv)/sizeof(argv[0]);
   VNN_Result  ret = VNN_Create_Face(&vnn_handle_, argc, argv);
-  int aa = 0;
-  aa++;
 }
 
 FaceDetector::~FaceDetector() {

@@ -101,7 +101,7 @@ ENDIF()
 # Add resource file
 FILE(GLOB RESOURCE_FILES 
 	"${CMAKE_CURRENT_SOURCE_DIR}/../src/resources/*"
-	"${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/vnn/models/vnn_face278_data/face_pc[1.0.0].vnnmodel"           
+	"${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/vnn/models/vnn_face278_data/*"           
 )
 
 
