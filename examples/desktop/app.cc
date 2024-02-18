@@ -82,14 +82,7 @@ int main()
                     ->addTarget(face_reshape_filter_)
                     ->addTarget(beauty_face_filter_)
                     ->addTarget(target_view);
-    // set default value
-    // ----
-    // beauty_face_filter_->setBlurAlpha(9.0f/10);
-    // beauty_face_filter_->setWhite(9.0f/20);
-
-    // lipstick_filter_->setBlendLevel(9.0f/10); 
-    // blusher_filter_->setBlendLevel(9.0f/10); 
-
+                    
     // 
     target_view->onSizeChanged(1280, 720);
     
