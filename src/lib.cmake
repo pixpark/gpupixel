@@ -23,7 +23,7 @@ SET(OUTPUT_INSTALL_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../output")
 SET(CMAKE_INCLUDE_OUTPUT_DIRECTORY "${OUTPUT_INSTALL_PATH}/include")
 SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${OUTPUT_INSTALL_PATH}/library/${CURRENT_OS}")
 SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${OUTPUT_INSTALL_PATH}/library/${CURRENT_OS}")
-SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${OUTPUT_INSTALL_PATH}/app/${CURRENT_OS}")
+SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${OUTPUT_INSTALL_PATH}/library/${CURRENT_OS}")
 SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG   ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/debug)
 SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG   ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/debug)
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG   ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/debug)
@@ -93,10 +93,12 @@ IF(${CURRENT_OS} STREQUAL "windows") 														# windows
 
 	# link libs find path
 	LINK_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/third_party/glfw/lib-mingw-w64)
+	FILE(GLOB VNN_LIBS ${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/libs/${CURRENT_OS}/x64/*)
 ELSEIF(${CURRENT_OS} STREQUAL "linux" OR ${CURRENT_OS} STREQUAL "wasm")	
 	# Source 
 	FILE(GLOB GLAD_SOURCE_FILE  "${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/src/*.c" )
 	list(APPEND SOURCE_FILES ${GLAD_SOURCE_FILE})
+	FILE(GLOB VNN_LIBS ${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/libs/${CURRENT_OS}/*)
 ELSEIF(${CURRENT_OS} STREQUAL "macos" OR ${CURRENT_OS} STREQUAL "ios")						# ios and mac
 	# Header
 	FILE(GLOB OBJC_HEADER_FILE  "${CMAKE_CURRENT_SOURCE_DIR}/target/objc/*.h")
@@ -113,6 +115,8 @@ ELSEIF(${CURRENT_OS} STREQUAL "android")													# android
 	# Source 
 	FILE(GLOB JNI_SOURCE_FILE  "${CMAKE_CURRENT_SOURCE_DIR}/android/jni/*")
 	list(APPEND SOURCE_FILES ${JNI_SOURCE_FILE})
+
+	LINK_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/libs/${CURRENT_OS}/${ANDROID_ABI})
 ENDIF()
 
 # Config project 
@@ -125,7 +129,21 @@ ADD_LIBRARY(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${RESOURCE_FILES})
 IF(${CURRENT_OS} STREQUAL "linux")
 
 ELSEIF(${CURRENT_OS} STREQUAL "windows")
+	# 设置要构建的目标库的名称和类型
+	add_library(vnn_kit SHARED IMPORTED)
+	# 设置目标库的实际路径
+	set_target_properties(vnn_kit PROPERTIES IMPORTED_IMPLIB
+	${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/libs/${CURRENT_OS}/x64/vnn_kit.dll)
 
+	add_library(vnn_core SHARED IMPORTED)
+	# 设置目标库的实际路径
+	set_target_properties(vnn_core PROPERTIES IMPORTED_IMPLIB
+	${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/libs/${CURRENT_OS}/x64/vnn_core.dll)
+
+	add_library(vnn_face SHARED IMPORTED)
+	# 设置目标库的实际路径
+	set_target_properties(vnn_face PROPERTIES IMPORTED_IMPLIB
+	${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/libs/${CURRENT_OS}/x64/vnn_face.dll)
 ELSEIF(${CURRENT_OS} STREQUAL "macos" OR ${CURRENT_OS} STREQUAL "ios")
 	set_target_properties(${PROJECT_NAME} PROPERTIES
 		XCODE_ATTRIBUTE_PRODUCT_NAME ${PROJECT_NAME}
@@ -147,7 +165,21 @@ ELSEIF(${CURRENT_OS} STREQUAL "macos" OR ${CURRENT_OS} STREQUAL "ios")
 		#XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "iPhone Developer"
 	)
 ELSEIF(${CURRENT_OS} STREQUAL "android")
+	# 设置要构建的目标库的名称和类型
+	add_library(vnn_kit SHARED IMPORTED)
+	# 设置目标库的实际路径
+	set_target_properties(vnn_kit PROPERTIES IMPORTED_LOCATION
+	${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/libs/${CURRENT_OS}/${ANDROID_ABI}/libvnn_kit.so)
 
+	add_library(vnn_core SHARED IMPORTED)
+	# 设置目标库的实际路径
+	set_target_properties(vnn_core PROPERTIES IMPORTED_LOCATION
+	${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/libs/${CURRENT_OS}/${ANDROID_ABI}/libvnn_core.so)
+
+	add_library(vnn_face SHARED IMPORTED)
+	# 设置目标库的实际路径
+	set_target_properties(vnn_face PROPERTIES IMPORTED_LOCATION
+	${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/libs/${CURRENT_OS}/${ANDROID_ABI}/libvnn_face.so)
 ELSEIF(${CURRENT_OS} STREQUAL "wasm")
 	set_target_properties(${PROJECT_NAME} PROPERTIES 
 						SUFFIX ".wasm"
@@ -166,7 +198,10 @@ ELSEIF(${CURRENT_OS} STREQUAL "windows")
 	TARGET_LINK_LIBRARIES(
 						${PROJECT_NAME} 
 						opengl32
-						glfw3)
+						glfw3
+						vnn_core
+						vnn_kit
+						vnn_face)
 ELSEIF(${CURRENT_OS} STREQUAL "macos")
 	TARGET_LINK_LIBRARIES(
 		${PROJECT_NAME} "-framework OpenGL 		\
@@ -200,7 +235,10 @@ ELSEIF(${CURRENT_OS} STREQUAL "android")
 					android
 					GLESv3
 					EGL
-					jnigraphics)
+					jnigraphics
+					vnn_core
+					vnn_kit
+					vnn_face)
 ENDIF()
 
 # copy header to install dir
