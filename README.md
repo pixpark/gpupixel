@@ -16,9 +16,7 @@
 
 ---
 
-
-> 👏🏻👏🏻 GPUPixel has added support for the `Windows` and `Linux` from [v1.1.0](https://github.com/pixpark/gpupixel/releases/tag/v1.1.0). 
-> Now it is fully cross-platform supported: `iOS`, `Android`, `Mac`, `Win` and `Linux` 🎉🎉🎉 
+> 👉 The face landmark detection has replace [Face++](https://www.faceplusplus.com.cn/) with [VNN](https://github.com/joyycom/VNN) from [v1.2.0](https://github.com/pixpark/gpupixel/releases/tag/v1.2.0), no more verification requirements are needed 👏
 
 ## Introduction
 
@@ -27,8 +25,6 @@
 🔑 GPUPixel  is written in C++11 and is based on OpenGL/ES, incorporating a built-in beauty face filter that achieves commercial-grade beauty effects.
 
 🔌 GPUPixel supports platforms including `iOS`, `Android`, `Mac`, `Win` and `Linux`. It can theoretically be ported to any platform that supports OpenGL/ES.
-
->💡 The face key points detection currently utilizes the [Face++](https://www.faceplusplus.com.cn/) library, but it will be replaced with either **[VNN](https://github.com/joyycom/VNN)** or **[NCNN](https://github.com/Tencent/ncnn)** in the future.
 
 ## Effects Preview
 
@@ -84,7 +80,7 @@ This table compares the features supported by **GPUPixel** and **GPUImage** and 
 |    **CPU**     |    5%     |    5%    |    3%    |    3%     |      3%       |
 | **Time Taken** |   10ms    |   4ms    |   3ms    |    3ms    |      3ms      |
 ### Android
-|     -      | Xiaomi 10 | Huawei Meta30 | Vivo  | SAMSUNG | Google Pixel |
+|     -      | Xiaomi 10 | Huawei Mate30 | Vivo  | SAMSUNG | Google Pixel |
 | :--------: | :-------: | :-----------: | :---: | :-----: | :----------: |
 |    CPU     |    3%     |      5%       |   -   |    -    |      -       |
 | Time Taken |    6ms    |      5ms      |   -   |    -    |      -       |
@@ -111,9 +107,7 @@ Compile using CMake frome v1.1.0. Please search for instructions on how to insta
 
 The generated libraries and app will be located in the "output" directory of the project's root folder.
 
-<details>
-<summary>Click to expand</summary>
-
+ 
 ### iOS 
 
 ```shell
@@ -187,8 +181,8 @@ make
 
 ### App demo
 
-<details>
-<summary>Click to expand</summary>
+
+
 
 ### iOS
 Refer to `examples/ios`
@@ -217,8 +211,8 @@ mingw32-make
 
 ## How to Use
 
-<details>
-<summary>Click to expand</summary>
+
+
 
 **Declear filters**
 
