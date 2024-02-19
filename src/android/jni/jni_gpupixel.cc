@@ -366,14 +366,46 @@ extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeYUVtoRBGA(
 
 extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeSetLandmarkCallback (
         JNIEnv* env,
-        jobject,
-        jlong classId,
-        jlong filterClassId) {
+        jobject obj,
+        jobject source,
+        jlong classId) {
+
+    jobject globalSourceRef = env->NewGlobalRef(source);
   ((SourceCamera*)classId)->RegLandmarkCallback([=](std::vector<float> landmarks) {
-      ((FaceReshapeFilter*)filterClassId)->SetFaceLandmarks(landmarks);
+      jclass cls = env->GetObjectClass(globalSourceRef);
+      jmethodID methodID = env->GetMethodID(cls, "onFaceLandmark", "([F)V");
+
+      jfloatArray arr = env->NewFloatArray(landmarks.size());
+      env->SetFloatArrayRegion( arr, 0, landmarks.size(), landmarks.data());
+
+      env->CallVoidMethod(globalSourceRef, methodID, arr);
+
+      env->DeleteLocalRef(arr);
+
   });
 
 };
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_pixpark_gpupixel_GPUPixel_nativeFilterSetPropertyFloatArray(JNIEnv *env, jclass clazz,
+                                                                     jlong class_id,
+                                                                     jstring jProperty,
+                                                                     jfloatArray jarray) {
+    const char* property = env->GetStringUTFChars(jProperty, 0);
+    jsize length = env->GetArrayLength(jarray);
+
+    // 获取指向原始Java数组的指针
+    jfloat* c_array = env->GetFloatArrayElements(jarray, nullptr);
+    std::vector<float> vector;
+    for(int i = 0; i < length; i++) {
+        vector.push_back(c_array[i]);
+    }
+    ((Filter*)class_id)->setProperty(property, vector);
+    env->ReleaseStringUTFChars(jProperty, property);
+    // 释放Java数组的内存
+    env->ReleaseFloatArrayElements(jarray, c_array, JNI_ABORT);
+}
 
 extern "C" jint JNIEXPORT JNICALL JNI_OnLoad(JavaVM* jvm, void* reserved) {
   SetJVM(jvm);

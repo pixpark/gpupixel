@@ -44,6 +44,17 @@ public class GPUPixelFilter extends GPUPixelSource implements GPUPixelTarget {
         });
     }
 
+    public void setProperty(final String property, final float[] array){
+        GPUPixel.getInstance().runOnDraw(new Runnable() {
+            @Override
+            public void run() {
+                if (mNativeClassID != 0) {
+                    GPUPixel.nativeFilterSetPropertyFloatArray(mNativeClassID, property, array);
+                }
+            }
+        });
+    }
+
     public void setProperty(final String property, final int value){
         GPUPixel.getInstance().runOnDraw(new Runnable() {
             @Override
@@ -123,5 +134,18 @@ public class GPUPixelFilter extends GPUPixelSource implements GPUPixelTarget {
         public static final String name = "FaceReshapeFilter";
         public static final String propThinLevel = "thin_face";
         public static final String propBigeyeLevel = "big_eye";
+        public static final String propFaceLandmark = "face_landmark";
+    }
+
+    public final class LipstickFilter {
+        public static final String name = "LipstickFilter";
+        public static final String propBlendLevel = "blend_level";
+        public static final String propFaceLandmark = "face_landmark";
+    }
+
+    public final class BlusherFilter {
+        public static final String name = "BlusherFilter";
+        public static final String propBlendLevel = "blend_level";
+        public static final String propFaceLandmark = "face_landmark";
     }
 }

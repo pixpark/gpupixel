@@ -191,6 +191,15 @@ bool FaceMakeupFilter::init() {
   _filterPositionAttribute2 = _filterProgram2->getAttribLocation("position");
   _filterTexCoordAttribute2 =
       _filterProgram2->getAttribLocation("inputTextureCoordinate");
+
+  registerProperty("blend_level", 0, "The smoothing of filter with range between -1 and 1.", [this](float& val) {
+      setBlendLevel(val);
+  });
+
+  std::vector<float> defaut;
+  registerProperty("face_landmark", defaut, "The face landmark of filter with range between -1 and 1.", [this](std::vector<float> val) {
+      SetFaceLandmarks(val);
+  });
   return true;
 }
 
