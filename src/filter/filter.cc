@@ -15,6 +15,8 @@ std::map<std::string, std::function<std::shared_ptr<Filter>()>> initFilterFactor
     std::map<std::string, std::function<std::shared_ptr<Filter>()>> factory;
     factory["BeautyFaceFilter"] = BeautyFaceFilter::create;
     factory["FaceReshapeFilter"] = FaceReshapeFilter::create;
+    factory["LipstickFilter"] = LipstickFilter::create;
+    factory["BlusherFilter"] = BlusherFilter::create;
     return  factory;
 }
 std::map<std::string, std::function<std::shared_ptr<Filter>()>> Filter::_filterFactories = initFilterFactory();
@@ -338,6 +340,23 @@ bool Filter::registerProperty(
 }
 
 bool Filter::registerProperty(
+        const std::string& name,
+        std::vector<float> defaultValue,
+        const std::string& comment /* = ""*/,
+        std::function<void(std::vector<float>)> setCallback /* = 0*/) {
+  if (hasProperty(name)) {
+    return false;
+  }
+  VectorProperty property;
+  property.type = "vector";
+  property.value = defaultValue;
+  property.comment = comment;
+  property.setCallback = setCallback;
+  _vectorProperties[name] = property;
+  return true;
+}
+
+bool Filter::registerProperty(
     const std::string& name,
     const std::string& defaultValue,
     const std::string& comment /* = ""*/,
@@ -387,6 +406,27 @@ bool Filter::setProperty(const std::string& name, float value) {
     return false;
   }
   FloatProperty* property = ((FloatProperty*)rawProperty);
+  if (property->setCallback) {
+    property->setCallback(value);
+  }
+  property->value = value;
+
+  return true;
+}
+
+bool Filter::setProperty(const std::string& name, std::vector<float> value) {
+  Property* rawProperty = _getProperty(name);
+  if (!rawProperty) {
+    Util::Log("WARNING", "Filter::setProperty invalid property %s",
+              name.c_str());
+    return false;
+  } else if (rawProperty->type != "vector") {
+    Util::Log("WARNING",
+              "Filter::setProperty The property type is expected to be %s",
+              rawProperty->type.c_str());
+    return false;
+  }
+  VectorProperty* property = ((VectorProperty*)rawProperty);
   if (property->setCallback) {
     property->setCallback(value);
   }
@@ -448,6 +488,9 @@ Filter::Property* Filter::_getProperty(const std::string& name) {
   }
   if (_floatProperties.find(name) != _floatProperties.end()) {
     return &_floatProperties[name];
+  }
+  if (_vectorProperties.find(name) != _vectorProperties.end()) {
+    return &_vectorProperties[name];
   }
   if (_stringProperties.find(name) != _stringProperties.end()) {
     return &_stringProperties[name];

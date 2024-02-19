@@ -18,6 +18,10 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 
 public class GPUPixel {
+
+    public interface GPUPixelLandmarkCallback {
+        public void onFaceLandmark(float[] landmarks);
+    }
     public static final int NoRotation = 0;
     public static final int RotateLeft = 1;
     public static final int RotateRight = 2;
@@ -27,7 +31,7 @@ public class GPUPixel {
     public static final int RotateRightFlipHorizontal = 6;
     public static final int Rotate180 = 7;
 
-    public static String model_path;
+    public static String resource_path;
     private GPUPixelRenderer mRenderer = null;
     private GLSurfaceView mGLSurfaceView = null;
     private int mGLSurfaceViewRenderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY;
@@ -48,6 +52,9 @@ public class GPUPixel {
 
     public boolean isInited() {
         return mRenderer != null;
+    }
+    public static void setContext(Context context) {
+        copyResource(context);
     }
 
     public void init() {
@@ -150,14 +157,14 @@ public class GPUPixel {
         System.loadLibrary("vnn_face");
     }
 
-    public static void CopyModel(Context context) {
+    public static void copyResource(Context context) {
         String exPath = context.getExternalFilesDir(null).getAbsolutePath();
-        copyAssetsToFiles(context, "vnn_models", exPath + "/vnn_models");
-        model_path = exPath + "/vnn_models";
+        copyAssetsToFiles(context, "resource", exPath + "/resource");
+        resource_path = exPath + "/resource";
     }
 
-    public static String getModel_path() {
-        return model_path;
+    public static String getResource_path() {
+        return resource_path;
     }
 
     public static void  copyAssetsToFiles(Context context, String oldPath, String newPath) {
@@ -205,8 +212,8 @@ public class GPUPixel {
     public static native void nativeFilterFinalize(long classID);
     public static native void nativeFilterSetPropertyFloat(long classID, String property, float value);
     public static native void nativeFilterSetPropertyInt(long classID, String property, int value);
+    public static native void nativeFilterSetPropertyFloatArray(long classID, String property, float[] array);
     public static native void nativeFilterSetPropertyString(long classID, String prooerty, String value);
-
     // SourceImage
     public static native long nativeSourceImageNew();
     public static native void nativeSourceImageDestroy(final long classID);
@@ -247,6 +254,6 @@ public class GPUPixel {
     // utils
     public static native void nativeYUVtoRBGA(byte[] yuv, int width, int height, int[] out);
 
-    public static native void nativeSetLandmarkCallback(final long classID, final long filterID);
+    public static native void nativeSetLandmarkCallback(Object source, final long classID);
 
 }

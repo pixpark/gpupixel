@@ -231,6 +231,11 @@ bool FaceReshapeFilter::init() {
         setEyeZoomLevel(val);
     });
 
+    std::vector<float> defaut;
+    registerProperty("face_landmark", defaut, "The face landmark of filter with range between -1 and 1.", [this](std::vector<float> val) {
+        SetFaceLandmarks(val);
+    });
+
   this->thinFaceDelta_ = 0.0;
   // [0, 0.15]
   this->bigEyeDelta_ = 0.0;

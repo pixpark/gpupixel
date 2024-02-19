@@ -30,5 +30,8 @@ class Util {
                                      std::string file_name,
                                      std::string type);
 #endif
+#if defined(GPUPIXEL_ANDROID)
+  static std::string getResourcePathJni(std::string name);
+#endif
 };
 NS_GPUPIXEL_END
