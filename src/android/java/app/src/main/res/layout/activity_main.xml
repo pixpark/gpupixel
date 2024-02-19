@@ -17,11 +17,11 @@
         android:id="@+id/mopi"
         android:layout_width="100dp"
         android:layout_height="30dp"
-        android:text="Skin Smooth"
+        android:text="smooth"
         android:textColor="@color/white"
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="20dp"
-        android:layout_marginBottom="90dp" />
+        android:layout_marginBottom="200dp" />
 
     <SeekBar
         android:id="@+id/smooth_seekbar"
@@ -29,19 +29,20 @@
         android:layout_height="20dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="80dp"
+        android:layout_marginBottom="190dp"
         android:max="10"
         android:progress="0" />
 
+    <!--white-->
     <TextView
-        android:id="@+id/meibai"
+        android:id="@+id/skin_white"
         android:layout_width="100dp"
         android:layout_height="30dp"
-        android:text="Skin White"
+        android:text="white"
         android:textColor="@color/white"
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="20dp"
-        android:layout_marginBottom="40dp" />
+        android:layout_marginBottom="160dp" />
 
     <SeekBar
         android:id="@+id/whiteness_seekbar"
@@ -49,7 +50,71 @@
         android:layout_height="20dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="150dp"
+        android:max="10"
+        android:progress="0" />
+
+    <!--thinface-->
+    <TextView
+        android:id="@+id/thinface"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:text="thinface"
+        android:textColor="@color/white"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="120dp" />
+
+    <SeekBar
+        android:id="@+id/thinface_seekbar"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="110dp"
+        android:max="10"
+        android:progress="0" />
+
+    <!--big eye-->
+    <TextView
+        android:id="@+id/bigeye"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:text="big eye"
+        android:textColor="@color/white"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="80dp" />
+
+    <SeekBar
+        android:id="@+id/bigeye_seekbar"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="70dp"
+        android:max="10"
+        android:progress="0" />
+
+    <!--lipstick-->
+    <TextView
+        android:id="@+id/lipstick"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:text="lipstick"
+        android:textColor="@color/white"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="40dp" />
+
+    <SeekBar
+        android:id="@+id/lipstick_seekbar"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="30dp"
         android:max="10"
         android:progress="0" />
+
 </RelativeLayout>

@@ -29,21 +29,16 @@ std::shared_ptr<SourceImage> SourceImage::create_from_memory(int width,
 }
 
 std::shared_ptr<SourceImage> SourceImage::create(const std::string name) {
-#if defined(GPUPIXEL_ANDROID)
-    auto sourceImage = createImageForAndroid(name);
-    return sourceImage;
-#else
-  int width, height, channel_count;
-  unsigned char *data = stbi_load(name.c_str(), &width, &height, &channel_count, 0);
+    int width, height, channel_count;
+    unsigned char *data = stbi_load(name.c_str(), &width, &height, &channel_count, 0);
 //   todo(logo info)
-  if(data == nullptr) {
-    Util::Log("SourceImage", "SourceImage: input data in null! file name: %s", name.c_str());
-    return nullptr;
-  }
-  auto image = SourceImage::create_from_memory(width, height, channel_count, data);
-  stbi_image_free(data);
-  return image;
-#endif
+    if(data == nullptr) {
+        Util::Log("SourceImage", "SourceImage: input data in null! file name: %s", name.c_str());
+        return nullptr;
+    }
+    auto image = SourceImage::create_from_memory(width, height, channel_count, data);
+    stbi_image_free(data);
+    return image;
 }
 
 void SourceImage::init(int width, int height, int channel_count, const unsigned char* pixels) {
@@ -86,72 +81,5 @@ void SourceImage::Render() {
   }
   
   Source::proceed();
-
 }
 
-#if defined(GPUPIXEL_ANDROID)
-std::shared_ptr<SourceImage> SourceImage::createImageForAndroid(std::string name) {
-    // Todo(Jeayo) @see https://developer.android.com/ndk/guides/image-decoder?hl=zh-cn
-    JavaVM *jvm = GetJVM();
-    JNIEnv *env = GetEnv(jvm);
-
-    // 定义类路径和方法签名
-    const char *className = "com/pixpark/gpupixel/GPUPixelSourceImage";
-    const char *methodName = "createBitmap";
-    const char *methodSignature = "(Landroid/content/Context;Ljava/lang/String;)Landroid/graphics/Bitmap;";
-
-    // GPUPixelSourceImage
-    jclass jSourceImageClass = env->FindClass(className);
-    if (jSourceImageClass == NULL) {
-        return NULL;
-    }
-
-    // 找到createBitmap方法
-    jmethodID createBitmapMethod = env->GetStaticMethodID(jSourceImageClass, methodName,
-                                                          methodSignature);
-    if (createBitmapMethod == NULL) {
-        return NULL;
-    }
-    // get app context
-    jobject jAppContext = NULL;
-    const char *context_name = "android/app/ActivityThread";
-    jclass activity_thread_clz = env->FindClass(context_name);
-    if (activity_thread_clz != NULL) {
-        jmethodID currentApplication = env->GetStaticMethodID(
-                activity_thread_clz, "currentApplication", "()Landroid/app/Application;");
-        if (currentApplication != NULL) {
-            jAppContext = env->CallStaticObjectMethod(activity_thread_clz, currentApplication);
-        } else {
-            //todo
-        }
-        env->DeleteLocalRef(activity_thread_clz);
-    } else {
-        // todo
-    }
-    // 创建Java字符串作为参数
-    jstring imgName = env->NewStringUTF(name.c_str());
-
-    // 调用createBitmap方法
-    jobject bitmap = env->CallStaticObjectMethod(jSourceImageClass,
-                                                 createBitmapMethod,
-                                                 jAppContext,
-                                                 imgName);
-
-    AndroidBitmapInfo info;
-    GLvoid *pixels;
-    AndroidBitmap_getInfo(env, bitmap, &info);
-    if (info.format != ANDROID_BITMAP_FORMAT_RGBA_8888) {
-        return nullptr;
-    }
-    AndroidBitmap_lockPixels(env, bitmap, &pixels);
- 
-    auto sourceImage = SourceImage::create_from_memory(info.width, info.height, 4, (const unsigned char *)pixels);
-    AndroidBitmap_unlockPixels(env, bitmap);
-
-    // 释放资源
-    env->DeleteLocalRef(imgName);
-    env->DeleteLocalRef(jSourceImageClass);
-    return sourceImage;
-}
-#endif
- 
