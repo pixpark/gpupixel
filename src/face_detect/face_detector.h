@@ -38,6 +38,5 @@ NS_GPUPIXEL_BEGIN
         uint32_t vnn_handle_;
         int use_278pts = 0;
         std::vector<FaceDetectorCallback> _face_detector_callbacks;
-        std::string getModelPath();
     };
 NS_GPUPIXEL_END
