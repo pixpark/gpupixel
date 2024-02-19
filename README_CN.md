@@ -21,7 +21,6 @@
 
 🔌 它支持的平台包括iOS、Mac和Android，理论上可以移植到任何支持OpenGL/ES的平台。
 
->💡 人脸关键点检测目前使用的是 [Face++](https://www.faceplusplus.com.cn/) 库，但未来将替换为 [VNN](https://github.com/joyycom/VNN)
 
 ## 效果
 👉 **视频: <a href="https://youtu.be/9BY1Qx1NEPs" target="_blank">YouTube</a> | <a href="https://www.bilibili.com/video/BV1xQ4y1L7Fh/?share_source=copy_web&vd_source=46adcb1014fa989cfcbb4cc1e866831e" target="_blank">BiliBili</a>**
@@ -79,7 +78,7 @@
 |    **CPU**     |    5%     |    5%    |    3%    |    3%     |      3%       |
 | **Time Taken** |   10ms    |   4ms    |   3ms    |    3ms    |      3ms      |
 ### Android
-|     -      | Xiaomi 10 | Huawei Meta30 | Vivo  | SAMSUNG | Google Pixel |
+|     -      | Xiaomi 10 | Huawei Mate30 | Vivo  | SAMSUNG | Google Pixel |
 | :--------: | :-------: | :-----------: | :---: | :-----: | :----------: |
 |    CPU     |    3%     |      5%       |   -   |    -    |      -       |
 | Time Taken |    6ms    |      5ms      |   -   |    -    |      -       |
