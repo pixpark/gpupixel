@@ -87,6 +87,12 @@ class Filter : public Source, public Target {
                         const std::string& comment = "",
                         std::function<void(float&)> setCallback = 0);
 
+bool registerProperty(
+        const std::string& name,
+        std::vector<float> defaultValue,
+        const std::string& comment /* = ""*/,
+        std::function<void(std::vector<float>)> setCallback /* = 0*/);
+
   bool registerProperty(const std::string& name,
                         const std::string& defaultValue,
                         const std::string& comment = "",
@@ -101,6 +107,8 @@ class Filter : public Source, public Target {
   bool getProperty(const std::string& name, int& retValue);
 
   bool getProperty(const std::string& name, float& retValue);
+
+  bool setProperty(const std::string& name, std::vector<float> value);
 
   bool getProperty(const std::string& name, std::string& retValue);
 
@@ -149,7 +157,14 @@ class Filter : public Source, public Target {
   };
   std::map<std::string, FloatProperty> _floatProperties;
 
-  struct StringProperty : Property {
+  struct VectorProperty : Property {
+      std::vector<float> value;
+      std::function<void(std::vector<float>&)> setCallback;
+  };
+  std::map<std::string, VectorProperty> _vectorProperties;
+
+
+    struct StringProperty : Property {
     std::string value;
     std::function<void(std::string&)> setCallback;
   };
