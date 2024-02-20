@@ -28,12 +28,11 @@ FaceDetector::FaceDetector() {
   
   const int argc = sizeof(argv)/sizeof(argv[0]);
   VNN_Result  ret = VNN_Create_Face(&vnn_handle_, argc, argv);
-  int aa =0;
-  aa++;
 }
 
 FaceDetector::~FaceDetector() {
-  
+  if(vnn_handle_ > 0)
+    VNN_Destroy_Face(&vnn_handle_);
 }
 
 int FaceDetector::RegCallback(FaceDetectorCallback callback) {
@@ -55,20 +54,13 @@ int FaceDetector::Detect(const uint8_t* data,
   input.width = width;
   input.height = height;
   input.channels = 4;
-  
   switch (type) {
     case GPUPIXEL_FRAME_TYPE_RGBA8888: {
-      input.pix_fmt = VNN_PIX_FMT_BGRA8888;
+      input.pix_fmt = VNN_PIX_FMT_BGRA8888; 
     }
-      
       break;
     case GPUPIXEL_FRAME_TYPE_YUVI420: {
       input.pix_fmt = VNN_PIX_FMT_YUVI420;
-    }
-      break;
-    case GPUPIXEL_FRAME_TYPE_RGB888: {
-      input.pix_fmt = VNN_PIX_FMT_RGB888;
-     
     }
       break;
     default:

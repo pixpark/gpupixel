@@ -51,13 +51,23 @@ void SourceImage::init(int width, int height, int channel_count, const unsigned 
     }
     this->setFramebuffer(_framebuffer);
     CHECK_GL(glBindTexture(GL_TEXTURE_2D, this->getFramebuffer()->getTexture()));
-  
-  image_channel_count_ = channel_count;
   if(channel_count == 3) {
     CHECK_GL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB,
                           GL_UNSIGNED_BYTE, pixels));
-    image_bytes.assign(pixels, pixels + width * height *3);
    
+    int rgba_size = width * height * 4;
+    uint8_t* rgba = new uint8_t[rgba_size];
+    
+    for (int i = 0; i < width * height; i++) {
+        rgba[i * 4 + 0] = pixels[i * 3 + 0];  // Red
+        rgba[i * 4 + 1] = pixels[i * 3 + 1];  // Green
+        rgba[i * 4 + 2] = pixels[i * 3 + 2];  // Blue
+        rgba[i * 4 + 3] = 255;              // Alpha (fully opaque)
+    }
+    
+    image_bytes.assign(rgba, rgba + width * height *3);
+    
+    delete[] rgba;
   } else if(channel_count == 4) {
     CHECK_GL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
                           GL_UNSIGNED_BYTE, pixels));
@@ -69,15 +79,7 @@ void SourceImage::init(int width, int height, int channel_count, const unsigned 
 void SourceImage::Render() {
   GPUPIXEL_FRAME_TYPE type;
   if(_face_detector) {
-    if(image_channel_count_ == 3) {
-      type = GPUPIXEL_FRAME_TYPE_RGB888;
-      // todo vnn not support, only support png picture.
-      std::terminate();
-    } else if(image_channel_count_ == 4) {
-      type = GPUPIXEL_FRAME_TYPE_RGBA8888;
-    }
-
-    _face_detector->Detect(image_bytes.data(), _framebuffer->getWidth(), _framebuffer->getHeight(), type);
+    _face_detector->Detect(image_bytes.data(), _framebuffer->getWidth(), _framebuffer->getHeight(), GPUPIXEL_FRAME_TYPE_RGBA8888);
   }
   
   Source::proceed();
