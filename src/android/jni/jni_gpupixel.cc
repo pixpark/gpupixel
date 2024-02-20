@@ -83,10 +83,10 @@ extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeSourceCameraSetFrame(
     jint height,
     jintArray jdata,
     jint rotation) {
-  jint* data = (jint*)(env->GetPrimitiveArrayCritical(jdata, 0));
+    jint *data = env->GetIntArrayElements(jdata, NULL);
   ((SourceCamera*)classId)
       ->setFrameData(width, height, data, (RotationMode)rotation);
-  env->ReleasePrimitiveArrayCritical(jdata, data, 0);
+    env->ReleaseIntArrayElements(jdata, data, 0);
 };
 
 extern "C" jlong Java_com_pixpark_gpupixel_GPUPixel_nativeSourceRawInputNew(
@@ -104,11 +104,9 @@ Java_com_pixpark_gpupixel_GPUPixel_nativeSourceRawInputUploadBytes(
     jint width,
     jint height,
     jint stride) {
-  // jbyte* pixel = (jbyte*) (env->GetPrimitiveArrayCritical(jPixel, 0));
-  uint8_t* pixel = (uint8_t*)(env->GetPrimitiveArrayCritical(jPixel, 0));
-
-  ((SourceRawDataInput*)classId)->uploadBytes(pixel, width, height, stride, 0);
-  env->ReleasePrimitiveArrayCritical(jPixel, pixel, 0);
+  jint* pixel = env->GetIntArrayElements(jPixel, 0);
+  ((SourceRawDataInput*)classId)->uploadBytes((uint8_t*)pixel, width, height, stride, 0);
+  env->ReleaseIntArrayElements(jPixel, pixel, 0);
 };
 
 extern "C" void
@@ -373,7 +371,7 @@ extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeSetLandmarkCallback (
     jobject globalSourceRef = env->NewGlobalRef(source);
   ((SourceCamera*)classId)->RegLandmarkCallback([=](std::vector<float> landmarks) {
       jclass cls = env->GetObjectClass(globalSourceRef);
-      jmethodID methodID = env->GetMethodID(cls, "onFaceLandmark", "([F)V");
+    jmethodID methodID = env->GetMethodID(cls, "onFaceLandmark", "([F)V");
 
       jfloatArray arr = env->NewFloatArray(landmarks.size());
       env->SetFloatArrayRegion( arr, 0, landmarks.size(), landmarks.data());
