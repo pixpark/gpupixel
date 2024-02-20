@@ -19,7 +19,6 @@ NS_GPUPIXEL_BEGIN
         GPUPIXEL_FRAME_TYPE_UNKNOW,      /*  Unknow pixel format, as a cube */
         GPUPIXEL_FRAME_TYPE_YUVI420,     /*  YUV  4:2:0   12bpp ( 3 planes, the first is Y, the second is U, the third is V */
         GPUPIXEL_FRAME_TYPE_RGBA8888,    /*  RGBA 8:8:8:8 32bpp ( 4 channel, 8x4=32bit RGBA pixel ) */  
-        GPUPIXEL_FRAME_TYPE_RGB888  
     } GPUPIXEL_FRAME_TYPE;
 
     class FaceDetector {
