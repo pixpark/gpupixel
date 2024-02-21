@@ -40,7 +40,22 @@ jobs:
               run: cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/toolchain/ios.toolchain.cmake -DPLATFORM=MAC_UNIVERSAL -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -S ${{ github.workspace }}/src
             - name: Build
               run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
- 
+    
+    build-ios-clang:
+        name: iOS (arm64)
+        runs-on: macos-latest
+        timeout-minutes: 15
+        env:
+            BUILD_TYPE: Release
+            CMAKE_OSX_ARCHITECTURES: x86_64;arm64
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Configure
+              run: cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/toolchain/ios.toolchain.cmake -DPLATFORM=OS64 -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -S ${{ github.workspace }}/src
+            - name: Build
+              run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+              
     build-windows-mingw:
         name: Windows (MSYS2)
         runs-on: windows-latest
