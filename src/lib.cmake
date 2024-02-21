@@ -138,11 +138,10 @@ IF(${CURRENT_OS} STREQUAL "linux")
 	set_target_properties(vnn_face PROPERTIES IMPORTED_LOCATION
 	${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/libs/${CURRENT_OS}/libvnn_face.so)
 
-	# add_library(vnn_core SHARED IMPORTED)
-	# # 设置目标库的实际路径
-	# set_target_properties(vnn_core PROPERTIES IMPORTED_LOCATION
-	# ${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/libs/${CURRENT_OS}/libvnn_core.so)
-
+	add_library(vnn_core SHARED IMPORTED)
+	# 设置目标库的实际路径
+	set_target_properties(vnn_core PROPERTIES IMPORTED_LOCATION
+	${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/libs/${CURRENT_OS}/libvnn_core.so)
 
 	set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-Wl,-rpath,./")
 ELSEIF(${CURRENT_OS} STREQUAL "windows")
