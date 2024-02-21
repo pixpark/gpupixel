@@ -15,6 +15,7 @@
 </p>
 
 ---
+> 欢迎大家加入使得 GPUPixel 更好，通过讨论 [discussions](https://github.com/pixpark/gpupixel/discussions), 提交 [issues](https://github.com/pixpark/gpupixel/issues/new/choose), 提交 [PRs](https://github.com/pixpark/gpupixel/pulls).
 
 > 📢 人脸关键点检测从 v1.2.0开始已经由 Face++ 替换为 VNN, 不需要联网认证（不需要交钱了），并且支持了全端，欢迎各位客观品尝食用 👏
 
@@ -62,13 +63,13 @@
 | NV21(for Android) |                        ✏️                        |                         ❌                          |
 | 🍉**输出格式 :**   |                                                 |                                                    |
 | RGBA              |                        ✅                        |                         ✅                          |
-| YUV420P(I420)     |                        ✏️                        |                         ❌                          |
+| YUV420P(I420)     |                        ✅                        |                         ❌                          |
 | 🥑**平台系统:**    |                                                 |                                                    |
 | iOS               |                        ✅                        |                         ✅                          |
 | Mac               |                        ✅                        |                         ✅                          |
 | Android           |                        ✅                        |                         ❌                          |
-| Win               |                        ✏️                        |                         ❌                          |
-| Linux             |                        ✏️                        |                         ❌                          |
+| Win               |                        ✅                        |                         ❌                          |
+| Linux             |                        ✅                        |                         ❌                          |
 
 
 ## 系统最低版本
