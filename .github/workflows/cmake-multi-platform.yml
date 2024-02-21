@@ -10,7 +10,7 @@ jobs:
     build-linux-clang:
         name: Linux (Clang)
         runs-on: ubuntu-latest
-        timeout-minutes: 4
+        timeout-minutes: 15
         env:
           # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
           BUILD_TYPE: Release
@@ -29,7 +29,7 @@ jobs:
     build-macos-clang:
         name: macOS (arm64|x86_64)
         runs-on: macos-latest
-        timeout-minutes: 4
+        timeout-minutes: 15
         env:
             BUILD_TYPE: Release
             CMAKE_OSX_ARCHITECTURES: x86_64;arm64
@@ -44,7 +44,7 @@ jobs:
     build-windows-mingw:
         name: Windows (MSYS2)
         runs-on: windows-latest
-        timeout-minutes: 4
+        timeout-minutes: 15
         env:
             BUILD_TYPE: Release
         steps:
