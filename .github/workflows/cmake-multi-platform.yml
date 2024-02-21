@@ -1,4 +1,4 @@
-name: Build
+name: Build Multi Platform
 on:
     pull_request:
         branches: [main, dev ]
