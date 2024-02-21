@@ -1,0 +1,60 @@
+name: Build
+on:
+    pull_request:
+        branches: [main, dev ]
+    push:
+        branches: [main, dev ]
+    workflow_dispatch:
+ 
+jobs:
+    build-linux-clang:
+        name: Linux (Clang)
+        runs-on: ubuntu-latest
+        timeout-minutes: 4
+        env:
+          # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+          BUILD_TYPE: Release
+        steps:
+            - uses: actions/checkout@v4
+            - name: Install dependencies
+              run: |
+                  sudo apt update
+                  sudo apt-get install mesa-utils libglu1-mesa-dev freeglut3-dev mesa-common-dev libglfw3-dev
+ 
+            - name: Configure 
+              run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+            - name: Build 
+              run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+
+    build-macos-clang:
+        name: macOS (arm64|x86_64)
+        runs-on: macos-latest
+        timeout-minutes: 4
+        env:
+            BUILD_TYPE: Release
+            CMAKE_OSX_ARCHITECTURES: x86_64;arm64
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Configure
+              run: cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/toolchain/ios.toolchain.cmake -DPLATFORM=MAC_UNIVERSAL -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -S ${{ github.workspace }}/src
+            - name: Build
+              run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+ 
+    build-windows-mingw:
+        name: Windows (MSYS2)
+        runs-on: windows-latest
+        timeout-minutes: 4
+        env:
+            BUILD_TYPE: Release
+        steps:
+            - uses: actions/checkout@v4
+            
+            - name: Set up MinGW
+              uses: msys2/setup-msys2@v2
+     
+            - name: Configure
+              run: cmake -G "MinGW Makefiles" -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+            - name: Build Win shared x64 library
+              run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+ 
