@@ -43,6 +43,7 @@ int FaceDetector::RegCallback(FaceDetectorCallback callback) {
 int FaceDetector::Detect(const uint8_t* data,
                     int width,
                     int height,
+                    GPUPIXEL_MODE_FMT fmt,
                     GPUPIXEL_FRAME_TYPE type) {
   if(vnn_handle_ == 0) {
     return -1;
@@ -68,7 +69,14 @@ int FaceDetector::Detect(const uint8_t* data,
   }
 
   input.data = (VNNVoidPtr)data;
-  input.mode_fmt = VNN_MODE_FMT_VIDEO;
+  if(fmt == GPUPIXEL_MODE_FMT_VIDEO) {
+    input.mode_fmt = VNN_MODE_FMT_VIDEO;
+  }
+
+  if(fmt == GPUPIXEL_MODE_FMT_PICTURE) {
+      input.mode_fmt = VNN_MODE_FMT_PICTURE;
+  }
+
   input.ori_fmt = VNN_ORIENT_FMT_DEFAULT;
 
   VNN_FaceFrameDataArr output;
