@@ -16,7 +16,7 @@
 
 ---
 
-> 📢 人脸关键点检测已经从 Face++ 替换为 VNN, 不需要联网认证（不需要交钱了），并且支持了全端，欢迎各位客观品尝食用 👏
+> 📢 人脸关键点检测从 v1.2.0开始已经由 Face++ 替换为 VNN, 不需要联网认证（不需要交钱了），并且支持了全端，欢迎各位客观品尝食用 👏
 
 ## 简介 ##
 
@@ -95,26 +95,123 @@
 | Size  |     2.4 MB      |      2.6 MB       |    2.1 MB     |
 
  
-## 编译
-### iOS
-打开 `objc/gpupixel.xcodeproj` 或 `objc/demo/PixDemo.xcodeproj`  Xcode工程
+## 开始之前
+⭐️ 老铁给个星星，求点赞!
+
+![](./docs/image/give-star.gif)
+
+ 
+## 快速开始
+
+### 如何编译
+从 v1.1.0开始使用 cmake 编译, 请自行搜索下cmake的安装配置. 
+库和生成的 demo 程序会在项目根目录的 output 目录
+ 
+### iOS 
+
+```shell
+cd src
+mkdir build
+cd build
+
+# Generate project
+## for iOS arm64
+cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=../../toolchain/ios.toolchain.cmake -DPLATFORM=OS64 ..
+ 
+# Build
+cmake --build . --config Debug
+```
+### Mac
+
+```shell
+cd src
+mkdir build
+cd build
+
+# Generate project
+## for Mac Apple Silicon
+cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=../../toolchain/ios.toolchain.cmake -DPLATFORM=MAC_ARM64 ..
+## for Mac Intel
+cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=../../toolchain/ios.toolchain.cmake -DPLATFORM=MAC ..
+
+# Build
+cmake --build . --config Debug
+```
 
 ### Android
-Android Studio 打开目录 `./android`, 配置 `NDK r21+`
+Android Studio `src/android/java` 打开工程
 
-## 接口调用
-参考`./objc/demo` 或 `./android` demo
-**`.h` file**
+### Windows
+需要提前安装配置 Cmake 和 MinGW64.
+```shell
+cd src
+mkdir build
+cd build
+
+# Generate project
+cmake -G "MinGW Makefiles" ..
+
+# Build
+mingw32-make
+```
+### Linux (ubuntu)
+
+```shell
+# install cmake 
+sudo apt-get install cmake pkg-config
+# install dependent lib
+sudo apt-get install mesa-utils libglu1-mesa-dev freeglut3-dev mesa-common-dev libglfw3-dev
+
+# start build
+cd src
+mkdir build
+cd build
+
+# Generate project
+cmake ..
+
+# Build
+make
+```
+
+## App demo
+ 
+### iOS 和 Mac
+参考 `examples/ios` 和 `examples/mac`
+### Android
+参考  `examples/android` 或 `src/android/java`
+### Window and Linux
+
+参考 `examples/desktop` ，编译方法和编译库类似
+
+```shell
+cd examples
+mkdir build
+cd build
+
+# Generate project
+cmake -G "MinGW Makefiles" ..
+
+# Build
+mingw32-make
+```
+#### App 使用 
+<kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> <kbd>F</kbd> <kbd>G</kbd> <kbd>H</kbd> - 增加 smooth, white, thin face, big eye, lipstick, blusher 的值.
+
+<kbd>Z</kbd> <kbd>X</kbd> <kbd>C</kbd> <kbd>V</kbd> <kbd>B</kbd> <kbd>N</kbd> - 减小 smooth, white, thin face, big eye, lipstick, blusher 的值. 
+
+## C++ 接口调用
+**声明 filters**
 
 ```c++
 // video data input
 std::shared_ptr<SourceRawDataInput> source_raw_input_;
 // beauty filter
-std::shared_ptr<FaceBeautyFilter> face_beauty_filter_;
+std::shared_ptr<BeautyFaceFilter> beauty_face_filter_;
 // video data output 
 std::shared_ptr<TargetRawDataOutput> target_raw_output_;
 ```
-**Create Filter, `.c++` file**
+**创建和串联 filters**
 
 ```c++
  gpupixel::GPUPixelContext::getInstance()->runSync([&] {
@@ -122,14 +219,15 @@ std::shared_ptr<TargetRawDataOutput> target_raw_output_;
     source_raw_input_ = SourceRawDataInput::create();
     target_raw_output_ = TargetRawDataOutput::create();
     // Face Beauty Filter
-    face_beauty_filter_ = FaceBeautyFilter::create();
+    beauty_face_filter_ = BeautyFaceFilter::create();
     
     // Add filter
-    source_raw_input_->addTarget(face_beauty_filter_)->addTarget(target_raw_output_);
+    source_raw_input_->addTarget(beauty_face_filter_)
+                     ->addTarget(target_raw_output_);
  }
 ```
 
-**输入图像数据 I420 or RGBA**
+**输入 YUV420P 或 RGBA数据**
 
 ```c++
 // ...
@@ -150,7 +248,7 @@ std::shared_ptr<TargetRawDataOutput> target_raw_output_;
                                 stride);
 ```
 
-**输出数据回调**
+**获取输出数据**
 
 ```c++
 // I420 callback
@@ -175,3 +273,23 @@ target_raw_output_->setPixelsCallbck([=](const uint8_t *data,
 
 // Output data callbck
 ```
+ 
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=pixpark/gpupixel&type=Date)](https://star-history.com/#pixpark/gpupixel&Date)
+
+## 参与贡献
+欢迎参与此项目，贡献代码，同时希望通过在社交媒体分享 GPUPixel 项目来支持本项目  👏🏻.
+
+
+## 感谢
+### 参考项目
+1. [GPUImage](https://github.com/BradLarson/GPUImage) 
+2. [CainCamera](https://github.com/CainKernel/CainCamera)
+3. [AwemeLike](https://github.com/ZZZZou/AwemeLike)
+4. [VNN](https://github.com/joyycom/VNN)
+
+## License
+This repository is available under the [MIT License](https://github.com/pixpark/gpupixel?tab=MIT-1-ov-file#readme).
+
