@@ -175,15 +175,12 @@ cmake ..
 make
 ```
 
-</details>
+
 
 ---
 
 ### App demo
-
-
-
-
+ 
 ### iOS
 Refer to `examples/ios`
 ### Mac
@@ -191,6 +188,10 @@ Refer to `examples/mac`
 ### Android
 Refer to `examples/android` or `src/android/java`
 ### Window and Linux
+<kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> <kbd>F</kbd> <kbd>G</kbd> <kbd>H</kbd> - Increase smooth, white, thin face, big eye, lipstick, blusher level
+
+<kbd>Z</kbd> <kbd>X</kbd> <kbd>C</kbd> <kbd>V</kbd> <kbd>B</kbd> <kbd>N</kbd> - Decrease smooth, white, thin face, big eye, lipstick, blusher level 
+
 Refer to `examples/desktop` 
 
 The compilation method is the same as compiling the library.
@@ -206,14 +207,10 @@ cmake -G "MinGW Makefiles" ..
 # Build
 mingw32-make
 ```
-
-</details>
-
+ 
 ## How to Use
 
-
-
-
+ 
 **Declear filters**
 
 ```c++
@@ -286,8 +283,7 @@ target_raw_output_->setPixelsCallbck([=](const uint8_t *data,
 
 // Output data callbck
 ```
-
-</details>
+ 
 
 ## Star History
 
