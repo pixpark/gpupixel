@@ -175,26 +175,15 @@ cmake ..
 make
 ```
 
-
-
----
-
-### App demo
+## App demo
  
-### iOS
-Refer to `examples/ios`
-### Mac
-Refer to `examples/mac`
+### iOS and Mac
+Refer to `examples/ios` and `examples/mac`
 ### Android
 Refer to `examples/android` or `src/android/java`
 ### Window and Linux
-<kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> <kbd>F</kbd> <kbd>G</kbd> <kbd>H</kbd> - Increase smooth, white, thin face, big eye, lipstick, blusher level
 
-<kbd>Z</kbd> <kbd>X</kbd> <kbd>C</kbd> <kbd>V</kbd> <kbd>B</kbd> <kbd>N</kbd> - Decrease smooth, white, thin face, big eye, lipstick, blusher level 
-
-Refer to `examples/desktop` 
-
-The compilation method is the same as compiling the library.
+Refer to `examples/desktop` . The compilation method is the same as compiling the library.
 
 ```shell
 cd examples
@@ -207,10 +196,13 @@ cmake -G "MinGW Makefiles" ..
 # Build
 mingw32-make
 ```
- 
+#### App Usage 
+<kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> <kbd>F</kbd> <kbd>G</kbd> <kbd>H</kbd> - Increase smooth, white, thin face, big eye, lipstick, blusher level
+
+<kbd>Z</kbd> <kbd>X</kbd> <kbd>C</kbd> <kbd>V</kbd> <kbd>B</kbd> <kbd>N</kbd> - Decrease smooth, white, thin face, big eye, lipstick, blusher level 
+
 ## How to Use
 
- 
 **Declear filters**
 
 ```c++
