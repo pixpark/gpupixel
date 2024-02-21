@@ -124,7 +124,7 @@ void SourceRawDataInput::uploadBytes(const uint8_t* pixels,
                                      int64_t ts) {
   GPUPixelContext::getInstance()->runSync([=] {
     if(_face_detector) {
-      _face_detector->Detect(pixels, width, height, GPUPIXEL_FRAME_TYPE_RGBA8888);
+      _face_detector->Detect(pixels, width, height, GPUPIXEL_MODE_FMT_VIDEO,GPUPIXEL_FRAME_TYPE_RGBA8888);
     }
     genTextureWithRGBA(pixels, width, height, stride, ts); 
   });
@@ -145,7 +145,7 @@ void SourceRawDataInput::uploadBytes(int width,
                                      int64_t ts) {
   GPUPixelContext::getInstance()->runSync([=] {
     if(_face_detector) {
-      _face_detector->Detect(dataY, width, height, GPUPIXEL_FRAME_TYPE_YUVI420);
+      _face_detector->Detect(dataY, width, height, GPUPIXEL_MODE_FMT_VIDEO, GPUPIXEL_FRAME_TYPE_YUVI420);
     }
 
     genTextureWithI420(width, height, dataY, strideY, dataU, strideU, dataV,
