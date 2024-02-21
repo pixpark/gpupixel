@@ -21,6 +21,12 @@ NS_GPUPIXEL_BEGIN
         GPUPIXEL_FRAME_TYPE_RGBA8888,    /*  RGBA 8:8:8:8 32bpp ( 4 channel, 8x4=32bit RGBA pixel ) */  
     } GPUPIXEL_FRAME_TYPE;
 
+    typedef enum {
+        GPUPIXEL_MODE_FMT_VIDEO = 0x00000000,
+        GPUPIXEL_MODE_FMT_PICTURE = 0x00000001,
+        GPUPIXEL_MODE_FMT_DEFAULT = 0x00000000,
+    } GPUPIXEL_MODE_FMT;
+
     class FaceDetector {
     public:
         FaceDetector();
@@ -30,6 +36,7 @@ NS_GPUPIXEL_BEGIN
         int Detect(const uint8_t* data,
                     int width,
                     int height,
+                    GPUPIXEL_MODE_FMT fmt,
                     GPUPIXEL_FRAME_TYPE type);
       
         int RegCallback(FaceDetectorCallback callback);
