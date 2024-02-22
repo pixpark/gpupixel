@@ -20,6 +20,7 @@ ENDIF()
 # Config build output path
 # --------
 SET(OUTPUT_INSTALL_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../output")
+SET(OUTPUT_RESOURCE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../output/resources")
 SET(CMAKE_INCLUDE_OUTPUT_DIRECTORY "${OUTPUT_INSTALL_PATH}/include")
 SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${OUTPUT_INSTALL_PATH}/library/${CURRENT_OS}")
 SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${OUTPUT_INSTALL_PATH}/library/${CURRENT_OS}")
@@ -71,11 +72,14 @@ FILE(GLOB EXPORT_HEADER
 	"${CMAKE_CURRENT_SOURCE_DIR}/face_detect/*.h"                 
 )
 
-# Add resource file
 FILE(GLOB RESOURCE_FILES 
-	"${CMAKE_CURRENT_SOURCE_DIR}/resources/*"               
-	"${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/models/vnn_face278_data/*"               
+	"${CMAKE_CURRENT_SOURCE_DIR}/resources/*"                         
 )
+if(${CURRENT_OS} STREQUAL "ios" OR ${CURRENT_OS} STREQUAL "android") 	
+	list(APPEND SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/models/vnn_face278_data/face_pc[1.0.0].vnnmodel")
+else()
+	list(APPEND SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/models/vnn_face278_data/face_mobile[1.0.0].vnnmodel")
+endif()
 
 # Add platform source and header and lib link search path
 IF(${CURRENT_OS} STREQUAL "windows") 														# windows
@@ -90,6 +94,7 @@ ELSEIF(${CURRENT_OS} STREQUAL "linux" OR ${CURRENT_OS} STREQUAL "wasm")
 	# Source 
 	FILE(GLOB GLAD_SOURCE_FILE  "${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/src/*.c" )
 	list(APPEND SOURCE_FILES ${GLAD_SOURCE_FILE})
+
 	FILE(GLOB VNN_LIBS ${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/libs/${CURRENT_OS}/*)
 ELSEIF(${CURRENT_OS} STREQUAL "macos" OR ${CURRENT_OS} STREQUAL "ios")						# ios and mac
 	# Header
@@ -99,6 +104,8 @@ ELSEIF(${CURRENT_OS} STREQUAL "macos" OR ${CURRENT_OS} STREQUAL "ios")						# io
 	# Source 
 	FILE(GLOB OBJC_SOURCE_FILE  "${CMAKE_CURRENT_SOURCE_DIR}/target/objc/*")
 	list(APPEND SOURCE_FILES ${OBJC_SOURCE_FILE})
+
+	FILE(GLOB VNN_LIBS ${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/libs/${CURRENT_OS}/*)
 ELSEIF(${CURRENT_OS} STREQUAL "android")													# android 
 	# Header
 	FILE(GLOB OBJC_HEADER_FILE  "${CMAKE_CURRENT_SOURCE_DIR}/android/jni/*.h")
@@ -115,7 +122,6 @@ ENDIF()
 # ----------
 # build shared or static lib
 ADD_LIBRARY(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${RESOURCE_FILES})
-# ADD_EXECUTABLE(${PROJECT_NAME} ${SOURCE_FILES} ${RESOURCE_FILES})
  
 # set platform project 
 IF(${CURRENT_OS} STREQUAL "linux")
@@ -157,20 +163,14 @@ ELSEIF(${CURRENT_OS} STREQUAL "macos" OR ${CURRENT_OS} STREQUAL "ios")
 		XCODE_ATTRIBUTE_PRODUCT_NAME ${PROJECT_NAME}
 		COMPILE_FLAGS "-x objective-c++"
 		FRAMEWORK TRUE
-		FRAMEWORK_VERSION A
 		MACOSX_FRAMEWORK_IDENTIFIER net.pixpark.${PROJECT_NAME}
 		PRODUCT_BUNDLE_IDENTIFIER net.pixpark.${PROJECT_NAME}
 		CMAKE_XCODE_ATTRIBUTE_BUILT_PRODUCTS_DIR ${PROJECT_NAME}
 		MACOSX_FRAMEWORK_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
 		FRAMEWORK_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/gezhaoyou
-		# "current version" in semantic format in Mach-O binary file
-		VERSION 1.0.1
-		# "compatibility version" in semantic format in Mach-O binary file
-		SOVERSION 1.0.1
 		PUBLIC_HEADER "${EXPORT_HEADER}"
 		RESOURCE "${RESOURCE_FILES}"
 		LINK_FLAGS "-Wl,-F${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/libs/${CURRENT_OS}"
-		#XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "iPhone Developer"
 	)
 ELSEIF(${CURRENT_OS} STREQUAL "android")
 	# 设置要构建的目标库的名称和类型
@@ -254,11 +254,29 @@ ENDIF()
 
 # copy header to install dir
 # --------
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+	set(COPY_DST_OUTPUT_DIR ${CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG})
+else()
+	set(COPY_DST_OUTPUT_DIR ${CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE})
+endif()
+
 MACRO(EXPORT_INCLUDE)
+# copy header
 ADD_CUSTOM_COMMAND(TARGET ${PROJECT_NAME} PRE_BUILD 
 				COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_INCLUDE_OUTPUT_DIRECTORY}
 				COMMAND ${CMAKE_COMMAND} -E copy 
 				${EXPORT_HEADER} ${CMAKE_INCLUDE_OUTPUT_DIRECTORY}
-				COMMENT "Copying export headers to output/include directory.")
+				COMMAND ${CMAKE_COMMAND} -E make_directory ${OUTPUT_RESOURCE_PATH}
+				COMMAND ${CMAKE_COMMAND} -E copy 
+				${RESOURCE_FILES} ${OUTPUT_RESOURCE_PATH}
+				COMMENT "Copying headers and resource to output directory.")
+				
+# copy gpupixel and vnn lib
+ADD_CUSTOM_COMMAND(TARGET ${PROJECT_NAME} POST_BUILD
+				COMMAND ${CMAKE_COMMAND} -E copy_if_different
+				${VNN_LIBS} ${COPY_DST_OUTPUT_DIR}
+				)
 ENDMACRO()
-EXPORT_INCLUDE()
+if(NOT ${CURRENT_OS} STREQUAL "android")
+	EXPORT_INCLUDE()
+endif()

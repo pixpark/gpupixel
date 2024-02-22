@@ -640,3 +640,4 @@ $RECYCLE.BIN/
 .vscode
 android/gpupixel/.cxx
 output
+src/android/java/gpupixel/.cxx
