@@ -10,8 +10,5 @@ SET(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}")
 SET(APP_PROJECT_NAME "gpupixel_app")
 PROJECT(${APP_PROJECT_NAME})
 
-# 定义是否编译 DEBUG 版本(也可以在执行 cmake 指令的时候设置：cmake -DBUILD_DEBUG=ON ..)
-SET(BUILD_DEBUG TRUE)
-
 # 引用公用的 cmake 文件
 INCLUDE(app)
