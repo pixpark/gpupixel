@@ -141,14 +141,14 @@ jobs:
         run: ./gradlew :gpupixel:assemble
 
       - name: Create zip
-        working-directory: ${{github.workspace}}/src/android/java/gpupixel/build/outputs/
+        working-directory: ${{github.workspace}}/src/android/java/gpupixel/build/outputs/aar
         run: zip -r gpupixel_android_arm64_v8a_aar.zip .
 
       - name: Upload Android Artifact
         uses: actions/upload-artifact@v4
         with:
           name: gpupixel_android_arm64_v8a_aar
-          path: ${{github.workspace}}/src/android/java/gpupixel/build/outputs/gpupixel_android_arm64_v8a_aar.zip
+          path: ${{github.workspace}}/src/android/java/gpupixel/build/outputs/aar/gpupixel_android_arm64_v8a_aar.zip
 
   # Deployment job
   deploy:
