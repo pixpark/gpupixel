@@ -27,13 +27,14 @@ jobs:
         run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
       - name: Create zip
-        run: zip -r -j gpupixel_linux_x86_64.zip ${{github.workspace}}/output
+        working-directory: ${{github.workspace}}/output
+        run: zip -r gpupixel_linux_x86_64.zip .
 
       - name: Upload Linux Artifact
         uses: actions/upload-artifact@v4
         with:
           name: gpupixel_linux_x86_64
-          path: ./gpupixel_linux_x86_64.zip
+          path: ${{github.workspace}}/output/gpupixel_linux_x86_64.zip
 
   build-macos-clang:
     name: macOS (Universal)
@@ -52,13 +53,14 @@ jobs:
         run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
       - name: Create zip
-        run: zip -r -j gpupixel_mac_Universal.zip ${{github.workspace}}/output
+        working-directory: ${{github.workspace}}/output
+        run: zip -r gpupixel_mac_Universal.zip .
 
       - name: Upload Mac Artifact
         uses: actions/upload-artifact@v4
         with:
           name: gpupixel_mac_Universal
-          path: ./gpupixel_mac_Universal.zip
+          path: ${{github.workspace}}/output/gpupixel_mac_Universal.zip
  
 
   build-ios-clang:
@@ -78,13 +80,14 @@ jobs:
         run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
       - name: Create zip
-        run: zip -r -j gpupixel_ios_arm64.zip ${{github.workspace}}/output
+        working-directory: ${{github.workspace}}/output
+        run: zip -r gpupixel_ios_arm64.zip .
 
       - name: Upload iOS Artifact
         uses: actions/upload-artifact@v4
         with:
           name: gpupixel_ios_arm64
-          path: ./gpupixel_ios_arm64.zip
+          path: ${{github.workspace}}/output/gpupixel_ios_arm64.zip
  
 
   build-windows-mingw:
@@ -138,13 +141,14 @@ jobs:
         run: ./gradlew :gpupixel:assemble
 
       - name: Create zip
-        run: zip -r -j gpupixel_android_arm64_v8a_aar.zip ${{github.workspace}}/src/android/java/gpupixel/build/outputs/aar
+        working-directory: ${{github.workspace}}/src/android/java/gpupixel/build/outputs/
+        run: zip -r gpupixel_android_arm64_v8a_aar.zip .
 
       - name: Upload Android Artifact
         uses: actions/upload-artifact@v4
         with:
           name: gpupixel_android_arm64_v8a_aar
-          path: ./gpupixel_android_arm64_v8a_aar.zip
+          path: ${{github.workspace}}/src/android/java/gpupixel/build/outputs/gpupixel_android_arm64_v8a_aar.zip
 
   # Deployment job
   deploy:
