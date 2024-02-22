@@ -27,7 +27,7 @@ jobs:
         run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
       - name: Create zip
-        run: zip -r gpupixel_linux_x86_64.zip ${{github.workspace}}/output
+        run: zip -r -j gpupixel_linux_x86_64.zip ${{github.workspace}}/output
 
       - name: Upload Linux Artifact
         uses: actions/upload-artifact@v4
@@ -52,7 +52,7 @@ jobs:
         run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
       - name: Create zip
-        run: zip -r gpupixel_mac_Universal.zip ${{github.workspace}}/output
+        run: zip -r -j gpupixel_mac_Universal.zip ${{github.workspace}}/output
 
       - name: Upload Mac Artifact
         uses: actions/upload-artifact@v4
@@ -78,7 +78,7 @@ jobs:
         run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
       - name: Create zip
-        run: zip -r gpupixel_ios_arm64.zip ${{github.workspace}}/output
+        run: zip -r -j gpupixel_ios_arm64.zip ${{github.workspace}}/output
 
       - name: Upload iOS Artifact
         uses: actions/upload-artifact@v4
@@ -138,7 +138,7 @@ jobs:
         run: ./gradlew :gpupixel:assemble
 
       - name: Create zip
-        run: zip -r gpupixel_android_arm64_v8a_aar.zip ${{github.workspace}}/src/android/java/gpupixel/build/outputs/aar
+        run: zip -r -j gpupixel_android_arm64_v8a_aar.zip ${{github.workspace}}/src/android/java/gpupixel/build/outputs/aar
 
       - name: Upload Android Artifact
         uses: actions/upload-artifact@v4
