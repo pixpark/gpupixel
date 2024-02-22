@@ -1,6 +1,6 @@
 # Sample workflow for building and deploying a VitePress site to GitHub Pages
 #
-name: Deploy VitePress site to Pages
+name: Build Website
 
 on:
   # Runs on pushes targeting the `main` branch. Change this to `master` if you're
