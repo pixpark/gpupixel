@@ -1,0 +1,254 @@
+name: Release Multi Platform
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+jobs:
+  build-linux-clang:
+    name: Linux (Clang)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+      BUILD_TYPE: Release
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt-get install mesa-utils libglu1-mesa-dev freeglut3-dev mesa-common-dev libglfw3-dev
+
+      - name: Configure
+        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+
+      - name: Build
+        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+
+      - name: Create zip
+        run: zip -r gpupixel_linux_x86_64.zip ${{github.workspace}}/output
+
+      - name: Upload Linux Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: gpupixel_linux_x86_64
+          path: ./gpupixel_linux_x86_64.zip
+
+  build-macos-clang:
+    name: macOS (Universal)
+    runs-on: macos-latest
+    timeout-minutes: 15
+    env:
+      BUILD_TYPE: Release
+      CMAKE_OSX_ARCHITECTURES: x86_64;arm64
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure
+        run: cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/toolchain/ios.toolchain.cmake -DPLATFORM=MAC_UNIVERSAL -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -S ${{ github.workspace }}/src
+
+      - name: Build
+        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+
+      - name: Create zip
+        run: zip -r gpupixel_mac_Universal.zip ${{github.workspace}}/output
+
+      - name: Upload Mac Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: gpupixel_mac_Universal
+          path: ./gpupixel_mac_Universal.zip
+ 
+
+  build-ios-clang:
+    name: iOS (Arm64)
+    runs-on: macos-latest
+    timeout-minutes: 15
+    env:
+      BUILD_TYPE: Release
+      CMAKE_OSX_ARCHITECTURES: x86_64;arm64
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure
+        run: cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/toolchain/ios.toolchain.cmake -DPLATFORM=OS64 -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -S ${{ github.workspace }}/src
+
+      - name: Build
+        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+
+      - name: Create zip
+        run: zip -r gpupixel_ios_arm64.zip ${{github.workspace}}/output
+
+      - name: Upload iOS Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: gpupixel_ios_arm64
+          path: ./gpupixel_ios_arm64.zip
+ 
+
+  build-windows-mingw:
+    name: Windows (MSYS2)
+    runs-on: windows-latest
+    timeout-minutes: 15
+    env:
+      BUILD_TYPE: Release
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up MinGW
+        uses: msys2/setup-msys2@v2
+
+      - name: Configure
+        run: cmake -G "MinGW Makefiles" -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+
+      - name: Build Win shared x64 library
+        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+
+      - name: Create zip
+        run: Compress-Archive -Path ${{github.workspace}}/output/* -Destination gpupixel_windows_x86_64.zip
+
+      - name: Upload Win Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: gpupixel_windows_x86_64
+          path: ./gpupixel_windows_x86_64.zip
+
+  build-android-gradle:
+    name: Android (Arm64-v8a)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      BUILD_TYPE: Release
+    steps:
+      - uses: actions/checkout@v4
+      - name: set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: "11"
+          distribution: "temurin"
+          cache: gradle
+
+      - name: Grant execute permission for gradlew
+        working-directory: src/android/java
+        run: chmod +x gradlew
+
+      - name: Build with Gradle
+        working-directory: src/android/java
+        run: ./gradlew :gpupixel:assemble
+
+      - name: Create zip
+        run: zip -r gpupixel_android_arm64_v8a_aar.zip ${{github.workspace}}/src/android/java/gpupixel/build/outputs/aar
+
+      - name: Upload Android Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: gpupixel_android_arm64_v8a_aar
+          path: ./gpupixel_android_arm64_v8a_aar.zip
+
+  # Deployment job
+  deploy:
+    needs:
+      [
+        build-linux-clang,
+        build-macos-clang,
+        build-ios-clang,
+        build-windows-mingw,
+        build-android-gradle,
+      ]
+    runs-on: ubuntu-latest
+    name: Deploy
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download Linux Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: gpupixel_linux_x86_64
+          path: ./
+
+      - name: Download Mac Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: gpupixel_mac_Universal
+          path: ./
+
+      - name: Download iOS Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: gpupixel_ios_arm64
+          path: ./
+
+      - name: Download Win Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: gpupixel_windows_x86_64
+          path: ./
+      
+      - name: Download Android Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: gpupixel_android_arm64_v8a_aar
+          path: ./
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          body_path: ${{ github.workspace }}/CHANGELOG.md
+          draft: false
+          prerelease: false
+        
+      - name: Upload Linux library
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./gpupixel_linux_x86_64.zip
+          asset_name: gpupixel_linux_x86_64.zip
+          asset_content_type: application/gzip
+
+      - name: Upload Mac library
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./gpupixel_mac_Universal.zip
+          asset_name: gpupixel_mac_Universal.zip
+          asset_content_type: application/gzip
+
+      - name: Upload iOS library
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./gpupixel_ios_arm64.zip
+          asset_name: gpupixel_ios_arm64.zip
+          asset_content_type: application/gzip
+
+      - name: Upload Win library
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./gpupixel_windows_x86_64.zip
+          asset_name: gpupixel_windows_x86_64.zip
+          asset_content_type: application/gzip
+      
+      - name: Upload Android library
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./gpupixel_android_arm64_v8a_aar.zip
+          asset_name: gpupixel_android_arm64_v8a_aar.zip
+          asset_content_type: application/gzip
