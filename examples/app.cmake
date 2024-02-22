@@ -114,7 +114,7 @@ ENDIF()
 FILE(GLOB RESOURCE_FILES 
 	"${CMAKE_CURRENT_SOURCE_DIR}/../src/resources/*"        
 )
-
+list(APPEND RESOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/../examples/desktop/demo.png")
 list(APPEND RESOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/vnn/models/vnn_face278_data/face_pc[1.0.0].vnnmodel")
 
 MACRO(EXPORT_INCLUDE)
