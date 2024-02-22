@@ -30,7 +30,7 @@ jobs:
         run: zip -r gpupixel_linux_x86_64.zip ${{github.workspace}}/output
 
       - name: Upload Linux Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: gpupixel_linux_x86_64
           path: ./gpupixel_linux_x86_64.zip
@@ -55,7 +55,7 @@ jobs:
         run: zip -r gpupixel_mac_Universal.zip ${{github.workspace}}/output
 
       - name: Upload Mac Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: gpupixel_mac_Universal
           path: ./gpupixel_mac_Universal.zip
@@ -81,7 +81,7 @@ jobs:
         run: zip -r gpupixel_ios_arm64.zip ${{github.workspace}}/output
 
       - name: Upload iOS Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: gpupixel_ios_arm64
           path: ./gpupixel_ios_arm64.zip
@@ -109,7 +109,7 @@ jobs:
         run: Compress-Archive -Path ${{github.workspace}}/output/* -Destination gpupixel_windows_x86_64.zip
 
       - name: Upload Win Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: gpupixel_windows_x86_64
           path: ./gpupixel_windows_x86_64.zip
@@ -141,7 +141,7 @@ jobs:
         run: zip -r gpupixel_android_arm64_v8a_aar.zip ${{github.workspace}}/src/android/java/gpupixel/build/outputs/aar
 
       - name: Upload Android Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: gpupixel_android_arm64_v8a_aar
           path: ./gpupixel_android_arm64_v8a_aar.zip
@@ -162,31 +162,31 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Download Linux Artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: gpupixel_linux_x86_64
           path: ./
 
       - name: Download Mac Artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: gpupixel_mac_Universal
           path: ./
 
       - name: Download iOS Artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: gpupixel_ios_arm64
           path: ./
 
       - name: Download Win Artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: gpupixel_windows_x86_64
           path: ./
       
       - name: Download Android Artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: gpupixel_android_arm64_v8a_aar
           path: ./
