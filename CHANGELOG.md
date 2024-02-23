@@ -1,4 +1,4 @@
-GPUPixel Version: v1.2.3
+GPUPixel Version: v1.2.4
 ## What's New
 
-1. Add ci script for building libs and demo.
+1. opt cmake and update demo
