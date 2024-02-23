@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		840CD3D42B88448900EEF7B0 /* gpupixel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 840CD3D32B88448900EEF7B0 /* gpupixel.framework */; };
+		840CD3D52B88448900EEF7B0 /* gpupixel.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 840CD3D32B88448900EEF7B0 /* gpupixel.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		840FD5CF2B82455100781FA6 /* vnn_kit_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 840FD5CC2B82455100781FA6 /* vnn_kit_ios.framework */; };
 		840FD5D02B82455100781FA6 /* vnn_kit_ios.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 840FD5CC2B82455100781FA6 /* vnn_kit_ios.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		840FD5D12B82455100781FA6 /* vnn_face_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 840FD5CD2B82455100781FA6 /* vnn_face_ios.framework */; };
@@ -23,8 +25,6 @@
 		84307E9F261F2CDC003EAC98 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84307E9D261F2CDC003EAC98 /* LaunchScreen.storyboard */; };
 		84307EA2261F2CDC003EAC98 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 84307EA1261F2CDC003EAC98 /* main.m */; };
 		843580EE276352260053E16A /* ImageFilterController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 843580EC276352260053E16A /* ImageFilterController.mm */; };
-		8453D7092B67C42A009C0532 /* gpupixel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8453D7082B67C42A009C0532 /* gpupixel.framework */; };
-		8453D70A2B67C42A009C0532 /* gpupixel.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8453D7082B67C42A009C0532 /* gpupixel.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		847244A22A6034BF009D1488 /* VideoCapturer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8472449E2A603368009D1488 /* VideoCapturer.m */; };
 		84A0D77A2B7DAB49007A86EF /* sample_face.png in Resources */ = {isa = PBXBuildFile; fileRef = 84A0D7792B7DAB49007A86EF /* sample_face.png */; };
 		84C1D161266F5D69006D1AB4 /* VideoFilterController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84C1D15F266F5D69006D1AB4 /* VideoFilterController.mm */; };
@@ -37,8 +37,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				840CD3D52B88448900EEF7B0 /* gpupixel.framework in Embed Frameworks */,
 				840FD5D02B82455100781FA6 /* vnn_kit_ios.framework in Embed Frameworks */,
-				8453D70A2B67C42A009C0532 /* gpupixel.framework in Embed Frameworks */,
 				840FD5D42B82455100781FA6 /* vnn_core_ios.framework in Embed Frameworks */,
 				840FD5D22B82455100781FA6 /* vnn_face_ios.framework in Embed Frameworks */,
 			);
@@ -48,6 +48,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		840CD3D32B88448900EEF7B0 /* gpupixel.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = gpupixel.framework; path = ../../output/library/ios/gpupixel.framework; sourceTree = "<group>"; };
 		840FD5CC2B82455100781FA6 /* vnn_kit_ios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = vnn_kit_ios.framework; path = ../../src/third_party/vnn/libs/ios/vnn_kit_ios.framework; sourceTree = "<group>"; };
 		840FD5CD2B82455100781FA6 /* vnn_face_ios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = vnn_face_ios.framework; path = ../../src/third_party/vnn/libs/ios/vnn_face_ios.framework; sourceTree = "<group>"; };
 		840FD5CE2B82455100781FA6 /* vnn_core_ios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = vnn_core_ios.framework; path = ../../src/third_party/vnn/libs/ios/vnn_core_ios.framework; sourceTree = "<group>"; };
@@ -83,8 +84,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				840FD5CF2B82455100781FA6 /* vnn_kit_ios.framework in Frameworks */,
-				8453D7092B67C42A009C0532 /* gpupixel.framework in Frameworks */,
 				840FD5D32B82455100781FA6 /* vnn_core_ios.framework in Frameworks */,
+				840CD3D42B88448900EEF7B0 /* gpupixel.framework in Frameworks */,
 				8417C43C267F5B470074DDEF /* CoreMedia.framework in Frameworks */,
 				840FD5D12B82455100781FA6 /* vnn_face_ios.framework in Frameworks */,
 				8417C43A267F5AF10074DDEF /* AVFoundation.framework in Frameworks */,
@@ -139,6 +140,7 @@
 		84EEBF41261F2DC5000AD4AE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				840CD3D32B88448900EEF7B0 /* gpupixel.framework */,
 				840FD5CE2B82455100781FA6 /* vnn_core_ios.framework */,
 				840FD5CD2B82455100781FA6 /* vnn_face_ios.framework */,
 				840FD5CC2B82455100781FA6 /* vnn_kit_ios.framework */,
@@ -380,7 +382,7 @@
 				DEVELOPMENT_TEAM = QFCE3TAQXQ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(SRCROOT)/../../output/library/ios/$(CONFIGURATION)",
+					"$(SRCROOT)/../../output/library/ios",
 					"$(SRCROOT)/../../src/third_party/vnn/libs/ios",
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -420,7 +422,7 @@
 				DEVELOPMENT_TEAM = QFCE3TAQXQ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(SRCROOT)/../..//output/library/ios/$(CONFIGURATION)",
+					"$(SRCROOT)/../..//output/library/ios",
 					"$(SRCROOT)/../../src/third_party/vnn/libs/ios",
 				);
 				HEADER_SEARCH_PATHS = "";

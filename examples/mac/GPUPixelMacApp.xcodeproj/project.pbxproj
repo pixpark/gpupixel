@@ -7,14 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		840CD3D12B8843CD00EEF7B0 /* gpupixel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 840CD3CF2B88431900EEF7B0 /* gpupixel.framework */; };
+		840CD3D22B8843CD00EEF7B0 /* gpupixel.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 840CD3CF2B88431900EEF7B0 /* gpupixel.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		840FD5BD2B7E523D00781FA6 /* vnn_face_osx.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 840FD5BA2B7E523D00781FA6 /* vnn_face_osx.framework */; };
 		840FD5BE2B7E523D00781FA6 /* vnn_face_osx.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 840FD5BA2B7E523D00781FA6 /* vnn_face_osx.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		840FD5BF2B7E523D00781FA6 /* vnn_core_osx.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 840FD5BB2B7E523D00781FA6 /* vnn_core_osx.framework */; };
 		840FD5C02B7E523D00781FA6 /* vnn_core_osx.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 840FD5BB2B7E523D00781FA6 /* vnn_core_osx.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		840FD5C12B7E523D00781FA6 /* vnn_kit_osx.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 840FD5BC2B7E523D00781FA6 /* vnn_kit_osx.framework */; };
 		840FD5C22B7E523D00781FA6 /* vnn_kit_osx.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 840FD5BC2B7E523D00781FA6 /* vnn_kit_osx.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		8453D7052B67BE5B009C0532 /* gpupixel.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8453D7032B67BE5B009C0532 /* gpupixel.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		8453D7062B67C1C9009C0532 /* gpupixel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8453D7032B67BE5B009C0532 /* gpupixel.framework */; };
 		84AE136B26FCBCAA00E215AE /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84AE136A26FCBCAA00E215AE /* AVFoundation.framework */; };
 		84AE137526FCBCDA00E215AE /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84AE137426FCBCDA00E215AE /* CoreMedia.framework */; };
 		84AE137A26FCBCFA00E215AE /* VideoCameraManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84AE137926FCBCFA00E215AE /* VideoCameraManager.mm */; };
@@ -32,7 +32,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				8453D7052B67BE5B009C0532 /* gpupixel.framework in Embed Frameworks */,
+				840CD3D22B8843CD00EEF7B0 /* gpupixel.framework in Embed Frameworks */,
 				840FD5C02B7E523D00781FA6 /* vnn_core_osx.framework in Embed Frameworks */,
 				840FD5BE2B7E523D00781FA6 /* vnn_face_osx.framework in Embed Frameworks */,
 				840FD5C22B7E523D00781FA6 /* vnn_kit_osx.framework in Embed Frameworks */,
@@ -44,6 +44,7 @@
 
 /* Begin PBXFileReference section */
 		840303632B5C2737001A8B3C /* VideoCameraManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoCameraManager.h; sourceTree = "<group>"; };
+		840CD3CF2B88431900EEF7B0 /* gpupixel.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = gpupixel.framework; path = ../../output/library/macos/gpupixel.framework; sourceTree = "<group>"; };
 		840FD5BA2B7E523D00781FA6 /* vnn_face_osx.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = vnn_face_osx.framework; path = ../../src/third_party/vnn/libs/macos/vnn_face_osx.framework; sourceTree = "<group>"; };
 		840FD5BB2B7E523D00781FA6 /* vnn_core_osx.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = vnn_core_osx.framework; path = ../../src/third_party/vnn/libs/macos/vnn_core_osx.framework; sourceTree = "<group>"; };
 		840FD5BC2B7E523D00781FA6 /* vnn_kit_osx.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = vnn_kit_osx.framework; path = ../../src/third_party/vnn/libs/macos/vnn_kit_osx.framework; sourceTree = "<group>"; };
@@ -69,9 +70,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8453D7062B67C1C9009C0532 /* gpupixel.framework in Frameworks */,
 				840FD5C12B7E523D00781FA6 /* vnn_kit_osx.framework in Frameworks */,
 				84AE137526FCBCDA00E215AE /* CoreMedia.framework in Frameworks */,
+				840CD3D12B8843CD00EEF7B0 /* gpupixel.framework in Frameworks */,
 				84AE136B26FCBCAA00E215AE /* AVFoundation.framework in Frameworks */,
 				840FD5BD2B7E523D00781FA6 /* vnn_face_osx.framework in Frameworks */,
 				840FD5BF2B7E523D00781FA6 /* vnn_core_osx.framework in Frameworks */,
@@ -84,6 +85,7 @@
 		84AE136526FCBC9B00E215AE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				840CD3CF2B88431900EEF7B0 /* gpupixel.framework */,
 				840FD5BB2B7E523D00781FA6 /* vnn_core_osx.framework */,
 				840FD5BA2B7E523D00781FA6 /* vnn_face_osx.framework */,
 				840FD5BC2B7E523D00781FA6 /* vnn_kit_osx.framework */,
@@ -345,7 +347,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/GPUPixelMacApp",
-					"$(PROJECT_DIR)/../../output/library/macos/$(CONFIGURATION)",
+					"$(PROJECT_DIR)/../../output/library/macos",
 					"$(PROJECT_DIR)/../../src/third_party/vnn/libs/macos",
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -381,7 +383,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/GPUPixelMacApp",
-					"$(PROJECT_DIR)/../../output/library/macos/$(CONFIGURATION)",
+					"$(PROJECT_DIR)/../../output/library/macos",
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = "";
 				INFOPLIST_FILE = GPUPixelMacApp/Info.plist;
