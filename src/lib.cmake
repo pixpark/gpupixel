@@ -272,10 +272,17 @@ ADD_CUSTOM_COMMAND(TARGET ${PROJECT_NAME} PRE_BUILD
 				COMMENT "Copying headers and resource to output directory.")
 				
 # copy gpupixel and vnn lib
+if(${CURRENT_OS} STREQUAL "ios" OR ${CURRENT_OS} STREQUAL "macos")
 ADD_CUSTOM_COMMAND(TARGET ${PROJECT_NAME} POST_BUILD
-				COMMAND ${CMAKE_COMMAND} -E copy_if_different
+				COMMAND ${CMAKE_COMMAND} -E copy_directory
 				${VNN_LIBS} ${COPY_DST_OUTPUT_DIR}
 				)
+else()
+ADD_CUSTOM_COMMAND(TARGET ${PROJECT_NAME} POST_BUILD
+				COMMAND ${CMAKE_COMMAND} -E copy
+				${VNN_LIBS} ${COPY_DST_OUTPUT_DIR}
+				)
+endif()
 ENDMACRO()
 if(NOT ${CURRENT_OS} STREQUAL "android")
 	EXPORT_INCLUDE()
