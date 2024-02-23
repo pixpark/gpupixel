@@ -21,7 +21,7 @@ jobs:
           sudo apt-get install mesa-utils libglu1-mesa-dev freeglut3-dev mesa-common-dev libglfw3-dev
 
       - name: Configure
-        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+        run: cmake -B ${{github.workspace}}/build -S ${{github.workspace}}/src -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
       - name: Build
         run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
@@ -47,7 +47,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Configure
-        run: cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/toolchain/ios.toolchain.cmake -DPLATFORM=MAC_UNIVERSAL -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -S ${{ github.workspace }}/src
+        run: cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/toolchain/ios.toolchain.cmake -DPLATFORM=MAC_UNIVERSAL -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -S ${{ github.workspace }}/src
 
       - name: Build
         run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
@@ -74,7 +74,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Configure
-        run: cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/toolchain/ios.toolchain.cmake -DPLATFORM=OS64 -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -S ${{ github.workspace }}/src
+        run: cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/toolchain/ios.toolchain.cmake -DPLATFORM=OS64 -B ${{github.workspace}}/build -S ${{github.workspace}}/src -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
       - name: Build
         run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
@@ -103,7 +103,7 @@ jobs:
         uses: msys2/setup-msys2@v2
 
       - name: Configure
-        run: cmake -G "MinGW Makefiles" -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+        run: cmake -G "MinGW Makefiles" -B ${{github.workspace}}/build -S ${{github.workspace}}/src -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
       - name: Build Win shared x64 library
         run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
@@ -138,17 +138,19 @@ jobs:
 
       - name: Build with Gradle
         working-directory: src/android/java
-        run: ./gradlew :gpupixel:assemble
+        run: ./gradlew :gpupixel:assembleRelease
 
       - name: Create zip
-        working-directory: ${{github.workspace}}/src/android/java/gpupixel/build/outputs/aar
-        run: zip -r gpupixel_android_arm64_v8a_aar.zip .
+        working-directory: ${{github.workspace}}/output
+        run: | 
+          cp -r ${{github.workspace}}/src/android/java/gpupixel/build/outputs/aar ${{github.workspace}}/output/library/android
+          zip -r gpupixel_android_arm64_v8a.zip .
 
       - name: Upload Android Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: gpupixel_android_arm64_v8a_aar
-          path: ${{github.workspace}}/src/android/java/gpupixel/build/outputs/aar/gpupixel_android_arm64_v8a_aar.zip
+          name: gpupixel_android_arm64_v8a
+          path: ${{github.workspace}}/output/gpupixel_android_arm64_v8a.zip
 
   # Deployment job
   deploy:
@@ -192,7 +194,7 @@ jobs:
       - name: Download Android Artifact
         uses: actions/download-artifact@v4
         with:
-          name: gpupixel_android_arm64_v8a_aar
+          name: gpupixel_android_arm64_v8a
           path: ./
 
       - name: Create Release
@@ -253,6 +255,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./gpupixel_android_arm64_v8a_aar.zip
-          asset_name: gpupixel_android_arm64_v8a_aar.zip
+          asset_path: ./gpupixel_android_arm64_v8a.zip
+          asset_name: gpupixel_android_arm64_v8a.zip
           asset_content_type: application/gzip
