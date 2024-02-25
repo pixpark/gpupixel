@@ -111,51 +111,39 @@
 ### iOS 
 
 ```shell
-cd src
-mkdir build
-cd build
-
 # Generate project
 ## for iOS arm64
-cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=../../toolchain/ios.toolchain.cmake -DPLATFORM=OS64 ..
+cmake -G Xcode -B build -S src -DCMAKE_TOOLCHAIN_FILE=toolchain/ios.toolchain.cmake -DPLATFORM=OS64
  
 # Build
-cmake --build . --config Debug
+cmake --build build --config Debug #or Release
 ```
 ### Mac
 
 ```shell
-cd src
-mkdir build
-cd build
-
 # Generate project
 ## for Mac Apple Silicon
-cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=../../toolchain/ios.toolchain.cmake -DPLATFORM=MAC_ARM64 ..
+cmake -G Xcode -B build -S src -DCMAKE_TOOLCHAIN_FILE=toolchain/ios.toolchain.cmake -DPLATFORM=MAC_ARM64
 ## for Mac Intel
-cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=../../toolchain/ios.toolchain.cmake -DPLATFORM=MAC ..
+cmake -G Xcode -B build -S src -DCMAKE_TOOLCHAIN_FILE=toolchain/ios.toolchain.cmake -DPLATFORM=MAC
 
 # Build
-cmake --build . --config Debug
+cmake --build build --config Debug #or Release
 ```
 
 ### Android
-Android Studio `src/android/java` 打开工程
+Open the directory `src/android/java` in Android Studio.
 
 ### Windows
-需要提前安装配置 Cmake 和 MinGW64.
+需提前安装 Cmake and MinGW64
 ```shell
-cd src
-mkdir build
-cd build
-
 # Generate project
-cmake -G "MinGW Makefiles" ..
+cmake -G "MinGW Makefiles" -B build -S src
 
 # Build
-mingw32-make
+cmake --build build -DCMAKE_BUILD_TYPE=Debug #or Release
 ```
-### Linux (ubuntu)
+### Linux (Test on ubuntu)
 
 ```shell
 # install cmake 
@@ -163,38 +151,29 @@ sudo apt-get install cmake pkg-config
 # install dependent lib
 sudo apt-get install mesa-utils libglu1-mesa-dev freeglut3-dev mesa-common-dev libglfw3-dev
 
-# start build
-cd src
-mkdir build
-cd build
-
 # Generate project
-cmake ..
+cmake -B build -S src
 
 # Build
-make
+cmake --build build -DCMAKE_BUILD_TYPE=Debug #or Release 
 ```
 
 ## App demo
  
-### iOS 和 Mac
-参考 `examples/ios` 和 `examples/mac`
+### iOS and Mac
+参考 `examples/ios` and `examples/mac`
 ### Android
-参考  `examples/android` 或 `src/android/java`
+参考  `src/android/java`
 ### Window and Linux
 
-参考 `examples/desktop` ，编译方法和编译库类似
+参考  `examples/desktop` 
 
 ```shell
-cd examples
-mkdir build
-cd build
-
 # Generate project
-cmake -G "MinGW Makefiles" ..
+cmake -G "MinGW Makefiles" -B examples/build -S examples
 
 # Build
-mingw32-make
+cmake --build build -DCMAKE_BUILD_TYPE=Debug #or Release 
 ```
 #### App 使用 
 <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> <kbd>F</kbd> <kbd>G</kbd> <kbd>H</kbd> - 增加 smooth, white, thin face, big eye, lipstick, blusher 的值.
