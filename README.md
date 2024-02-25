@@ -117,32 +117,24 @@ The generated libraries and app will be located in the "output" directory of the
 ### iOS 
 
 ```shell
-cd src
-mkdir build
-cd build
-
 # Generate project
 ## for iOS arm64
-cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=../../toolchain/ios.toolchain.cmake -DPLATFORM=OS64 ..
+cmake -G Xcode -B build -S src -DCMAKE_TOOLCHAIN_FILE=toolchain/ios.toolchain.cmake -DPLATFORM=OS64
  
 # Build
-cmake --build . --config Debug
+cmake --build build --config Debug #or Release
 ```
 ### Mac
 
 ```shell
-cd src
-mkdir build
-cd build
-
 # Generate project
 ## for Mac Apple Silicon
-cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=../../toolchain/ios.toolchain.cmake -DPLATFORM=MAC_ARM64 ..
+cmake -G Xcode -B build -S src -DCMAKE_TOOLCHAIN_FILE=toolchain/ios.toolchain.cmake -DPLATFORM=MAC_ARM64
 ## for Mac Intel
-cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=../../toolchain/ios.toolchain.cmake -DPLATFORM=MAC ..
+cmake -G Xcode -B build -S src -DCMAKE_TOOLCHAIN_FILE=toolchain/ios.toolchain.cmake -DPLATFORM=MAC
 
 # Build
-cmake --build . --config Debug
+cmake --build build --config Debug #or Release
 ```
 
 ### Android
@@ -151,15 +143,11 @@ Open the directory `src/android/java` in Android Studio.
 ### Windows
 You need install and config Cmake and MinGW64 by yourself.
 ```shell
-cd src
-mkdir build
-cd build
-
 # Generate project
-cmake -G "MinGW Makefiles" ..
+cmake -G "MinGW Makefiles" -B build -S src
 
 # Build
-mingw32-make
+cmake --build build -DCMAKE_BUILD_TYPE=Debug #or Release
 ```
 ### Linux (Test on ubuntu)
 
@@ -169,16 +157,11 @@ sudo apt-get install cmake pkg-config
 # install dependent lib
 sudo apt-get install mesa-utils libglu1-mesa-dev freeglut3-dev mesa-common-dev libglfw3-dev
 
-# start build
-cd src
-mkdir build
-cd build
-
 # Generate project
-cmake ..
+cmake -B build -S src
 
 # Build
-make
+cmake --build build -DCMAKE_BUILD_TYPE=Debug #or Release 
 ```
 
 ## App demo
@@ -186,21 +169,17 @@ make
 ### iOS and Mac
 Refer to `examples/ios` and `examples/mac`
 ### Android
-Refer to `examples/android` or `src/android/java`
+Refer to `src/android/java`
 ### Window and Linux
 
 Refer to `examples/desktop` . The compilation method is the same as compiling the library.
 
 ```shell
-cd examples
-mkdir build
-cd build
-
 # Generate project
-cmake -G "MinGW Makefiles" ..
+cmake -G "MinGW Makefiles" -B examples/build -S examples
 
 # Build
-mingw32-make
+cmake --build build -DCMAKE_BUILD_TYPE=Debug #or Release 
 ```
 #### App Usage 
 <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> <kbd>F</kbd> <kbd>G</kbd> <kbd>H</kbd> - Increase smooth, white, thin face, big eye, lipstick, blusher level
@@ -288,7 +267,8 @@ target_raw_output_->setPixelsCallbck([=](const uint8_t *data,
 [![Star History Chart](https://api.star-history.com/svg?repos=pixpark/gpupixel&type=Date)](https://star-history.com/#pixpark/gpupixel&Date)
 
 ## Contributing
-Welcome to contribute code 👏🏻.
+
+Welcome to join us to make GPUPixel better by participating [discussions](https://github.com/pixpark/gpupixel/discussions), opening [issues](https://github.com/pixpark/gpupixel/issues/new/choose), submitting [PRs](https://github.com/pixpark/gpupixel/pulls).
 
 At the same time, please consider supporting GPUPixel by sharing it on social media and at events and conferences.
 
