@@ -2,7 +2,7 @@
 //  ViewController.m
 //  SimpleVideoFilter
 //
-//  Created by gezhaoyou on 2021/8/25.
+//  Created by PixPark on 2021/8/25.
 //
 
 #import "ViewController.h"
