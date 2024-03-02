@@ -2,7 +2,7 @@
 //  ViewController.m
 //  GPUPixelDemo
 //
-//  Created by gezhaoyou on 2021/3/31.
+//  Created by PixPark on 2021/3/31.
 //
 //
 
