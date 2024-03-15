@@ -5,16 +5,16 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-package com.pixpark.gpupixel;
+package com.pixpark.gpupixel.filter;
+
+import com.pixpark.gpupixel.GPUPixel;
+import com.pixpark.gpupixel.GPUPixelSource;
+import com.pixpark.gpupixel.GPUPixelTarget;
 
 public class GPUPixelFilter extends GPUPixelSource implements GPUPixelTarget {
     private String filterClassName;
 
-    static public GPUPixelFilter create(final String filterName) {
-        return new GPUPixelFilter(filterName);
-    }
-
-    private GPUPixelFilter(final String filterClassName) {
+    GPUPixelFilter(final String filterClassName) {
         if (mNativeClassID != 0) return;
         GPUPixel.getInstance().runOnDraw(new Runnable() {
             @Override
@@ -29,11 +29,11 @@ public class GPUPixelFilter extends GPUPixelSource implements GPUPixelTarget {
         return filterClassName;
     }
 
-    public void setProperty(final String property, final double value){
-        setProperty(property, (float)value);
+    public final void setProperty(final String property, final double value) {
+        setProperty(property, (float) value);
     }
 
-    public void setProperty(final String property, final float value){
+    public final void setProperty(final String property, final float value) {
         GPUPixel.getInstance().runOnDraw(new Runnable() {
             @Override
             public void run() {
@@ -44,7 +44,7 @@ public class GPUPixelFilter extends GPUPixelSource implements GPUPixelTarget {
         });
     }
 
-    public void setProperty(final String property, final float[] array){
+    public final void setProperty(final String property, final float[] array) {
         GPUPixel.getInstance().runOnDraw(new Runnable() {
             @Override
             public void run() {
@@ -55,7 +55,7 @@ public class GPUPixelFilter extends GPUPixelSource implements GPUPixelTarget {
         });
     }
 
-    public void setProperty(final String property, final int value){
+    public final void setProperty(final String property, final int value) {
         GPUPixel.getInstance().runOnDraw(new Runnable() {
             @Override
             public void run() {
@@ -66,7 +66,7 @@ public class GPUPixelFilter extends GPUPixelSource implements GPUPixelTarget {
         });
     }
 
-    public void setProperty(final String property, final String value){
+    public final void setProperty(final String property, final String value) {
         GPUPixel.getInstance().runOnDraw(new Runnable() {
             @Override
             public void run() {
@@ -77,11 +77,11 @@ public class GPUPixelFilter extends GPUPixelSource implements GPUPixelTarget {
         });
     }
 
-    public void destroy() {
+    public final void destroy() {
         destroy(true);
     }
 
-    public void destroy(boolean onGLThread) {
+    public final void destroy(boolean onGLThread) {
         if (mNativeClassID != 0) {
             if (onGLThread) {
                 GPUPixel.getInstance().runOnDraw(new Runnable() {
@@ -123,29 +123,4 @@ public class GPUPixelFilter extends GPUPixelSource implements GPUPixelTarget {
         }
     }
 
-    //
-    public final class BeautyFaceFilter {
-        public static final String name = "BeautyFaceFilter";
-        public static final String propSmoothLevel = "skin_smoothing";
-        public static final String propWhiteLevel = "whiteness";
-    }
-
-    public final class FaceReshapeFilter {
-        public static final String name = "FaceReshapeFilter";
-        public static final String propThinLevel = "thin_face";
-        public static final String propBigeyeLevel = "big_eye";
-        public static final String propFaceLandmark = "face_landmark";
-    }
-
-    public final class LipstickFilter {
-        public static final String name = "LipstickFilter";
-        public static final String propBlendLevel = "blend_level";
-        public static final String propFaceLandmark = "face_landmark";
-    }
-
-    public final class BlusherFilter {
-        public static final String name = "BlusherFilter";
-        public static final String propBlendLevel = "blend_level";
-        public static final String propFaceLandmark = "face_landmark";
-    }
 }
