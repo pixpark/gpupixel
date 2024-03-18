@@ -8,12 +8,17 @@
 package com.pixpark.gpupixel;
 
 import android.graphics.Bitmap;
+
+import com.pixpark.gpupixel.filter.GPUPixelFilter;
+
 import java.nio.ByteBuffer;
 
 public abstract class GPUPixelSource {
     protected long mNativeClassID = 0;
 
-    public long getNativeClassID() { return mNativeClassID; }
+    public long getNativeClassID() {
+        return mNativeClassID;
+    }
 
     public GPUPixelSource addTarget(GPUPixelTarget target) {
         return addTarget(target, -1);
@@ -28,7 +33,7 @@ public abstract class GPUPixelSource {
             }
         });
         if (target instanceof GPUPixelSource)
-            return (GPUPixelSource)target;
+            return (GPUPixelSource) target;
         else
             return null;
     }
@@ -88,7 +93,7 @@ public abstract class GPUPixelSource {
             public void run() {
                 if (mNativeClassID != 0) {
                     byte[] resultData = GPUPixel.nativeSourceCaptureAProcessedFrameData(mNativeClassID, upToFilter.getNativeClassID(), width, height);
-                    if(resultData != null){
+                    if (resultData != null) {
                         Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
                         bmp.copyPixelsFromBuffer(ByteBuffer.wrap(resultData));
                         proceedResult.onResult(bmp);
@@ -99,7 +104,7 @@ public abstract class GPUPixelSource {
         GPUPixel.getInstance().requestRender();
     }
 
-    public interface ProcessedFrameDataCallback{
+    public interface ProcessedFrameDataCallback {
         void onResult(Bitmap result);
     }
 }
