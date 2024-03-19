@@ -272,6 +272,13 @@ Welcome to join us to make GPUPixel better by participating [discussions](https:
 
 At the same time, please consider supporting GPUPixel by sharing it on social media and at events and conferences.
 
+## Contributors
+
+<a href="https://github.com/pixpark/gpupixel/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=pixpark/gpupixel" />
+</a>
+
+Made with [contrib.rocks](https://contrib.rocks).
 
 ## Acknowledgement
 ### Reference Project
