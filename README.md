@@ -260,11 +260,6 @@ target_raw_output_->setPixelsCallbck([=](const uint8_t *data,
 
 // Output data callbck
 ```
- 
-
-## Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=pixpark/gpupixel&type=Date)](https://star-history.com/#pixpark/gpupixel&Date)
 
 ## Contributing
 
@@ -279,7 +274,7 @@ At the same time, please consider supporting GPUPixel by sharing it on social me
 </a>
 
 Made with [contrib.rocks](https://contrib.rocks).
-
+  
 ## Acknowledgement
 ### Reference Project
 1. [GPUImage](https://github.com/BradLarson/GPUImage) 
