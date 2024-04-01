@@ -21,9 +21,6 @@
 
 > Welcome to join us to make GPUPixel better by participating [discussions](https://github.com/pixpark/gpupixel/discussions), opening [issues](https://github.com/pixpark/gpupixel/issues/new/choose), submitting [PRs](https://github.com/pixpark/gpupixel/pulls).
 
-> 📢 The face landmark detection has replaced [Face++](https://www.faceplusplus.com.cn/) with [VNN](https://github.com/joyycom/VNN) starting from [v1.2.0](https://github.com/pixpark/gpupixel/releases/tag/v1.2.0); no more Face++ network verification requirements are needed 👏
-
-
 ## Introduction
 
 ⛰️ GPUPixel is a real-time, high-performance image and video filter library, extremely easy to compile and integrate with  small library size.
