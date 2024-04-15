@@ -233,8 +233,8 @@ public class GPUPixel {
 
     // Source
     public static native long nativeSourceAddTarget(final long classID, final long targetClassID, final int texID, final boolean isFilter);
-    public static native boolean nativeSourceRemoveTarget(final long classID, final long targetClassID, final boolean isFilter);
-    public static native boolean nativeSourceRemoveAllTargets(final long classID);
+    public static native void nativeSourceRemoveTarget(final long classID, final long targetClassID, final boolean isFilter);
+    public static native void nativeSourceRemoveAllTargets(final long classID);
     public static native boolean nativeSourceProceed(final long classID, final boolean bUpdateTargets);
     public static native int nativeSourceGetRotatedFramebuferWidth(final long classID);
     public static native int nativeSourceGetRotatedFramebuferHeight(final long classID);
