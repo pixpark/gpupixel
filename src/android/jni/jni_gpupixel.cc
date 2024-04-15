@@ -19,25 +19,25 @@ std::list<std::shared_ptr<Filter>>  filter_list_;
 
 extern "C" jlong Java_com_pixpark_gpupixel_GPUPixel_nativeSourceImageNew(
     JNIEnv* env,
-    jobject) {
+    jclass) {
   return (uintptr_t)(new SourceImage());
 };
 
 extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeSourceImageDestroy(
     JNIEnv* env,
-    jobject,
+    jclass,
     jlong classId){};
 
 extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeSourceImageFinalize(
     JNIEnv* env,
-    jobject,
+    jclass,
     jlong classId) {
   ((SourceImage*)classId)->releaseFramebuffer(false);
 };
 
 extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeSourceImageSetImage(
     JNIEnv* env,
-    jobject,
+    jclass,
     jlong classId,
     jobject bitmap) {
   char* pData = 0;
@@ -57,27 +57,27 @@ extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeSourceImageSetImage(
 
 extern "C" jlong Java_com_pixpark_gpupixel_GPUPixel_nativeSourceCameraNew(
     JNIEnv* env,
-    jobject) {
+    jclass) {
   return (uintptr_t)(new SourceCamera());
 };
 
 extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeSourceCameraDestroy(
     JNIEnv* env,
-    jobject,
+    jclass,
     jlong classId){
 
 };
 
 extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeSourceCameraFinalize(
     JNIEnv* env,
-    jobject,
+    jclass,
     jlong classId) {
   ((SourceCamera*)classId)->releaseFramebuffer(false);
 };
 
 extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeSourceCameraSetFrame(
     JNIEnv* env,
-    jobject,
+    jclass,
     jlong classId,
     jint width,
     jint height,
@@ -91,14 +91,14 @@ extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeSourceCameraSetFrame(
 
 extern "C" jlong Java_com_pixpark_gpupixel_GPUPixel_nativeSourceRawInputNew(
     JNIEnv* env,
-    jobject) {
+    jclass) {
   return 0;
 };
 
 extern "C" void
 Java_com_pixpark_gpupixel_GPUPixel_nativeSourceRawInputUploadBytes(
     JNIEnv* env,
-    jobject,
+    jclass,
     jlong classId,
     jintArray jPixel,
     jint width,
@@ -112,7 +112,7 @@ Java_com_pixpark_gpupixel_GPUPixel_nativeSourceRawInputUploadBytes(
 extern "C" void
 Java_com_pixpark_gpupixel_GPUPixel_nativeSourceRawInputSetRotation(
     JNIEnv* env,
-    jobject,
+    jclass,
     jlong classId,
     jint rotation) {
   ((SourceRawDataInput*)classId)->setRotation((RotationMode)rotation);
@@ -120,7 +120,7 @@ Java_com_pixpark_gpupixel_GPUPixel_nativeSourceRawInputSetRotation(
 
 extern "C" jlong Java_com_pixpark_gpupixel_GPUPixel_nativeSourceAddTarget(
     JNIEnv* env,
-    jobject,
+    jclass,
     jlong classId,
     jlong targetClassId,
     jint texID,
@@ -138,7 +138,7 @@ extern "C" jlong Java_com_pixpark_gpupixel_GPUPixel_nativeSourceAddTarget(
 
 extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeSourceRemoveTarget(
     JNIEnv* env,
-    jobject,
+    jclass,
     jlong classId,
     jlong targetClassId,
     jboolean isFilter) {
@@ -150,14 +150,14 @@ extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeSourceRemoveTarget(
 
 extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeSourceRemoveAllTargets(
     JNIEnv* env,
-    jobject,
+    jclass,
     jlong classId) {
   ((Source*)classId)->removeAllTargets();
 };
 
-extern "C" jlong Java_com_pixpark_gpupixel_GPUPixel_nativeSourceProceed(
+extern "C" jboolean Java_com_pixpark_gpupixel_GPUPixel_nativeSourceProceed(
     JNIEnv* env,
-    jobject,
+    jclass,
     jlong classId,
     jboolean bUpdateTargets) {
   return ((Source*)classId)->proceed(bUpdateTargets, Util::nowTimeMs());
@@ -166,7 +166,7 @@ extern "C" jlong Java_com_pixpark_gpupixel_GPUPixel_nativeSourceProceed(
 extern "C" jint
 Java_com_pixpark_gpupixel_GPUPixel_nativeSourceGetRotatedFramebuferWidth(
     JNIEnv* env,
-    jobject,
+    jclass,
     jlong classId) {
   return ((Source*)classId)->getRotatedFramebufferWidth();
 };
@@ -174,7 +174,7 @@ Java_com_pixpark_gpupixel_GPUPixel_nativeSourceGetRotatedFramebuferWidth(
 extern "C" jint
 Java_com_pixpark_gpupixel_GPUPixel_nativeSourceGetRotatedFramebuferHeight(
     JNIEnv* env,
-    jobject,
+    jclass,
     jlong classId) {
   return ((Source*)classId)->getRotatedFramebufferHeight();
 };
@@ -182,7 +182,7 @@ Java_com_pixpark_gpupixel_GPUPixel_nativeSourceGetRotatedFramebuferHeight(
 extern "C" jbyteArray
 Java_com_pixpark_gpupixel_GPUPixel_nativeSourceCaptureAProcessedFrameData(
     JNIEnv* env,
-    jobject,
+    jclass,
     jlong classId,
     jlong upToFilterClassId,
     jint width,
@@ -207,20 +207,20 @@ Java_com_pixpark_gpupixel_GPUPixel_nativeSourceCaptureAProcessedFrameData(
 
 extern "C" jlong Java_com_pixpark_gpupixel_GPUPixel_nativeTargetViewNew(
     JNIEnv* env,
-    jobject obj) {
+    jclass obj) {
   return (uintptr_t)(new TargetView());
 };
 
 extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeTargetViewFinalize(
     JNIEnv* env,
-    jobject,
+    jclass,
     jlong classId){
 
 };
 
 extern "C" void
 Java_com_pixpark_gpupixel_GPUPixel_nativeTargetViewOnSizeChanged(JNIEnv* env,
-                                                                 jobject,
+                                                                 jclass obj,
                                                                  jlong classId,
                                                                  jint width,
                                                                  jint height) {
@@ -229,7 +229,7 @@ Java_com_pixpark_gpupixel_GPUPixel_nativeTargetViewOnSizeChanged(JNIEnv* env,
 
 extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeTargetViewSetFillMode(
     JNIEnv* env,
-    jobject,
+    jclass,
     jlong classId,
     jint fillMode) {
   ((TargetView*)classId)->setFillMode((TargetView::FillMode)fillMode);
@@ -245,7 +245,7 @@ Java_com_pixpark_gpupixel_GPUPixel_nativeTargetViewSetMirror(JNIEnv *env, jclass
 
 extern "C" jlong Java_com_pixpark_gpupixel_GPUPixel_nativeFilterCreate(
     JNIEnv* env,
-    jobject obj,
+    jclass obj,
     jstring jFilterClassName) {
   const char* filterClassName = env->GetStringUTFChars(jFilterClassName, 0);
 
@@ -258,7 +258,7 @@ extern "C" jlong Java_com_pixpark_gpupixel_GPUPixel_nativeFilterCreate(
 
 extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeFilterDestroy(
     JNIEnv* env,
-    jobject obj,
+    jclass obj,
     jlong classId){
     for(auto ft : filter_list_) {
         if(classId == (jlong)ft.get()){
@@ -269,14 +269,14 @@ extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeFilterDestroy(
 
 extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeFilterFinalize(
     JNIEnv* env,
-    jobject obj,
+    jclass obj,
     jlong classId) {
   ((Filter*)classId)->releaseFramebuffer(false);
 };
 
 extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeFilterSetPropertyFloat(
     JNIEnv* env,
-    jobject obj,
+    jclass obj,
     jlong classId,
     jstring jProperty,
     jfloat value) {
@@ -287,7 +287,7 @@ extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeFilterSetPropertyFloat(
 
 extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeFilterSetPropertyInt(
     JNIEnv* env,
-    jobject obj,
+    jclass obj,
     jlong classId,
     jstring jProperty,
     jint value) {
@@ -299,7 +299,7 @@ extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeFilterSetPropertyInt(
 extern "C" void
 Java_com_pixpark_gpupixel_GPUPixel_nativeFilterSetPropertyString(
     JNIEnv* env,
-    jobject obj,
+    jclass obj,
     jlong classId,
     jstring jProperty,
     jstring jValue) {
@@ -312,25 +312,25 @@ Java_com_pixpark_gpupixel_GPUPixel_nativeFilterSetPropertyString(
 
 extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeContextInit(
     JNIEnv* env,
-    jobject obj){
+    jclass obj){
 
 };
 
 extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeContextDestroy(
     JNIEnv* env,
-    jobject obj) {
+    jclass obj) {
   GPUPixelContext::destroy();
 };
 
 extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeContextPurge(
     JNIEnv* env,
-    jobject obj) {
+    jclass obj) {
   GPUPixelContext::getInstance()->purge();
 };
 
 extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeYUVtoRBGA(
     JNIEnv* env,
-    jobject obj,
+    jclass obj,
     jbyteArray yuv420sp,
     jint width,
     jint height,
@@ -364,7 +364,7 @@ extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeYUVtoRBGA(
 
 extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeSetLandmarkCallback (
         JNIEnv* env,
-        jobject obj,
+        jclass obj,
         jobject source,
         jlong classId) {
 
