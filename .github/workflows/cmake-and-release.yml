@@ -118,7 +118,7 @@ jobs:
           path: ./gpupixel_windows_x86_64.zip
 
   build-android-gradle:
-    name: Android (Arm64-v8a)
+    name: Android (Arm64-v8a & Armeabi-v7a)
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
@@ -144,13 +144,13 @@ jobs:
         working-directory: ${{github.workspace}}/output
         run: | 
           cp -r ${{github.workspace}}/src/android/java/gpupixel/build/outputs/aar ${{github.workspace}}/output/library/android
-          zip -r gpupixel_android_arm64_v8a.zip .
+          zip -r gpupixel_android.zip .
 
       - name: Upload Android Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: gpupixel_android_arm64_v8a
-          path: ${{github.workspace}}/output/gpupixel_android_arm64_v8a.zip
+          name: gpupixel_android
+          path: ${{github.workspace}}/output/gpupixel_android.zip
 
   # Deployment job
   deploy:
@@ -194,7 +194,7 @@ jobs:
       - name: Download Android Artifact
         uses: actions/download-artifact@v4
         with:
-          name: gpupixel_android_arm64_v8a
+          name: gpupixel_android
           path: ./
 
       - name: Create Release
@@ -255,6 +255,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./gpupixel_android_arm64_v8a.zip
-          asset_name: gpupixel_android_arm64_v8a.zip
+          asset_path: ./gpupixel_android.zip
+          asset_name: gpupixel_android.zip
           asset_content_type: application/gzip
