@@ -266,12 +266,8 @@ At the same time, please consider supporting GPUPixel by sharing it on social me
 
 ## Contributors
 
-<a href="https://github.com/pixpark/gpupixel/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=pixpark/gpupixel" />
-</a>
+[![](https://opencollective.com/gpupixel/contributors.svg?width=890&button=false)](https://github.com/pixpark/gpupixel/graphs/contributors)
 
-Made with [contrib.rocks](https://contrib.rocks).
-  
 ## Acknowledgement
 ### Reference Project
 1. [GPUImage](https://github.com/BradLarson/GPUImage) 
