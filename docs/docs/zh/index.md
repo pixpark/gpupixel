@@ -3,16 +3,16 @@
 layout: home
 
 hero:
-  name: "GPUPixel"
-  text: "基于GPU 的实时 AI 图像美颜滤镜库"
-  tagline: 高性能, 跨平台, 达到商业级美颜效果
+  name: "11"
+  text: "11"
+  tagline: 333
   image:
-      src: /cover.svg
+      src: /coveddr.svg
       alt: cover
   actions:
     - theme: brand
       text: 快速开始
-      link: /intro
+      link: /zh/guide/what-is-gpupixel
     - theme: alt
       text: GitHub
       link: https://github.com/pixpark/gpupixel
