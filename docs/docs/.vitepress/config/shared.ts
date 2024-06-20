@@ -51,13 +51,13 @@ export const shared = defineConfig({
     search: {
       provider: 'algolia',
       options: {
-        appId: '8J64VVRP8K',
-        apiKey: 'a18e2f4cc5665f6602c5631fd868adfd',
-        indexName: 'vitepress',
+        appId: 'EJA99Y55JA',
+        apiKey: '1df90cf42bd532964a5c08e31dbbc9cb',
+        indexName: 'open-pixpark"',
         locales: { ...zhSearch }
       }
     },
 
-    carbonAds: { code: 'CEBDT27Y', placement: 'vuejsorg' }
+    // carbonAds: { code: 'CEBDT27Y', placement: 'vuejsorg' }
   }
 })
