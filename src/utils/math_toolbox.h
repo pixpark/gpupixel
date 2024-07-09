@@ -12,8 +12,7 @@
 #include <cstring>
 
 NS_GPUPIXEL_BEGIN
-
-class Vector2 {
+class GPUPIXEL_API Vector2 {
  public:
   float x;
   float y;
@@ -68,9 +67,10 @@ class Vector2 {
   bool operator!=(const Vector2& v) const;
 };
 
-class Vector3 {};
+class GPUPIXEL_API Vector3 {
+};
 
-class Matrix4 {
+class GPUPIXEL_API Matrix4 {
  public:
   float m[16];
   Matrix4();
@@ -152,7 +152,7 @@ class Matrix4 {
   static const Matrix4 IDENTITY;
 };
 
-class Matrix3 {
+class GPUPIXEL_API Matrix3 {
  public:
   float m[9];
   Matrix3();

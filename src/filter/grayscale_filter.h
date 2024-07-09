@@ -11,8 +11,7 @@
 #include "gpupixel_macros.h"
 
 NS_GPUPIXEL_BEGIN
-
-class GrayscaleFilter : public Filter {
+class GPUPIXEL_API GrayscaleFilter : public Filter {
  public:
   static std::shared_ptr<GrayscaleFilter> create();
   bool init();

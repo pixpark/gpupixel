@@ -10,7 +10,7 @@
 #include "face_makeup_filter.h"
 
 NS_GPUPIXEL_BEGIN
-class BlusherFilter : public FaceMakeupFilter {
+class GPUPIXEL_API BlusherFilter : public FaceMakeupFilter {
 public:
   static std::shared_ptr<BlusherFilter> create();
   bool init() override;

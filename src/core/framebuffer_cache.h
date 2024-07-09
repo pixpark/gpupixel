@@ -13,8 +13,7 @@
 #include "gpupixel_macros.h"
 
 NS_GPUPIXEL_BEGIN
-
-class FramebufferCache {
+class GPUPIXEL_API FramebufferCache {
  public:
   FramebufferCache();
   ~FramebufferCache();

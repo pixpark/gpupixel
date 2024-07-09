@@ -11,8 +11,7 @@
 #include "gpupixel_macros.h"
 
 NS_GPUPIXEL_BEGIN
-
-class PixellationFilter : public Filter {
+class GPUPIXEL_API PixellationFilter : public Filter {
  public:
   static std::shared_ptr<PixellationFilter> create();
   bool init();

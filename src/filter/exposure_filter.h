@@ -10,8 +10,7 @@
 #include "gpupixel_macros.h"
 
 NS_GPUPIXEL_BEGIN
-
-class ExposureFilter : public Filter {
+class GPUPIXEL_API ExposureFilter : public Filter {
  public:
   static std::shared_ptr<ExposureFilter> create();
   bool init();

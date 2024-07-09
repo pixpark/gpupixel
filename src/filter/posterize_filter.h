@@ -11,8 +11,7 @@
 #include "gpupixel_macros.h"
 
 NS_GPUPIXEL_BEGIN
-
-class PosterizeFilter : public Filter {
+class GPUPIXEL_API PosterizeFilter : public Filter {
  public:
   static std::shared_ptr<PosterizeFilter> create();
   bool init();

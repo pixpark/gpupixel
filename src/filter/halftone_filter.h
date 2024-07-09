@@ -11,8 +11,7 @@
 #include "pixellation_filter.h"
 
 NS_GPUPIXEL_BEGIN
-
-class HalftoneFilter : public PixellationFilter {
+class GPUPIXEL_API HalftoneFilter : public PixellationFilter {
  public:
   static std::shared_ptr<HalftoneFilter> create();
   bool init();

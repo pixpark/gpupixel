@@ -11,8 +11,7 @@
 #include "gpupixel_macros.h"
 
 NS_GPUPIXEL_BEGIN
-
-class HSBFilter : public ColorMatrixFilter {
+class GPUPIXEL_API HSBFilter : public ColorMatrixFilter {
  public:
   static std::shared_ptr<HSBFilter> create();
   bool init();

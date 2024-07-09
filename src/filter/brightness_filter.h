@@ -11,8 +11,7 @@
 #include "gpupixel_macros.h"
 
 NS_GPUPIXEL_BEGIN
-
-class BrightnessFilter : public Filter {
+class GPUPIXEL_API BrightnessFilter : public Filter {
  public:
   static std::shared_ptr<BrightnessFilter> create(float brightness = 0.0);
   bool init(float brightness);

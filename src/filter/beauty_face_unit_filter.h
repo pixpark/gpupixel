@@ -13,7 +13,7 @@
 NS_GPUPIXEL_BEGIN
 class SourceImage;
 
-class BeautyFaceUnitFilter : public Filter {
+class GPUPIXEL_API BeautyFaceUnitFilter : public Filter {
  public:
   static std::shared_ptr<BeautyFaceUnitFilter> create();
   ~BeautyFaceUnitFilter();

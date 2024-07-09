@@ -11,8 +11,7 @@
 #include "gpupixel_macros.h"
 
 NS_GPUPIXEL_BEGIN
-
-class RGBFilter : public Filter {
+class GPUPIXEL_API RGBFilter : public Filter {
  public:
   static std::shared_ptr<RGBFilter> create();
   bool init();

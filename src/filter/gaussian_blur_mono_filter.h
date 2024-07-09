@@ -11,8 +11,7 @@
 #include "gpupixel_macros.h"
 
 NS_GPUPIXEL_BEGIN
-
-class GaussianBlurMonoFilter : public Filter {
+class GPUPIXEL_API GaussianBlurMonoFilter : public Filter {
  public:
   enum Type { HORIZONTAL, VERTICAL };
 
