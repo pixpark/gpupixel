@@ -11,8 +11,7 @@
 #include "gpupixel_macros.h"
 
 NS_GPUPIXEL_BEGIN
-
-class LuminanceRangeFilter : public Filter {
+class GPUPIXEL_API LuminanceRangeFilter : public Filter {
  public:
   static std::shared_ptr<LuminanceRangeFilter> create();
   bool init();

@@ -11,8 +11,7 @@
 #include "target.h"
 
 NS_GPUPIXEL_BEGIN
-
-class TargetView : public Target {
+class GPUPIXEL_API TargetView : public Target {
  public:
   enum FillMode {
     Stretch = 0,  // Stretch to fill the view, and may distort the image

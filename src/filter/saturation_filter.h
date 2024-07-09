@@ -11,8 +11,7 @@
 #include "gpupixel_macros.h"
 
 NS_GPUPIXEL_BEGIN
-
-class SaturationFilter : public Filter {
+class GPUPIXEL_API SaturationFilter : public Filter {
  public:
   static std::shared_ptr<SaturationFilter> create();
   bool init();

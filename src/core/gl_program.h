@@ -14,8 +14,7 @@
 #include <string>
 
 NS_GPUPIXEL_BEGIN
-
-class GLProgram {
+class GPUPIXEL_API GLProgram {
  public:
   GLProgram();
   ~GLProgram();

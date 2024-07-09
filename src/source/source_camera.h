@@ -16,8 +16,7 @@
 #endif
 
 NS_GPUPIXEL_BEGIN
-
-class SourceCamera : public Source {
+class GPUPIXEL_API SourceCamera : public Source {
  public:
   SourceCamera();
   virtual ~SourceCamera();

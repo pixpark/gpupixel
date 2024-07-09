@@ -13,8 +13,7 @@
 #include "toon_filter.h"
 
 NS_GPUPIXEL_BEGIN
-
-class SmoothToonFilter : public FilterGroup {
+class GPUPIXEL_API SmoothToonFilter : public FilterGroup {
  public:
   virtual ~SmoothToonFilter();
 

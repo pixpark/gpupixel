@@ -15,7 +15,6 @@
 #include "string"
 
 NS_GPUPIXEL_BEGIN
-
 const std::string kDefaultVertexShader = R"(
     attribute vec4 position; attribute vec4 inputTextureCoordinate;
 
@@ -27,7 +26,7 @@ const std::string kDefaultVertexShader = R"(
     })";
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
-const std::string kDefaultFragmentShader = R"(
+GPUPIXEL_API const std::string kDefaultFragmentShader = R"(
     varying highp vec2 textureCoordinate; uniform sampler2D inputImageTexture;
 
     void main() {
@@ -42,7 +41,7 @@ const std::string kDefaultFragmentShader = R"(
     })";
 #endif
 
-class Filter : public Source, public Target {
+class GPUPIXEL_API Filter : public Source, public Target {
  public:
   virtual ~Filter();
 

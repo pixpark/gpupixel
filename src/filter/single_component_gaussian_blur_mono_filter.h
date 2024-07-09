@@ -11,8 +11,8 @@
 #include "gaussian_blur_mono_filter.h"
 
 NS_GPUPIXEL_BEGIN
-
-class SingleComponentGaussianBlurMonoFilter : public GaussianBlurMonoFilter {
+class GPUPIXEL_API SingleComponentGaussianBlurMonoFilter
+    : public GaussianBlurMonoFilter {
  public:
   static std::shared_ptr<SingleComponentGaussianBlurMonoFilter>
   create(Type type = HORIZONTAL, int radius = 4, float sigma = 2.0);
