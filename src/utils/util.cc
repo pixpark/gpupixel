@@ -59,6 +59,8 @@
 
 NS_GPUPIXEL_BEGIN
 
+std::string Util::resourceRoot = "";
+
 std::string Util::getResourcePath(std::string name) {
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
   NSString* oc_path = [ObjcHelper
@@ -67,9 +69,13 @@ std::string Util::getResourcePath(std::string name) {
 #elif defined(GPUPIXEL_ANDROID)
   std::string path = getResourcePathJni(name);
 #else
-    std::string path = name;
+    std::string path = resourceRoot.empty() ? name : (resourceRoot + "/" + name);
 #endif
   return path;
+}
+
+void Util::setResourceRoot(std::string root) {
+    resourceRoot = root;
 }
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
 std::string Util::getResourcePath(std::string bundle_name,
@@ -178,7 +184,7 @@ int64_t Util::nowTimeMs() {
   return ts;
 }
 
-void Util::Log(const std::string& tag, const std::string& format, ...) {
+void Util::Log(const std::string& tag,std::string format, ...) {
   char buffer[10240];
   va_list args;
   va_start(args, format);

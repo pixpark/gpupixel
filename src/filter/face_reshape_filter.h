@@ -11,8 +11,7 @@
 #include "face_detector.h"
 
 NS_GPUPIXEL_BEGIN
-
-class FaceReshapeFilter : public Filter {
+class GPUPIXEL_API FaceReshapeFilter : public Filter {
  public:
   static std::shared_ptr<FaceReshapeFilter> create();
   ~FaceReshapeFilter();

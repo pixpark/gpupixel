@@ -11,8 +11,7 @@
 #include "gpupixel_macros.h"
 
 NS_GPUPIXEL_BEGIN
-
-class HueFilter : public Filter {
+class GPUPIXEL_API HueFilter : public Filter {
  public:
   static std::shared_ptr<HueFilter> create();
   bool init();

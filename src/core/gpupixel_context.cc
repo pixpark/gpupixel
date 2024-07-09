@@ -268,6 +268,8 @@ void GPUPixelContext::createContext() {
     return;
   }
   glfwMakeContextCurrent(gl_context_);
+
+  gladLoadGL();
 #endif
 }
 

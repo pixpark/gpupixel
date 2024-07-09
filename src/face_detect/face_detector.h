@@ -13,21 +13,22 @@
 #include "gpupixel_macros.h"
 
 NS_GPUPIXEL_BEGIN
-    typedef std::function<void(std::vector<float> landmarks)> FaceDetectorCallback;
+GPUPIXEL_API typedef std::function<void(std::vector<float> landmarks)>
+FaceDetectorCallback;
 
-    typedef enum {
+GPUPIXEL_API typedef enum {
         GPUPIXEL_FRAME_TYPE_UNKNOW,      /*  Unknow pixel format, as a cube */
         GPUPIXEL_FRAME_TYPE_YUVI420,     /*  YUV  4:2:0   12bpp ( 3 planes, the first is Y, the second is U, the third is V */
         GPUPIXEL_FRAME_TYPE_RGBA8888,    /*  RGBA 8:8:8:8 32bpp ( 4 channel, 8x4=32bit RGBA pixel ) */  
     } GPUPIXEL_FRAME_TYPE;
 
-    typedef enum {
+GPUPIXEL_API typedef enum {
         GPUPIXEL_MODE_FMT_VIDEO = 0x00000000,
         GPUPIXEL_MODE_FMT_PICTURE = 0x00000001,
         GPUPIXEL_MODE_FMT_DEFAULT = 0x00000000,
     } GPUPIXEL_MODE_FMT;
 
-    class FaceDetector {
+class GPUPIXEL_API FaceDetector {
     public:
         FaceDetector();
 

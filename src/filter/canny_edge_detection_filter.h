@@ -16,8 +16,7 @@
 #include "weak_pixel_inclusion_filter.h"
 
 NS_GPUPIXEL_BEGIN
-
-class CannyEdgeDetectionFilter : public FilterGroup {
+class GPUPIXEL_API CannyEdgeDetectionFilter : public FilterGroup {
  public:
   static std::shared_ptr<CannyEdgeDetectionFilter> create();
   ~CannyEdgeDetectionFilter();
