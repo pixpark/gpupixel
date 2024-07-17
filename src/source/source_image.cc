@@ -65,7 +65,7 @@ void SourceImage::init(int width, int height, int channel_count, const unsigned 
         rgba[i * 4 + 3] = 255;              // Alpha (fully opaque)
     }
     
-    image_bytes.assign(rgba, rgba + width * height *3);
+    image_bytes.assign(rgba, rgba + width * height *4);
     
     delete[] rgba;
   } else if(channel_count == 4) {
