@@ -39,7 +39,7 @@
 | ![bigeye](./docs/image/bigeye.gif) | ![lipstick](./docs/image/lipstick.gif) | ![blusher](./docs/image/blusher.gif) |   ![on-off](./docs/image/on-off.gif)   |
  
 ## 架构流程
-![](./docs/arch-zh.jpg)
+![](./docs/image/arch-zh.jpg)
  
 ## 特性对比
 
