@@ -1,11 +1,10 @@
 ---
-# https://vitepress.dev/reference/default-theme-home-page
 layout: home
 
 hero:
   name: "GPUPixel"
   text: "基于GPU 的实时 AI 图像美颜滤镜库"
-  tagline: 高性能, 跨平台, 达到商业级美颜效果
+  tagline: 高性能, 跨平台
   image:
       src: /cover.svg
       alt: cover
@@ -20,7 +19,7 @@ hero:
 features:
   - icon: 🤹‍♀️
     title: 美颜滤镜
-    details: 内置美白, 磨皮, 瘦脸, 大眼, 口红, 腮红等滤镜，商业级美颜效果
+    details: 内置美白, 磨皮, 瘦脸, 大眼, 口红, 腮红等滤镜
   - icon: ⚙
     title: 高性能
     details: 基于C++11 和 OpenGL/ES 编写，实时高性能，可用于直播和WebRTC等

@@ -6,7 +6,7 @@ const pkg = require('vitepress/package.json')
 
 export const zh = defineConfig({
   lang: 'zh-Hans',
-  description: '由 Vite 和 Vue 驱动的静态站点生成器',
+  description: 'Cross-Platform AI Beauty Effects Library, Achieving Commercial-Grade Beauty Effects. Written in C++11, Based on OpenGL/ES and VNN.',
 
   themeConfig: {
     nav: nav(),
@@ -17,7 +17,7 @@ export const zh = defineConfig({
     },
 
     editLink: {
-      pattern: 'https://github.com/vuejs/vitepress/edit/main/docs/:path',
+      pattern: 'https://github.com/pixpark/gpupixel/edit/main/docs/:path',
       text: '在 GitHub 上编辑此页面'
     },
 
@@ -32,7 +32,7 @@ export const zh = defineConfig({
     },
 
     outline: {
-      label: '页面导航'
+      label: '文章内容'
     },
 
     lastUpdated: {
@@ -56,12 +56,12 @@ function nav(): DefaultTheme.NavItem[] {
   return [
     {
       text: '指南',
-      link: '/zh/guide/what-is-gpupixel',
+      link: '/zh/guide/intro',
       activeMatch: '/zh/guide/'
     },
     {
-      text: '参考',
-      link: '/zh/reference/site-config',
+      text: '参考',    
+      link: '/zh/reference/filter-list',
       activeMatch: '/zh/reference/'
     },
     {
@@ -69,14 +69,18 @@ function nav(): DefaultTheme.NavItem[] {
       items: [
         {
           text: '更新日志',
-          link: 'https://github.com/vuejs/vitepress/blob/main/CHANGELOG.md'
+          link: 'https://github.com/pixpark/gpupixel/blob/main/CHANGELOG.md'
         },
         {
           text: '参与贡献',
-          link: 'https://github.com/vuejs/vitepress/blob/main/.github/contributing.md'
+          link: 'https://github.com/pixpark/gpupixel/issues/new/choose'
         }
       ]
-    }
+    },
+    {
+      text: 'PixPark',
+      link: 'https://pixpark.net',
+    },
   ]
 }
 
@@ -86,50 +90,39 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
       text: '快速开始',
       collapsed: false,
       items: [
-        { text: '简介', link: 'what-is-gpupixel' },
-        { text: '运行Demo', link: 'what-is-gpupixel' },
+        { text: '简介', link: 'intro' },
+        { text: '编译', link: 'build' },
+        { text: '示例', link: 'demo' },
+        { text: '集成', link: 'integrated' },
       ]
     },
     {
-      text: '集成&调用',
+      text: '接口调用',
       collapsed: false,
       items: [
-        { text: 'Android', link: 'what-is-gpupixel' },
-        { text: 'iOS', link: 'what-is-gpupixel' },
-        { text: 'Windows', link: 'what-is-gpupixel' },
-        { text: 'MacOS', link: 'what-is-gpupixel' },
-        { text: 'Linux', link: 'what-is-gpupixel' },
-        { text: 'Web', link: 'what-is-gpupixel' },
-        { text: 'Python', link: 'what-is-gpupixel' },
-      ]
-    },
-    {
-      text: '编译&调试',
-      collapsed: false,
-      items: [
-        { text: 'Android', link: 'what-is-gpupixel' },
-        { text: 'iOS', link: 'what-is-gpupixel' },
-        { text: 'Desktop', link: 'what-is-gpupixel' },
-        { text: 'Web', link: 'what-is-gpupixel' },
-        { text: 'Python', link: 'what-is-gpupixel' },
+        { text: '基础滤镜', link: '#' },
+        { text: '美妆特效', link: '#' },
+        { text: '输入输出', link: '#' },
       ]
     },
     {
       text: '自定义',
       collapsed: false,
       items: [
-        { text: '自定义滤镜', link: 'custom-theme' },
+        { text: '自定义滤镜', link: '#' },
+        { text: '自定义输入', link: '#' },
+        { text: '自定义输出', link: '#' },
       ]
     },
     {
-      text: '实验性功能',
+      text: '其他',
       collapsed: false,
       items: [
-        { text: 'MPA 模式', link: 'mpa-mode' },
-        { text: 'sitemap 生成', link: 'sitemap-generation' }
+        { text: '架构分析', link: '#' },
+        { text: '代码调试', link: '#' },
       ]
     },
-    { text: '配置和 API 参考', base: '/zh/reference/', link: 'site-config' }
+    { text: '配置和 API 参考', base: '/zh/reference/', link: 'filter-list' }
   ]
 }
 
@@ -138,29 +131,7 @@ function sidebarReference(): DefaultTheme.SidebarItem[] {
     {
       text: '参考',
       items: [
-        { text: '站点配置', link: 'site-config' },
-        { text: 'frontmatter 配置', link: 'frontmatter-config' },
-        { text: '运行时 API', link: 'runtime-api' },
-        { text: 'CLI', link: 'cli' },
-        {
-          text: '默认主题',
-          base: '/zh/reference/default-theme-',
-          items: [
-            { text: '概览', link: 'config' },
-            { text: '导航栏', link: 'nav' },
-            { text: '侧边栏', link: 'sidebar' },
-            { text: '主页', link: 'home-page' },
-            { text: '页脚', link: 'footer' },
-            { text: '布局', link: 'layout' },
-            { text: '徽章', link: 'badge' },
-            { text: '团队页', link: 'team-page' },
-            { text: '上下页链接', link: 'prev-next-links' },
-            { text: '编辑链接', link: 'edit-link' },
-            { text: '最后更新时间戳', link: 'last-updated' },
-            { text: '搜索', link: 'search' },
-            { text: 'Carbon Ads', link: 'carbon-ads' }
-          ]
-        }
+        { text: '滤镜列表', link: 'filter-list' },
       ]
     }
   ]
