@@ -17,13 +17,13 @@ export const en = defineConfig({
     },
 
     editLink: {
-      pattern: 'https://github.com/vuejs/vitepress/edit/main/docs/:path',
+      pattern: 'https://github.com/pixpark/gpupixel/edit/main/docs/:path',
       text: 'Edit this page on GitHub'
     },
 
     footer: {
       message: 'Released under the MIT License.',
-      copyright: 'Copyright © 2019-present Evan You'
+      copyright: 'Copyright © 2019-present PixPark'
     }
   }
 })
@@ -32,7 +32,7 @@ function nav(): DefaultTheme.NavItem[] {
   return [
     {
       text: 'Guide',
-      link: '/guide/what-is-vitepress',
+      link: '/guide/intro',
       activeMatch: '/guide/'
     },
     {
@@ -45,11 +45,11 @@ function nav(): DefaultTheme.NavItem[] {
       items: [
         {
           text: 'Changelog',
-          link: 'https://github.com/vuejs/vitepress/blob/main/CHANGELOG.md'
+          link: 'https://github.com/pixpark/gpupixel/blob/main/CHANGELOG.md'
         },
         {
           text: 'Contributing',
-          link: 'https://github.com/vuejs/vitepress/blob/main/.github/contributing.md'
+          link: 'https://github.com/pixpark/gpupixel/issues/new/choose'
         }
       ]
     }

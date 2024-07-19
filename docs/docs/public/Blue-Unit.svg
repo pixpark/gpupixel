@@ -5,24 +5,24 @@
 <path fill-rule="evenodd" clip-rule="evenodd" d="M1000 980V540.402C1000 513.88 1010.54 488.445 1029.29 469.691L1469.69 29.2893C1488.44 10.5357 1513.88 0 1540.4 0H1980C1991.05 0 2000 8.9543 2000 20V458.239C2000 484.76 1989.46 510.196 1970.71 528.949L1528.95 970.711C1510.2 989.464 1484.76 1000 1458.24 1000H1020C1008.95 1000 1000 991.046 1000 980Z" fill="url(#paint3_linear_50_3)"/>
 <defs>
 <linearGradient id="paint0_linear_50_3" x1="1000" y1="1500" x2="2000" y2="1500" gradientUnits="userSpaceOnUse">
-<stop stop-color="#2551D7"/>
-<stop offset="0.5" stop-color="#305ADC"/>
-<stop offset="1" stop-color="#3A61DF" stop-opacity="0.9"/>
+<stop stop-color="#0500FF"/>
+<stop offset="0.498635" stop-color="#0500FF" stop-opacity="0.8"/>
+<stop offset="1" stop-color="#A415FB"/>
 </linearGradient>
 <linearGradient id="paint1_linear_50_3" x1="0" y1="1500" x2="1000" y2="1500" gradientUnits="userSpaceOnUse">
-<stop stop-color="#2551D7"/>
-<stop offset="0.5" stop-color="#305ADC"/>
-<stop offset="1" stop-color="#3A61DF" stop-opacity="0.9"/>
+<stop stop-color="#0500FF"/>
+<stop offset="0.498635" stop-color="#0500FF" stop-opacity="0.8"/>
+<stop offset="1" stop-color="#A415FB"/>
 </linearGradient>
 <linearGradient id="paint2_linear_50_3" x1="0" y1="500" x2="1000" y2="500" gradientUnits="userSpaceOnUse">
-<stop stop-color="#2551D7"/>
-<stop offset="0.5" stop-color="#305ADC"/>
-<stop offset="1" stop-color="#3A61DF" stop-opacity="0.9"/>
+<stop stop-color="#0500FF"/>
+<stop offset="0.498635" stop-color="#0500FF" stop-opacity="0.8"/>
+<stop offset="1" stop-color="#A415FB"/>
 </linearGradient>
 <linearGradient id="paint3_linear_50_3" x1="1000" y1="500" x2="2000" y2="500" gradientUnits="userSpaceOnUse">
-<stop stop-color="#2551D7"/>
-<stop offset="0.5" stop-color="#305ADC"/>
-<stop offset="1" stop-color="#3A61DF" stop-opacity="0.9"/>
+<stop stop-color="#0500FF"/>
+<stop offset="0.498635" stop-color="#0500FF" stop-opacity="0.8"/>
+<stop offset="1" stop-color="#A415FB"/>
 </linearGradient>
 </defs>
 </svg>
