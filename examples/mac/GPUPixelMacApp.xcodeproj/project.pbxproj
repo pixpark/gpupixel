@@ -71,11 +71,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				840FD5C12B7E523D00781FA6 /* vnn_kit_osx.framework in Frameworks */,
-				84AE137526FCBCDA00E215AE /* CoreMedia.framework in Frameworks */,
 				840CD3D12B8843CD00EEF7B0 /* gpupixel.framework in Frameworks */,
-				84AE136B26FCBCAA00E215AE /* AVFoundation.framework in Frameworks */,
 				840FD5BD2B7E523D00781FA6 /* vnn_face_osx.framework in Frameworks */,
 				840FD5BF2B7E523D00781FA6 /* vnn_core_osx.framework in Frameworks */,
+				84AE137526FCBCDA00E215AE /* CoreMedia.framework in Frameworks */,
+				84AE136B26FCBCAA00E215AE /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
