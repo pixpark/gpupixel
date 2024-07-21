@@ -89,7 +89,7 @@ IF(${CURRENT_OS} STREQUAL "windows") 														# windows
 	list(APPEND SOURCE_FILES ${GLAD_SOURCE_FILE})
 
 	# link libs find path
-	LINK_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/third_party/glfw/lib-mingw-w64)
+	LINK_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/third_party/glfw/lib-msvc)
 ELSEIF(${CURRENT_OS} STREQUAL "linux" OR ${CURRENT_OS} STREQUAL "wasm")	
 	# Source 
 	FILE(GLOB GLAD_SOURCE_FILE  "${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/src/*.c" )
@@ -145,17 +145,17 @@ ELSEIF(${CURRENT_OS} STREQUAL "windows")
 	add_library(vnn_kit SHARED IMPORTED)
 	# 设置目标库的实际路径
 	set_target_properties(vnn_kit PROPERTIES IMPORTED_IMPLIB
-	${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/libs/${CURRENT_OS}/x64/vnn_kit.dll)
+	${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/libs/${CURRENT_OS}/x64/vnn_kit.lib)
 
 	add_library(vnn_core SHARED IMPORTED)
 	# 设置目标库的实际路径
 	set_target_properties(vnn_core PROPERTIES IMPORTED_IMPLIB
-	${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/libs/${CURRENT_OS}/x64/vnn_core.dll)
+	${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/libs/${CURRENT_OS}/x64/vnn_core.lib)
 
 	add_library(vnn_face SHARED IMPORTED)
 	# 设置目标库的实际路径
 	set_target_properties(vnn_face PROPERTIES IMPORTED_IMPLIB
-	${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/libs/${CURRENT_OS}/x64/vnn_face.dll)
+	${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/libs/${CURRENT_OS}/x64/vnn_face.lib)
 ELSEIF(${CURRENT_OS} STREQUAL "macos" OR ${CURRENT_OS} STREQUAL "ios")
 	set_target_properties(${PROJECT_NAME} PROPERTIES
 		XCODE_ATTRIBUTE_PRODUCT_NAME ${PROJECT_NAME}

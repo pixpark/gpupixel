@@ -54,7 +54,11 @@ FILE(GLOB SOURCE_FILES
 IF(${CURRENT_OS} STREQUAL "windows") 														# windows
 	# link libs find path
 	LINK_DIRECTORIES( 
-		${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/glfw/lib-mingw-w64)
+		${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/glfw/lib-msvc)
+
+	# Source
+	FILE(GLOB GLAD_SOURCE_FILE "${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/glad/src/*.c")
+	list(APPEND SOURCE_FILES ${GLAD_SOURCE_FILE})
 ELSEIF(${CURRENT_OS} STREQUAL "linux")	
 	# # Source 
 	# FILE(GLOB GLAD_SOURCE_FILE  "${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/src/*.c" )
@@ -87,7 +91,7 @@ ELSEIF(${CURRENT_OS} STREQUAL "windows")
 		${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/vnn/libs/${CURRENT_OS}/x64/*
 	)
 
-	SET(GPUPIXEL_LIBS ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libgpupixel.dll)
+	SET(GPUPIXEL_LIBS ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/gpupixel.dll)
 	set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-Wl,-rpath,./")
 ENDIF()
 

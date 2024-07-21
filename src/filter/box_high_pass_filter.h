@@ -13,8 +13,7 @@
 #include "box_difference_filter.h"
 #include "filter_group.h"
 NS_GPUPIXEL_BEGIN
-
-class BoxHighPassFilter : public FilterGroup {
+class GPUPIXEL_API BoxHighPassFilter : public FilterGroup {
  public:
   static std::shared_ptr<BoxHighPassFilter> create();
   ~BoxHighPassFilter();

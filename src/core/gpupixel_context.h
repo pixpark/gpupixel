@@ -25,8 +25,7 @@
  
  
 NS_GPUPIXEL_BEGIN
-
-class GPUPixelContext {
+class GPUPIXEL_API GPUPixelContext {
  public:
   static GPUPixelContext* getInstance();
   static void destroy();

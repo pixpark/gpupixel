@@ -12,8 +12,7 @@
 #include "single_component_gaussian_blur_mono_filter.h"
 
 NS_GPUPIXEL_BEGIN
-
-class SingleComponentGaussianBlurFilter : public FilterGroup {
+class GPUPIXEL_API SingleComponentGaussianBlurFilter : public FilterGroup {
  public:
   virtual ~SingleComponentGaussianBlurFilter();
 
