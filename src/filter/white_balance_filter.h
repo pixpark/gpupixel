@@ -11,8 +11,7 @@
 #include "gpupixel_macros.h"
 
 NS_GPUPIXEL_BEGIN
-
-class WhiteBalanceFilter : public Filter {
+class GPUPIXEL_API WhiteBalanceFilter : public Filter {
  public:
   static std::shared_ptr<WhiteBalanceFilter> create();
   bool init();

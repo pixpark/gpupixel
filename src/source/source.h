@@ -17,10 +17,9 @@
 #include "face_detector.h"
 
 NS_GPUPIXEL_BEGIN
+class GPUPIXEL_API Filter;
 
-class Filter;
-
-class Source {
+class GPUPIXEL_API Source {
  public:
   Source();
   virtual ~Source();

@@ -11,8 +11,7 @@
 #include "gpupixel_macros.h"
 
 NS_GPUPIXEL_BEGIN
-
-class ColorInvertFilter : public Filter {
+class GPUPIXEL_API ColorInvertFilter : public Filter {
  public:
   static std::shared_ptr<ColorInvertFilter> create();
   bool init();

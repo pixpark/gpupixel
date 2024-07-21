@@ -14,8 +14,7 @@
 #include "saturation_filter.h"
 
 NS_GPUPIXEL_BEGIN
-
-class IOSBlurFilter : public FilterGroup {
+class GPUPIXEL_API IOSBlurFilter : public FilterGroup {
  public:
   virtual ~IOSBlurFilter();
 

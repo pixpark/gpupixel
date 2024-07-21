@@ -11,8 +11,7 @@
 #include "gpupixel_macros.h"
 
 NS_GPUPIXEL_BEGIN
-
-class ContrastFilter : public Filter {
+class GPUPIXEL_API ContrastFilter : public Filter {
  public:
   static std::shared_ptr<ContrastFilter> create();
   bool init();

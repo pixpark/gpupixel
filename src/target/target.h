@@ -13,8 +13,7 @@
 #include <map>
 
 NS_GPUPIXEL_BEGIN
-
-enum RotationMode {
+GPUPIXEL_API enum RotationMode {
   NoRotation = 0,
   RotateLeft,
   RotateRight,
@@ -25,7 +24,7 @@ enum RotationMode {
   Rotate180
 };
 
-class Target {
+class GPUPIXEL_API Target {
  public:
   Target(int inputNumber = 1);
   virtual ~Target();

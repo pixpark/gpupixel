@@ -18,13 +18,14 @@ NS_GPUPIXEL_BEGIN
    (rotation) == gpupixel::RotateRightFlipVertical || \
    (rotation) == gpupixel::RotateRightFlipHorizontal)
 
-class Util {
+class GPUPIXEL_API Util {
  public:
   static std::string str_format(const char* fmt, ...);
-  static void Log(const std::string& tag, const std::string& format, ...);
+  static void Log(const std::string& tag, std::string format, ...);
   static int64_t nowTimeMs();
 
   static std::string getResourcePath(std::string name);
+  static void setResourceRoot(std::string root);
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
   static std::string getResourcePath(std::string bundle_name,
                                      std::string file_name,
@@ -33,5 +34,8 @@ class Util {
 #if defined(GPUPIXEL_ANDROID)
   static std::string getResourcePathJni(std::string name);
 #endif
+
+private:
+  static std::string resourceRoot;
 };
 NS_GPUPIXEL_END

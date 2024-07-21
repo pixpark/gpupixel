@@ -11,8 +11,7 @@
 #include "gpupixel_macros.h"
 
 NS_GPUPIXEL_BEGIN
-
-class SphereRefractionFilter : public Filter {
+class GPUPIXEL_API SphereRefractionFilter : public Filter {
  public:
   static std::shared_ptr<SphereRefractionFilter> create();
   bool init();

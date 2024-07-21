@@ -15,8 +15,7 @@
 #include "box_high_pass_filter.h"
 #include "gaussian_blur_filter.h"
 NS_GPUPIXEL_BEGIN
-
-class BeautyFaceFilter : public FilterGroup {
+class GPUPIXEL_API BeautyFaceFilter : public FilterGroup {
  public:
   static std::shared_ptr<BeautyFaceFilter> create();
   ~BeautyFaceFilter();
