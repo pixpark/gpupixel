@@ -11,8 +11,7 @@
 #include "gpupixel_macros.h"
 
 NS_GPUPIXEL_BEGIN
-
-class BilateralMonoFilter : public Filter {
+class GPUPIXEL_API BilateralMonoFilter : public Filter {
  public:
   enum Type { HORIZONTAL, VERTICAL };
 
@@ -32,7 +31,7 @@ class BilateralMonoFilter : public Filter {
   float _distanceNormalizationFactor;
 };
 
-class BilateralFilter : public FilterGroup {
+class GPUPIXEL_API BilateralFilter : public FilterGroup {
  public:
   virtual ~BilateralFilter();
 

@@ -7,11 +7,12 @@
 
 #pragma once
 
+#include <string>
+
 #include "source.h"
 
 NS_GPUPIXEL_BEGIN
-
-class SourceImage : public Source {
+class GPUPIXEL_API SourceImage : public Source {
  public:
   SourceImage() {}
   ~SourceImage() {};
@@ -20,7 +21,8 @@ class SourceImage : public Source {
               int height,
               int channel_count,
               const unsigned char* pixels);
-  static std::shared_ptr<SourceImage> create(const std::string name);
+  static std::shared_ptr<SourceImage> create(
+      const std::string name);
 
   static std::shared_ptr<SourceImage> create_from_memory(int width,
                                             int height,

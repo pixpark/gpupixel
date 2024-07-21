@@ -12,14 +12,14 @@
 NS_GPUPIXEL_BEGIN
 class SourceImage;
 
-typedef struct {
+GPUPIXEL_API typedef struct {
   float x;
   float y;
   float width;
   float height;
 } FrameBounds;
 
-class FaceMakeupFilter : public Filter {
+class GPUPIXEL_API FaceMakeupFilter : public Filter {
  public:
   static std::shared_ptr<FaceMakeupFilter> create();
   ~FaceMakeupFilter();

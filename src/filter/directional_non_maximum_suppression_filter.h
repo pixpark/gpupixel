@@ -11,8 +11,7 @@
 #include "gpupixel_macros.h"
 
 NS_GPUPIXEL_BEGIN
-
-class DirectionalNonMaximumSuppressionFilter : public Filter {
+class GPUPIXEL_API DirectionalNonMaximumSuppressionFilter : public Filter {
  public:
   static std::shared_ptr<DirectionalNonMaximumSuppressionFilter> create();
   bool init();

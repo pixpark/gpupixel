@@ -32,6 +32,7 @@ void processInput(GLFWwindow *window);
 
 int main()
 {
+    glfwInit();
      GLFWwindow* window = GPUPixelContext::getInstance()->GetGLContext();
   
     if (window == NULL)
@@ -41,18 +42,11 @@ int main()
         return -1;
     }
 
-    glfwShowWindow(window);
-
+    gladLoadGL();
     glfwMakeContextCurrent(window);
+
+   glfwShowWindow(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
- 
-    // glad: load all OpenGL function pointers
-    // ---------------------------------------
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-    {
-        std::cout << "Failed to initialize GLAD" << std::endl;
-        return -1;
-    }
     
     // create filter
     // ----

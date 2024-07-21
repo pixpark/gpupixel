@@ -11,8 +11,7 @@
 #include "nearby_sampling3x3_filter.h"
 
 NS_GPUPIXEL_BEGIN
-
-class Convolution3x3Filter : public NearbySampling3x3Filter {
+class GPUPIXEL_API Convolution3x3Filter : public NearbySampling3x3Filter {
  public:
   virtual bool init();
   virtual bool proceed(bool bUpdateTargets = true,

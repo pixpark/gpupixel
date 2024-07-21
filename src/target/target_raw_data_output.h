@@ -20,14 +20,13 @@
 
 #include <mutex>
 NS_GPUPIXEL_BEGIN
-
-typedef std::function<
+GPUPIXEL_API typedef std::function<
     void(const uint8_t* data, int width, int height, int64_t ts)>
     RawOutputCallback;
     
 #define PBO_SIZE 2
 
-class TargetRawDataOutput : public Target {
+class GPUPIXEL_API TargetRawDataOutput : public Target {
  public:
   TargetRawDataOutput();
   virtual ~TargetRawDataOutput();

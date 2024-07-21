@@ -11,8 +11,7 @@
 #include "gpupixel_macros.h"
 
 NS_GPUPIXEL_BEGIN
-
-class BackgroundSegmentationFilter : public Filter {
+class GPUPIXEL_API BackgroundSegmentationFilter : public Filter {
  public:
   static std::shared_ptr<BackgroundSegmentationFilter> create();
   bool init();

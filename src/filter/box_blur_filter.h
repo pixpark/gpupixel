@@ -12,8 +12,7 @@
 #include "box_mono_blur_filter.h"
 #include "filter_group.h"
 NS_GPUPIXEL_BEGIN
-
-class BoxBlurFilter : public FilterGroup {
+class GPUPIXEL_API BoxBlurFilter : public FilterGroup {
  public:
   virtual ~BoxBlurFilter();
 

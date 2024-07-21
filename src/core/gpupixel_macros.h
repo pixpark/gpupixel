@@ -58,6 +58,18 @@
 #   error "Unknown compiler"
 #endif
 
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
+#ifndef GPUPIXEL_API
+#ifdef GPUPIXEL_WIN
+#define GPUPIXEL_API __declspec(dllexport)
+#endif
+#else
+        #define GPUPIXEL_API
+#endif
+
 //
 #if defined(GPUPIXEL_IOS)
   #import <OpenGLES/ES3/gl.h>

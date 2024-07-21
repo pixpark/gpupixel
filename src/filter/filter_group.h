@@ -14,8 +14,7 @@
 #include "target.h"
 
 NS_GPUPIXEL_BEGIN
-
-class FilterGroup : public Filter {
+class GPUPIXEL_API FilterGroup : public Filter {
  public:
   virtual ~FilterGroup();
 
