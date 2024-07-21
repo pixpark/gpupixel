@@ -63,13 +63,12 @@
 #endif
 
 #ifndef GPUPIXEL_API
-#ifdef GPUPIXEL_WIN
-#define GPUPIXEL_API __declspec(dllexport)
+  #ifdef GPUPIXEL_WIN
+    #define GPUPIXEL_API __declspec(dllexport)
+  #else
+    #define GPUPIXEL_API
+ #endif
 #endif
-#else
-        #define GPUPIXEL_API
-#endif
-
 //
 #if defined(GPUPIXEL_IOS)
   #import <OpenGLES/ES3/gl.h>
