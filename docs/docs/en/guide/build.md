@@ -1,28 +1,29 @@
 ---
-title: 编译
+
+title: Build
 editLink: true
-description: 本篇将介绍各个系统平台GPUPixel库的编译方法
+description: This article will introduce the compilation methods for the GPUPixel library on various system platforms.
 ---
 
-# 编译
+# Build
 
-本章将介绍各个系统平台GPUPixel库的编译方法
+This chapter will introduce the compilation methods for the GPUPixel library on various system platforms.
 
 ::: tip
-从 [v1.1.0](https://github.com/pixpark/gpupixel/releases/tag/v1.1.1) 版本开始，源码使用CMake编译。最新编译好的各个平台库可以从[这里](https://github.com/pixpark/gpupixel/releases/latest)找到
+Starting from version [v1.1.0](https://github.com/pixpark/gpupixel/releases/tag/v1.1.1), the source code is compiled using CMake. The latest precompiled libraries for various platforms can be found [here](https://github.com/pixpark/gpupixel/releases/latest).
 :::
 
 ## iOS
-工程根目录下执行如下命令
+Execute the following commands at the root directory of the project.
 
-**生成工程**
+**Generate Project**
 ::: code-group
 ```bash [Arm64]
 cmake -G Xcode -B build -S src -DCMAKE_TOOLCHAIN_FILE=toolchain/ios.toolchain.cmake -DPLATFORM=OS64
 ```
 :::
 
-**编译**
+**Compile**
 ::: code-group
 
 ```bash [Release]
@@ -34,21 +35,21 @@ cmake --build build --config Debug
 ```
 :::
 
-**输出**
+**Output**
 
-编译输出位于项目根目录下的 `output` 路径，包含内容如下
+The compilation output is located in the `output` path under the root directory of the project, containing the following:
 ```bash
 output
-├── include   # 头文件
-├── library   # 库文件
-└── resources #资源文件
+├── include   # Header files
+├── library   # Library files
+└── resources # Resource files
 ```
-对于iOS只需要使用 `library` 下的 `.framework` 库即可，里面已经包含头文件和资源文件
+For iOS, you only need to use the `.framework` library under `library`, which already contains header files and resource files.
 
-## Mac
-工程根目录下执行如下命令
+## MacOS
+Execute the following commands at the root directory of the project.
 
-**生成工程**
+**Generate Project**
 ::: code-group
 ```bash [Apple Silicon]
 cmake -G Xcode -B build -S src -DCMAKE_TOOLCHAIN_FILE=toolchain/ios.toolchain.cmake -DPLATFORM=MAC_ARM64
@@ -57,8 +58,8 @@ cmake -G Xcode -B build -S src -DCMAKE_TOOLCHAIN_FILE=toolchain/ios.toolchain.cm
 cmake -G Xcode -B build -S src -DCMAKE_TOOLCHAIN_FILE=toolchain/ios.toolchain.cmake -DPLATFORM=MAC
 ```
 :::
- 
-**编译**
+
+**Compile**
 ::: code-group
 
 ```bash [Release]
@@ -70,61 +71,59 @@ cmake --build build --config Debug
 ```
 :::
 
-**输出**
+**Output**
 
-编译输出位于项目根目录下的 `output` 路径，包含内容如下
+The compilation output is located in the `output` path under the root directory of the project, containing the following:
 ```bash
 output
-├── include   #头文件
-├── library   #库文件
-└── resources #资源文件
+├── include   # Header files
+├── library   # Library files
+└── resources # Resource files
 ```
-对于MacOS只需要使用 `library` 下的 `.framework` 库即可，里面已经包含头文件和资源文件
+For macOS, you only need to use the `.framework` library under `library`, which already contains header files and resource files.
 
 ## Android
 
-使用Android Studio打开目录 `src/android/java`, 开始自动下载 gradle 等依赖
+Open the directory `src/android/java` with Android Studio, which will automatically start downloading dependencies such as Gradle.
 
-**工程结构**
+**Project Structure**
 
-包含demo和 gpupixel module, 如下
+Includes demo and gpupixel module, as follows:
 
 ![](../../image/android-project.png)
 
-**编译**
+**Compile**
 
-双击右侧 `gradle -> gpupixel -> build -> assemble` 开始编译
+Double-click `gradle -> gpupixel -> build -> assemble` to start compiling.
 
 ![](../../image/android-build.png)
 
-**输出**
+**Output**
 
-切换到 project 视图，输出位于： `src/android/java/gpupixel/build/outputs/aar`
+Switch to the project view, the output is located at: `src/android/java/gpupixel/build/outputs/aar`
 
 ![](../../image/android-output.png)
 
-**Gradle 命令编译**
+**Gradle Command Compile**
 
-如果已经配置号 gradle 命令环境，也可以使用 `gradlew` 编译
+If the Gradle command environment has been configured, you can also use `gradlew` to compile.
 
 ```bash
 ./gradlew :gpupixel:assembleRelease
 ```
 
-输出位于：`src/android/java/gpupixel/build/outputs/aar`
+The output is located at: `src/android/java/gpupixel/build/outputs/aar`
 
 ## Windows
 
-Windows编译需要安装 Cmake 和 MinGW64.
+Compiling on Windows requires the installation of CMake and MinGW64.
 
-**生成工程**
+**Generate Project**
 
 ```bash
 # Generate project
 cmake -G "MinGW Makefiles" -B build -S src
-
 ```
-**编译**
 ::: code-group
 
 ```bash [Release]
@@ -135,34 +134,46 @@ cmake --build build -DCMAKE_BUILD_TYPE=Release
 cmake --build build -DCMAKE_BUILD_TYPE=Debug
 ```
 :::
- 
-**输出**
+**Compile**
+::: code-group
 
-编译输出位于项目根目录下的 `output` 路径，包含内容如下
-```bash
-output
-├── include   #头文件
-├── library   #库文件
-└── resources #资源文件
+```bash [Release]
+cmake --build build -DCMAKE_BUILD_TYPE=Release
 ```
 
-## Linux (Test On Ubuntu)
+```bash [Debug]
+cmake --build build -DCMAKE_BUILD_TYPE=Debug
+```
+:::
 
-**环境配置**
+**Output**
+
+The compilation output is located in the `output` path under the root directory of the project, containing the following:
+```bash
+output
+├── include   # Header files
+├── library   # Library files
+└── resources # Resource files
+```
+
+## Linux (Tested on Ubuntu)
+
+**Environment Configuration**
 
 ```bash
-# install cmake 
+# Install cmake
 sudo apt-get install cmake pkg-config
-# install dependent lib
+# Install dependent libraries
 sudo apt-get install mesa-utils libglu1-mesa-dev freeglut3-dev mesa-common-dev libglfw3-dev
 ```
 
-**生成工程**
+**Generate Project**
 ```bash
 # Generate project
 cmake -B build -S src
 ```
-**编译**
+
+**Compile**
 ::: code-group
 
 ```bash [Release]
@@ -174,16 +185,17 @@ cmake --build build -DCMAKE_BUILD_TYPE=Debug
 ```
 :::
 
-**输出**
+**Output**
 
-编译输出位于项目根目录下的 `output` 路径，包含内容如下
+The compilation output is located in the `output` path under the root directory of the project, containing the following:
 ```bash
 output
-├── include   #头文件
-├── library   #库文件
-└── resources #资源文件
+├── include   # Header files
+├── library   # Library files
+└── resources # Resource files
 ```
 
-## Github Workflows
-自动化编译可以参考
-[GPUPixel Github Build Workflows](https://github.com/pixpark/gpupixel/blob/main/.github/workflows/cmake-and-release.yml)，脚本化了上面讲到的各个平台的编译命令
+## GitHub Workflows
+
+Automated compilation can refer to
+[GPUPixel GitHub Build Workflows](https://github.com/pixpark/gpupixel/blob/main/.github/workflows/cmake-and-release.yml), which scripts the compilation commands mentioned above for various platforms.

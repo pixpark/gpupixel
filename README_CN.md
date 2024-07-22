@@ -14,8 +14,13 @@
     <a href="https://github.com/pixpark/gpupixel/blob/main/LICENSE"><img alt="GPUPixel Stars" src="https://img.shields.io/github/license/pixpark/gpupixel"/></a>
 </p>
 
+<p align="center">
+  <a href="https://gpupixel.pixpark.net/zh">文档</a> ·
+</p>
+
 ---
-> 欢迎大家加入使得 GPUPixel 更好，通过讨论 [discussions](https://github.com/pixpark/gpupixel/discussions), 提交 [issues](https://github.com/pixpark/gpupixel/issues/new/choose), 提交 [PRs](https://github.com/pixpark/gpupixel/pulls).
+
+> 欢迎大家参与，使得 GPUPixel 更好，通过讨论 [discussions](https://github.com/pixpark/gpupixel/discussions), 提交 [issues](https://github.com/pixpark/gpupixel/issues/new/choose), 提交 [PRs](https://github.com/pixpark/gpupixel/pulls).
 
 > 📢 人脸关键点检测从 v1.2.0开始已经由 Face++ 替换为 VNN, 不需要联网认证（不需要交钱了），并且支持了全端，欢迎各位客观品尝食用 👏
 

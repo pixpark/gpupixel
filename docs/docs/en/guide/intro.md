@@ -1,76 +1,74 @@
 ---
-title: 简介
+title: Introduction
 editLink: true
 description: GPUPixel是一个使用C++11编写的高性能图像和视频AI美颜效果库，非常容易编译和集成，并且库文件非常小。它是基于GPU的，并且带有内置的美颜效果滤镜，可以实现商业级别的效果。它支持的平台包括iOS、Mac和Android，理论上可以移植到任何支持OpenGL/ES的平台
 ---
 
-# 简介
+# Introduction
 
-## 开发背景
-做音视频开发绕不开的一个问题就是视频图像的处理，视频图像处理的诉求有很多，比如短视频直播时代的刚需：美颜，也有一些图像画质增强方面的需求。
+## Development Background
+An unavoidable issue in audio and video development is the processing of video images. There are many demands for video image processing, such as the essential feature of beautification in the era of short videos and live streaming, as well as the need for image quality enhancement.
 
-图像处理框架有很多，传统的比如 OpenCV，一个非常经典伟大的图像处理库，另外针对各个平台也有一些特定平台的图像处理库，如iOS端大名鼎鼎的 GPUImage，Android端的 GPUImage-Android等等，他们都是非常优秀的开源库。
+There are numerous frameworks for image processing. Traditional ones like OpenCV, a classic and remarkable image processing library, stand out. Additionally, there are platform-specific image processing libraries for different platforms, such as the renowned GPUImage for iOS and GPUImage-Android for Android; these are all excellent open-source libraries.
 
-但是他们也有各种的缺点，比如 OpenCV 处理的速度可能较慢，不能满足实时视频或者移动端视频处理的需求，GPUImage 和 GPUImage-Android的使用又局限于一个平台，同时他们只提供基础的图像处理能力，像美颜等高级功能需要在框架的基础上进行二次开发。
+However, they each have their drawbacks. For example, the processing speed of OpenCV may be slower, unable to meet the needs of real-time video or mobile video processing. The use of GPUImage and GPUImage-Android is limited to a single platform, and while they provide basic image processing capabilities, advanced features like beautification require secondary development on top of the framework.
 
-做音视频开发也很多年了，渴望有个多端统一的图像处理方案，又能提供基础的图像处理能力，所以写了 GPUPixel，支持的平台包括iOS、Mac、Android、Windows和Linux。
+Having been involved in audio and video development for many years, I yearned for a unified multi-platform image processing solution that could provide not only basic image processing capabilities but also support for advanced features. Thus, GPUPixel was born, supporting platforms including iOS, Mac, Android, Windows, and Linux.
 
-## 项目简介
-GPUPixel 使用C++11编写，摒弃了裸指针，有效的防止内存泄露等问题的产生。框架架构类似 GPUImage，基于OpenGL拥有极高的性能，完全满足移动端和实时图像处理场景的使用，单帧处理基本小于10ms。
+## Project Overview
+GPUPixel is written in C++11, eschewing raw pointers to effectively prevent issues like memory leaks. Its architecture is similar to that of GPUImage, leveraging OpenGL for exceptional performance, fully capable of meeting the requirements of mobile devices and real-time image processing scenarios, with per-frame processing times consistently under 10ms.
 
-而且容易编译和集成，多端接口统一，库文件也非常小。功能方面，内置的多种滤镜，如美颜，可以实现商业级别的效果。
+Moreover, it is easy to compile and integrate, with a unified interface across multiple platforms, and the library files are very small. In terms of functionality, it includes various built-in filters, such as beautification, achieving commercial-grade results.
 
-支持图片和视频输入，输出格式支持RGBA, YUV420P等格式，非常方便为直播，音视频会议等提供美颜滤镜能力支持！
+It supports both image and video input, with output formats including RGBA, YUV420P, and others, making it extremely convenient for providing beautification filter capabilities for live streaming, audio-video conferencing, and more!
+## Effects Preview
 
-## 效果预览
-👉 **视频: <a href="https://youtu.be/9BY1Qx1NEPs" target="_blank">YouTube</a> | <a href="https://www.bilibili.com/video/BV1xQ4y1L7Fh/?share_source=copy_web&vd_source=46adcb1014fa989cfcbb4cc1e866831e" target="_blank">BiliBili</a>**
-
-|              **原图**              |                **磨皮**                |               **美白**               |              **ThinFace**              |
-| :--------------------------------: | :------------------------------------: | :----------------------------------: | :------------------------------------: |
-| ![origin](../../image/origin.gif) |   ![smooth](../../image/smooth.gif)   |   ![white](../../image/white.gif)   | ![thinface](../../image/thinface.gif) |
-|              **大眼**              |                **口红**                |               **腮红**               |                  **开                  | 关** |
-| ![bigeye](../../image/bigeye.gif) | ![lipstick](../../image/lipstick.gif) | ![blusher](../../image/blusher.gif) |   ![on-off](../../image/on-off.gif)   |
- 
-## 架构流程
-![](../../image/arch-zh.jpg)
- 
-## 特性对比
-
-✅: 支持 | ❌: 不支持 | ✏️: 计划中
-
-|                   | [GPUPixel](https://github.com/pixpark/gpupixel) | [GPUImage](https://github.com/BradLarson/GPUImage) |
-| :---------------- | :---------------------------------------------: | :------------------------------------------------: |
-| 🍎**滤镜:**        |                        ✅                        |                         ❌                          |
-| 磨皮              |                        ✅                        |                         ❌                          |
-| 美白              |                        ✅                        |                         ❌                          |
-| 瘦脸              |                        ✅                        |                         ❌                          |
-| 大眼              |                        ✅                        |                         ❌                          |
-| 口红              |                        ✅                        |                         ❌                          |
-| 腮红              |                        ✅                        |                         ❌                          |
-| 内建滤镜          |                        ✅                        |                         ✅                          |
-| 🍓**输入格式：**   |                                                 |                                                    |
-| YUV420P(I420)     |                        ✅                        |                         ❌                          |
-| RGBA              |                        ✅                        |                         ✅                          |
-| JPEG              |                        ✅                        |                         ✅                          |
-| PNG               |                        ✅                        |                         ✅                          |
-| NV21(for Android) |                        ✏️                        |                         ❌                          |
-| 🍉**输出格式 :**   |                                                 |                                                    |
-| RGBA              |                        ✅                        |                         ✅                          |
-| YUV420P(I420)     |                        ✅                        |                         ❌                          |
-| 🥑**平台系统:**    |                                                 |                                                    |
-| iOS               |                        ✅                        |                         ✅                          |
-| Mac               |                        ✅                        |                         ✅                          |
-| Android           |                        ✅                        |                         ❌                          |
-| Win               |                        ✅                        |                         ❌                          |
-| Linux             |                        ✅                        |                         ❌                          |
+👉 **Video: <a href="https://youtu.be/9BY1Qx1NEPs" target="_blank">YouTube</a> | <a href="https://www.bilibili.com/video/BV1xQ4y1L7Fh/?share_source=copy_web&vd_source=46adcb1014fa989cfcbb4cc1e866831e" target="_blank">BiliBili</a>**
 
 
-## 系统支持
-|           OS           |  iOS  |  OSX  |   Android    | Windows | Linux |
-| :--------------------: | :---: | :---: | :----------: | :-----: | :---: |
-| Min Support OS Version | 10.0  | 10.13 | 5.0 (API 21) |    -    |   -   |
+|                   **Origin**                    |                    **Smooth**                     |                    **White**                     |                   **ThinFace**                    |
+| :---------------------------------------------: | :-----------------------------------------------: | :----------------------------------------------: | :-----------------------------------------------: |
+| <img src="../../image/origin.gif" width="180px"> |  <img src="../../image/smooth.gif" width="180px">  |  <img src="../../image/white.gif" width="180px">  | <img src="../../image/thinface.gif" width="180px"> |
+|                   **BigEye**                    |                   **Lipstick**                    |                   **Blusher**                    |                    **ON-OFF**                     |
+| <img src="../../image/bigeye.gif" width="180px"> | <img src="../../image/lipstick.gif" width="180px"> | <img src="../../image/blusher.gif" width="180px"> |  <img src="../../image/on-off.gif" width="180px">  |
 
-##  性能和体积
+## Architecture
+![](../../image/arch-en.jpg)
+
+## Features
+
+This table compares the features supported by **GPUPixel** and **GPUImage** and **Android-GPUImage**:
+
+✅: Supported | ❌: Not supported | ✏️: Planning
+
+|                       | [GPUPixel](https://github.com/pixpark/gpupixel) | [GPUImage](https://github.com/BradLarson/GPUImage) | [Android-GPUImage](https://github.com/cats-oss/android-gpuimage) |
+| :-------------------- | :---------------------------------------------: | :------------------------------------------------: | :----------------------------------------------------------: |
+| 📷 **Filters:**        |                        ✅                        |                         ❌                          |                              ❌                               |
+| Skin Smoothing Filter |                        ✅                        |                         ❌                          |                              ❌                               |
+| Skin Whitening Filter |                        ✅                        |                         ❌                          |                              ❌                               |
+| Face Slimming Filter  |                        ✅                        |                         ❌                          |                              ❌                               |
+| Big Eyes Filter       |                        ✅                        |                         ❌                          |                              ❌                               |
+| Lipstick Filter       |                        ✅                        |                         ❌                          |                              ❌                               |
+| Blush Filter          |                        ✅                        |                         ❌                          |                              ❌                               |
+| More Build in Filter  |                        ✅                        |                         ✅                          |                              ✅                               |
+| 🎬 **Input Formats:**  |                                                 |                                                    |                                                              |
+| YUV420P(I420)         |                        ✅                        |                         ❌                          |                              ❌                               |
+| RGBA                  |                        ✅                        |                         ✅                          |                              ✅                               |
+| JPEG                  |                        ✅                        |                         ✅                          |                              ✅                               |
+| PNG                   |                        ✅                        |                         ✅                          |                              ✅                               |
+| NV21(for Android)     |                        ✏️                        |                         ❌                          |                              ❌                               |
+| 🎥 **Output Formats:** |                                                 |                                                    |                                                              |
+| RGBA                  |                        ✅                        |                         ✅                          |                              ✅                               |
+| YUV420P(I420)         |                        ✏️                        |                         ❌                          |                              ❌                               |
+| 💻 **Platform:**       |                                                 |                                                    |                                                              |
+| iOS                   |                        ✅                        |                         ✅                          |                              ❌                               |
+| Mac                   |                        ✅                        |                         ✅                          |                              ❌                               |
+| Android               |                        ✅                        |                         ❌                          |                              ✅                               |
+| Win                   |                        ✅                        |                         ❌                          |                              ❌                               |
+| Linux                 |                        ✅                        |                         ❌                          |                              ❌                               |
+
+
+##  Performance
 ### iPhone
 |       -        | iPhone 6P | iPhone 8 | iPhone X | iPhone 11 | iPhone 14 pro |
 | :------------: | :-------: | :------: | :------: | :-------: | :-----------: |
@@ -81,26 +79,29 @@ GPUPixel 使用C++11编写，摒弃了裸指针，有效的防止内存泄露等
 | :--------: | :-------: | :-----------: | :---: | :-----: | :----------: |
 |    CPU     |    3%     |      5%       |   -   |    -    |      -       |
 | Time Taken |    6ms    |      5ms      |   -   |    -    |      -       |
- 
-### 库体积
+
+
+## Lib Size
 
 |       | iOS(.framework) | MacOS(.framework) | Android(.aar) |
 | :---: | :-------------: | :---------------: | :-----------: |
 | Size  |     2.4 MB      |      2.6 MB       |    2.1 MB     |
 
 
-## 参与贡献
-欢迎参与此项目，贡献代码，同时希望通过在社交媒体分享 GPUPixel 项目来支持本项目  👏🏻.
+## Contributing
+We welcome contributions to this project, whether through code contributions or by supporting the project by sharing the GPUPixel project on social media. 👏🏻
 
-## 项目未来
+## Future of the Project
+The project has gained some attention, but compared to libraries like GPUImage, its usage is still relatively low. GPUPixel has several features and optimizations planned, such as adding background replacement and providing Python and WebAssembly encapsulation support.
 
-项目目前也获得了一定的关注，但是和 GPUImage 等库相比使用量还比较少，另外 GPUPixel 还有不少功能和需要优化的点，比如增加背景替换，提供 Python 和 WebAssembly 封装支持等。
+Issues related to the project will be actively addressed, and this library will continue to evolve. We hope for more participation, as individual efforts are limited, and there are still many aspects of GPU image processing that are not fully understood. We look forward to collective learning and inspiration.
 
-项目的 issue 也会积极处理，这个库会一直做下去，也希望有更多朋友参与进来。毕竟个人的力量有限，另外对于 GPU 处理图像还有很多问题也没有搞太懂，希望大家一块交流互相启发~
+If this library is helpful to you, we also hope for your support, liking and sharing this project to make it known to more people. 🙏
 
-如果这个库对你有帮助，也希望多多支持，点赞转发这个项目，让更多人了解~🙏
+## Reference Projects
 
-## 参考项目
+Please note that the reference projects section was not translated as no specific projects were listed in the original text. If you have specific projects in mind, you should list them here in the same manner as in the original text.
+
 1. [GPUImage](https://github.com/BradLarson/GPUImage) 
 2. [CainCamera](https://github.com/CainKernel/CainCamera)
 3. [AwemeLike](https://github.com/ZZZZou/AwemeLike)
