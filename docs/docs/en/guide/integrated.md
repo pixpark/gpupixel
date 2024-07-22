@@ -5,17 +5,17 @@ outline: deep
 description: 本篇将介绍各个系统平台GPUPixel库的集成调用方法
 ---
 
-# 集成
+# Integration
 
-本章将介绍GPUPixel在各个系统的集成方法，最新编译好的各个平台库可以从[这里](https://github.com/pixpark/gpupixel/releases/latest)下载
+This chapter will introduce the integration methods for GPUPixel across different systems. The latest pre-compiled libraries for each platform can be downloaded [here](https://github.com/pixpark/gpupixel/releases/latest).
 
 ## iOS & MacOS
 
-iOS 和 MacOS库的链接形式相同，放到一块来讲
+The linking method for both iOS and MacOS libraries is the same, so they will be covered together.
 
-### 添加依赖
+### Adding Dependencies
 
-将gpupixel和vnn库拷贝到你的工程目录
+Copy the gpupixel and vnn libraries to your project directory.
 ::: code-group
 ```bash [iOS]
 ├── gpupixel.framework
@@ -31,52 +31,52 @@ iOS 和 MacOS库的链接形式相同，放到一块来讲
 ```
 :::
 
-选择`工程 -> Targets -> Build Phases -> Link Binary With Libraries`
+Select `Project -> Targets -> Build Phases -> Link Binary With Libraries`.
 
-点击左下角的 `+` 号添加如上面的依赖，`CoreMedia.framework` 和 `AVFoundation.framework` 为系统库，提供相机采集等能力，添加完后情况如下图
+Click the `+` button in the lower left corner to add the dependencies mentioned above. The `CoreMedia.framework` and `AVFoundation.framework` are system libraries that provide capabilities such as camera capture. After adding them, the situation should resemble the following image.
 
 ![](../../image/mac-project-setting.png)
 
-**嵌入Framework**
+**Embedding Frameworks**
 
-选择`工程 -> Targets -> General -> Frameworks, Libraries, and Embeded Content`
+Select `Project -> Targets -> General -> Frameworks, Libraries, and Embedded Content`.
 
-将gpupixel和vnn等库设置为 `Embed & Sign`, 系统库选择` Do Not Embed `, 如下
+Set gpupixel and vnn libraries to `Embed & Sign`, choose `Do Not Embed` for system libraries, as shown below.
 
 ![](../../image/mac-project-general.png)
 
+### Objective-C Invocation
 
-### Objective-C 调用
+Since GPUPixel is written in C++, to call C++ from Objective-C (OC), the file extension for OC source files must be changed from `.m` to `.mm`. This allows for mixed compilation between OC and C++.
 
-由于GPUPixel采用C++编写，OC要调用C++需要将OC源文件拓展名由 `.m` 改为 `.mm`，这样就可以实现 OC和C++混编。
-
-GPUPixel对外所有的头文件都包含在 `gpupixel.h`中，只要引入 
+All public headers for GPUPixel are included in `gpupixel.h`. By importing 
 
 ```objective-c
 #import <gpupixel/gpupixel.h>
-``` 
+```
 
-即可调用所有方法，详细库方法调用参考[这里](#)
+you can access all the functions. For detailed library function calls, refer [here](#).
 
 ![](../../image/oc-to-oc++.png)
 
-### Swift 调用
-Swift 5.9 之后可以直接与C++交互，也是通过桥接头文件的方式，省去了OC在中间转一道，可以参考[这篇文章](https://cloud.tencent.com/developer/article/2312347) 或 Swift 官方文档[Mixing Swift and C++](https://www.swift.org/documentation/cxx-interop/#calling-c-functions)
+### Swift Invocation
+Starting from Swift 5.9, direct interaction with C++ is possible, also through bridging header files, eliminating the need for an intermediate step with Objective-C. You can refer to [this article](https://cloud.tencent.com/developer/article/2312347) or the official Swift documentation on [Mixing Swift and C++](https://www.swift.org/documentation/cxx-interop/#calling-c-functions).
 
 ## Android
 
-下载最新 `gpupixel-release.aar`, 放入安卓工程下，如 `libs` 目录
+Download the latest `gpupixel-release.aar` and place it under your Android project, such as in the `libs` directory.
 
-在 gradle 中添加依赖
+Add the dependency in the gradle file:
 
 ```gradle
 dependencies {
     implementation files('libs/gpupixel-release.aar')
 }
 ```
-然后 sync 一下工程即可，参考 Android Demo
+Then sync the project. Refer to the Android Demo for more details.
 
-参考文章：[Android 导入AAR包](https://juejin.cn/post/7226600031569510459)
+Reference article: 
+[Importing AAR Package in Android](https://juejin.cn/post/7226600031569510459)
 
 ## Windows
   

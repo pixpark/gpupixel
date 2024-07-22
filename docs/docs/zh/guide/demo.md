@@ -91,7 +91,7 @@ cmake -G "MinGW Makefiles" -B examples/build -S examples
 ```
 ```bash [Linux]
 # Generate project
-cmake -G "MinGW Makefiles" -B examples/build -S examples
+cmake -B examples/build -S examples
 ```
 :::
 
@@ -120,8 +120,5 @@ Demo运行起来后，按键盘调节美颜程度，具体如下：
 
 ## Web
 
-Incoming.
 
 ## Python
-
-Incoming.

@@ -63,7 +63,7 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
       collapsed: false,
       items: [
         { text: 'Introduction', link: 'intro' },
-        { text: 'Compilation', link: 'build' },
+        { text: 'Build', link: 'build' },
         { text: 'Examples', link: 'demo' },
         { text: 'Integration', link: 'integrated' },
       ]
