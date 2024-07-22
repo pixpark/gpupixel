@@ -6,7 +6,7 @@ const pkg = require('vitepress/package.json')
 
 export const en = defineConfig({
   lang: 'en-US',
-  description: 'Vite & Vue powered static site generator.',
+  description: 'Realtime AI Beauty Filter Library.',
 
   themeConfig: {
     nav: nav(),
@@ -59,49 +59,42 @@ function nav(): DefaultTheme.NavItem[] {
 function sidebarGuide(): DefaultTheme.SidebarItem[] {
   return [
     {
-      text: 'Introduction',
+      text: 'Quick Start',
       collapsed: false,
       items: [
-        { text: 'What is VitePress?', link: 'what-is-vitepress' },
-        { text: 'Getting Started', link: 'getting-started' },
-        { text: 'Routing', link: 'routing' },
-        { text: 'Deploy', link: 'deploy' }
+        { text: 'Introduction', link: 'intro' },
+        { text: 'Compilation', link: 'build' },
+        { text: 'Examples', link: 'demo' },
+        { text: 'Integration', link: 'integrated' },
       ]
     },
     {
-      text: 'Writing',
+      text: 'API Calls',
       collapsed: false,
       items: [
-        { text: 'Markdown Extensions', link: 'markdown' },
-        { text: 'Asset Handling', link: 'asset-handling' },
-        { text: 'Frontmatter', link: 'frontmatter' },
-        { text: 'Using Vue in Markdown', link: 'using-vue' },
-        { text: 'Internationalization', link: 'i18n' }
+        { text: 'Basic Filters', link: '#' },
+        { text: 'Beauty Effects', link: '#' },
+        { text: 'Input and Output', link: '#' },
       ]
     },
     {
       text: 'Customization',
       collapsed: false,
       items: [
-        { text: 'Using a Custom Theme', link: 'custom-theme' },
-        {
-          text: 'Extending the Default Theme',
-          link: 'extending-default-theme'
-        },
-        { text: 'Build-Time Data Loading', link: 'data-loading' },
-        { text: 'SSR Compatibility', link: 'ssr-compat' },
-        { text: 'Connecting to a CMS', link: 'cms' }
+        { text: 'Custom Filters', link: '#' },
+        { text: 'Custom Input', link: '#' },
+        { text: 'Custom Output', link: '#' },
       ]
     },
     {
-      text: 'Experimental',
+      text: 'Other',
       collapsed: false,
       items: [
-        { text: 'MPA Mode', link: 'mpa-mode' },
-        { text: 'Sitemap Generation', link: 'sitemap-generation' }
+        { text: 'Architecture Analysis', link: '#' },
+        { text: 'Code Debugging', link: '#' },
       ]
     },
-    { text: 'Config & API Reference', base: '/reference/', link: 'site-config' }
+    { text: 'Configuration and API Reference', base: '/en/reference/', link: 'filter-list' }
   ]
 }
 
@@ -110,29 +103,7 @@ function sidebarReference(): DefaultTheme.SidebarItem[] {
     {
       text: 'Reference',
       items: [
-        { text: 'Site Config', link: 'site-config' },
-        { text: 'Frontmatter Config', link: 'frontmatter-config' },
-        { text: 'Runtime API', link: 'runtime-api' },
-        { text: 'CLI', link: 'cli' },
-        {
-          text: 'Default Theme',
-          base: '/reference/default-theme-',
-          items: [
-            { text: 'Overview', link: 'config' },
-            { text: 'Nav', link: 'nav' },
-            { text: 'Sidebar', link: 'sidebar' },
-            { text: 'Home Page', link: 'home-page' },
-            { text: 'Footer', link: 'footer' },
-            { text: 'Layout', link: 'layout' },
-            { text: 'Badge', link: 'badge' },
-            { text: 'Team Page', link: 'team-page' },
-            { text: 'Prev / Next Links', link: 'prev-next-links' },
-            { text: 'Edit Link', link: 'edit-link' },
-            { text: 'Last Updated Timestamp', link: 'last-updated' },
-            { text: 'Search', link: 'search' },
-            { text: 'Carbon Ads', link: 'carbon-ads' }
-          ]
-        }
+        { text: 'Filter List', link: 'filter-list' },
       ]
     }
   ]

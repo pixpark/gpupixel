@@ -3,37 +3,37 @@ layout: home
 
 hero:
   name: "GPUPixel"
-  text: "基于GPU 的实时 AI 图像美颜滤镜库"
-  tagline: 高性能, 跨平台
+  text: "GPU-based Realtime AI Beauty Filter Library"
+  tagline: 'High Performance, Cross-Platform'
   image:
-      src: /cover.svg
+      src: /gpupixel-logo-large.svg
       alt: cover
   actions:
     - theme: brand
-      text: 快速开始
-      link: /intro
+      text: Get Started
+      link: /guide/intro
     - theme: alt
       text: GitHub
       link: https://github.com/pixpark/gpupixel
 
 features:
   - icon: 🤹‍♀️
-    title: 美颜滤镜
-    details: 内置美白, 磨皮, 瘦脸, 大眼, 口红, 腮红等滤镜
+    title: Beauty Filters
+    details: Built-in filters like whitening, smoothing, face slimming, big eyes, lipstick, and blush
   - icon: ⚙
-    title: 高性能
-    details: 基于C++11 和 OpenGL/ES 编写，实时高性能，可用于直播和WebRTC等
+    title: High Performance
+    details: Written in C++11 and based on OpenGL/ES, real-time high performance, suitable for live streaming and WebRTC
   - icon: 📱
-    title: 跨平台
-    details: 全平台支持：iOS, Android, Mac, Windows, Linux 等系统
+    title: Cross-Platform
+    details: Full platform support -> iOS, Android, Mac, Windows, Linux, etc.
   - icon: 🌇
-    title: 输入输出
-    details: 支持YUV和RGBA多种格式输入输出，输入源支持包括相机视频和图像
+    title: Input and Output
+    details: Supports multiple formats like YUV and RGBA for input and output, with input sources including camera video and images
   - icon: 🧚‍♀️
-    title: 滤镜组合
-    details: 滤镜可随意串联组合，实现复杂处理效果
+    title: Filter Combinations
+    details: Filters can be chained together to achieve complex processing effects
   - icon: 🧸
-    title: 自定义滤镜
-    details: 架构简洁，逻辑清晰，方便拓展自定义滤镜
+    title: Custom Filters
+    details: Simple architecture, clear logic, easy to extend with custom filters
 ---
 
