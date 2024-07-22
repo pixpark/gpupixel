@@ -54,7 +54,7 @@ FILE(GLOB SOURCE_FILES
 IF(${CURRENT_OS} STREQUAL "windows") 														# windows
 	# link libs find path
 	LINK_DIRECTORIES( 
-		${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/glfw/lib-msvc)
+		${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/glfw/lib-mingw-w64)
 
 	# Source
 	FILE(GLOB GLAD_SOURCE_FILE "${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/glad/src/*.c")
