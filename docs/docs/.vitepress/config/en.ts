@@ -2,7 +2,6 @@ import { createRequire } from 'module'
 import { defineConfig, type DefaultTheme } from 'vitepress'
 
 const require = createRequire(import.meta.url)
-const pkg = require('vitepress/package.json')
 
 export const en = defineConfig({
   lang: 'en-US',
@@ -41,7 +40,7 @@ function nav(): DefaultTheme.NavItem[] {
       activeMatch: '/reference/'
     },
     {
-      text: pkg.version,
+      text: '1.2.5',
       items: [
         {
           text: 'Changelog',
