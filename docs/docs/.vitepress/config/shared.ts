@@ -4,6 +4,10 @@ import { search as zhSearch } from './zh'
 export const shared = defineConfig({
   title: 'GPUPixel',
 
+  rewrites: {
+    'en/:rest*': ':rest*'
+  },
+  
   lastUpdated: true,
   cleanUrls: true,
   metaChunk: true,
