@@ -37,6 +37,12 @@ Click the `+` button in the lower left corner to add the dependencies mentioned 
 
 ![](../../image/mac-project-setting.png)
 
+**Framework Search Paths**
+
+Click `Targets -> Build Settings -> Search Paths -> Framework Search Paths`, input `gpupixel`和`vnn` framework paths.
+
+![](../../image/xcode-libs-path.png)
+
 **Embedding Frameworks**
 
 Select `Project -> Targets -> General -> Frameworks, Libraries, and Embedded Content`.
