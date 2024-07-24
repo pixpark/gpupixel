@@ -53,11 +53,9 @@ export const shared = defineConfig({
     ],
 
     search: {
-      provider: 'algolia',
+      provider: 'local',
       options: {
-        appId: 'EJA99Y55JA',
-        apiKey: '1df90cf42bd532964a5c08e31dbbc9cb',
-        indexName: 'open-pixpark"',
+        detailedView: true,
         locales: { ...zhSearch }
       }
     },
