@@ -16,7 +16,7 @@ export const zh = defineConfig({
     },
 
     editLink: {
-      pattern: 'https://github.com/pixpark/gpupixel/edit/main/docs/:path',
+      pattern: 'https://github.com/pixpark/gpupixel/edit/main/docs/docs/:path',
       text: '在 GitHub 上编辑此页面'
     },
 
