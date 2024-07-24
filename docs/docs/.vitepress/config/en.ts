@@ -16,7 +16,7 @@ export const en = defineConfig({
     },
 
     editLink: {
-      pattern: 'https://github.com/pixpark/gpupixel/edit/main/docs/:path',
+      pattern: 'https://github.com/pixpark/gpupixel/edit/main/docs/docs/:path',
       text: 'Edit this page on GitHub'
     },
 
