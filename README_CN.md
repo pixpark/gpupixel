@@ -8,7 +8,11 @@
 </p>
 
 <p align="center">
-  <a href="https://gpupixel.pixpark.net/zh">文档</a>
+  <a href="https://gpupixel.pixpark.net/guide/intro">编译</a>
+  <span> · </span>
+  <a href="https://reactnative.dev/docs/tutorial">Demo</a>
+  <span> · </span>
+  <a href="https://reactnative.dev/showcase">集成</a>
 </p>
 
 <p align="center">
@@ -17,8 +21,6 @@
     <a href="#"><img alt="GPUPixel Stars" src="https://img.shields.io/badge/Platform-iOS_%7C_Android_%7C_Mac_%7C_Win_%7C_Linux-red"/></a>
     <a href="https://github.com/pixpark/gpupixel/blob/main/LICENSE"><img alt="GPUPixel Stars" src="https://img.shields.io/github/license/pixpark/gpupixel"/></a>
 </p>
-
-
 
 ---
 

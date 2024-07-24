@@ -37,6 +37,12 @@ iOS 和 MacOS库的链接形式相同，放到一块来讲
 
 ![](../../image/mac-project-setting.png)
 
+**Framework 查找路径**
+
+选择`工程 -> Targets -> Build Settings -> Search Paths -> Framework Search Paths`, 将 gpupixel和vnn库存放路径填入
+
+![](../../image/xcode-libs-path.png)
+
 **嵌入Framework**
 
 选择`工程 -> Targets -> General -> Frameworks, Libraries, and Embeded Content`
