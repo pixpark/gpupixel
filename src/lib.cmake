@@ -83,13 +83,14 @@ endif()
 
 
 # Add platform source and header and lib link search path
-IF(${CURRENT_OS} STREQUAL "windows") 														# windows
+IF(${CURRENT_OS} STREQUAL "windows") 	
+	set(CMAKE_SHARED_LIBRARY_PREFIX "")													# windows
 	# Source 
 	FILE(GLOB GLAD_SOURCE_FILE  "${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/src/*.c" )
 	list(APPEND SOURCE_FILES ${GLAD_SOURCE_FILE})
 
 	# link libs find path
-	LINK_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/third_party/glfw/lib-msvc)
+	LINK_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/third_party/glfw/lib-mingw-w64)
 ELSEIF(${CURRENT_OS} STREQUAL "linux" OR ${CURRENT_OS} STREQUAL "wasm")	
 	# Source 
 	FILE(GLOB GLAD_SOURCE_FILE  "${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/src/*.c" )
@@ -120,7 +121,7 @@ ENDIF()
 # ----------
 # build shared or static lib
 ADD_LIBRARY(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${RESOURCE_FILES})
- 
+
 # set platform project 
 IF(${CURRENT_OS} STREQUAL "linux")
 	# 设置要构建的目标库的名称和类型
