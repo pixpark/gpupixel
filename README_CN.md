@@ -117,6 +117,14 @@
 
 欢迎参与此项目，贡献代码，同时希望通过在社交媒体分享 GPUPixel 项目来支持本项目  👏🏻.
 
+## 联系 & 支持
+- [Doc](https://gpupixel.pixpark.net/): 在线文档.
+- [Issues](https://github.com/pixpark/gpupixel/issues/new/choose): Github Issues
+- [Mail](mailto:jaaronkot@gmail.com?subject=[GitHub]Questions%20About%20GPUPixel)  👉：向我们发送邮件
+ - [添加微信]() 👉： 
+<p align="center">
+<img src="./docs/image/wechat.png" alt="wechat" width="60%"/>
+</p>
 
 ## 感谢
 ### 参考项目
