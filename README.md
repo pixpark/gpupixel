@@ -8,11 +8,11 @@
 </p>
 
 <p align="center">
-  <a href="https://gpupixel.pixpark.net/guide/intro">Build</a>
+  <a href="https://gpupixel.pixpark.net/guide/intro">编译</a>
   <span> · </span>
   <a href="https://reactnative.dev/docs/tutorial">Demo</a>
   <span> · </span>
-  <a href="https://reactnative.dev/showcase">Integration</a>
+  <a href="https://reactnative.dev/showcase">集成</a>
 </p>
 
 <p align="center">
@@ -51,7 +51,7 @@
 | <img src="./docs/image/bigeye.gif" width="180px"> | <img src="./docs/image/lipstick.gif" width="180px"> | <img src="./docs/image/blusher.gif" width="180px"> |  <img src="./docs/image/on-off.gif" width="180px">  |
 
 ## Architecture
-![](./docs/image/arch-en.jpg)
+![](./docs/image/arch-en.svg)
 
 ## Features
 
@@ -129,8 +129,8 @@ At the same time, please consider supporting GPUPixel by sharing it on social me
 
 ## Contact & Support
 - [Doc](https://gpupixel.pixpark.net/) : Online documentation.
-- [Issues](https://github.com/pixpark/gpupixel/issues/new/choose) : Github Issues.
-- [Mail](mailto:jaaronkot@gmail.com?subject=[GitHub]Questions%20About%20GPUPixel) : Send email to us.
+- [Issues](https://github.com/pixpark/gpupixel/issues/new/choose) : 👉 Github Issues.
+- [Mail](mailto:jaaronkot@gmail.com?subject=[GitHub] Questions%20About%20GPUPixel) : 👉 Send email to us.
  - [WeChat]() ： 
 <p align="center">
 <img src="./docs/image/wechat.png" alt="wechat" width="60%"/>
