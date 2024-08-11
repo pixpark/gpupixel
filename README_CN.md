@@ -46,7 +46,7 @@
 | ![bigeye](./docs/image/bigeye.gif) | ![lipstick](./docs/image/lipstick.gif) | ![blusher](./docs/image/blusher.gif) |   ![on-off](./docs/image/on-off.gif)   |
 
 ## 架构流程
-![](./docs/image/arch-zh.jpg)
+![](./docs/image/arch-en.svg)
 
 ## 特性对比
 
@@ -120,7 +120,7 @@
 ## 联系 & 支持
 - [Doc](https://gpupixel.pixpark.net/): 在线文档.
 - [Issues](https://github.com/pixpark/gpupixel/issues/new/choose): Github Issues
-- [Mail](mailto:jaaronkot@gmail.com?subject=[GitHub]Questions%20About%20GPUPixel)  👉：向我们发送邮件
+- [Mail](mailto:jaaronkot@gmail.com?subject=[GitHub] Questions%20About%20GPUPixel)  👉：向我们发送邮件
  - [添加微信]() 👉： 
 <p align="center">
 <img src="./docs/image/wechat.png" alt="wechat" width="60%"/>
