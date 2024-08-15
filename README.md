@@ -130,7 +130,7 @@ At the same time, please consider supporting GPUPixel by sharing it on social me
 ## Contact & Support
 - [Doc](https://gpupixel.pixpark.net/) : Online documentation.
 - [Issues](https://github.com/pixpark/gpupixel/issues/new/choose) : 👉 Github Issues.
-- [Mail](mailto:jaaronkot@gmail.com?subject=[GitHub] Questions%20About%20GPUPixel) : 👉 Send email to us.
+- [Mail](mailto:jaaronkot@gmail.com?subject=[GitHub]Questions%20About%20GPUPixel) : 👉 Send email to us.
  - [WeChat]() ： 
 <p align="center">
 <img src="./docs/image/wechat.png" alt="wechat" width="60%"/>
