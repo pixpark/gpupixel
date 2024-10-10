@@ -1,10 +1,10 @@
 ---
-title: 示例程序
+title: Examples
 editLink: true
 description: 本章将介绍各个系统平台Demo编译和运行方法
 ---
 
-# Demo App
+# Examples App
 
 This chapter will introduce the methods for compiling and running demos on various system platforms. The demo code is located in the `examples` directory, structured as follows:
 
