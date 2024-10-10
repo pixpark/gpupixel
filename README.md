@@ -8,11 +8,11 @@
 </p>
 
 <p align="center">
-  <a href="https://gpupixel.pixpark.net/guide/intro">编译</a>
+  <a href="https://gpupixel.pixpark.net/guide/intro">Build</a>
   <span> · </span>
-  <a href="https://reactnative.dev/docs/tutorial">Demo</a>
+  <a href="https://reactnative.dev/docs/tutorial">Examples</a>
   <span> · </span>
-  <a href="https://reactnative.dev/showcase">集成</a>
+  <a href="https://reactnative.dev/showcase">Integration</a>
 </p>
 
 <p align="center">

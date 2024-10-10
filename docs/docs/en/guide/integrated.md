@@ -1,5 +1,5 @@
 ---
-title: 集成
+title: Integration
 editLink: true
 outline: deep
 description: 本篇将介绍各个系统平台GPUPixel库的集成调用方法
