@@ -222,7 +222,7 @@ using namespace gpupixel;
       auto height = CVPixelBufferGetHeight(imageBuffer);
       auto stride = CVPixelBufferGetBytesPerRow(imageBuffer)/4;
       auto pixels = (const uint8_t *)CVPixelBufferGetBaseAddress(imageBuffer);
-      gpuPixelRawInput->uploadBytes(pixels, width, height, stride);
+      gpuPixelRawInput->uploadBytes(pixels, stride, height, stride);
       CVPixelBufferUnlockBaseAddress(imageBuffer, 0);
     }
 }
