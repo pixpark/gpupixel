@@ -1,3 +1,5 @@
+NOTE: THIS PROJECT HAS NOT WORKED YET!!!
+
 <h1 align="center">
   <a href="https://github.com/pixpark/gpupixel"><img src="./docs/image/describe.png"></a>
 </h1>
