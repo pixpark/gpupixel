@@ -31,7 +31,7 @@
 
 > 欢迎加入我们，通过参与[讨论](https://github.com/pixpark/gpupixel/discussions)、创建[问题](https://github.com/pixpark/gpupixel/issues/new/choose)、提交[PRs](https://github.com/pixpark/gpupixel/pulls)，让GPUPixel变得更好。👏
 
-## 简介 ##
+## 简介
 
 ⛰️ GPUPixel是一个实时、高性能图像和视频AI美颜效果库，非常容易编译和集成，并且库文件非常小。
 
@@ -39,10 +39,8 @@
 
 🔌 它支持的平台包括`iOS`、`Android`、`Mac`、`Win`和`Linux`，理论上可以移植到任何支持OpenGL/ES的平台。
 
-
-## 效果预览 ##
+## 效果预览
 👉 **视频: <a href="https://youtu.be/9BY1Qx1NEPs" target="_blank">YouTube</a> | <a href="https://www.bilibili.com/video/BV1xQ4y1L7Fh/?share_source=copy_web&vd_source=46adcb1014fa989cfcbb4cc1e866831e" target="_blank">BiliBili</a>**
-
 
 |              **原图**              |                **磨皮**                |               **美白**               |                 **瘦脸**               |
 | :--------------------------------: | :------------------------------------: | :----------------------------------: | :------------------------------------: |
@@ -109,14 +107,15 @@
 
 ![](./docs/image/give-star.gif)
 
-
 ## 快速开始
 
-查看文档:  [简介](https://gpupixel.pixpark.net/zh/guide/build) | [编译](https://gpupixel.pixpark.net/zh/guide/build) | [示例](https://gpupixel.pixpark.net/zh/guide/demo) | [集成](https://gpupixel.pixpark.net/zh/guide/integrated)
+查看文档：[简介](https://gpupixel.pixpark.net/zh/guide/build) | [编译](https://gpupixel.pixpark.net/zh/guide/build) | [示例](https://gpupixel.pixpark.net/zh/guide/demo) | [集成](https://gpupixel.pixpark.net/zh/guide/integrated)
 
 ## 参与贡献
 
-欢迎参与此项目，贡献代码，同时希望通过在社交媒体、活动、会议上分享GPUPixel来支持本项目👏🏻。
+欢迎加入我们，通过参与[讨论](https://github.com/pixpark/gpupixel/discussions)、创建[问题](https://github.com/pixpark/gpupixel/issues/new/choose)、提交[PRs](https://github.com/pixpark/gpupixel/pulls)，让GPUPixel变得更好。
+
+同时，希望您可以通过在社交媒体、活动、会议上分享GPUPixel来支持本项目。
 
 ## 贡献者
 
@@ -139,5 +138,4 @@
 4. [VNN](https://github.com/joyycom/VNN)
 
 ## 许可证
-此开源项目遵从[MIT许可证](https://github.com/pixpark/gpupixel?tab=MIT-1-ov-file#readme).
-
+此开源项目遵从[MIT许可证](https://github.com/pixpark/gpupixel?tab=MIT-1-ov-file#readme)。
