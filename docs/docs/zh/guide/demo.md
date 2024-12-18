@@ -87,11 +87,11 @@ examples
 ::: code-group
 ```bash [Windows]
 # Generate project
-cmake -G "MinGW Makefiles" -B examples/build -S examples
+cmake -G "MinGW Makefiles" -B examples/build -S examples -DCMAKE_BUILD_TYPE=Release
 ```
 ```bash [Linux]
 # Generate project
-cmake -B examples/build -S examples
+cmake -B examples/build -S examples -DCMAKE_BUILD_TYPE=Release
 ```
 :::
 
@@ -100,12 +100,12 @@ cmake -B examples/build -S examples
 
 ```bash [Release]
 # Build
-cmake --build build -DCMAKE_BUILD_TYPE=Release
+cmake --build examples/build --config Release
 ```
 
 ```bash [Debug]
 # Build
-cmake --build build -DCMAKE_BUILD_TYPE=Debug 
+cmake --build examples/build --config Debug
 ```
 :::
  
@@ -119,6 +119,11 @@ Demo运行起来后，按键盘调节美颜程度，具体如下：
 
 
 ## Web
-
+```bash
+// not support yet
+```
 
 ## Python
+``` bash
+// not support yet
+```
