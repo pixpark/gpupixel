@@ -12,7 +12,7 @@ This chapter will introduce the methods for compiling and running demos on vario
 examples
 ├── CMakeLists.txt
 ├── android     # Android demo
-├── app.cmake   
+├── app.cmake   #
 ├── desktop     # Desktop demo, including Windows and Linux
 ├── ios         # iOS demo
 └── mac         # MacOS demo
@@ -87,11 +87,11 @@ It includes the demo and the gpupixel module. The invocation logic is in `MainAc
 ::: code-group
 ```bash [Windows]
 # Generate project
-cmake -G "MinGW Makefiles" -B examples/build -S examples
+cmake -G "MinGW Makefiles" -B examples/build -S examples -DCMAKE_BUILD_TYPE=Release
 ```
 ```bash [Linux]
 # Generate project
-cmake -G "Unix Makefiles" -B examples/build -S examples
+cmake -G "Unix Makefiles" -B examples/build -S examples -DCMAKE_BUILD_TYPE=Release
 ```
 :::
 
@@ -100,12 +100,12 @@ cmake -G "Unix Makefiles" -B examples/build -S examples
 
 ```bash [Release]
 # Build
-cmake --build build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --config Release
 ```
 
 ```bash [Debug]
 # Build
-cmake --build build -DCMAKE_BUILD_TYPE=Debug 
+cmake --build build --config Debug
 ```
 :::
 

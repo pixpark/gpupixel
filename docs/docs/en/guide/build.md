@@ -19,7 +19,7 @@ Execute the following commands at the root directory of the project.
 **Generate Project**
 ::: code-group
 ```bash [Arm64]
-cmake -G Xcode -B build -S src -DCMAKE_TOOLCHAIN_FILE=../toolchain/ios.toolchain.cmake -DPLATFORM=OS64
+cmake -G Xcode -B build -S src -DCMAKE_TOOLCHAIN_FILE=../toolchain/ios.toolchain.cmake -DPLATFORM=OS64 -DCMAKE_BUILD_TYPE=Release
 ```
 :::
 
@@ -52,7 +52,7 @@ Execute the following commands at the root directory of the project.
 **Generate Project**
 ::: code-group
 ```bash [Apple Silicon]
-cmake -G Xcode -B build -S src -DCMAKE_TOOLCHAIN_FILE=../toolchain/ios.toolchain.cmake -DPLATFORM=MAC_ARM64
+cmake -G Xcode -B build -S src -DCMAKE_TOOLCHAIN_FILE=../toolchain/ios.toolchain.cmake -DPLATFORM=MAC_ARM64 -DCMAKE_BUILD_TYPE=Release
 ```
 ```bash [Intel]
 cmake -G Xcode -B build -S src -DCMAKE_TOOLCHAIN_FILE=../toolchain/ios.toolchain.cmake -DPLATFORM=MAC
@@ -120,29 +120,23 @@ Compiling on Windows requires the installation of CMake and MinGW64.
 
 **Generate Project**
 
-```bash
-# Generate project
-cmake -G "MinGW Makefiles" -B build -S src
-```
-::: code-group
-
 ```bash [Release]
-cmake --build build -DCMAKE_BUILD_TYPE=Release
+cmake -G "MinGW Makefiles" -B build -S src -DCMAKE_BUILD_TYPE=Release
 ```
 
 ```bash [Debug]
-cmake --build build -DCMAKE_BUILD_TYPE=Debug
+cmake -G "MinGW Makefiles" -B build -S src -DCMAKE_BUILD_TYPE=Debug
 ```
 :::
+
 **Compile**
 ::: code-group
-
 ```bash [Release]
-cmake --build build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --config Release
 ```
 
 ```bash [Debug]
-cmake --build build -DCMAKE_BUILD_TYPE=Debug
+cmake --build build --config Debug
 ```
 :::
 
@@ -168,20 +162,23 @@ sudo apt-get install mesa-utils libglu1-mesa-dev freeglut3-dev mesa-common-dev l
 ```
 
 **Generate Project**
-```bash
-# Generate project
-cmake -B build -S src
-```
-
-**Compile**
-::: code-group
-
 ```bash [Release]
-cmake --build build -DCMAKE_BUILD_TYPE=Release
+cmake -B build -S src -DCMAKE_BUILD_TYPE=Release
 ```
 
 ```bash [Debug]
-cmake --build build -DCMAKE_BUILD_TYPE=Debug
+cmake -B build -S src -DCMAKE_BUILD_TYPE=Debug
+```
+:::
+
+**Compile**
+::: code-group
+```bash [Release]
+cmake --build build --config Release
+```
+
+```bash [Debug]
+cmake --build build --config Debug
 ```
 :::
 
