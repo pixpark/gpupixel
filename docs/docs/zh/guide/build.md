@@ -18,7 +18,7 @@ description: 本篇将介绍各个系统平台GPUPixel库的编译方法
 **生成工程**
 ::: code-group
 ```bash [Arm64]
-cmake -G Xcode -B build -S src -DCMAKE_TOOLCHAIN_FILE=../toolchain/ios.toolchain.cmake -DPLATFORM=OS64
+cmake -G Xcode -B build -S src -DCMAKE_TOOLCHAIN_FILE=../toolchain/ios.toolchain.cmake -DPLATFORM=OS64 -DCMAKE_BUILD_TYPE=Release
 ```
 :::
 
@@ -51,10 +51,10 @@ output
 **生成工程**
 ::: code-group
 ```bash [Apple Silicon]
-cmake -G Xcode -B build -S src -DCMAKE_TOOLCHAIN_FILE=../toolchain/ios.toolchain.cmake -DPLATFORM=MAC_ARM64
+cmake -G Xcode -B build -S src -DCMAKE_TOOLCHAIN_FILE=../toolchain/ios.toolchain.cmake -DPLATFORM=MAC_ARM64 -DCMAKE_BUILD_TYPE=Release
 ```
 ```bash [Intel]
-cmake -G Xcode -B build -S src -DCMAKE_TOOLCHAIN_FILE=../toolchain/ios.toolchain.cmake -DPLATFORM=MAC
+cmake -G Xcode -B build -S src -DCMAKE_TOOLCHAIN_FILE=../toolchain/ios.toolchain.cmake -DPLATFORM=MAC -DCMAKE_BUILD_TYPE=Debug
 ```
 :::
  
@@ -118,24 +118,29 @@ output
 Windows编译需要安装 Cmake 和 MinGW64.
 
 **生成工程**
-
-```bash
-# Generate project
-cmake -G "MinGW Makefiles" -B build -S src
-
-```
-**编译**
 ::: code-group
 
 ```bash [Release]
-cmake --build build -DCMAKE_BUILD_TYPE=Release
+cmake -G "MinGW Makefiles" -B build -S src -DCMAKE_BUILD_TYPE=Release
 ```
 
 ```bash [Debug]
-cmake --build build -DCMAKE_BUILD_TYPE=Debug
+cmake -G "MinGW Makefiles" -B build -S src -DCMAKE_BUILD_TYPE=Debug
 ```
 :::
- 
+
+**编译**
+
+::: code-group
+
+```bash [Release]
+cmake --build build --config Release
+```
+
+```bash [Debug]
+cmake --build build --config Debug
+```
+:::
 **输出**
 
 编译输出位于项目根目录下的 `output` 路径，包含内容如下
@@ -158,21 +163,30 @@ sudo apt-get install mesa-utils libglu1-mesa-dev freeglut3-dev mesa-common-dev l
 ```
 
 **生成工程**
-```bash
-# Generate project
-cmake -B build -S src
-```
-**编译**
 ::: code-group
 
 ```bash [Release]
-cmake --build build -DCMAKE_BUILD_TYPE=Release
+cmake -B build -S src -DCMAKE_BUILD_TYPE=Release
 ```
 
 ```bash [Debug]
-cmake --build build -DCMAKE_BUILD_TYPE=Debug
+cmake -B build -S src -DCMAKE_BUILD_TYPE=Debug
 ```
 :::
+
+**编译**
+
+::: code-group
+
+```bash [Release]
+cmake --build build --config Release
+```
+
+```bash [Debug]
+cmake --build build --config Debug
+```
+:::
+ 
 
 **输出**
 
