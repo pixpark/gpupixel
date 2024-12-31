@@ -1,5 +1,5 @@
 <h1 align="center">
-  <a href="https://github.com/pixpark/gpupixel"><img src="./docs/image/describe.png"></a>
+  GPUPixel
 </h1>
 
 <p align="center">
@@ -35,7 +35,7 @@
 
 ⛰️ GPUPixel is a real-time, high-performance image and video filter library, extremely easy to compile and integrate with  small library size.
 
-🔑 GPUPixel  is written in C++11 and is based on OpenGL/ES, incorporating a built-in beauty face filter that achieves commercial-grade beauty effects.
+🔑 GPUPixel  is written in C++11 and is based on OpenGL/ES, incorporating a built-in beauty face filter.
 
 🔌 GPUPixel supports platforms including `iOS`, `Android`, `Mac`, `Win` and `Linux`. It can theoretically be ported to any platform that supports OpenGL/ES.
 
@@ -44,11 +44,9 @@
 👉 **Video: <a href="https://youtu.be/9BY1Qx1NEPs" target="_blank">YouTube</a> | <a href="https://www.bilibili.com/video/BV1xQ4y1L7Fh/?share_source=copy_web&vd_source=46adcb1014fa989cfcbb4cc1e866831e" target="_blank">BiliBili</a>**
 
 
-|                   **Origin**                    |                    **Smooth**                     |                    **White**                     |                   **ThinFace**                    |
-| :---------------------------------------------: | :-----------------------------------------------: | :----------------------------------------------: | :-----------------------------------------------: |
-| <img src="./docs/image/origin.gif" width="180px"> |  <img src="./docs/image/smooth.gif" width="180px">  |  <img src="./docs/image/white.gif" width="180px">  | <img src="./docs/image/thinface.gif" width="180px"> |
-|                   **BigEye**                    |                   **Lipstick**                    |                   **Blusher**                    |                    **ON-OFF**                     |
-| <img src="./docs/image/bigeye.gif" width="180px"> | <img src="./docs/image/lipstick.gif" width="180px"> | <img src="./docs/image/blusher.gif" width="180px"> |  <img src="./docs/image/on-off.gif" width="180px">  |
+|                   **Origin**                    |                    **Smooth**                     |                    **White**                     |
+| :---------------------------------------------: | :-----------------------------------------------: | :----------------------------------------------: |
+| <img src="./docs/image/origin.gif" width="180px"> |  <img src="./docs/image/smooth.gif" width="180px">  |  <img src="./docs/image/white.gif" width="180px">  |
 
 ## Architecture
 ![](./docs/image/arch-en.svg)
@@ -63,11 +61,7 @@ This table compares the features supported by **GPUPixel** and **GPUImage** and 
 | :-------------------- | :---------------------------------------------: | :------------------------------------------------: | :----------------------------------------------------------: |
 | 📷 **Filters:**        |                        ✅                        |                         ❌                          |                              ❌                               |
 | Skin Smoothing Filter |                        ✅                        |                         ❌                          |                              ❌                               |
-| Skin Whitening Filter |                        ✅                        |                         ❌                          |                              ❌                               |
-| Face Slimming Filter  |                        ✅                        |                         ❌                          |                              ❌                               |
-| Big Eyes Filter       |                        ✅                        |                         ❌                          |                              ❌                               |
-| Lipstick Filter       |                        ✅                        |                         ❌                          |                              ❌                               |
-| Blush Filter          |                        ✅                        |                         ❌                          |                              ❌                               |
+| Skin Whitening Filter |                        ✅                        |                         ❌                          |                                                        ❌                               |
 | More Build in Filter  |                        ✅                        |                         ✅                          |                              ✅                               |
 | 🎬 **Input Formats:**  |                                                 |                                                    |                                                              |
 | YUV420P(I420)         |                        ✅                        |                         ❌                          |                              ❌                               |
@@ -141,7 +135,6 @@ At the same time, please consider supporting GPUPixel by sharing it on social me
 1. [GPUImage](https://github.com/BradLarson/GPUImage) 
 2. [CainCamera](https://github.com/CainKernel/CainCamera)
 3. [AwemeLike](https://github.com/ZZZZou/AwemeLike)
-4. [VNN](https://github.com/joyycom/VNN)
 
 ## License
 This repository is available under the [MIT License](https://github.com/pixpark/gpupixel?tab=MIT-1-ov-file#readme).
