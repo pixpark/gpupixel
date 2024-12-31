@@ -35,18 +35,17 @@
 
 ⛰️ GPUPixel是一个实时、高性能图像和视频AI美颜效果库，非常容易编译和集成，并且库文件非常小。
 
-🔑 它是使用C++11编写的，基于OpenGL/ES，并且带有内置的美颜效果滤镜，可以实现商业级别的效果。
+🔑 它是使用C++11编写的，基于OpenGL/ES，并且带有内置的美颜效果滤镜。
 
 🔌 它支持的平台包括`iOS`、`Android`、`Mac`、`Win`和`Linux`，理论上可以移植到任何支持OpenGL/ES的平台。
 
 ## 效果预览
 👉 **视频: <a href="https://youtu.be/9BY1Qx1NEPs" target="_blank">YouTube</a> | <a href="https://www.bilibili.com/video/BV1xQ4y1L7Fh/?share_source=copy_web&vd_source=46adcb1014fa989cfcbb4cc1e866831e" target="_blank">BiliBili</a>**
 
-|              **原图**              |                **磨皮**                |               **美白**               |                 **瘦脸**               |
-| :--------------------------------: | :------------------------------------: | :----------------------------------: | :------------------------------------: |
-| ![origin](./docs/image/origin.gif) |   ![smooth](./docs/image/smooth.gif)   |   ![white](./docs/image/white.gif)   | ![thinface](./docs/image/thinface.gif) |
-|              **大眼**              |                **口红**                |               **腮红**               |                 **开关**               |
-| ![bigeye](./docs/image/bigeye.gif) | ![lipstick](./docs/image/lipstick.gif) | ![blusher](./docs/image/blusher.gif) |   ![on-off](./docs/image/on-off.gif)   |
+|              **原图**              |                **磨皮**                |               **美白**               |      
+| :--------------------------------: | :------------------------------------: | :----------------------------------: |  
+| ![origin](./docs/image/origin.gif) |   ![smooth](./docs/image/smooth.gif)   |   ![white](./docs/image/white.gif)   | 
+ 
 
 ## 架构流程
 ![](./docs/image/arch-en.svg)
@@ -62,10 +61,6 @@
 | 📷 **滤镜：**        |                        ✅                        |                         ❌                          |                              ❌                               |
 | 磨皮                  |                        ✅                        |                         ❌                          |                              ❌                               |
 | 美白                  |                        ✅                        |                         ❌                          |                              ❌                               |
-| 瘦脸                  |                        ✅                        |                         ❌                          |                              ❌                               |
-| 大眼                  |                        ✅                        |                         ❌                          |                              ❌                               |
-| 口红                  |                        ✅                        |                         ❌                          |                              ❌                               |
-| 腮红                  |                        ✅                        |                         ❌                          |                              ❌                               |
 | 内建滤镜              |                        ✅                        |                         ✅                          |                              ✅                               |
 | 🎬 **输入格式：**    |                                                   |                                                     |                                                                |
 | YUV420P(I420)         |                        ✅                        |                         ❌                          |                              ❌                               |
@@ -103,7 +98,7 @@
 
 
 ## 开始之前
-⭐️ 老铁给个星星，求点赞！您也可以第一时间收到新版本的通知！
+⭐️ 老铁给个星，求点赞！
 
 ![](./docs/image/give-star.gif)
 
@@ -135,7 +130,6 @@
 1. [GPUImage](https://github.com/BradLarson/GPUImage) 
 2. [CainCamera](https://github.com/CainKernel/CainCamera)
 3. [AwemeLike](https://github.com/ZZZZou/AwemeLike)
-4. [VNN](https://github.com/joyycom/VNN)
 
 ## 许可证
 此开源项目遵从[MIT许可证](https://github.com/pixpark/gpupixel?tab=MIT-1-ov-file#readme)。
