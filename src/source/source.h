@@ -14,7 +14,6 @@
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
 #import "gpupixel_target.h"
 #endif
-#include "face_detector.h"
 
 NS_GPUPIXEL_BEGIN
 class GPUPIXEL_API Filter;
@@ -55,13 +54,11 @@ class GPUPIXEL_API Source {
       std::shared_ptr<Filter> upToFilter,
       int width = 0,
       int height = 0);
-  int RegLandmarkCallback(FaceDetectorCallback callback);
  protected:
   std::shared_ptr<Framebuffer> _framebuffer;
   RotationMode _outputRotation;
   std::map<std::shared_ptr<Target>, int> _targets;
   float _framebufferScale;
-  std::shared_ptr<FaceDetector> _face_detector;
 };
 
 NS_GPUPIXEL_END
