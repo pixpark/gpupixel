@@ -1,5 +1,5 @@
 <h1 align="center">
-  GPUPixel
+  <a href="https://github.com/pixpark/gpupixel"><img src="./docs/image/describe.png"></a>
 </h1>
 
 <p align="center">
@@ -41,12 +41,12 @@
 
 ## Effects Preview
 
-👉 **Video: <a href="https://youtu.be/9BY1Qx1NEPs" target="_blank">YouTube</a> | <a href="https://www.bilibili.com/video/BV1xQ4y1L7Fh/?share_source=copy_web&vd_source=46adcb1014fa989cfcbb4cc1e866831e" target="_blank">BiliBili</a>**
+👉 **Video: <a href="https://youtu.be/9BY1Qx1NEPs" target="_blank">YouTube</a>
 
 
-|                   **Origin**                    |                    **Smooth**                     |                    **White**                     |
-| :---------------------------------------------: | :-----------------------------------------------: | :----------------------------------------------: |
-| <img src="./docs/image/origin.gif" width="180px"> |  <img src="./docs/image/smooth.gif" width="180px">  |  <img src="./docs/image/white.gif" width="180px">  |
+|          **Origin**          |          **Smooth**          |          **White**          |
+| :--------------------------: | :--------------------------: | :-------------------------: |
+| ![](./docs/image/origin.gif) | ![](./docs/image/smooth.gif) | ![](./docs/image/white.gif) |
 
 ## Architecture
 ![](./docs/image/arch-en.svg)
@@ -58,26 +58,26 @@ This table compares the features supported by **GPUPixel** and **GPUImage** and 
 ✅: Supported | ❌: Not supported | ✏️: Planning
 
 |                       | [GPUPixel](https://github.com/pixpark/gpupixel) | [GPUImage](https://github.com/BradLarson/GPUImage) | [Android-GPUImage](https://github.com/cats-oss/android-gpuimage) |
-| :-------------------- | :---------------------------------------------: | :------------------------------------------------: | :----------------------------------------------------------: |
-| 📷 **Filters:**        |                        ✅                        |                         ❌                          |                              ❌                               |
-| Skin Smoothing Filter |                        ✅                        |                         ❌                          |                              ❌                               |
-| Skin Whitening Filter |                        ✅                        |                         ❌                          |                                                        ❌                               |
-| More Build in Filter  |                        ✅                        |                         ✅                          |                              ✅                               |
-| 🎬 **Input Formats:**  |                                                 |                                                    |                                                              |
-| YUV420P(I420)         |                        ✅                        |                         ❌                          |                              ❌                               |
-| RGBA                  |                        ✅                        |                         ✅                          |                              ✅                               |
-| JPEG                  |                        ✅                        |                         ✅                          |                              ✅                               |
-| PNG                   |                        ✅                        |                         ✅                          |                              ✅                               |
-| NV21(for Android)     |                        ✏️                        |                         ❌                          |                              ❌                               |
-| 🎥 **Output Formats:** |                                                 |                                                    |                                                              |
-| RGBA                  |                        ✅                        |                         ✅                          |                              ✅                               |
-| YUV420P(I420)         |                        ✏️                        |                         ❌                          |                              ❌                               |
-| 💻 **Platform:**       |                                                 |                                                    |                                                              |
-| iOS                   |                        ✅                        |                         ✅                          |                              ❌                               |
-| Mac                   |                        ✅                        |                         ✅                          |                              ❌                               |
-| Android               |                        ✅                        |                         ❌                          |                              ✅                               |
-| Win                   |                        ✅                        |                         ❌                          |                              ❌                               |
-| Linux                 |                        ✅                        |                         ❌                          |                              ❌                               |
+| :-------------------- | :---------------------------------------------: | :------------------------------------------------: | :--------------------------------------------------------------: |
+| 📷 **Filters:**        |                        ✅                        |                         ❌                          |                                ❌                                 |
+| Skin Smoothing Filter |                        ✅                        |                         ❌                          |                                ❌                                 |
+| Skin Whitening Filter |                        ✅                        |                         ❌                          |                                ❌                                 |
+| More Build in Filter  |                        ✅                        |                         ✅                          |                                ✅                                 |
+| 🎬 **Input Formats:**  |                                                 |                                                    |                                                                  |
+| YUV420P(I420)         |                        ✅                        |                         ❌                          |                                ❌                                 |
+| RGBA                  |                        ✅                        |                         ✅                          |                                ✅                                 |
+| JPEG                  |                        ✅                        |                         ✅                          |                                ✅                                 |
+| PNG                   |                        ✅                        |                         ✅                          |                                ✅                                 |
+| NV21(for Android)     |                        ✏️                        |                         ❌                          |                                ❌                                 |
+| 🎥 **Output Formats:** |                                                 |                                                    |                                                                  |
+| RGBA                  |                        ✅                        |                         ✅                          |                                ✅                                 |
+| YUV420P(I420)         |                        ✏️                        |                         ❌                          |                                ❌                                 |
+| 💻 **Platform:**       |                                                 |                                                    |                                                                  |
+| iOS                   |                        ✅                        |                         ✅                          |                                ❌                                 |
+| Mac                   |                        ✅                        |                         ✅                          |                                ❌                                 |
+| Android               |                        ✅                        |                         ❌                          |                                ✅                                 |
+| Win                   |                        ✅                        |                         ❌                          |                                ❌                                 |
+| Linux                 |                        ✅                        |                         ❌                          |                                ❌                                 |
 
 
 ##  Performance
@@ -125,11 +125,7 @@ At the same time, please consider supporting GPUPixel by sharing it on social me
 - [Doc](https://gpupixel.pixpark.net/) : Online documentation.
 - [Issues](https://github.com/pixpark/gpupixel/issues/new/choose) : 👉 Github Issues.
 - [Mail](mailto:jaaronkot@gmail.com?subject=[GitHub]Questions%20About%20GPUPixel) : 👉 Send email to us.
- - [WeChat]() ： 
-<p align="center">
-<img src="./docs/image/wechat.png" alt="wechat" width="60%"/>
-</p>
-
+ 
 ## Acknowledgement
 ### Reference Project
 1. [GPUImage](https://github.com/BradLarson/GPUImage) 
