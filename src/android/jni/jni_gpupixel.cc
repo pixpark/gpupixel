@@ -4,7 +4,6 @@
 #include <jni.h>
 #include <string>
 #include <list>
-#include <face_reshape_filter.h>
 #include "gpupixel_context.h"
 #include "jni_helpers.h"
 #include "libyuv.h"
@@ -367,21 +366,7 @@ extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeSetLandmarkCallback (
         jclass obj,
         jobject source,
         jlong classId) {
-
-    jobject globalSourceRef = env->NewGlobalRef(source);
-  ((SourceCamera*)classId)->RegLandmarkCallback([=](std::vector<float> landmarks) {
-      jclass cls = env->GetObjectClass(globalSourceRef);
-    jmethodID methodID = env->GetMethodID(cls, "onFaceLandmark", "([F)V");
-
-      jfloatArray arr = env->NewFloatArray(landmarks.size());
-      env->SetFloatArrayRegion( arr, 0, landmarks.size(), landmarks.data());
-
-      env->CallVoidMethod(globalSourceRef, methodID, arr);
-
-      env->DeleteLocalRef(arr);
-
-  });
-
+          //todo
 };
 
 extern "C"
