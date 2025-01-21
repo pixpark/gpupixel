@@ -100,12 +100,12 @@ cmake -G "Unix Makefiles" -B examples/build -S examples -DCMAKE_BUILD_TYPE=Relea
 
 ```bash [Release]
 # Build
-cmake --build build --config Release
+cmake --build examples/build --config Release
 ```
 
 ```bash [Debug]
 # Build
-cmake --build build --config Debug
+cmake --build examples/build --config Debug
 ```
 :::
 
