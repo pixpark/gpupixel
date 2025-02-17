@@ -17,6 +17,9 @@ using namespace gpupixel;
 @interface ImageFilterController () {
   GPUPixelView *gpuPixelView;
   std::shared_ptr<BeautyFaceFilter> beauty_face_filter_;
+  std::shared_ptr<FaceReshapeFilter> face_reshape_filter_;
+  std::shared_ptr<gpupixel::FaceMakeupFilter> lipstick_filter_;
+  std::shared_ptr<gpupixel::FaceMakeupFilter> blusher_filter_;
   std::shared_ptr<SourceImage> gpuSourceImage;
   CADisplayLink *_displayLink;
 }
@@ -53,7 +56,7 @@ using namespace gpupixel;
 }
 
 -(void)initUI {
-  NSArray *array = [NSArray arrayWithObjects:@"Smooth", @"White", nil];
+  NSArray *array = [NSArray arrayWithObjects:@"Smooth", @"White", @"ThinFace", @"BigEye", @"Lipstick", @"Blusher", nil];
   self.segment = [[UISegmentedControl alloc]initWithItems:array];
   self.segment.frame = CGRectMake(10,
                                  self.view.frame.size.height - 70,
@@ -103,17 +106,31 @@ using namespace gpupixel;
   gpupixel::GPUPixelContext::getInstance()->runSync([&] {
     gpuPixelView = [[GPUPixelView alloc] initWithFrame:self.view.frame];
     [self.view addSubview:gpuPixelView];
+    
+    
+    lipstick_filter_ = LipstickFilter::create();
+    blusher_filter_ = BlusherFilter::create();
  
+   
     beauty_face_filter_ = BeautyFaceFilter::create();
-  
+    face_reshape_filter_ = FaceReshapeFilter::create();
+    
     NSString *imagePath = [[NSBundle mainBundle] pathForResource:@"sample_face" ofType:@"png"];
 
     gpuSourceImage = SourceImage::create([imagePath UTF8String]);
     
- 
+    gpuSourceImage->RegLandmarkCallback([=](std::vector<float> landmarks) {
+      lipstick_filter_->SetFaceLandmarks(landmarks);
+      blusher_filter_->SetFaceLandmarks(landmarks);
+      face_reshape_filter_->SetFaceLandmarks(landmarks);
+    });
+    
     // filter pipline
-    gpuSourceImage->addTarget(beauty_face_filter_);
-    beauty_face_filter_->addTarget(gpuPixelView);
+    gpuSourceImage->addTarget(lipstick_filter_)
+                    ->addTarget(blusher_filter_)
+                    ->addTarget(face_reshape_filter_)
+                    ->addTarget(beauty_face_filter_)
+                    ->addTarget(gpuPixelView);
  
     [gpuPixelView setBackgroundColor:[UIColor grayColor]];
     [gpuPixelView setFillMode:(gpupixel::TargetView::PreserveAspectRatioAndFill)];
@@ -163,7 +180,30 @@ using namespace gpupixel;
   _whithValue = value;
   beauty_face_filter_->setWhite(value/20);
 }
- 
+- (void)setSaturationValue:(CGFloat)value{
+  _saturationValue = value;
+}
+
+- (void)setThinFaceValue:(CGFloat)value{
+  _thinFaceValue = value;
+  face_reshape_filter_->setFaceSlimLevel(value/100);
+}
+
+- (void)setEyeValue:(CGFloat)value{
+  _eyeValue = value;
+  face_reshape_filter_->setEyeZoomLevel(value/50);
+}
+
+- (void)setLipstickValue:(CGFloat)value{
+  _lipstickValue = value;
+  lipstick_filter_->setBlendLevel(value/10);
+}
+
+- (void)setBlusherValue:(CGFloat)value{
+  _blusherValue = value;
+  blusher_filter_->setBlendLevel(value/10);
+}
+  
 - (void)displayLinkDidFire:(CADisplayLink *)displayLink {
   // must call function
   gpuSourceImage->Render();
@@ -180,6 +220,10 @@ using namespace gpupixel;
   } else {
     beauty_face_filter_->setBlurAlpha(0);
     beauty_face_filter_->setWhite(0);
+    face_reshape_filter_->setFaceSlimLevel(0);
+    face_reshape_filter_->setEyeZoomLevel(0);
+    lipstick_filter_->setBlendLevel(0);
+    blusher_filter_->setBlendLevel(0);
   }
 }
  

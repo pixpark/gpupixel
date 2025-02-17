@@ -76,7 +76,8 @@ IF(${CURRENT_OS} STREQUAL "linux")
 						gpupixel
 						GL
 						glfw)
-	SET(GPUPIXEL_LIBS ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libgpupixel.so)
+	SET(GPUPIXEL_LIBS ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libgpupixel.so)	
+	)
 	set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-Wl,-rpath,./")
 ELSEIF(${CURRENT_OS} STREQUAL "windows")
 	TARGET_LINK_LIBRARIES(${PROJECT_NAME} 
