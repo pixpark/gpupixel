@@ -77,6 +77,8 @@ IF(${CURRENT_OS} STREQUAL "linux")
 						GL
 						glfw)
 	SET(GPUPIXEL_LIBS ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libgpupixel.so)	
+	FIlE(GLOB VNN_LIBS 
+		${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/vnn/libs/${CURRENT_OS}/*
 	)
 	set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-Wl,-rpath,./")
 ELSEIF(${CURRENT_OS} STREQUAL "windows")
@@ -85,6 +87,10 @@ ELSEIF(${CURRENT_OS} STREQUAL "windows")
 						opengl32
 						glfw3)
 						
+	FIlE(GLOB VNN_LIBS 
+		${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/vnn/libs/${CURRENT_OS}/x64/*
+	)
+
 	SET(GPUPIXEL_LIBS ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/gpupixel.dll)
 	set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-Wl,-rpath,./")
 ENDIF()
@@ -96,6 +102,7 @@ FILE(GLOB RESOURCE_FILES
 	"${CMAKE_CURRENT_SOURCE_DIR}/../src/resources/*"        
 )
 list(APPEND RESOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/../examples/desktop/demo.png")
+list(APPEND RESOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/vnn/models/vnn_face278_data/face_pc[1.0.0].vnnmodel")
 
 MACRO(EXPORT_INCLUDE)
 ADD_CUSTOM_COMMAND(TARGET ${PROJECT_NAME} PRE_BUILD 
@@ -103,8 +110,10 @@ ADD_CUSTOM_COMMAND(TARGET ${PROJECT_NAME} PRE_BUILD
 				${RESOURCE_FILES} ${APP_RESOURCE_DIR}
 				COMMENT "Copying resource files to output/app directory.")
 
-# copy gpupixel lib
+# copy gpupixel and vnn lib
 ADD_CUSTOM_COMMAND(TARGET ${PROJECT_NAME} POST_BUILD
+				COMMAND ${CMAKE_COMMAND} -E copy_if_different
+				${VNN_LIBS} ${COPY_DST_RUNTIME_DIR}
 				COMMAND ${CMAKE_COMMAND} -E copy_if_different
 				${GPUPIXEL_LIBS} ${COPY_DST_RUNTIME_DIR}
 				)
