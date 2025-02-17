@@ -16,6 +16,7 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+#include "face_detector.h"
 USING_NS_GPUPIXEL
 
 std::shared_ptr<SourceImage> SourceImage::create_from_memory(int width,
@@ -75,7 +76,16 @@ void SourceImage::init(int width, int height, int channel_count, const unsigned 
   CHECK_GL(glBindTexture(GL_TEXTURE_2D, 0));
 }
 
-void SourceImage::Render() { 
+void SourceImage::Render() {
+  GPUPIXEL_FRAME_TYPE type;
+  if(_face_detector) {
+    _face_detector->Detect(image_bytes.data(),
+                           _framebuffer->getWidth(),
+                           _framebuffer->getHeight(),
+                           GPUPIXEL_MODE_FMT_PICTURE,
+                           GPUPIXEL_FRAME_TYPE_RGBA8888);
+  }
+  
   Source::proceed();
 }
 
