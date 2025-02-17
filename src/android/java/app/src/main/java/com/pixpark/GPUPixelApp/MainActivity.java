@@ -19,8 +19,10 @@ import android.widget.Toast;
 import com.pixpark.GPUPixelApp.databinding.ActivityMainBinding;
 import com.pixpark.gpupixel.GPUPixel;
 import com.pixpark.gpupixel.filter.BeautyFaceFilter;
+import com.pixpark.gpupixel.filter.FaceReshapeFilter;
 import com.pixpark.gpupixel.GPUPixelSourceCamera;
 import com.pixpark.gpupixel.GPUPixelView;
+import com.pixpark.gpupixel.filter.LipstickFilter;
 
 public class MainActivity extends AppCompatActivity implements SurfaceHolder.Callback {
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 200;
@@ -29,9 +31,14 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     private GPUPixelSourceCamera sourceCamera;
     private GPUPixelView surfaceView;
     private BeautyFaceFilter beautyFaceFilter;
+    private FaceReshapeFilter faceReshapFilter;
+    private LipstickFilter lipstickFilter;
     private SeekBar smooth_seekbar;
     private SeekBar whiteness_seekbar;
- 
+    private SeekBar face_reshap_seekbar;
+    private SeekBar big_eye_seekbar;
+    private SeekBar lipstick_seekbar;
+
     private ActivityMainBinding binding;
 
     @Override
@@ -40,7 +47,11 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
- 
+
+        // get log path
+        String path = getExternalFilesDir("gpupixel").getAbsolutePath();
+        Log.i(TAG, path);
+
         GPUPixel.setContext(this);
         // 保持屏幕常亮
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -84,7 +95,63 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
             }
         });
- 
+
+
+        face_reshap_seekbar = binding.thinfaceSeekbar;
+        face_reshap_seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                faceReshapFilter.setThinLevel(progress / 200.0f);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        big_eye_seekbar = binding.bigeyeSeekbar;
+        big_eye_seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                faceReshapFilter.setBigeyeLevel(progress / 100.0f);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        lipstick_seekbar = binding.lipstickSeekbar;
+        lipstick_seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                lipstickFilter.setBlendLevel(progress / 10.0f);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        //
         this.checkCameraPermission();
 
     }
@@ -92,16 +159,27 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     public void startCameraFilter() {
         // 美颜滤镜
         beautyFaceFilter = new BeautyFaceFilter();
-   
+        faceReshapFilter = new FaceReshapeFilter();
+        lipstickFilter = new LipstickFilter();
         // camera
         sourceCamera = new GPUPixelSourceCamera(this.getApplicationContext());
 
+        //
+        sourceCamera.addTarget(lipstickFilter);
+        lipstickFilter.addTarget(faceReshapFilter);
+        faceReshapFilter.addTarget(beautyFaceFilter);
+        beautyFaceFilter.addTarget(surfaceView);
+
+        sourceCamera.setLandmarkCallbck(new GPUPixel.GPUPixelLandmarkCallback() {
+            @Override
+            public void onFaceLandmark(float[] landmarks) {
+                faceReshapFilter.setFaceLandmark(landmarks);
+                lipstickFilter.setFaceLandmark(landmarks);
+            }
+        });
         // set default value
         beautyFaceFilter.setSmoothLevel(0.5f);
         beautyFaceFilter.setWhiteLevel(0.4f);
-
-        sourceCamera.addTarget(beautyFaceFilter);
-        beautyFaceFilter.addTarget(surfaceView);
     }
 
     public void checkCameraPermission() {

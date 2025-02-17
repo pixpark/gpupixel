@@ -361,6 +361,14 @@ extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeYUVtoRBGA(
     env->ReleasePrimitiveArrayCritical(yuv420sp, nv21, 0);
 }
 
+extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeSetLandmarkCallback (
+        JNIEnv* env,
+        jclass obj,
+        jobject source,
+        jlong classId) {
+          //todo
+};
+
 extern "C"
 JNIEXPORT void JNICALL
 Java_com_pixpark_gpupixel_GPUPixel_nativeFilterSetPropertyFloatArray(JNIEnv *env, jclass clazz,
