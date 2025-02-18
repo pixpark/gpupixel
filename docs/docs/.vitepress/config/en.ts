@@ -57,11 +57,11 @@ function nav(): DefaultTheme.NavItem[] {
       items: [
         {
           text: 'Team',
-          link: '/en/about/team'
+          link: '/about/team'
         },
         {
           text: 'Contact',
-          link: '/en/about/contact'
+          link: 'about/contact'
         },
         {
           items: [
@@ -76,7 +76,7 @@ function nav(): DefaultTheme.NavItem[] {
     },
     {
       text: 'Sponsor',
-      link: '/en/sponsor'
+      link: 'sponsor'
     }
   ]
 }
@@ -119,7 +119,7 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
         { text: 'Code Debugging', link: '#' },
       ]
     },
-    { text: 'Configuration and API Reference', base: '/en/reference/', link: 'filter-list' }
+    { text: 'Configuration and API Reference', base: 'reference/', link: 'filter-list' }
   ]
 }
 

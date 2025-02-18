@@ -18,3 +18,9 @@ const members = [
 The GPUPixel project was originally created by [Jaaron Kot](https://github.com/jaaronkot)
 
 <VPTeamMembers size="small" :members="members" />
+
+### Useful Links
+
+- [GitHub](https://github.com/pixpark/gpupixel)
+- [Contribution Guide](/contrib-guide/)
+- [Discord Chat](https://discord.gg/q2MjmqK4)
