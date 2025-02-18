@@ -49,7 +49,8 @@ export const shared = defineConfig({
     logo: { src: '/gpupixel-logo-mini.svg', width: 24, height: 24 },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/pixpark/gpupixel' }
+      { icon: 'github', link: 'https://github.com/pixpark/gpupixel' },
+      { icon: 'discord', link: 'https://discord.gg/q2MjmqK4' }
     ],
 
     search: {
