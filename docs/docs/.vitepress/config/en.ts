@@ -51,6 +51,32 @@ function nav(): DefaultTheme.NavItem[] {
           link: 'https://github.com/pixpark/gpupixel/issues/new/choose'
         }
       ]
+    },
+    {
+      text: 'About',
+      items: [
+        {
+          text: 'Team',
+          link: '/en/about/team'
+        },
+        {
+          text: 'Contact',
+          link: '/en/about/contact'
+        },
+        {
+          items: [
+            {
+              text: 'Blog',
+              link: 'https://pixpark.net'
+              
+            }
+          ],
+        }
+      ]
+    },
+    {
+      text: 'Sponsor',
+      link: '/en/sponsor'
     }
   ]
 }

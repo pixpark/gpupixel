@@ -24,6 +24,13 @@
 </p>
 
 <p align="center">
+<a href="https://discord.gg/q2MjmqK4"><img alt="GPUPixel Discord" src="https://img.shields.io/badge/-Discord-blue?logo=discord&logoColor=white&labelColor=grey&color=blue"/></a>
+<a href="https://gpupixel.pixpark.net/about/contact#wechat-official-account"><img alt="GPUPixel Wechat" src="https://img.shields.io/badge/-WeChat-gray?logo=wechat&logoColor=white&labelColor=gray&color=07C160&style=flat"/></a>
+<a href="https://gpupixel.pixpark.net/about/contact#qq-group"><img alt="QQ Group" src="https://img.shields.io/badge/-QQ Group-gray?logo=qq&logoColor=white&labelColor=gray&color=blue&style=flat"/></a>
+<a href="https://gpupixel.pixpark.net/about/contact#paid-support"><img alt="GPUPixel 付费支持" src="https://img.shields.io/badge/-知识星球-gray?logo=google-earth&logoColor=white&labelColor=grey&color=07C160&style=flat"/></a>
+</p>
+
+<p align="center">
 <a href="https://trendshift.io/repositories/7103" target="_blank"><img src="https://trendshift.io/api/badge/repositories/7103" alt="pixpark%2Fgpupixel | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
 </p>
 
@@ -131,10 +138,7 @@ At the same time, please consider supporting GPUPixel by sharing it on social me
 - [Doc](https://gpupixel.pixpark.net/) : Online documentation.
 - [Issues](https://github.com/pixpark/gpupixel/issues/new/choose) : 👉 Github Issues.
 - [Mail](mailto:jaaronkot@gmail.com?subject=[GitHub]Questions%20About%20GPUPixel) : 👉 Send email to us.
- - [WeChat]() ： 
-<p align="center">
-<img src="./docs/image/wechat.png" alt="wechat" width="60%"/>
-</p>
+- [Contact](https://gpupixel.pixpark.net/zh/about/contact) : 👉 Contact us.
 
 ## Acknowledgement
 ### Reference Project
