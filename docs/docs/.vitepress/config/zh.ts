@@ -77,9 +77,31 @@ function nav(): DefaultTheme.NavItem[] {
       ]
     },
     {
-      text: 'PixPark',
-      link: 'https://pixpark.net',
+      text: '关于',
+      items: [
+        {
+          text: '团队',
+          link: '/zh/about/team'
+        },
+        {
+          text: '联系',
+          link: '/zh/about/contact'
+        },
+        {
+          items: [
+            {
+              text: '博客',
+              link: 'https://pixpark.net'
+              
+            }
+          ],
+        }
+      ]
     },
+    {
+      text: '赞助',
+      link: '/zh/sponsor'
+    }
   ]
 }
 
