@@ -138,9 +138,17 @@ At the same time, please consider supporting GPUPixel by sharing it on social me
 ## Sponsorship
 If you like this project, you can consider supporting me through the following methods:
 
-- [WeChat Rewards](https://gpupixel.pixpark.net/sponsor#wechat)
-- [Open Collective](https://opencollective.com/gpupixel)
-  
+<p align="center">
+  <a href="https://ko-fi.com/jaaron" target="_blank"><img alt="Ko-fi" src="./docs/image/support_me_on_kofi_red.png" width="30%"/></a> 
+</p>
+<p align="center">
+  <a href="https://opencollective.com/gpupixel" target="_blank"><img alt="open collective" src="./docs/image/open-collective-vector-logo.png" width="30%"/></a> 
+</p>
+
+<p align="center">
+  <a href="https://gpupixel.pixpark.net/sponsor#wechat" target="_blank"><img alt="wechat" src="./docs/image/wechat-logo.png" width="30%"/></a>
+</p>
+
 ## Contact & Support
 - [Doc](https://gpupixel.pixpark.net/) : Online documentation.
 - [Issues](https://github.com/pixpark/gpupixel/issues/new/choose) : 👉 Github Issues.
