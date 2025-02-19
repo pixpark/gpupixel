@@ -27,7 +27,9 @@
 <a href="https://discord.gg/q2MjmqK4"><img alt="GPUPixel Discord" src="https://img.shields.io/badge/-Discord-blue?logo=discord&logoColor=white&labelColor=grey&color=blue"/></a>
 <a href="https://gpupixel.pixpark.net/about/contact#wechat-official-account"><img alt="GPUPixel Wechat" src="https://img.shields.io/badge/-WeChat-gray?logo=wechat&logoColor=white&labelColor=gray&color=07C160&style=flat"/></a>
 <a href="https://gpupixel.pixpark.net/about/contact#qq-group"><img alt="QQ Group" src="https://img.shields.io/badge/-QQ Group-gray?logo=qq&logoColor=white&labelColor=gray&color=blue&style=flat"/></a>
-<a href="https://gpupixel.pixpark.net/about/contact#paid-support"><img alt="GPUPixel 付费支持" src="https://img.shields.io/badge/-知识星球-gray?logo=google-earth&logoColor=white&labelColor=grey&color=07C160&style=flat"/></a>
+<a href="https://gpupixel.pixpark.net/about/contact#paid-support"><img alt="GPUPixel 付费支持" src="https://img.shields.io/badge/-知识星球-gray?logo=sharp&logoColor=white&labelColor=grey&color=07C160&style=flat"/></a>
+</p>
+<a href="https://github.com/pixpark/gpupixel#赞助"><img alt="Sponsor" src="https://img.shields.io/badge/-Sponsor-gray?logo=githubsponsors&logoColor=white&labelColor=grey&color=FE6AB2&style=flat"/></a>
 </p>
 
 <p align="center">
@@ -128,12 +130,18 @@
 
 [![](https://opencollective.com/gpupixel/contributors.svg?width=890&button=false)](https://github.com/pixpark/gpupixel/graphs/contributors)
 
+## 赞助
+如果你喜欢这个项目，可以考虑通过以下方式支持我：
+
+- [微信赞赏](https://gpupixel.pixpark.net/sponsor#wechat)
+- [Open Collective](https://opencollective.com/gpupixel)
+
 ## 联系 & 支持
 - [文档](https://gpupixel.pixpark.net/)：在线文档。
 - [提问](https://github.com/pixpark/gpupixel/issues/new/choose)：👉 Github问题。
 - [邮件](mailto:jaaronkot@gmail.com?subject=[GitHub]Questions%20About%20GPUPixel)：👉 向我们发送邮件。
 - [联系](https://gpupixel.pixpark.net/zh/about/contact) : 👉 更多联系方式.
-  
+
 ## 感谢
 ### 参考项目
 1. [GPUImage](https://github.com/BradLarson/GPUImage) 
