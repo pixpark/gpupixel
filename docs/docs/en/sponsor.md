@@ -10,5 +10,5 @@ description: sponsor us
 ## Wechat
  
 <p align="center">
-    <img src="../image/wechat_sponsor.jpg" alt="wechat" width="30%"/>
+    <img src="../image/wechat_sponsor.jpg" alt="wechat" width="40%"/>
 </p>
