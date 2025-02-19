@@ -10,5 +10,5 @@ description: 支持项目发展
 ## 微信赞赏
  
 <p align="center">
-    <img src="../image/wechat_sponsor.jpg" alt="wechat" width="30%"/>
+    <img src="../image/wechat_sponsor.jpg" alt="wechat" width="40%"/>
 </p>
