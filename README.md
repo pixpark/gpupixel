@@ -8,11 +8,11 @@
 </p>
 
 <p align="center">
-  <a href="https://gpupixel.pixpark.net/guide/intro">Build</a>
+  <a href="https://gpupixel.pixpark.net/guide/intro" target="_blank">Build</a>
   <span> · </span>
-  <a href="https://reactnative.dev/docs/tutorial">Examples</a>
+  <a href="https://reactnative.dev/docs/tutorial" target="_blank">Examples</a>
   <span> · </span>
-  <a href="https://reactnative.dev/showcase">Integration</a>
+  <a href="https://reactnative.dev/showcase" target="_blank">Integration</a>
 </p>
 
 <p align="center">
@@ -24,11 +24,11 @@
 </p>
 
 <p align="center">
-<a href="https://discord.gg/q2MjmqK4"><img alt="GPUPixel Discord" src="https://img.shields.io/badge/-Discord-blue?logo=discord&logoColor=white&labelColor=grey&color=blue"/></a>
-<a href="https://gpupixel.pixpark.net/about/contact#wechat-official-account"><img alt="GPUPixel Wechat" src="https://img.shields.io/badge/-WeChat-gray?logo=wechat&logoColor=white&labelColor=gray&color=07C160&style=flat"/></a>
-<a href="https://gpupixel.pixpark.net/about/contact#qq-group"><img alt="QQ Group" src="https://img.shields.io/badge/-QQ Group-gray?logo=qq&logoColor=white&labelColor=gray&color=blue&style=flat"/></a>
-<a href="https://gpupixel.pixpark.net/about/contact#paid-support"><img alt="GPUPixel 付费支持" src="https://img.shields.io/badge/-知识星球-gray?logo=sharp&logoColor=white&labelColor=grey&color=07C160&style=flat"/></a>
-<a href="https://github.com/pixpark/gpupixel#Sponsorship"><img alt="Sponsor" src="https://img.shields.io/badge/-Sponsor-gray?logo=githubsponsors&logoColor=white&labelColor=grey&color=FE6AB2&style=flat"/></a>
+<a href="https://discord.gg/q2MjmqK4" target="_blank"><img alt="GPUPixel Discord" src="https://img.shields.io/badge/-Discord-blue?logo=discord&logoColor=white&labelColor=grey&color=blue"/></a>
+<a href="https://gpupixel.pixpark.net/about/contact#wechat-official-account" target="_blank"><img alt="GPUPixel Wechat" src="https://img.shields.io/badge/-WeChat-gray?logo=wechat&logoColor=white&labelColor=gray&color=07C160&style=flat"/></a>
+<a href="https://gpupixel.pixpark.net/about/contact#qq-group" target="_blank"><img alt="QQ Group" src="https://img.shields.io/badge/-QQ Group-gray?logo=qq&logoColor=white&labelColor=gray&color=blue&style=flat"/></a>
+<a href="https://gpupixel.pixpark.net/about/contact#paid-support" target="_blank"><img alt="GPUPixel 付费支持" src="https://img.shields.io/badge/-知识星球-gray?logo=sharp&logoColor=white&labelColor=grey&color=07C160&style=flat"/></a>
+<a href="https://github.com/pixpark/gpupixel#Sponsorship" target="_blank"><img alt="Sponsor" src="https://img.shields.io/badge/-Sponsor-gray?logo=githubsponsors&logoColor=white&labelColor=grey&color=FE6AB2&style=flat"/></a>
 </p>
 
 <p align="center">
@@ -41,15 +41,15 @@
 
 ## Introduction
 
-⛰️ GPUPixel is a real-time, high-performance image and video filter library, extremely easy to compile and integrate with  small library size.
+🍔  GPUPixel is a real-time, high-performance image and video filter library, extremely easy to compile and integrate with  small library size.
 
-🔑 GPUPixel  is written in C++11 and is based on OpenGL/ES, incorporating a built-in beauty face filter that achieves commercial-grade beauty effects.
+🍤 GPUPixel  is written in C++11 and is based on OpenGL/ES, incorporating a built-in beauty face filter that achieves commercial-grade beauty effects.
 
-🔌 GPUPixel supports platforms including `iOS`, `Android`, `Mac`, `Win` and `Linux`. It can theoretically be ported to any platform that supports OpenGL/ES.
+🍖 GPUPixel supports platforms including `iOS`, `Android`, `Mac`, `Win` and `Linux`. It can theoretically be ported to any platform that supports OpenGL/ES.
 
 ## Effects Preview
 
-👉 **Video: <a href="https://youtu.be/9BY1Qx1NEPs" target="_blank">YouTube</a> | <a href="https://www.bilibili.com/video/BV1xQ4y1L7Fh/?share_source=copy_web&vd_source=46adcb1014fa989cfcbb4cc1e866831e" target="_blank">BiliBili</a>**
+👉 **Video: <a href="https://youtu.be/9BY1Qx1NEPs" target="_blank">YouTube</a>**
 
 
 |                   **Origin**                    |                    **Smooth**                     |                    **White**                     |                   **ThinFace**                    |
