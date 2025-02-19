@@ -12,7 +12,7 @@ description: Donate or sponsor us
 
 ## Open Collective
 <p align="center">
- <a href="https://opencollective.com/gpupixel" target="_blank"><img alt="Ko-fi" src="../../image/open-collective-vector-logo.svg" width="40%"/></a>
+ <a href="https://opencollective.com/gpupixel" target="_blank"><img alt="Ko-fi" src="../../image/open-collective-vector-logo.png" width="40%"/></a>
 </p>
  
 ## Wechat
