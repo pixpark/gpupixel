@@ -134,10 +134,10 @@
 如果你喜欢这个项目，可以考虑通过以下方式支持我：
 
 <p align="center">
-  <a href="https://ko-fi.com/jaaron" target="_blank"><img alt="Ko-fi" src="./docs/image/support_me_on_kofi_red.png" width="30%"/></a> 
+  <a href="https://ko-fi.com/jaaron" target="_blank"><img alt="Ko-fi" src="./docs/image/support_me_on_kofi_red.png" width="30%" style="border-bottom: 1px dashed gray; padding-bottom: 15px;"/></a> 
 </p>
 <p align="center">
-  <a href="https://opencollective.com/gpupixel" target="_blank"><img alt="open collective" src="./docs/image/open-collective-vector-logo.png" width="30%"/></a> 
+  <a href="https://opencollective.com/gpupixel" target="_blank"><img alt="open collective" src="./docs/image/open-collective-vector-logo.png" width="30%" style="border-bottom: 1px dashed gray; padding-bottom: 15px;"/></a> 
 </p>
 
 <p align="center">
