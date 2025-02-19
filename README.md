@@ -139,10 +139,10 @@ At the same time, please consider supporting GPUPixel by sharing it on social me
 If you like this project, you can consider supporting me through the following methods:
 
 <p align="center">
-  <a href="https://ko-fi.com/jaaron" target="_blank"><img alt="Ko-fi" src="./docs/image/support_me_on_kofi_red.png" width="30%"/></a> 
+  <a href="https://ko-fi.com/jaaron" target="_blank"><img alt="Ko-fi" src="./docs/image/support_me_on_kofi_red.png" width="30%" style="border-bottom: 1px dashed gray; padding-bottom: 15px;"/></a> 
 </p>
 <p align="center">
-  <a href="https://opencollective.com/gpupixel" target="_blank"><img alt="open collective" src="./docs/image/open-collective-vector-logo.png" width="30%"/></a> 
+  <a href="https://opencollective.com/gpupixel" target="_blank"><img alt="open collective" src="./docs/image/open-collective-vector-logo.png" width="30%" style="border-bottom: 1px dashed gray; padding-bottom: 15px;"/></a> 
 </p>
 
 <p align="center">
