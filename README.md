@@ -27,7 +27,8 @@
 <a href="https://discord.gg/q2MjmqK4"><img alt="GPUPixel Discord" src="https://img.shields.io/badge/-Discord-blue?logo=discord&logoColor=white&labelColor=grey&color=blue"/></a>
 <a href="https://gpupixel.pixpark.net/about/contact#wechat-official-account"><img alt="GPUPixel Wechat" src="https://img.shields.io/badge/-WeChat-gray?logo=wechat&logoColor=white&labelColor=gray&color=07C160&style=flat"/></a>
 <a href="https://gpupixel.pixpark.net/about/contact#qq-group"><img alt="QQ Group" src="https://img.shields.io/badge/-QQ Group-gray?logo=qq&logoColor=white&labelColor=gray&color=blue&style=flat"/></a>
-<a href="https://gpupixel.pixpark.net/about/contact#paid-support"><img alt="GPUPixel 付费支持" src="https://img.shields.io/badge/-知识星球-gray?logo=google-earth&logoColor=white&labelColor=grey&color=07C160&style=flat"/></a>
+<a href="https://gpupixel.pixpark.net/about/contact#paid-support"><img alt="GPUPixel 付费支持" src="https://img.shields.io/badge/-知识星球-gray?logo=sharp&logoColor=white&labelColor=grey&color=07C160&style=flat"/></a>
+<a href="https://github.com/pixpark/gpupixel#Sponsorship"><img alt="Sponsor" src="https://img.shields.io/badge/-Sponsor-gray?logo=githubsponsors&logoColor=white&labelColor=grey&color=FE6AB2&style=flat"/></a>
 </p>
 
 <p align="center">
@@ -134,6 +135,12 @@ At the same time, please consider supporting GPUPixel by sharing it on social me
 
 [![](https://opencollective.com/gpupixel/contributors.svg?width=890&button=false)](https://github.com/pixpark/gpupixel/graphs/contributors)
 
+## Sponsorship
+If you like this project, you can consider supporting me through the following methods:
+
+- [WeChat Rewards](https://gpupixel.pixpark.net/sponsor#wechat)
+- [Open Collective](https://opencollective.com/gpupixel)
+  
 ## Contact & Support
 - [Doc](https://gpupixel.pixpark.net/) : Online documentation.
 - [Issues](https://github.com/pixpark/gpupixel/issues/new/choose) : 👉 Github Issues.
