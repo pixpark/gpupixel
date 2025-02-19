@@ -8,11 +8,11 @@
 </p>
 
 <p align="center">
-  <a href="https://gpupixel.pixpark.net/guide/intro">编译</a>
+  <a href="https://gpupixel.pixpark.net/guide/intro" target="_blank">编译</a>
   <span> · </span>
-  <a href="https://reactnative.dev/docs/tutorial">示例</a>
+  <a href="https://reactnative.dev/docs/tutorial" target="_blank">示例</a>
   <span> · </span>
-  <a href="https://reactnative.dev/showcase">集成</a>
+  <a href="https://reactnative.dev/showcase" target="_blank">集成</a>
 </p>
 
 <p align="center">
@@ -24,12 +24,11 @@
 </p>
 
 <p align="center">
-<a href="https://discord.gg/q2MjmqK4"><img alt="GPUPixel Discord" src="https://img.shields.io/badge/-Discord-blue?logo=discord&logoColor=white&labelColor=grey&color=blue"/></a>
-<a href="https://gpupixel.pixpark.net/about/contact#wechat-official-account"><img alt="GPUPixel Wechat" src="https://img.shields.io/badge/-WeChat-gray?logo=wechat&logoColor=white&labelColor=gray&color=07C160&style=flat"/></a>
-<a href="https://gpupixel.pixpark.net/about/contact#qq-group"><img alt="QQ Group" src="https://img.shields.io/badge/-QQ Group-gray?logo=qq&logoColor=white&labelColor=gray&color=blue&style=flat"/></a>
-<a href="https://gpupixel.pixpark.net/about/contact#paid-support"><img alt="GPUPixel 付费支持" src="https://img.shields.io/badge/-知识星球-gray?logo=sharp&logoColor=white&labelColor=grey&color=07C160&style=flat"/></a>
-</p>
-<a href="https://github.com/pixpark/gpupixel#赞助"><img alt="Sponsor" src="https://img.shields.io/badge/-Sponsor-gray?logo=githubsponsors&logoColor=white&labelColor=grey&color=FE6AB2&style=flat"/></a>
+<a href="https://discord.gg/q2MjmqK4" target="_blank"><img alt="GPUPixel Discord" src="https://img.shields.io/badge/-Discord-blue?logo=discord&logoColor=white&labelColor=grey&color=blue"/></a>
+<a href="https://gpupixel.pixpark.net/about/contact#wechat-official-account" target="_blank"><img alt="GPUPixel Wechat" src="https://img.shields.io/badge/-WeChat-gray?logo=wechat&logoColor=white&labelColor=gray&color=07C160&style=flat"/></a>
+<a href="https://gpupixel.pixpark.net/about/contact#qq-group" target="_blank"><img alt="QQ Group" src="https://img.shields.io/badge/-QQ Group-gray?logo=qq&logoColor=white&labelColor=gray&color=blue&style=flat"/></a>
+<a href="https://gpupixel.pixpark.net/about/contact#paid-support" target="_blank"><img alt="GPUPixel 付费支持" src="https://img.shields.io/badge/-知识星球-gray?logo=sharp&logoColor=white&labelColor=grey&color=07C160&style=flat"/></a>
+<a href="https://github.com/pixpark/gpupixel/blob/main/README_CN.md#赞助" target="_blank"><img alt="Sponsor" src="https://img.shields.io/badge/-Sponsor-gray?logo=githubsponsors&logoColor=white&labelColor=grey&color=FE6AB2&style=flat"/></a>
 </p>
 
 <p align="center">
@@ -42,14 +41,14 @@
 
 ## 简介
 
-⛰️ GPUPixel是一个实时、高性能图像和视频AI美颜效果库，非常容易编译和集成，并且库文件非常小。
+🍔 GPUPixel是一个实时、高性能图像和视频AI美颜效果库，非常容易编译和集成，并且库文件非常小。
 
-🔑 它是使用C++11编写的，基于OpenGL/ES，并且带有内置的美颜效果滤镜，可以实现商业级别的效果。
+🍤 它是使用C++11编写的，基于OpenGL/ES，并且带有内置的美颜效果滤镜，可以实现商业级别的效果。
 
-🔌 它支持的平台包括`iOS`、`Android`、`Mac`、`Win`和`Linux`，理论上可以移植到任何支持OpenGL/ES的平台。
+🍖 它支持的平台包括`iOS`、`Android`、`Mac`、`Win`和`Linux`，理论上可以移植到任何支持OpenGL/ES的平台。
 
 ## 效果预览
-👉 **视频: <a href="https://youtu.be/9BY1Qx1NEPs" target="_blank">YouTube</a> | <a href="https://www.bilibili.com/video/BV1xQ4y1L7Fh/?share_source=copy_web&vd_source=46adcb1014fa989cfcbb4cc1e866831e" target="_blank">BiliBili</a>**
+👉 **视频: <a href="https://youtu.be/9BY1Qx1NEPs" target="_blank">YouTube</a>**
 
 |              **原图**              |                **磨皮**                |               **美白**               |                 **瘦脸**               |
 | :--------------------------------: | :------------------------------------: | :----------------------------------: | :------------------------------------: |
