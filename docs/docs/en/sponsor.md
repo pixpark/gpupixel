@@ -1,12 +1,20 @@
 ---
-title: Sponsor
+title: Donate and Sponsor 
 editLink: true
-description: sponsor us
+description: Donate or sponsor us
 ---
 
-## Open Collective
- [https://opencollective.com/gpupixel](https://opencollective.com/gpupixel)
+## Ko-fi
 
+<p align="center">
+ <a href="https://ko-fi.com/jaaron" target="_blank"><img alt="Ko-fi" src="../../image/support_me_on_kofi_red.png" width="40%"/></a>
+</p>
+
+## Open Collective
+<p align="center">
+ <a href="https://opencollective.com/gpupixel" target="_blank"><img alt="Ko-fi" src="../../image/open-collective-vector-logo.svg" width="40%"/></a>
+</p>
+ 
 ## Wechat
  
 <p align="center">

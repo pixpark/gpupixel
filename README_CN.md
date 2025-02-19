@@ -133,8 +133,16 @@
 ## 赞助
 如果你喜欢这个项目，可以考虑通过以下方式支持我：
 
-- [微信赞赏](https://gpupixel.pixpark.net/sponsor#wechat)
-- [Open Collective](https://opencollective.com/gpupixel)
+<p align="center">
+  <a href="https://ko-fi.com/jaaron" target="_blank"><img alt="Ko-fi" src="./docs/image/support_me_on_kofi_red.png" width="30%"/></a> 
+</p>
+<p align="center">
+  <a href="https://opencollective.com/gpupixel" target="_blank"><img alt="open collective" src="./docs/image/open-collective-vector-logo.png" width="30%"/></a> 
+</p>
+
+<p align="center">
+  <a href="https://gpupixel.pixpark.net/sponsor#wechat" target="_blank"><img alt="wechat" src="./docs/image/wechat-logo.png" width="30%"/></a>
+</p>
 
 ## 联系 & 支持
 - [文档](https://gpupixel.pixpark.net/)：在线文档。
