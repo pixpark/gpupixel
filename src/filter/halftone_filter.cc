@@ -41,6 +41,7 @@ const std::string kHalftoneFragmentShaderString = R"(
     })";
 #elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
 const std::string kHalftoneFragmentShaderString = R"(
+    precision mediump float;
     uniform float pixelSize; uniform float aspectRatio;
 
     uniform sampler2D inputImageTexture;

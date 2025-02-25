@@ -39,6 +39,7 @@ const std::string kBackgroundSegmentationFragmentShaderString = R"(
     })";
 #elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
 const std::string kBackgroundSegmentationFragmentShaderString = R"(
+    precision mediump float;
     varying vec2 textureCoordinate; 
     uniform sampler2D inputImageTexture;
     uniform sampler2D maskTexture;
@@ -54,9 +55,11 @@ const std::string kBackgroundSegmentationFragmentShaderString = R"(
       }
     })";
 #endif
- 
-std::shared_ptr<BackgroundSegmentationFilter> BackgroundSegmentationFilter::create() {
-  auto ret = std::shared_ptr<BackgroundSegmentationFilter>(new BackgroundSegmentationFilter());
+
+std::shared_ptr<BackgroundSegmentationFilter>
+BackgroundSegmentationFilter::create() {
+  auto ret = std::shared_ptr<BackgroundSegmentationFilter>(
+      new BackgroundSegmentationFilter());
   if (ret && !ret->init()) {
     ret.reset();
   }
@@ -64,7 +67,8 @@ std::shared_ptr<BackgroundSegmentationFilter> BackgroundSegmentationFilter::crea
 }
 
 bool BackgroundSegmentationFilter::init() {
-  if (!initWithShaderString(kBackgroundSegmentationVertexShaderString, kBackgroundSegmentationFragmentShaderString)) {
+  if (!initWithShaderString(kBackgroundSegmentationVertexShaderString,
+                            kBackgroundSegmentationFragmentShaderString)) {
     return false;
   }
 
@@ -85,7 +89,8 @@ bool BackgroundSegmentationFilter::init() {
 //   }
 // }
 
-bool BackgroundSegmentationFilter::proceed(bool bUpdateTargets, int64_t frameTime) {
+bool BackgroundSegmentationFilter::proceed(bool bUpdateTargets,
+                                           int64_t frameTime) {
   _filterProgram->setUniformValue("brightness_para", _brightness);
   return Filter::proceed(bUpdateTargets, frameTime);
 }

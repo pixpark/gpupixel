@@ -10,6 +10,7 @@
 NS_GPUPIXEL_BEGIN
 
 const std::string kNearbySampling3x3SamplingVertexShaderString = R"(
+    precision mediump float;
     attribute vec4 position; attribute vec4 inputTextureCoordinate;
 
     uniform float texelWidth;

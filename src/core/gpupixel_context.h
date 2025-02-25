@@ -8,22 +8,21 @@
 #pragma once
 
 #include <mutex>
+#include "dispatch_queue.h"
 #include "framebuffer_cache.h"
 #include "gpupixel_macros.h"
-#include "dispatch_queue.h"
 
 #include "filter.h"
 #include "gl_program.h"
 
 #if defined(GPUPIXEL_ANDROID)
-  typedef struct _gpu_context_t {
-    EGLDisplay egldisplay;
-    EGLSurface eglsurface;
-    EGLContext eglcontext;
-  } _gpu_context_t;
+typedef struct _gpu_context_t {
+  EGLDisplay egldisplay;
+  EGLSurface eglsurface;
+  EGLContext eglcontext;
+} _gpu_context_t;
 #endif
- 
- 
+
 NS_GPUPIXEL_BEGIN
 class GPUPIXEL_API GPUPixelContext {
  public:
@@ -31,15 +30,16 @@ class GPUPIXEL_API GPUPixelContext {
   static void destroy();
 
   FramebufferCache* getFramebufferCache() const;
-  //todo(zhaoyou)
+  // todo(zhaoyou)
   void setActiveShaderProgram(GLProgram* shaderProgram);
   void purge();
 
   void runSync(std::function<void(void)> func);
   void runAsync(std::function<void(void)> func);
+
   void useAsCurrent(void);
   void presentBufferForDisplay();
- 
+
 #if defined(GPUPIXEL_IOS)
   EAGLContext* getEglContext() const { return _eglContext; };
 #elif defined(GPUPIXEL_MAC)
@@ -47,7 +47,6 @@ class GPUPIXEL_API GPUPixelContext {
 #elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
   GLFWwindow* GetGLContext() const { return gl_context_; };
 #endif
- 
 
   // used for capturing a processed frame data
   bool isCapturingFrame;
@@ -64,13 +63,14 @@ class GPUPIXEL_API GPUPixelContext {
 
   void createContext();
   void releaseContext();
+
  private:
   static GPUPixelContext* _instance;
   static std::mutex _mutex;
   FramebufferCache* _framebufferCache;
   GLProgram* _curShaderProgram;
   std::shared_ptr<LocalDispatchQueue> task_queue_;
-  
+
 #if defined(GPUPIXEL_ANDROID)
   bool context_inited = false;
   int m_surfacewidth;
@@ -84,7 +84,18 @@ class GPUPIXEL_API GPUPixelContext {
 #elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
   GLFWwindow* gl_context_ = nullptr;
 #endif
-
 };
+
+#ifdef __emscripten__
+class GPUPixelContextWrapper {
+ public:
+  GPUPixelContext* getInstance() { return GPUPixelContext::getInstance(); }
+
+  void runSync(emscripten::val callback) {
+    std::function<void(void)> func = [callback] { callback(); };
+    GPUPixelContext::getInstance()->runSync(func);
+  }
+};
+#endif
 
 NS_GPUPIXEL_END

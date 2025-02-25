@@ -13,6 +13,7 @@ REGISTER_FILTER_CLASS(BrightnessFilter)
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID) || defined(GPUPIXEL_MAC)
 const std::string kBrightnessFragmentShaderString = R"(
+    precision mediump float;
     uniform sampler2D inputImageTexture; uniform lowp float brightness_para;
     varying highp vec2 textureCoordinate;
 

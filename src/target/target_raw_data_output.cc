@@ -28,6 +28,7 @@ const std::string kRGBToI420FragmentShaderString = R"(
 
 #elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
 const std::string kRGBToI420FragmentShaderString = R"(
+    precision mediump float;
     varying vec2 textureCoordinate; uniform sampler2D sTexture;
 
     void main() { gl_FragColor = texture2D(sTexture, textureCoordinate); })";
@@ -320,11 +321,13 @@ void TargetRawDataOutput::readPixelsWithPBO(int width, int height) {
   // map the PBO to process its data by CPU
   CHECK_GL(glBindBuffer(GL_PIXEL_PACK_BUFFER, pboIds[nextIndex]));
 
-#if defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
+#if defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || (defined(GPUPIXEL_LINUX) && !defined(__emscripten__))
   GLubyte* ptr = (GLubyte*)glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY);
 #elif defined(GPUPIXEL_ANDROID)
   GLubyte* ptr = (GLubyte*)glMapBufferRange(
                   GL_PIXEL_PACK_BUFFER, 0, width * height * 4, GL_MAP_READ_BIT);
+#else
+  GLubyte* ptr = nullptr;
 #endif
   if (ptr) {
        libyuv::ABGRToI420(ptr, width * 4, _yuvFrameBuffer, _width,
@@ -343,5 +346,15 @@ void TargetRawDataOutput::readPixelsWithPBO(int width, int height) {
   }
   glBindBuffer(GL_PIXEL_PACK_BUFFER, GL_NONE);
 }
+
+#ifdef __emscripten__
+EMSCRIPTEN_BINDINGS(target_raw_data_output) {
+  emscripten::class_<TargetRawDataOutput, emscripten::base<Target>>("TargetRawDataOutput")
+  .constructor<>()
+  .smart_ptr<std::shared_ptr<TargetRawDataOutput>>("TargetRawDataOutput")
+  .class_function("create", &TargetRawDataOutput::create, emscripten::return_value_policy::take_ownership());
+
+}
+#endif
 
 #endif

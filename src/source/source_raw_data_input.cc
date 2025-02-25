@@ -45,8 +45,10 @@ const std::string kI420FragmentShaderString = R"(
         gl_FragColor = texture2D(inputImageTexture, textureCoordinate);
       }
     })";
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
+#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || \
+    defined(GPUPIXEL_LINUX) || defined(__emscripten__)
 const std::string kI420FragmentShaderString = R"(
+    precision mediump float;
     varying vec2 textureCoordinate; uniform sampler2D yTexture;
     uniform sampler2D uTexture;
     uniform sampler2D vTexture;
@@ -199,7 +201,7 @@ int SourceRawDataInput::genTextureWithI420(int width,
     glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, widths[i], heights[i], 0,
                  GL_LUMINANCE, GL_UNSIGNED_BYTE, pixels[i]);
   }
-  
+
   _filterProgram->setUniformValue("texture_type", 0);
   // draw frame buffer
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
@@ -237,10 +239,7 @@ int SourceRawDataInput::genTextureWithRGBA(const uint8_t* pixels,
   this->getFramebuffer()->active();
 
   GLfloat imageVertices[]{
-    -1.0f, -1.0f,
-    1.0f, -1.0f,
-    -1.0f, 1.0f,
-    1.0f, 1.0f,
+      -1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f,
   };
 
   _filterProgram->setUniformValue("texture_type", 1);
@@ -264,3 +263,13 @@ int SourceRawDataInput::genTextureWithRGBA(const uint8_t* pixels,
   Source::proceed(true, ts);
   return 0;
 }
+
+#ifdef __emscripten__
+EMSCRIPTEN_BINDINGS(source_raw_data_input) {
+  emscripten::class_<SourceRawDataInputWrapper>("SourceRawDataInput")
+      .constructor<>()
+      .function("addTarget", &SourceRawDataInputWrapper::addTarget)
+      .function("uploadRGBBytes", &SourceRawDataInputWrapper::uploadRGBBytes)
+      .function("uploadYUVBytes", &SourceRawDataInputWrapper::uploadYUVBytes);
+}
+#endif
