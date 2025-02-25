@@ -10,6 +10,7 @@
 USING_NS_GPUPIXEL
 
 const std::string kExposureFragmentShaderString = R"(
+    precision mediump float;
     uniform sampler2D inputImageTexture; uniform lowp float exposure;
     varying highp vec2 textureCoordinate;
 

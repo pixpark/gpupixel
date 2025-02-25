@@ -74,4 +74,11 @@ void Target::unPrepear() {
   }
 }
 
+#ifdef __emscripten__
+EMSCRIPTEN_BINDINGS(target){
+  emscripten::class_<Target>("Target")
+  .constructor<int>()
+  .smart_ptr<std::shared_ptr<Target>>("Target");
+}
+#endif
 NS_GPUPIXEL_END

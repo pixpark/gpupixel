@@ -56,6 +56,7 @@ const std::string kConvolution3x3FragmentShaderString = R"(
     })";
 #elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
 const std::string kConvolution3x3FragmentShaderString = R"(
+    precision mediump float;
     precision float; uniform sampler2D inputImageTexture;
     uniform mat3 convolutionMatrix;
 

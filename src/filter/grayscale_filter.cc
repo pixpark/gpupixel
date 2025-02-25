@@ -23,6 +23,7 @@ const std::string kGrayscaleFragmentShaderString = R"(
     })";
 #elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
 const std::string kGrayscaleFragmentShaderString = R"(
+    precision mediump float;
     uniform sampler2D inputImageTexture; varying vec2 textureCoordinate;
 
     const vec3 W = vec3(0.2125, 0.7154, 0.0721);

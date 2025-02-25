@@ -83,10 +83,17 @@
   #include <GLES/glext.h>
   #include <android/log.h>
   #include <jni.h>
-#elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
+#elif defined(GPUPIXEL_WIN) || (defined(GPUPIXEL_LINUX) && !defined(__emscripten__))
   #include <glad/glad.h>
   #define GLEW_STATIC
   #include <GLFW/glfw3.h>
+#elif defined(__emscripten__)
+  #define GLEW_STATIC
+  #include <GLFW/glfw3.h>
+  #include <GLES3/gl3.h>
+  #include <emscripten.h>
+  #include <emscripten/html5.h>
+  #include <emscripten/bind.h>
 #endif
 
 #define NS_GPUPIXEL_BEGIN namespace gpupixel {

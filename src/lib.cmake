@@ -46,7 +46,7 @@ INCLUDE_DIRECTORIES(
 	${CMAKE_CURRENT_SOURCE_DIR}/target/objc
 	${CMAKE_CURRENT_SOURCE_DIR}/third_party/glfw/include
 	${CMAKE_CURRENT_SOURCE_DIR}/third_party/stb
-	${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/include
+	# ${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/include
 	${CMAKE_CURRENT_SOURCE_DIR}/third_party/libyuv/include
 	${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/include
 )
@@ -91,7 +91,7 @@ IF(${CURRENT_OS} STREQUAL "windows")
 
 	# link libs find path
 	LINK_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/third_party/glfw/lib-mingw-w64)
-ELSEIF(${CURRENT_OS} STREQUAL "linux" OR ${CURRENT_OS} STREQUAL "wasm")	
+ELSEIF(${CURRENT_OS} STREQUAL "linux")	
 	# Source 
 	FILE(GLOB GLAD_SOURCE_FILE  "${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/src/*.c" )
 	list(APPEND SOURCE_FILES ${GLAD_SOURCE_FILE})
@@ -189,14 +189,15 @@ ELSEIF(${CURRENT_OS} STREQUAL "android")
 	${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/libs/${CURRENT_OS}/${ANDROID_ABI}/libvnn_face.so)
 ELSEIF(${CURRENT_OS} STREQUAL "wasm")
 	set_target_properties(${PROJECT_NAME} PROPERTIES 
-						SUFFIX ".wasm"
-    					LINK_FLAGS "-Os -s USE_WEBGL2=1 -s FULL_ES3=1 -s USE_GLFW=3  -s WASM=1")
+						SUFFIX ".js"
+    					# LINK_FLAGS "-Os -s USE_WEBGL2=1 -s FULL_ES3=1 -s USE_GLFW=3  -s WASM=1 --bind  -g --no-entry")
+    					LINK_FLAGS "-Os -s USE_WEBGL2=1 -s FULL_ES3=1 -s USE_GLFW=3 -s WASM=1 --bind -s MODULARIZE=1 -s EXPORT_NAME=GpuPixel -s GL_PREINITIALIZED_CONTEXT=1 -GL_DEBUG=1 -g --no-entry")
 ENDIF()
 
 
 # link libs
 # -------
-IF(${CURRENT_OS} STREQUAL "linux" OR ${CURRENT_OS} STREQUAL "wasm")
+IF(${CURRENT_OS} STREQUAL "linux")
 	TARGET_LINK_LIBRARIES(
 						${PROJECT_NAME}  
 						GL
