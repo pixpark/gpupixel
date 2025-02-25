@@ -31,8 +31,8 @@ class GPUPIXEL_API BeautyFaceFilter : public FilterGroup {
                                    RotationMode rotationMode /* = NoRotation*/,
                                    int texIdx /* = 0*/) override;
 
+ BeautyFaceFilter();
  protected:
-  BeautyFaceFilter();
 
   std::shared_ptr<BoxBlurFilter> boxBlurFilter;
   std::shared_ptr<BoxHighPassFilter> boxHighPassFilter;

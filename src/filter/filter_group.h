@@ -63,11 +63,11 @@ class GPUPIXEL_API FilterGroup : public Filter {
   virtual bool isPrepared() const override;
   virtual void unPrepear() override;
 
+  FilterGroup();
  protected:
   std::vector<std::shared_ptr<Filter>> _filters;
   std::shared_ptr<Filter> _terminalFilter;
 
-  FilterGroup();
   static std::shared_ptr<Filter> _predictTerminalFilter(
       std::shared_ptr<Filter> filter);
 };

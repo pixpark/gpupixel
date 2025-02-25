@@ -526,5 +526,12 @@ bool Filter::getPropertyType(const std::string& name, std::string& retType) {
   return true;
 }
 
+#ifdef __emscripten__
+EMSCRIPTEN_BINDINGS(filter) {
+  emscripten::class_<Filter, emscripten::base<Target>>("Filter")
+    .constructor<>()
+    .smart_ptr<std::shared_ptr<Filter>>("Filter");
+}
+#endif
 
 NS_GPUPIXEL_END

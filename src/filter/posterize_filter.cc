@@ -23,6 +23,7 @@ const std::string kPosterizeFragmentShaderString = R"(
     })";
 #elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
 const std::string kPosterizeFragmentShaderString = R"(
+    precision mediump float;
     uniform sampler2D inputImageTexture; uniform float colorLevels;
     varying vec2 textureCoordinate;
 

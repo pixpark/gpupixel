@@ -52,6 +52,7 @@ const std::string kWeakPixelInclusionFragmentShaderString = R"(
     })";
 #elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
 const std::string kWeakPixelInclusionFragmentShaderString = R"(
+    precision mediump float;
     uniform sampler2D inputImageTexture;
 
     varying vec2 textureCoordinate;

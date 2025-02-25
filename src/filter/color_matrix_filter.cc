@@ -25,6 +25,7 @@ const std::string kColorMatrixFragmentShaderString = R"(
     })";
 #elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
 const std::string kColorMatrixFragmentShaderString = R"(
+    precision mediump float;
     uniform sampler2D inputImageTexture; uniform mat4 colorMatrix;
     uniform float intensity;
 

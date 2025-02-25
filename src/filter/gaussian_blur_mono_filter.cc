@@ -351,6 +351,7 @@ std::string GaussianBlurMonoFilter::_generateOptimizedFragmentShaderString(
 #elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
   std::string shaderStr = Util::str_format(
       "\
+               precision mediump float;\n\
                uniform sampler2D inputImageTexture;\n\
                uniform float texelWidthOffset;\n\
                uniform float texelHeightOffset;\n\

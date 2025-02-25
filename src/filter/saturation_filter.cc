@@ -10,6 +10,7 @@
 USING_NS_GPUPIXEL
 
 const std::string kSaturationFragmentShaderString = R"(
+    precision mediump float;
     uniform sampler2D inputImageTexture; uniform lowp float saturation;
     varying highp vec2 textureCoordinate;
 

@@ -10,9 +10,9 @@
 #include "gl_program.h"
 #include "gpupixel_macros.h"
 #include "source.h"
+#include "string"
 #include "target.h"
 #include "util.h"
-#include "string"
 
 NS_GPUPIXEL_BEGIN
 const std::string kDefaultVertexShader = R"(
@@ -34,6 +34,7 @@ GPUPIXEL_API const std::string kDefaultFragmentShader = R"(
     })";
 #elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
 const std::string kDefaultFragmentShader = R"(
+    precision mediump float;
     varying vec2 textureCoordinate; uniform sampler2D inputImageTexture;
 
     void main() {
@@ -86,11 +87,11 @@ class GPUPIXEL_API Filter : public Source, public Target {
                         const std::string& comment = "",
                         std::function<void(float&)> setCallback = 0);
 
-bool registerProperty(
-        const std::string& name,
-        std::vector<float> defaultValue,
-        const std::string& comment /* = ""*/,
-        std::function<void(std::vector<float>)> setCallback /* = 0*/);
+  bool registerProperty(
+      const std::string& name,
+      std::vector<float> defaultValue,
+      const std::string& comment /* = ""*/,
+      std::function<void(std::vector<float>)> setCallback /* = 0*/);
 
   bool registerProperty(const std::string& name,
                         const std::string& defaultValue,
@@ -119,6 +120,7 @@ bool registerProperty(
 
   bool getPropertyType(const std::string& name, std::string& retType);
 
+  Filter();
  protected:
   GLProgram* _filterProgram;
   GLuint _filterPositionAttribute;
@@ -130,7 +132,6 @@ bool registerProperty(
     float a;
   } _backgroundColor;
 
-  Filter();
 
   std::string _getVertexShaderString(int inputNumber) const;
 
@@ -157,20 +158,20 @@ bool registerProperty(
   std::map<std::string, FloatProperty> _floatProperties;
 
   struct VectorProperty : Property {
-      std::vector<float> value;
-      std::function<void(std::vector<float>&)> setCallback;
+    std::vector<float> value;
+    std::function<void(std::vector<float>&)> setCallback;
   };
   std::map<std::string, VectorProperty> _vectorProperties;
 
-
-    struct StringProperty : Property {
+  struct StringProperty : Property {
     std::string value;
     std::function<void(std::string&)> setCallback;
   };
   std::map<std::string, StringProperty> _stringProperties;
 
  private:
-  static std::map<std::string, std::function<std::shared_ptr<Filter>()>> _filterFactories;
+  static std::map<std::string, std::function<std::shared_ptr<Filter>()>>
+      _filterFactories;
 };
 
 #define REGISTER_FILTER_CLASS(className)

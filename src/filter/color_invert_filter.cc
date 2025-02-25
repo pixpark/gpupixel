@@ -12,7 +12,7 @@ NS_GPUPIXEL_BEGIN
 REGISTER_FILTER_CLASS(ColorInvertFilter)
 
 const std::string kColorInvertFragmentShaderString = R"(
-
+    precision mediump float;
     uniform sampler2D inputImageTexture; varying highp vec2 textureCoordinate;
 
     void main() {

@@ -34,8 +34,8 @@ bool BoxMonoBlurFilter::init(int radius, float sigma) {
 }
 
 void BoxMonoBlurFilter::setRadius(int radius) {
-  float newBlurRadius =
-      std::round(std::round(radius / 2.0) * 2.0);  // For now, only do even radii
+  float newBlurRadius = std::round(std::round(radius / 2.0) *
+                                   2.0);  // For now, only do even radii
 
   if (newBlurRadius != _radius) {
     _radius = newBlurRadius;
@@ -130,6 +130,7 @@ std::string BoxMonoBlurFilter::_generateOptimizedFragmentShaderString(
       // Header
       Util::str_format(
           "\
+     precision mediump float;\n\
      uniform sampler2D inputImageTexture;\n\
      uniform float texelWidthOffset;\n\
      uniform float texelHeightOffset;\n\

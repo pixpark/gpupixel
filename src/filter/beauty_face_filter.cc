@@ -43,13 +43,13 @@ bool BeautyFaceFilter::init() {
   boxBlurFilter->setTexelSpacingMultiplier(4);
   setRadius(4);
 
-  registerProperty("whiteness", 0, "The whiteness of filter with range between -1 and 1.", [this](float& val) {
-      setWhite(val);
-  });
+  registerProperty("whiteness", 0,
+                   "The whiteness of filter with range between -1 and 1.",
+                   [this](float& val) { setWhite(val); });
 
-  registerProperty("skin_smoothing", 0, "The smoothing of filter with range between -1 and 1.", [this](float& val) {
-      setBlurAlpha(val);
-  });
+  registerProperty("skin_smoothing", 0,
+                   "The smoothing of filter with range between -1 and 1.",
+                   [this](float& val) { setBlurAlpha(val); });
   return true;
 }
 
@@ -82,4 +82,19 @@ void BeautyFaceFilter::setRadius(float radius) {
   boxBlurFilter->setRadius(radius);
   boxHighPassFilter->setRadius(radius);
 }
+
+#ifdef __emscripten__
+EMSCRIPTEN_BINDINGS(beauty_face_filter) {
+  emscripten::class_<BeautyFaceFilter, emscripten::base<FilterGroup>>("BeautyFaceFilter")
+    .constructor<>()
+    .smart_ptr<std::shared_ptr<BeautyFaceFilter>>("BeautyFaceFilter")
+    .function("setHighPassDelta", &BeautyFaceFilter::setHighPassDelta)
+    .function("setSharpen", &BeautyFaceFilter::setSharpen)
+    .function("setBlurAlpha", &BeautyFaceFilter::setBlurAlpha)
+    .function("setWhite", &BeautyFaceFilter::setWhite)
+    .function("setRadius", &BeautyFaceFilter::setRadius)
+    .class_function("create", &BeautyFaceFilter::create, emscripten::return_value_policy::take_ownership());
+}
+#endif
+
 NS_GPUPIXEL_END
