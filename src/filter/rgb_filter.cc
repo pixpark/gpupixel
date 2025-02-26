@@ -12,7 +12,6 @@ USING_NS_GPUPIXEL
 REGISTER_FILTER_CLASS(RGBFilter)
 
 const std::string kRGBFragmentShaderString = R"(
-    precision mediump float;
     uniform sampler2D inputImageTexture; uniform highp float redAdjustment;
     uniform highp float greenAdjustment;
     uniform highp float blueAdjustment;

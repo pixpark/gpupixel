@@ -77,8 +77,7 @@ NS_GPUPIXEL_BEGIN
 iOSHelper* iosHelper;
 #elif defined(GPUPIXEL_ANDROID)
 const std::string kRtcLogTag = "Context";
-#elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX) || \
-    defined(__emscripten__)
+#elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
 const unsigned int VIEW_WIDTH = 1280;
 const unsigned int VIEW_HEIGHT = 720;
 
@@ -140,9 +139,9 @@ void GPUPixelContext::setActiveShaderProgram(GLProgram* shaderProgram) {
 void GPUPixelContext::purge() {
   _framebufferCache->purge();
 }
-
+ 
 void GPUPixelContext::createContext() {
-#if defined(GPUPIXEL_IOS)
+#if defined(GPUPIXEL_IOS) 
   _eglContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
   [EAGLContext setCurrentContext:_eglContext];
   iosHelper = [[iOSHelper alloc] init];
@@ -248,8 +247,7 @@ void GPUPixelContext::createContext() {
   // m_surfaceheight);
   Util::Log("INFO", "Create Surface width:%d height:%d", m_surfacewidth,
             m_surfaceheight);
-#elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX) || \
-    defined(__emscripten__)
+#elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
   int ret = glfwInit();
 
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -263,8 +261,7 @@ void GPUPixelContext::createContext() {
     // todo log error
     return;
   }
-  gl_context_ = glfwCreateWindow(VIEW_WIDTH, VIEW_HEIGHT,
-                                 "gpupixel opengl context", NULL, NULL);
+  gl_context_ = glfwCreateWindow(VIEW_WIDTH, VIEW_HEIGHT, "gpupixel opengl context", NULL, NULL);
   if (!gl_context_) {
     // todo log error
     glfwTerminate();
@@ -272,28 +269,27 @@ void GPUPixelContext::createContext() {
   }
   glfwMakeContextCurrent(gl_context_);
 
-  // gladLoadGL();
+  gladLoadGL();
 #endif
 }
 
 void GPUPixelContext::useAsCurrent() {
-#if defined(GPUPIXEL_IOS)
-  if ([EAGLContext currentContext] != _eglContext) {
-    [EAGLContext setCurrentContext:_eglContext];
-  }
-#elif defined(GPUPIXEL_MAC)
-  if ([NSOpenGLContext currentContext] != imageProcessingContext) {
-    [imageProcessingContext makeCurrentContext];
-  }
+  #if defined(GPUPIXEL_IOS)
+    if ([EAGLContext currentContext] != _eglContext) {
+      [EAGLContext setCurrentContext:_eglContext];
+    }
+  #elif defined(GPUPIXEL_MAC)
+    if ([NSOpenGLContext currentContext] != imageProcessingContext) {
+      [imageProcessingContext makeCurrentContext];
+    }
 #elif defined(GPUPIXEL_ANDROID)
   if (!eglMakeCurrent(m_gpu_context->egldisplay, m_gpu_context->eglsurface,
                       m_gpu_context->eglsurface, m_gpu_context->eglcontext)) {
     // err_log("Set Current Context Error.");
     Util::Log("ERROR", "Set Current Context Error!");
   }
-#elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX) || \
-    defined(__emscripten__)
-  if (glfwGetCurrentContext() != gl_context_) {
+#elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
+   if (glfwGetCurrentContext() != gl_context_) {
     glfwMakeContextCurrent(gl_context_);
   }
 #endif
@@ -308,7 +304,7 @@ void GPUPixelContext::presentBufferForDisplay() {
 }
 
 void GPUPixelContext::releaseContext() {
-#if defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX) || defined(__emscripten__)
+#if defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
   if (gl_context_) {
     glfwDestroyWindow(gl_context_);
   }
@@ -340,28 +336,19 @@ void GPUPixelContext::releaseContext() {
   }
 #endif
 }
-
+ 
 void GPUPixelContext::runSync(std::function<void(void)> func) {
-  // todo fix android
+  // todo fix android 
 #if defined(GPUPIXEL_ANDROID)
   func();
 #else
   task_queue_->add([=]() {
-    useAsCurrent();
-    func();
+      useAsCurrent();
+      func();
   });
   task_queue_->processOne();
 #endif
-}
 
-#ifdef __emscripten__
-EMSCRIPTEN_BINDINGS(gpupixelcontext_wrapper) {
-  emscripten::class_<GPUPixelContextWrapper>("GPUPixelContext")
-      .constructor<>()
-      .function("getInstance", &GPUPixelContextWrapper::getInstance,
-                emscripten::allow_raw_pointers())
-      .function("runSync", &GPUPixelContextWrapper::runSync);
 }
-#endif
 
 NS_GPUPIXEL_END

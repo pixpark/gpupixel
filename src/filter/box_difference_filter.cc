@@ -39,7 +39,6 @@ const std::string kBoxDifferenceFragmentShaderString = R"(
     })";
 #elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
 const std::string kBoxDifferenceFragmentShaderString = R"(
-    precision mediump float;
     varying vec2 textureCoordinate; varying vec2 textureCoordinate2;
     uniform sampler2D inputImageTexture;
     uniform sampler2D inputImageTexture2;

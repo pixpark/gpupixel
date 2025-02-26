@@ -56,7 +56,6 @@ class GPUPIXEL_API Source {
       int width = 0,
       int height = 0);
   int RegLandmarkCallback(FaceDetectorCallback callback);
-
  protected:
   std::shared_ptr<Framebuffer> _framebuffer;
   RotationMode _outputRotation;
