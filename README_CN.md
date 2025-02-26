@@ -57,7 +57,7 @@
 | ![bigeye](./docs/image/bigeye.gif) | ![lipstick](./docs/image/lipstick.gif) | ![blusher](./docs/image/blusher.gif) |   ![on-off](./docs/image/on-off.gif)   |
 
 ## 架构流程
-![](./docs/image/arch-en.svg)
+![](./docs/image/arch.jpg)
 
 ## 特性对比
 
@@ -139,10 +139,10 @@
 感谢以下朋友对本项目的赞助和支持
 
 <a href="https://github.com/leavenotrace">
-  <img src="https://github.com/leavenotrace.png" style="border-radius: 50%; width: 40px; height: 40px;" >
+  <img src="https://github.com/leavenotrace.png" style="border-radius:50%; width: 50px; height: 50px;" >
 </a>
 <a href="https://github.com/weiyu666">
-  <img src="https://github.com/weiyu666.png" style="border-radius: 50%; width: 40px; height: 40px;" >
+  <img src="https://github.com/weiyu666.png" style="border-radius: 50%; width: 50px; height: 50px;" >
 </a>
 
 ## 联系 & 支持

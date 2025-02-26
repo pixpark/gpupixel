@@ -59,7 +59,7 @@
 | <img src="./docs/image/bigeye.gif" width="180px"> | <img src="./docs/image/lipstick.gif" width="180px"> | <img src="./docs/image/blusher.gif" width="180px"> |  <img src="./docs/image/on-off.gif" width="180px">  |
 
 ## Architecture
-![](./docs/image/arch-en.svg)
+![](./docs/image/arch.jpg)
 
 ## Features
 
@@ -138,7 +138,7 @@ At the same time, please consider supporting GPUPixel by sharing it on social me
 ## Sponsorship
 If you like this project, you can consider supporting me through the following methods:
 
-| [<img src="./docs/image/support_me_on_kofi_red.png" alt="Ko-fi" style="max-width: 200px;" />](https://ko-fi.com/jaaron) | [<img src="./docs/image/open-collective-vector-logo.png" alt="open collective" style="max-width: 200px;" />](https://opencollective.com/gpupixel) | [<img src="./docs/image/wechat-logo.png" alt="wechat" style="max-width: 200px;" />](https://gpupixel.pixpark.net/sponsor#wechat) |
+| [<img src="./docs/image/support_me_on_kofi_red.png" alt="Ko-fi" style="width: 150px;" />](https://ko-fi.com/jaaron) | [<img src="./docs/image/open-collective-vector-logo.png" alt="open collective" style="width: 150px;" />](https://opencollective.com/gpupixel) | [<img src="./docs/image/wechat-logo.png" alt="wechat" style="width: 150px;" />](https://gpupixel.pixpark.net/sponsor#wechat) |
 |:---:|:---:|:---:|
 
 ## Donors
@@ -146,10 +146,10 @@ If you like this project, you can consider supporting me through the following m
 Thank you to the following friends for their contributions and support to the project.
 
 <a href="https://github.com/leavenotrace">
-  <img src="https://github.com/leavenotrace.png" style="border-radius: 50%; width: 40px; height: 40px;" >
+  <img src="https://github.com/leavenotrace.png" style="border-radius:50%; width: 50px; height: 50px;" >
 </a>
 <a href="https://github.com/weiyu666">
-  <img src="https://github.com/weiyu666.png" style="border-radius: 50%; width: 40px; height: 40px;" >
+  <img src="https://github.com/weiyu666.png" style="border-radius: 50%; width: 50px; height: 50px;" >
 </a>
 
 ## Contact & Support
