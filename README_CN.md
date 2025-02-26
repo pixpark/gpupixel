@@ -132,16 +132,18 @@
 ## 赞助
 如果你喜欢这个项目，可以考虑通过以下方式支持我：
 
-<p align="center">
-  <a href="https://ko-fi.com/jaaron" target="_blank"><img alt="Ko-fi" src="./docs/image/support_me_on_kofi_red.png" width="30%" style="border-bottom: 1px dashed gray; padding-bottom: 15px;"/></a> 
-</p>
-<p align="center">
-  <a href="https://opencollective.com/gpupixel" target="_blank"><img alt="open collective" src="./docs/image/open-collective-vector-logo.png" width="30%" style="border-bottom: 1px dashed gray; padding-bottom: 15px;"/></a> 
-</p>
+| [<img src="./docs/image/support_me_on_kofi_red.png" alt="Ko-fi" style="max-width: 200px;" />](https://ko-fi.com/jaaron) | [<img src="./docs/image/open-collective-vector-logo.png" alt="open collective" style="max-width: 200px;" />](https://opencollective.com/gpupixel) | [<img src="./docs/image/wechat-logo.png" alt="wechat" style="max-width: 200px;" />](https://gpupixel.pixpark.net/sponsor#wechat) |
+|:---:|:---:|:---:|
 
-<p align="center">
-  <a href="https://gpupixel.pixpark.net/sponsor#wechat" target="_blank"><img alt="wechat" src="./docs/image/wechat-logo.png" width="30%"/></a>
-</p>
+## 赞助者
+感谢以下朋友对本项目的赞助和支持
+
+<a href="https://github.com/leavenotrace">
+  <img src="https://github.com/leavenotrace.png" style="border-radius: 50%; width: 40px; height: 40px;" >
+</a>
+<a href="https://github.com/weiyu666">
+  <img src="https://github.com/weiyu666.png" style="border-radius: 50%; width: 40px; height: 40px;" >
+</a>
 
 ## 联系 & 支持
 - [文档](https://gpupixel.pixpark.net/)：在线文档。
