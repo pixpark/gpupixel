@@ -77,8 +77,8 @@ FILE(GLOB RESOURCE_FILES
 )
 if(${CURRENT_OS} STREQUAL "ios" OR ${CURRENT_OS} STREQUAL "android") 	
 	list(APPEND RESOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/models/vnn_face278_data/face_mobile[1.0.0].vnnmodel")
-# else()
-# 	list(APPEND RESOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/models/vnn_face278_data/face_pc[1.0.0].vnnmodel")
+else()
+	list(APPEND RESOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/models/vnn_face278_data/face_pc[1.0.0].vnnmodel")
 endif()
 
 
@@ -123,24 +123,24 @@ ENDIF()
 ADD_LIBRARY(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${RESOURCE_FILES})
 
 # set platform project 
-IF(${CURRENT_OS} STREQUAL "linux" OR ${CURRENT_OS} STREQUAL "wasm")
-	# # 设置要构建的目标库的名称和类型
-	# add_library(vnn_kit SHARED IMPORTED)
-	# # 设置目标库的实际路径
-	# set_target_properties(vnn_kit PROPERTIES IMPORTED_LOCATION
-	# ${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/libs/${CURRENT_OS}/libvnn_kit.so)
+IF(${CURRENT_OS} STREQUAL "linux")
+	# 设置要构建的目标库的名称和类型
+	add_library(vnn_kit SHARED IMPORTED)
+	# 设置目标库的实际路径
+	set_target_properties(vnn_kit PROPERTIES IMPORTED_LOCATION
+	${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/libs/${CURRENT_OS}/libvnn_kit.so)
 
-	# add_library(vnn_face SHARED IMPORTED)
-	# # 设置目标库的实际路径
-	# set_target_properties(vnn_face PROPERTIES IMPORTED_LOCATION
-	# ${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/libs/${CURRENT_OS}/libvnn_face.so)
+	add_library(vnn_face SHARED IMPORTED)
+	# 设置目标库的实际路径
+	set_target_properties(vnn_face PROPERTIES IMPORTED_LOCATION
+	${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/libs/${CURRENT_OS}/libvnn_face.so)
 
-	# add_library(vnn_core SHARED IMPORTED)
-	# # 设置目标库的实际路径
-	# set_target_properties(vnn_core PROPERTIES IMPORTED_LOCATION
-	# ${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/libs/${CURRENT_OS}/libvnn_core.so)
-	#
-	# set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-Wl,-rpath,./")
+	add_library(vnn_core SHARED IMPORTED)
+	# 设置目标库的实际路径
+	set_target_properties(vnn_core PROPERTIES IMPORTED_LOCATION
+	${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/libs/${CURRENT_OS}/libvnn_core.so)
+
+	set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-Wl,-rpath,./")
 ELSEIF(${CURRENT_OS} STREQUAL "windows")
 	# 设置要构建的目标库的名称和类型
 	add_library(vnn_kit SHARED IMPORTED)
@@ -197,14 +197,14 @@ ENDIF()
 
 # link libs
 # -------
-IF(${CURRENT_OS} STREQUAL "linux" OR ${CURRENT_OS} STREQUAL "wasm")
+IF(${CURRENT_OS} STREQUAL "linux")
 	TARGET_LINK_LIBRARIES(
 						${PROJECT_NAME}  
 						GL
-						glfw)
-						# vnn_core
-						# vnn_kit
-						# vnn_face)
+						glfw
+						vnn_core
+						vnn_kit
+						vnn_face)
 ELSEIF(${CURRENT_OS} STREQUAL "windows")
 	TARGET_LINK_LIBRARIES(
 						${PROJECT_NAME} 
@@ -264,12 +264,12 @@ MACRO(EXPORT_INCLUDE)
 				COMMENT "Copying headers and resource to output directory.")
 				
 	# copy gpupixel and vnn lib
-	# SET(VNN_LIBS ${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/libs/${CURRENT_OS})
-	# ADD_CUSTOM_COMMAND(TARGET ${PROJECT_NAME} POST_BUILD
-	# 			COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/vnn
-	# 			COMMAND ${CMAKE_COMMAND} -E copy_directory
-	# 			${VNN_LIBS} ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/vnn
-	# 			)
+	SET(VNN_LIBS ${CMAKE_CURRENT_SOURCE_DIR}/third_party/vnn/libs/${CURRENT_OS})
+	ADD_CUSTOM_COMMAND(TARGET ${PROJECT_NAME} POST_BUILD
+				COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/vnn
+				COMMAND ${CMAKE_COMMAND} -E copy_directory
+				${VNN_LIBS} ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/vnn
+				)
 ENDMACRO()
 
 EXPORT_INCLUDE()
