@@ -48,10 +48,8 @@ GLProgram* GLProgram::createByShaderString(
     const std::string& vertexShaderSource,
     const std::string& fragmentShaderSource) {
   GLProgram* ret = new (std::nothrow) GLProgram();
-  gpupixel::Util::Log("DEBUG", "create GLProgram %d", ret);
   if (ret) {
     if (!ret->_initWithShaderString(vertexShaderSource, fragmentShaderSource)) {
-      gpupixel::Util::Log("DEBUG", "failed to create GLProgram %d", ret);
       delete ret;
       ret = 0;
     }
@@ -66,7 +64,6 @@ bool GLProgram::_initWithShaderString(const std::string& vertexShaderSource,
     _program = -1;
   }
   CHECK_GL(_program = glCreateProgram());
-  gpupixel::Util::Log("DEBUG", "after create and get program id %d", _program);
 
   CHECK_GL(GLuint vertShader = glCreateShader(GL_VERTEX_SHADER));
   const char* vertexShaderSourceStr = vertexShaderSource.c_str();
@@ -88,7 +85,7 @@ bool GLProgram::_initWithShaderString(const std::string& vertexShaderSource,
     gpupixel::Util::Log(
         "ERROR", "GL ERROR GLProgram::_initWithShaderString vertex shader %s",
         messages);
-    return false;
+    return -1;
   }
 
   CHECK_GL(GLuint fragShader = glCreateShader(GL_FRAGMENT_SHADER));
@@ -109,7 +106,7 @@ bool GLProgram::_initWithShaderString(const std::string& vertexShaderSource,
     gpupixel::Util::Log(
         "ERROR", "GL ERROR GLProgram::_initWithShaderString frag shader %s",
         messages);
-    return false;
+    return -1;
   }
 
   CHECK_GL(glAttachShader(_program, vertShader));
@@ -128,10 +125,6 @@ void GLProgram::use() {
 }
 
 GLuint GLProgram::getAttribLocation(const std::string& attribute) {
-  if (_program < 0) {
-      gpupixel::Util::Log("DEBUG", "didn't get program id");
-  }
-  gpupixel::Util::Log("DEBUG", "get program id %d", _program);
   return glGetAttribLocation(_program, attribute.c_str());
 }
 
