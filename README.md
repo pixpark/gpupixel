@@ -138,16 +138,19 @@ At the same time, please consider supporting GPUPixel by sharing it on social me
 ## Sponsorship
 If you like this project, you can consider supporting me through the following methods:
 
-<p align="center">
-  <a href="https://ko-fi.com/jaaron" target="_blank"><img alt="Ko-fi" src="./docs/image/support_me_on_kofi_red.png" width="30%" style="border-bottom: 1px dashed gray; padding-bottom: 15px;"/></a> 
-</p>
-<p align="center">
-  <a href="https://opencollective.com/gpupixel" target="_blank"><img alt="open collective" src="./docs/image/open-collective-vector-logo.png" width="30%" style="border-bottom: 1px dashed gray; padding-bottom: 15px;"/></a> 
-</p>
+| [<img src="./docs/image/support_me_on_kofi_red.png" alt="Ko-fi" style="max-width: 200px;" />](https://ko-fi.com/jaaron) | [<img src="./docs/image/open-collective-vector-logo.png" alt="open collective" style="max-width: 200px;" />](https://opencollective.com/gpupixel) | [<img src="./docs/image/wechat-logo.png" alt="wechat" style="max-width: 200px;" />](https://gpupixel.pixpark.net/sponsor#wechat) |
+|:---:|:---:|:---:|
 
-<p align="center">
-  <a href="https://gpupixel.pixpark.net/sponsor#wechat" target="_blank"><img alt="wechat" src="./docs/image/wechat-logo.png" width="30%"/></a>
-</p>
+## Donors
+
+Thank you to the following friends for their contributions and support to the project.
+
+<a href="https://github.com/leavenotrace">
+  <img src="https://github.com/leavenotrace.png" style="border-radius: 50%; width: 40px; height: 40px;" >
+</a>
+<a href="https://github.com/weiyu666">
+  <img src="https://github.com/weiyu666.png" style="border-radius: 50%; width: 40px; height: 40px;" >
+</a>
 
 ## Contact & Support
 - [Doc](https://gpupixel.pixpark.net/) : Online documentation.
@@ -164,3 +167,4 @@ If you like this project, you can consider supporting me through the following m
 
 ## License
 This repository is available under the [MIT License](https://github.com/pixpark/gpupixel?tab=MIT-1-ov-file#readme).
+
