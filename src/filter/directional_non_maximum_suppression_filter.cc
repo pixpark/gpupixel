@@ -54,7 +54,6 @@ const std::string kDirectionalNonmaximumSuppressionFragmentShaderString =
 #elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
 const std::string kDirectionalNonmaximumSuppressionFragmentShaderString =
     R"(
-        precision mediump float;
         uniform sampler2D inputImageTexture; uniform float texelWidth;
         uniform float texelHeight;
         uniform float upperThreshold;

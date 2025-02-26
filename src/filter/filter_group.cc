@@ -202,12 +202,4 @@ void FilterGroup::unPrepear() {
   //}
 }
 
-#ifdef __emscripten__
-EMSCRIPTEN_BINDINGS(filter_group) {
-  emscripten::class_<FilterGroup, emscripten::base<Filter>>("FilterGroup")
-    .constructor<>()
-    .smart_ptr<std::shared_ptr<FilterGroup>>("FilterGroup");
-}
-#endif
-
 NS_GPUPIXEL_END

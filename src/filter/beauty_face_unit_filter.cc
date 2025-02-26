@@ -160,7 +160,6 @@ const std::string kGPUImageBaseBeautyFaceFragmentShaderString = R"(
     })";
 #elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
 const std::string kGPUImageBaseBeautyFaceFragmentShaderString = R"(
-    precision mediump float;
     float; varying vec2 textureCoordinate; varying vec4 textureShift_1;
     varying vec4 textureShift_2;
     varying vec4 textureShift_3;
@@ -305,8 +304,7 @@ bool BeautyFaceUnitFilter::init() {
   }
 
   grayImage_ = SourceImage::create(Util::getResourcePath("lookup_gray.png"));
-  originImage_ =
-      SourceImage::create(Util::getResourcePath("lookup_origin.png"));
+  originImage_ = SourceImage::create(Util::getResourcePath("lookup_origin.png"));
   skinImage_ = SourceImage::create(Util::getResourcePath("lookup_skin.png"));
   customImage_ = SourceImage::create(Util::getResourcePath("lookup_light.png"));
   return true;

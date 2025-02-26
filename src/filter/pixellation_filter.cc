@@ -12,7 +12,6 @@ USING_NS_GPUPIXEL
 REGISTER_FILTER_CLASS(PixellationFilter)
 
 const std::string kPixellationFragmentShaderString = R"(
-    precision mediump float;
     uniform highp float pixelSize; uniform highp float aspectRatio;
 
     uniform sampler2D inputImageTexture;
