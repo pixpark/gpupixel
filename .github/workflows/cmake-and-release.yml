@@ -15,26 +15,23 @@ jobs:
       BUILD_TYPE: Release
     steps:
       - uses: actions/checkout@v4
-      - name: Install dependencies
-        run: |
-          sudo apt update
-          sudo apt-get install mesa-utils libglu1-mesa-dev freeglut3-dev mesa-common-dev libglfw3-dev
 
-      - name: Configure
-        run: cmake -B ${{github.workspace}}/build -S ${{github.workspace}}/src -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+      - name: Build Docker image
+        run: docker build -t gpupixel .
+ 
+      - name: Build 
+        run: pwd && docker run --rm -v $(pwd)/output:/workspace/output -v $(pwd)/build:/workspace/build gpupixel
 
-      - name: Build
-        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
       - name: Create zip
-        working-directory: ${{github.workspace}}/output
-        run: zip -r gpupixel_linux_x86_64.zip .
+        working-directory: output
+        run: sudo zip -r gpupixel_linux_x86_64.zip .
 
       - name: Upload Linux Artifact
         uses: actions/upload-artifact@v4
         with:
           name: gpupixel_linux_x86_64
-          path: ${{github.workspace}}/output/gpupixel_linux_x86_64.zip
+          path: $(pwd)/output/gpupixel_linux_x86_64.zip
 
   build-macos-clang:
     name: macOS (Universal)
@@ -90,23 +87,26 @@ jobs:
           path: ${{github.workspace}}/output/gpupixel_ios_arm64.zip
  
 
-  build-windows-mingw:
-    name: Windows (MSYS2)
+  build-windows-cl:
+    name: Windows (MSCV CL.EXE)
     runs-on: windows-latest
     timeout-minutes: 15
     env:
       BUILD_TYPE: Release
     steps:
       - uses: actions/checkout@v4
+      
+      # Step 2: 配置 MSVC 环境为 x64
+      - name: Build something requiring CL.EXE
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
 
-      - name: Set up MinGW
-        uses: msys2/setup-msys2@v2
-
-      - name: Configure
-        run: cmake -G "MinGW Makefiles" -B ${{github.workspace}}/build -S ${{github.workspace}}/src -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
-
-      - name: Build Win shared x64 library
-        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+      # Step 3: 创建构建目录并运行 CMake（指定 x64 平台）
+      - name: Configure CMake for x64
+        run: |
+          cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release .
+          nmake
 
       - name: Create zip
         run: Compress-Archive -Path ${{github.workspace}}/output/* -Destination gpupixel_windows_x86_64.zip
