@@ -152,9 +152,7 @@ public class GPUPixel {
 
     static {
         System.loadLibrary("gpupixel");
-        System.loadLibrary("vnn_core");
-        System.loadLibrary("vnn_kit");
-        System.loadLibrary("vnn_face");
+        System.loadLibrary("mars-face-kit");
     }
 
     public static void copyResource(Context context) {

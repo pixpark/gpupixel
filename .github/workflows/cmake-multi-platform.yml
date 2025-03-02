@@ -16,15 +16,13 @@ jobs:
           BUILD_TYPE: Release
         steps:
             - uses: actions/checkout@v4
-            - name: Install dependencies
-              run: |
-                  sudo apt update
-                  sudo apt-get install mesa-utils libglu1-mesa-dev freeglut3-dev mesa-common-dev libglfw3-dev
-
-            - name: Configure 
-              run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+           
+            # 构建 Docker 镜像
+            - name: Build Docker image
+              run: docker build -t gpupixel .
+ 
             - name: Build 
-              run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+              run: docker run --rm -v $(pwd)/output:/workspace/output -v $(pwd)/build:/workspace/build gpupixel
 
     build-macos-clang:
         name: macOS (Universal)
@@ -57,21 +55,25 @@ jobs:
               run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
               
     build-windows-mingw:
-        name: Windows (MSYS2)
+        name: Windows (MSCV CL.EXE)
         runs-on: windows-latest
         timeout-minutes: 15
         env:
             BUILD_TYPE: Release
         steps:
             - uses: actions/checkout@v4
-            
-            - name: Set up MinGW
-              uses: msys2/setup-msys2@v2
 
-            - name: Configure
-              run: cmake -G "MinGW Makefiles" -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
-            - name: Build Win shared x64 library
-              run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+           # Step 2: 配置 MSVC 环境为 x64
+            - name: Build something requiring CL.EXE
+              uses: ilammy/msvc-dev-cmd@v1
+              with:
+                arch: x64
+
+            # Step 3: 创建构建目录并运行 CMake（指定 x64 平台）
+            - name: Configure CMake for x64
+              run: |
+                cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release .
+                nmake
 
     build-android-gradle:
         name: Android (Arm64-v8a)
@@ -81,6 +83,7 @@ jobs:
             BUILD_TYPE: Release
         steps:
             - uses: actions/checkout@v4
+         
             - name: set up JDK 11
               uses: actions/setup-java@v3
               with:

@@ -303,10 +303,10 @@ bool BeautyFaceUnitFilter::init() {
     return false;
   }
 
-  grayImage_ = SourceImage::create(Util::getResourcePath("lookup_gray.png"));
-  originImage_ = SourceImage::create(Util::getResourcePath("lookup_origin.png"));
-  skinImage_ = SourceImage::create(Util::getResourcePath("lookup_skin.png"));
-  customImage_ = SourceImage::create(Util::getResourcePath("lookup_light.png"));
+  grayImage_ = SourceImage::create(Util::getResourcePath("res/lookup_gray.png"));
+  originImage_ = SourceImage::create(Util::getResourcePath("res/lookup_origin.png"));
+  skinImage_ = SourceImage::create(Util::getResourcePath("res/lookup_skin.png"));
+  customImage_ = SourceImage::create(Util::getResourcePath("res/lookup_light.png"));
   return true;
 }
 

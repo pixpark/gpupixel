@@ -24,7 +24,7 @@ class GPUPIXEL_API Util {
   static void Log(const std::string& tag, std::string format, ...);
   static int64_t nowTimeMs();
 
-  static std::string getResourcePath(std::string name);
+  static std::string getResourcePath(std::string name = "");
   static void setResourceRoot(std::string root);
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
   static std::string getResourcePath(std::string bundle_name,
