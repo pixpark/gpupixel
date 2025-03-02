@@ -54,7 +54,7 @@ jobs:
             - name: Build
               run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
               
-    build-windows-mingw:
+    build-windows-cl:
         name: Windows (MSCV CL.EXE)
         runs-on: windows-latest
         timeout-minutes: 15
