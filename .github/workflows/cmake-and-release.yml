@@ -159,7 +159,7 @@ jobs:
         build-linux-clang,
         build-macos-clang,
         build-ios-clang,
-        build-windows-mingw,
+        build-windows-cl,
         build-android-gradle,
       ]
     runs-on: ubuntu-latest
