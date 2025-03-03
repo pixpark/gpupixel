@@ -3,6 +3,7 @@ title: 示例程序
 editLink: true
 description: 本章将介绍各个系统平台Demo编译和运行方法
 ---
+<Badge type="tip" text="版本: 1.3.0-beta" />
 
 # 示例程序
 
@@ -10,7 +11,6 @@ description: 本章将介绍各个系统平台Demo编译和运行方法
 ```bash
 examples
 ├── CMakeLists.txt
-├── android     # 安卓 demo
 ├── app.cmake   
 ├── desktop     # 桌面 demo, 包括 Windows 和 Linux
 ├── ios         # iOS demo
@@ -42,11 +42,6 @@ examples
 
 ![](../../image/ios-demo-project.png)
 
-**报错**
-
-若编译报错，检查工程库链接是否设置正确，gpupixel以及 vnn等framework 是否存在
-
-![](../../image/ios-project-link.png)
 
 ## Mac
 确保MacOS库已编译好([参考](build#mac)), xcode打开 `gpupixel/examples/mac/GPUPixelMacApp.xcodeproj`
@@ -63,12 +58,6 @@ examples
 按正常 Mac App编译运行方法运行即可
 
 ![](../../image/mac-demo-project.png)
-
-**报错**
-
-若编译报错，检查工程库链接是否设置正确，gpupixel以及 vnn等framework 是否存在
-
-![](../../image/mac-demo-link.png)
 
 ## Android
 
@@ -87,7 +76,7 @@ examples
 ::: code-group
 ```bash [Windows]
 # Generate project
-cmake -G "MinGW Makefiles" -B examples/build -S examples -DCMAKE_BUILD_TYPE=Release
+cmake -G "NMake Makefiles" -B examples/build -S examples -DCMAKE_BUILD_TYPE=Release
 ```
 ```bash [Linux]
 # Generate project
@@ -96,18 +85,11 @@ cmake -B examples/build -S examples -DCMAKE_BUILD_TYPE=Release
 :::
 
 **编译**
-::: code-group
 
-```bash [Release]
+```bash
 # Build
 cmake --build examples/build --config Release
 ```
-
-```bash [Debug]
-# Build
-cmake --build examples/build --config Debug
-```
-:::
  
 **按键**
 

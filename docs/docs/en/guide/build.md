@@ -4,6 +4,7 @@ title: Build
 editLink: true
 description: This article will introduce the compilation methods for the GPUPixel library on various system platforms.
 ---
+<Badge type="tip" text="Version: 1.3.0-beta" />
 
 # Build
 
@@ -42,6 +43,7 @@ The compilation output is located in the `output` path under the root directory 
 output
 ├── include   # Header files
 ├── library   # Library files
+├── models    # Models files
 └── resources # Resource files
 ```
 For iOS, you only need to use the `.framework` library under `library`, which already contains header files and resource files.
@@ -78,6 +80,7 @@ The compilation output is located in the `output` path under the root directory 
 output
 ├── include   # Header files
 ├── library   # Library files
+├── models    # Models files
 └── resources # Resource files
 ```
 For macOS, you only need to use the `.framework` library under `library`, which already contains header files and resource files.
@@ -87,23 +90,7 @@ For macOS, you only need to use the `.framework` library under `library`, which 
 Open the directory `src/android/java` with Android Studio, which will automatically start downloading dependencies such as Gradle.
 
 **Project Structure**
-
-Includes demo and gpupixel module, as follows:
-
-![](../../image/android-project.png)
-
-**Compile**
-
-Double-click `gradle -> gpupixel -> build -> assemble` to start compiling.
-
-![](../../image/android-build.png)
-
-**Output**
-
-Switch to the project view, the output is located at: `src/android/java/gpupixel/build/outputs/aar`
-
-![](../../image/android-output.png)
-
+ 
 **Gradle Command Compile**
 
 If the Gradle command environment has been configured, you can also use `gradlew` to compile.
@@ -116,29 +103,20 @@ The output is located at: `src/android/java/gpupixel/build/outputs/aar`
 
 ## Windows
 
-Compiling on Windows requires the installation of CMake and MinGW64.
+To compile on Windows, you need to install Cmake and Visual Studio 2017 or later, primarily using VS's NMake for compilation. Open the `x64 Native Tools Command Prompt for VS 2022` command window and compile with the following commands:
+
+> Only supports generating x86_64 versions, does not support x86_32.
 
 **Generate Project**
 
-```bash [Release]
-cmake -G "MinGW Makefiles" -B build -S src -DCMAKE_BUILD_TYPE=Release
+```bash
+cmake -G "NMake Makefiles" -B build -S src -DCMAKE_BUILD_TYPE=Release
 ```
-
-```bash [Debug]
-cmake -G "MinGW Makefiles" -B build -S src -DCMAKE_BUILD_TYPE=Debug
-```
-:::
 
 **Compile**
-::: code-group
-```bash [Release]
+```bash
 cmake --build build --config Release
 ```
-
-```bash [Debug]
-cmake --build build --config Debug
-```
-:::
 
 **Output**
 
@@ -147,10 +125,13 @@ The compilation output is located in the `output` path under the root directory 
 output
 ├── include   # Header files
 ├── library   # Library files
+├── models    # Models files
 └── resources # Resource files
 ```
 
-## Linux (Tested on Ubuntu)
+## Linux (Debian 10)
+
+Due to the dependency on the mars-face and mnn static libraries, and issues with the GLIBC version, it is necessary to compile on a Linux system using Debian 10 or GLIBC version 2.28.
 
 **Environment Configuration**
 
@@ -189,6 +170,7 @@ The compilation output is located in the `output` path under the root directory 
 output
 ├── include   # Header files
 ├── library   # Library files
+├── models    # Models files
 └── resources # Resource files
 ```
 

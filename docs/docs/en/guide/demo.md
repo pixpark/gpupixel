@@ -3,6 +3,7 @@ title: Examples
 editLink: true
 description: 本章将介绍各个系统平台Demo编译和运行方法
 ---
+<Badge type="tip" text="Version: 1.3.0-beta" />
 
 # Examples App
 
@@ -87,7 +88,7 @@ It includes the demo and the gpupixel module. The invocation logic is in `MainAc
 ::: code-group
 ```bash [Windows]
 # Generate project
-cmake -G "MinGW Makefiles" -B examples/build -S examples -DCMAKE_BUILD_TYPE=Release
+cmake -G "NMake Makefiles" -B examples/build -S examples -DCMAKE_BUILD_TYPE=Release
 ```
 ```bash [Linux]
 # Generate project
@@ -96,18 +97,10 @@ cmake -G "Unix Makefiles" -B examples/build -S examples -DCMAKE_BUILD_TYPE=Relea
 :::
 
 **Compiling**
-::: code-group
-
-```bash [Release]
+```bash
 # Build
 cmake --build examples/build --config Release
 ```
-
-```bash [Debug]
-# Build
-cmake --build examples/build --config Debug
-```
-:::
 
 **Keyboard Shortcuts**
 

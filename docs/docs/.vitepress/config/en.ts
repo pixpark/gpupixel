@@ -12,6 +12,7 @@ export const en = defineConfig({
 
     sidebar: {
       '/guide/': { base: '/guide/', items: sidebarGuide() },
+      '/1.2.5/en/guide/': { base: '/1.2.5/en/guide/', items: sidebarGuide() },
       '/reference/': { base: '/reference/', items: sidebarReference() }
     },
 
@@ -40,15 +41,15 @@ function nav(): DefaultTheme.NavItem[] {
       activeMatch: '/reference/'
     },
     {
-      text: '1.2.5',
+      text: '1.3.0-beta',
       items: [
         {
-          text: 'Changelog',
-          link: 'https://github.com/pixpark/gpupixel/blob/main/CHANGELOG.md'
+          text: '1.3.0-beta',
+          link: '/guide/intro'
         },
         {
-          text: 'Contributing',
-          link: 'https://github.com/pixpark/gpupixel/issues/new/choose'
+          text: '1.2.5',
+          link: '/1.2.5/en/guide/intro'
         }
       ]
     },
@@ -67,8 +68,11 @@ function nav(): DefaultTheme.NavItem[] {
           items: [
             {
               text: 'Blog',
-              link: 'https://pixpark.net'
-              
+              link: 'https://pixpark.net' 
+            },
+            {
+              text: 'Contributing',
+              link: 'https://github.com/pixpark/gpupixel/issues/new/choose'
             }
           ],
         }
