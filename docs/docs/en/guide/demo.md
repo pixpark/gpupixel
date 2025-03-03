@@ -3,7 +3,7 @@ title: Examples
 editLink: true
 description: 本章将介绍各个系统平台Demo编译和运行方法
 ---
-<Badge type="tip" text="Version: 1.3.0-beta" />
+
 
 # Examples App
 
@@ -42,14 +42,6 @@ Ensure that the iOS library has been compiled (see [instructions](build#ios)). O
 
 To run, simply connect an iPhone or use the simulator following the standard iOS App compilation and running procedure.
 
-![](../../image/ios-demo-project.png)
-
-**Errors**
-
-If you encounter compilation errors, check if the project's library links are correctly set up, and whether the gpupixel and vnn frameworks exist.
-
-![](../../image/ios-project-link.png)
-
 ## MacOS
 Ensure that the MacOS library has been compiled (see [instructions](build#mac)), then open `gpupixel/examples/mac/GPUPixelMacApp.xcodeproj` with Xcode.
 
@@ -64,14 +56,6 @@ Ensure that the MacOS library has been compiled (see [instructions](build#mac)),
 
 Run the app following the standard Mac App compilation and running procedure.
 
-![](../../image/mac-demo-project.png)
-
-**Errors**
-
-If you encounter compilation errors, check if the project's library links are correctly set up, and whether the gpupixel and vnn frameworks exist.
-
-![](../../image/mac-demo-link.png)
-
 ## Android
 
 Open the directory `src/android/java` with Android Studio, which will automatically download dependencies such as Gradle.
@@ -79,9 +63,7 @@ Open the directory `src/android/java` with Android Studio, which will automatica
 **Project Structure**
 
 It includes the demo and the gpupixel module. The invocation logic is in `MainActivity`. Choose the app target and connect your phone to run it.
-
-![](../../image/android-demo.png)
-
+ 
 ## Desktop
 
 **Generating the Project**
@@ -109,7 +91,3 @@ After running the demo, use the keyboard to adjust beauty effects, specifically:
 `A` `S` `D` `F` `G` `H` - Increase the level of `smoothing`, `whitening`, `slimming`, `enlarging eyes`, `lipstick`, `blush`
 
 `Z` `X` `C` `V` `B` `N` - Decrease the level of `smoothing`, `whitening`, `slimming`, `enlarging eyes`, `lipstick`, `blush`
-
-## Web
-
-## Python

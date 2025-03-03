@@ -25,8 +25,6 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "iOS")
     set(CURRENT_OS "ios")
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Android")
     set(CURRENT_OS "android")
-elseif(${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
-    message(FATAL_ERROR "NOT SUPPORT WSAM YET.")
 else()
     message(FATAL_ERROR "NOT SUPPORT THIS SYSTEM")
 endif()
@@ -183,9 +181,6 @@ elseif(${CURRENT_OS} STREQUAL "android")
     # Set actual path of target library
     set_target_properties(mars-face-kit PROPERTIES IMPORTED_LOCATION
     ${CMAKE_CURRENT_SOURCE_DIR}/third_party/mars-face-kit/libs/${CURRENT_OS}/${ANDROID_ABI}/libmars-face-kit.so)
-    
-elseif(${CURRENT_OS} STREQUAL "wasm")
-    
 endif()
  
 # link libs

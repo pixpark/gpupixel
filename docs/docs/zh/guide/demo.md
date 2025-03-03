@@ -38,11 +38,6 @@ examples
 └── sample_face.png                 # 演示图片
 ```
 
-按正常 iOS App编译运行方法连接iPhone或模拟器运行即可
-
-![](../../image/ios-demo-project.png)
-
-
 ## Mac
 确保MacOS库已编译好([参考](build#mac)), xcode打开 `gpupixel/examples/mac/GPUPixelMacApp.xcodeproj`
 
@@ -55,10 +50,6 @@ examples
 ├── ViewController.mm       # 相机采集和 GPUPixel 滤镜调用主逻辑
 ```
 
-按正常 Mac App编译运行方法运行即可
-
-![](../../image/mac-demo-project.png)
-
 ## Android
 
 使用Android Studio打开目录 `src/android/java`, 开始自动下载 gradle 等依赖
@@ -66,8 +57,6 @@ examples
 **工程结构**
 
 包含demo和 gpupixel module, 调用逻辑在 `MainActivity` 中选择 app target 连上手机运行即可
-
-![](../../image/android-demo.png)
 
 ## Desktop
 
@@ -98,14 +87,3 @@ Demo运行起来后，按键盘调节美颜程度，具体如下：
 `A` `S` `D` `F` `G` `H` - 增加`磨皮`, `美白`, `瘦脸`, `大眼`, `口红`, `腮红`等级
 
 `Z` `X` `C` `V` `B` `N` - 减少`磨皮`, `美白`, `瘦脸`, `大眼`, `口红`, `腮红`等级 
-
-
-## Web
-```bash
-// not support yet
-```
-
-## Python
-``` bash
-// not support yet
-```

@@ -126,9 +126,8 @@ output
 └── res       #资源文件
 ```
 
-## Linux (Debian 10)
+## Linux (Debian or Ubuntu)
 
-由于依赖了mars-face和mnn静态库，GLIBC版本的问题，必须使用Debian 10或者 GLIBC 2.28版本的linux系统编译
 **环境配置**
 
 ```bash
@@ -174,7 +173,3 @@ output
 ├── models    #模型文件
 └── res       #资源文件
 ```
-
-## Github Workflows
-自动化编译可以参考
-[GPUPixel Github Build Workflows](https://github.com/pixpark/gpupixel/blob/main/.github/workflows/release.yml)，脚本化了上面讲到的各个平台的编译命令

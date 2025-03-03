@@ -4,7 +4,7 @@ title: Build
 editLink: true
 description: This article will introduce the compilation methods for the GPUPixel library on various system platforms.
 ---
-<Badge type="tip" text="Version: 1.3.0-beta" />
+
 
 # Build
 
@@ -20,7 +20,7 @@ Execute the following commands at the root directory of the project.
 **Generate Project**
 ::: code-group
 ```bash [Arm64]
-cmake -G Xcode -B build -S src -DCMAKE_TOOLCHAIN_FILE=../toolchain/ios.toolchain.cmake -DPLATFORM=OS64 -DCMAKE_BUILD_TYPE=Release
+cmake -G Xcode -B build -S src -DCMAKE_TOOLCHAIN_FILE=../toolchain/ios.toolchain.cmake -DPLATFORM=OS64
 ```
 :::
 
@@ -44,7 +44,7 @@ output
 ├── include   # Header files
 ├── library   # Library files
 ├── models    # Models files
-└── resources # Resource files
+└── res # Resource files
 ```
 For iOS, you only need to use the `.framework` library under `library`, which already contains header files and resource files.
 
@@ -54,10 +54,10 @@ Execute the following commands at the root directory of the project.
 **Generate Project**
 ::: code-group
 ```bash [Apple Silicon]
-cmake -G Xcode -B build -S src -DCMAKE_TOOLCHAIN_FILE=../toolchain/ios.toolchain.cmake -DPLATFORM=MAC_ARM64 -DCMAKE_BUILD_TYPE=Release
+cmake -G Xcode -B build -S src -DCMAKE_TOOLCHAIN_FILE=../toolchain/ios.toolchain.cmake -DPLATFORM=MAC_ARM64 
 ```
 ```bash [Intel]
-cmake -G Xcode -B build -S src -DCMAKE_TOOLCHAIN_FILE=../toolchain/ios.toolchain.cmake -DPLATFORM=MAC
+cmake -G Xcode -B build -S src -DCMAKE_TOOLCHAIN_FILE=../toolchain/ios.toolchain.cmake -DPLATFORM=MAC -DCMAKE_BUILD_TYPE=Release
 ```
 :::
 
@@ -81,7 +81,7 @@ output
 ├── include   # Header files
 ├── library   # Library files
 ├── models    # Models files
-└── resources # Resource files
+└── res # Resource files
 ```
 For macOS, you only need to use the `.framework` library under `library`, which already contains header files and resource files.
 
@@ -115,7 +115,8 @@ cmake -G "NMake Makefiles" -B build -S src -DCMAKE_BUILD_TYPE=Release
 
 **Compile**
 ```bash
-cmake --build build --config Release
+cd build 
+nmake
 ```
 
 **Output**
@@ -126,12 +127,10 @@ output
 ├── include   # Header files
 ├── library   # Library files
 ├── models    # Models files
-└── resources # Resource files
+└── res # Resource files
 ```
 
-## Linux (Debian 10)
-
-Due to the dependency on the mars-face and mnn static libraries, and issues with the GLIBC version, it is necessary to compile on a Linux system using Debian 10 or GLIBC version 2.28.
+## Linux (Debian or Ubuntu)
 
 **Environment Configuration**
 
@@ -171,10 +170,5 @@ output
 ├── include   # Header files
 ├── library   # Library files
 ├── models    # Models files
-└── resources # Resource files
+└── res # Resource files
 ```
-
-## GitHub Workflows
-
-Automated compilation can refer to
-[GPUPixel GitHub Build Workflows](https://github.com/pixpark/gpupixel/blob/main/.github/workflows/cmake-and-release.yml), which scripts the compilation commands mentioned above for various platforms.

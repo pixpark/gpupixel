@@ -24,10 +24,10 @@
 </p>
 
 <p align="center">
-<a href="https://discord.gg/q2MjmqK4" target="_blank"><img alt="GPUPixel Discord" src="https://img.shields.io/badge/-Discord-blue?logo=discord&logoColor=white&labelColor=grey&color=blue"/></a>
-<a href="https://gpupixel.pixpark.net/about/contact#wechat-official-account" target="_blank"><img alt="GPUPixel Wechat" src="https://img.shields.io/badge/-WeChat-gray?logo=wechat&logoColor=white&labelColor=gray&color=07C160&style=flat"/></a>
-<a href="https://gpupixel.pixpark.net/about/contact#qq-group" target="_blank"><img alt="QQ Group" src="https://img.shields.io/badge/-QQ Group-gray?logo=qq&logoColor=white&labelColor=gray&color=blue&style=flat"/></a>
-<a href="https://gpupixel.pixpark.net/about/contact#paid-support" target="_blank"><img alt="GPUPixel 付费支持" src="https://img.shields.io/badge/-知识星球-gray?logo=sharp&logoColor=white&labelColor=grey&color=07C160&style=flat"/></a>
+<a href="https://discord.gg/q2MjmqK4" target="_blank"><img alt="GPUPixel Discord" src="https://img.shields.io/badge/Chat-Discord-blue?logo=discord&logoColor=white&labelColor=grey&color=blue"/></a>
+<a href="https://gpupixel.pixpark.net/about/contact#qq-group" target="_blank"><img alt="QQ Group" src="https://img.shields.io/badge/-QQ群-gray?logo=qq&logoColor=white&labelColor=gray&color=blue&style=flat"/></a>
+<a href="https://gpupixel.pixpark.net/about/contact#wechat-official-account" target="_blank"><img alt="GPUPixel Wechat" src="https://img.shields.io/badge/-公众号-gray?logo=wechat&logoColor=white&labelColor=gray&color=07C160&style=flat"/></a>
+<a href="https://gpupixel.pixpark.net/about/contact#paid-support" target="_blank"><img alt="GPUPixel 付费支持" src="https://img.shields.io/badge/-付费支持-gray?logo=payhip&logoColor=white&labelColor=grey&color=07C160&style=flat"/></a>
 <a href="https://github.com/pixpark/gpupixel#Sponsorship" target="_blank"><img alt="Sponsor" src="https://img.shields.io/badge/-Sponsor-gray?logo=githubsponsors&logoColor=white&labelColor=grey&color=FE6AB2&style=flat"/></a>
 </p>
 
@@ -37,21 +37,21 @@
 
 ---
 
-> Welcome to join us to make GPUPixel better by participating [discussions](https://github.com/pixpark/gpupixel/discussions), opening [issues](https://github.com/pixpark/gpupixel/issues/new/choose), submitting [PRs](https://github.com/pixpark/gpupixel/pulls) 👏.
+> 🌟 Join us in making GPUPixel better through [discussions](https://github.com/pixpark/gpupixel/discussions), [issues](https://github.com/pixpark/gpupixel/issues/new/choose), and [PRs](https://github.com/pixpark/gpupixel/pulls).
 
-> Replace the VNN face detection library with Mars-Face from v1.3.0-beta
+> 📢 Note: VNN face detection library has been replaced with Mars-Face from v1.3.0-beta
 
 ## Introduction
 
-🍔  GPUPixel is a real-time, high-performance image and video filter library, extremely easy to compile and integrate with  small library size.
+🚀 GPUPixel is a real-time, high-performance image and video filter library that's extremely easy to compile and integrate with a small footprint.
 
-🍤 GPUPixel  is written in C++11 and is based on OpenGL/ES, incorporating a built-in beauty face filter that achieves commercial-grade beauty effects.
+💻 GPUPixel is written in C++11 and built on OpenGL/ES, featuring built-in beauty face filters that deliver commercial-grade results.
 
-🍖 GPUPixel supports platforms including `iOS`, `Android`, `Mac`, `Win` and `Linux`. It can theoretically be ported to any platform that supports OpenGL/ES.
+🌐 GPUPixel supports multiple platforms including `iOS`, `Android`, `Mac`, `Win` and `Linux`, and can be ported to virtually any platform that supports OpenGL/ES.
 
 ## Effects Preview
 
-👉 **Video: <a href="https://youtu.be/9BY1Qx1NEPs" target="_blank">YouTube</a>**
+🎬 **Video: <a href="https://youtu.be/9BY1Qx1NEPs" target="_blank">YouTube</a>**
 
 
 |                   **Origin**                    |                    **Smooth**                     |                    **White**                     |                   **ThinFace**                    |
@@ -65,7 +65,7 @@
 
 ## Features
 
-This table compares the features supported by **GPUPixel** and **GPUImage** and **Android-GPUImage**:
+✨ This table compares the features supported by **GPUPixel**, **GPUImage**, and **Android-GPUImage**:
 
 ✅: Supported | ❌: Not supported | ✏️: Planning
 
@@ -96,8 +96,8 @@ This table compares the features supported by **GPUPixel** and **GPUImage** and 
 | Linux                 |                        ✅                        |                         ❌                          |                              ❌                               |
 
 
-##  Performance
-### iPhone
+## Performance
+⚡ ### iPhone
 |       -        | iPhone 6P | iPhone 8 | iPhone X | iPhone 11 | iPhone 14 pro |
 | :------------: | :-------: | :------: | :------: | :-------: | :-----------: |
 |    **CPU**     |    5%     |    5%    |    3%    |    3%     |      3%       |
@@ -111,13 +111,13 @@ This table compares the features supported by **GPUPixel** and **GPUImage** and 
 
 ## Lib Size
 
-|       | iOS(.framework) | MacOS(.framework) | Android(.aar) |
+📦 |       | iOS(.framework) | MacOS(.framework) | Android(.aar) |
 | :---: | :-------------: | :---------------: | :-----------: |
 | Size  |     2.4 MB      |      2.6 MB       |    2.1 MB     |
 
 
 ## Before You Start
-⭐️ Star us on GitHub, and be instantly notified for new releases!
+⭐ Star us on GitHub to receive instant notifications about new releases!
 
 ![](./docs/image/give-star.gif)
 
@@ -125,27 +125,26 @@ This table compares the features supported by **GPUPixel** and **GPUImage** and 
 
 ## Getting Started
 
-See the doc: [Introduction](https://gpupixel.pixpark.net/guide/build) | [Build](https://gpupixel.pixpark.net/guide/build) | [Examples](https://gpupixel.pixpark.net/guide/demo) | [Integrated](https://gpupixel.pixpark.net/guide/integrated)
+🔍 See the docs: [Introduction](https://gpupixel.pixpark.net/guide/build) | [Build](https://gpupixel.pixpark.net/guide/build) | [Examples](https://gpupixel.pixpark.net/guide/demo) | [Integration](https://gpupixel.pixpark.net/guide/integrated)
 
 ## Contributing
 
-Welcome to join us to make GPUPixel better by participating [discussions](https://github.com/pixpark/gpupixel/discussions), opening [issues](https://github.com/pixpark/gpupixel/issues/new/choose), submitting [PRs](https://github.com/pixpark/gpupixel/pulls).
+🤝 Help make GPUPixel better by joining our [discussions](https://github.com/pixpark/gpupixel/discussions), opening [issues](https://github.com/pixpark/gpupixel/issues/new/choose), or submitting [PRs](https://github.com/pixpark/gpupixel/pulls).
 
-At the same time, please consider supporting GPUPixel by sharing it on social media and at events and conferences.
+Please also consider supporting GPUPixel by sharing it on social media and at events and conferences.
 
 ## Contributors
-
-[![](https://opencollective.com/gpupixel/contributors.svg?width=890&button=false)](https://github.com/pixpark/gpupixel/graphs/contributors)
+ [![](https://opencollective.com/gpupixel/contributors.svg?width=890&button=false)](https://github.com/pixpark/gpupixel/graphs/contributors)
 
 ## Sponsorship
-If you like this project, you can consider supporting me through the following methods:
+💖 If you like this project, consider supporting us through the following methods:
 
 | [<img src="./docs/image/support_me_on_kofi_red.png" alt="Ko-fi" style="width: 150px;" />](https://ko-fi.com/jaaron) | [<img src="./docs/image/open-collective-vector-logo.png" alt="open collective" style="width: 150px;" />](https://opencollective.com/gpupixel) | [<img src="./docs/image/wechat-logo.png" alt="wechat" style="width: 150px;" />](https://gpupixel.pixpark.net/sponsor#wechat) |
 |:---:|:---:|:---:|
 
 ## Donors
 
-Thank you to the following friends for their contributions and support to the project.
+🙏 Thank you to the following contributors for their generous support of the project:
 
 <a href="https://github.com/leavenotrace">
   <img src="https://github.com/leavenotrace.png" style="border-radius:50%; width: 50px; height: 50px;" >
@@ -155,18 +154,18 @@ Thank you to the following friends for their contributions and support to the pr
 </a>
 
 ## Contact & Support
-- [Doc](https://gpupixel.pixpark.net/) : Online documentation.
-- [Issues](https://github.com/pixpark/gpupixel/issues/new/choose) : 👉 Github Issues.
-- [Mail](mailto:jaaronkot@gmail.com?subject=[GitHub]Questions%20About%20GPUPixel) : 👉 Send email to us.
-- [Contact](https://gpupixel.pixpark.net/zh/about/contact) : 👉 Contact us.
+- 📚 [Docs](https://gpupixel.pixpark.net/) : Online documentation
+- 🐛 [Issues](https://github.com/pixpark/gpupixel/issues/new/choose) : Report bugs or request features
+- 📧 [Email](mailto:jaaronkot@gmail.com?subject=[GitHub]Questions%20About%20GPUPixel) : Send us a message
+- 📞 [Contact](https://gpupixel.pixpark.net/zh/about/contact) : Get in touch with us
 
-## Acknowledgement
-### Reference Project
+## Acknowledgements
+🔗 ### Reference Projects
 1. [GPUImage](https://github.com/BradLarson/GPUImage) 
 2. [CainCamera](https://github.com/CainKernel/CainCamera)
 3. [AwemeLike](https://github.com/ZZZZou/AwemeLike)
 4. [VNN](https://github.com/joyycom/VNN)
 
 ## License
-This repository is available under the [MIT License](https://github.com/pixpark/gpupixel?tab=MIT-1-ov-file#readme).
+📄 This repository is available under the [MIT License](https://github.com/pixpark/gpupixel?tab=MIT-1-ov-file#readme).
 

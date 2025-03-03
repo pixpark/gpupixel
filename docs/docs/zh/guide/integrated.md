@@ -50,10 +50,6 @@ GPUPixel对外所有的头文件都包含在 `gpupixel.h`中，只要引入
 #import <gpupixel/gpupixel.h>
 ``` 
 
-即可调用所有方法，详细库方法调用参考[这里](#)
-
-![](../../image/oc-to-oc++.png)
-
 ### Swift 调用
 Swift 5.9 之后可以直接与C++交互，也是通过桥接头文件的方式，省去了OC在中间转一道，可以参考[这篇文章](https://cloud.tencent.com/developer/article/2312347) 或 Swift 官方文档[Mixing Swift and C++](https://www.swift.org/documentation/cxx-interop/#calling-c-functions)
 
