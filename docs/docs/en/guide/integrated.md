@@ -4,7 +4,7 @@ editLink: true
 outline: deep
 description: This article will introduce the integration and invocation methods of the GPUPixel library across various system platforms.
 ---
-<Badge type="tip" text="Version: 1.3.0-beta" />
+
 
 # Integration
 
@@ -50,10 +50,6 @@ All GPUPixel headers are included in `gpupixel.h`. Simply import
 ```objective-c
 #import <gpupixel/gpupixel.h>
 ```
-
-to access all methods. For detailed method invocations, refer to [here](#).
-
-![](../../image/oc-to-oc++.png)
 
 ### Swift Invocation
 

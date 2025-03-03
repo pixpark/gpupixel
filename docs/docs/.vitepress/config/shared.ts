@@ -11,7 +11,7 @@ export const shared = defineConfig({
   lastUpdated: true,
   cleanUrls: true,
   metaChunk: true,
-
+ 
   markdown: {
     math: true,
     codeTransformers: [
@@ -49,8 +49,8 @@ export const shared = defineConfig({
     logo: { src: '/gpupixel-logo-mini.svg', width: 24, height: 24 },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/pixpark/gpupixel' },
-      { icon: 'discord', link: 'https://discord.gg/q2MjmqK4' }
+      { icon: 'discord', link: 'https://discord.gg/q2MjmqK4'},
+      { icon: 'github', link: 'https://github.com/pixpark/gpupixel' }
     ],
 
     search: {

@@ -11,13 +11,11 @@ export const zh = defineConfig({
     nav: nav(),
 
     sidebar: {
-      '/zh/guide/': { base: '/zh/guide/', items: sidebarGuide() },
-      '/1.2.5/zh/guide/': { base: '/1.2.5/zh/guide/', items: sidebarGuide() },
-      '/zh/reference/': { base: '/zh/reference/', items: sidebarReference() }
+      '/zh/': { base: '/zh/', items: sidebarGuide() },
     },
 
     editLink: {
-      pattern: 'https://github.com/pixpark/gpupixel/edit/main/docs/docs/:path',
+      pattern: 'https://github.com/pixpark/gpupixel/edit/doc/docs/docs/:path',
       text: '在 GitHub 上编辑此页面'
     },
 
@@ -69,12 +67,8 @@ function nav(): DefaultTheme.NavItem[] {
       items: [
         {
           text: '1.3.0-beta',
-          link: '/zh/guide/intro'
+          link: 'https://github.com/pixpark/gpupixel/releases/tag/v1.3.0-beta'
         },
-        {
-          text: '1.2.5',
-          link: '/1.2.5/zh/guide/intro'
-        }
       ]
     },
     {
@@ -115,53 +109,47 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
       text: '快速开始',
       collapsed: false,
       items: [
-        { text: '简介', link: 'intro' },
-        { text: '编译', link: 'build' },
-        { text: '示例', link: 'demo' },
-        { text: '集成', link: 'integrated' },
+        { text: '简介', link: 'guide/intro' },
+        { text: '编译', link: 'guide/build' },
+        { text: '示例', link: 'guide/demo' },
+        { text: '集成', link: 'guide/integrated' },
       ]
     },
     {
       text: '接口调用',
       collapsed: false,
       items: [
-        { text: '基础滤镜', link: '#' },
-        { text: '美妆特效', link: '#' },
-        { text: '输入输出', link: '#' },
+        { text: '基础滤镜', link: 'call/basic_filters' },
+        { text: '美妆特效', link: 'call/beauty_effects' },
+        { text: '输入输出', link: 'call/input_output' },
       ]
     },
     {
       text: '自定义',
       collapsed: false,
       items: [
-        { text: '自定义滤镜', link: '#' },
-        { text: '自定义输入', link: '#' },
-        { text: '自定义输出', link: '#' },
+        { text: '自定义滤镜', link: 'custom/custom_filter' },
+        { text: '自定义输入', link: 'custom/custom_input' },
+        { text: '自定义输出', link: 'custom/custom_target' },
       ]
     },
     {
-      text: '其他',
+      text: '人脸检测',
       collapsed: false,
       items: [
-        { text: '架构分析', link: '#' },
-        { text: '代码调试', link: '#' },
+        { text: '关键点检测', link: 'face/landmark' },
       ]
     },
-    { text: '配置和 API 参考', base: '/zh/reference/', link: 'filter-list' }
-  ]
-}
-
-function sidebarReference(): DefaultTheme.SidebarItem[] {
-  return [
     {
       text: '参考',
+      collapsed: false,
       items: [
-        { text: '滤镜列表', link: 'filter-list' },
+        { text: '滤镜列表', link: 'reference/filter-list' },
       ]
     }
   ]
 }
-
+ 
 export const search = {
     zh: { // make this `root` if you want to translate the default locale
       translations: {

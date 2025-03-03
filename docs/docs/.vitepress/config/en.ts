@@ -11,13 +11,11 @@ export const en = defineConfig({
     nav: nav(),
 
     sidebar: {
-      '/guide/': { base: '/guide/', items: sidebarGuide() },
-      '/1.2.5/en/guide/': { base: '/1.2.5/en/guide/', items: sidebarGuide() },
-      '/reference/': { base: '/reference/', items: sidebarReference() }
+      '/': { base: '/', items: sidebarGuide() },
     },
 
     editLink: {
-      pattern: 'https://github.com/pixpark/gpupixel/edit/main/docs/docs/:path',
+      pattern: 'https://github.com/pixpark/gpupixel/edit/doc/docs/docs/:path',
       text: 'Edit this page on GitHub'
     },
 
@@ -36,20 +34,11 @@ function nav(): DefaultTheme.NavItem[] {
       activeMatch: '/guide/'
     },
     {
-      text: 'Reference',
-      link: '/reference/site-config',
-      activeMatch: '/reference/'
-    },
-    {
       text: '1.3.0-beta',
       items: [
         {
           text: '1.3.0-beta',
-          link: '/guide/intro'
-        },
-        {
-          text: '1.2.5',
-          link: '/1.2.5/en/guide/intro'
+          link: 'https://github.com/pixpark/gpupixel/releases/tag/v1.3.0-beta'
         }
       ]
     },
@@ -91,48 +80,42 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
       text: 'Quick Start',
       collapsed: false,
       items: [
-        { text: 'Introduction', link: 'intro' },
-        { text: 'Build', link: 'build' },
-        { text: 'Examples', link: 'demo' },
-        { text: 'Integration', link: 'integrated' },
+        { text: 'Introduction', link: 'guide/intro' },
+        { text: 'Build', link: 'guide/build' },
+        { text: 'Examples', link: 'guide/demo' },
+        { text: 'Integration', link: 'guide/integrated' },
       ]
     },
     {
       text: 'API Calls',
       collapsed: false,
       items: [
-        { text: 'Basic Filters', link: '#' },
-        { text: 'Beauty Effects', link: '#' },
-        { text: 'Input and Output', link: '#' },
+        { text: 'Basic Filters', link: 'call/basic_filters' },
+        { text: 'Beauty Effects', link: 'call/beauty_effects' },
+        { text: 'Input and Output', link: 'call/input_output' },
       ]
     },
     {
-      text: 'Customization',
+      text: 'Custom',
       collapsed: false,
       items: [
-        { text: 'Custom Filters', link: '#' },
-        { text: 'Custom Input', link: '#' },
-        { text: 'Custom Output', link: '#' },
+        { text: 'Custom Filters', link: 'custom/custom_filter' },
+        { text: 'Custom Input', link: 'custom/custom_input' },
+        { text: 'Custom Output', link: 'custom/custom_target' },
       ]
-    },
+    },   
     {
-      text: 'Other',
+      text: 'Face Detect',
       collapsed: false,
       items: [
-        { text: 'Architecture Analysis', link: '#' },
-        { text: 'Code Debugging', link: '#' },
+        { text: 'Landmark', link: 'face/landmark' },
       ]
     },
-    { text: 'Configuration and API Reference', base: 'reference/', link: 'filter-list' }
-  ]
-}
-
-function sidebarReference(): DefaultTheme.SidebarItem[] {
-  return [
     {
       text: 'Reference',
+      collapsed: false,
       items: [
-        { text: 'Filter List', link: 'filter-list' },
+        { text: 'Filter List', link: 'reference/filter-list' },
       ]
     }
   ]
