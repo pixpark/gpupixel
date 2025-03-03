@@ -12,12 +12,12 @@ export const zh = defineConfig({
 
     sidebar: {
       '/zh/guide/': { base: '/zh/guide/', items: sidebarGuide() },
-      '/1.2.5/zh/guide/': { base: '/1.2.5/zh/guide/', items: sidebarGuide() },
+      '/1.2.5/zh/guide/': { base: '/1.2.5/guide/', items: sidebarGuide() },
       '/zh/reference/': { base: '/zh/reference/', items: sidebarReference() }
     },
 
     editLink: {
-      pattern: 'https://github.com/pixpark/gpupixel/edit/main/docs/docs/:path',
+      pattern: 'https://github.com/pixpark/gpupixel/edit/doc/docs/docs/:path',
       text: '在 GitHub 上编辑此页面'
     },
 
