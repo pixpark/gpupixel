@@ -56,30 +56,30 @@ INCLUDE_DIRECTORIES(
 	${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/stb
 	${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/glad/include
 )
- 
+
 # Add common source file
-FILE(GLOB SOURCE_FILES 
-	"${CMAKE_CURRENT_SOURCE_DIR}/desktop/*" 
+FILE(GLOB SOURCE_FILES
+	"${CMAKE_CURRENT_SOURCE_DIR}/desktop/*"
 	)
- 
+
 
 # Add platform source and header and lib link search path
 IF(${CURRENT_OS} STREQUAL "windows") 														# windows
 	set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL$<$<CONFIG:Debug>:Debug>")
 	# link libs find path
-	LINK_DIRECTORIES( 
+	LINK_DIRECTORIES(
 		${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/glfw/lib-mingw-w64)
 
 	# Source
 	FILE(GLOB GLAD_SOURCE_FILE "${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/glad/src/*.c")
 	list(APPEND SOURCE_FILES ${GLAD_SOURCE_FILE})
-ELSEIF(${CURRENT_OS} STREQUAL "linux")	
-	# # Source 
+ELSEIF(${CURRENT_OS} STREQUAL "linux")
+	# # Source
 	# FILE(GLOB GLAD_SOURCE_FILE  "${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/src/*.c" )
 	# list(APPEND SOURCE_FILES ${GLAD_SOURCE_FILE})
 ENDIF()
 
-FIlE(GLOB MODULE_FILES 
+FIlE(GLOB MODULE_FILES
 ${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/mars-face-kit/models/*
 )
 # build type: executable
@@ -89,43 +89,44 @@ ADD_EXECUTABLE(${PROJECT_NAME} ${SOURCE_FILES})
 # link libs
 # -------
 IF(${CURRENT_OS} STREQUAL "linux")
-	TARGET_LINK_LIBRARIES(${PROJECT_NAME} 
+	TARGET_LINK_LIBRARIES(${PROJECT_NAME}
 						gpupixel
 						GL
 						glfw)
-	SET(GPUPIXEL_LIBS ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libgpupixel.so)	
+	SET(GPUPIXEL_LIBS ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libgpupixel.so)
 	set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-Wl,-rpath,./")
 ELSEIF(${CURRENT_OS} STREQUAL "windows")
 
-	SET(GPUPIXEL_LIBS ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/gpupixel.dll
-	${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/mars-face-kit.dll)	
+	SET(GPUPIXEL_LIBS 	${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/gpupixel.dll
+						${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/mars-face-kit.dll)
+
 	TARGET_LINK_LIBRARIES(${PROJECT_NAME}
 						${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/gpupixel.lib
 						opengl32
 						${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/glfw/libs/msvc-x64/glfw3.lib)
- 
+
 	set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-Wl,-rpath,./")
 ENDIF()
- 
+
 # copy resource file
 # --------
 # Add resource file
-FILE(GLOB RESOURCE_FILES 
-	"${CMAKE_CURRENT_SOURCE_DIR}/../src/resources/*"        
+FILE(GLOB RESOURCE_FILES
+	"${CMAKE_CURRENT_SOURCE_DIR}/../src/resources/*"
 )
 
 
 MACRO(EXPORT_INCLUDE)
-ADD_CUSTOM_COMMAND(TARGET ${PROJECT_NAME} PRE_BUILD 
+ADD_CUSTOM_COMMAND(TARGET ${PROJECT_NAME} PRE_BUILD
 
 				COMMAND ${CMAKE_COMMAND} -E make_directory ${APP_RESOURCE_DIR}
 
-				COMMAND ${CMAKE_COMMAND} -E copy 
+				COMMAND ${CMAKE_COMMAND} -E copy
 				${RESOURCE_FILES} ${APP_RESOURCE_DIR}
 
 				COMMENT "Copying resource files to output/app directory.")
 
-# copy gpupixel and vnn lib
+
 ADD_CUSTOM_COMMAND(TARGET ${PROJECT_NAME} POST_BUILD
 				COMMAND ${CMAKE_COMMAND} -E make_directory ${MODELS_DST_DIR}
 

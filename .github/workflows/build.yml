@@ -7,8 +7,8 @@ on:
     workflow_dispatch:
 
 jobs:
-    build-linux-clang:
-        name: Linux (Clang)
+    build-linux-with-docker:
+        name: Linux(With Dockerfile)
         runs-on: ubuntu-latest
         timeout-minutes: 15
         env:
@@ -19,10 +19,10 @@ jobs:
            
             # 构建 Docker 镜像
             - name: Build Docker image
-              run: docker build -t gpupixel .
+              run: docker build -t gpupixel_img .
  
             - name: Build 
-              run: docker run --rm -v $(pwd)/output:/workspace/output -v $(pwd)/build:/workspace/build gpupixel
+              run: docker run --rm -v $(pwd)/output:/workspace/output -v $(pwd)/build:/workspace/build gpupixel_img
 
     build-macos-clang:
         name: macOS (Universal)
