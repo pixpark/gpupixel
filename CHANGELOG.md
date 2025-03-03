@@ -1,6 +1,16 @@
-GPUPixel Version: v1.2.5
+GPUPixel Version: v1.3.0-beta
 ## What's New
 
-1. Android support armeabi-v7a @cijiugechu    https://github.com/pixpark/gpupixel/commit/f51ece9b81ee71d357e26a1ca6620ab035767796
-1. fix type errors in jni @cijiugechu  https://github.com/pixpark/gpupixel/commit/f70fa25de04ff0d9a37dd64c1a6beb21da787e29
-1. Refine android filter @xiaoshanlin000 https://github.com/pixpark/gpupixel/commit/7ee92c3c69949e2e5852770a282e9c75b46eaccd
+1. 🔄 Replace the VNN face detection library with Mars-Face.
+
+2. 📉 Further reduce the library size.
+
+3. 🖥️ Use static linking for Mars-Face on Linux, macOS, and iOS.
+
+4. 📱 Use dynamic linking for Mars-Face on Windows and Android.
+
+5. 🐧 For Linux, the Mars-Face static library must be compiled using Debian 10.
+
+---
+
+📝 👀Both Linux and macOS platforms provide static libraries for all third-party dependencies, so if you want to experiment with WASM support, you can use these two platforms for compilation.

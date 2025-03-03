@@ -39,6 +39,8 @@
 
 > Welcome to join us to make GPUPixel better by participating [discussions](https://github.com/pixpark/gpupixel/discussions), opening [issues](https://github.com/pixpark/gpupixel/issues/new/choose), submitting [PRs](https://github.com/pixpark/gpupixel/pulls) 👏.
 
+> Replace the VNN face detection library with Mars-Face from v1.3.0-beta
+
 ## Introduction
 
 🍔  GPUPixel is a real-time, high-performance image and video filter library, extremely easy to compile and integrate with  small library size.
