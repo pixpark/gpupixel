@@ -12,6 +12,7 @@ export const zh = defineConfig({
 
     sidebar: {
       '/zh/guide/': { base: '/zh/guide/', items: sidebarGuide() },
+      '/1.2.5/zh/guide/': { base: '/1.2.5/zh/guide/', items: sidebarGuide() },
       '/zh/reference/': { base: '/zh/reference/', items: sidebarReference() }
     },
 
@@ -64,15 +65,15 @@ function nav(): DefaultTheme.NavItem[] {
       activeMatch: '/zh/reference/'
     },
     {
-      text: '1.2.5',
+      text: '1.3.0-beta',
       items: [
         {
-          text: '更新日志',
-          link: 'https://github.com/pixpark/gpupixel/blob/main/CHANGELOG.md'
+          text: '1.3.0-beta',
+          link: '/zh/guide/intro'
         },
         {
-          text: '参与贡献',
-          link: 'https://github.com/pixpark/gpupixel/issues/new/choose'
+          text: '1.2.5',
+          link: '/1.2.5/zh/guide/intro'
         }
       ]
     },
@@ -92,8 +93,11 @@ function nav(): DefaultTheme.NavItem[] {
             {
               text: '博客',
               link: 'https://pixpark.net'
-              
-            }
+            },
+            {
+              text: '代码贡献',
+              link: 'https://github.com/pixpark/gpupixel/issues/new/choose'
+            },
           ],
         }
       ]

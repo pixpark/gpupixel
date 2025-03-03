@@ -1,6 +1,7 @@
 ---
 outline: deep
 ---
+<Badge type="tip" text="版本: 1.3.0-beta" />
 
 # 简单的调用说明
 **声明filters**

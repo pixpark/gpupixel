@@ -4,6 +4,7 @@ editLink: true
 outline: deep
 description: 本篇将介绍各个系统平台GPUPixel库的集成调用方法
 ---
+<Badge type="tip" text="版本: 1.3.0-beta" />
 
 # 集成
 
@@ -15,42 +16,29 @@ iOS 和 MacOS库的链接形式相同，放到一块来讲
 
 ### 添加依赖
 
-将gpupixel和vnn库拷贝到你的工程目录
+将gpupixel库拷贝到你的工程目录
+
 ::: code-group
 ```bash [iOS]
 ├── gpupixel.framework
-├── vnn_core_ios.framework
-├── vnn_face_ios.framework
-└── vnn_kit_ios.framework
 ```
 ```bash [MacOS]
 ├── gpupixel.framework
-├── vnn_core_osx.framework
-├── vnn_face_osx.framework
-└── vnn_kit_osx.framework
 ```
 :::
 
 选择`工程 -> Targets -> Build Phases -> Link Binary With Libraries`
 
-点击左下角的 `+` 号添加如上面的依赖，`CoreMedia.framework` 和 `AVFoundation.framework` 为系统库，提供相机采集等能力，添加完后情况如下图
-
-![](../../image/mac-project-setting.png)
-
+点击左下角的 `+` 号添加如上面的依赖，`CoreMedia.framework` 和 `AVFoundation.framework` 为系统库，提供相机采集等能力
 **Framework 查找路径**
 
-选择`工程 -> Targets -> Build Settings -> Search Paths -> Framework Search Paths`, 将 gpupixel和vnn库存放路径填入
-
-![](../../image/xcode-libs-path.png)
+选择`工程 -> Targets -> Build Settings -> Search Paths -> Framework Search Paths`, 将 gpupixel存放路径填入
 
 **嵌入Framework**
 
 选择`工程 -> Targets -> General -> Frameworks, Libraries, and Embeded Content`
 
-将gpupixel和vnn等库设置为 `Embed & Sign`, 系统库选择` Do Not Embed `, 如下
-
-![](../../image/mac-project-general.png)
-
+将gpupixel库设置为 `Embed & Sign`, 系统库选择` Do Not Embed `
 
 ### Objective-C 调用
 
@@ -84,6 +72,5 @@ dependencies {
 
 参考文章：[Android 导入AAR包](https://juejin.cn/post/7226600031569510459)
 
-## Windows
-  
-## Linux
+## Windows and Linux
+参考 [demo](https://github.com/pixpark/gpupixel/blob/main/examples/desktop/app.cc) 和 [Cmake配置](https://github.com/pixpark/gpupixel/blob/main/examples/CMakeLists.txt)
