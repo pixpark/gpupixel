@@ -45,8 +45,6 @@
 #elif __linux__
     // linux
     #define GPUPIXEL_LINUX
-#elif __emscripten__
-  #define GPUPIXEL_LINUX
 #elif __unix__ // all unices not caught above
     // Unix
     #define GPUPIXEL_LINUX
