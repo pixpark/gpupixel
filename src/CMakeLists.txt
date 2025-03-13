@@ -131,29 +131,14 @@ ENDIF()
 # Config project 
 # ----------
 # build shared or static lib
-ADD_LIBRARY(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${RESOURCE_FILES})
+ADD_LIBRARY(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${MODEL_FILES} ${RESOURCE_FILES})
 
 # set platform project 
 IF(${CURRENT_OS} STREQUAL "linux")
-	IF(LINK_SHARED_THIRD_PARTY_LIBS)
-		# 设置要构建的目标库的名称和类型
-		add_library(mars-face-kit SHARED IMPORTED)
-		# 设置目标库的实际路径
-		set_target_properties(mars-face-kit PROPERTIES IMPORTED_LOCATION
-		${CMAKE_CURRENT_SOURCE_DIR}/third_party/mars-face-kit/libs/${CURRENT_OS}/libmars-face-kit.so)
-	ELSE()
-		# 设置要构建的目标库的名称和类型
-		add_library(mars-face-kit STATIC IMPORTED)
-		# 设置目标库的实际路径
-		set_target_properties(mars-face-kit PROPERTIES IMPORTED_LOCATION
-		${CMAKE_CURRENT_SOURCE_DIR}/third_party/mars-face-kit/libs/${CURRENT_OS}/libmars-face-kit.a)
-
-		add_library(MNN STATIC IMPORTED)
-		# 设置目标库的实际路径
-		set_target_properties(MNN PROPERTIES IMPORTED_LOCATION
-		${CMAKE_CURRENT_SOURCE_DIR}/third_party/mnn/libs/${CURRENT_OS}/libMNN.a)
-	ENDIF()
-	
+	add_library(mars-face-kit SHARED IMPORTED)
+	# 设置目标库的实际路径
+	set_target_properties(mars-face-kit PROPERTIES IMPORTED_LOCATION
+	${CMAKE_CURRENT_SOURCE_DIR}/third_party/mars-face-kit/libs/${CURRENT_OS}/libmars-face-kit.so)
 
 ELSEIF(${CURRENT_OS} STREQUAL "windows")
 	add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
@@ -171,7 +156,27 @@ ELSEIF(${CURRENT_OS} STREQUAL "macos" OR ${CURRENT_OS} STREQUAL "ios")
 		MACOSX_FRAMEWORK_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
 		FRAMEWORK_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/
 		PUBLIC_HEADER "${EXPORT_HEADER}"
-		RESOURCE "${RESOURCE_FILES}"
+	)
+
+	# 为macOS/iOS添加自定义的资源复制命令
+	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+		# 创建资源目录
+		COMMAND ${CMAKE_COMMAND} -E make_directory 
+			"$<TARGET_FILE_DIR:${PROJECT_NAME}>/Resources/models"
+		COMMAND ${CMAKE_COMMAND} -E make_directory 
+			"$<TARGET_FILE_DIR:${PROJECT_NAME}>/Resources/resources"
+		
+		# 复制模型文件到models目录
+		COMMAND ${CMAKE_COMMAND} -E copy_directory
+			"${CMAKE_CURRENT_SOURCE_DIR}/third_party/mars-face-kit/models"
+			"$<TARGET_FILE_DIR:${PROJECT_NAME}>/Resources/models"
+		
+		# 复制资源文件到resources目录
+		COMMAND ${CMAKE_COMMAND} -E copy_directory
+			"${CMAKE_CURRENT_SOURCE_DIR}/resources"
+			"$<TARGET_FILE_DIR:${PROJECT_NAME}>/Resources/res"
+		
+		COMMENT "Organizing resources in framework bundle"
 	)
  
 ELSEIF(${CURRENT_OS} STREQUAL "android")
@@ -189,22 +194,12 @@ ENDIF()
 # link libs
 # -------
 IF(${CURRENT_OS} STREQUAL "linux" OR ${CURRENT_OS} STREQUAL "wasm")
-	IF(LINK_SHARED_THIRD_PARTY_LIBS)
-		TARGET_LINK_LIBRARIES(
-								${PROJECT_NAME}  
-								PRIVATE
-								GL
-								glfw
-								mars-face-kit)
-	ELSE()
-		TARGET_LINK_LIBRARIES(
-								${PROJECT_NAME}  
-								PRIVATE
-								GL
-								glfw
-								mars-face-kit
-								MNN)
-	ENDIF()
+	TARGET_LINK_LIBRARIES(
+							${PROJECT_NAME}  
+							PRIVATE
+							GL
+							glfw
+							mars-face-kit)
 ELSEIF(${CURRENT_OS} STREQUAL "windows")
 	TARGET_LINK_LIBRARIES(
 						${PROJECT_NAME} 
