@@ -3,14 +3,14 @@ cmake_minimum_required(VERSION 3.10)
 set(CMAKE_CXX_STANDARD 17)
 #set(CMAKE_COMPILE_WARNING_AS_ERROR ON)
 
-# 设置引入的 cmake 文件路径为当前目录
+# Set cmake module path to current directory
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}")
 
-# 定义当前模块的名称
+# Define project name
 set(PROJECT_NAME "gpupixel")
 project(${PROJECT_NAME})
 
-# 定义导出 API 的宏定义(Windows下才有意义)
+# Define API export macros (Valid for Windows platform)
 add_definitions(-DMYMATH_EXPORT_LIBRARY)
 
 # Detect platform
@@ -135,7 +135,7 @@ add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${MODEL_FILES} ${RESOURCE_FIL
 # set platform project 
 if(${CURRENT_OS} STREQUAL "linux")
     add_library(mars-face-kit SHARED IMPORTED)
-    # 设置目标库的实际路径
+    # Set actual path of target library
     set_target_properties(mars-face-kit PROPERTIES IMPORTED_LOCATION
     ${CMAKE_CURRENT_SOURCE_DIR}/third_party/mars-face-kit/libs/${CURRENT_OS}/libmars-face-kit.so)
 
@@ -157,20 +157,20 @@ elseif(${CURRENT_OS} STREQUAL "macos" OR ${CURRENT_OS} STREQUAL "ios")
         PUBLIC_HEADER "${EXPORT_HEADER}"
     )
 
-    # 为macOS/iOS添加自定义的资源复制命令
+    # Add custom resource copy commands for macOS/iOS
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        # 创建资源目录
+        # Create resource directories
         COMMAND ${CMAKE_COMMAND} -E make_directory 
             "$<TARGET_FILE_DIR:${PROJECT_NAME}>/Resources/models"
         COMMAND ${CMAKE_COMMAND} -E make_directory 
             "$<TARGET_FILE_DIR:${PROJECT_NAME}>/Resources/resources"
         
-        # 复制模型文件到models目录
+        # Copy model files to models directory
         COMMAND ${CMAKE_COMMAND} -E copy_directory
             "${CMAKE_CURRENT_SOURCE_DIR}/third_party/mars-face-kit/models"
             "$<TARGET_FILE_DIR:${PROJECT_NAME}>/Resources/models"
         
-        # 复制资源文件到resources目录
+        # Copy resource files to resources directory
         COMMAND ${CMAKE_COMMAND} -E copy_directory
             "${CMAKE_CURRENT_SOURCE_DIR}/resources"
             "$<TARGET_FILE_DIR:${PROJECT_NAME}>/Resources/res"
@@ -180,7 +180,7 @@ elseif(${CURRENT_OS} STREQUAL "macos" OR ${CURRENT_OS} STREQUAL "ios")
  
 elseif(${CURRENT_OS} STREQUAL "android")
     add_library(mars-face-kit SHARED IMPORTED)
-    # 设置目标库的实际路径
+    # Set actual path of target library
     set_target_properties(mars-face-kit PROPERTIES IMPORTED_LOCATION
     ${CMAKE_CURRENT_SOURCE_DIR}/third_party/mars-face-kit/libs/${CURRENT_OS}/${ANDROID_ABI}/libmars-face-kit.so)
     
@@ -241,39 +241,37 @@ elseif(${CURRENT_OS} STREQUAL "android")
                     mars-face-kit)
 endif()
 
-macro(cmd_copy_file)
-    # copy DLL only on Windows
-    if(${CURRENT_OS} STREQUAL "windows")
-    add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD 
-        COMMAND ${CMAKE_COMMAND} -E copy 
-            "${CMAKE_CURRENT_SOURCE_DIR}/third_party/mars-face-kit/libs/${CURRENT_OS}/msvc-x64/mars-face-kit.dll" ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
-        
-        COMMENT "Copying resource files to output/app directory.")
 
-    endif()
-
-    # copy header
-    add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD 
-        # copy resource
-        COMMAND ${CMAKE_COMMAND} -E make_directory ${OUTPUT_RESOURCE_PATH}
-
-        COMMAND ${CMAKE_COMMAND} -E copy 
-        ${RESOURCE_FILES} ${OUTPUT_RESOURCE_PATH}
-        
-        # copy models
-        COMMAND ${CMAKE_COMMAND} -E make_directory ${OUTPUT_MODELS_PATH}
-
-        COMMAND ${CMAKE_COMMAND} -E copy 
-        ${MODEL_FILES} ${OUTPUT_MODELS_PATH}
-
-        # copy headers
-        COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_INCLUDE_OUTPUT_DIRECTORY}
-
-        COMMAND ${CMAKE_COMMAND} -E copy 
-        ${EXPORT_HEADER} ${CMAKE_INCLUDE_OUTPUT_DIRECTORY}
-    
-        COMMENT "Copying headers and resource to output directory.")
-endmacro()
  
 
-cmd_copy_file()
+# copy DLL only on Windows
+if(${CURRENT_OS} STREQUAL "windows")
+add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD 
+    COMMAND ${CMAKE_COMMAND} -E copy 
+        "${CMAKE_CURRENT_SOURCE_DIR}/third_party/mars-face-kit/libs/${CURRENT_OS}/msvc-x64/mars-face-kit.dll" ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
+    
+    COMMENT "Copying resource files to output/app directory.")
+
+endif()
+
+# copy header
+add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD 
+    # copy resource
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${OUTPUT_RESOURCE_PATH}
+
+    COMMAND ${CMAKE_COMMAND} -E copy 
+    ${RESOURCE_FILES} ${OUTPUT_RESOURCE_PATH}
+    
+    # copy models
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${OUTPUT_MODELS_PATH}
+
+    COMMAND ${CMAKE_COMMAND} -E copy 
+    ${MODEL_FILES} ${OUTPUT_MODELS_PATH}
+
+    # copy headers
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_INCLUDE_OUTPUT_DIRECTORY}
+
+    COMMAND ${CMAKE_COMMAND} -E copy 
+    ${EXPORT_HEADER} ${CMAKE_INCLUDE_OUTPUT_DIRECTORY}
+
+    COMMENT "Copying headers and resource to output directory.")
