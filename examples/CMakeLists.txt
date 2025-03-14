@@ -1,4 +1,4 @@
-# 设置 cmkae 最低版本
+# Set minimum CMake version
 cmake_minimum_required(VERSION 3.10)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 # 设置引入的 cmake 文件路径为当前目录
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}")
 
-# 定义当前模块的名称
+# Define application project name
 set(APP_PROJECT_NAME "gpupixel_app")
 project(${APP_PROJECT_NAME})
 
@@ -116,29 +116,19 @@ file(GLOB RESOURCE_FILES
 )
 
 
-macro(EXPORT_INCLUDE)
+
 add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
-
-                COMMAND ${CMAKE_COMMAND} -E make_directory ${APP_RESOURCE_DIR}
-
-                COMMAND ${CMAKE_COMMAND} -E copy
-                ${RESOURCE_FILES} ${APP_RESOURCE_DIR}
-
-                COMMENT "Copying resource files to output/app directory.")
-
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${APP_RESOURCE_DIR}
+    COMMAND ${CMAKE_COMMAND} -E copy
+    ${RESOURCE_FILES} ${APP_RESOURCE_DIR}
+    COMMENT "Copying resource files to output/app directory.")
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E make_directory ${MODELS_DST_DIR}
-
-                COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                ${MODULE_FILES} ${MODELS_DST_DIR}
-
-                COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                "${CMAKE_CURRENT_SOURCE_DIR}/../examples/desktop/demo.png" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
-
-                COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                ${GPUPIXEL_LIBS} ${COPY_DST_RUNTIME_DIR}
-                )
-
-endmacro()
-EXPORT_INCLUDE()
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${MODELS_DST_DIR}
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    ${MODULE_FILES} ${MODELS_DST_DIR}
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    "${CMAKE_CURRENT_SOURCE_DIR}/../examples/desktop/demo.png" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    ${GPUPIXEL_LIBS} ${COPY_DST_RUNTIME_DIR}
+    COMMENT "Copying models and libraries to output directory.")
