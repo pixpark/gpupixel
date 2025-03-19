@@ -94,8 +94,8 @@
 | Linux                 |                        ✅                        |                         ❌                          |                              ❌                               |
 
 
-## Performance
-⚡ ### iPhone
+## ⚡ Performance
+### iPhone
 |       -        | iPhone 6P | iPhone 8 | iPhone X | iPhone 11 | iPhone 14 pro |
 | :------------: | :-------: | :------: | :------: | :-------: | :-----------: |
 |    **CPU**     |    5%     |    5%    |    3%    |    3%     |      3%       |
@@ -105,13 +105,6 @@
 | :--------: | :-------: | :-----------: | :---: | :-----: | :----------: |
 |    CPU     |    3%     |      5%       |   -   |    -    |      -       |
 | Time Taken |    6ms    |      5ms      |   -   |    -    |      -       |
-
-
-## Lib Size
-
-📦 |       | iOS(.framework) | MacOS(.framework) | Android(.aar) |
-| :---: | :-------------: | :---------------: | :-----------: |
-| Size  |     2.4 MB      |      2.6 MB       |    2.1 MB     |
 
 
 ## Before You Start
@@ -162,7 +155,7 @@ Please also consider supporting GPUPixel by sharing it on social media and at ev
 - 📞 [Contact](docs/docs/en/about/contact.md) : Get in touch with us
 
 ## Acknowledgements
-🔗 ### Reference Projects
+### 🔗 Reference Projects
 1. [GPUImage](https://github.com/BradLarson/GPUImage) 
 2. [CainCamera](https://github.com/CainKernel/CainCamera)
 3. [AwemeLike](https://github.com/ZZZZou/AwemeLike)
