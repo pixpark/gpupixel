@@ -127,7 +127,7 @@
 
 ## Contributing
 
-🤝 Help make GPUPixel better by joining our [discussions](https://github.com/pixpark/gpupixel/discussions), opening [issues](https://github.com/pixpark/gpupixel/issues/new/choose), or submitting [PRs](https://github.com/pixpark/gpupixel/pulls).
+🤝 Help make GPUPixel better by joining our [discussions](https://github.com/pixpark/gpupixel/discussions), opening [issues](https://github.com/pixpark/gpupixel/issues/new/choose), or submitting [PRs](https://github.com/pixpark/gpupixel/pulls). Check our [Contributing Guide](docs/docs/en/guide/contributing.md) to get started.
 
 Please also consider supporting GPUPixel by sharing it on social media and at events and conferences.
 
