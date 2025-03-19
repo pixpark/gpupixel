@@ -7,7 +7,7 @@ hero:
   text: "基于GPU的实时AI图像美颜滤镜库"
   tagline: '高性能, 跨平台'
   image:
-      src: /gpupixel-logo-large.svg
+      src: /cover.png
       alt: cover
   actions:
     - theme: brand
