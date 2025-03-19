@@ -6,7 +6,7 @@ hero:
   text: "GPU-based Realtime AI Beauty Filter Library"
   tagline: 'High Performance, Cross-Platform'
   image:
-      src: /gpupixel-logo-large.svg
+      src: /cover.png
       alt: cover
   actions:
     - theme: brand
