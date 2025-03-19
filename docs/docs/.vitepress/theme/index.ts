@@ -50,7 +50,14 @@ export default {
     app.component('Linkcard' , Linkcard) //链接卡片
     app.component('fluidborder' , fluidborder) //流体边框仅用于演示
 
- 
+    // 彩虹背景动画样式
+    if (typeof window !== 'undefined') {
+      watch(
+        () => router.route.data.relativePath,
+        () => updateHomePageStyle(location.pathname === '/'),
+        { immediate: true },
+      )
+    }
 
   },
 
