@@ -70,9 +70,9 @@ using namespace gpupixel;
   [self.view addSubview:self.effectSwitch];
   
  
-  self.slider = [[UISlider alloc] initWithFrame:CGRectMake(10,
+  self.slider = [[UISlider alloc] initWithFrame:CGRectMake(50,
                                                                 self.view.frame.size.height - 120,
-                                                                self.view.frame.size.width - 20,
+                                                                self.view.frame.size.width - 100,
                                                                 30)];
 
   // 设置最小值
