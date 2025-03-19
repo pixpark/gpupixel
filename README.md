@@ -94,8 +94,8 @@
 | Linux                 |                        ✅                        |                         ❌                          |                              ❌                               |
 
 
-## Performance
-⚡ ### iPhone
+## ⚡ Performance
+### iPhone
 |       -        | iPhone 6P | iPhone 8 | iPhone X | iPhone 11 | iPhone 14 pro |
 | :------------: | :-------: | :------: | :------: | :-------: | :-----------: |
 |    **CPU**     |    5%     |    5%    |    3%    |    3%     |      3%       |
@@ -105,13 +105,6 @@
 | :--------: | :-------: | :-----------: | :---: | :-----: | :----------: |
 |    CPU     |    3%     |      5%       |   -   |    -    |      -       |
 | Time Taken |    6ms    |      5ms      |   -   |    -    |      -       |
-
-
-## Lib Size
-
-📦 |       | iOS(.framework) | MacOS(.framework) | Android(.aar) |
-| :---: | :-------------: | :---------------: | :-----------: |
-| Size  |     2.4 MB      |      2.6 MB       |    2.1 MB     |
 
 
 ## Before You Start
@@ -127,7 +120,7 @@
 
 ## Contributing
 
-🤝 Help make GPUPixel better by joining our [discussions](https://github.com/pixpark/gpupixel/discussions), opening [issues](https://github.com/pixpark/gpupixel/issues/new/choose), or submitting [PRs](https://github.com/pixpark/gpupixel/pulls).
+🤝 Help make GPUPixel better by joining our [discussions](https://github.com/pixpark/gpupixel/discussions), opening [issues](https://github.com/pixpark/gpupixel/issues/new/choose), or submitting [PRs](https://github.com/pixpark/gpupixel/pulls). Check our [Contributing Guide](docs/docs/en/guide/contributing.md) to get started.
 
 Please also consider supporting GPUPixel by sharing it on social media and at events and conferences.
 
@@ -137,28 +130,32 @@ Please also consider supporting GPUPixel by sharing it on social media and at ev
 ## Sponsorship
 💖 If you like this project, consider supporting us through the following methods:
 
-| [<img src="./docs/image/support_me_on_kofi_red.png" alt="Ko-fi" style="width: 150px;" />](https://ko-fi.com/jaaron) | [<img src="./docs/image/open-collective-vector-logo.png" alt="open collective" style="width: 150px;" />](https://opencollective.com/gpupixel) | [<img src="./docs/image/wechat-logo.png" alt="wechat" style="width: 150px;" />](https://gpupixel.pixpark.net/sponsor#wechat) |
+| [☕ Support me on Ko-fi](docs/docs/en/sponsor.md#ko-fi) | [💝 Support on Open Collective](docs/docs/en/sponsor.md#open-collective) | [💰 WeChat Sponsor](docs/docs/en/sponsor.md#wechat) |
 |:---:|:---:|:---:|
 
-## Donors
+## Sponsors
 
 🙏 Thank you to the following contributors for their generous support of the project:
 
 <a href="https://github.com/leavenotrace">
-  <img src="https://github.com/leavenotrace.png" style="border-radius:50%; width: 50px; height: 50px;" >
+  <picture>
+    <img src="https://github.com/leavenotrace.png" width="50" height="50" style="border-radius: 50%;" alt="@leavenotrace">
+  </picture>
 </a>
 <a href="https://github.com/weiyu666">
-  <img src="https://github.com/weiyu666.png" style="border-radius: 50%; width: 50px; height: 50px;" >
+  <picture>
+    <img src="https://github.com/weiyu666.png" width="50" height="50" style="border-radius: 50%;" alt="@weiyu666">
+  </picture>
 </a>
 
 ## Contact & Support
 - 📚 [Docs](https://gpupixel.pixpark.net/) : Online documentation
 - 🐛 [Issues](https://github.com/pixpark/gpupixel/issues/new/choose) : Report bugs or request features
 - 📧 [Email](mailto:jaaronkot@gmail.com?subject=[GitHub]Questions%20About%20GPUPixel) : Send us a message
-- 📞 [Contact](https://gpupixel.pixpark.net/zh/about/contact) : Get in touch with us
+- 📞 [Contact](docs/docs/en/about/contact.md) : Get in touch with us
 
 ## Acknowledgements
-🔗 ### Reference Projects
+### 🔗 Reference Projects
 1. [GPUImage](https://github.com/BradLarson/GPUImage) 
 2. [CainCamera](https://github.com/CainKernel/CainCamera)
 3. [AwemeLike](https://github.com/ZZZZou/AwemeLike)
