@@ -1,0 +1,44 @@
+/* var.css */
+:root {
+  --vp-c-brand-1: #18794e;
+  --vp-c-brand-2: #299764;
+  --vp-c-brand-3: #30a46c;
+}
+
+.dark {
+  --vp-c-brand-1: #3dd68c;
+  --vp-c-brand-2: #30a46c;
+  --vp-c-brand-3: #298459;
+}
+
+:root {
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: -webkit-linear-gradient(120deg, #bd34fe, #41d1ff);
+
+
+  --vp-home-hero-image-background-image: linear-gradient(-45deg, #bd34fe 50%, #47caff 50%);
+  --vp-home-hero-image-filter: blur(40px);
+}
+
+/* 超链接下划线 */
+.vp-doc a {
+  text-decoration: none;
+}
+
+/* 文档h1标题样式 */
+.VPDoc h1 {
+  background: -webkit-linear-gradient(10deg, #bd34fe 5%, #e43498 15%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* medium样式 */
+.medium-zoom-overlay {
+  z-index: 30;
+}
+
+.medium-zoom-image {
+  z-index: 9999 !important;
+  /* 给的值是21，但是实测盖不住，直接999 */
+}

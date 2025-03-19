@@ -1,4 +1,4 @@
-# Custom Input Source Development Guide
+# Custom Input Source
 
 This guide explains how to create a custom input source by inheriting from the `Source` class in GPUPixel. We'll explore the implementation process through two examples: `SourceRawDataInput` and `SourceCamera`.
 

@@ -1,6 +1,9 @@
 import { defineConfig } from 'vitepress'
 import { search as zhSearch } from './zh'
-
+import { devDependencies } from '../../package.json'
+import markdownItTaskCheckbox from 'markdown-it-task-checkbox'
+import { groupIconMdPlugin, groupIconVitePlugin, localIconLoader } from 'vitepress-plugin-group-icons'
+import { MermaidMarkdown, MermaidPlugin } from 'vitepress-plugin-mermaid';
 export const shared = defineConfig({
   title: 'GPUPixel',
 
@@ -33,8 +36,7 @@ export const shared = defineConfig({
 
   /* prettier-ignore */
   head: [
-    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/gpupixel-logo-mini.svg' }],
-    ['link', { rel: 'icon', type: 'image/png', href: '/gpupixel-logo-mini.svg' }],
+    ['link', { rel: 'icon', type: 'image/png', href: '/logo.png' }],
     ['meta', { name: 'theme-color', content: '#5f67ee' }],
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:locale', content: 'en' }],
@@ -46,7 +48,7 @@ export const shared = defineConfig({
   ],
 
   themeConfig: {
-    logo: { src: '/gpupixel-logo-mini.svg', width: 24, height: 24 },
+    logo: { src: '/logo.png', width: 24, height: 24 },
 
     socialLinks: [
       { icon: 'discord', link: 'https://discord.gg/q2MjmqK4'},

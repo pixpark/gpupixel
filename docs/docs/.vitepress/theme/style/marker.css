@@ -1,0 +1,42 @@
+/* .vitepress/theme/style/marker.css */
+
+/* 记号笔 不喜欢可自行调整 */
+.marker-text {
+    text-decoration: underline;
+    text-decoration-thickness: 9px;
+    text-decoration-color: rgba(255, 228, 0, 0.4);
+    text-underline-offset: -4px;
+    text-decoration-skip-ink: none;
+}
+
+
+/* 荧光笔 不喜欢可自行调整*/
+.marker-text-highlight {
+    border-radius: 5px 5px;
+    background: transparent;
+    color: var(--vp-c-text-soft);
+    background: linear-gradient(104deg, rgba(130, 255, 173, 0) 0.9%, rgba(130, 255, 173, 1.25) 2.4%, rgba(130, 255, 173, 0.5) 5.8%, rgba(130, 255, 173, 0.1) 93%, rgba(130, 255, 173, 0.7) 96%, rgba(130, 255, 1732, 0) 98%), linear-gradient(183deg, rgba(130, 255, 173, 0) 0%, rgba(130, 255, 173, 0.3) 7.9%, rgba(130, 255, 173, 0) 15%);
+}
+
+
+/* 尤雨溪 不喜欢可自行调整 */
+.marker-evy {
+    white-space: nowrap;
+    position: relative;
+}
+
+.marker-evy:after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    top: 66%;
+    left: 0em;
+    right: 0em;
+    bottom: 0;
+    transition: top 200ms cubic-bezier(0, 0.8, 0.13, 1);
+    background-color: rgba(79, 192, 141, 0.5);
+}
+
+.marker-evy:hover:after {
+    top: 0%;
+}

@@ -1,4 +1,4 @@
-# 自定义输入源开发指南
+# 自定义输入
 
 本指南将介绍如何通过继承 GPUPixel 中的 `Source` 类来创建自定义输入源。我们将通过 `SourceRawDataInput` 和 `SourceCamera` 两个示例来探索实现过程。
 
