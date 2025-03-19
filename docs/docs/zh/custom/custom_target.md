@@ -1,4 +1,4 @@
-# 自定义Target输出和渲染
+# 自定义输出和渲染
 
 本文将介绍如何通过继承 `Target` 基类来实现自定义的输出和渲染功能。GPUPixel 提供了两个典型的实现示例：`TargetView` 和 `TargetRawDataOutput`，我们将通过这两个示例来说明实现流程。
 

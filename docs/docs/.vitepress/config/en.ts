@@ -80,7 +80,7 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
       text: 'Quick Start',
       collapsed: false,
       items: [
-        { text: 'Introduction', link: 'guide/intro' },
+        { text: 'Intro', link: 'guide/intro' },
         { text: 'Build', link: 'guide/build' },
         { text: 'Examples', link: 'guide/demo' },
         { text: 'Integration', link: 'guide/integrated' },

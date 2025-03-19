@@ -1,13 +1,29 @@
 {
   "devDependencies": {
-    "vitepress": "^2.0.0-alpha.4"
+    "@mdit-vue/shared": "^2.1.3",
+    "@types/animejs": "^3.1.13",
+    "@types/dom-view-transitions": "^1.0.6",
+    "animejs": "^3.2.2",
+    "busuanzi.pure.js": "^1.0.3",
+    "canvas-confetti": "^1.9.3",
+    "less": "^4.2.2",
+    "markdown-it-task-checkbox": "^1.0.6",
+    "medium-zoom": "^1.1.0",
+    "mermaid": "^11.4.1",
+    "nprogress-v2": "^1.1.10",
+    "sass": "^1.85.1",
+    "vitepress": "^1.6.3",
+    "vitepress-plugin-comment-with-giscus": "^1.1.15",
+    "vitepress-plugin-group-icons": "^1.3.6",
+    "vitepress-plugin-mermaid": "^2.0.17",
+    "vue": "^3.5.13",
+    "xgplayer": "^3.0.21"
   },
+  "packageManager": "pnpm@8.6.10+sha1.98fe2755061026799bfa30e7dc8d6d48e9c3edf0",
+  "type": "module",
   "scripts": {
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs"
-  },
-  "dependencies": {
-    "markdown-it-mathjax3": "^4.3.2"
   }
 }

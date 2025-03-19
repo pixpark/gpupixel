@@ -101,7 +101,9 @@ output
 Windows编译需要安装 Cmake 和 Visual Studio 2017+，主要使用了VS的NMmake编译，
 打开 `x64 Native Tools Command Prompt for VS 2022` 命令窗口，按以下命令编译
 
-> 仅支持生成 x86_64版本，不支持 x86_32
+::: warning
+仅支持生成 x86_64版本，不支持 x86_32
+:::
 
 **生成工程**
 

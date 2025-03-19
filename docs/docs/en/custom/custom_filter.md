@@ -1,4 +1,4 @@
-# Custom Filter Development Guide
+# Custom Filter
 
 This guide explains how to create custom filters by inheriting from the `Filter` class in GPUPixel.
 

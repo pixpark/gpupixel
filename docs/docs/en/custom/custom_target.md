@@ -1,4 +1,4 @@
-# Custom Target Output and Rendering
+# Custom Output and Rendering
 
 This article explains how to implement custom output and rendering functionality by inheriting from the `Target` base class. GPUPixel provides two typical implementation examples: `TargetView` and `TargetRawDataOutput`, which we will use to illustrate the implementation process.
 
