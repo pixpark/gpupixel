@@ -157,21 +157,15 @@ elseif(${CURRENT_OS} STREQUAL "macos" OR ${CURRENT_OS} STREQUAL "ios")
 
     # Add custom resource copy commands for macOS/iOS
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        # Create resource directories
-        COMMAND ${CMAKE_COMMAND} -E make_directory 
-            "$<TARGET_FILE_DIR:${PROJECT_NAME}>/Resources/models"
-        COMMAND ${CMAKE_COMMAND} -E make_directory 
-            "$<TARGET_FILE_DIR:${PROJECT_NAME}>/Resources/resources"
-        
         # Copy model files to models directory
         COMMAND ${CMAKE_COMMAND} -E copy_directory
             "${CMAKE_CURRENT_SOURCE_DIR}/third_party/mars-face-kit/models"
-            "$<TARGET_FILE_DIR:${PROJECT_NAME}>/Resources/models"
+            "$<TARGET_FILE_DIR:${PROJECT_NAME}>"
         
         # Copy resource files to resources directory
         COMMAND ${CMAKE_COMMAND} -E copy_directory
             "${CMAKE_CURRENT_SOURCE_DIR}/resources"
-            "$<TARGET_FILE_DIR:${PROJECT_NAME}>/Resources/res"
+            "$<TARGET_FILE_DIR:${PROJECT_NAME}>"
         
         COMMENT "Organizing resources in framework bundle"
     )
