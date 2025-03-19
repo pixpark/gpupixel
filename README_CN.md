@@ -121,7 +121,7 @@
 
 ## 参与贡献
 
-🤝 欢迎加入我们，通过参与[讨论](https://github.com/pixpark/gpupixel/discussions)、创建[问题](https://github.com/pixpark/gpupixel/issues/new/choose)、提交[PRs](https://github.com/pixpark/gpupixel/pulls)，让GPUPixel变得更好。
+🤝 欢迎加入我们，通过参与[讨论](https://github.com/pixpark/gpupixel/discussions)、创建[问题](https://github.com/pixpark/gpupixel/issues/new/choose)、提交[PRs](https://github.com/pixpark/gpupixel/pulls)，让GPUPixel变得更好。查看我们的[贡献指南](docs/docs/zh/guide/contributing.md)了解如何开始。
 
 同时，希望您可以通过在社交媒体、活动、会议上分享GPUPixel来支持本项目。
 
