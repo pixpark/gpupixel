@@ -131,7 +131,7 @@
 ## 赞助
 💖 如果你喜欢这个项目，可以考虑通过以下方式支持我：
 
-| [<img src="./docs/image/support_me_on_kofi_red.png" alt="Ko-fi" style="width: 150px;" />](https://ko-fi.com/jaaron) | [<img src="./docs/image/open-collective-vector-logo.png" alt="open collective" style="width: 150px;" />](https://opencollective.com/gpupixel) | [<img src="./docs/image/wechat-logo.png" alt="wechat" style="width: 150px;" />](https://gpupixel.pixpark.net/sponsor#wechat) |
+| [☕ 在 Ko-fi 上支持](docs/docs/zh/sponsor.md#ko-fi) | [💝 在 Open Collective 上支持](docs/docs/zh/sponsor.md#open-collective) | [💰 微信赞助](docs/docs/zh/sponsor.md#微信赞赏) |
 |:---:|:---:|:---:|
 
 ## 赞助者
@@ -148,7 +148,7 @@
 - 📚 [文档](https://gpupixel.pixpark.net/)：在线文档
 - 🐛 [提问](https://github.com/pixpark/gpupixel/issues/new/choose)：报告问题或请求功能
 - 📧 [邮件](mailto:jaaronkot@gmail.com?subject=[GitHub]Questions%20About%20GPUPixel)：向我们发送邮件
-- 📞 [联系](https://gpupixel.pixpark.net/zh/about/contact)：与我们联系
+- 📞 [联系](docs/docs/zh/about/contact.md)：与我们联系
 
 ## 感谢
 🔗 ### 参考项目
