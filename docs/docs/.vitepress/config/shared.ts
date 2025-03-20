@@ -4,6 +4,7 @@ import { devDependencies } from '../../package.json'
 import markdownItTaskCheckbox from 'markdown-it-task-checkbox'
 import { groupIconMdPlugin, groupIconVitePlugin, localIconLoader } from 'vitepress-plugin-group-icons'
 import { MermaidMarkdown, MermaidPlugin } from 'vitepress-plugin-mermaid';
+import { getSocialIcons } from './icons'
 export const shared = defineConfig({
   title: 'GPUPixel',
 
@@ -51,8 +52,22 @@ export const shared = defineConfig({
     logo: { src: '/logo.png', width: 24, height: 24 },
 
     socialLinks: [
+      { 
+        icon: {
+          svg: getSocialIcons.qq()
+        },
+        link: 'https://qm.qq.com/q/8NO7T58HJu',
+        ariaLabel: 'QQ Group'
+      },
+      {
+        icon: {
+          svg: getSocialIcons.wechat()
+        },
+        link: 'zh/about/contact#官方渠道',
+        ariaLabel: 'WeChat Official Account'
+      },
       { icon: 'discord', link: 'https://discord.gg/q2MjmqK4'},
-      { icon: 'github', link: 'https://github.com/pixpark/gpupixel' }
+      { icon: 'github', link: 'https://github.com/pixpark/gpupixel' },
     ],
 
     search: {
