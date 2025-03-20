@@ -41,6 +41,10 @@ using namespace gpupixel;
 @end
 
 @implementation ImageFilterController
+- (void)viewWillDisappear:(BOOL)animated {
+  _displayLink.paused = YES;
+  [super viewWillDisappear:animated];
+}
 - (void)viewDidLoad {
   [super viewDidLoad];
   [self.view setBackgroundColor:UIColor.whiteColor];
@@ -95,12 +99,55 @@ using namespace gpupixel;
 #endif
   [_displayLink addToRunLoop:[NSRunLoop currentRunLoop]
                      forMode:NSRunLoopCommonModes];
+  
+  UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(backAction)];
+  self.navigationItem.leftBarButtonItem = backItem;
+  UIBarButtonItem *saveItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(saveImageAction)];
+  self.navigationItem.rightBarButtonItem = saveItem;
+}
+/// Back to home page and release all memory of gpupixel
+- (void)backAction {
+  [_displayLink invalidate];
+  _displayLink = nil;
+  
+  beauty_face_filter_ = nil;
+  face_reshape_filter_ = nil;
+  lipstick_filter_ = nil;
+  blusher_filter_ = nil;
+  [gpuPixelView removeFromSuperview];
+  gpuPixelView = nil;
+  gpuSourceImage = nil;
+  gpupixel::GPUPixelContext::getInstance()->destroy();
+  
+  [self.navigationController popViewControllerAnimated:true];
+}
+/// Get image from gpupixel after render
+- (void)saveImageAction {
+  int width = gpuSourceImage->getRotatedFramebufferWidth();
+  int height = gpuSourceImage->getRotatedFramebufferHeight();
+  // "beauty_face_filter_" is last filter in gpuSourceImage
+  unsigned char *pixels = gpuSourceImage->captureAProcessedFrameData(beauty_face_filter_, width, height);
+  size_t bitsPerComponent = 8;//r g b a 每个component bits数目
+  size_t bytesPerRow = width * 4;//一张图片每行字节数目(每个像素点包含r g b a 四个字节)
+  CGColorSpaceRef space = CGColorSpaceCreateDeviceRGB();//创建rgb颜色空间
+  uint32_t bitmapInfo = kCGImageAlphaPremultipliedLast | kCGImageByteOrder32Big;
+  CGContextRef context = CGBitmapContextCreate(pixels,
+                                               width,
+                                               height,
+                                               bitsPerComponent,
+                                               bytesPerRow,
+                                               space,
+                                               bitmapInfo);
+  CGImageRef cgImage = CGBitmapContextCreateImage(context);
+  CIImage *ciImage = [CIImage imageWithCGImage:cgImage];
+  UIImage *resultImage = [UIImage imageWithCIImage:ciImage];
+  NSLog(@"%@", resultImage);
+  
+  free(pixels);
+  CGContextRelease(context);
+  CGImageRelease(cgImage);
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
-  _displayLink.paused = YES;
-  [super viewWillDisappear:animated];
-}
 
 -(void) initVideoFilter {
   gpupixel::GPUPixelContext::getInstance()->runSync([&] {
