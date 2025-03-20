@@ -114,7 +114,8 @@ unsigned char* Source::captureAProcessedFrameData(
   GPUPixelContext::getInstance()->captureWidth = 0;
   GPUPixelContext::getInstance()->captureHeight = 0;
   GPUPixelContext::getInstance()->isCapturingFrame = false;
-
+  GPUPixelContext::getInstance()->captureUpToFilter.reset();
+        
   return processedFrameData;
 }
 
