@@ -40,7 +40,10 @@ using namespace gpupixel;
 @end
 
 @implementation VideoFilterController
-
+- (void)viewWillDisappear:(BOOL)animated {
+  [self.capturer stopCapture];
+  [super viewWillDisappear:animated];
+}
 - (void)viewDidLoad {
   [super viewDidLoad];
   [self.view setBackgroundColor:UIColor.whiteColor];
@@ -54,6 +57,22 @@ using namespace gpupixel;
   captureYuvFrame = false;
   // start camera capture
   [self.capturer startCapture];
+}
+/// Back to home page and release all memory of gpupixel
+- (void)backAction {
+    [self.capturer stopCapture];
+    self.capturer = nil;
+    
+  beauty_face_filter_ = nil;
+  face_reshape_filter_ = nil;
+  lipstick_filter_ = nil;
+  blusher_filter_ = nil;
+  [gpuPixelView removeFromSuperview];
+  gpuPixelView = nil;
+  targetRawOutput_ = nil;
+  gpuPixelRawInput = nil;
+  gpupixel::GPUPixelContext::getInstance()->destroy();
+  [self.navigationController popViewControllerAnimated:true];
 }
 
 -(void)initUI {
@@ -91,7 +110,8 @@ using namespace gpupixel;
 
   [self.view addSubview:self.slider];
   
- 
+  UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(backAction)];
+  self.navigationItem.leftBarButtonItem = backItem;
 }
 
 -(void)sliderValueChanged:(UISlider*) slider {
@@ -125,13 +145,6 @@ using namespace gpupixel;
   } else if (self.segment.selectedSegmentIndex == 5) {  // 腮红
     self.slider.value = _blusherValue;
   }
-}
-  
-
-- (void)viewWillDisappear:(BOOL)animated {
-  [self.capturer stopCapture];
-  
-  [super viewWillDisappear:animated];
 }
 
 -(void) initVideoFilter {
@@ -302,6 +315,4 @@ using namespace gpupixel;
   }
   return _effectSwitch;
 }
-
- 
 @end
