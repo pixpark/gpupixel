@@ -14,7 +14,7 @@ NS_GPUPIXEL_BEGIN
 
 FaceDetector::FaceDetector() {
     mars_face_detector_ = mars_face_kit::MarsFaceDetector::CreateFaceDetector();
-    mars_face_detector_->Init(Util::getResourcePath(""));
+    mars_face_detector_->Init(Util::getResourcePath("models"));
 }
 
 FaceDetector::~FaceDetector() {

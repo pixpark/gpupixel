@@ -19,7 +19,7 @@ std::shared_ptr<BlusherFilter> BlusherFilter::create() {
 }
 
 bool BlusherFilter::init() {
-  auto blusher  = SourceImage::create(Util::getResourcePath("blusher.png"));
+  auto blusher  = SourceImage::create(Util::getResourcePath("res/blusher.png"));
   setImageTexture(blusher);
   setTextureBounds(FrameBounds{395, 520, 489, 209});
   return FaceMakeupFilter::init();
