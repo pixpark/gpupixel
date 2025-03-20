@@ -1,17 +1,19 @@
-# Set minimum CMake version
+# Basic Project Configuration
+# ----------------------------------------
 cmake_minimum_required(VERSION 3.10)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 11)
 
-# 设置引入的 cmake 文件路径为当前目录
+# Set cmake module path to current directory for finding custom modules
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}")
 
-# Define application project name
+# Define and initialize application project
 set(APP_PROJECT_NAME "gpupixel_app")
 project(${APP_PROJECT_NAME})
 
-# Detect platform
-# ------
+# Platform Detection
+# Detect and set the current operating system
+# ----------------------------------------
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     set(CURRENT_OS "linux")
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
@@ -26,13 +28,16 @@ else()
     message(FATAL_ERROR "NOT SUPPORT THIS SYSTEM")
 endif()
 
-# Config build output path
-# ------
+# Output Directory Configuration
+# Configure paths for different build artifacts
+# ----------------------------------------
 set(OUTPUT_INSTALL_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../output")
 set(CMAKE_INCLUDE_OUTPUT_DIRECTORY "${OUTPUT_INSTALL_PATH}/include")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${OUTPUT_INSTALL_PATH}/library/${CURRENT_OS}")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${OUTPUT_INSTALL_PATH}/library/${CURRENT_OS}")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${OUTPUT_INSTALL_PATH}/app/${CURRENT_OS}")
+
+# Set output directories for different build configurations (Debug/Release)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG   ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG   ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG   ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
@@ -40,65 +45,68 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
-
+# Resource and Runtime Directory Configuration
+# ----------------------------------------
 link_directories(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
-set(APP_RESOURCE_DIR "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/res/")
-set(COPY_DST_RUNTIME_DIR ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
-set(MODELS_DST_DIR ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/models)
-
-# Config source and header file
-# -------
-# header include path
+# Include Directories Configuration
+# Add all necessary include paths for header files
+# ----------------------------------------
 include_directories(
+    # Project headers
     ${CMAKE_INCLUDE_OUTPUT_DIRECTORY}
+    # Third-party libraries
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/glfw/include
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/stb
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/glad/include
 )
 
-# Add common source file
+# Source Files Configuration
+# ----------------------------------------
+# Add desktop application source files
 file(GLOB SOURCE_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/desktop/*"
-    )
+)
 
-
-# Add platform source and header and lib link search path
-if(${CURRENT_OS} STREQUAL "windows")                                                         # windows
+# Platform Specific Configuration
+# Add platform-specific source files and settings
+# ----------------------------------------
+if(${CURRENT_OS} STREQUAL "windows")
+    # Configure MSVC runtime library
     set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL$<$<CONFIG:Debug>:Debug>")
-    # link libs find path
+    
+    # Add Windows-specific library paths
     link_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/glfw/lib-mingw-w64)
 
-    # Source
+    # Add GLAD source files for Windows
     file(GLOB GLAD_SOURCE_FILE "${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/glad/src/*.c")
     list(APPEND SOURCE_FILES ${GLAD_SOURCE_FILE})
 elseif(${CURRENT_OS} STREQUAL "linux")
-    # # Source
-    # file(GLOB GLAD_SOURCE_FILE  "${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/src/*.c" )
-    # list(APPEND SOURCE_FILES ${GLAD_SOURCE_FILE})
+   
 endif()
 
-file(GLOB MODULE_FILES
-${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/mars-face-kit/models/*
-)
-# build type: executable
-# ------
+# Build Configuration
+# ----------------------------------------
+# Create executable from source files
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
-# link libs
-# -------
+# Library Linkage Configuration
+# Configure platform-specific library dependencies
+# ----------------------------------------
 if(${CURRENT_OS} STREQUAL "linux")
+    # Linux dependencies
     target_link_libraries(${PROJECT_NAME}
                         gpupixel
                         GL
                         glfw)
-    set(GPUPIXEL_LIBS ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libgpupixel.so)
+    set(DEPS_LIBS ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libgpupixel.so
+                      ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libmars-face-kit.so)
     set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-Wl,-rpath,./")
 elseif(${CURRENT_OS} STREQUAL "windows")
-
-    set(GPUPIXEL_LIBS     ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/gpupixel.dll
-                        ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/mars-face-kit.dll)
+    # Windows dependencies
+    set(DEPS_LIBS ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/gpupixel.dll
+                      ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/mars-face-kit.dll)
 
     target_link_libraries(${PROJECT_NAME}
                         ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/gpupixel.lib
@@ -107,28 +115,28 @@ elseif(${CURRENT_OS} STREQUAL "windows")
 
     set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-Wl,-rpath,./")
 endif()
-
-# copy resource file
-# --------
-# Add resource file
-file(GLOB RESOURCE_FILES
-    "${CMAKE_CURRENT_SOURCE_DIR}/../src/resources/*"
-)
-
-
-
-add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
-    COMMAND ${CMAKE_COMMAND} -E make_directory ${APP_RESOURCE_DIR}
-    COMMAND ${CMAKE_COMMAND} -E copy
-    ${RESOURCE_FILES} ${APP_RESOURCE_DIR}
-    COMMENT "Copying resource files to output/app directory.")
-
+ 
+# Post-Build Commands
+# Copy necessary resources and libraries to output directory
+# ----------------------------------------
+# Copy resource and model files
+set(COPY_DST_RUNTIME_DIR ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E make_directory ${MODELS_DST_DIR}
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-    ${MODULE_FILES} ${MODELS_DST_DIR}
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/res
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_CURRENT_SOURCE_DIR}/../output/res ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/res
+
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/models
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_CURRENT_SOURCE_DIR}/../output/models ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/models
+
+    COMMAND ${CMAKE_COMMAND} -E copy
     "${CMAKE_CURRENT_SOURCE_DIR}/../examples/desktop/demo.png" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-    ${GPUPIXEL_LIBS} ${COPY_DST_RUNTIME_DIR}
-    COMMENT "Copying models and libraries to output directory.")
+    
+    COMMENT "Copying res and models files to output/app directory.")
+
+# Copy demo image and libraries
+add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy
+    ${DEPS_LIBS} ${COPY_DST_RUNTIME_DIR}
+    COMMENT "Copying libraries to output directory.")

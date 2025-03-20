@@ -1,14 +1,14 @@
 #include "dispatch_queue.h"
 
 void LocalDispatchQueue::add(std::function<void()> task) {
-    std::unique_lock lk(m);
+     std::unique_lock<std::mutex> lk(m);
     taskQueue.push(task);
 }
 
 void LocalDispatchQueue::processOne() {
     std::function<void()> task;
     {
-        std::unique_lock lk(m);
+         std::unique_lock<std::mutex> lk(m);
         if (taskQueue.empty())
             return;
 
@@ -22,7 +22,7 @@ void LocalDispatchQueue::processAll() {
     for (;;) {
         std::function<void()> task;
         {
-            std::unique_lock lk(m);
+             std::unique_lock<std::mutex> lk(m);
             if (taskQueue.empty())
                 return;
 
@@ -37,7 +37,7 @@ void DispatchQueue::worker(size_t id) {
     std::function<void()> task;
     while (running) {
         {
-            std::unique_lock lk(m);
+             std::unique_lock<std::mutex> lk(m);
             cv.wait(lk, [&]() {
                 return !running || !taskQueue.empty();
             });
@@ -51,7 +51,7 @@ void DispatchQueue::worker(size_t id) {
         }
         task();
         {
-            std::unique_lock lk(m);
+             std::unique_lock<std::mutex> lk(m);
             nWorking--;
         }
     }
@@ -70,7 +70,7 @@ DispatchQueue::DispatchQueue(QueueType type) : running(true), nWorking(0) {
 bool DispatchQueue::busy() {
     bool queueBusy;
     {
-        std::unique_lock lk(m);
+         std::unique_lock<std::mutex> lk(m);
         queueBusy = !taskQueue.empty() || nWorking > 0;
     }
     return queueBusy;
@@ -78,7 +78,7 @@ bool DispatchQueue::busy() {
 
 void DispatchQueue::stop() {
     {
-        std::unique_lock lk(m);
+         std::unique_lock<std::mutex> lk(m);
         running = false;
     }
     cv.notify_all();
@@ -99,7 +99,7 @@ void DispatchQueue::join() {
 
 void DispatchQueue::add(const std::function<void()> & task) {
     {
-        std::unique_lock lk(m);
+         std::unique_lock<std::mutex> lk(m);
         taskQueue.push(task);
     }
     cv.notify_one();
