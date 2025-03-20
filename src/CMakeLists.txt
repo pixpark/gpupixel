@@ -32,8 +32,6 @@ endif()
 # Config build output path
 # --------
 set(OUTPUT_INSTALL_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../output")
-set(OUTPUT_RESOURCE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../output/res")
-set(OUTPUT_MODELS_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../output/models")
 set(CMAKE_INCLUDE_OUTPUT_DIRECTORY "${OUTPUT_INSTALL_PATH}/include")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${OUTPUT_INSTALL_PATH}/library/${CURRENT_OS}")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${OUTPUT_INSTALL_PATH}/library/${CURRENT_OS}")
@@ -86,13 +84,9 @@ file(GLOB EXPORT_HEADER
 )
 
 file(GLOB RESOURCE_FILES 
-    "${CMAKE_CURRENT_SOURCE_DIR}/resources/*"                      
+    "${CMAKE_CURRENT_SOURCE_DIR}/assets/*"                      
 )
-
-file(GLOB MODEL_FILES 
-    "${CMAKE_CURRENT_SOURCE_DIR}/third_party/mars-face-kit/models/*"                      
-)
-
+ 
 # Add platform source and header and lib link search path
 if(${CURRENT_OS} STREQUAL "windows")     
     set(CMAKE_SHARED_LIBRARY_PREFIX "")                                                    # windows
@@ -100,10 +94,22 @@ if(${CURRENT_OS} STREQUAL "windows")
     file(GLOB GLAD_SOURCE_FILE  "${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/src/*.c" )
     list(APPEND SOURCE_FILES ${GLAD_SOURCE_FILE})
 
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD 
+    COMMAND ${CMAKE_COMMAND} -E copy 
+        "${CMAKE_CURRENT_SOURCE_DIR}/third_party/mars-face-kit/libs/${CURRENT_OS}/msvc-x64/mars-face-kit.dll" ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
+    
+    COMMENT "Copying libs files to output/app directory.")
+
 elseif(${CURRENT_OS} STREQUAL "linux")    
     # Source 
     file(GLOB GLAD_SOURCE_FILE  "${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/src/*.c" )
     list(APPEND SOURCE_FILES ${GLAD_SOURCE_FILE})
+
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD 
+    COMMAND ${CMAKE_COMMAND} -E copy 
+        "${CMAKE_CURRENT_SOURCE_DIR}/third_party/mars-face-kit/libs/${CURRENT_OS}/mars-face-kit.so" ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
+    
+    COMMENT "Copying libs files to output/app directory.")
 elseif(${CURRENT_OS} STREQUAL "macos" OR ${CURRENT_OS} STREQUAL "ios")                        # ios and mac
     # Header
     file(GLOB OBJC_HEADER_FILE  "${CMAKE_CURRENT_SOURCE_DIR}/target/objc/*.h")
@@ -128,7 +134,7 @@ endif()
 # Config project 
 # ----------
 # build shared or static lib
-add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${MODEL_FILES} ${RESOURCE_FILES})
+add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${RESOURCE_FILES})
 
 # set platform project 
 if(${CURRENT_OS} STREQUAL "linux")
@@ -153,21 +159,7 @@ elseif(${CURRENT_OS} STREQUAL "macos" OR ${CURRENT_OS} STREQUAL "ios")
         MACOSX_FRAMEWORK_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
         FRAMEWORK_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/
         PUBLIC_HEADER "${EXPORT_HEADER}"
-    )
-
-    # Add custom resource copy commands for macOS/iOS
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        # Copy model files to models directory
-        COMMAND ${CMAKE_COMMAND} -E copy_directory
-            "${CMAKE_CURRENT_SOURCE_DIR}/third_party/mars-face-kit/models"
-            "$<TARGET_FILE_DIR:${PROJECT_NAME}>"
-        
-        # Copy resource files to resources directory
-        COMMAND ${CMAKE_COMMAND} -E copy_directory
-            "${CMAKE_CURRENT_SOURCE_DIR}/resources"
-            "$<TARGET_FILE_DIR:${PROJECT_NAME}>"
-        
-        COMMENT "Organizing resources in framework bundle"
+        RESOURCE "${RESOURCE_FILES}"
     )
  
 elseif(${CURRENT_OS} STREQUAL "android")
@@ -229,33 +221,11 @@ elseif(${CURRENT_OS} STREQUAL "android")
                     jnigraphics
                     mars-face-kit)
 endif()
-
-
  
 
-# copy DLL only on Windows
-if(${CURRENT_OS} STREQUAL "windows")
-add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD 
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD 
     COMMAND ${CMAKE_COMMAND} -E copy 
-        "${CMAKE_CURRENT_SOURCE_DIR}/third_party/mars-face-kit/libs/${CURRENT_OS}/msvc-x64/mars-face-kit.dll" ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
-    
-    COMMENT "Copying resource files to output/app directory.")
-
-endif()
-
-# copy header
-add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD 
-    # copy resource
-    COMMAND ${CMAKE_COMMAND} -E make_directory ${OUTPUT_RESOURCE_PATH}
-
-    COMMAND ${CMAKE_COMMAND} -E copy 
-    ${RESOURCE_FILES} ${OUTPUT_RESOURCE_PATH}
-    
-    # copy models
-    COMMAND ${CMAKE_COMMAND} -E make_directory ${OUTPUT_MODELS_PATH}
-
-    COMMAND ${CMAKE_COMMAND} -E copy 
-    ${MODEL_FILES} ${OUTPUT_MODELS_PATH}
+    ${RESOURCE_FILES} ${OUTPUT_INSTALL_PATH}
 
     # copy headers
     COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_INCLUDE_OUTPUT_DIRECTORY}

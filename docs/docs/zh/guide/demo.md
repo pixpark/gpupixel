@@ -3,7 +3,6 @@ title: 示例程序
 editLink: true
 description: 本章将介绍各个系统平台Demo编译和运行方法
 ---
-<Badge type="tip" text="版本: 1.3.0-beta" />
 
 # 示例程序
 
