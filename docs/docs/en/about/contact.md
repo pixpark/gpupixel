@@ -11,18 +11,20 @@ Welcome to connect with the GPUPixel team. We are committed to providing timely 
 ## Community
 
 ### Discord Community
+<p align="center">
 <a href="https://discord.gg/q2MjmqK4" target="_blank">
-    <img src="../../image/discord-logo-blue.svg" alt="Discord" style="width: 150px;">
+    <img src="../../image/discord-logo-blue.svg" alt="Discord" style="width: 200px;">
 </a>
-
+</p>
 - International developer community
 - Real-time technical discussions
 - Problem-solving support
 - [Join Discord Now](https://discord.gg/q2MjmqK4)
 
 ### QQ Group
-<img src="../../image/qq-group.jpg" alt="QQ Group" style="width: 200px;">
-
+<p align="center">
+<img src="../../image/qq-group.jpg" alt="QQ Group" style="width: 250px;">
+</p>
 - Chinese developer community
 - Technical discussions
 - Experience sharing
@@ -31,8 +33,9 @@ Welcome to connect with the GPUPixel team. We are committed to providing timely 
 ## Official Channels
 
 ### WeChat Official Account
-<img src="../../image/wechat.png" alt="wechat" style="width: 200px;">
-
+<p align="center">
+<img src="../../image/wechat.png" alt="wechat" style="width: 500px;">
+</p>
 - Latest project updates
 - Technical articles
 - Version release notes
@@ -52,8 +55,9 @@ Welcome to connect with the GPUPixel team. We are committed to providing timely 
 ## Professional Support
 
 ### Knowledge Planet
-<img src="../../image/zhishixingqiu.jpg" alt="Knowledge Planet" style="width: 200px;">
-
+<p align="center">
+<img src="../../image/zhishixingqiu.jpg" alt="Knowledge Planet" style="width: 500px;">
+</p>
 Join our Knowledge Planet to get:
 - 🚀 Professional technical consulting
 - 💡 Best practices guidance

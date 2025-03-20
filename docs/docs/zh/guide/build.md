@@ -3,7 +3,6 @@ title: 编译
 editLink: true
 description: 本篇将介绍各个系统平台GPUPixel库的编译方法
 ---
-<Badge type="tip" text="版本: 1.3.0-beta" />
 
 # 编译
 

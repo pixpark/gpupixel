@@ -4,8 +4,7 @@ editLink: true
 outline: deep
 description: 本篇将介绍各个系统平台GPUPixel库的集成调用方法
 ---
-<Badge type="tip" text="版本: 1.3.0-beta" />
-
+ 
 # 集成
 
 本章将介绍GPUPixel在各个系统的集成方法，最新编译好的各个平台库可以从[这里](https://github.com/pixpark/gpupixel/releases/latest)下载
