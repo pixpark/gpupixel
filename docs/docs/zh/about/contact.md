@@ -11,18 +11,20 @@ description: 多种方式联系 GPUPixel 团队
 ## 社区交流
 
 ### Discord 社区
+<p align="center">
 <a href="https://discord.gg/q2MjmqK4" target="_blank">
-    <img src="../../image/discord-logo-blue.svg" alt="Discord" style="width: 150px;">
+    <img src="../../image/discord-logo-blue.svg" alt="Discord" style="width: 200px;">
 </a>
-
+</p>
 - 国际开发者社区
 - 实时技术讨论
 - 问题解答支持
 - [立即加入 Discord](https://discord.gg/q2MjmqK4)
 
 ### QQ 技术交流群
-<img src="../../image/qq-group.jpg" alt="QQ群" style="width: 200px;">
-
+<p align="center">
+<img src="../../image/qq-group.jpg" alt="QQ群" style="width: 250px;">
+</p>
 - 中文开发者社区
 - 技术问题交流
 - 使用经验分享
@@ -31,8 +33,9 @@ description: 多种方式联系 GPUPixel 团队
 ## 官方渠道
 
 ### 微信公众号
-<img src="../../image/wechat.png" alt="wechat" style="width: 200px;">
-
+<p align="center">
+<img src="../../image/wechat.png" alt="wechat" style="width: 500px;">
+</p>
 - 项目最新动态
 - 技术文章分享
 - 版本更新通知
@@ -52,8 +55,9 @@ description: 多种方式联系 GPUPixel 团队
 ## 专业支持
 
 ### 知识星球
-<img src="../../image/zhishixingqiu.jpg" alt="知识星球" style="width: 200px;">
-
+<p align="center">
+<img src="../../image/zhishixingqiu.jpg" alt="知识星球" style="width: 500px;">
+</p>
 加入我们的知识星球，获得：
 - 🚀 专业技术咨询
 - 💡 最佳实践指导
