@@ -103,10 +103,22 @@ The output is located at: `src/android/java/gpupixel/build/outputs/aar`
 
 ## Windows
 
-To compile on Windows, you need to install Cmake and Visual Studio 2017 or later, primarily using VS's NMake for compilation. Open the `x64 Native Tools Command Prompt for VS 2022` command window and compile with the following commands:
+Windows compilation requires the following environment:
+
+**Environment Requirements**
+- Microsoft Visual Studio >= 2017
+- cmake >= 3.10
+
+**Build Environment Setup**
+
+It is recommended to use Windows Terminal and select the corresponding VS environment tab for compilation.
+![Windows Terminal](../../image/win-terminal.png)
+If not using Windows Terminal, you can configure as follows:
+
+- **64-bit compilation**: Find and click `vcvars64.bat` (x64 Native Tools Command Prompt for VS 2017) in settings to open the VS virtual environment for compiling x64 architecture programs
 
 ::: warning
-Only supports generating x86_64 versions, does not support x86_32.
+Only supports generating x86_64 Release version, x86_32 is not supported currently
 :::
 
 **Generate Project**
