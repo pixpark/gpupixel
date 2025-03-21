@@ -41,7 +41,9 @@ Ensure that the iOS library has been compiled (see [instructions](build#ios)). O
 ```
 
 To run, simply connect an iPhone or use the simulator following the standard iOS App compilation and running procedure.
-
+::: warning
+For custom Xcode projects, disable `Build Settings -> Compress PNG Files` to prevent image color inversion.
+:::
 ## MacOS
 Ensure that the MacOS library has been compiled (see [instructions](build#mac)), then open `gpupixel/examples/mac/GPUPixelMacApp.xcodeproj` with Xcode.
 
@@ -55,7 +57,9 @@ Ensure that the MacOS library has been compiled (see [instructions](build#mac)),
 ```
 
 Run the app following the standard Mac App compilation and running procedure.
-
+::: warning
+For custom Xcode projects, disable `Build Settings -> Compress PNG Files` to prevent image color inversion.
+:::
 ## Android
 
 Open the directory `src/android/java` with Android Studio, which will automatically download dependencies such as Gradle.
