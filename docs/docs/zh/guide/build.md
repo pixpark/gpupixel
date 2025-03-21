@@ -97,11 +97,22 @@ output
 
 ## Windows
 
-Windows编译需要安装 Cmake 和 Visual Studio 2017+，主要使用了VS的NMmake编译，
-打开 `x64 Native Tools Command Prompt for VS 2022` 命令窗口，按以下命令编译
+Windows编译需要安装以下环境：
 
+**环境要求**
+- Microsoft Visual Studio >= 2017
+- cmake >= 3.10
+
+**编译环境配置**
+
+推荐使用 Windows Terminal，在Terminal中选择对应的VS环境Tab后进行编译。
+![Windows Terminal](../../image/win-terminal.png)
+如不使用Windows Terminal，可按如下方式配置：
+
+- **64位编译**：在设置中找到`vcvars64.bat`（适用于 VS 2017 的 x64 本机工具命令提示）并单击，打开VS编译x64架构程序的虚拟环境
+ 
 ::: warning
-仅支持生成 x86_64版本，不支持 x86_32
+仅支持生成 x86_64 Release 版本，暂不支持 x86_32
 :::
 
 **生成工程**
