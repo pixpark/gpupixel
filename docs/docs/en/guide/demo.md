@@ -41,7 +41,9 @@ Ensure that the iOS library has been compiled (see [instructions](build#ios)). O
 ```
 
 To run, simply connect an iPhone or use the simulator following the standard iOS App compilation and running procedure.
-
+::: warning
+For custom Xcode projects, disable `Build Settings -> Compress PNG Files` to prevent image color inversion.
+:::
 ## MacOS
 Ensure that the MacOS library has been compiled (see [instructions](build#mac)), then open `gpupixel/examples/mac/GPUPixelMacApp.xcodeproj` with Xcode.
 
@@ -55,7 +57,9 @@ Ensure that the MacOS library has been compiled (see [instructions](build#mac)),
 ```
 
 Run the app following the standard Mac App compilation and running procedure.
-
+::: warning
+For custom Xcode projects, disable `Build Settings -> Compress PNG Files` to prevent image color inversion.
+:::
 ## Android
 
 Open the directory `src/android/java` with Android Studio, which will automatically download dependencies such as Gradle.
@@ -66,22 +70,41 @@ It includes the demo and the gpupixel module. The invocation logic is in `MainAc
  
 ## Desktop
 
+Desktop Demo compilation requires the following environment:
+
+**Environment Requirements**
+- Microsoft Visual Studio >= 2017 (Windows)
+- cmake >= 3.10
+- mesa-utils, libglu1-mesa-dev, freeglut3-dev, mesa-common-dev, libglfw3-dev (Linux)
+
+**Windows Build Environment Setup**
+
+It is recommended to use Windows Terminal and select the corresponding VS environment tab for compilation.
+![Windows Terminal](../../image/win-terminal.png)
+If not using Windows Terminal, you can configure as follows:
+
+- **64-bit compilation**: Find and click `vcvars64.bat` (x64 Native Tools Command Prompt for VS 2017) in settings to open the VS virtual environment for compiling x64 architecture programs
+
+::: warning
+Windows only supports generating x86_64 Release version, x86_32 is not supported currently
+:::
+
 **Generating the Project**
 ::: code-group
 ```bash [Windows]
 # Generate project
-cmake -G "NMake Makefiles" -B examples/build -S examples -DCMAKE_BUILD_TYPE=Release
+cmake -G "NMake Makefiles" -B build -S . -DCMAKE_BUILD_TYPE=Release
 ```
 ```bash [Linux]
 # Generate project
-cmake -G "Unix Makefiles" -B examples/build -S examples -DCMAKE_BUILD_TYPE=Release
+cmake -G "Unix Makefiles" -B build -S . -DCMAKE_BUILD_TYPE=Release
 ```
 :::
 
 **Compiling**
 ```bash
 # Build
-cmake --build examples/build --config Release
+cmake --build build --config Release
 ```
 
 **Keyboard Shortcuts**
