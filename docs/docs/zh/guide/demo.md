@@ -36,6 +36,9 @@ examples
 ├── ViewController.mm               # demo 入口控制器
 └── sample_face.png                 # 演示图片
 ```
+::: warning
+如果是自己创建的 Xcode工程，记得把工程 `Build Settings -> Compress PNG Files  -> NO` 选项关掉，否则会照成图片反色
+:::
 
 ## Mac
 确保MacOS库已编译好([参考](build#mac)), xcode打开 `gpupixel/examples/mac/GPUPixelMacApp.xcodeproj`
@@ -48,7 +51,9 @@ examples
 ├── ViewController.h
 ├── ViewController.mm       # 相机采集和 GPUPixel 滤镜调用主逻辑
 ```
-
+::: warning
+如果是自己创建的 Xcode工程，记得把工程 `Build Settings -> Compress PNG Files  -> NO` 选项关掉，否则会照成图片反色
+:::
 ## Android
 
 使用Android Studio打开目录 `src/android/java`, 开始自动下载 gradle 等依赖
