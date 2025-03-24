@@ -25,7 +25,8 @@ using namespace gpupixel;
 }
  
 //
-@property(nonatomic, assign) CGFloat beautyValue;
+@property(nonatomic, assign) CGFloat sharpenValue;
+@property(nonatomic, assign) CGFloat blurValue;
 @property(nonatomic, assign) CGFloat whithValue;
 @property(nonatomic, assign) CGFloat saturationValue;
 @property(nonatomic, assign) CGFloat thinFaceValue;
@@ -59,13 +60,13 @@ using namespace gpupixel;
   _displayLink.paused = NO;
 }
 
--(void)initUI {
-  NSArray *array = [NSArray arrayWithObjects:@"Smooth", @"White", @"ThinFace", @"BigEye", @"Lipstick", @"Blusher", nil];
+- (void)initUI {
+  NSArray *array = [NSArray arrayWithObjects:@"SP", @"SM", @"White", @"Thin", @"BigEye", @"Lipstick", @"Blusher", nil];
   self.segment = [[UISegmentedControl alloc]initWithItems:array];
   self.segment.frame = CGRectMake(10,
-                                 self.view.frame.size.height - 70,
-                                 self.view.frame.size.width - 20,
-                                 30);
+                                  self.view.frame.size.height - 70,
+                                  self.view.frame.size.width - 20,
+                                  30);
   self.segment.apportionsSegmentWidthsByContent = YES;
   self.segment.selectedSegmentIndex = 0;
   [self.segment addTarget:self action:@selector(onFilterSelectChange:) forControlEvents:UIControlEventValueChanged];
@@ -75,9 +76,9 @@ using namespace gpupixel;
   
  
   self.slider = [[UISlider alloc] initWithFrame:CGRectMake(50,
-                                                                self.view.frame.size.height - 120,
-                                                                self.view.frame.size.width - 100,
-                                                                30)];
+                                                           self.view.frame.size.height - 120,
+                                                           self.view.frame.size.width - 100,
+                                                           30)];
 
   // 设置最小值
   self.slider.minimumValue = 0;
@@ -127,29 +128,24 @@ using namespace gpupixel;
   int height = gpuSourceImage->getRotatedFramebufferHeight();
   // "beauty_face_filter_" is last filter in gpuSourceImage
   unsigned char *pixels = gpuSourceImage->captureAProcessedFrameData(beauty_face_filter_, width, height);
-  size_t bitsPerComponent = 8;//r g b a 每个component bits数目
-  size_t bytesPerRow = width * 4;//一张图片每行字节数目(每个像素点包含r g b a 四个字节)
-  CGColorSpaceRef space = CGColorSpaceCreateDeviceRGB();//创建rgb颜色空间
+  size_t bitsPerComponent = 8; //R,G,B,A bits
+  size_t bytesPerRow = width * 4; //per pixel include R,G,B,A
+  CGColorSpaceRef space = CGColorSpaceCreateDeviceRGB(); //Create RGB Color Space
   uint32_t bitmapInfo = kCGImageAlphaPremultipliedLast | kCGImageByteOrder32Big;
-  CGContextRef context = CGBitmapContextCreate(pixels,
-                                               width,
-                                               height,
-                                               bitsPerComponent,
-                                               bytesPerRow,
-                                               space,
-                                               bitmapInfo);
+  CGContextRef context = CGBitmapContextCreate(pixels, width, height, bitsPerComponent, bytesPerRow, space, bitmapInfo);
   CGImageRef cgImage = CGBitmapContextCreateImage(context);
   CIImage *ciImage = [CIImage imageWithCGImage:cgImage];
   UIImage *resultImage = [UIImage imageWithCIImage:ciImage];
   NSLog(@"%@", resultImage);
   
+  //Release memory
   free(pixels);
   CGContextRelease(context);
   CGImageRelease(cgImage);
 }
 
 
--(void) initVideoFilter {
+- (void) initVideoFilter {
   gpupixel::GPUPixelContext::getInstance()->runSync([&] {
     gpuPixelView = [[GPUPixelView alloc] initWithFrame:self.view.frame];
     [self.view addSubview:gpuPixelView];
@@ -186,41 +182,50 @@ using namespace gpupixel;
 }
 
 
--(void)sliderValueChanged:(UISlider*) slider {
-  if (self.segment.selectedSegmentIndex == 0) {         // 磨皮
-    [self setBeautyValue: slider.value];
-  } else if (self.segment.selectedSegmentIndex == 1) {  // 美白
+- (void)sliderValueChanged:(UISlider*) slider {
+  if (self.segment.selectedSegmentIndex == 0) {  // 锐化
+    [self setSharpenValue:slider.value];
+  } else if (self.segment.selectedSegmentIndex == 1) { // 磨皮
+    [self setBlurValue: slider.value];
+  } else if (self.segment.selectedSegmentIndex == 2) {  // 美白
     [self setWhithValue: slider.value];
-  } else if (self.segment.selectedSegmentIndex == 2) {  // 瘦脸
+  } else if (self.segment.selectedSegmentIndex == 3) {  // 瘦脸
     [self setThinFaceValue: slider.value];
-  } else if (self.segment.selectedSegmentIndex == 3) {  // 大眼
+  } else if (self.segment.selectedSegmentIndex == 4) {  // 大眼
     [self setEyeValue: slider.value];
-  } else if (self.segment.selectedSegmentIndex == 4) {  // 口红
+  } else if (self.segment.selectedSegmentIndex == 5) {  // 口红
     [self setLipstickValue: slider.value];
-  } else if (self.segment.selectedSegmentIndex == 5) {  // 腮红
+  } else if (self.segment.selectedSegmentIndex == 6) {  // 腮红
     [self setBlusherValue: slider.value];
   }
 }
 
--(void)onFilterSelectChange:(UISegmentedControl *)sender{
-  if (self.segment.selectedSegmentIndex == 0) {         // 磨皮
-    self.slider.value = _beautyValue;
-  } else if (self.segment.selectedSegmentIndex == 1) {  // 美白
+- (void)onFilterSelectChange:(UISegmentedControl *)sender {
+  if (self.segment.selectedSegmentIndex == 0) {  // 锐化
+    self.slider.value = _sharpenValue;
+  } else if (self.segment.selectedSegmentIndex == 1) {  // 磨皮
+    self.slider.value = _blurValue;
+  } else if (self.segment.selectedSegmentIndex == 2) {  // 美白
     self.slider.value = _whithValue;
-  } else if (self.segment.selectedSegmentIndex == 2) {  // 瘦脸
+  } else if (self.segment.selectedSegmentIndex == 3) {  // 瘦脸
     self.slider.value = _thinFaceValue;
-  } else if (self.segment.selectedSegmentIndex == 3) {  // 大眼
+  } else if (self.segment.selectedSegmentIndex == 4) {  // 大眼
     self.slider.value = _eyeValue;
-  } else if (self.segment.selectedSegmentIndex == 4) {  // 口红
+  } else if (self.segment.selectedSegmentIndex == 5) {  // 口红
     self.slider.value = _lipstickValue;
-  } else if (self.segment.selectedSegmentIndex == 5) {  // 腮红
+  } else if (self.segment.selectedSegmentIndex == 6) {  // 腮红
     self.slider.value = _blusherValue;
   }
 }
  
 #pragma mark - 属性赋值
-- (void)setBeautyValue:(CGFloat)value {
-  _beautyValue = value;
+- (void)setSharpenValue:(CGFloat)value {
+  _sharpenValue = value;
+  beauty_face_filter_->setSharpen(value/2.5);
+}
+
+- (void)setBlurValue:(CGFloat)value {
+  _blurValue = value;
   beauty_face_filter_->setBlurAlpha(value/10);
 }
 - (void)setWhithValue:(CGFloat)value{
@@ -256,15 +261,17 @@ using namespace gpupixel;
   gpuSourceImage->Render();
 }
  
--(void)onFilterSwitchChange:(UISegmentedControl *)sender{
+- (void)onFilterSwitchChange:(UISegmentedControl *)sender {
   if (sender.selectedSegmentIndex == 0) {
-    [self setBeautyValue: self.beautyValue];
+    [self setSharpenValue:self.sharpenValue];
+    [self setBlurValue: self.blurValue];
     [self setWhithValue:self.whithValue];
     [self setThinFaceValue:self.thinFaceValue];
     [self setEyeValue: self.eyeValue];
     [self setLipstickValue: self.lipstickValue];
     [self setBlusherValue: self.blusherValue];
   } else {
+    beauty_face_filter_->setSharpen(0);
     beauty_face_filter_->setBlurAlpha(0);
     beauty_face_filter_->setWhite(0);
     face_reshape_filter_->setFaceSlimLevel(0);
@@ -274,21 +281,17 @@ using namespace gpupixel;
   }
 }
  
--(UISegmentedControl*)effectSwitch {
+- (UISegmentedControl*)effectSwitch {
   if(_effectSwitch == nil) {
     NSArray *array = [NSArray arrayWithObjects:@"ON",@"OFF", nil];
- 
     _effectSwitch = [[UISegmentedControl alloc]initWithItems:array];
- 
     _effectSwitch.frame = CGRectMake(self.view.frame.size.width - 90,
                                      self.view.frame.size.height - 160,
-                                    80,
-                                    30);
+                                     80,
+                                     30);
     _effectSwitch.apportionsSegmentWidthsByContent = YES;
     _effectSwitch.selectedSegmentIndex = 0;
- 
     [_effectSwitch addTarget:self action:@selector(onFilterSwitchChange:) forControlEvents:UIControlEventValueChanged];
- 
   }
   return _effectSwitch;
 }

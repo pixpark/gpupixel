@@ -23,7 +23,8 @@ using namespace gpupixel;
 }
 
 //
-@property(nonatomic, assign) CGFloat beautyValue;
+@property(nonatomic, assign) CGFloat sharpenValue;
+@property(nonatomic, assign) CGFloat blurValue;
 @property(nonatomic, assign) CGFloat whithValue;
 @property(nonatomic, assign) CGFloat saturationValue;
 @property(nonatomic, assign) CGFloat thinFaceValue;
@@ -60,8 +61,8 @@ using namespace gpupixel;
 }
 /// Back to home page and release all memory of gpupixel
 - (void)backAction {
-    [self.capturer stopCapture];
-    self.capturer = nil;
+  [self.capturer stopCapture];
+  self.capturer = nil;
     
   beauty_face_filter_ = nil;
   face_reshape_filter_ = nil;
@@ -76,14 +77,14 @@ using namespace gpupixel;
 }
 
 -(void)initUI {
-  NSArray *array = [NSArray arrayWithObjects:@"磨皮",@"美白",@"瘦脸",@"大眼", @"口红", @"腮红", nil];
+  NSArray *array = [NSArray arrayWithObjects:@"锐化",@"磨皮",@"美白",@"瘦脸",@"大眼", @"口红", @"腮红", nil];
   //初始化UISegmentedControl
   self.segment = [[UISegmentedControl alloc]initWithItems:array];
   //设置frame
   self.segment.frame = CGRectMake(10,
-                                 self.view.frame.size.height - 70,
-                                 self.view.frame.size.width - 20,
-                                 30);
+                                  self.view.frame.size.height - 70,
+                                  self.view.frame.size.width - 20,
+                                  30);
   self.segment.apportionsSegmentWidthsByContent = YES;
   self.segment.selectedSegmentIndex = 0;
   //添加事件
@@ -97,9 +98,9 @@ using namespace gpupixel;
   
   // 初始化
   self.slider = [[UISlider alloc] initWithFrame:CGRectMake(50,
-                                                                self.view.frame.size.height - 120,
-                                                                self.view.frame.size.width - 100,
-                                                                30)];
+                                                           self.view.frame.size.height - 120,
+                                                           self.view.frame.size.width - 100,
+                                                           30)];
 
   // 设置最小值
   self.slider.minimumValue = 0;
@@ -115,37 +116,41 @@ using namespace gpupixel;
 }
 
 -(void)sliderValueChanged:(UISlider*) slider {
-  if (self.segment.selectedSegmentIndex == 0) {         // 磨皮
-    [self setBeautyValue: slider.value];
-  } else if (self.segment.selectedSegmentIndex == 1) {  // 美白
-    [self setWhithValue: slider.value];
-  } else if (self.segment.selectedSegmentIndex == 2) {  // 瘦脸
-    [self setThinFaceValue: slider.value];
-  } else if (self.segment.selectedSegmentIndex == 3) {  // 大眼
-    [self setEyeValue: slider.value];
-  } else if (self.segment.selectedSegmentIndex == 4) {  // 口红
-    [self setLipstickValue: slider.value];
-  } else if (self.segment.selectedSegmentIndex == 5) {  // 腮红
-    [self setBlusherValue: slider.value];
+    if (self.segment.selectedSegmentIndex == 0) {  // 锐化
+      [self setSharpenValue:slider.value];
+    } else if (self.segment.selectedSegmentIndex == 1) { // 磨皮
+      [self setBlurValue: slider.value];
+    } else if (self.segment.selectedSegmentIndex == 2) {  // 美白
+      [self setWhithValue: slider.value];
+    } else if (self.segment.selectedSegmentIndex == 3) {  // 瘦脸
+      [self setThinFaceValue: slider.value];
+    } else if (self.segment.selectedSegmentIndex == 4) {  // 大眼
+      [self setEyeValue: slider.value];
+    } else if (self.segment.selectedSegmentIndex == 5) {  // 口红
+      [self setLipstickValue: slider.value];
+    } else if (self.segment.selectedSegmentIndex == 6) {  // 腮红
+      [self setBlusherValue: slider.value];
+    }
   }
-}
 
 //点击不同分段就会有不同的事件进行相应
--(void)onFilterSelectChange:(UISegmentedControl *)sender{
-  if (self.segment.selectedSegmentIndex == 0) {         // 磨皮
-    self.slider.value = _beautyValue;
-  } else if (self.segment.selectedSegmentIndex == 1) {  // 美白
-    self.slider.value = _whithValue;
-  } else if (self.segment.selectedSegmentIndex == 2) {  // 瘦脸
-    self.slider.value = _thinFaceValue;
-  } else if (self.segment.selectedSegmentIndex == 3) {  // 大眼
-    self.slider.value = _eyeValue;
-  } else if (self.segment.selectedSegmentIndex == 4) {  // 口红
-    self.slider.value = _lipstickValue;
-  } else if (self.segment.selectedSegmentIndex == 5) {  // 腮红
-    self.slider.value = _blusherValue;
+-(void)onFilterSelectChange:(UISegmentedControl *)sender {
+    if (self.segment.selectedSegmentIndex == 0) {  // 锐化
+      self.slider.value = _sharpenValue;
+    } else if (self.segment.selectedSegmentIndex == 1) {  // 磨皮
+      self.slider.value = _blurValue;
+    } else if (self.segment.selectedSegmentIndex == 2) {  // 美白
+      self.slider.value = _whithValue;
+    } else if (self.segment.selectedSegmentIndex == 3) {  // 瘦脸
+      self.slider.value = _thinFaceValue;
+    } else if (self.segment.selectedSegmentIndex == 4) {  // 大眼
+      self.slider.value = _eyeValue;
+    } else if (self.segment.selectedSegmentIndex == 5) {  // 口红
+      self.slider.value = _lipstickValue;
+    } else if (self.segment.selectedSegmentIndex == 6) {  // 腮红
+      self.slider.value = _blusherValue;
+    }
   }
-}
 
 -(void) initVideoFilter {
   gpupixel::GPUPixelContext::getInstance()->runSync([&] {
@@ -181,8 +186,13 @@ using namespace gpupixel;
 }
  
 #pragma mark - 属性赋值
-- (void)setBeautyValue:(CGFloat)value {
-  _beautyValue = value;
+- (void)setSharpenValue:(CGFloat)value {
+  _sharpenValue = value;
+  beauty_face_filter_->setSharpen(value/5);
+}
+
+- (void)setBlurValue:(CGFloat)value {
+  _blurValue = value;
   beauty_face_filter_->setBlurAlpha(value/10);
 }
 - (void)setWhithValue:(CGFloat)value{
@@ -241,23 +251,25 @@ using namespace gpupixel;
 }
 
 //点击不同分段就会有不同的事件进行相应
--(void)onFilterSwitchChange:(UISegmentedControl *)sender{
-  if (sender.selectedSegmentIndex == 0) {
-    [self setBeautyValue: self.beautyValue];
-    [self setWhithValue:self.whithValue];
-    [self setThinFaceValue:self.thinFaceValue];
-    [self setEyeValue: self.eyeValue];
-    [self setLipstickValue: self.lipstickValue];
-    [self setBlusherValue: self.blusherValue];
-  } else {
-    beauty_face_filter_->setBlurAlpha(0);
-    beauty_face_filter_->setWhite(0);
-    face_reshape_filter_->setFaceSlimLevel(0);
-    face_reshape_filter_->setEyeZoomLevel(0);
-    lipstick_filter_->setBlendLevel(0);
-    blusher_filter_->setBlendLevel(0);
+-(void)onFilterSwitchChange:(UISegmentedControl *)sender {
+    if (sender.selectedSegmentIndex == 0) {
+      [self setSharpenValue:self.sharpenValue];
+      [self setBlurValue: self.blurValue];
+      [self setWhithValue:self.whithValue];
+      [self setThinFaceValue:self.thinFaceValue];
+      [self setEyeValue: self.eyeValue];
+      [self setLipstickValue: self.lipstickValue];
+      [self setBlusherValue: self.blusherValue];
+    } else {
+      beauty_face_filter_->setSharpen(0);
+      beauty_face_filter_->setBlurAlpha(0);
+      beauty_face_filter_->setWhite(0);
+      face_reshape_filter_->setFaceSlimLevel(0);
+      face_reshape_filter_->setEyeZoomLevel(0);
+      lipstick_filter_->setBlendLevel(0);
+      blusher_filter_->setBlendLevel(0);
+    }
   }
-}
 
 
 -(void)onCameraSwitchBtnUpInside {
