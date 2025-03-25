@@ -150,18 +150,13 @@ using namespace gpupixel;
     gpuPixelView = [[GPUPixelView alloc] initWithFrame:self.view.frame];
     [self.view addSubview:gpuPixelView];
     
-    
     lipstick_filter_ = LipstickFilter::create();
     blusher_filter_ = BlusherFilter::create();
- 
-   
     beauty_face_filter_ = BeautyFaceFilter::create();
     face_reshape_filter_ = FaceReshapeFilter::create();
     
     NSString *imagePath = [[NSBundle mainBundle] pathForResource:@"sample_face" ofType:@"png"];
-
     gpuSourceImage = SourceImage::create([imagePath UTF8String]);
-    
     gpuSourceImage->RegLandmarkCallback([=](std::vector<float> landmarks) {
       lipstick_filter_->SetFaceLandmarks(landmarks);
       blusher_filter_->SetFaceLandmarks(landmarks);
@@ -177,7 +172,6 @@ using namespace gpupixel;
  
     [gpuPixelView setBackgroundColor:[UIColor grayColor]];
     [gpuPixelView setFillMode:(gpupixel::TargetView::PreserveAspectRatioAndFill)];
-  
   });
 }
 
@@ -256,21 +250,10 @@ using namespace gpupixel;
   blusher_filter_->setBlendLevel(value/10);
 }
   
+
 - (void)displayLinkDidFire:(CADisplayLink *)displayLink {
-  // must call function
-  gpuSourceImage->Render();
-}
- 
-- (void)onFilterSwitchChange:(UISegmentedControl *)sender {
-  if (sender.selectedSegmentIndex == 0) {
-    [self setSharpenValue:self.sharpenValue];
-    [self setBlurValue: self.blurValue];
-    [self setWhithValue:self.whithValue];
-    [self setThinFaceValue:self.thinFaceValue];
-    [self setEyeValue: self.eyeValue];
-    [self setLipstickValue: self.lipstickValue];
-    [self setBlusherValue: self.blusherValue];
-  } else {
+  //If set OFF, cancel all effects for comparing with the original image
+  if (self.effectSwitch.selectedSegmentIndex == 1) {
     beauty_face_filter_->setSharpen(0);
     beauty_face_filter_->setBlurAlpha(0);
     beauty_face_filter_->setWhite(0);
@@ -279,8 +262,25 @@ using namespace gpupixel;
     lipstick_filter_->setBlendLevel(0);
     blusher_filter_->setBlendLevel(0);
   }
+  
+  // must call function for updating image effects
+  gpuSourceImage->Render();
 }
  
+- (void)onFilterSwitchChange:(UISegmentedControl *)sender {
+  //If set ON, apply all effects for recoverying functions
+  if (sender.selectedSegmentIndex == 0) {
+    [self setSharpenValue:self.sharpenValue];
+    [self setBlurValue: self.blurValue];
+    [self setWhithValue:self.whithValue];
+    [self setThinFaceValue:self.thinFaceValue];
+    [self setEyeValue: self.eyeValue];
+    [self setLipstickValue: self.lipstickValue];
+    [self setBlusherValue: self.blusherValue];
+  }
+}
+ 
+/// For comparing with the original image
 - (UISegmentedControl*)effectSwitch {
   if(_effectSwitch == nil) {
     NSArray *array = [NSArray arrayWithObjects:@"ON",@"OFF", nil];
