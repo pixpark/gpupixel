@@ -76,7 +76,7 @@ using namespace gpupixel;
   [self.navigationController popViewControllerAnimated:true];
 }
 
--(void)initUI {
+- (void)initUI {
   NSArray *array = [NSArray arrayWithObjects:@"锐化",@"磨皮",@"美白",@"瘦脸",@"大眼", @"口红", @"腮红", nil];
   //初始化UISegmentedControl
   self.segment = [[UISegmentedControl alloc]initWithItems:array];
@@ -115,7 +115,7 @@ using namespace gpupixel;
   self.navigationItem.leftBarButtonItem = backItem;
 }
 
--(void)sliderValueChanged:(UISlider*) slider {
+- (void)sliderValueChanged:(UISlider*) slider {
     if (self.segment.selectedSegmentIndex == 0) {  // 锐化
       [self setSharpenValue:slider.value];
     } else if (self.segment.selectedSegmentIndex == 1) { // 磨皮
@@ -134,7 +134,7 @@ using namespace gpupixel;
   }
 
 //点击不同分段就会有不同的事件进行相应
--(void)onFilterSelectChange:(UISegmentedControl *)sender {
+- (void)onFilterSelectChange:(UISegmentedControl *)sender {
     if (self.segment.selectedSegmentIndex == 0) {  // 锐化
       self.slider.value = _sharpenValue;
     } else if (self.segment.selectedSegmentIndex == 1) {  // 磨皮
@@ -152,7 +152,7 @@ using namespace gpupixel;
     }
   }
 
--(void) initVideoFilter {
+- (void) initVideoFilter {
   gpupixel::GPUPixelContext::getInstance()->runSync([&] {
     gpuPixelRawInput = SourceRawDataInput::create();
     gpuPixelView = [[GPUPixelView alloc] initWithFrame:self.view.frame];
@@ -186,6 +186,45 @@ using namespace gpupixel;
 }
  
 #pragma mark - 属性赋值
+- (void)onCameraSwitchBtnUpInside {
+  [self.capturer reverseCamera];
+}
+
+- (VideoCapturer*)capturer {
+  if(_capturer == nil) {
+    VCVideoCapturerParam *param = [[VCVideoCapturerParam alloc] init];
+    param.frameRate = 30;
+    
+    param.sessionPreset = AVCaptureSessionPreset1280x720;
+    if(captureYuvFrame) {
+      param.pixelsFormatType = kCVPixelFormatType_420YpCbCr8BiPlanarFullRange;
+    } else {
+      param.pixelsFormatType = kCVPixelFormatType_32BGRA;
+    }
+    
+    param.devicePosition = AVCaptureDevicePositionFront;
+    param.videoOrientation = AVCaptureVideoOrientationPortrait;
+    _capturer = [[VideoCapturer alloc] initWithCaptureParam:param error:nil];
+    _capturer.delegate = self;
+  }
+  
+  return _capturer;
+}
+
+- (UIButton*)cameraSwitchBtn {
+  if(_cameraSwitchBtn == nil) {
+    _cameraSwitchBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+    _cameraSwitchBtn.frame = CGRectMake(self.view.bounds.size.width - 35,
+                                        105,
+                                        25,
+                                        20);
+    
+    [_cameraSwitchBtn setBackgroundImage:[UIImage imageNamed:@"CameraIcon"] forState:UIControlStateNormal];
+    [_cameraSwitchBtn addTarget: self action: @selector(onCameraSwitchBtnUpInside) forControlEvents: UIControlEventTouchUpInside] ;
+  }
+  return _cameraSwitchBtn;
+}
+
 - (void)setSharpenValue:(CGFloat)value {
   _sharpenValue = value;
   beauty_face_filter_->setSharpen(value/5);
@@ -222,103 +261,65 @@ using namespace gpupixel;
   _blusherValue = value;
   blusher_filter_->setBlendLevel(value/10);
 }
- 
+
 // camera frame callback
 - (void)videoCaptureOutputDataCallback:(CMSampleBufferRef)sampleBuffer {
-  if(captureYuvFrame) {
-      CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
-      CVPixelBufferLockBaseAddress(imageBuffer, 0);
-      const uint8_t* dataY = (const uint8_t*)CVPixelBufferGetBaseAddressOfPlane(imageBuffer, 0);//YYYYYYYY
-      size_t strideY = CVPixelBufferGetBytesPerRowOfPlane(imageBuffer, 0);
-      const uint8_t* dataUV = (const uint8_t*)CVPixelBufferGetBaseAddressOfPlane(imageBuffer, 1);//UVUVUVUV
-      size_t strideUV = CVPixelBufferGetBytesPerRowOfPlane(imageBuffer, 1);
-      size_t width = CVPixelBufferGetWidth(imageBuffer);
-      size_t height = CVPixelBufferGetHeight(imageBuffer);
-
-      // todo render nv12
-      CVPixelBufferUnlockBaseAddress(imageBuffer, 0);
-    } else {
-      //
-      CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
-      CVPixelBufferLockBaseAddress(imageBuffer, 0);
-      auto width = CVPixelBufferGetWidth(imageBuffer);
-      auto height = CVPixelBufferGetHeight(imageBuffer);
-      auto stride = CVPixelBufferGetBytesPerRow(imageBuffer)/4;
-      auto pixels = (const uint8_t *)CVPixelBufferGetBaseAddress(imageBuffer);
-      gpuPixelRawInput->uploadBytes(pixels, stride, height, stride);
-      CVPixelBufferUnlockBaseAddress(imageBuffer, 0);
+    //If set OFF, cancel all effects for comparing with the original image
+    if (self.effectSwitch.selectedSegmentIndex == 1) {
+        beauty_face_filter_->setSharpen(0);
+        beauty_face_filter_->setBlurAlpha(0);
+        beauty_face_filter_->setWhite(0);
+        face_reshape_filter_->setFaceSlimLevel(0);
+        face_reshape_filter_->setEyeZoomLevel(0);
+        lipstick_filter_->setBlendLevel(0);
+        blusher_filter_->setBlendLevel(0);
+    }
+    
+    if(captureYuvFrame) {
+        CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
+        CVPixelBufferLockBaseAddress(imageBuffer, 0);
+        const uint8_t* dataY = (const uint8_t*)CVPixelBufferGetBaseAddressOfPlane(imageBuffer, 0);//YYYYYYYY
+        size_t strideY = CVPixelBufferGetBytesPerRowOfPlane(imageBuffer, 0);
+        const uint8_t* dataUV = (const uint8_t*)CVPixelBufferGetBaseAddressOfPlane(imageBuffer, 1);//UVUVUVUV
+        size_t strideUV = CVPixelBufferGetBytesPerRowOfPlane(imageBuffer, 1);
+        size_t width = CVPixelBufferGetWidth(imageBuffer);
+        size_t height = CVPixelBufferGetHeight(imageBuffer);
+        // todo render nv12
+        CVPixelBufferUnlockBaseAddress(imageBuffer, 0);
+    } else { //
+        CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
+        CVPixelBufferLockBaseAddress(imageBuffer, 0);
+        auto width = CVPixelBufferGetWidth(imageBuffer);
+        auto height = CVPixelBufferGetHeight(imageBuffer);
+        auto stride = CVPixelBufferGetBytesPerRow(imageBuffer)/4;
+        auto pixels = (const uint8_t *)CVPixelBufferGetBaseAddress(imageBuffer);
+        gpuPixelRawInput->uploadBytes(pixels, stride, height, stride);
+        CVPixelBufferUnlockBaseAddress(imageBuffer, 0);
     }
 }
 
 //点击不同分段就会有不同的事件进行相应
--(void)onFilterSwitchChange:(UISegmentedControl *)sender {
+- (void)onFilterSwitchChange:(UISegmentedControl *)sender {
+    //If set ON, apply all effects for recoverying functions
     if (sender.selectedSegmentIndex == 0) {
-      [self setSharpenValue:self.sharpenValue];
-      [self setBlurValue: self.blurValue];
-      [self setWhithValue:self.whithValue];
-      [self setThinFaceValue:self.thinFaceValue];
-      [self setEyeValue: self.eyeValue];
-      [self setLipstickValue: self.lipstickValue];
-      [self setBlusherValue: self.blusherValue];
-    } else {
-      beauty_face_filter_->setSharpen(0);
-      beauty_face_filter_->setBlurAlpha(0);
-      beauty_face_filter_->setWhite(0);
-      face_reshape_filter_->setFaceSlimLevel(0);
-      face_reshape_filter_->setEyeZoomLevel(0);
-      lipstick_filter_->setBlendLevel(0);
-      blusher_filter_->setBlendLevel(0);
+        [self setSharpenValue:self.sharpenValue];
+        [self setBlurValue: self.blurValue];
+        [self setWhithValue:self.whithValue];
+        [self setThinFaceValue:self.thinFaceValue];
+        [self setEyeValue: self.eyeValue];
+        [self setLipstickValue: self.lipstickValue];
+        [self setBlusherValue: self.blusherValue];
     }
-  }
-
-
--(void)onCameraSwitchBtnUpInside {
-  [self.capturer reverseCamera];
 }
-
--(VideoCapturer*)capturer {
-  if(_capturer == nil) {
-    VCVideoCapturerParam *param = [[VCVideoCapturerParam alloc] init];
-    param.frameRate = 30;
-    
-    param.sessionPreset = AVCaptureSessionPreset1280x720;
-    if(captureYuvFrame) {
-      param.pixelsFormatType = kCVPixelFormatType_420YpCbCr8BiPlanarFullRange;
-    } else {
-      param.pixelsFormatType = kCVPixelFormatType_32BGRA;
-    }
-    
-    param.devicePosition = AVCaptureDevicePositionFront;
-    param.videoOrientation = AVCaptureVideoOrientationPortrait;
-    _capturer = [[VideoCapturer alloc] initWithCaptureParam:param error:nil];
-    _capturer.delegate = self;
-  }
-  
-  return _capturer;
-}
-
--(UIButton*)cameraSwitchBtn {
-  if(_cameraSwitchBtn == nil) {
-    _cameraSwitchBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-    _cameraSwitchBtn.frame = CGRectMake(self.view.bounds.size.width - 35,
-                                        105,
-                                        25,
-                                        20);
-    
-    [_cameraSwitchBtn setBackgroundImage:[UIImage imageNamed:@"CameraIcon"] forState:UIControlStateNormal];
-    [_cameraSwitchBtn addTarget: self action: @selector(onCameraSwitchBtnUpInside) forControlEvents: UIControlEventTouchUpInside] ;
-  }
-  return _cameraSwitchBtn;
-}
-
--(UISegmentedControl*)effectSwitch {
-  if(_effectSwitch == nil) {
+/// For comparing with the original image
+- (UISegmentedControl*)effectSwitch {
+  if (_effectSwitch == nil) {
     NSArray *array = [NSArray arrayWithObjects:@"ON",@"OFF", nil];
     _effectSwitch = [[UISegmentedControl alloc]initWithItems:array];
     _effectSwitch.frame = CGRectMake(self.view.frame.size.width - 90,
                                      self.view.frame.size.height - 160,
-                                    80,
-                                    30);
+                                     80,
+                                     30);
     _effectSwitch.apportionsSegmentWidthsByContent = YES;
     _effectSwitch.selectedSegmentIndex = 0;
     
@@ -327,4 +328,5 @@ using namespace gpupixel;
   }
   return _effectSwitch;
 }
+
 @end
