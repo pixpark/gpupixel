@@ -14,12 +14,14 @@ using namespace gpupixel;
 @interface VideoFilterController () <VCVideoCapturerDelegate> {
   bool captureYuvFrame;
   std::shared_ptr<SourceRawDataInput> gpuPixelRawInput;
+  std::shared_ptr<TargetRawDataOutput> targetRawOutput_;
   GPUPixelView *gpuPixelView;
   std::shared_ptr<BeautyFaceFilter> beauty_face_filter_;
-  std::shared_ptr<TargetRawDataOutput> targetRawOutput_;
   std::shared_ptr<FaceReshapeFilter> face_reshape_filter_;
   std::shared_ptr<gpupixel::FaceMakeupFilter> lipstick_filter_;
   std::shared_ptr<gpupixel::FaceMakeupFilter> blusher_filter_;
+    
+  RawOutputCallback _cb;
 }
 
 //
@@ -38,6 +40,9 @@ using namespace gpupixel;
 @property (strong, nonatomic) UISegmentedControl* segment;
 @property (strong, nonatomic) UISegmentedControl* effectSwitch;
 @property (strong, nonatomic) UISlider *slider;
+
+@property (assign, nonatomic) BOOL isTrySaveImage;
+
 @end
 
 @implementation VideoFilterController
@@ -59,23 +64,58 @@ using namespace gpupixel;
   // start camera capture
   [self.capturer startCapture];
 }
-/// Back to home page and release all memory of gpupixel
-- (void)backAction {
-  [self.capturer stopCapture];
-  self.capturer = nil;
-    
-  beauty_face_filter_ = nil;
-  face_reshape_filter_ = nil;
-  lipstick_filter_ = nil;
-  blusher_filter_ = nil;
-  [gpuPixelView removeFromSuperview];
-  gpuPixelView = nil;
-  targetRawOutput_ = nil;
-  gpuPixelRawInput = nil;
-  gpupixel::GPUPixelContext::getInstance()->destroy();
-  [self.navigationController popViewControllerAnimated:true];
+- (void) initVideoFilter {
+    gpupixel::GPUPixelContext::getInstance()->runSync([&] {
+        gpuPixelRawInput = SourceRawDataInput::create();
+        gpuPixelView = [[GPUPixelView alloc] initWithFrame:self.view.frame];
+        [self.view addSubview:gpuPixelView];
+        
+        lipstick_filter_ = LipstickFilter::create();
+        blusher_filter_ = BlusherFilter::create();
+        gpuPixelRawInput->RegLandmarkCallback([=](std::vector<float> landmarks) {
+            lipstick_filter_->SetFaceLandmarks(landmarks);
+            blusher_filter_->SetFaceLandmarks(landmarks);
+            face_reshape_filter_->SetFaceLandmarks(landmarks);
+        });
+        
+        // create filter
+        targetRawOutput_ = TargetRawDataOutput::create();
+        beauty_face_filter_ = BeautyFaceFilter::create();
+        face_reshape_filter_ = FaceReshapeFilter::create();
+        // filter pipline
+        gpuPixelRawInput->addTarget(lipstick_filter_)
+        ->addTarget(blusher_filter_)
+        ->addTarget(face_reshape_filter_)
+        ->addTarget(beauty_face_filter_)
+        ->addTarget(gpuPixelView);
+        [gpuPixelView setBackgroundColor:[UIColor grayColor]];
+        [gpuPixelView setFillMode:(gpupixel::TargetView::PreserveAspectRatioAndFill)];
+        
+        beauty_face_filter_->addTarget(targetRawOutput_);
+        __weak typeof(VideoFilterController*)weakSelf = self;
+        _cb = [weakSelf]( const uint8_t* data, int width, int height, int64_t ts) {
+            if (weakSelf.isTrySaveImage == YES) {
+                unsigned char *imageData = (unsigned char *)data;
+                size_t bitsPerComponent = 8; //r g b a 每个component bits数目
+                size_t bytesPerRow = width * 4; //一张图片每行字节数目(每个像素点包含r g b a 四个字节)
+                CGColorSpaceRef space = CGColorSpaceCreateDeviceRGB(); //创建rgb颜色空间
+                uint32_t bitmapInfo = kCGImageAlphaPremultipliedFirst | kCGBitmapByteOrder32Little;
+                CGContextRef context = CGBitmapContextCreate(imageData, width, height, bitsPerComponent, bytesPerRow, space, bitmapInfo);
+                CGImageRef cgImage = CGBitmapContextCreateImage(context);
+                CIImage *ciImage = [CIImage imageWithCGImage:cgImage];
+                UIImage *resultImage = [UIImage imageWithCIImage:ciImage];
+                NSLog(@"%@", resultImage);
+                
+                //Release memory
+                CGContextRelease(context);
+                CGImageRelease(cgImage);
+                weakSelf.isTrySaveImage = NO;
+            }
+        };
+        targetRawOutput_->setPixelsCallbck(_cb);
+        self.isTrySaveImage = NO;
+    });
 }
-
 - (void)initUI {
   NSArray *array = [NSArray arrayWithObjects:@"锐化",@"磨皮",@"美白",@"瘦脸",@"大眼", @"口红", @"腮红", nil];
   //初始化UISegmentedControl
@@ -113,8 +153,32 @@ using namespace gpupixel;
   
   UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(backAction)];
   self.navigationItem.leftBarButtonItem = backItem;
+  UIBarButtonItem *saveItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(saveImageAction)];
+  self.navigationItem.rightBarButtonItem = saveItem;
 }
-
+/// Back to home page and release all memory of gpupixel
+- (void)backAction {
+    [self.capturer stopCapture];
+    self.capturer = nil;
+    
+    beauty_face_filter_ = nil;
+    face_reshape_filter_ = nil;
+    lipstick_filter_ = nil;
+    blusher_filter_ = nil;
+    [gpuPixelView removeFromSuperview];
+    gpuPixelView = nil;
+    targetRawOutput_ = nil;
+    gpuPixelRawInput = nil;
+    gpupixel::GPUPixelContext::getInstance()->destroy();
+    _cb = nil;
+    
+    [self.navigationController popViewControllerAnimated:true];
+}
+/// Get image from gpupixel after render
+- (void)saveImageAction {
+    self.isTrySaveImage = YES;
+}
+ 
 - (void)sliderValueChanged:(UISlider*) slider {
     if (self.segment.selectedSegmentIndex == 0) {  // 锐化
       [self setSharpenValue:slider.value];
@@ -151,40 +215,6 @@ using namespace gpupixel;
       self.slider.value = _blusherValue;
     }
   }
-
-- (void) initVideoFilter {
-  gpupixel::GPUPixelContext::getInstance()->runSync([&] {
-    gpuPixelRawInput = SourceRawDataInput::create();
-    gpuPixelView = [[GPUPixelView alloc] initWithFrame:self.view.frame];
-    [self.view addSubview:gpuPixelView];
- 
-  
-    lipstick_filter_ = LipstickFilter::create();
-    blusher_filter_ = BlusherFilter::create();
- 
-    gpuPixelRawInput->RegLandmarkCallback([=](std::vector<float> landmarks) {
-      lipstick_filter_->SetFaceLandmarks(landmarks);
-      blusher_filter_->SetFaceLandmarks(landmarks);
-      face_reshape_filter_->SetFaceLandmarks(landmarks);
-    });
-  
-    // create filter
-    targetRawOutput_ = TargetRawDataOutput::create();
-    beauty_face_filter_ = BeautyFaceFilter::create();
-    face_reshape_filter_ = FaceReshapeFilter::create();
-    
-    // filter pipline
-    gpuPixelRawInput->addTarget(lipstick_filter_)
-                    ->addTarget(blusher_filter_)
-                    ->addTarget(face_reshape_filter_)
-                    ->addTarget(beauty_face_filter_)
-                    ->addTarget(gpuPixelView);
-    [gpuPixelView setBackgroundColor:[UIColor grayColor]];
-    [gpuPixelView setFillMode:(gpupixel::TargetView::PreserveAspectRatioAndFill)];
-  
-  });
-}
- 
 #pragma mark - 属性赋值
 - (void)onCameraSwitchBtnUpInside {
   [self.capturer reverseCamera];
@@ -195,7 +225,7 @@ using namespace gpupixel;
     VCVideoCapturerParam *param = [[VCVideoCapturerParam alloc] init];
     param.frameRate = 30;
     
-    param.sessionPreset = AVCaptureSessionPreset1280x720;
+    param.sessionPreset = AVCaptureSessionPresetHigh;
     if(captureYuvFrame) {
       param.pixelsFormatType = kCVPixelFormatType_420YpCbCr8BiPlanarFullRange;
     } else {
