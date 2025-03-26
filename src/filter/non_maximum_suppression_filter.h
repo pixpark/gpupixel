@@ -10,7 +10,7 @@
 #include "gpupixel_macros.h"
 #include "nearby_sampling3x3_filter.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 class GPUPIXEL_API
     NonMaximumSuppressionFilter : public NearbySampling3x3Filter {
  public:
@@ -21,4 +21,4 @@ class GPUPIXEL_API
   NonMaximumSuppressionFilter(){};
 };
 
-NS_GPUPIXEL_END
+}

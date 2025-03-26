@@ -7,7 +7,7 @@
 
 #include "smooth_toon_filter.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 
 REGISTER_FILTER_CLASS(SmoothToonFilter)
 
@@ -29,7 +29,7 @@ bool SmoothToonFilter::init() {
   }
   _gaussianBlurFilter = GaussianBlurFilter::create();
   _toonFilter = ToonFilter::create();
-  _gaussianBlurFilter->addTarget(_toonFilter);
+  _gaussianBlurFilter->addSink(_toonFilter);
   addFilter(_gaussianBlurFilter);
 
   _blurRadius = 2.0;
@@ -69,4 +69,4 @@ void SmoothToonFilter::setToonQuantizationLevels(float toonQuantizationLevels) {
   _toonFilter->setQuantizatinLevels(_toonQuantizationLevels);
 }
 
-NS_GPUPIXEL_END
+}

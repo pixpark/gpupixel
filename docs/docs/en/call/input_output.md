@@ -14,20 +14,20 @@ GPUPixel supports different input formats:
 
 ```cpp
 // For RGBA data
-source_raw_input_->uploadBytes(pixels, width, height, stride);
+source_raw_input_->processData(pixels, width, height, stride);
 ```
 
 Example with camera frame processing:
 
 ```cpp
-gpuPixelRawInput->uploadBytes(pixels, width, height, stride);
+gpuPixelRawInput->processData(pixels, width, height, stride);
 ```
 
 ### YUV Data Input
 
 ```cpp
 // For YUV420P data
-source_raw_input_->uploadBytes(width, height, 
+source_raw_input_->processData(width, height, 
                               bufferY, strideY, 
                               bufferU, strideU,
                               bufferV, strideV);

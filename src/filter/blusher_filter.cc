@@ -9,7 +9,7 @@
 #include "face_detector.h"
 #include "source_image.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 std::shared_ptr<BlusherFilter> BlusherFilter::create() {
   auto ret = std::shared_ptr<BlusherFilter>(new BlusherFilter());
   if (ret && !ret->init()) {
@@ -25,4 +25,4 @@ bool BlusherFilter::init() {
   return FaceMakeupFilter::init();
 }
 
-NS_GPUPIXEL_END
+}

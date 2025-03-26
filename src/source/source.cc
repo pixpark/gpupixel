@@ -10,10 +10,10 @@
 #include "util.h"
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
-#include "objc_target.h"
+#include "objc_sink.h"
 #endif
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 
 Source::Source()
     : _framebuffer(0),
@@ -21,66 +21,65 @@ Source::Source()
       _framebufferScale(1.0) {}
 
 Source::~Source() {
-  removeAllTargets();
+  removeAllSinks();
 }
 
-std::shared_ptr<Source> Source::addTarget(std::shared_ptr<Target> target) {
-  int targetTexIdx = target->getNextAvailableTextureIndex();
-  return addTarget(target, targetTexIdx);
+std::shared_ptr<Source> Source::addSink(std::shared_ptr<Sink> sink) {
+  int sinkTexIdx = sink->getNextAvailableTextureIndex();
+  return addSink(sink, sinkTexIdx);
 }
 
-std::shared_ptr<Source> Source::addTarget(std::shared_ptr<Target> target,
+std::shared_ptr<Source> Source::addSink(std::shared_ptr<Sink> sink,
                                           int texIdx) {
-  if (!hasTarget(target)) {
-    _targets[target] = texIdx;
-    target->setInputFramebuffer(_framebuffer, RotationMode::NoRotation, texIdx);
+  if (!hasSink(sink)) {
+    _sinks[sink] = texIdx;
+    sink->setInputFramebuffer(_framebuffer, RotationMode::NoRotation, texIdx);
   }
-  return std::dynamic_pointer_cast<Source>(target);
+  return std::dynamic_pointer_cast<Source>(sink);
 }
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
-std::shared_ptr<Source> Source::addTarget(id<GPUPixelTarget> target) {
-  auto ios_target = std::shared_ptr<Target>(new ObjcTarget(target));
-  addTarget(ios_target);
+std::shared_ptr<Source> Source::addSink(id<GPUPixelSink> sink) {
+  auto ios_sink = std::shared_ptr<Sink>(new ObjcSink(sink));
+  addSink(ios_sink);
   return 0;
 }
 #endif
 
-bool Source::hasTarget(const std::shared_ptr<Target> target) const {
-  if (_targets.find(target) != _targets.end()) {
+bool Source::hasSink(const std::shared_ptr<Sink> sink) const {
+  if (_sinks.find(sink) != _sinks.end()) {
     return true;
   } else {
     return false;
   }
 }
 
-void Source::removeTarget(std::shared_ptr<Target> target) {
-  auto itr = _targets.find(target);
-  if (itr != _targets.end()) {
-    _targets.erase(itr);
+void Source::removeSink(std::shared_ptr<Sink> sink) {
+  auto itr = _sinks.find(sink);
+  if (itr != _sinks.end()) {
+    _sinks.erase(itr);
   }
 }
 
-void Source::removeAllTargets() {
-  _targets.clear();
+void Source::removeAllSinks() {
+  _sinks.clear();
 }
 
-bool Source::proceed(bool bUpdateTargets /* = true*/,
-                     int64_t frameTime /* = 0*/) {
-  if (bUpdateTargets) {
-    updateTargets(frameTime);
+bool Source::doRender(bool updateSinks) {
+  if (updateSinks) {
+    doUpdateSinks();
   }
   return true;
 }
 
-void Source::updateTargets(int64_t frameTime) {
-  for (auto& it : _targets) {
-    auto target = it.first;
-    target->setInputFramebuffer(_framebuffer, _outputRotation,
-                                _targets[target]);
-    if (target->isPrepared()) {
-      target->update(frameTime);
-      target->unPrepear();
+void Source::doUpdateSinks() {
+  for (auto& it : _sinks) {
+    auto sink = it.first;
+    sink->setInputFramebuffer(_framebuffer, _outputRotation,
+                                _sinks[sink]);
+    if (sink->isPrepared()) {
+      sink->render();
+      sink->unPrepear();
     }
   }
 }
@@ -106,7 +105,7 @@ unsigned char* Source::captureAProcessedFrameData(
   GPUPixelContext::getInstance()->captureHeight = height;
   GPUPixelContext::getInstance()->captureUpToFilter = upToFilter;
 
-  proceed(true);
+  doRender(true);
   unsigned char* processedFrameData =
       GPUPixelContext::getInstance()->capturedFrameData;
 
@@ -165,4 +164,4 @@ std::shared_ptr<Framebuffer> Source::getFramebuffer() const {
 
 void Source::releaseFramebuffer(bool returnToCache /* = true*/) {}
 
-NS_GPUPIXEL_END
+}

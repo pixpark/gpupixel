@@ -7,7 +7,7 @@
 
 #include "ios_blur_filter.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 
 REGISTER_FILTER_CLASS(IOSBlurFilter)
 
@@ -34,8 +34,8 @@ bool IOSBlurFilter::init() {
   _luminanceRangeFilter = LuminanceRangeFilter::create();
 
   _saturationFilter             // 1. downsample and desaturate
-      ->addTarget(_blurFilter)  // 2. apply a strong Gaussian blur
-      ->addTarget(
+      ->addSink(_blurFilter)  // 2. apply a strong Gaussian blur
+      ->addSink(
           _luminanceRangeFilter);  // 3. upsample and adjust luminance range
 
   addFilter(_saturationFilter);
@@ -87,4 +87,4 @@ void IOSBlurFilter::setDownSampling(float downSampling) {
   _luminanceRangeFilter->setFramebufferScale(downSampling);
 }
 
-NS_GPUPIXEL_END
+}

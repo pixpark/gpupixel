@@ -7,7 +7,7 @@
 
 #include "box_blur_filter.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 
 BoxBlurFilter::BoxBlurFilter() : _hBlurFilter(0), _vBlurFilter(0) {}
 
@@ -31,7 +31,7 @@ bool BoxBlurFilter::init(int radius, float sigma) {
       BoxMonoBlurFilter::create(GaussianBlurMonoFilter::HORIZONTAL, 4, 0.0);
   _vBlurFilter =
       BoxMonoBlurFilter::create(GaussianBlurMonoFilter::VERTICAL, 4, 0.0);
-  _hBlurFilter->addTarget(_vBlurFilter);
+  _hBlurFilter->addSink(_vBlurFilter);
   addFilter(_hBlurFilter);
 
   registerProperty("radius", 4, "", [this](int& radius) { setRadius(radius); });
@@ -56,4 +56,4 @@ void BoxBlurFilter::setTexelSpacingMultiplier(float value) {
   _vBlurFilter->setTexelSpacingMultiplier(value);
 }
 
-NS_GPUPIXEL_END
+}

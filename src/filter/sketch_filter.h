@@ -12,7 +12,7 @@
 #include "grayscale_filter.h"
 #include "nearby_sampling3x3_filter.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 
 // Sketch filter is just the Sobel edge detection filter with the colors
 // inverted.
@@ -38,8 +38,7 @@ class GPUPIXEL_API _SketchFilter : public NearbySampling3x3Filter {
  public:
   static std::shared_ptr<_SketchFilter> create();
   bool init();
-  virtual bool proceed(bool bUpdateTargets = true,
-                       int64_t frameTime = 0) override;
+  virtual bool doRender(bool updateSinks = true) override;
 
   void setEdgeStrength(float edgeStrength);
 
@@ -49,4 +48,4 @@ class GPUPIXEL_API _SketchFilter : public NearbySampling3x3Filter {
   float _edgeStrength;
 };
 
-NS_GPUPIXEL_END
+}

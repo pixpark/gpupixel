@@ -10,7 +10,7 @@
 #include "color_matrix_filter.h"
 #include "gpupixel_macros.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 class GPUPIXEL_API HSBFilter : public ColorMatrixFilter {
  public:
   static std::shared_ptr<HSBFilter> create();
@@ -49,4 +49,4 @@ class GPUPIXEL_API HSBFilter : public ColorMatrixFilter {
   Matrix4 saturationMatrix_;
 };
 
-NS_GPUPIXEL_END
+}

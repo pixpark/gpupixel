@@ -7,7 +7,7 @@
 
 #include "halftone_filter.h"
 
-USING_NS_GPUPIXEL
+using namespace gpupixel;
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
 const std::string kHalftoneFragmentShaderString = R"(

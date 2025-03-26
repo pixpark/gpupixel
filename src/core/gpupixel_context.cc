@@ -78,7 +78,7 @@ typedef void (^TaskBlock)(void);
 
 #endif
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
 iOSHelper* iosHelper;
@@ -359,4 +359,4 @@ void GPUPixelContext::runSync(std::function<void(void)> func) {
 
 }
 
-NS_GPUPIXEL_END
+}

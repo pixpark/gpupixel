@@ -165,10 +165,10 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         sourceCamera = new GPUPixelSourceCamera(this.getApplicationContext());
 
         //
-        sourceCamera.addTarget(lipstickFilter);
-        lipstickFilter.addTarget(faceReshapFilter);
-        faceReshapFilter.addTarget(beautyFaceFilter);
-        beautyFaceFilter.addTarget(surfaceView);
+        sourceCamera.addSink(lipstickFilter);
+        lipstickFilter.addSink(faceReshapFilter);
+        faceReshapFilter.addSink(beautyFaceFilter);
+        beautyFaceFilter.addSink(surfaceView);
 
         sourceCamera.setLandmarkCallbck(new GPUPixel.GPUPixelLandmarkCallback() {
             @Override

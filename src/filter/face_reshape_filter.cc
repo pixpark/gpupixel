@@ -8,7 +8,7 @@
 #include "face_reshape_filter.h"
 #include "gpupixel_context.h"
 #include "face_detector.h"
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
 const std::string kGPUPixelThinFaceFragmentShaderString = R"(
@@ -252,7 +252,7 @@ void FaceReshapeFilter::SetFaceLandmarks(std::vector<float> landmarks) {
   has_face_ = true;
 }
 
-bool FaceReshapeFilter::proceed(bool bUpdateTargets, int64_t frameTime) {
+bool FaceReshapeFilter::doRender(bool updateSinks) {
   float aspect = (float)_framebuffer->getWidth() / _framebuffer->getHeight();
   _filterProgram->setUniformValue("aspectRatio", aspect);
 
@@ -265,7 +265,7 @@ bool FaceReshapeFilter::proceed(bool bUpdateTargets, int64_t frameTime) {
     _filterProgram->setUniformValue("facePoints", face_land_marks_.data(),
                                     static_cast<int>(face_land_marks_.size()));
   }
-  return Filter::proceed(bUpdateTargets, frameTime);
+  return Filter::doRender(updateSinks);
 }
 
 #pragma mark - face slim
@@ -278,4 +278,4 @@ void FaceReshapeFilter::setEyeZoomLevel(float level) {
   bigEyeDelta_ = level;
 }
 
-NS_GPUPIXEL_END
+}

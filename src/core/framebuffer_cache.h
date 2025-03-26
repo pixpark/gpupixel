@@ -12,7 +12,7 @@
 #include "framebuffer.h"
 #include "gpupixel_macros.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 class GPUPIXEL_API FramebufferCache {
  public:
   FramebufferCache();
@@ -37,4 +37,4 @@ class GPUPIXEL_API FramebufferCache {
   std::map<std::string, int> _framebufferTypeCounts;
 };
 
-NS_GPUPIXEL_END
+}

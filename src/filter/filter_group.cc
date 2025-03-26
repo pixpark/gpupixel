@@ -10,7 +10,7 @@
 #include <algorithm>
 #include "gpupixel_context.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 
 FilterGroup::FilterGroup() : _terminalFilter(0) {}
 
@@ -80,72 +80,72 @@ void FilterGroup::removeAllFilters() {
 
 std::shared_ptr<Filter> FilterGroup::_predictTerminalFilter(
     std::shared_ptr<Filter> filter) {
-  if (filter->getTargets().size() == 0) {
+  if (filter->getSinks().size() == 0) {
     return filter;
   } else {
     return _predictTerminalFilter(
-        std::dynamic_pointer_cast<Filter>(filter->getTargets().begin()->first));
+        std::dynamic_pointer_cast<Filter>(filter->getSinks().begin()->first));
   }
 }
 
-std::shared_ptr<Source> FilterGroup::addTarget(std::shared_ptr<Target> target) {
+std::shared_ptr<Source> FilterGroup::addSink(std::shared_ptr<Sink> sink) {
   if (_terminalFilter) {
-    return _terminalFilter->addTarget(target);
+    return _terminalFilter->addSink(sink);
   } else {
     return 0;
   }
 }
 
-std::shared_ptr<Source> FilterGroup::addTarget(std::shared_ptr<Target> target,
+std::shared_ptr<Source> FilterGroup::addSink(std::shared_ptr<Sink> sink,
                                                int inputNumber) {
   if (_terminalFilter) {
-    return _terminalFilter->addTarget(target, inputNumber);
+    return _terminalFilter->addSink(sink, inputNumber);
   } else {
     return 0;
   }
 }
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
-std::shared_ptr<Source> FilterGroup::addTarget(id<GPUPixelTarget> target) {
+std::shared_ptr<Source> FilterGroup::addSink(id<GPUPixelSink> sink) {
   if (_terminalFilter) {
-    return _terminalFilter->addTarget(target);
+    return _terminalFilter->addSink(sink);
   } else {
     return 0;
   }
 }
 #endif
 
-void FilterGroup::removeTarget(std::shared_ptr<Target> target) {
+void FilterGroup::removeSink(std::shared_ptr<Sink> sink) {
   if (_terminalFilter) {
-    _terminalFilter->removeTarget(target);
+    _terminalFilter->removeSink(sink);
   }
 }
 
-void FilterGroup::removeAllTargets() {
+void FilterGroup::removeAllSinks() {
   if (_terminalFilter) {
-    _terminalFilter->removeAllTargets();
+    _terminalFilter->removeAllSinks();
   }
 }
 
-bool FilterGroup::hasTarget(const std::shared_ptr<Target> target) const {
+bool FilterGroup::hasSink(const std::shared_ptr<Sink> sink) const {
   if (_terminalFilter) {
-    return _terminalFilter->hasTarget(target);
+    return _terminalFilter->hasSink(sink);
   } else {
     return false;
   }
 }
 
-std::map<std::shared_ptr<Target>, int>& FilterGroup::getTargets() {
+std::map<std::shared_ptr<Sink>, int>& FilterGroup::getSinks() {
   assert(_terminalFilter);
-  return _terminalFilter->getTargets();
+  return _terminalFilter->getSinks();
 }
 
-bool FilterGroup::proceed(bool bUpdateTargets, int64_t frameTime) {
+bool FilterGroup::doRender(bool updateSinks) {
   return true;
 }
 
-void FilterGroup::update(int64_t frameTime) {
-  proceed();
+void FilterGroup::render() {
+  doRender();
   if (GPUPixelContext::getInstance()->isCapturingFrame &&
       this == GPUPixelContext::getInstance()->captureUpToFilter.get()) {
     GPUPixelContext::getInstance()->captureUpToFilter = _terminalFilter;
@@ -153,14 +153,14 @@ void FilterGroup::update(int64_t frameTime) {
 
   for (auto& filter : _filters) {
     if (filter->isPrepared()) {
-      filter->update(frameTime);
+      filter->render();
     }
   }
 }
 
-void FilterGroup::updateTargets(int64_t frameTime) {
+void FilterGroup::doUpdateSinks() {
   if (_terminalFilter) {
-    _terminalFilter->updateTargets(frameTime);
+    _terminalFilter->doUpdateSinks();
   }
 }
 
@@ -202,4 +202,4 @@ void FilterGroup::unPrepear() {
   //}
 }
 
-NS_GPUPIXEL_END
+}

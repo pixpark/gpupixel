@@ -12,7 +12,7 @@
 #include "gaussian_blur_filter.h"
 #include "toon_filter.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 class GPUPIXEL_API SmoothToonFilter : public FilterGroup {
  public:
   virtual ~SmoothToonFilter();
@@ -36,4 +36,4 @@ class GPUPIXEL_API SmoothToonFilter : public FilterGroup {
   float _toonQuantizationLevels;
 };
 
-NS_GPUPIXEL_END
+}

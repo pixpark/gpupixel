@@ -1,6 +1,6 @@
 # 自定义输入
 
-本指南将介绍如何通过继承 GPUPixel 中的 `Source` 类来创建自定义输入源。我们将通过 `SourceRawDataInput` 和 `SourceCamera` 两个示例来探索实现过程。
+本指南将介绍如何通过继承 GPUPixel 中的 `Source` 类来创建自定义输入源。我们将通过 `SourceRawData` 和 `SourceCamera` 两个示例来探索实现过程。
 
 ## 概述
 
@@ -80,22 +80,22 @@ void YourCustomInput::setFrameData(const uint8_t* pixels,
 
 ### 4. 数据流控制
 
-调用 `proceed()` 来通过滤镜链处理帧：
+调用 `doRender()` 来通过滤镜链处理帧：
 
 ```cpp
-Source::proceed(true, timestamp);
+Source::doRender(true, timestamp);
 ```
 
-## 示例：SourceRawDataInput
+## 示例：SourceRawData
 
-SourceRawDataInput 演示了如何处理原始像素数据：
+SourceRawData 演示了如何处理原始像素数据：
 
 1. 支持多种输入格式（RGBA 和 I420）
 2. 管理 OpenGL 纹理
 3. 实现格式转换的着色器程序
 
 主要特性：
-- `uploadBytes()`：处理 RGBA 和 YUV 数据
+- `processData()`：处理 RGBA 和 YUV 数据
 - 不同格式的纹理管理
 - YUV 到 RGB 转换的着色器程序
 
@@ -143,7 +143,7 @@ SourceCamera 展示了如何处理相机输入：
 auto input = YourCustomInput::create();
 if (input) {
   auto filter = BeautyFaceFilter::create();
-  input->addTarget(filter);
+  input->addSink(filter);
   // 设置更多滤镜或输出
 }
 ```

@@ -11,7 +11,7 @@
 
 #include <vector>
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 GPUPIXEL_API typedef struct {
   GLenum minFilter;
   GLenum magFilter;
@@ -60,4 +60,4 @@ class GPUPIXEL_API Framebuffer {
   //    static std::vector<std::shared_ptr<Framebuffer>> _framebuffers;
 };
 
-NS_GPUPIXEL_END
+}

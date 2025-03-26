@@ -7,7 +7,7 @@
 
 #include "bilateral_filter.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 
 REGISTER_FILTER_CLASS(BilateralMonoFilter)
 
@@ -231,7 +231,7 @@ bool BilateralMonoFilter::init() {
   return false;
 }
 
-bool BilateralMonoFilter::proceed(bool bUpdateTargets, int64_t frameTime) {
+bool BilateralMonoFilter::doRender(bool updateSinks) {
   std::shared_ptr<Framebuffer> inputFramebuffer =
       _inputFramebuffers.begin()->second.frameBuffer;
   RotationMode inputRotation = _inputFramebuffers.begin()->second.rotationMode;
@@ -264,7 +264,7 @@ bool BilateralMonoFilter::proceed(bool bUpdateTargets, int64_t frameTime) {
 
   _filterProgram->setUniformValue("distanceNormalizationFactor",
                                   _distanceNormalizationFactor);
-  return Filter::proceed(bUpdateTargets, frameTime);
+  return Filter::doRender(updateSinks);
 }
 
 void BilateralMonoFilter::setTexelSpacingMultiplier(float multiplier) {
@@ -296,7 +296,7 @@ bool BilateralFilter::init() {
 
   _hBlurFilter = BilateralMonoFilter::create(BilateralMonoFilter::HORIZONTAL);
   _vBlurFilter = BilateralMonoFilter::create(BilateralMonoFilter::VERTICAL);
-  _hBlurFilter->addTarget(_vBlurFilter);
+  _hBlurFilter->addSink(_vBlurFilter);
   addFilter(_hBlurFilter);
 
   registerProperty("texelSpacingMultiplier", 4.0,
@@ -323,4 +323,4 @@ void BilateralFilter::setDistanceNormalizationFactor(float value) {
   _hBlurFilter->setDistanceNormalizationFactor(value);
   _vBlurFilter->setDistanceNormalizationFactor(value);
 }
-NS_GPUPIXEL_END
+}

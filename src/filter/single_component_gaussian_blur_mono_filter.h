@@ -10,7 +10,7 @@
 #include "gpupixel_macros.h"
 #include "gaussian_blur_mono_filter.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 class GPUPIXEL_API SingleComponentGaussianBlurMonoFilter
     : public GaussianBlurMonoFilter {
  public:
@@ -27,4 +27,4 @@ class GPUPIXEL_API SingleComponentGaussianBlurMonoFilter
                                                      float sigma) override;
 };
 
-NS_GPUPIXEL_END
+}

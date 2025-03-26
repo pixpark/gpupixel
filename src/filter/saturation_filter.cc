@@ -7,7 +7,7 @@
 
 #include "saturation_filter.h"
 
-USING_NS_GPUPIXEL
+using namespace gpupixel;
 
 const std::string kSaturationFragmentShaderString = R"(
     uniform sampler2D inputImageTexture; uniform lowp float saturation;
@@ -57,7 +57,7 @@ void SaturationFilter::setSaturation(float saturation) {
   }
 }
 
-bool SaturationFilter::proceed(bool bUpdateTargets, int64_t frameTime) {
+bool SaturationFilter::doRender(bool updateSinks) {
   _filterProgram->setUniformValue("saturation", _saturation);
-  return Filter::proceed(bUpdateTargets, frameTime);
+  return Filter::doRender(updateSinks);
 }

@@ -7,7 +7,7 @@
 
 #include "weak_pixel_inclusion_filter.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 
 REGISTER_FILTER_CLASS(WeakPixelInclusionFilter)
 
@@ -107,4 +107,4 @@ bool WeakPixelInclusionFilter::init() {
   return false;
 }
 
-NS_GPUPIXEL_END
+}

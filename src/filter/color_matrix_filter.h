@@ -10,14 +10,13 @@
 #include "gpupixel_macros.h"
 #include "math_toolbox.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 class GPUPIXEL_API ColorMatrixFilter : public Filter {
  public:
   static std::shared_ptr<ColorMatrixFilter> create();
   bool init();
 
-  virtual bool proceed(bool bUpdateTargets = true,
-                       int64_t frameTime = 0) override;
+  virtual bool doRender(bool updateSinks = true) override;
 
   void setIntensity(float intensity) { _intensity = intensity; }
   void setColorMatrix(Matrix4 colorMatrix) { _colorMatrix = colorMatrix; }
@@ -29,4 +28,4 @@ class GPUPIXEL_API ColorMatrixFilter : public Filter {
   Matrix4 _colorMatrix;
 };
 
-NS_GPUPIXEL_END
+}

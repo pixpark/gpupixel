@@ -1,6 +1,6 @@
 # Custom Input Source
 
-This guide explains how to create a custom input source by inheriting from the `Source` class in GPUPixel. We'll explore the implementation process through two examples: `SourceRawDataInput` and `SourceCamera`.
+This guide explains how to create a custom input source by inheriting from the `Source` class in GPUPixel. We'll explore the implementation process through two examples: `SourceRawData` and `SourceCamera`.
 
 ## Overview
 
@@ -80,22 +80,22 @@ void YourCustomInput::setFrameData(const uint8_t* pixels,
 
 ### 4. Data Flow Control
 
-Call `proceed()` to process the frame through the filter chain:
+Call `doRender()` to process the frame through the filter chain:
 
 ```cpp
-Source::proceed(true, timestamp);
+Source::doRender(true, timestamp);
 ```
 
-## Example: SourceRawDataInput
+## Example: SourceRawData
 
-SourceRawDataInput demonstrates handling raw pixel data:
+SourceRawData demonstrates handling raw pixel data:
 
 1. Supports multiple input formats (RGBA and I420)
 2. Manages OpenGL textures
 3. Implements shader programs for format conversion
 
 Key features:
-- `uploadBytes()`: Handle RGBA and YUV data
+- `processData()`: Handle RGBA and YUV data
 - Texture management for different formats
 - Shader program for YUV to RGB conversion
 
@@ -143,7 +143,7 @@ To use your custom input source:
 auto input = YourCustomInput::create();
 if (input) {
   auto filter = BeautyFaceFilter::create();
-  input->addTarget(filter);
+  input->addSink(filter);
   // Setup more filters or outputs
 }
 ```

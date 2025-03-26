@@ -10,13 +10,12 @@
 #include "filter.h"
 #include "gpupixel_macros.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 class GPUPIXEL_API CrosshatchFilter : public Filter {
  public:
   static std::shared_ptr<CrosshatchFilter> create();
   bool init();
-  virtual bool proceed(bool bUpdateTargets = true,
-                       int64_t frameTime = 0) override;
+  virtual bool doRender(bool updateSinks = true) override;
 
   void setCrossHatchSpacing(float crossHatchSpacing);
   void setLineWidth(float lineWidth);
@@ -28,4 +27,4 @@ class GPUPIXEL_API CrosshatchFilter : public Filter {
   float _lineWidth;
 };
 
-NS_GPUPIXEL_END
+}

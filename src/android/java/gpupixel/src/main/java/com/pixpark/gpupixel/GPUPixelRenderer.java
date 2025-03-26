@@ -38,7 +38,7 @@ public class GPUPixelRenderer implements Renderer {
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         if (mSource != null) {
-            mSource.proceed(true, false);
+            mSource.doRender(true, false);
         }
     }
 

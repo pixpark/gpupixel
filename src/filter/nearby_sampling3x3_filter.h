@@ -10,7 +10,7 @@
 #include "filter.h"
 #include "gpupixel_macros.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 GPUPIXEL_API extern const std::string
 kNearbySampling3x3SamplingVertexShaderString;
 
@@ -19,8 +19,7 @@ class GPUPIXEL_API NearbySampling3x3Filter : public Filter {
   virtual bool initWithFragmentShaderString(
       const std::string& fragmentShaderSource,
       int inputNumber = 1) override;
-  virtual bool proceed(bool bUpdateTargets = true,
-                       int64_t frameTime = 0) override;
+  virtual bool doRender(bool updateSinks = true) override;
 
   void setTexelSizeMultiplier(float texelSizeMultiplier);
 
@@ -32,4 +31,4 @@ class GPUPIXEL_API NearbySampling3x3Filter : public Filter {
   GLuint _texelHeightUniform;
 };
 
-NS_GPUPIXEL_END
+}

@@ -9,7 +9,7 @@
 #include "util.h"
 #include "mars_face_detector.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 
 
 FaceDetector::FaceDetector() {
@@ -90,4 +90,4 @@ int FaceDetector::Detect(const uint8_t* data,
   return 0;
 }
 
-NS_GPUPIXEL_END
+}

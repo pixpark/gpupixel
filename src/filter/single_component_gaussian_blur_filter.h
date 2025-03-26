@@ -11,7 +11,7 @@
 #include "gpupixel_macros.h"
 #include "single_component_gaussian_blur_mono_filter.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 class GPUPIXEL_API SingleComponentGaussianBlurFilter : public FilterGroup {
  public:
   virtual ~SingleComponentGaussianBlurFilter();
@@ -31,4 +31,4 @@ class GPUPIXEL_API SingleComponentGaussianBlurFilter : public FilterGroup {
   std::shared_ptr<SingleComponentGaussianBlurMonoFilter> _vBlurFilter;
 };
 
-NS_GPUPIXEL_END
+}

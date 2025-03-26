@@ -7,7 +7,7 @@
 
 #include "non_maximum_suppression_filter.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 
 const std::string kNonMaximumSuppressionShaderString = R"(
     precision mediump float; uniform sampler2D inputImageTexture;
@@ -71,4 +71,4 @@ bool NonMaximumSuppressionFilter::init() {
   return false;
 }
 
-NS_GPUPIXEL_END
+}

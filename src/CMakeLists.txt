@@ -56,13 +56,13 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/core
     ${CMAKE_CURRENT_SOURCE_DIR}/filter
     ${CMAKE_CURRENT_SOURCE_DIR}/source
-    ${CMAKE_CURRENT_SOURCE_DIR}/target
+    ${CMAKE_CURRENT_SOURCE_DIR}/sink
     ${CMAKE_CURRENT_SOURCE_DIR}/utils
     ${CMAKE_CURRENT_SOURCE_DIR}/face_detect
     
     # Platform specific headers
     ${CMAKE_CURRENT_SOURCE_DIR}/android/jni
-    ${CMAKE_CURRENT_SOURCE_DIR}/target/objc
+    ${CMAKE_CURRENT_SOURCE_DIR}/sink/objc
     
     # Third-party dependencies
     ${CMAKE_CURRENT_SOURCE_DIR}/third_party/glfw/include
@@ -77,7 +77,7 @@ file(GLOB SOURCE_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/core/*"        
     "${CMAKE_CURRENT_SOURCE_DIR}/filter/*"         
     "${CMAKE_CURRENT_SOURCE_DIR}/source/*"       
-    "${CMAKE_CURRENT_SOURCE_DIR}/target/*"                               
+    "${CMAKE_CURRENT_SOURCE_DIR}/sink/*"                               
     "${CMAKE_CURRENT_SOURCE_DIR}/face_detect/*"                 
     "${CMAKE_CURRENT_SOURCE_DIR}/utils/*"                 
     "${CMAKE_CURRENT_SOURCE_DIR}/third_party/libyuv/source/*"
@@ -88,7 +88,7 @@ file(GLOB EXPORT_HEADER
     "${CMAKE_CURRENT_SOURCE_DIR}/core/*.h"         
     "${CMAKE_CURRENT_SOURCE_DIR}/filter/*.h"         
     "${CMAKE_CURRENT_SOURCE_DIR}/source/*.h"       
-    "${CMAKE_CURRENT_SOURCE_DIR}/target/*.h"                      
+    "${CMAKE_CURRENT_SOURCE_DIR}/sink/*.h"                      
     "${CMAKE_CURRENT_SOURCE_DIR}/utils/*.h"                 
     "${CMAKE_CURRENT_SOURCE_DIR}/face_detect/*.h"                 
 )
@@ -108,9 +108,9 @@ elseif(${CURRENT_OS} STREQUAL "linux")
     file(GLOB GLAD_SOURCE_FILE  "${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/src/*.c" )
     list(APPEND SOURCE_FILES ${GLAD_SOURCE_FILE})
 elseif(${CURRENT_OS} STREQUAL "macos" OR ${CURRENT_OS} STREQUAL "ios")
-    file(GLOB OBJC_HEADER_FILE  "${CMAKE_CURRENT_SOURCE_DIR}/target/objc/*.h")
+    file(GLOB OBJC_HEADER_FILE  "${CMAKE_CURRENT_SOURCE_DIR}/sink/objc/*.h")
     list(APPEND EXPORT_HEADER     ${OBJC_HEADER_FILE})
-    file(GLOB OBJC_SOURCE_FILE  "${CMAKE_CURRENT_SOURCE_DIR}/target/objc/*")
+    file(GLOB OBJC_SOURCE_FILE  "${CMAKE_CURRENT_SOURCE_DIR}/sink/objc/*")
     list(APPEND SOURCE_FILES ${OBJC_SOURCE_FILE})
 elseif(${CURRENT_OS} STREQUAL "android")
     file(GLOB OBJC_HEADER_FILE  "${CMAKE_CURRENT_SOURCE_DIR}/android/jni/*.h")

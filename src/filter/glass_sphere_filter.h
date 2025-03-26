@@ -10,7 +10,7 @@
 #include "gpupixel_macros.h"
 #include "sphere_refraction_filter.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 class GPUPIXEL_API GlassSphereFilter : public SphereRefractionFilter {
  public:
   static std::shared_ptr<GlassSphereFilter> create();
@@ -20,4 +20,4 @@ class GPUPIXEL_API GlassSphereFilter : public SphereRefractionFilter {
   GlassSphereFilter(){};
 };
 
-NS_GPUPIXEL_END
+}

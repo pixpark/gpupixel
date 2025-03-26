@@ -7,7 +7,7 @@
 
 #include "directional_sobel_edge_detection_filter.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
 const std::string kDirectionalSobelEdgeDetectionFragmentShaderString =
@@ -135,4 +135,4 @@ bool DirectionalSobelEdgeDetectionFilter::init() {
   return false;
 }
 
-NS_GPUPIXEL_END
+}

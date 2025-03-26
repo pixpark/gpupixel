@@ -10,7 +10,7 @@
 #include "filter.h"
 #include "gpupixel_macros.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 class SourceImage;
 
 class GPUPIXEL_API BeautyFaceUnitFilter : public Filter {
@@ -18,7 +18,7 @@ class GPUPIXEL_API BeautyFaceUnitFilter : public Filter {
   static std::shared_ptr<BeautyFaceUnitFilter> create();
   ~BeautyFaceUnitFilter();
   bool init();
-  bool proceed(bool bUpdateTargets = true, int64_t frameTime = 0) override;
+  bool doRender(bool updateSinks = true) override;
 
   void setSharpen(float sharpen);
   void setBlurAlpha(float blurAlpha);
@@ -38,4 +38,4 @@ class GPUPIXEL_API BeautyFaceUnitFilter : public Filter {
   float white_ = 0.0;
 };
 
-NS_GPUPIXEL_END
+}

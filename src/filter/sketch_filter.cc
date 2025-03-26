@@ -7,7 +7,7 @@
 
 #include "sketch_filter.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 
 REGISTER_FILTER_CLASS(SketchFilter)
 
@@ -69,7 +69,7 @@ bool SketchFilter::init() {
 
   _grayscaleFilter = GrayscaleFilter::create();
   _sketchFilter = _SketchFilter::create();
-  _grayscaleFilter->addTarget(_sketchFilter);
+  _grayscaleFilter->addSink(_sketchFilter);
   addFilter(_grayscaleFilter);
 
   _edgeStrength = 1.0;
@@ -102,7 +102,7 @@ void _SketchFilter::setEdgeStrength(float edgeStrength) {
   _edgeStrength = edgeStrength;
 }
 
-bool _SketchFilter::proceed(bool bUpdateTargets, int64_t frameTime) {
+bool _SketchFilter::doRender(bool updateSinks) {
   float texelWidth = 1.0 / _framebuffer->getWidth();
   float texelHeight = 1.0 / _framebuffer->getHeight();
 
@@ -117,7 +117,7 @@ bool _SketchFilter::proceed(bool bUpdateTargets, int64_t frameTime) {
   _filterProgram->setUniformValue("texelWidth", texelWidth);
   _filterProgram->setUniformValue("texelHeight", texelHeight);
   _filterProgram->setUniformValue("edgeStrength", _edgeStrength);
-  return NearbySampling3x3Filter::proceed(bUpdateTargets, frameTime);
+  return NearbySampling3x3Filter::doRender(updateSinks);
 }
 
-NS_GPUPIXEL_END
+}

@@ -1,10 +1,10 @@
 # 自定义输出和渲染
 
-本文将介绍如何通过继承 `Target` 基类来实现自定义的输出和渲染功能。GPUPixel 提供了两个典型的实现示例：`TargetView` 和 `TargetRawDataOutput`，我们将通过这两个示例来说明实现流程。
+本文将介绍如何通过继承 `Sink` 基类来实现自定义的输出和渲染功能。GPUPixel 提供了两个典型的实现示例：`SinkRender` 和 `SinkRawData`，我们将通过这两个示例来说明实现流程。
 
-## Target 基类
+## Sink 基类
 
-`Target` 类是所有输出目标的基类，它定义了以下关键功能：
+`Sink` 类是所有输出目标的基类，它定义了以下关键功能：
 
 - 管理输入帧缓冲区（Framebuffer）
 - 处理旋转模式
@@ -13,10 +13,10 @@
 主要接口：
 
 ```cpp
-class Target {
+class Sink {
  public:
   // 构造函数，指定输入数量
-  Target(int inputNumber = 1);
+  Sink(int inputNumber = 1);
   
   // 设置输入帧缓冲区
   virtual void setInputFramebuffer(std::shared_ptr<Framebuffer> framebuffer,
@@ -24,7 +24,7 @@ class Target {
                                  int texIdx = 0);
   
   // 更新处理
-  virtual void update(int64_t frameTime){};
+  virtual void render(){};
 };
 ```
 
@@ -32,14 +32,14 @@ class Target {
 
 ### 1. 基本步骤
 
-1. 继承 `Target` 类
+1. 继承 `Sink` 类
 2. 实现构造函数，进行必要的初始化
 3. 重写 `setInputFramebuffer` 方法（可选）
 4. 重写 `update` 方法，实现具体的渲染逻辑
 
-### 2. 渲染到屏幕 - TargetView
+### 2. 渲染到屏幕 - SinkRender
 
-`TargetView` 实现了将图像渲染到屏幕的功能。主要特点：
+`SinkRender` 实现了将图像渲染到屏幕的功能。主要特点：
 
 - 支持多种填充模式（拉伸、保持宽高比等）
 - 支持镜像显示
@@ -48,7 +48,7 @@ class Target {
 关键实现：
 
 ```cpp
-class TargetView : public Target {
+class SinkRender : public Sink {
  public:
   // 初始化着色器程序和属性位置
   void init() {
@@ -56,15 +56,15 @@ class TargetView : public Target {
   }
 
   // 实现更新方法，执行实际的渲染
-  void update(int64_t frameTime) override {
+  void render() override {
      // do render
   }
 };
 ```
 
-### 3. 原始数据输出 - TargetRawDataOutput
+### 3. 原始数据输出 - SinkRawData
 
-`TargetRawDataOutput` 实现了将渲染结果输出为原始数据的功能。主要特点：
+`SinkRawData` 实现了将渲染结果输出为原始数据的功能。主要特点：
 
 - 支持 RGBA 和 I420 格式输出
 - 使用 PBO（Pixel Buffer Object）优化读取性能
@@ -73,14 +73,14 @@ class TargetView : public Target {
 关键实现：
 
 ```cpp
-class TargetRawDataOutput : public Target {
+class SinkRawData : public Sink {
  public:
   // 设置回调函数
   void setI420Callbck(RawOutputCallback cb);
   void setPixelsCallbck(RawOutputCallback cb);
 
   // 实现更新方法
-  void update(int64_t frameTime) override {
+  void render() override {
     // 检查输入尺寸变化
     if (_width != width || _height != height) {
       initPBO(width, height);
@@ -123,12 +123,12 @@ class TargetRawDataOutput : public Target {
 
 ## 示例代码
 
-这里是一个最小化的自定义 Target 实现示例：
+这里是一个最小化的自定义 Sink 实现示例：
 
 ```cpp
-class MyCustomTarget : public Target {
+class MyCustomTarget : public Sink {
  public:
-  MyCustomTarget() : Target(1) {
+  MyCustomTarget() : Sink(1) {
     // 初始化着色器和其他资源
     initShaders();
   }
@@ -138,7 +138,7 @@ class MyCustomTarget : public Target {
     cleanup();
   }
 
-  void update(int64_t frameTime) override {
+  void render() override {
     if (!isPrepared()) return;
     
     // 设置渲染状态
@@ -158,9 +158,9 @@ class MyCustomTarget : public Target {
 
 ## 总结
 
-继承 `Target` 类实现自定义输出和渲染主要涉及以下流程：
+继承 `Sink` 类实现自定义输出和渲染主要涉及以下流程：
 
-1. 创建自定义类并继承 `Target`
+1. 创建自定义类并继承 `Sink`
 2. 实现必要的初始化和清理逻辑
 3. 重写 `update` 方法实现渲染逻辑
 4. 根据需要实现输出处理

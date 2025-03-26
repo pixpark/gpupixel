@@ -11,7 +11,7 @@
 
 #include "box_mono_blur_filter.h"
 #include "filter_group.h"
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 class GPUPIXEL_API BoxBlurFilter : public FilterGroup {
  public:
   virtual ~BoxBlurFilter();
@@ -31,4 +31,4 @@ class GPUPIXEL_API BoxBlurFilter : public FilterGroup {
   std::shared_ptr<BoxMonoBlurFilter> _vBlurFilter;
 };
 
-NS_GPUPIXEL_END
+}

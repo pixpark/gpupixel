@@ -7,7 +7,7 @@
 
 #include "posterize_filter.h"
 
-USING_NS_GPUPIXEL
+using namespace gpupixel;
 
 REGISTER_FILTER_CLASS(PosterizeFilter)
 
@@ -64,7 +64,7 @@ void PosterizeFilter::setColorLevels(int colorLevels) {
   }
 }
 
-bool PosterizeFilter::proceed(bool bUpdateTargets, int64_t frameTime) {
+bool PosterizeFilter::doRender(bool updateSinks) {
   _filterProgram->setUniformValue("colorLevels", (float)_colorLevels);
-  return Filter::proceed(bUpdateTargets, frameTime);
+  return Filter::doRender(updateSinks);
 }

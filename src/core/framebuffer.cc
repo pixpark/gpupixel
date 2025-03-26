@@ -11,7 +11,7 @@
 #include "gpupixel_context.h"
 #include "util.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 
 // std::vector<std::shared_ptr<Framebuffer>> Framebuffer::_framebuffers;
 #ifndef GPUPIXEL_WIN
@@ -101,4 +101,4 @@ void Framebuffer::_generateFramebuffer() {
   CHECK_GL(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 }
 
-NS_GPUPIXEL_END
+}

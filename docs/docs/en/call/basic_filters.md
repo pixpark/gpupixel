@@ -10,9 +10,9 @@ description: This article introduces how to use the basic filters in GPUPixel li
 
 GPUPixel is designed with a filter chain architecture, where video or image data flows through a series of filters to achieve various effects. The main components include:
 
-- **Source**: Input for video/image data (e.g., `SourceRawDataInput`)
+- **Source**: Input for video/image data (e.g., `SourceRawData`)
 - **Filters**: Processing units that apply effects (e.g., `BeautyFaceFilter`, `FaceReshapeFilter`)
-- **Target**: Output destination (e.g., `TargetRawDataOutput`)
+- **Sink**: Output destination (e.g., `SinkRawData`)
 
 ## Initialization
 
@@ -31,24 +31,24 @@ A typical filter chain setup includes creating sources, filters, and targets, th
 
 ```cpp
 // Declare components
-std::shared_ptr<SourceRawDataInput> source_raw_input_;
+std::shared_ptr<SourceRawData> source_raw_input_;
 std::shared_ptr<BeautyFaceFilter> beauty_face_filter_;
-std::shared_ptr<TargetRawDataOutput> target_raw_output_;
+std::shared_ptr<SinkRawData> target_raw_output_;
 
 // Initialize and link components
 gpupixel::GPUPixelContext::getInstance()->runSync([&] {
     // Create source
-    source_raw_input_ = SourceRawDataInput::create();
+    source_raw_input_ = SourceRawData::create();
     
     // Create filters
     beauty_face_filter_ = BeautyFaceFilter::create();
     
-    // Create target
-    target_raw_output_ = TargetRawDataOutput::create();
+    // Create sink
+    target_raw_output_ = SinkRawData::create();
     
     // Link the chain
-    source_raw_input_->addTarget(beauty_face_filter_)
-                     ->addTarget(target_raw_output_);
+    source_raw_input_->addSink(beauty_face_filter_)
+                     ->addSink(target_raw_output_);
 });
 ```
 

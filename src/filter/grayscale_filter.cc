@@ -7,7 +7,7 @@
 
 #include "grayscale_filter.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
 const std::string kGrayscaleFragmentShaderString = R"(
@@ -49,8 +49,8 @@ bool GrayscaleFilter::init() {
   return false;
 }
 
-bool GrayscaleFilter::proceed(bool bUpdateTargets, int64_t frameTime) {
-  return Filter::proceed(bUpdateTargets, frameTime);
+bool GrayscaleFilter::doRender(bool updateSinks) {
+  return Filter::doRender(updateSinks);
 }
 
-NS_GPUPIXEL_END
+}

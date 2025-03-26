@@ -15,7 +15,7 @@
 #include "single_component_gaussian_blur_filter.h"
 #include "weak_pixel_inclusion_filter.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 class GPUPIXEL_API CannyEdgeDetectionFilter : public FilterGroup {
  public:
   static std::shared_ptr<CannyEdgeDetectionFilter> create();
@@ -33,4 +33,4 @@ class GPUPIXEL_API CannyEdgeDetectionFilter : public FilterGroup {
   std::shared_ptr<WeakPixelInclusionFilter> _weakPixelInclusionFilter;
 };
 
-NS_GPUPIXEL_END
+}

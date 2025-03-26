@@ -27,7 +27,7 @@ public class GPUPixelSourceCamera extends GPUPixelSource implements Camera.Previ
     private int mRotation = GPUPixel.NoRotation;
     private Context mContext;
     private SurfaceTexture mSurfaceTexture = null;
-    private GPUPixelSourceRawInput SourceRawDataInput = null;
+    private GPUPixelSourceRawData SourceRawData = null;
     private Object object_this;
     private GPUPixel.GPUPixelLandmarkCallback landmarkCallback;
     public GPUPixelSourceCamera(Context context) {
@@ -81,7 +81,7 @@ public class GPUPixelSourceCamera extends GPUPixelSource implements Camera.Previ
                 }
             }
         });
-        proceed(true, true);
+        doRender(true, true);
     }
 
     public void onResume() {
@@ -98,8 +98,8 @@ public class GPUPixelSourceCamera extends GPUPixelSource implements Camera.Previ
         setUpCamera(mCurrentCameraId);
     }
 
-    public void SetSourceRawInput(final GPUPixelSourceRawInput source_input) {
-        SourceRawDataInput = source_input;
+    public void SetSourceRawInput(final GPUPixelSourceRawData source_input) {
+        SourceRawData = source_input;
     }
 
     private void setUpCamera(final int id) {

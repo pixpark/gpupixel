@@ -7,7 +7,7 @@
 
 #include "box_mono_blur_filter.h"
 #include <cmath>
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 
 BoxMonoBlurFilter::BoxMonoBlurFilter(Type type)
     : GaussianBlurMonoFilter(type) {}
@@ -197,4 +197,4 @@ std::string BoxMonoBlurFilter::_generateOptimizedFragmentShaderString(
   return shaderStr;
 }
 
-NS_GPUPIXEL_END
+}

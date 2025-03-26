@@ -8,7 +8,7 @@
 #include "source_camera.h"
 #include "gpupixel_context.h"
 #include "util.h"
-USING_NS_GPUPIXEL
+using namespace gpupixel;
 
 SourceCamera::SourceCamera() {
 #if defined(GPUPIXEL_IOS)
@@ -323,7 +323,7 @@ void SourceCamera::_updateOutputRotation() {
                                   CVPixelBufferGetBaseAddress(imageBuffer),
                                   _rotation);
       CVPixelBufferUnlockBaseAddress(imageBuffer, 0);
-      _sourceCamera->proceed();
+      _sourceCamera->doRender();
     });
   }
 }

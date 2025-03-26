@@ -7,7 +7,7 @@
 
 #include "rgb_filter.h"
 
-USING_NS_GPUPIXEL
+using namespace gpupixel;
 
 REGISTER_FILTER_CLASS(RGBFilter)
 
@@ -81,9 +81,9 @@ void RGBFilter::setBlueAdjustment(float blueAdjustment) {
     _blueAdjustment = 0.0;
   }
 }
-bool RGBFilter::proceed(bool bUpdateTargets, int64_t frameTime) {
+bool RGBFilter::doRender(bool updateSinks) {
   _filterProgram->setUniformValue("redAdjustment", _redAdjustment);
   _filterProgram->setUniformValue("greenAdjustment", _greenAdjustment);
   _filterProgram->setUniformValue("blueAdjustment", _blueAdjustment);
-  return Filter::proceed(bUpdateTargets, frameTime);
+  return Filter::doRender(updateSinks);
 }

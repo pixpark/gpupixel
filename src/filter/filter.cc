@@ -9,7 +9,7 @@
 #include "gpupixel.h"
 #include "gpupixel_context.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 
 std::map<std::string, std::function<std::shared_ptr<Filter>()>> initFilterFactory() {
     std::map<std::string, std::function<std::shared_ptr<Filter>()>> factory;
@@ -117,8 +117,7 @@ std::string Filter::_getVertexShaderString(int inputNumber) const {
   return shaderStr;
 }
 
-bool Filter::proceed(bool bUpdateTargets /* = true*/,
-                     int64_t frametime /* = 0*/) {
+bool Filter::doRender(bool updateSinks) {
   static const GLfloat imageVertices[] = {
       -1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f,
   };
@@ -154,7 +153,7 @@ bool Filter::proceed(bool bUpdateTargets /* = true*/,
 
   _framebuffer->inactive();
 
-  return Source::proceed(bUpdateTargets, frametime);
+  return Source::doRender(updateSinks);
 }
 
 const GLfloat* Filter::_getTexureCoordinate(
@@ -245,7 +244,7 @@ const GLfloat* Filter::_getTexureCoordinate(
   }
 }
 
-void Filter::update(int64_t frameTime) {
+void Filter::render() {
   if (_inputFramebuffers.empty()) {
     return;
   }
@@ -262,7 +261,7 @@ void Filter::update(int64_t frameTime) {
                          ->fetchFramebuffer(captureWidth, captureHeight);
     }
 
-    proceed(false);
+    doRender(false);
 
     _framebuffer->active();
     GPUPixelContext::getInstance()->capturedFrameData =
@@ -302,7 +301,7 @@ void Filter::update(int64_t frameTime) {
                          ->fetchFramebuffer(rotatedFramebufferWidth,
                                             rotatedFramebufferHeight);
     }
-    proceed(true, frameTime);
+    doRender(true);
   }
 }
 
@@ -527,4 +526,4 @@ bool Filter::getPropertyType(const std::string& name, std::string& retType) {
 }
 
 
-NS_GPUPIXEL_END
+}

@@ -7,7 +7,7 @@
 
 #include "directional_non_maximum_suppression_filter.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 
 REGISTER_FILTER_CLASS(DirectionalNonMaximumSuppressionFilter)
 
@@ -114,8 +114,7 @@ bool DirectionalNonMaximumSuppressionFilter::init() {
   return false;
 }
 
-bool DirectionalNonMaximumSuppressionFilter::proceed(bool bUpdateTargets,
-                                                     int64_t frameTime) {
+bool DirectionalNonMaximumSuppressionFilter::doRender(bool updateSinks) {
   float texelWidth = 1.0 / _framebuffer->getWidth();
   float texelHeight = 1.0 / _framebuffer->getHeight();
 
@@ -131,7 +130,7 @@ bool DirectionalNonMaximumSuppressionFilter::proceed(bool bUpdateTargets,
   _filterProgram->setUniformValue(_texelWidthUniform, texelWidth);
   _filterProgram->setUniformValue(_texelHeightUniform, texelHeight);
 
-  return Filter::proceed(bUpdateTargets, frameTime);
+  return Filter::doRender(updateSinks);
 }
 
-NS_GPUPIXEL_END
+}

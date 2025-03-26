@@ -10,13 +10,12 @@
 #include "gpupixel_macros.h"
 #include "nearby_sampling3x3_filter.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 class GPUPIXEL_API ToonFilter : public NearbySampling3x3Filter {
  public:
   static std::shared_ptr<ToonFilter> create();
   bool init();
-  virtual bool proceed(bool bUpdateTargets = true,
-                       int64_t frameTime = 0) override;
+  virtual bool doRender(bool updateSinks = true) override;
 
   void setThreshold(float threshold);
   void setQuantizatinLevels(float quantizationLevels);
@@ -28,4 +27,4 @@ class GPUPIXEL_API ToonFilter : public NearbySampling3x3Filter {
   float _quantizationLevels;
 };
 
-NS_GPUPIXEL_END
+}

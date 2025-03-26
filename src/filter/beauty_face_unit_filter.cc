@@ -9,7 +9,7 @@
 #include "gpupixel_context.h"
 #include "source_image.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 const std::string kGPUImageBaseBeautyFaceVertexShaderString = R"(
     attribute vec3 position; attribute vec2 inputTextureCoordinate;
 
@@ -310,7 +310,7 @@ bool BeautyFaceUnitFilter::init() {
   return true;
 }
 
-bool BeautyFaceUnitFilter::proceed(bool bUpdateTargets, int64_t frameTime) {
+bool BeautyFaceUnitFilter::doRender(bool updateSinks) {
   static const GLfloat imageVertices[] = {
       -1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f,
   };
@@ -378,7 +378,7 @@ bool BeautyFaceUnitFilter::proceed(bool bUpdateTargets, int64_t frameTime) {
 
   _framebuffer->inactive();
 
-  return Source::proceed(bUpdateTargets, frameTime);
+  return Source::doRender(updateSinks);
 }
 
 void BeautyFaceUnitFilter::setSharpen(float sharpen) {
@@ -397,4 +397,4 @@ void BeautyFaceUnitFilter::setWhite(float white) {
 #endif
 }
 
-NS_GPUPIXEL_END
+}

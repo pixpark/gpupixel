@@ -7,7 +7,7 @@ li.task-list-item {
   list-style: inherit;
 }
 
-/* Target the last child element to push it to the next line */
+/* Sink the last child element to push it to the next line */
 li.task-list-item ul:last-child {
   flex-basis: 100%;
   margin-right: 0;

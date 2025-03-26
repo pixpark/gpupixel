@@ -10,13 +10,12 @@
 #include "filter.h"
 #include "gpupixel_macros.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 class GPUPIXEL_API SphereRefractionFilter : public Filter {
  public:
   static std::shared_ptr<SphereRefractionFilter> create();
   bool init();
-  virtual bool proceed(bool bUpdateTargets = true,
-                       int64_t frameTime = 0) override;
+  virtual bool doRender(bool updateSinks = true) override;
 
   void setPositionX(float x);
   void setPositionY(float y);
@@ -38,4 +37,4 @@ class GPUPIXEL_API SphereRefractionFilter : public Filter {
   float _refractiveIndex;
 };
 
-NS_GPUPIXEL_END
+}

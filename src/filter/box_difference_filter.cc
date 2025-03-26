@@ -8,7 +8,7 @@
 #include "box_difference_filter.h"
 #include "gpupixel_context.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 
 const std::string kBoxDifferenceVertexShaderString = R"(
     attribute vec4 position; attribute vec4 inputTextureCoordinate;
@@ -81,7 +81,7 @@ bool BoxDifferenceFilter::init() {
   return true;
 }
 
-bool BoxDifferenceFilter::proceed(bool bUpdateTargets, int64_t frameTime) {
+bool BoxDifferenceFilter::doRender(bool updateSinks) {
   static const GLfloat imageVertices[] = {
       -1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f,
   };
@@ -126,10 +126,10 @@ bool BoxDifferenceFilter::proceed(bool bUpdateTargets, int64_t frameTime) {
 
   _framebuffer->inactive();
 
-  return Source::proceed(bUpdateTargets, frameTime);
+  return Source::doRender(updateSinks);
 }
 
 void BoxDifferenceFilter::setDelta(float delta) {
   this->delta_ = delta;
 }
-NS_GPUPIXEL_END
+}

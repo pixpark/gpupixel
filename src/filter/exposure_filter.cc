@@ -7,7 +7,7 @@
 
 #include "exposure_filter.h"
 
-USING_NS_GPUPIXEL
+using namespace gpupixel;
 
 const std::string kExposureFragmentShaderString = R"(
     uniform sampler2D inputImageTexture; uniform lowp float exposure;
@@ -49,7 +49,7 @@ void ExposureFilter::setExposure(float exposure) {
   }
 }
 
-bool ExposureFilter::proceed(bool bUpdateTargets, int64_t frameTime) {
+bool ExposureFilter::doRender(bool updateSinks) {
   _filterProgram->setUniformValue("exposure", _exposure);
-  return Filter::proceed(bUpdateTargets, frameTime);
+  return Filter::doRender(updateSinks);
 }

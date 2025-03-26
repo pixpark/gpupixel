@@ -10,12 +10,11 @@
 #include "math_toolbox.h"
 #include "nearby_sampling3x3_filter.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 class GPUPIXEL_API Convolution3x3Filter : public NearbySampling3x3Filter {
  public:
   virtual bool init();
-  virtual bool proceed(bool bUpdateTargets = true,
-                       int64_t frameTime = 0) override;
+  virtual bool doRender(bool updateSinks = true) override;
 
  protected:
   Convolution3x3Filter(){};
@@ -25,4 +24,4 @@ class GPUPIXEL_API Convolution3x3Filter : public NearbySampling3x3Filter {
   Matrix3 _convolutionKernel;
 };
 
-NS_GPUPIXEL_END
+}

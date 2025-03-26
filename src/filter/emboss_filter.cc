@@ -7,7 +7,7 @@
 
 #include "emboss_filter.h"
 
-USING_NS_GPUPIXEL
+using namespace gpupixel;
 
 // REGISTER_FILTER_CLASS(EmbossFilter)
 

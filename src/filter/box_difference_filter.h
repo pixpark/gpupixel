@@ -10,13 +10,13 @@
 #include "filter.h"
 #include "gpupixel_macros.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 class GPUPIXEL_API BoxDifferenceFilter : public Filter {
  public:
   static std::shared_ptr<BoxDifferenceFilter> create();
   ~BoxDifferenceFilter();
   bool init();
-  bool proceed(bool bUpdateTargets = true, int64_t frameTime = 0) override;
+  bool doRender(bool updateSinks = true) override;
 
   //
   void setDelta(float delta);
@@ -28,4 +28,4 @@ class GPUPIXEL_API BoxDifferenceFilter : public Filter {
   GLuint filterTexCoordAttribute2_;
 };
 
-NS_GPUPIXEL_END
+}
