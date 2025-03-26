@@ -67,6 +67,13 @@ typedef void (^TaskBlock)(void);
 - (void)doRunTask:(TaskBlock)task {
   task();
 }
+
+- (void)dealloc {
+#if defined(GPUPIXEL_IOS)
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+#endif
+}
 @end
 
 #endif
@@ -115,6 +122,9 @@ void GPUPixelContext::destroy() {
   if (_instance) {
     delete _instance;
     _instance = 0;
+#if defined(GPUPIXEL_IOS)
+    iosHelper = nil;
+#endif
   }
 }
 
@@ -141,7 +151,7 @@ void GPUPixelContext::purge() {
 }
  
 void GPUPixelContext::createContext() {
-#if defined(GPUPIXEL_IOS) 
+#if defined(GPUPIXEL_IOS)
   _eglContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
   [EAGLContext setCurrentContext:_eglContext];
   iosHelper = [[iOSHelper alloc] init];
@@ -336,7 +346,7 @@ void GPUPixelContext::releaseContext() {
 }
  
 void GPUPixelContext::runSync(std::function<void(void)> func) {
-  // todo fix android 
+  // todo fix android
 #if defined(GPUPIXEL_ANDROID)
   func();
 #else
