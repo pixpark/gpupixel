@@ -67,6 +67,13 @@ typedef void (^TaskBlock)(void);
 - (void)doRunTask:(TaskBlock)task {
   task();
 }
+
+- (void)dealloc {
+#if defined(GPUPIXEL_IOS)
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+#endif
+}
 @end
 
 #endif
@@ -115,6 +122,9 @@ void GPUPixelContext::destroy() {
   if (_instance) {
     delete _instance;
     _instance = 0;
+#if defined(GPUPIXEL_IOS)
+    iosHelper = nil;
+#endif
   }
 }
 
