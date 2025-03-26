@@ -10,7 +10,7 @@
 #include "source_image.h"
 #include "face_detector.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 
 const std::string FaceMakeupFilterVertexShaderString = R"(
     attribute vec3 position; attribute vec2 inputTextureCoordinate;
@@ -221,7 +221,7 @@ void FaceMakeupFilter::setImageTexture(std::shared_ptr<SourceImage> texture) {
 }
 
 
-bool FaceMakeupFilter::proceed(bool bUpdateTargets, int64_t frameTime) {
+bool FaceMakeupFilter::doRender(bool updateSinks) {
   static const GLfloat imageVertices[] = {
     -1.0f, -1.0f,
     1.0f, -1.0f,
@@ -296,7 +296,7 @@ bool FaceMakeupFilter::proceed(bool bUpdateTargets, int64_t frameTime) {
   }
   _framebuffer->inactive();
 
-  return Source::proceed(bUpdateTargets, frameTime);
+  return Source::doRender(updateSinks);
 }
 
 std::vector<GLuint> FaceMakeupFilter::getFaceIndexs() {
@@ -609,4 +609,4 @@ std::vector<GLfloat> FaceMakeupFilter::faceTextureCoordinates() {
   };
   return arr;
 }
-NS_GPUPIXEL_END
+}

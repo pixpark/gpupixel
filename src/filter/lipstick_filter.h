@@ -9,11 +9,11 @@
 
 #include "face_makeup_filter.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 class GPUPIXEL_API LipstickFilter : public FaceMakeupFilter {
 public:
   static std::shared_ptr<LipstickFilter> create();
   bool init() override;
 };
 
-NS_GPUPIXEL_END
+}

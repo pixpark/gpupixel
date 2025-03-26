@@ -13,7 +13,7 @@
 #include <vector>
 #include <string>
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 class GPUPIXEL_API GLProgram {
  public:
   GLProgram();
@@ -52,4 +52,4 @@ class GPUPIXEL_API GLProgram {
                              const std::string& fragmentShaderSource);
 };
 
-NS_GPUPIXEL_END
+}

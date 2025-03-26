@@ -407,7 +407,7 @@ using namespace gpupixel;
         int width = (int)CVPixelBufferGetWidth(imageBuffer);
         int height = (int)CVPixelBufferGetHeight(imageBuffer);
         int stride = (int)CVPixelBufferGetBytesPerRow(imageBuffer)/4;
-        // gpuPixelsRawInput->uploadBytes(bytes, width, height, stride);
+        // gpuPixelsRawInput->processData(bytes, width, height, stride);
         CVPixelBufferUnlockBaseAddress(imageBuffer, 0);
     }
 }

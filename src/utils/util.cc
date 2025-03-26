@@ -58,7 +58,7 @@
 #endif
 
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 
 std::string Util::resourceRoot = "";
 
@@ -206,4 +206,4 @@ int64_t Util::nowTimeMs() {
 #endif
 }
 
-NS_GPUPIXEL_END
+}

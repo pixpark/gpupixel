@@ -20,54 +20,54 @@ public abstract class GPUPixelSource {
         return mNativeClassID;
     }
 
-    public GPUPixelSource addTarget(GPUPixelTarget target) {
-        return addTarget(target, -1);
+    public GPUPixelSource addSink(GPUPixelSink sink) {
+        return addSink(sink, -1);
     }
 
-    public final GPUPixelSource addTarget(final GPUPixelTarget target, final int texID) {
+    public final GPUPixelSource addSink(final GPUPixelSink sink, final int texID) {
         GPUPixel.getInstance().runOnDraw(new Runnable() {
             @Override
             public void run() {
                 if (mNativeClassID != 0)
-                    GPUPixel.nativeSourceAddTarget(mNativeClassID, target.getNativeClassID(), texID, target instanceof GPUPixelFilter);
+                    GPUPixel.nativeSourceAddSink(mNativeClassID, sink.getNativeClassID(), texID, sink instanceof GPUPixelFilter);
             }
         });
-        if (target instanceof GPUPixelSource)
-            return (GPUPixelSource) target;
+        if (sink instanceof GPUPixelSource)
+            return (GPUPixelSource) sink;
         else
             return null;
     }
 
-    public final void removeTarget(final GPUPixelTarget target) {
+    public final void removeSink(final GPUPixelSink sink) {
         GPUPixel.getInstance().runOnDraw(new Runnable() {
             @Override
             public void run() {
-                if (mNativeClassID != 0 && target.getNativeClassID() != 0)
-                    GPUPixel.nativeSourceRemoveTarget(mNativeClassID, target.getNativeClassID(), target instanceof GPUPixelFilter);
+                if (mNativeClassID != 0 && sink.getNativeClassID() != 0)
+                    GPUPixel.nativeSourceRemoveSink(mNativeClassID, sink.getNativeClassID(), sink instanceof GPUPixelFilter);
             }
         });
     }
 
-    public final void removeAllTargets() {
+    public final void removeAllSinks() {
         GPUPixel.getInstance().runOnDraw(new Runnable() {
             @Override
             public void run() {
                 if (mNativeClassID != 0)
-                    GPUPixel.nativeSourceRemoveAllTargets(mNativeClassID);
+                    GPUPixel.nativeSourceRemoveAllSinks(mNativeClassID);
             }
         });
     }
 
-    public void proceed() {
-        proceed(true, true);
+    public void doRender() {
+        doRender(true, true);
     }
 
-    public void proceed(final boolean bUpdateTargets, final boolean bRequestRender) {
+    public void doRender(final boolean updateSinks, final boolean bRequestRender) {
         GPUPixel.getInstance().runOnDraw(new Runnable() {
             @Override
             public void run() {
                 if (mNativeClassID != 0)
-                    GPUPixel.nativeSourceProceed(mNativeClassID, bUpdateTargets);
+                    GPUPixel.nativeSourceProceed(mNativeClassID, updateSinks);
             }
         });
         if (bRequestRender) {

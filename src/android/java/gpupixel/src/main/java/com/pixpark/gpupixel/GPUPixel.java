@@ -224,26 +224,26 @@ public class GPUPixel {
     public static native void nativeSourceCameraFinalize(final long classID);
     public static native void nativeSourceCameraSetFrame(final long classID, final int width, final int height, final int[] data, final int rotation);
 
-    // SourceRawDataInput
-    public static native long nativeSourceRawInputNew();
-    public static native void nativeSourceRawInputUploadBytes(final long classID, final int[] pixel, final int width, final int height, final int stride);
-    public static native void nativeSourceRawInputSetRotation(final long classID, final int rotation);
+    // SourceRawData
+    public static native long nativeSourceRawDataNew();
+    public static native void nativeSourceRawDataUploadBytes(final long classID, final int[] pixel, final int width, final int height, final int stride);
+    public static native void nativeSourceRawDataSetRotation(final long classID, final int rotation);
 
     // Source
-    public static native long nativeSourceAddTarget(final long classID, final long targetClassID, final int texID, final boolean isFilter);
-    public static native void nativeSourceRemoveTarget(final long classID, final long targetClassID, final boolean isFilter);
-    public static native void nativeSourceRemoveAllTargets(final long classID);
-    public static native boolean nativeSourceProceed(final long classID, final boolean bUpdateTargets);
+    public static native long nativeSourceAddSink(final long classID, final long targetClassID, final int texID, final boolean isFilter);
+    public static native void nativeSourceRemoveSink(final long classID, final long targetClassID, final boolean isFilter);
+    public static native void nativeSourceRemoveAllSinks(final long classID);
+    public static native boolean nativeSourceProceed(final long classID, final boolean updateSinks);
     public static native int nativeSourceGetRotatedFramebuferWidth(final long classID);
     public static native int nativeSourceGetRotatedFramebuferHeight(final long classID);
     public static native byte[] nativeSourceCaptureAProcessedFrameData(final long classId, final long upToFilterClassId, final int width, final int height);
 
     // view
-    public static native long nativeTargetViewNew();
-    public static native void nativeTargetViewFinalize(final long classID);
-    public static native void nativeTargetViewOnSizeChanged(final long classID, final int width, final int height);
-    public static native void nativeTargetViewSetFillMode(final long classID, final int fillMode);
-    public static native void nativeTargetViewSetMirror(final long classID, final boolean mirror);
+    public static native long nativeSinkRender();
+    public static native void nativeSinkRenderFinalize(final long classID);
+    public static native void nativeSinkRenderOnSizeChanged(final long classID, final int width, final int height);
+    public static native void nativeSinkRenderSetFillMode(final long classID, final int fillMode);
+    public static native void nativeSinkRenderSetMirror(final long classID, final boolean mirror);
     // context
     public static native void nativeContextInit();
     public static native void nativeContextDestroy();

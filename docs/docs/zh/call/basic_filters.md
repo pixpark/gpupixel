@@ -10,9 +10,9 @@ description: 本文介绍如何在 GPUPixel 库中使用基础滤镜。
 
 GPUPixel 采用滤镜链架构设计，视频或图像数据通过一系列滤镜流动以实现各种效果。主要组件包括：
 
-- **Source**：视频/图像数据的输入（例如 `SourceRawDataInput`）
+- **Source**：视频/图像数据的输入（例如 `SourceRawData`）
 - **Filters**：应用效果的处理单元（例如 `BeautyFaceFilter`、`FaceReshapeFilter`）
-- **Target**：输出目标（例如 `TargetRawDataOutput`）
+- **Sink**：输出目标（例如 `SinkRawData`）
 
 ## 初始化
 
@@ -31,24 +31,24 @@ gpupixel::GPUPixelContext::getInstance()->runSync([&] {
 
 ```cpp
 // 声明组件
-std::shared_ptr<SourceRawDataInput> source_raw_input_;
+std::shared_ptr<SourceRawData> source_raw_input_;
 std::shared_ptr<BeautyFaceFilter> beauty_face_filter_;
-std::shared_ptr<TargetRawDataOutput> target_raw_output_;
+std::shared_ptr<SinkRawData> target_raw_output_;
 
 // 初始化并链接组件
 gpupixel::GPUPixelContext::getInstance()->runSync([&] {
     // 创建源
-    source_raw_input_ = SourceRawDataInput::create();
+    source_raw_input_ = SourceRawData::create();
     
     // 创建滤镜
     beauty_face_filter_ = BeautyFaceFilter::create();
     
     // 创建目标
-    target_raw_output_ = TargetRawDataOutput::create();
+    target_raw_output_ = SinkRawData::create();
     
     // 链接滤镜链
-    source_raw_input_->addTarget(beauty_face_filter_)
-                     ->addTarget(target_raw_output_);
+    source_raw_input_->addSink(beauty_face_filter_)
+                     ->addSink(target_raw_output_);
 });
 ```
 

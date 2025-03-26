@@ -7,7 +7,7 @@
 
 #include "contrast_filter.h"
 
-USING_NS_GPUPIXEL
+using namespace gpupixel;
 
 REGISTER_FILTER_CLASS(ContrastFilter)
 
@@ -52,7 +52,7 @@ void ContrastFilter::setContrast(float contrast) {
   }
 }
 
-bool ContrastFilter::proceed(bool bUpdateTargets, int64_t frameTime) {
+bool ContrastFilter::doRender(bool updateSinks) {
   _filterProgram->setUniformValue("contrast", _contrast);
-  return Filter::proceed(bUpdateTargets, frameTime);
+  return Filter::doRender(updateSinks);
 }

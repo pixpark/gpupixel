@@ -9,9 +9,9 @@ package com.pixpark.gpupixel.filter;
 
 import com.pixpark.gpupixel.GPUPixel;
 import com.pixpark.gpupixel.GPUPixelSource;
-import com.pixpark.gpupixel.GPUPixelTarget;
+import com.pixpark.gpupixel.GPUPixelSink;
 
-public class GPUPixelFilter extends GPUPixelSource implements GPUPixelTarget {
+public class GPUPixelFilter extends GPUPixelSource implements GPUPixelSink {
     private String filterClassName;
 
     GPUPixelFilter(final String filterClassName) {

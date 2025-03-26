@@ -10,14 +10,13 @@
 #include "filter.h"
 #include "face_detector.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 class GPUPIXEL_API FaceReshapeFilter : public Filter {
  public:
   static std::shared_ptr<FaceReshapeFilter> create();
   ~FaceReshapeFilter();
   bool init();
-  virtual bool proceed(bool bUpdateTargets = true,
-                       int64_t frameTime = 0) override;
+  virtual bool doRender(bool updateSinks = true) override;
 
   void setFaceSlimLevel(float level);
   void setEyeZoomLevel(float level);
@@ -31,4 +30,4 @@ class GPUPIXEL_API FaceReshapeFilter : public Filter {
   int has_face_ = 0;
 };
 
-NS_GPUPIXEL_END
+}

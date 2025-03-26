@@ -15,7 +15,7 @@ class CustomFilter : public Filter {
  public:
   static std::shared_ptr<CustomFilter> create();
   bool init();
-  virtual bool proceed(bool bUpdateTargets = true, int64_t frameTime = 0) override;
+  virtual bool doRender(bool updateSinks = true) override;
 
   // 自定义参数设置器
   void setParameter(float value);
@@ -87,15 +87,15 @@ const std::string kCustomFragmentShader = R"(
 
 ### 4. 实现处理逻辑
 
-重写 `proceed()` 方法来更新着色器 uniform 变量并处理图像：
+重写 `doRender()` 方法来更新着色器 uniform 变量并处理图像：
 
 ```cpp
-bool CustomFilter::proceed(bool bUpdateTargets, int64_t frameTime) {
+bool CustomFilter::doRender(bool updateSinks) {
   // 更新着色器 uniform 变量
   _filterProgram->setUniformValue("parameter", _parameter);
   
   // 调用基类实现
-  return Filter::proceed(bUpdateTargets, frameTime);
+  return Filter::doRender(updateSinks);
 }
 ```
 
@@ -108,7 +108,7 @@ class HueFilter : public Filter {
  public:
   static std::shared_ptr<HueFilter> create();
   bool init();
-  virtual bool proceed(bool bUpdateTargets = true, int64_t frameTime = 0) override;
+  virtual bool doRender(bool updateSinks = true) override;
 
   void setHueAdjustment(float hueAdjustment);
 
@@ -120,7 +120,7 @@ class HueFilter : public Filter {
 
 `HueFilter` 展示了：
 - 带回调的参数注册
-- proceed() 中的着色器 uniform 更新
+- doRender() 中的着色器 uniform 更新
 - 参数设置器中的值转换
 
 ## 最佳实践

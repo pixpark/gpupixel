@@ -11,7 +11,7 @@
 #include <string>
 #include "gpupixel_macros.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 #define rotationSwapsSize(rotation)                   \
   ((rotation) == gpupixel::RotateLeft ||              \
    (rotation) == gpupixel::RotateRight ||             \
@@ -38,4 +38,4 @@ class GPUPIXEL_API Util {
 private:
   static std::string resourceRoot;
 };
-NS_GPUPIXEL_END
+}

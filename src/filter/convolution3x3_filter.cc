@@ -7,7 +7,7 @@
 
 #include "convolution3x3_filter.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
 const std::string kConvolution3x3FragmentShaderString = R"(
@@ -107,9 +107,9 @@ bool Convolution3x3Filter::init() {
   return true;
 }
 
-bool Convolution3x3Filter::proceed(bool bUpdateTargets, int64_t frameTime) {
+bool Convolution3x3Filter::doRender(bool updateSinks) {
   _filterProgram->setUniformValue("convolutionMatrix", _convolutionKernel);
-  return NearbySampling3x3Filter::proceed(bUpdateTargets, frameTime);
+  return NearbySampling3x3Filter::doRender(updateSinks);
 }
 
-NS_GPUPIXEL_END
+}

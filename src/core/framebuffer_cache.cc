@@ -8,7 +8,7 @@
 #include "framebuffer_cache.h"
 #include "util.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 
 FramebufferCache::FramebufferCache() {}
 
@@ -109,4 +109,4 @@ void FramebufferCache::purge() {
   _framebufferTypeCounts.clear();
 }
 
-NS_GPUPIXEL_END
+}

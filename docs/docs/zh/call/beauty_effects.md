@@ -13,10 +13,10 @@ description: 本文介绍如何在 GPUPixel 库中使用美颜特效滤镜。
 ```cpp
 gpupixel::GPUPixelContext::getInstance()->runSync([&] {
     // 创建源
-    gpuPixelRawInput = SourceRawDataInput::create();
+    gpuPixelRawInput = SourceRawData::create();
     
      // 创建目标
-    target_raw_output_ = TargetRawDataOutput::create();
+    target_raw_output_ = SinkRawData::create();
     
     // 创建滤镜
     lipstick_filter_ = LipstickFilter::create();
@@ -32,11 +32,11 @@ gpupixel::GPUPixelContext::getInstance()->runSync([&] {
     });
     
     // 链接滤镜链
-    gpuPixelRawInput->addTarget(lipstick_filter_)
-                     ->addTarget(blusher_filter_)
-                     ->addTarget(face_reshape_filter_)
-                     ->addTarget(beauty_face_filter_)
-                     ->addTarget(target_raw_output_);
+    gpuPixelRawInput->addSink(lipstick_filter_)
+                     ->addSink(blusher_filter_)
+                     ->addSink(face_reshape_filter_)
+                     ->addSink(beauty_face_filter_)
+                     ->addSink(target_raw_output_);
 });
 ```
 

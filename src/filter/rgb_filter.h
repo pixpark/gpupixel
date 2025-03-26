@@ -10,13 +10,12 @@
 #include "filter.h"
 #include "gpupixel_macros.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 class GPUPIXEL_API RGBFilter : public Filter {
  public:
   static std::shared_ptr<RGBFilter> create();
   bool init();
-  virtual bool proceed(bool bUpdateTargets = true,
-                       int64_t frameTime = 0) override;
+  virtual bool doRender(bool updateSinks = true) override;
 
   void setRedAdjustment(float redAdjustment);
   void setGreenAdjustment(float greenAdjustment);
@@ -30,4 +29,4 @@ class GPUPIXEL_API RGBFilter : public Filter {
   float _blueAdjustment;
 };
 
-NS_GPUPIXEL_END
+}

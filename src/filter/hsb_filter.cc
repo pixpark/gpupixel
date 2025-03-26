@@ -7,7 +7,7 @@
 
 #include "hsb_filter.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 
 REGISTER_FILTER_CLASS(HSBFilter)
 
@@ -94,4 +94,4 @@ void HSBFilter::adjustBrightness(float b) {
   _colorMatrix = saturationMatrix_ * _colorMatrix;
 }
 
-NS_GPUPIXEL_END
+}

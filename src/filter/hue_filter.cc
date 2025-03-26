@@ -8,7 +8,7 @@
 #include "hue_filter.h"
 #include "math_toolbox.h"
 
-USING_NS_GPUPIXEL
+using namespace gpupixel;
 
 // Adapted from
 // http://stackoverflow.com/questions/9234724/how-to-change-hue-of-a-texture-with-glsl
@@ -81,7 +81,7 @@ void HueFilter::setHueAdjustment(float hueAdjustment) {
   _hueAdjustment = fmodf(hueAdjustment, 360.0) * M_PI / 180;
 }
 
-bool HueFilter::proceed(bool bUpdateTargets, int64_t frameTime) {
+bool HueFilter::doRender(bool updateSinks) {
   _filterProgram->setUniformValue("hueAdjustment", _hueAdjustment);
-  return Filter::proceed(bUpdateTargets, frameTime);
+  return Filter::doRender(updateSinks);
 }

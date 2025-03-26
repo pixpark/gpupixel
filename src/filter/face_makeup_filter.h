@@ -9,7 +9,7 @@
 
 #include "filter.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 class SourceImage;
 
 GPUPIXEL_API typedef struct {
@@ -24,8 +24,7 @@ class GPUPIXEL_API FaceMakeupFilter : public Filter {
   static std::shared_ptr<FaceMakeupFilter> create();
   ~FaceMakeupFilter();
   virtual bool init();
-  virtual bool proceed(bool bUpdateTargets = true,
-                       int64_t frameTime = 0) override;
+  virtual bool doRender(bool updateSinks = true) override;
 
  
   inline void setBlendLevel(float level) { this->blend_level_ = level; }
@@ -53,4 +52,4 @@ class GPUPIXEL_API FaceMakeupFilter : public Filter {
   std::shared_ptr<SourceImage> image_texture_;
 };
 
-NS_GPUPIXEL_END
+}

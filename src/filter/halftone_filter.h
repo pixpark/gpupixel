@@ -10,7 +10,7 @@
 #include "gpupixel_macros.h"
 #include "pixellation_filter.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 class GPUPIXEL_API HalftoneFilter : public PixellationFilter {
  public:
   static std::shared_ptr<HalftoneFilter> create();
@@ -20,4 +20,4 @@ class GPUPIXEL_API HalftoneFilter : public PixellationFilter {
   HalftoneFilter(){};
 };
 
-NS_GPUPIXEL_END
+}

@@ -24,7 +24,7 @@
 #endif
  
  
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 class GPUPIXEL_API GPUPixelContext {
  public:
   static GPUPixelContext* getInstance();
@@ -87,4 +87,4 @@ class GPUPIXEL_API GPUPixelContext {
 
 };
 
-NS_GPUPIXEL_END
+}

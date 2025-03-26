@@ -11,7 +11,7 @@
 
 #include "source.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 class GPUPIXEL_API SourceImage : public Source {
  public:
   SourceImage() {}
@@ -36,4 +36,4 @@ class GPUPIXEL_API SourceImage : public Source {
   std::vector<unsigned char> image_bytes;
 };
 
-NS_GPUPIXEL_END
+}

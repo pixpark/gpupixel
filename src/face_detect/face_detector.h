@@ -14,7 +14,7 @@
 namespace mars_face_kit {
     class MarsFaceDetector;
 }
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 GPUPIXEL_API typedef std::function<void(std::vector<float> landmarks)>
 FaceDetectorCallback;
 
@@ -47,4 +47,4 @@ class GPUPIXEL_API FaceDetector {
         std::vector<FaceDetectorCallback> _face_detector_callbacks;
         std::shared_ptr<mars_face_kit::MarsFaceDetector> mars_face_detector_;
     };
-NS_GPUPIXEL_END
+}

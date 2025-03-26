@@ -9,13 +9,12 @@
 #include "filter.h"
 #include "gpupixel_macros.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 class GPUPIXEL_API ExposureFilter : public Filter {
  public:
   static std::shared_ptr<ExposureFilter> create();
   bool init();
-  virtual bool proceed(bool bUpdateTargets = true,
-                       int64_t frameTime = 0) override;
+  virtual bool doRender(bool updateSinks = true) override;
 
   void setExposure(float exposure);
 
@@ -25,4 +24,4 @@ class GPUPIXEL_API ExposureFilter : public Filter {
   float _exposure;
 };
 
-NS_GPUPIXEL_END
+}

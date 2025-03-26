@@ -7,7 +7,7 @@
 
 #include "box_high_pass_filter.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 
 BoxHighPassFilter::BoxHighPassFilter() {}
 
@@ -32,7 +32,7 @@ bool BoxHighPassFilter::init() {
   boxDifferenceFilter = BoxDifferenceFilter::create();
   addFilter(boxDifferenceFilter);
 
-  boxBlurFilter->addTarget(boxDifferenceFilter, 1);
+  boxBlurFilter->addSink(boxDifferenceFilter, 1);
   setTerminalFilter(boxDifferenceFilter);
 
   boxBlurFilter->setTexelSpacingMultiplier(4);
@@ -56,4 +56,4 @@ void BoxHighPassFilter::setDelta(float delta) {
   boxDifferenceFilter->setDelta(delta);
 }
 
-NS_GPUPIXEL_END
+}

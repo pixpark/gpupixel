@@ -12,7 +12,7 @@
 #include "box_blur_filter.h"
 #include "box_difference_filter.h"
 #include "filter_group.h"
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 class GPUPIXEL_API BoxHighPassFilter : public FilterGroup {
  public:
   static std::shared_ptr<BoxHighPassFilter> create();
@@ -33,4 +33,4 @@ class GPUPIXEL_API BoxHighPassFilter : public FilterGroup {
   std::shared_ptr<BoxDifferenceFilter> boxDifferenceFilter;
 };
 
-NS_GPUPIXEL_END
+}

@@ -7,7 +7,7 @@
 
 #include "color_invert_filter.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 
 REGISTER_FILTER_CLASS(ColorInvertFilter)
 
@@ -35,8 +35,8 @@ bool ColorInvertFilter::init() {
   return true;
 }
 
-bool ColorInvertFilter::proceed(bool bUpdateTargets, int64_t frameTime) {
-  return Filter::proceed(bUpdateTargets, frameTime);
+bool ColorInvertFilter::doRender(bool updateSinks) {
+  return Filter::doRender(updateSinks);
 }
 
-NS_GPUPIXEL_END
+}

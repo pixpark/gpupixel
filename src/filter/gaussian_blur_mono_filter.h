@@ -10,7 +10,7 @@
 #include "filter_group.h"
 #include "gpupixel_macros.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 class GPUPIXEL_API GaussianBlurMonoFilter : public Filter {
  public:
   enum Type { HORIZONTAL, VERTICAL };
@@ -23,8 +23,7 @@ class GPUPIXEL_API GaussianBlurMonoFilter : public Filter {
   void setRadius(int radius);
   void setSigma(float sigma);
 
-  virtual bool proceed(bool bUpdateTargets = true,
-                       int64_t frameTime = 0) override;
+  virtual bool doRender(bool updateSinks = true) override;
   void setTexelSpacingMultiplier(float value);
 
  protected:
@@ -46,4 +45,4 @@ class GPUPIXEL_API GaussianBlurMonoFilter : public Filter {
                                                              float sigma);
 };
 
-NS_GPUPIXEL_END
+}

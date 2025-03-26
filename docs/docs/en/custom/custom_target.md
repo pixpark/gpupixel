@@ -1,10 +1,10 @@
 # Custom Output and Rendering
 
-This article explains how to implement custom output and rendering functionality by inheriting from the `Target` base class. GPUPixel provides two typical implementation examples: `TargetView` and `TargetRawDataOutput`, which we will use to illustrate the implementation process.
+This article explains how to implement custom output and rendering functionality by inheriting from the `Sink` base class. GPUPixel provides two typical implementation examples: `SinkRender` and `SinkRawData`, which we will use to illustrate the implementation process.
 
-## Target Base Class
+## Sink Base Class
 
-The `Target` class is the base class for all output targets, defining the following key functionalities:
+The `Sink` class is the base class for all output targets, defining the following key functionalities:
 
 - Managing input framebuffers
 - Handling rotation modes
@@ -13,10 +13,10 @@ The `Target` class is the base class for all output targets, defining the follow
 Main interfaces:
 
 ```cpp
-class Target {
+class Sink {
  public:
   // Constructor, specify input number
-  Target(int inputNumber = 1);
+  Sink(int inputNumber = 1);
   
   // Set input framebuffer
   virtual void setInputFramebuffer(std::shared_ptr<Framebuffer> framebuffer,
@@ -24,22 +24,22 @@ class Target {
                                  int texIdx = 0);
   
   // Update processing
-  virtual void update(int64_t frameTime){};
+  virtual void render(){};
 };
 ```
 
-## Implementing Custom Target
+## Implementing Custom Sink
 
 ### 1. Basic Steps
 
-1. Inherit from the `Target` class
+1. Inherit from the `Sink` class
 2. Implement constructor with necessary initialization
 3. Override `setInputFramebuffer` method (optional)
 4. Override `update` method to implement specific rendering logic
 
-### 2. Rendering to Screen - TargetView
+### 2. Rendering to Screen - SinkRender
 
-`TargetView` implements functionality to render images to the screen. Main features:
+`SinkRender` implements functionality to render images to the screen. Main features:
 
 - Supports multiple fill modes (stretch, preserve aspect ratio, etc.)
 - Supports mirror display
@@ -48,7 +48,7 @@ class Target {
 Key implementation:
 
 ```cpp
-class TargetView : public Target {
+class SinkRender : public Sink {
  public:
   // Initialize shader program and attribute locations
   void init() {
@@ -56,15 +56,15 @@ class TargetView : public Target {
   }
 
   // Implement update method for actual rendering
-  void update(int64_t frameTime) override {
+  void render() override {
      // do render
   }
 };
 ```
 
-### 3. Raw Data Output - TargetRawDataOutput
+### 3. Raw Data Output - SinkRawData
 
-`TargetRawDataOutput` implements functionality to output rendering results as raw data. Main features:
+`SinkRawData` implements functionality to output rendering results as raw data. Main features:
 
 - Supports RGBA and I420 format output
 - Uses PBO (Pixel Buffer Object) for optimized reading performance
@@ -73,14 +73,14 @@ class TargetView : public Target {
 Key implementation:
 
 ```cpp
-class TargetRawDataOutput : public Target {
+class SinkRawData : public Sink {
  public:
   // Set callback functions
   void setI420Callbck(RawOutputCallback cb);
   void setPixelsCallbck(RawOutputCallback cb);
 
   // Implement update method
-  void update(int64_t frameTime) override {
+  void render() override {
     // Check input size changes
     if (_width != width || _height != height) {
       initPBO(width, height);
@@ -123,12 +123,12 @@ class TargetRawDataOutput : public Target {
 
 ## Example Code
 
-Here's a minimal custom Target implementation example:
+Here's a minimal custom Sink implementation example:
 
 ```cpp
-class MyCustomTarget : public Target {
+class MyCustomTarget : public Sink {
  public:
-  MyCustomTarget() : Target(1) {
+  MyCustomTarget() : Sink(1) {
     // Initialize shaders and other resources
     initShaders();
   }
@@ -138,7 +138,7 @@ class MyCustomTarget : public Target {
     cleanup();
   }
 
-  void update(int64_t frameTime) override {
+  void render() override {
     if (!isPrepared()) return;
     
     // Setup render state
@@ -158,9 +158,9 @@ class MyCustomTarget : public Target {
 
 ## Summary
 
-Implementing custom output and rendering by inheriting from the `Target` class involves the following process:
+Implementing custom output and rendering by inheriting from the `Sink` class involves the following process:
 
-1. Create custom class inheriting from `Target`
+1. Create custom class inheriting from `Sink`
 2. Implement necessary initialization and cleanup logic
 3. Override `update` method to implement rendering logic
 4. Implement output processing as needed

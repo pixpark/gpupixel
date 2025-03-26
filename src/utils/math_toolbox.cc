@@ -9,7 +9,7 @@
 #include <assert.h>
 #include <string>
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 
 Vector2::Vector2() : x(0.0f), y(0.0f) {}
 
@@ -780,4 +780,4 @@ Matrix3& Matrix3::operator*=(float scalar) {
   return *this;
 }
 
-NS_GPUPIXEL_END
+}

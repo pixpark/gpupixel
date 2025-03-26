@@ -10,14 +10,13 @@
 #include "filter.h"
 #include "gpupixel_macros.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 class GPUPIXEL_API DirectionalNonMaximumSuppressionFilter : public Filter {
  public:
   static std::shared_ptr<DirectionalNonMaximumSuppressionFilter> create();
   bool init();
 
-  virtual bool proceed(bool bUpdateTargets = true,
-                       int64_t frameTime = 0) override;
+  virtual bool doRender(bool updateSinks = true) override;
 
  protected:
   GLuint _texelWidthUniform;
@@ -25,4 +24,4 @@ class GPUPIXEL_API DirectionalNonMaximumSuppressionFilter : public Filter {
   DirectionalNonMaximumSuppressionFilter(){};
 };
 
-NS_GPUPIXEL_END
+}

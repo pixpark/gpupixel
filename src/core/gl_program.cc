@@ -10,7 +10,7 @@
 #include "gpupixel_context.h"
 #include "util.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 
 std::vector<GLProgram*> GLProgram::_programs;
 
@@ -196,4 +196,4 @@ void GLProgram::setUniformValue(int uniformLocation,
   CHECK_GL(glUniform1fv(uniformLocation, length, (GLfloat*)value));
 }
 
-NS_GPUPIXEL_END
+}

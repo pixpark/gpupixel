@@ -7,7 +7,7 @@
 
 #include "nearby_sampling3x3_filter.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 
 const std::string kNearbySampling3x3SamplingVertexShaderString = R"(
     attribute vec4 position; attribute vec4 inputTextureCoordinate;
@@ -67,7 +67,7 @@ bool NearbySampling3x3Filter::initWithFragmentShaderString(
   return false;
 }
 
-bool NearbySampling3x3Filter::proceed(bool bUpdateTargets, int64_t frameTime) {
+bool NearbySampling3x3Filter::doRender(bool updateSinks) {
   float texelWidth = _texelSizeMultiplier / _framebuffer->getWidth();
   float texelHeight = _texelSizeMultiplier / _framebuffer->getHeight();
 
@@ -79,7 +79,7 @@ bool NearbySampling3x3Filter::proceed(bool bUpdateTargets, int64_t frameTime) {
 
   _filterProgram->setUniformValue(_texelWidthUniform, texelWidth);
   _filterProgram->setUniformValue(_texelHeightUniform, texelHeight);
-  return Filter::proceed(bUpdateTargets, frameTime);
+  return Filter::doRender(updateSinks);
 }
 
 void NearbySampling3x3Filter::setTexelSizeMultiplier(
@@ -89,4 +89,4 @@ void NearbySampling3x3Filter::setTexelSizeMultiplier(
   }
 }
 
-NS_GPUPIXEL_END
+}

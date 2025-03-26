@@ -15,7 +15,7 @@ class CustomFilter : public Filter {
  public:
   static std::shared_ptr<CustomFilter> create();
   bool init();
-  virtual bool proceed(bool bUpdateTargets = true, int64_t frameTime = 0) override;
+  virtual bool doRender(bool updateSinks = true) override;
 
   // Custom parameter setters
   void setParameter(float value);
@@ -87,15 +87,15 @@ const std::string kCustomFragmentShader = R"(
 
 ### 4. Implement Processing Logic
 
-Override the `proceed()` method to update shader uniforms and process the image:
+Override the `doRender()` method to update shader uniforms and process the image:
 
 ```cpp
-bool CustomFilter::proceed(bool bUpdateTargets, int64_t frameTime) {
+bool CustomFilter::doRender(bool updateSinks) {
   // Update shader uniforms
   _filterProgram->setUniformValue("parameter", _parameter);
   
   // Call base class implementation
-  return Filter::proceed(bUpdateTargets, frameTime);
+  return Filter::doRender(updateSinks);
 }
 ```
 
@@ -108,7 +108,7 @@ class HueFilter : public Filter {
  public:
   static std::shared_ptr<HueFilter> create();
   bool init();
-  virtual bool proceed(bool bUpdateTargets = true, int64_t frameTime = 0) override;
+  virtual bool doRender(bool updateSinks = true) override;
 
   void setHueAdjustment(float hueAdjustment);
 
@@ -120,7 +120,7 @@ class HueFilter : public Filter {
 
 The `HueFilter` demonstrates:
 - Parameter registration with callback
-- Shader uniform updates in proceed()
+- Shader uniform updates in doRender()
 - Value conversion in parameter setter
 
 ## Best Practices
@@ -143,4 +143,4 @@ The `HueFilter` demonstrates:
 ## See Also
 
 - [Custom Input](./custom_input.md)
-- [Custom Target](./custom_target.md)
+- [Custom Sink](./custom_target.md)

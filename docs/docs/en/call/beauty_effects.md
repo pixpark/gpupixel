@@ -13,10 +13,10 @@ For more complex effects, you can create multiple filters and chain them togethe
 ```cpp
 gpupixel::GPUPixelContext::getInstance()->runSync([&] {
     // Create source
-    gpuPixelRawInput = SourceRawDataInput::create();
+    gpuPixelRawInput = SourceRawData::create();
     
-     // Create target
-    target_raw_output_ = TargetRawDataOutput::create();
+     // Create sink
+    target_raw_output_ = SinkRawData::create();
     
     // Create filters
     lipstick_filter_ = LipstickFilter::create();
@@ -32,11 +32,11 @@ gpupixel::GPUPixelContext::getInstance()->runSync([&] {
     });
     
     // Link the filter chain
-    gpuPixelRawInput->addTarget(lipstick_filter_)
-                     ->addTarget(blusher_filter_)
-                     ->addTarget(face_reshape_filter_)
-                     ->addTarget(beauty_face_filter_)
-                     ->addTarget(target_raw_output_);
+    gpuPixelRawInput->addSink(lipstick_filter_)
+                     ->addSink(blusher_filter_)
+                     ->addSink(face_reshape_filter_)
+                     ->addSink(beauty_face_filter_)
+                     ->addSink(target_raw_output_);
 });
 ```
 

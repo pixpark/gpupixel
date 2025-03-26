@@ -7,7 +7,7 @@
 
 #include "color_matrix_filter.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
 const std::string kColorMatrixFragmentShaderString = R"(
@@ -72,10 +72,10 @@ bool ColorMatrixFilter::init() {
   return true;
 }
 
-bool ColorMatrixFilter::proceed(bool bUpdateTargets, int64_t frameTime) {
+bool ColorMatrixFilter::doRender(bool updateSinks) {
   _filterProgram->setUniformValue("intensity", _intensity);
   _filterProgram->setUniformValue("colorMatrix", _colorMatrix);
-  return Filter::proceed(bUpdateTargets, frameTime);
+  return Filter::doRender(updateSinks);
 }
 
-NS_GPUPIXEL_END
+}

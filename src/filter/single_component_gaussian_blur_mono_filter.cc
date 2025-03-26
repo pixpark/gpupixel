@@ -8,7 +8,7 @@
 #include "single_component_gaussian_blur_mono_filter.h"
 #include <cmath>
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 
 REGISTER_FILTER_CLASS(SingleComponentGaussianBlurMonoFilter)
 
@@ -231,4 +231,4 @@ SingleComponentGaussianBlurMonoFilter::_generateOptimizedFragmentShaderString(
   return shaderStr;
 }
 
-NS_GPUPIXEL_END
+}

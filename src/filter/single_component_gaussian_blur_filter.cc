@@ -9,7 +9,7 @@
 #include <cmath>
 #include "util.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 
 SingleComponentGaussianBlurFilter::SingleComponentGaussianBlurFilter()
     : _hBlurFilter(0), _vBlurFilter(0) {}
@@ -36,7 +36,7 @@ bool SingleComponentGaussianBlurFilter::init(int radius, float sigma) {
       SingleComponentGaussianBlurMonoFilter::HORIZONTAL, radius, sigma);
   _vBlurFilter = SingleComponentGaussianBlurMonoFilter::create(
       SingleComponentGaussianBlurMonoFilter::VERTICAL, radius, sigma);
-  _hBlurFilter->addTarget(_vBlurFilter);
+  _hBlurFilter->addSink(_vBlurFilter);
   addFilter(_hBlurFilter);
 
   registerProperty("radius", 4, "", [this](int& radius) { setRadius(radius); });
@@ -56,4 +56,4 @@ void SingleComponentGaussianBlurFilter::setSigma(float sigma) {
   _vBlurFilter->setSigma(sigma);
 }
 
-NS_GPUPIXEL_END
+}

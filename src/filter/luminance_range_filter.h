@@ -10,13 +10,12 @@
 #include "filter.h"
 #include "gpupixel_macros.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 class GPUPIXEL_API LuminanceRangeFilter : public Filter {
  public:
   static std::shared_ptr<LuminanceRangeFilter> create();
   bool init();
-  virtual bool proceed(bool bUpdateTargets = true,
-                       int64_t frameTime = 0) override;
+  virtual bool doRender(bool updateSinks = true) override;
 
   void setRangeReductionFactor(float rangeReductionFactor);
 
@@ -25,4 +24,4 @@ class GPUPIXEL_API LuminanceRangeFilter : public Filter {
   float _rangeReductionFactor;
 };
 
-NS_GPUPIXEL_END
+}

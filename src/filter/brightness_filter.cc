@@ -7,7 +7,7 @@
 
 #include "brightness_filter.h"
 
-USING_NS_GPUPIXEL
+using namespace gpupixel;
 
 REGISTER_FILTER_CLASS(BrightnessFilter)
 
@@ -62,7 +62,7 @@ void BrightnessFilter::setBrightness(float brightness) {
   }
 }
 
-bool BrightnessFilter::proceed(bool bUpdateTargets, int64_t frameTime) {
+bool BrightnessFilter::doRender(bool updateSinks) {
   _filterProgram->setUniformValue("brightness_para", _brightness);
-  return Filter::proceed(bUpdateTargets, frameTime);
+  return Filter::doRender(updateSinks);
 }

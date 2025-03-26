@@ -11,10 +11,10 @@
 #include "filter.h"
 #include "source_camera.h"
 #include "source_image.h"
-#include "source_raw_data_input.h"
-#include "target_view.h"
+#include "source_raw_data.h"
+#include "sink_render.h"
 
-USING_NS_GPUPIXEL
+using namespace gpupixel;
 std::list<std::shared_ptr<Filter>>  filter_list_;
 
 extern "C" jlong Java_com_pixpark_gpupixel_GPUPixel_nativeSourceImageNew(
@@ -89,14 +89,14 @@ extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeSourceCameraSetFrame(
     env->ReleaseIntArrayElements(jdata, data, 0);
 };
 
-extern "C" jlong Java_com_pixpark_gpupixel_GPUPixel_nativeSourceRawInputNew(
+extern "C" jlong Java_com_pixpark_gpupixel_GPUPixel_nativeSourceRawDataNew(
     JNIEnv* env,
     jclass) {
   return 0;
 };
 
 extern "C" void
-Java_com_pixpark_gpupixel_GPUPixel_nativeSourceRawInputUploadBytes(
+Java_com_pixpark_gpupixel_GPUPixel_nativeSourceRawDataUploadBytes(
     JNIEnv* env,
     jclass,
     jlong classId,
@@ -105,62 +105,62 @@ Java_com_pixpark_gpupixel_GPUPixel_nativeSourceRawInputUploadBytes(
     jint height,
     jint stride) {
   jint* pixel = env->GetIntArrayElements(jPixel, 0);
-  ((SourceRawDataInput*)classId)->uploadBytes((uint8_t*)pixel, width, height, stride, 0);
+  ((SourceRawData*)classId)->processData((uint8_t*)pixel, width, height, stride, 0);
   env->ReleaseIntArrayElements(jPixel, pixel, 0);
 };
 
 extern "C" void
-Java_com_pixpark_gpupixel_GPUPixel_nativeSourceRawInputSetRotation(
+Java_com_pixpark_gpupixel_GPUPixel_nativeSourceRawDataSetRotation(
     JNIEnv* env,
     jclass,
     jlong classId,
     jint rotation) {
-  ((SourceRawDataInput*)classId)->setRotation((RotationMode)rotation);
+  ((SourceRawData*)classId)->setRotation((RotationMode)rotation);
 };
 
-extern "C" jlong Java_com_pixpark_gpupixel_GPUPixel_nativeSourceAddTarget(
+extern "C" jlong Java_com_pixpark_gpupixel_GPUPixel_nativeSourceAddSink(
     JNIEnv* env,
     jclass,
     jlong classId,
-    jlong targetClassId,
+    jlong sinkClassId,
     jint texID,
     jboolean isFilter) {
   Source* source = (Source*)classId;
-  std::shared_ptr<Target> target =
-      isFilter ? std::shared_ptr<Target>((Filter*)targetClassId)
-               : std::shared_ptr<Target>((Target*)targetClassId);
+  std::shared_ptr<Sink> sink =
+      isFilter ? std::shared_ptr<Sink>((Filter*)sinkClassId)
+               : std::shared_ptr<Sink>((Sink*)sinkClassId);
   if (texID >= 0) {
-    return (uintptr_t)(source->addTarget(target, texID)).get();
+    return (uintptr_t)(source->addSink(sink, texID)).get();
   } else {
-    return (uintptr_t)(source->addTarget(target)).get();
+    return (uintptr_t)(source->addSink(sink)).get();
   }
 };
 
-extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeSourceRemoveTarget(
+extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeSourceRemoveSink(
     JNIEnv* env,
     jclass,
     jlong classId,
-    jlong targetClassId,
+    jlong sinkClassId,
     jboolean isFilter) {
   Source* source = (Source*)classId;
-  Target* target = isFilter ? dynamic_cast<Target*>((Filter*)targetClassId)
-                            : (Target*)targetClassId;
-  source->removeTarget(std::shared_ptr<Target>(target));
+  Sink* sink = isFilter ? dynamic_cast<Sink*>((Filter*)sinkClassId)
+                            : (Sink*)sinkClassId;
+  source->removeSink(std::shared_ptr<Sink>(sink));
 };
 
-extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeSourceRemoveAllTargets(
+extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeSourceRemoveAllSinks(
     JNIEnv* env,
     jclass,
     jlong classId) {
-  ((Source*)classId)->removeAllTargets();
+  ((Source*)classId)->removeAllSinks();
 };
 
 extern "C" jboolean Java_com_pixpark_gpupixel_GPUPixel_nativeSourceProceed(
     JNIEnv* env,
     jclass,
     jlong classId,
-    jboolean bUpdateTargets) {
-  return ((Source*)classId)->proceed(bUpdateTargets, Util::nowTimeMs());
+    jboolean updateSinks) {
+  return ((Source*)classId)->doRender(updateSinks);
 };
 
 extern "C" jint
@@ -205,13 +205,13 @@ Java_com_pixpark_gpupixel_GPUPixel_nativeSourceCaptureAProcessedFrameData(
   return jresult;
 };
 
-extern "C" jlong Java_com_pixpark_gpupixel_GPUPixel_nativeTargetViewNew(
+extern "C" jlong Java_com_pixpark_gpupixel_GPUPixel_nativeSinkRender(
     JNIEnv* env,
     jclass obj) {
-  return (uintptr_t)(new TargetView());
+  return (uintptr_t)(new SinkRender());
 };
 
-extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeTargetViewFinalize(
+extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeSinkRenderFinalize(
     JNIEnv* env,
     jclass,
     jlong classId){
@@ -219,28 +219,28 @@ extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeTargetViewFinalize(
 };
 
 extern "C" void
-Java_com_pixpark_gpupixel_GPUPixel_nativeTargetViewOnSizeChanged(JNIEnv* env,
+Java_com_pixpark_gpupixel_GPUPixel_nativeSinkRenderOnSizeChanged(JNIEnv* env,
                                                                  jclass obj,
                                                                  jlong classId,
                                                                  jint width,
                                                                  jint height) {
-  ((TargetView*)classId)->onSizeChanged(width, height);
+  ((SinkRender*)classId)->onSizeChanged(width, height);
 };
 
-extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeTargetViewSetFillMode(
+extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeSinkRenderSetFillMode(
     JNIEnv* env,
     jclass,
     jlong classId,
     jint fillMode) {
-  ((TargetView*)classId)->setFillMode((TargetView::FillMode)fillMode);
+  ((SinkRender*)classId)->setFillMode((SinkRender::FillMode)fillMode);
 };
 
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_pixpark_gpupixel_GPUPixel_nativeTargetViewSetMirror(JNIEnv *env, jclass clazz,
+Java_com_pixpark_gpupixel_GPUPixel_nativeSinkRenderSetMirror(JNIEnv *env, jclass clazz,
                                                              jlong class_id, jboolean mirror) {
-    ((TargetView*)class_id)->setMirror(mirror);
+    ((SinkRender*)class_id)->setMirror(mirror);
 }
 
 extern "C" jlong Java_com_pixpark_gpupixel_GPUPixel_nativeFilterCreate(

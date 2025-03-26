@@ -24,16 +24,16 @@
 #include "source.h"
 #include "source_camera.h"
 #include "source_image.h"
-#include "source_raw_data_input.h"
+#include "source_raw_data.h"
 
-// target
-#include "target.h"
-#include "target_raw_data_output.h"
-#include "target_view.h"
+// sink
+#include "sink.h"
+#include "sink_raw_data.h"
+#include "sink_render.h"
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
-#include "gpupixel_target.h"
+#include "gpupixel_sink.h"
 #include "gpupixel_view.h"
-#include "objc_target.h"
+#include "objc_sink.h"
 #endif
 
 // base filters

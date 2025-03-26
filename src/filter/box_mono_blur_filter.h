@@ -11,7 +11,7 @@
 
 #include "gaussian_blur_mono_filter.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 class GPUPIXEL_API BoxMonoBlurFilter : public GaussianBlurMonoFilter {
  public:
   static std::shared_ptr<BoxMonoBlurFilter> create(Type type = HORIZONTAL,
@@ -30,4 +30,4 @@ class GPUPIXEL_API BoxMonoBlurFilter : public GaussianBlurMonoFilter {
                                                      float sigma) override;
 };
 
-NS_GPUPIXEL_END
+}

@@ -9,7 +9,7 @@
 #include "convolution3x3_filter.h"
 #include "gpupixel_macros.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 class GPUPIXEL_API EmbossFilter : public Convolution3x3Filter {
  public:
   static std::shared_ptr<EmbossFilter> create();
@@ -23,4 +23,4 @@ class GPUPIXEL_API EmbossFilter : public Convolution3x3Filter {
   float _intensity;
 };
 
-NS_GPUPIXEL_END
+}

@@ -10,7 +10,7 @@
 #include "filter_group.h"
 #include "gpupixel_macros.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 class GPUPIXEL_API BilateralMonoFilter : public Filter {
  public:
   enum Type { HORIZONTAL, VERTICAL };
@@ -18,8 +18,7 @@ class GPUPIXEL_API BilateralMonoFilter : public Filter {
   static std::shared_ptr<BilateralMonoFilter> create(Type type = HORIZONTAL);
   bool init();
 
-  virtual bool proceed(bool bUpdateTargets = true,
-                       int64_t frameTime = 0) override;
+  virtual bool doRender(bool updateSinks = true) override;
 
   void setTexelSpacingMultiplier(float multiplier);
   void setDistanceNormalizationFactor(float value);
@@ -50,4 +49,4 @@ class GPUPIXEL_API BilateralFilter : public FilterGroup {
   std::shared_ptr<BilateralMonoFilter> _vBlurFilter;
 };
 
-NS_GPUPIXEL_END
+}

@@ -11,7 +11,7 @@
 #include <cmath>
 #include <cstring>
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 class GPUPIXEL_API Vector2 {
  public:
   float x;
@@ -220,4 +220,4 @@ class GPUPIXEL_API Matrix3 {
   static const Matrix3 IDENTITY;
 };
 
-NS_GPUPIXEL_END
+}

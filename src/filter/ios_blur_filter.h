@@ -13,7 +13,7 @@
 #include "luminance_range_filter.h"
 #include "saturation_filter.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 class GPUPIXEL_API IOSBlurFilter : public FilterGroup {
  public:
   virtual ~IOSBlurFilter();
@@ -38,4 +38,4 @@ class GPUPIXEL_API IOSBlurFilter : public FilterGroup {
   float _downSampling;
 };
 
-NS_GPUPIXEL_END
+}

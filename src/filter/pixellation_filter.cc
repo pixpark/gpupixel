@@ -7,7 +7,7 @@
 
 #include "pixellation_filter.h"
 
-USING_NS_GPUPIXEL
+using namespace gpupixel;
 
 REGISTER_FILTER_CLASS(PixellationFilter)
 
@@ -56,7 +56,7 @@ void PixellationFilter::setPixelSize(float pixelSize) {
   }
 }
 
-bool PixellationFilter::proceed(bool bUpdateTargets, int64_t frameTime) {
+bool PixellationFilter::doRender(bool updateSinks) {
   float aspectRatio = 1.0;
   std::shared_ptr<Framebuffer> firstInputFramebuffer =
       _inputFramebuffers.begin()->second.frameBuffer;
@@ -71,5 +71,5 @@ bool PixellationFilter::proceed(bool bUpdateTargets, int64_t frameTime) {
   }
   _filterProgram->setUniformValue("pixelSize", pixelSize);
 
-  return Filter::proceed(bUpdateTargets, frameTime);
+  return Filter::doRender(updateSinks);
 }

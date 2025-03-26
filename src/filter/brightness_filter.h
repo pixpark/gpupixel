@@ -10,13 +10,12 @@
 #include "filter.h"
 #include "gpupixel_macros.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 class GPUPIXEL_API BrightnessFilter : public Filter {
  public:
   static std::shared_ptr<BrightnessFilter> create(float brightness = 0.0);
   bool init(float brightness);
-  virtual bool proceed(bool bUpdateTargets = true,
-                       int64_t frameTime = 0) override;
+  virtual bool doRender(bool updateSinks = true) override;
 
   void setBrightness(float brightness);
 
@@ -26,4 +25,4 @@ class GPUPIXEL_API BrightnessFilter : public Filter {
   float _brightness;
 };
 
-NS_GPUPIXEL_END
+}

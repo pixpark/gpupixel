@@ -7,7 +7,7 @@
 
 #include "luminance_range_filter.h"
 
-USING_NS_GPUPIXEL
+using namespace gpupixel;
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
 const std::string kLuminanceRangeFragmentShaderString = R"(
@@ -75,8 +75,8 @@ void LuminanceRangeFilter::setRangeReductionFactor(float rangeReductionFactor) {
   }
 }
 
-bool LuminanceRangeFilter::proceed(bool bUpdateTargets, int64_t frameTime) {
+bool LuminanceRangeFilter::doRender(bool updateSinks) {
   _filterProgram->setUniformValue("rangeReductionFactor",
                                   _rangeReductionFactor);
-  return Filter::proceed(bUpdateTargets, frameTime);
+  return Filter::doRender(updateSinks);
 }

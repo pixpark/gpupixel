@@ -7,7 +7,7 @@
 
 #include "beauty_face_filter.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 
 BeautyFaceFilter::BeautyFaceFilter() {}
 
@@ -35,8 +35,8 @@ bool BeautyFaceFilter::init() {
   beautyFilter = BeautyFaceUnitFilter::create();
   addFilter(beautyFilter);
 
-  boxBlurFilter->addTarget(beautyFilter, 1);
-  boxHighPassFilter->addTarget(beautyFilter, 2);
+  boxBlurFilter->addSink(beautyFilter, 1);
+  boxHighPassFilter->addSink(beautyFilter, 2);
 
   setTerminalFilter(beautyFilter);
 
@@ -82,4 +82,4 @@ void BeautyFaceFilter::setRadius(float radius) {
   boxBlurFilter->setRadius(radius);
   boxHighPassFilter->setRadius(radius);
 }
-NS_GPUPIXEL_END
+}

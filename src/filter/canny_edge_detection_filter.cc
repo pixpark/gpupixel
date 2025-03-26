@@ -7,7 +7,7 @@
 
 #include "canny_edge_detection_filter.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 
 REGISTER_FILTER_CLASS(CannyEdgeDetectionFilter)
 
@@ -50,13 +50,13 @@ bool CannyEdgeDetectionFilter::init() {
   // 5. include weak pixels to complete edges
   _weakPixelInclusionFilter = WeakPixelInclusionFilter::create();
 
-  _grayscaleFilter->addTarget(_blurFilter)
-      ->addTarget(_edgeDetectionFilter)
-      ->addTarget(_nonMaximumSuppressionFilter)
-      ->addTarget(_weakPixelInclusionFilter);
+  _grayscaleFilter->addSink(_blurFilter)
+      ->addSink(_edgeDetectionFilter)
+      ->addSink(_nonMaximumSuppressionFilter)
+      ->addSink(_weakPixelInclusionFilter);
   addFilter(_grayscaleFilter);
 
   return true;
 }
 
-NS_GPUPIXEL_END
+}

@@ -7,7 +7,7 @@
 
 #include "sphere_refraction_filter.h"
 
-USING_NS_GPUPIXEL
+using namespace gpupixel;
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
 const std::string kSphereRefractionShaderString = R"(
@@ -119,7 +119,7 @@ bool SphereRefractionFilter::init() {
   return true;
 }
 
-bool SphereRefractionFilter::proceed(bool bUpdateTargets, int64_t frameTime) {
+bool SphereRefractionFilter::doRender(bool updateSinks) {
   _filterProgram->setUniformValue("center", _position);
   _filterProgram->setUniformValue("radius", _radius);
   _filterProgram->setUniformValue("refractiveIndex", _refractiveIndex);
@@ -131,7 +131,7 @@ bool SphereRefractionFilter::proceed(bool bUpdateTargets, int64_t frameTime) {
                 (float)(firstInputFramebuffer->getWidth());
   _filterProgram->setUniformValue("aspectRatio", aspectRatio);
 
-  return Filter::proceed(bUpdateTargets, frameTime);
+  return Filter::doRender(updateSinks);
 }
 
 void SphereRefractionFilter::setPositionX(float x) {

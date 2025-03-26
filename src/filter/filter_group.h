@@ -11,9 +11,9 @@
 #include "filter.h"
 #include "gpupixel_macros.h"
 #include "source.h"
-#include "target.h"
+#include "sink.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 class GPUPIXEL_API FilterGroup : public Filter {
  public:
   virtual ~FilterGroup();
@@ -36,21 +36,20 @@ class GPUPIXEL_API FilterGroup : public Filter {
     _terminalFilter = filter;
   }
 
-  virtual std::shared_ptr<Source> addTarget(
-      std::shared_ptr<Target> target) override;
-  virtual std::shared_ptr<Source> addTarget(std::shared_ptr<Target> target,
+  virtual std::shared_ptr<Source> addSink(
+      std::shared_ptr<Sink> sink) override;
+  virtual std::shared_ptr<Source> addSink(std::shared_ptr<Sink> sink,
                                             int inputNumber) override;
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
-  virtual std::shared_ptr<Source> addTarget(id<GPUPixelTarget> target) override;
+  virtual std::shared_ptr<Source> addSink(id<GPUPixelSink> sink) override;
 #endif
-  virtual void removeTarget(std::shared_ptr<Target> target) override;
-  virtual void removeAllTargets() override;
-  virtual bool hasTarget(const std::shared_ptr<Target> target) const override;
-  virtual std::map<std::shared_ptr<Target>, int>& getTargets() override;
-  virtual bool proceed(bool bUpdateTargets = true,
-                       int64_t frameTime = 0) override;
-  virtual void update(int64_t frameTime) override;
-  virtual void updateTargets(int64_t frameTime) override;
+  virtual void removeSink(std::shared_ptr<Sink> sink) override;
+  virtual void removeAllSinks() override;
+  virtual bool hasSink(const std::shared_ptr<Sink> sink) const override;
+  virtual std::map<std::shared_ptr<Sink>, int>& getSinks() override;
+  virtual bool doRender(bool updateSinks = true) override;
+  virtual void render() override;
+  virtual void doUpdateSinks() override;
   virtual void setFramebuffer(
       std::shared_ptr<Framebuffer> fb,
       RotationMode outputRotation = RotationMode::NoRotation) override;
@@ -72,4 +71,4 @@ class GPUPIXEL_API FilterGroup : public Filter {
       std::shared_ptr<Filter> filter);
 };
 
-NS_GPUPIXEL_END
+}

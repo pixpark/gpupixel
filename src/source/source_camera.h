@@ -15,7 +15,7 @@
 @class VideoDataOutputSampleBufferDelegate;
 #endif
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 class GPUPIXEL_API SourceCamera : public Source {
  public:
   SourceCamera();
@@ -65,7 +65,7 @@ class GPUPIXEL_API SourceCamera : public Source {
   std::shared_ptr<Framebuffer> _framebuffer;
 };
 
-NS_GPUPIXEL_END
+}
 
 #if defined(GPUPIXEL_IOS)
 @interface VideoDataOutputSampleBufferDelegate

@@ -7,7 +7,7 @@
 
 #include "white_balance_filter.h"
 
-USING_NS_GPUPIXEL
+using namespace gpupixel;
 
 REGISTER_FILTER_CLASS(WhiteBalanceFilter)
 
@@ -80,8 +80,8 @@ void WhiteBalanceFilter::setTint(float tint) {
   _tint = tint / 100.0;
 }
 
-bool WhiteBalanceFilter::proceed(bool bUpdateTargets, int64_t frameTime) {
+bool WhiteBalanceFilter::doRender(bool updateSinks) {
   _filterProgram->setUniformValue("temperature", _temperature);
   _filterProgram->setUniformValue("tint", _tint);
-  return Filter::proceed(bUpdateTargets, frameTime);
+  return Filter::doRender(updateSinks);
 }

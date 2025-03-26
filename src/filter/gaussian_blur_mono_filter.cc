@@ -9,7 +9,7 @@
 #include <cmath>
 #include "util.h"
 
-NS_GPUPIXEL_BEGIN
+namespace gpupixel {
 
 REGISTER_FILTER_CLASS(GaussianBlurMonoFilter)
 
@@ -84,7 +84,7 @@ void GaussianBlurMonoFilter::setSigma(float sigma) {
                        _generateOptimizedFragmentShaderString(_radius, _sigma));
 }
 
-bool GaussianBlurMonoFilter::proceed(bool bUpdateTargets, int64_t frameTime) {
+bool GaussianBlurMonoFilter::doRender(bool updateSinks) {
   RotationMode inputRotation = _inputFramebuffers.begin()->second.rotationMode;
 
   if (rotationSwapsSize(inputRotation)) {
@@ -112,7 +112,7 @@ bool GaussianBlurMonoFilter::proceed(bool bUpdateTargets, int64_t frameTime) {
           (float)(horizontalTexelSpacing_ / _framebuffer->getHeight()));
     }
   }
-  return Filter::proceed(bUpdateTargets, frameTime);
+  return Filter::doRender(updateSinks);
 }
 
 void GaussianBlurMonoFilter::setTexelSpacingMultiplier(float value) {
@@ -419,4 +419,4 @@ std::string GaussianBlurMonoFilter::_generateOptimizedFragmentShaderString(
   return shaderStr;
 }
 
-NS_GPUPIXEL_END
+}

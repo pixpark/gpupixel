@@ -7,7 +7,7 @@
 
 #include "toon_filter.h"
 
-USING_NS_GPUPIXEL
+using namespace gpupixel;
 
 REGISTER_FILTER_CLASS(ToonFilter)
 
@@ -94,8 +94,8 @@ void ToonFilter::setQuantizatinLevels(float quantizationLevels) {
   _quantizationLevels = quantizationLevels;
 }
 
-bool ToonFilter::proceed(bool bUpdateTargets, int64_t frameTime) {
+bool ToonFilter::doRender(bool updateSinks) {
   _filterProgram->setUniformValue("threshold", _threshold);
   _filterProgram->setUniformValue("quantizationLevels", _quantizationLevels);
-  return NearbySampling3x3Filter::proceed(bUpdateTargets, frameTime);
+  return NearbySampling3x3Filter::doRender(updateSinks);
 }

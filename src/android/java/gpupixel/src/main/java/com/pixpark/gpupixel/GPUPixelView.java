@@ -14,7 +14,7 @@ import android.view.SurfaceHolder;
 import android.widget.FrameLayout;
 
 
-public class GPUPixelView extends FrameLayout implements GPUPixelTarget {
+public class GPUPixelView extends FrameLayout implements GPUPixelSink {
     static final int FillModeStretch = 0;                   // Stretch to fill the view, and may distort the image
     static final int FillModePreserveAspectRatio = 1;       // preserve the aspect ratio of the image
     static final int FillModePreserveAspectRatioAndFill =2; // preserve the aspect ratio, and zoom in to fill the view
@@ -41,7 +41,7 @@ public class GPUPixelView extends FrameLayout implements GPUPixelTarget {
         GPUPixel.getInstance().runOnDraw(new Runnable() {
             @Override
             public void run() {
-                mNativeClassID = GPUPixel.nativeTargetViewNew();
+                mNativeClassID = GPUPixel.nativeSinkRender();
             }
         });
 
@@ -60,7 +60,7 @@ public class GPUPixelView extends FrameLayout implements GPUPixelTarget {
             @Override
             public void run() {
                 if (mNativeClassID != 0)
-                    GPUPixel.nativeTargetViewOnSizeChanged(mNativeClassID, w, h);
+                    GPUPixel.nativeSinkRenderOnSizeChanged(mNativeClassID, w, h);
             }
         });
     }
@@ -70,7 +70,7 @@ public class GPUPixelView extends FrameLayout implements GPUPixelTarget {
             @Override
             public void run() {
                 if (mNativeClassID != 0)
-                    GPUPixel.nativeTargetViewSetFillMode(mNativeClassID, fillMode);
+                    GPUPixel.nativeSinkRenderSetFillMode(mNativeClassID, fillMode);
             }
         });
     }
@@ -80,7 +80,7 @@ public class GPUPixelView extends FrameLayout implements GPUPixelTarget {
             @Override
             public void run() {
                 if (mNativeClassID != 0)
-                    GPUPixel.nativeTargetViewSetMirror(mNativeClassID, mirror);
+                    GPUPixel.nativeSinkRenderSetMirror(mNativeClassID, mirror);
             }
         });
     }
@@ -101,13 +101,13 @@ public class GPUPixelView extends FrameLayout implements GPUPixelTarget {
                     GPUPixel.getInstance().runOnDraw(new Runnable() {
                         @Override
                         public void run() {
-                            GPUPixel.nativeTargetViewFinalize(mNativeClassID);
+                            GPUPixel.nativeSinkRenderFinalize(mNativeClassID);
                             mNativeClassID = 0;
                         }
                     });
                     GPUPixel.getInstance().requestRender();
                 } else {
-                    GPUPixel.nativeTargetViewFinalize(mNativeClassID);
+                    GPUPixel.nativeSinkRenderFinalize(mNativeClassID);
                     mNativeClassID = 0;
                 }
             }
