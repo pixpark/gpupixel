@@ -120,9 +120,9 @@ void GPUPixelContext::destroy() {
   if (_instance) {
     delete _instance;
     _instance = 0;
-#if defined(GPUPIXEL_IOS)
-    iosHelper = nil;
-#endif
+//#if defined(GPUPIXEL_IOS)
+//    iosHelper = nil;
+//#endif
   }
 }
 
