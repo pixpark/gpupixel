@@ -90,14 +90,18 @@ file(GLOB EXPORT_HEADER
     "${CMAKE_CURRENT_SOURCE_DIR}/source/*.h"       
     "${CMAKE_CURRENT_SOURCE_DIR}/sink/*.h"                      
     "${CMAKE_CURRENT_SOURCE_DIR}/utils/*.h"                 
-    "${CMAKE_CURRENT_SOURCE_DIR}/face_detect/*.h"                 
+    "${CMAKE_CURRENT_SOURCE_DIR}/face_detect/*.h"      
+    "${CMAKE_CURRENT_SOURCE_DIR}/third_party/glfw/include/*"
+    "${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/include/*"
 )
 
 # Collect resource files
 file(GLOB RESOURCE_FILES 
-    "${CMAKE_CURRENT_SOURCE_DIR}/assets/*"                      
+    "${CMAKE_CURRENT_SOURCE_DIR}/res*"  
+    "${CMAKE_CURRENT_SOURCE_DIR}/third_party/mars-face-kit/mod*"                     
 )
 
+message(STATUS "RESOURCE_FILES: ${RESOURCE_FILES}")
 # Platform Specific Configuration
 # ----------------------------------------
 if(${CURRENT_OS} STREQUAL "windows")     
@@ -134,9 +138,9 @@ if(${CURRENT_OS} STREQUAL "linux")
     # Copy resources and libraries
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD 
         COMMAND ${CMAKE_COMMAND} -E copy_directory 
-            ${CMAKE_CURRENT_SOURCE_DIR}/assets/res ${OUTPUT_INSTALL_PATH}/res
+            ${CMAKE_CURRENT_SOURCE_DIR}/res ${OUTPUT_INSTALL_PATH}/res
         COMMAND ${CMAKE_COMMAND} -E copy_directory 
-            ${CMAKE_CURRENT_SOURCE_DIR}/assets/models ${OUTPUT_INSTALL_PATH}/models
+            ${CMAKE_CURRENT_SOURCE_DIR}/third_party/mars-face-kit/models ${OUTPUT_INSTALL_PATH}/models
         COMMAND ${CMAKE_COMMAND} -E make_directory 
             ${CMAKE_INCLUDE_OUTPUT_DIRECTORY}
         COMMAND ${CMAKE_COMMAND} -E copy 
@@ -155,9 +159,9 @@ elseif(${CURRENT_OS} STREQUAL "windows")
     # Copy resources and libraries
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD 
         COMMAND ${CMAKE_COMMAND} -E copy_directory 
-            ${CMAKE_CURRENT_SOURCE_DIR}/assets/res ${OUTPUT_INSTALL_PATH}/res
+            ${CMAKE_CURRENT_SOURCE_DIR}/res ${OUTPUT_INSTALL_PATH}/res
         COMMAND ${CMAKE_COMMAND} -E copy_directory 
-            ${CMAKE_CURRENT_SOURCE_DIR}/assets/models ${OUTPUT_INSTALL_PATH}/models
+            ${CMAKE_CURRENT_SOURCE_DIR}/third_party/mars-face-kit/models ${OUTPUT_INSTALL_PATH}/models
         COMMAND ${CMAKE_COMMAND} -E make_directory 
             ${CMAKE_INCLUDE_OUTPUT_DIRECTORY}
         COMMAND ${CMAKE_COMMAND} -E copy 

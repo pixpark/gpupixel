@@ -68,4 +68,4 @@ dependencies {
 参考文章：[Android 导入AAR包](https://juejin.cn/post/7226600031569510459)
 
 ## Windows and Linux
-参考 [demo](https://github.com/pixpark/gpupixel/blob/main/examples/desktop/app.cc) 和 [Cmake配置](https://github.com/pixpark/gpupixel/blob/main/examples/CMakeLists.txt)
+参考 [demo](https://github.com/pixpark/gpupixel/blob/main/demo/desktop/app.cc) 和 [Cmake配置](https://github.com/pixpark/gpupixel/blob/main/demo/CMakeLists.txt)

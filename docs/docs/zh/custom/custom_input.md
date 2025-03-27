@@ -47,7 +47,7 @@ std::shared_ptr<YourCustomInput> YourCustomInput::create() {
 if (!_framebuffer || (_framebuffer->getWidth() != width ||
                       _framebuffer->getHeight() != height)) {
   _framebuffer =
-      GPUPixelContext::getInstance()->getFramebufferCache()->fetchFramebuffer(
+      GPUPixelContext::getInstance()->getFramebufferFactory()->fetchFramebuffer(
           width, height);
 }
 this->setFramebuffer(_framebuffer, outputRotation);

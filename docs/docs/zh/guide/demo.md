@@ -6,9 +6,9 @@ description: 本章将介绍各个系统平台Demo编译和运行方法
 
 # 示例程序
 
-本章将介绍各个系统平台Demo编译和运行方法, Demo代码位于 `examples`目录，结构如下：
+本章将介绍各个系统平台Demo编译和运行方法, Demo代码位于 `demo`目录，结构如下：
 ```bash
-examples
+demo
 ├── CMakeLists.txt
 ├── app.cmake   
 ├── desktop     # 桌面 demo, 包括 Windows 和 Linux
@@ -21,7 +21,7 @@ examples
 :::
 
 ## iOS
-确保iOS库已编译好（[参考](build#ios)），xcode 打开 `gpupixel/examples/ios/GPUPixelApp.xcodeproj`
+确保iOS库已编译好（[参考](build#ios)），xcode 打开 `gpupixel/demo/ios/GPUPixelApp.xcodeproj`
 
 **工程结构**
 
@@ -41,7 +41,7 @@ examples
 :::
 
 ## Mac
-确保MacOS库已编译好([参考](build#mac)), xcode打开 `gpupixel/examples/mac/GPUPixelMacApp.xcodeproj`
+确保MacOS库已编译好([参考](build#mac)), xcode打开 `gpupixel/demo/mac/GPUPixelMacApp.xcodeproj`
 
 **工程结构**
 

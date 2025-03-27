@@ -58,7 +58,7 @@ void PixellationFilter::setPixelSize(float pixelSize) {
 
 bool PixellationFilter::doRender(bool updateSinks) {
   float aspectRatio = 1.0;
-  std::shared_ptr<Framebuffer> firstInputFramebuffer =
+  std::shared_ptr<GPUPixelFramebuffer> firstInputFramebuffer =
       _inputFramebuffers.begin()->second.frameBuffer;
   aspectRatio = firstInputFramebuffer->getHeight() /
                 (float)(firstInputFramebuffer->getWidth());

@@ -125,7 +125,7 @@ bool SphereRefractionFilter::doRender(bool updateSinks) {
   _filterProgram->setUniformValue("refractiveIndex", _refractiveIndex);
 
   float aspectRatio = 1.0;
-  std::shared_ptr<Framebuffer> firstInputFramebuffer =
+  std::shared_ptr<GPUPixelFramebuffer> firstInputFramebuffer =
       _inputFramebuffers.begin()->second.frameBuffer;
   aspectRatio = firstInputFramebuffer->getHeight() /
                 (float)(firstInputFramebuffer->getWidth());

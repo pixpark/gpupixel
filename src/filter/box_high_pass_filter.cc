@@ -40,7 +40,7 @@ bool BoxHighPassFilter::init() {
 }
 
 void BoxHighPassFilter::setInputFramebuffer(
-    std::shared_ptr<Framebuffer> framebuffer,
+    std::shared_ptr<GPUPixelFramebuffer> framebuffer,
     RotationMode rotationMode /* = NoRotation*/,
     int texIdx /* = 0*/) {
   for (auto& filter : _filters) {

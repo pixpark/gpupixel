@@ -13,7 +13,7 @@
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
 
-#include "framebuffer.h"
+#include "gpupixel_framebuffer.h"
 #include "sink.h"
 
 @protocol GPUPixelSink <NSObject>
@@ -21,7 +21,7 @@
 @required
 - (void)doRender;
 - (void)setInputFramebuffer:
-            (std::shared_ptr<gpupixel::Framebuffer>)inputFramebuffer
+            (std::shared_ptr<gpupixel::GPUPixelFramebuffer>)inputFramebuffer
                withRotation:(gpupixel::RotationMode)rotationMode
                     atIndex:(NSInteger)texIdx;
 @optional

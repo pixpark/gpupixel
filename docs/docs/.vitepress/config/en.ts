@@ -82,7 +82,7 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
       items: [
         { text: 'Intro', link: 'guide/intro' },
         { text: 'Build', link: 'guide/build' },
-        { text: 'Examples', link: 'guide/demo' },
+        { text: 'Demo', link: 'guide/demo' },
         { text: 'Integration', link: 'guide/integrated' },
       ]
     },

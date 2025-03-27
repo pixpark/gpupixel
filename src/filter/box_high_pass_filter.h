@@ -22,7 +22,7 @@ class GPUPIXEL_API BoxHighPassFilter : public FilterGroup {
   void setRadius(float radius);
   void setDelta(float delta);
 
-  virtual void setInputFramebuffer(std::shared_ptr<Framebuffer> framebuffer,
+  virtual void setInputFramebuffer(std::shared_ptr<GPUPixelFramebuffer> framebuffer,
                                    RotationMode rotationMode /* = NoRotation*/,
                                    int texIdx /* = 0*/) override;
 

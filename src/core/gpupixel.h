@@ -11,9 +11,9 @@
 #include "gpupixel_macros.h"
 
 // base
-#include "framebuffer.h"
-#include "framebuffer_cache.h"
-#include "gl_program.h"
+#include "gpupixel_framebuffer.h"
+#include "gpupixel_framebuffer_factory.h"
+#include "gpupixel_program.h"
 #include "gpupixel_context.h"
 
 // utils

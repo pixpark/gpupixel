@@ -9,7 +9,7 @@
 #pragma once
 
 #include <stdio.h>
-#include "gl_program.h"
+#include "gpupixel_program.h"
 #include "sink.h"
 #include <functional>
 
@@ -49,7 +49,7 @@ class GPUPIXEL_API SinkRawData : public Sink {
 
  private:
   std::mutex mtx_;
-  GLProgram* _filterProgram;
+  GPUPixelGLProgram* _filterProgram;
   GLuint _filterPositionAttribute;
   GLuint _filterTexCoordAttribute;
   //
@@ -59,7 +59,7 @@ class GPUPIXEL_API SinkRawData : public Sink {
   CVOpenGLESTextureCacheRef textureCache = NULL;
   CVPixelBufferRef renderTarget = NULL;
 #else
-  std::shared_ptr<Framebuffer> _framebuffer;
+  std::shared_ptr<GPUPixelFramebuffer> _framebuffer;
 #endif
 
   bool init_ = false;

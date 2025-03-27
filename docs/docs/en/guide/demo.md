@@ -1,16 +1,16 @@
 ---
-title: Examples
+title: Demo
 editLink: true
 description: 本章将介绍各个系统平台Demo编译和运行方法
 ---
 
 
-# Examples App
+# Demo App
 
-This chapter will introduce the methods for compiling and running demos on various system platforms. The demo code is located in the `examples` directory, structured as follows:
+This chapter will introduce the methods for compiling and running demos on various system platforms. The demo code is located in the `demo` directory, structured as follows:
 
 ```bash
-examples
+demo
 ├── CMakeLists.txt
 ├── android     # Android demo
 ├── app.cmake   #
@@ -24,7 +24,7 @@ The source code is compiled using CMake. The latest pre-compiled libraries for e
 :::
 
 ## iOS
-Ensure that the iOS library has been compiled (see [instructions](build#ios)). Open `gpupixel/examples/ios/GPUPixelApp.xcodeproj` with Xcode.
+Ensure that the iOS library has been compiled (see [instructions](build#ios)). Open `gpupixel/demo/ios/GPUPixelApp.xcodeproj` with Xcode.
 
 **Project Structure**
 
@@ -45,7 +45,7 @@ To run, simply connect an iPhone or use the simulator following the standard iOS
 For custom Xcode projects, disable `Build Settings -> Compress PNG Files` to prevent image color inversion.
 :::
 ## MacOS
-Ensure that the MacOS library has been compiled (see [instructions](build#mac)), then open `gpupixel/examples/mac/GPUPixelMacApp.xcodeproj` with Xcode.
+Ensure that the MacOS library has been compiled (see [instructions](build#mac)), then open `gpupixel/demo/mac/GPUPixelMacApp.xcodeproj` with Xcode.
 
 **Project Structure**
 

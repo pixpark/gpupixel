@@ -43,7 +43,7 @@ class GPUPIXEL_API FaceMakeupFilter : public Filter {
   float blend_level_ = 0;  //[0. 0.5]
   bool has_face_ = false;
   //
-  GLProgram* _filterProgram2;
+  GPUPixelGLProgram* _filterProgram2;
   GLuint _filterPositionAttribute2;
   GLuint _filterTexCoordAttribute = 0;
   GLuint _filterTexCoordAttribute2 = 0;

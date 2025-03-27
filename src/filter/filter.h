@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "gl_program.h"
+#include "gpupixel_program.h"
 #include "gpupixel_macros.h"
 #include "source.h"
 #include "sink.h"
@@ -72,7 +72,7 @@ class GPUPIXEL_API Filter : public Source, public Sink {
 
   virtual bool doRender(bool updateSinks = true) override;
 
-  GLProgram* getProgram() const { return _filterProgram; };
+  GPUPixelGLProgram* getProgram() const { return _filterProgram; };
 
   // property setters & getters
   bool registerProperty(const std::string& name,
@@ -119,7 +119,7 @@ bool registerProperty(
   bool getPropertyType(const std::string& name, std::string& retType);
 
  protected:
-  GLProgram* _filterProgram;
+  GPUPixelGLProgram* _filterProgram;
   GLuint _filterPositionAttribute;
   std::string _filterClassName;
   struct {

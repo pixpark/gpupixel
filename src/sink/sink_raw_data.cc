@@ -113,7 +113,7 @@ bool SinkRawData::initWithShaderString(
     const std::string& vertexShaderSource,
     const std::string& fragmentShaderSource) {
   _filterProgram =
-      GLProgram::createByShaderString(vertexShaderSource, fragmentShaderSource);
+      GPUPixelGLProgram::createByShaderString(vertexShaderSource, fragmentShaderSource);
   GPUPixelContext::getInstance()->setActiveShaderProgram(_filterProgram);
   _filterPositionAttribute = _filterProgram->getAttribLocation("position");
   _filterTexCoordAttribute =
@@ -293,7 +293,7 @@ void SinkRawData::initFrameBuffer(int width, int height) {
   if (!_framebuffer || (_framebuffer->getWidth() != width ||
                         _framebuffer->getHeight() != height)) {
     _framebuffer =
-        GPUPixelContext::getInstance()->getFramebufferCache()->fetchFramebuffer(
+        GPUPixelContext::getInstance()->getFramebufferFactory()->fetchFramebuffer(
             width, height);
   }
 }

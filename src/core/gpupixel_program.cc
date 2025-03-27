@@ -5,22 +5,22 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "gl_program.h"
+#include "gpupixel_program.h"
 #include <algorithm>
 #include "gpupixel_context.h"
 #include "util.h"
 
 namespace gpupixel {
 
-std::vector<GLProgram*> GLProgram::_programs;
+std::vector<GPUPixelGLProgram*> GPUPixelGLProgram::_programs;
 
-GLProgram::GLProgram() : _program(-1) {
+GPUPixelGLProgram::GPUPixelGLProgram() : _program(-1) {
   _programs.push_back(this);
 }
 
-GLProgram::~GLProgram() {
+GPUPixelGLProgram::~GPUPixelGLProgram() {
   GPUPixelContext::getInstance()->runSync([=] {
-    std::vector<GLProgram*>::iterator itr =
+    std::vector<GPUPixelGLProgram*>::iterator itr =
         std::find(_programs.begin(), _programs.end(), this);
     if (itr != _programs.end()) {
       _programs.erase(itr);
@@ -44,10 +44,10 @@ GLProgram::~GLProgram() {
   });
 }
 
-GLProgram* GLProgram::createByShaderString(
+GPUPixelGLProgram* GPUPixelGLProgram::createByShaderString(
     const std::string& vertexShaderSource,
     const std::string& fragmentShaderSource) {
-  GLProgram* ret = new (std::nothrow) GLProgram();
+  GPUPixelGLProgram* ret = new (std::nothrow) GPUPixelGLProgram();
   if (ret) {
     if (!ret->_initWithShaderString(vertexShaderSource, fragmentShaderSource)) {
       delete ret;
@@ -57,7 +57,7 @@ GLProgram* GLProgram::createByShaderString(
   return ret;
 }
 
-bool GLProgram::_initWithShaderString(const std::string& vertexShaderSource,
+bool GPUPixelGLProgram::_initWithShaderString(const std::string& vertexShaderSource,
                                       const std::string& fragmentShaderSource) {
   if (_program != -1) {
     CHECK_GL(glDeleteProgram(_program));
@@ -83,7 +83,7 @@ bool GLProgram::_initWithShaderString(const std::string& vertexShaderSource,
 
 #endif
     gpupixel::Util::Log(
-        "ERROR", "GL ERROR GLProgram::_initWithShaderString vertex shader %s",
+        "ERROR", "GL ERROR GPUPixelGLProgram::_initWithShaderString vertex shader %s",
         messages);
     return -1;
   }
@@ -104,7 +104,7 @@ bool GLProgram::_initWithShaderString(const std::string& vertexShaderSource,
 
 #endif
     gpupixel::Util::Log(
-        "ERROR", "GL ERROR GLProgram::_initWithShaderString frag shader %s",
+        "ERROR", "GL ERROR GPUPixelGLProgram::_initWithShaderString frag shader %s",
         messages);
     return -1;
   }
@@ -120,76 +120,76 @@ bool GLProgram::_initWithShaderString(const std::string& vertexShaderSource,
   return true;
 }
 
-void GLProgram::use() {
+void GPUPixelGLProgram::use() {
   CHECK_GL(glUseProgram(_program));
 }
 
-GLuint GLProgram::getAttribLocation(const std::string& attribute) {
+GLuint GPUPixelGLProgram::getAttribLocation(const std::string& attribute) {
   return glGetAttribLocation(_program, attribute.c_str());
 }
 
-GLuint GLProgram::getUniformLocation(const std::string& uniformName) {
+GLuint GPUPixelGLProgram::getUniformLocation(const std::string& uniformName) {
   return glGetUniformLocation(_program, uniformName.c_str());
 }
 
-void GLProgram::setUniformValue(const std::string& uniformName, int value) {
+void GPUPixelGLProgram::setUniformValue(const std::string& uniformName, int value) {
   GPUPixelContext::getInstance()->setActiveShaderProgram(this);
   setUniformValue(getUniformLocation(uniformName), value);
 }
 
-void GLProgram::setUniformValue(const std::string& uniformName, float value) {
+void GPUPixelGLProgram::setUniformValue(const std::string& uniformName, float value) {
   GPUPixelContext::getInstance()->setActiveShaderProgram(this);
   setUniformValue(getUniformLocation(uniformName), value);
 }
 
-void GLProgram::setUniformValue(const std::string& uniformName, Matrix4 value) {
+void GPUPixelGLProgram::setUniformValue(const std::string& uniformName, Matrix4 value) {
   GPUPixelContext::getInstance()->setActiveShaderProgram(this);
   setUniformValue(getUniformLocation(uniformName), value);
 }
 
-void GLProgram::setUniformValue(const std::string& uniformName, Vector2 value) {
+void GPUPixelGLProgram::setUniformValue(const std::string& uniformName, Vector2 value) {
   GPUPixelContext::getInstance()->setActiveShaderProgram(this);
   setUniformValue(getUniformLocation(uniformName), value);
 }
 
-void GLProgram::setUniformValue(const std::string& uniformName, Matrix3 value) {
+void GPUPixelGLProgram::setUniformValue(const std::string& uniformName, Matrix3 value) {
   GPUPixelContext::getInstance()->setActiveShaderProgram(this);
   setUniformValue(getUniformLocation(uniformName), value);
 }
 
-void GLProgram::setUniformValue(const std::string& uniformName,
+void GPUPixelGLProgram::setUniformValue(const std::string& uniformName,
                                 const void* value,
                                 int length) {
   GPUPixelContext::getInstance()->setActiveShaderProgram(this);
   setUniformValue(getUniformLocation(uniformName), value, length);
 }
 
-void GLProgram::setUniformValue(int uniformLocation, int value) {
+void GPUPixelGLProgram::setUniformValue(int uniformLocation, int value) {
   GPUPixelContext::getInstance()->setActiveShaderProgram(this);
   CHECK_GL(glUniform1i(uniformLocation, value));
 }
 
-void GLProgram::setUniformValue(int uniformLocation, float value) {
+void GPUPixelGLProgram::setUniformValue(int uniformLocation, float value) {
   GPUPixelContext::getInstance()->setActiveShaderProgram(this);
   CHECK_GL(glUniform1f(uniformLocation, value));
 }
 
-void GLProgram::setUniformValue(int uniformLocation, Matrix4 value) {
+void GPUPixelGLProgram::setUniformValue(int uniformLocation, Matrix4 value) {
   GPUPixelContext::getInstance()->setActiveShaderProgram(this);
   CHECK_GL(glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, (GLfloat*)&value));
 }
 
-void GLProgram::setUniformValue(int uniformLocation, Vector2 value) {
+void GPUPixelGLProgram::setUniformValue(int uniformLocation, Vector2 value) {
   GPUPixelContext::getInstance()->setActiveShaderProgram(this);
   CHECK_GL(glUniform2f(uniformLocation, value.x, value.y));
 }
 
-void GLProgram::setUniformValue(int uniformLocation, Matrix3 value) {
+void GPUPixelGLProgram::setUniformValue(int uniformLocation, Matrix3 value) {
   GPUPixelContext::getInstance()->setActiveShaderProgram(this);
   CHECK_GL(glUniformMatrix3fv(uniformLocation, 1, GL_FALSE, (GLfloat*)&value));
 }
 
-void GLProgram::setUniformValue(int uniformLocation,
+void GPUPixelGLProgram::setUniformValue(int uniformLocation,
                                 const void* value,
                                 int length) {
   GPUPixelContext::getInstance()->setActiveShaderProgram(this);

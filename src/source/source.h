@@ -37,9 +37,9 @@ class GPUPIXEL_API Source {
   };
 
   virtual void setFramebuffer(
-      std::shared_ptr<Framebuffer> fb,
+      std::shared_ptr<GPUPixelFramebuffer> fb,
       RotationMode outputRotation = RotationMode::NoRotation);
-  virtual std::shared_ptr<Framebuffer> getFramebuffer() const;
+  virtual std::shared_ptr<GPUPixelFramebuffer> getFramebuffer() const;
   virtual void releaseFramebuffer(bool returnToCache = true);
 
   void setFramebufferScale(float framebufferScale) {
@@ -57,7 +57,7 @@ class GPUPIXEL_API Source {
       int height = 0);
   int RegLandmarkCallback(FaceDetectorCallback callback);
  protected:
-  std::shared_ptr<Framebuffer> _framebuffer;
+  std::shared_ptr<GPUPixelFramebuffer> _framebuffer;
   RotationMode _outputRotation;
   std::map<std::shared_ptr<Sink>, int> _sinks;
   float _framebufferScale;

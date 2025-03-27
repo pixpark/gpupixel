@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "gl_program.h"
+#include "gpupixel_program.h"
 #include "sink.h"
 
 namespace gpupixel {
@@ -25,7 +25,7 @@ class GPUPIXEL_API SinkRender : public Sink {
   ~SinkRender();
 
   void init();
-  virtual void setInputFramebuffer(std::shared_ptr<Framebuffer> framebuffer,
+  virtual void setInputFramebuffer(std::shared_ptr<GPUPixelFramebuffer> framebuffer,
                                    RotationMode rotationMode = NoRotation,
                                    int texIdx = 0) override;
   void setFillMode(FillMode fillMode);
@@ -38,7 +38,7 @@ class GPUPIXEL_API SinkRender : public Sink {
   int _viewHeight;
   FillMode _fillMode;
   bool _mirror = false;
-  GLProgram* _displayProgram;
+  GPUPixelGLProgram* _displayProgram;
   GLuint _positionAttribLocation;
   GLuint _texCoordAttribLocation;
   GLuint _colorMapUniformLocation;
