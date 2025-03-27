@@ -146,10 +146,12 @@ using namespace gpupixel;
 
 
 - (void) initVideoFilter {
+  gpuPixelView = [[GPUPixelView alloc] initWithFrame:self.view.frame];
+  [self.view addSubview:gpuPixelView];
+  [gpuPixelView setBackgroundColor:[UIColor grayColor]];
+  [gpuPixelView setFillMode:(gpupixel::SinkRender::PreserveAspectRatioAndFill)];
+  
   gpupixel::GPUPixelContext::getInstance()->runSync([&] {
-    gpuPixelView = [[GPUPixelView alloc] initWithFrame:self.view.frame];
-    [self.view addSubview:gpuPixelView];
-    
     lipstick_filter_ = LipstickFilter::create();
     blusher_filter_ = BlusherFilter::create();
     beauty_face_filter_ = BeautyFaceFilter::create();
@@ -169,9 +171,6 @@ using namespace gpupixel;
                     ->addSink(face_reshape_filter_)
                     ->addSink(beauty_face_filter_)
                     ->addSink(gpuPixelView);
- 
-    [gpuPixelView setBackgroundColor:[UIColor grayColor]];
-    [gpuPixelView setFillMode:(gpupixel::SinkRender::PreserveAspectRatioAndFill)];
   });
 }
 
@@ -264,7 +263,9 @@ using namespace gpupixel;
   }
   
   // must call function for updating image effects
-  gpuSourceImage->Render();
+  gpupixel::GPUPixelContext::getInstance()->runSync([&] {
+    gpuSourceImage->Render();
+  });
 }
  
 - (void)onFilterSwitchChange:(UISegmentedControl *)sender {
