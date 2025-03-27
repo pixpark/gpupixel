@@ -8,7 +8,7 @@
 #include "source_raw_data.h"
 #include "gpupixel_context.h"
 #include "util.h"
-#include "face_detector.h"
+
 using namespace gpupixel;
 
 const std::string kI420VertexShaderString = R"(
@@ -120,8 +120,7 @@ bool SourceRawData::init() {
 void SourceRawData::processData(const uint8_t* pixels,
                                      int width,
                                      int height,
-                                     int stride,
-                                     int64_t ts) {
+                                     int stride) {
   GPUPixelContext::getInstance()->runSync([=] {
     if(_face_detector) {
       _face_detector->Detect(pixels, width, height, GPUPIXEL_MODE_FMT_VIDEO,GPUPIXEL_FRAME_TYPE_RGBA8888);
@@ -141,8 +140,7 @@ void SourceRawData::processData(int width,
                                      const uint8_t* dataU,
                                      int strideU,
                                      const uint8_t* dataV,
-                                     int strideV,
-                                     int64_t ts) {
+                                     int strideV) {
   GPUPixelContext::getInstance()->runSync([=] {
     if(_face_detector) {
       _face_detector->Detect(dataY, width, height, GPUPIXEL_MODE_FMT_VIDEO, GPUPIXEL_FRAME_TYPE_YUVI420);
@@ -160,8 +158,7 @@ int SourceRawData::genTextureWithI420(int width,
                                            const uint8_t* dataU,
                                            int strideU,
                                            const uint8_t* dataV,
-                                           int strideV,
-                                           int64_t ts) {
+                                           int strideV) {
   if (!_framebuffer || (_framebuffer->getWidth() != width ||
                         _framebuffer->getHeight() != height)) {
     _framebuffer =
@@ -212,8 +209,7 @@ int SourceRawData::genTextureWithI420(int width,
 int SourceRawData::genTextureWithRGBA(const uint8_t* pixels,
                                            int width,
                                            int height,
-                                           int stride,
-                                           int64_t ts) {
+                                           int stride) {
   if (!_framebuffer || (_framebuffer->getWidth() != stride ||
                         _framebuffer->getHeight() != height)) {
     _framebuffer =

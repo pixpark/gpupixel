@@ -65,11 +65,13 @@ using namespace gpupixel;
   [self.videoCapturer startCapture];
 }
 - (void) initVideoFilter {
+  _gpuPixelView = [[GPUPixelView alloc] initWithFrame:self.view.frame];
+  [self.view addSubview:_gpuPixelView];
+  [_gpuPixelView setBackgroundColor:[UIColor grayColor]];
+  [_gpuPixelView setFillMode:(gpupixel::SinkRender::PreserveAspectRatioAndFill)];
+  
   gpupixel::GPUPixelContext::getInstance()->runSync([&] {
     _sourceRawData = SourceRawData::create();
-    _gpuPixelView = [[GPUPixelView alloc] initWithFrame:self.view.frame];
-    [self.view addSubview:_gpuPixelView];
-    
     _lipstickFilter = LipstickFilter::create();
     _blusherFilter = BlusherFilter::create();
     _sourceRawData->RegLandmarkCallback([=](std::vector<float> landmarks) {
@@ -88,10 +90,7 @@ using namespace gpupixel;
     ->addSink(_faceReshapeFilter)
     ->addSink(_beautyFaceFilter)
     ->addSink(_gpuPixelView);
-    
-    [_gpuPixelView setBackgroundColor:[UIColor grayColor]];
-    [_gpuPixelView setFillMode:(gpupixel::SinkRender::PreserveAspectRatioAndFill)];
-    
+  
     _beautyFaceFilter->addSink(_sinkRawData);
     __weak typeof(VideoFilterController*)weakSelf = self;
     _rawOutputCallback = [weakSelf]( const uint8_t* data, int width, int height, int64_t ts) {

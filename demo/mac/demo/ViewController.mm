@@ -90,12 +90,12 @@ using namespace gpupixel;
 }
  
 -(void) initVideoFilter {
+  gpuPixelView = [[GPUPixelView alloc] initWithFrame: self.view.frame];
+  [self.view addSubview:gpuPixelView positioned:NSWindowBelow relativeTo:nil];
+  [gpuPixelView setFillMode:(gpupixel::SinkRender::PreserveAspectRatioAndFill)];
+  
   gpupixel::GPUPixelContext::getInstance()->runSync([&] {
     sourceRawData = SourceRawData::create();
-    gpuPixelView = [[GPUPixelView alloc] initWithFrame: self.view.frame];
-    [self.view addSubview:gpuPixelView positioned:NSWindowBelow relativeTo:nil];
- 
-    // create filter
  
     lipstickFilter = LipstickFilter::create();
     blusherFilter = BlusherFilter::create();
@@ -116,8 +116,6 @@ using namespace gpupixel;
                  ->addSink(faceReshapeFilter)
                  ->addSink(beautyFaceFilter)
                  ->addSink(gpuPixelView);
-  
-    [gpuPixelView setFillMode:(gpupixel::SinkRender::PreserveAspectRatioAndFill)];
   
   });
 }

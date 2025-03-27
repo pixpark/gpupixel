@@ -18,8 +18,7 @@ class GPUPIXEL_API SourceRawData : public Filter {
   void processData(const uint8_t* pixels,
                    int width,
                    int height,
-                   int stride,
-                   int64_t ts = 0);
+                   int stride);
   void processData(int width,
                    int height,
                    const uint8_t* dataY,
@@ -27,8 +26,7 @@ class GPUPIXEL_API SourceRawData : public Filter {
                    const uint8_t* dataU,
                    int strideU,
                    const uint8_t* dataV,
-                   int strideV,
-                   int64_t ts = 0);
+                   int strideV);
 
   void setRotation(RotationMode rotation);
 
@@ -43,14 +41,12 @@ class GPUPIXEL_API SourceRawData : public Filter {
                          const uint8_t* dataU,
                          int strideU,
                          const uint8_t* dataV,
-                         int strideV,
-                         int64_t ts = 0);
+                         int strideV);
 
   int genTextureWithRGBA(const uint8_t* pixels,
                          int width,
                          int height,
-                         int stride,
-                         int64_t ts = 0);
+                         int stride);
 
  private:
   GPUPixelGLProgram* _filterProgram;

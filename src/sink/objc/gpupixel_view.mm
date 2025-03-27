@@ -9,6 +9,7 @@
 #include "gpupixel_context.h"
 #include "gpupixel_program.h"
 #include "filter.h"
+#include <memory>
 
 #import <AVFoundation/AVFoundation.h>
 
@@ -28,6 +29,7 @@
     CGSize lastBoundsSize;
     
     GLfloat backgroundColorRed, backgroundColorGreen, backgroundColorBlue, backgroundColorAlpha;
+    BOOL needsUpdate;
 }
 
 @end
@@ -36,6 +38,7 @@
 
 @synthesize sizeInPixels = _sizeInPixels;
 
+ 
 - (id)initWithFrame:(CGRect)frame
 {
     if (!(self = [super initWithFrame:frame]))
@@ -91,7 +94,7 @@
         glEnableVertexAttribArray(texCoordAttribLocation);
         
         [self setBackgroundColorRed:0.0 green:0.0 blue:0.0 alpha:0.0];
-        _fillMode = gpupixel::SinkRender::FillMode::PreserveAspectRatio;
+        _fillMode = gpupixel::SinkRender::PreserveAspectRatio;
         [self createDisplayFramebuffer];
     });
 }
@@ -232,6 +235,17 @@
 }
 
 - (void)doRender {
+    // 确保OpenGL操作在适当的线程上执行
+    if ([NSThread isMainThread]) {
+        // 在主线程上直接执行渲染操作
+        [self doRenderInternal];
+    } else {
+        // 非主线程时，使用performSelectorOnMainThread
+        [self performSelectorOnMainThread:@selector(doRenderInternal) withObject:nil waitUntilDone:NO];
+    }
+}
+
+- (void)doRenderInternal {
     gpupixel::GPUPixelContext::getInstance()->runSync([&]{
         gpupixel::GPUPixelContext::getInstance()->setActiveShaderProgram(displayProgram);
         [self setDisplayFramebuffer];
@@ -295,7 +309,12 @@
            lastInputRotation == rotation)
          ))
     {
-        [self performSelectorOnMainThread:@selector(updateDisplayVertices) withObject:nil waitUntilDone:YES];
+        // 确保在主线程更新UI相关操作
+        if ([NSThread isMainThread]) {
+            [self updateDisplayVertices];
+        } else {
+            [self performSelectorOnMainThread:@selector(updateDisplayVertices) withObject:nil waitUntilDone:NO];
+        }
     }
 }
 
@@ -303,12 +322,25 @@
 {
     if (_fillMode != newValue) {
         _fillMode = newValue;
-        [self updateDisplayVertices];
+        
+        // 检查当前是否在主线程
+        if ([NSThread isMainThread]) {
+            [self updateDisplayVertices];
+        } else {
+            // 非主线程，异步在主线程更新顶点
+            [self performSelectorOnMainThread:@selector(updateDisplayVertices) withObject:nil waitUntilDone:NO];
+        }
     }
 }
 
 - (void)updateDisplayVertices;
 {
+    // 确保在主线程执行UI更新操作
+    if (![NSThread isMainThread]) {
+        [self performSelectorOnMainThread:@selector(updateDisplayVertices) withObject:nil waitUntilDone:NO];
+        return;
+    }
+    
     if (inputFramebuffer == 0) return;
     
     CGFloat scaledWidth = 1.0;
@@ -324,10 +356,10 @@
     
     CGRect insetRect = AVMakeRectWithAspectRatioInsideRect(CGSizeMake(rotatedFramebufferWidth, rotatedFramebufferHeight), self.bounds);
     
-    if (_fillMode == gpupixel::SinkRender::FillMode::PreserveAspectRatio) {
+    if (_fillMode == gpupixel::SinkRender::PreserveAspectRatio) {
         scaledWidth = insetRect.size.width / self.bounds.size.width;
         scaledHeight = insetRect.size.height / self.bounds.size.height;
-    } else if (_fillMode == gpupixel::SinkRender::FillMode::PreserveAspectRatioAndFill) {
+    } else if (_fillMode == gpupixel::SinkRender::PreserveAspectRatioAndFill) {
         scaledWidth = self.bounds.size.height / insetRect.size.height;
         scaledHeight = self.bounds.size.width / insetRect.size.width;
     }

@@ -8,7 +8,7 @@
 #pragma once
 
 #include "filter.h"
-#include "face_detector.h"
+
 
 namespace gpupixel {
 class GPUPIXEL_API FaceReshapeFilter : public Filter {
