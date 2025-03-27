@@ -232,7 +232,7 @@ bool BilateralMonoFilter::init() {
 }
 
 bool BilateralMonoFilter::doRender(bool updateSinks) {
-  std::shared_ptr<Framebuffer> inputFramebuffer =
+  std::shared_ptr<GPUPixelFramebuffer> inputFramebuffer =
       _inputFramebuffers.begin()->second.frameBuffer;
   RotationMode inputRotation = _inputFramebuffers.begin()->second.rotationMode;
 

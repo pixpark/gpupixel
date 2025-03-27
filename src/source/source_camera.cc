@@ -46,7 +46,7 @@ void SourceCamera::setFrameData(
   if (!_framebuffer || (_framebuffer->getWidth() != width ||
                         _framebuffer->getHeight() != height)) {
     _framebuffer =
-        GPUPixelContext::getInstance()->getFramebufferCache()->fetchFramebuffer(
+        GPUPixelContext::getInstance()->getFramebufferFactory()->fetchFramebuffer(
             width, height, true);
   }
   if(_face_detector) {

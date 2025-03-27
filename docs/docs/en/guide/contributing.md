@@ -28,7 +28,7 @@ Thank you for your interest in contributing to GPUPixel! This guide will help yo
 - Fix typos or clarify existing documentation
 - Add missing documentation for features
 - Translate documentation to other languages
-- Improve code examples
+- Improve code demo
 
 ### Bug Reports
 

@@ -165,20 +165,20 @@ void FilterGroup::doUpdateSinks() {
 }
 
 void FilterGroup::setFramebuffer(
-    std::shared_ptr<Framebuffer> fb,
+    std::shared_ptr<GPUPixelFramebuffer> fb,
     RotationMode outputRotation /* = RotationMode::NoRotation*/) {
   // if (_terminalFilter)
   //     _terminalFilter->setFramebuffer(fb);
 }
 
-std::shared_ptr<Framebuffer> FilterGroup::getFramebuffer() const {
+std::shared_ptr<GPUPixelFramebuffer> FilterGroup::getFramebuffer() const {
   // if (_terminalFilter)
   //     return _terminalFilter->getFramebuffer();
   return 0;
 }
 
 void FilterGroup::setInputFramebuffer(
-    std::shared_ptr<Framebuffer> framebuffer,
+    std::shared_ptr<GPUPixelFramebuffer> framebuffer,
     RotationMode rotationMode /* = NoRotation*/,
     int texIdx /* = 0*/) {
   for (auto& filter : _filters) {

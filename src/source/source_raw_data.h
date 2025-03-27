@@ -8,7 +8,7 @@
 #pragma once
 
 #include "filter.h"
-#include "gl_program.h"
+#include "gpupixel_program.h"
 #include <functional>
 namespace gpupixel {
 class GPUPIXEL_API SourceRawData : public Filter {
@@ -53,13 +53,13 @@ class GPUPIXEL_API SourceRawData : public Filter {
                          int64_t ts = 0);
 
  private:
-  GLProgram* _filterProgram;
+  GPUPixelGLProgram* _filterProgram;
   GLuint _filterPositionAttribute;
   GLuint _filterTexCoordAttribute;
 
   GLuint _textures[4] = {0};
   RotationMode _rotation = NoRotation;
-  std::shared_ptr<Framebuffer> _framebuffer;
+  std::shared_ptr<GPUPixelFramebuffer> _framebuffer;
 };
 
 }

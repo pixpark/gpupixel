@@ -5,7 +5,7 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "framebuffer.h"
+#include "gpupixel_framebuffer.h"
 #include <assert.h>
 #include <algorithm>
 #include "gpupixel_context.h"
@@ -13,9 +13,9 @@
 
 namespace gpupixel {
 
-// std::vector<std::shared_ptr<Framebuffer>> Framebuffer::_framebuffers;
+// std::vector<std::shared_ptr<GPUPixelFramebuffer>> GPUPixelFramebuffer::_framebuffers;
 #ifndef GPUPIXEL_WIN
-TextureAttributes Framebuffer::defaultTextureAttribures = {
+TextureAttributes GPUPixelFramebuffer::defaultTextureAttribures = {
     .minFilter = GL_LINEAR,
     .magFilter = GL_LINEAR,
     .wrapS = GL_CLAMP_TO_EDGE,
@@ -24,11 +24,11 @@ TextureAttributes Framebuffer::defaultTextureAttribures = {
     .format = GL_RGBA,
     .type = GL_UNSIGNED_BYTE};
 #else
-TextureAttributes Framebuffer::defaultTextureAttribures = {
+TextureAttributes GPUPixelFramebuffer::defaultTextureAttribures = {
     GL_LINEAR, GL_LINEAR, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE,
     GL_RGBA,   GL_RGBA,   GL_UNSIGNED_BYTE};
 #endif
-Framebuffer::Framebuffer(
+GPUPixelFramebuffer::GPUPixelFramebuffer(
     int width,
     int height,
     bool onlyGenerateTexture /* = false*/,
@@ -46,7 +46,7 @@ Framebuffer::Framebuffer(
   }
 }
 
-Framebuffer::~Framebuffer() {
+GPUPixelFramebuffer::~GPUPixelFramebuffer() {
   gpupixel::GPUPixelContext::getInstance()->runSync([&] {
     bool bDeleteTex = (_texture != -1);
     bool bDeleteFB = (_framebuffer != -1);
@@ -62,16 +62,16 @@ Framebuffer::~Framebuffer() {
   });
 }
 
-void Framebuffer::active() {
+void GPUPixelFramebuffer::active() {
   CHECK_GL(glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer));
   CHECK_GL(glViewport(0, 0, _width, _height));
 }
 
-void Framebuffer::inactive() {
+void GPUPixelFramebuffer::inactive() {
   CHECK_GL(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 }
 
-void Framebuffer::_generateTexture() {
+void GPUPixelFramebuffer::_generateTexture() {
   CHECK_GL(glGenTextures(1, &_texture));
   CHECK_GL(glBindTexture(GL_TEXTURE_2D, _texture));
   CHECK_GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
@@ -87,7 +87,7 @@ void Framebuffer::_generateTexture() {
   CHECK_GL(glBindTexture(GL_TEXTURE_2D, 0));
 }
 
-void Framebuffer::_generateFramebuffer() {
+void GPUPixelFramebuffer::_generateFramebuffer() {
   CHECK_GL(glGenFramebuffers(1, &_framebuffer));
   CHECK_GL(glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer));
   _generateTexture();

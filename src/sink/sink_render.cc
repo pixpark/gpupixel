@@ -35,7 +35,7 @@ SinkRender::~SinkRender() {
 }
 
 void SinkRender::init() {
-  _displayProgram = GLProgram::createByShaderString(kDefaultVertexShader,
+  _displayProgram = GPUPixelGLProgram::createByShaderString(kDefaultVertexShader,
                                                     kDefaultFragmentShader);
   _positionAttribLocation = _displayProgram->getAttribLocation("position");
   _texCoordAttribLocation =
@@ -48,10 +48,10 @@ void SinkRender::init() {
 };
 
 void SinkRender::setInputFramebuffer(
-    std::shared_ptr<Framebuffer> framebuffer,
+    std::shared_ptr<GPUPixelFramebuffer> framebuffer,
     RotationMode rotationMode /* = NoRotation*/,
     int texIdx /* = 0*/) {
-  std::shared_ptr<Framebuffer> lastInputFramebuffer;
+  std::shared_ptr<GPUPixelFramebuffer> lastInputFramebuffer;
   RotationMode lastInputRotation = NoRotation;
   if (_inputFramebuffers.find(0) != _inputFramebuffers.end()) {
     lastInputFramebuffer = _inputFramebuffers[0].frameBuffer;
@@ -117,7 +117,7 @@ void SinkRender::_updateDisplayVertices() {
     return;
   }
 
-  std::shared_ptr<Framebuffer> inputFramebuffer =
+  std::shared_ptr<GPUPixelFramebuffer> inputFramebuffer =
       _inputFramebuffers[0].frameBuffer;
   RotationMode inputRotation = _inputFramebuffers[0].rotationMode;
 

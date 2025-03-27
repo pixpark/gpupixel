@@ -46,7 +46,7 @@ void SourceImage::init(int width, int height, int channel_count, const unsigned 
     if (!_framebuffer || (_framebuffer->getWidth() != width ||
                             _framebuffer->getHeight() != height)) {
         _framebuffer =
-                GPUPixelContext::getInstance()->getFramebufferCache()->fetchFramebuffer(
+                GPUPixelContext::getInstance()->getFramebufferFactory()->fetchFramebuffer(
                         width, height, true);
     }
     this->setFramebuffer(_framebuffer);

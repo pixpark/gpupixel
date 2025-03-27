@@ -13,7 +13,7 @@
     
     dispatch_queue_t cameraProcessingQueue, audioProcessingQueue;
     
-//    GLProgram *yuvConversionProgram;
+//    GPUPixelGLProgram *yuvConversionProgram;
     GLint yuvConversionPositionAttribute, yuvConversionTextureCoordinateAttribute;
     GLint yuvConversionLuminanceTextureUniform, yuvConversionChrominanceTextureUniform;
     

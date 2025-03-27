@@ -98,14 +98,14 @@ GPUPixelContext::GPUPixelContext()
       isCapturingFrame(false),
       captureUpToFilter(0),
       capturedFrameData(0) {
-  _framebufferCache = new FramebufferCache();
-  task_queue_ = std::make_shared<LocalDispatchQueue>();
+  _framebufferFactory = new FramebufferFactory();
+  task_queue_ = std::make_shared<DispatchQueue>();
   init();
 }
 
 GPUPixelContext::~GPUPixelContext() {
   releaseContext();
-  delete _framebufferCache;
+  delete _framebufferFactory;
 }
 
 GPUPixelContext* GPUPixelContext::getInstance() {
@@ -135,19 +135,19 @@ void GPUPixelContext::init() {
   });
 }
 
-FramebufferCache* GPUPixelContext::getFramebufferCache() const {
-  return _framebufferCache;
+FramebufferFactory* GPUPixelContext::getFramebufferFactory() const {
+  return _framebufferFactory;
 }
 
-void GPUPixelContext::setActiveShaderProgram(GLProgram* shaderProgram) {
+void GPUPixelContext::setActiveShaderProgram(GPUPixelGLProgram* shaderProgram) {
   if (_curShaderProgram != shaderProgram) {
     _curShaderProgram = shaderProgram;
     shaderProgram->use();
   }
 }
 
-void GPUPixelContext::purge() {
-  _framebufferCache->purge();
+void GPUPixelContext::clean() {
+  _framebufferFactory->clean();
 }
  
 void GPUPixelContext::createContext() {
@@ -350,11 +350,10 @@ void GPUPixelContext::runSync(std::function<void(void)> func) {
 #if defined(GPUPIXEL_ANDROID)
   func();
 #else
-  task_queue_->add([=]() {
+  task_queue_->runSync([=]() {
       useAsCurrent();
       func();
   });
-  task_queue_->processOne();
 #endif
 
 }

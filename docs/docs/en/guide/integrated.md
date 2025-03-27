@@ -73,4 +73,4 @@ Reference article: [Importing AAR Packages in Android](https://juejin.cn/post/72
 
 ## Windows and Linux
 
-Refer to the [demo](https://github.com/pixpark/gpupixel/blob/main/examples/desktop/app.cc) and [CMake configuration](https://github.com/pixpark/gpupixel/blob/main/examples/CMakeLists.txt).
+Refer to the [demo](https://github.com/pixpark/gpupixel/blob/main/demo/desktop/app.cc) and [CMake configuration](https://github.com/pixpark/gpupixel/blob/main/demo/CMakeLists.txt).

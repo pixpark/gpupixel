@@ -186,7 +186,7 @@ bool FaceMakeupFilter::init() {
       _filterProgram->getAttribLocation("inputTextureCoordinate");
 
   // base render program
-  _filterProgram2 = GLProgram::createByShaderString(kDefaultVertexShader,
+  _filterProgram2 = GPUPixelGLProgram::createByShaderString(kDefaultVertexShader,
                                                     kDefaultFragmentShader);
   _filterPositionAttribute2 = _filterProgram2->getAttribLocation("position");
   _filterTexCoordAttribute2 =
@@ -279,7 +279,7 @@ bool FaceMakeupFilter::doRender(bool updateSinks) {
 
   _filterProgram->setUniformValue("blendMode", 15);
 
-  std::shared_ptr<Framebuffer> fb = _inputFramebuffers[0].frameBuffer;
+  std::shared_ptr<GPUPixelFramebuffer> fb = _inputFramebuffers[0].frameBuffer;
   CHECK_GL(glActiveTexture(GL_TEXTURE0));
   CHECK_GL(glBindTexture(GL_TEXTURE_2D, fb->getTexture()));
   _filterProgram->setUniformValue("inputImageTexture", 0);  // origin image

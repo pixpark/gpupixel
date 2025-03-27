@@ -1,6 +1,6 @@
 # Custom Input Source
 
-This guide explains how to create a custom input source by inheriting from the `Source` class in GPUPixel. We'll explore the implementation process through two examples: `SourceRawData` and `SourceCamera`.
+This guide explains how to create a custom input source by inheriting from the `Source` class in GPUPixel. We'll explore the implementation process through two demo: `SourceRawData` and `SourceCamera`.
 
 ## Overview
 
@@ -39,7 +39,7 @@ std::shared_ptr<YourCustomInput> YourCustomInput::create() {
 }
 ```
 
-### 2. Framebuffer Management
+### 2. GPUPixelFramebuffer Management
 
 Create and manage framebuffer for your input source:
 
@@ -47,7 +47,7 @@ Create and manage framebuffer for your input source:
 if (!_framebuffer || (_framebuffer->getWidth() != width ||
                       _framebuffer->getHeight() != height)) {
   _framebuffer =
-      GPUPixelContext::getInstance()->getFramebufferCache()->fetchFramebuffer(
+      GPUPixelContext::getInstance()->getFramebufferFactory()->fetchFramebuffer(
           width, height);
 }
 this->setFramebuffer(_framebuffer, outputRotation);
@@ -148,4 +148,4 @@ if (input) {
 }
 ```
 
-This guide covers the basic implementation of a custom input source. For more specific requirements, refer to the provided examples and adapt them to your needs.
+This guide covers the basic implementation of a custom input source. For more specific requirements, refer to the provided demo and adapt them to your needs.

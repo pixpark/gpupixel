@@ -22,7 +22,7 @@ class ObjcSink : public Sink {
     [_gpuSink doRender];
   };
 
-  virtual void setInputFramebuffer(std::shared_ptr<Framebuffer> framebuffer,
+  virtual void setInputFramebuffer(std::shared_ptr<GPUPixelFramebuffer> framebuffer,
                                    RotationMode rotationMode = NoRotation,
                                    int texIdx = 0) override {
     [_gpuSink setInputFramebuffer:framebuffer

@@ -119,7 +119,7 @@ unsigned char* Source::captureAProcessedFrameData(
 }
 
 void Source::setFramebuffer(
-    std::shared_ptr<Framebuffer> fb,
+    std::shared_ptr<GPUPixelFramebuffer> fb,
     RotationMode outputRotation /* = RotationMode::NoRotation*/) {
   _framebuffer = fb;
   _outputRotation = outputRotation;
@@ -158,7 +158,7 @@ int Source::getRotatedFramebufferHeight() const {
   }
 }
 
-std::shared_ptr<Framebuffer> Source::getFramebuffer() const {
+std::shared_ptr<GPUPixelFramebuffer> Source::getFramebuffer() const {
   return _framebuffer;
 }
 

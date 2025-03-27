@@ -131,7 +131,7 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     ${CMAKE_CURRENT_SOURCE_DIR}/../output/models ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/models
 
     COMMAND ${CMAKE_COMMAND} -E copy
-    "${CMAKE_CURRENT_SOURCE_DIR}/../examples/desktop/demo.png" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+    "${CMAKE_CURRENT_SOURCE_DIR}/desktop/demo.png" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
     
     COMMENT "Copying res and models files to output/app directory.")
 

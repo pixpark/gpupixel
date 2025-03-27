@@ -68,7 +68,7 @@ bool Filter::initWithShaderString(const std::string& vertexShaderSource,
                                   int inputNumber /* = 1*/) {
   _inputNum = inputNumber;
   _filterProgram =
-      GLProgram::createByShaderString(vertexShaderSource, fragmentShaderSource);
+      GPUPixelGLProgram::createByShaderString(vertexShaderSource, fragmentShaderSource);
   _filterPositionAttribute = _filterProgram->getAttribLocation("position");
   GPUPixelContext::getInstance()->setActiveShaderProgram(_filterProgram);
   CHECK_GL(glEnableVertexAttribArray(_filterPositionAttribute));
@@ -131,7 +131,7 @@ bool Filter::doRender(bool updateSinks) {
            _inputFramebuffers.begin();
        it != _inputFramebuffers.end(); ++it) {
     int texIdx = it->first;
-    std::shared_ptr<Framebuffer> fb = it->second.frameBuffer;
+    std::shared_ptr<GPUPixelFramebuffer> fb = it->second.frameBuffer;
     CHECK_GL(glActiveTexture(GL_TEXTURE0 + texIdx));
     CHECK_GL(glBindTexture(GL_TEXTURE_2D, fb->getTexture()));
     _filterProgram->setUniformValue(
@@ -257,7 +257,7 @@ void Filter::render() {
     if (!_framebuffer || (_framebuffer->getWidth() != captureWidth ||
                           _framebuffer->getHeight() != captureHeight)) {
       _framebuffer = GPUPixelContext::getInstance()
-                         ->getFramebufferCache()
+                         ->getFramebufferFactory()
                          ->fetchFramebuffer(captureWidth, captureHeight);
     }
 
@@ -272,7 +272,7 @@ void Filter::render() {
     _framebuffer->inactive();
   } else {
     // todo(Jeayo)
-    std::shared_ptr<Framebuffer> firstInputFramebuffer =
+    std::shared_ptr<GPUPixelFramebuffer> firstInputFramebuffer =
         _inputFramebuffers.begin()->second.frameBuffer;
     RotationMode firstInputRotation =
         _inputFramebuffers.begin()->second.rotationMode;
@@ -297,7 +297,7 @@ void Filter::render() {
         (_framebuffer->getWidth() != rotatedFramebufferWidth ||
          _framebuffer->getHeight() != rotatedFramebufferHeight)) {
       _framebuffer = GPUPixelContext::getInstance()
-                         ->getFramebufferCache()
+                         ->getFramebufferFactory()
                          ->fetchFramebuffer(rotatedFramebufferWidth,
                                             rotatedFramebufferHeight);
     }

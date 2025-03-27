@@ -106,7 +106,7 @@ bool _SketchFilter::doRender(bool updateSinks) {
   float texelWidth = 1.0 / _framebuffer->getWidth();
   float texelHeight = 1.0 / _framebuffer->getHeight();
 
-  std::shared_ptr<Framebuffer> inputFramebuffer =
+  std::shared_ptr<GPUPixelFramebuffer> inputFramebuffer =
       _inputFramebuffers.begin()->second.frameBuffer;
   RotationMode inputRotation = _inputFramebuffers.begin()->second.rotationMode;
   if (rotationSwapsSize(inputRotation)) {

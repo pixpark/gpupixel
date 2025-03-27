@@ -7,18 +7,18 @@
 
 #import "gpupixel_view.h"
 #include "gpupixel_context.h"
-#include "gl_program.h"
+#include "gpupixel_program.h"
 #include "filter.h"
 
 #import <AVFoundation/AVFoundation.h>
 
 @interface GPUPixelView()
 {
-    std::shared_ptr<gpupixel::Framebuffer> inputFramebuffer;
+    std::shared_ptr<gpupixel::GPUPixelFramebuffer> inputFramebuffer;
     gpupixel::RotationMode inputRotation;
     GLuint displayFramebuffer;
     GLuint displayRenderbuffer;
-    gpupixel::GLProgram* displayProgram;
+    gpupixel::GPUPixelGLProgram* displayProgram;
     GLuint positionAttribLocation;
     GLuint texCoordAttribLocation;
     GLuint colorMapUniformLocation;
@@ -80,7 +80,7 @@
     self.hidden = NO;
 #endif
     gpupixel::GPUPixelContext::getInstance()->runSync([&]{
-        displayProgram = gpupixel::GLProgram::createByShaderString(gpupixel::kDefaultVertexShader, gpupixel::kDefaultFragmentShader);
+        displayProgram = gpupixel::GPUPixelGLProgram::createByShaderString(gpupixel::kDefaultVertexShader, gpupixel::kDefaultFragmentShader);
         
         positionAttribLocation = displayProgram->getAttribLocation("position");
         texCoordAttribLocation = displayProgram->getAttribLocation("inputTextureCoordinate");
@@ -279,10 +279,10 @@
     });
 }
 
-- (void)setInputFramebuffer:(std::shared_ptr<gpupixel::Framebuffer>)newInputFramebuffer
+- (void)setInputFramebuffer:(std::shared_ptr<gpupixel::GPUPixelFramebuffer>)newInputFramebuffer
                withRotation:(gpupixel::RotationMode)rotation
                     atIndex:(NSInteger)texIdx {
-    std::shared_ptr<gpupixel::Framebuffer> lastFramebuffer = inputFramebuffer;
+    std::shared_ptr<gpupixel::GPUPixelFramebuffer> lastFramebuffer = inputFramebuffer;
     gpupixel::RotationMode lastInputRotation = inputRotation;
     
     inputRotation = rotation;

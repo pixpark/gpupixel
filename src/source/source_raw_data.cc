@@ -87,7 +87,7 @@ SourceRawData::~SourceRawData() {
 }
 
 bool SourceRawData::init() {
-  _filterProgram = GLProgram::createByShaderString(kI420VertexShaderString,
+  _filterProgram = GPUPixelGLProgram::createByShaderString(kI420VertexShaderString,
                                                    kI420FragmentShaderString);
   GPUPixelContext::getInstance()->setActiveShaderProgram(_filterProgram);
 
@@ -165,7 +165,7 @@ int SourceRawData::genTextureWithI420(int width,
   if (!_framebuffer || (_framebuffer->getWidth() != width ||
                         _framebuffer->getHeight() != height)) {
     _framebuffer =
-        GPUPixelContext::getInstance()->getFramebufferCache()->fetchFramebuffer(
+        GPUPixelContext::getInstance()->getFramebufferFactory()->fetchFramebuffer(
             width, height);
   }
 
@@ -217,7 +217,7 @@ int SourceRawData::genTextureWithRGBA(const uint8_t* pixels,
   if (!_framebuffer || (_framebuffer->getWidth() != stride ||
                         _framebuffer->getHeight() != height)) {
     _framebuffer =
-        GPUPixelContext::getInstance()->getFramebufferCache()->fetchFramebuffer(
+        GPUPixelContext::getInstance()->getFramebufferFactory()->fetchFramebuffer(
             stride, height);
   }
   this->setFramebuffer(_framebuffer, NoRotation);

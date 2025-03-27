@@ -69,7 +69,7 @@ public class GPUPixel {
 
     public void destroy() {
         if (!isInited()) return;
-        purge();
+        clean();
         setGLSurfaceView(null);
         setSource(null);
         mRenderer.clear();
@@ -114,17 +114,17 @@ public class GPUPixel {
         }
     }
 
-    public void purge() {
+    public void clean() {
         if (mGLSurfaceView != null) {
             GPUPixel.getInstance().runOnDraw(new Runnable() {
                 @Override
                 public void run() {
-                    GPUPixel.nativeContextPurge();
+                    GPUPixel.nativeContextClean();
                 }
             });
             mGLSurfaceView.requestRender();
         } else {
-            GPUPixel.nativeContextPurge();
+            GPUPixel.nativeContextClean();
         }
     }
 
@@ -247,7 +247,7 @@ public class GPUPixel {
     // context
     public static native void nativeContextInit();
     public static native void nativeContextDestroy();
-    public static native void nativeContextPurge();
+    public static native void nativeContextClean();
 
     // utils
     public static native void nativeYUVtoRBGA(byte[] yuv, int width, int height, int[] out);

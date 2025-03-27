@@ -1,6 +1,6 @@
 # Custom Output and Rendering
 
-This article explains how to implement custom output and rendering functionality by inheriting from the `Sink` base class. GPUPixel provides two typical implementation examples: `SinkRender` and `SinkRawData`, which we will use to illustrate the implementation process.
+This article explains how to implement custom output and rendering functionality by inheriting from the `Sink` base class. GPUPixel provides two typical implementation demo: `SinkRender` and `SinkRawData`, which we will use to illustrate the implementation process.
 
 ## Sink Base Class
 
@@ -19,7 +19,7 @@ class Sink {
   Sink(int inputNumber = 1);
   
   // Set input framebuffer
-  virtual void setInputFramebuffer(std::shared_ptr<Framebuffer> framebuffer,
+  virtual void setInputFramebuffer(std::shared_ptr<GPUPixelFramebuffer> framebuffer,
                                  RotationMode rotationMode = NoRotation,
                                  int texIdx = 0);
   

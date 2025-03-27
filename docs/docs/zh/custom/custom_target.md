@@ -6,7 +6,7 @@
 
 `Sink` 类是所有输出目标的基类，它定义了以下关键功能：
 
-- 管理输入帧缓冲区（Framebuffer）
+- 管理输入帧缓冲区（GPUPixelFramebuffer）
 - 处理旋转模式
 - 提供更新机制
 
@@ -19,7 +19,7 @@ class Sink {
   Sink(int inputNumber = 1);
   
   // 设置输入帧缓冲区
-  virtual void setInputFramebuffer(std::shared_ptr<Framebuffer> framebuffer,
+  virtual void setInputFramebuffer(std::shared_ptr<GPUPixelFramebuffer> framebuffer,
                                  RotationMode rotationMode = NoRotation,
                                  int texIdx = 0);
   
