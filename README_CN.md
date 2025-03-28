@@ -150,5 +150,5 @@
 3. [AwemeLike](https://github.com/ZZZZou/AwemeLike)
 4. [VNN](https://github.com/joyycom/VNN)
 
-## 许可证
-📄 此开源项目遵从[MIT许可证](https://github.com/pixpark/gpupixel?tab=MIT-1-ov-file#readme)。
+## License
+📄 此开源项目遵从[Apache-2.0 License](https://github.com/pixpark/gpupixel?tab=Apache-2.0-1-ov-file)。

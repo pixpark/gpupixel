@@ -20,7 +20,7 @@ export const en = defineConfig({
     },
 
     footer: {
-      message: 'Released under the MIT License.',
+      message: 'Released under the Apache-2.0 License.',
       copyright: 'Copyright © 2019-present PixPark'
     }
   }
