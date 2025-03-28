@@ -17,7 +17,7 @@
    <a href="https://github.com/pixpark/gpupixel/stargazers"><img alt="GPUPixel Stars" src="https://img.shields.io/github/stars/pixpark/gpupixel?style=social"/></a>
     <a href="https://github.com/pixpark/gpupixel/releases/latest"><img alt="GPUPixel Release" src="https://img.shields.io/github/v/release/pixpark/gpupixel"/></a>
     <a href="#"><img alt="GPUPixel Stars" src="https://img.shields.io/badge/Platform-iOS_%7C_Android_%7C_Mac_%7C_Win_%7C_Linux-red"/></a>
-     <a href="https://github.com/pixpark/gpupixel/actions/workflows/cmake-multi-platform.yml"><img src="https://github.com/pixpark/gpupixel/actions/workflows/cmake-multi-platform.yml/badge.svg"></a>
+     <a href="https://github.com/pixpark/gpupixel/actions/workflows/release.yml"><img src="https://github.com/pixpark/gpupixel/actions/workflows/release.yml/badge.svg"></a>
     <a href="https://github.com/pixpark/gpupixel/blob/main/LICENSE"><img alt="GPUPixel Stars" src="https://img.shields.io/github/license/pixpark/gpupixel"/></a>
 </p>
 
@@ -49,7 +49,7 @@
 
 ## Effects Preview
 
-🎬 **Video: <a href="https://youtu.be/9BY1Qx1NEPs" target="_blank">YouTube</a>**
+ **Video: <a href="https://youtu.be/9BY1Qx1NEPs" target="_blank">YouTube</a>**
 
 
 |                   **Origin**                    |                    **Smooth**                     |                    **White**                     |                   **ThinFace**                    |
@@ -69,7 +69,7 @@
 
 |                       | [GPUPixel](https://github.com/pixpark/gpupixel) | [GPUImage](https://github.com/BradLarson/GPUImage) | [Android-GPUImage](https://github.com/cats-oss/android-gpuimage) |
 | :-------------------- | :---------------------------------------------: | :------------------------------------------------: | :----------------------------------------------------------: |
-| 📷 **Filters:**        |                        ✅                        |                         ❌                          |                              ❌                               |
+| **Filters:**          |                        ✅                        |                         ❌                          |                              ❌                               |
 | Skin Smoothing Filter |                        ✅                        |                         ❌                          |                              ❌                               |
 | Skin Whitening Filter |                        ✅                        |                         ❌                          |                              ❌                               |
 | Face Slimming Filter  |                        ✅                        |                         ❌                          |                              ❌                               |
@@ -77,34 +77,22 @@
 | Lipstick Filter       |                        ✅                        |                         ❌                          |                              ❌                               |
 | Blush Filter          |                        ✅                        |                         ❌                          |                              ❌                               |
 | More Build in Filter  |                        ✅                        |                         ✅                          |                              ✅                               |
-| 🎬 **Input Formats:**  |                                                 |                                                    |                                                              |
+| **Input Formats:**    |                                                 |                                                    |                                                              |
 | YUV420P(I420)         |                        ✅                        |                         ❌                          |                              ❌                               |
 | RGBA                  |                        ✅                        |                         ✅                          |                              ✅                               |
 | JPEG                  |                        ✅                        |                         ✅                          |                              ✅                               |
 | PNG                   |                        ✅                        |                         ✅                          |                              ✅                               |
 | NV21(for Android)     |                        ✏️                        |                         ❌                          |                              ❌                               |
-| 🎥 **Output Formats:** |                                                 |                                                    |                                                              |
+| **Output Formats:**   |                                                 |                                                    |                                                              |
 | RGBA                  |                        ✅                        |                         ✅                          |                              ✅                               |
-| YUV420P(I420)         |                        ✏️                        |                         ❌                          |                              ❌                               |
-| 💻 **Platform:**       |                                                 |                                                    |                                                              |
+| YUV420P(I420)         |                        ✅                        |                         ❌                          |                              ❌                               |
+| **Platform:**         |                                                 |                                                    |                                                              |
 | iOS                   |                        ✅                        |                         ✅                          |                              ❌                               |
 | Mac                   |                        ✅                        |                         ✅                          |                              ❌                               |
 | Android               |                        ✅                        |                         ❌                          |                              ✅                               |
 | Win                   |                        ✅                        |                         ❌                          |                              ❌                               |
 | Linux                 |                        ✅                        |                         ❌                          |                              ❌                               |
 
-
-## ⚡ Performance
-### iPhone
-|       -        | iPhone 6P | iPhone 8 | iPhone X | iPhone 11 | iPhone 14 pro |
-| :------------: | :-------: | :------: | :------: | :-------: | :-----------: |
-|    **CPU**     |    5%     |    5%    |    3%    |    3%     |      3%       |
-| **Time Taken** |   10ms    |   4ms    |   3ms    |    3ms    |      3ms      |
-### Android
-|     -      | Xiaomi 10 | Huawei Mate30 | Vivo  | SAMSUNG | Google Pixel |
-| :--------: | :-------: | :-----------: | :---: | :-----: | :----------: |
-|    CPU     |    3%     |      5%       |   -   |    -    |      -       |
-| Time Taken |    6ms    |      5ms      |   -   |    -    |      -       |
 
 
 ## Before You Start
@@ -116,7 +104,7 @@
 
 ## Getting Started
 
-🔍 See the docs: [Introduction](https://gpupixel.pixpark.net/guide/build) | [Build](https://gpupixel.pixpark.net/guide/build) | [Examples](https://gpupixel.pixpark.net/guide/demo) | [Integration](https://gpupixel.pixpark.net/guide/integrated)
+🔍 See the docs: [Introduction](https://gpupixel.pixpark.net/guide/build) | [Build](https://gpupixel.pixpark.net/guide/build) | [Demo](https://gpupixel.pixpark.net/guide/demo) | [Integration](https://gpupixel.pixpark.net/guide/integrated)
 
 ## Contributing
 
