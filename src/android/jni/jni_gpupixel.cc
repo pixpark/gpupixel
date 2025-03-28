@@ -105,7 +105,7 @@ Java_com_pixpark_gpupixel_GPUPixel_nativeSourceRawDataUploadBytes(
     jint height,
     jint stride) {
   jint* pixel = env->GetIntArrayElements(jPixel, 0);
-  ((SourceRawData*)classId)->processData((uint8_t*)pixel, width, height, stride, 0);
+  ((SourceRawData*)classId)->processData((uint8_t*)pixel, width, height, stride);
   env->ReleaseIntArrayElements(jPixel, pixel, 0);
 };
 
