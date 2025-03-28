@@ -20,7 +20,7 @@ export const zh = defineConfig({
     },
 
     footer: {
-      message: '基于 MIT 许可发布',
+      message: '基于 Apache-2.0 License 许可发布',
       copyright: `版权所有 © 2019-${new Date().getFullYear()} PixPark`
     },
 

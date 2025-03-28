@@ -3,191 +3,197 @@
 
 #include <iostream>
 #include "gpupixel.h"
+#include "imgui.h"
+#include "backends/imgui_impl_glfw.h"
+#include "backends/imgui_impl_opengl3.h"
+
 using namespace gpupixel;
 
-
-std::shared_ptr<BeautyFaceFilter> beautyFaceFilter;
-std::shared_ptr<FaceReshapeFilter> faceReshapeFilter;
+// Filters
+std::shared_ptr<BeautyFaceFilter> beautyFilter;
+std::shared_ptr<FaceReshapeFilter> reshapeFilter;
 std::shared_ptr<gpupixel::LipstickFilter> lipstickFilter;
 std::shared_ptr<gpupixel::BlusherFilter> blusherFilter;
 std::shared_ptr<SourceImage> sourceImage;
-std::shared_ptr<SinkRawData> sinkRawData;
-std::shared_ptr<SinkRender> sinkRender;
+std::shared_ptr<SinkRender> renderSink;
 
-float beautyIntensity = 0;
-float whitenIntensity = 0;
-float faceSlimIntensity = 0;
-float eyeEnlargeIntensity = 0;
-float lipstickIntensity = 0;
-float blusherIntensity = 0;
+// Filter parameters
+float beautyStrength = 0.0f;
+float whiteningStrength = 0.0f;
+float faceSlimStrength = 0.0f;
+float eyeEnlargeStrength = 0.0f;
+float lipstickStrength = 0.0f;
+float blusherStrength = 0.0f;
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void processInput(GLFWwindow *window);
+// GLFW window handle
+GLFWwindow* mainWindow = nullptr;
 
- void error_callback( int error, const char *msg ) {
-    std::string s;
-    s = " [" + std::to_string(error) + "] " + msg + '\n';
-    std::cerr << s << std::endl;
+// GLFW framebuffer resize callback
+void onFramebufferResize(GLFWwindow* window, int width, int height)
+{
+    glViewport(0, 0, width, height);
+}
+
+// Initialize GLFW and create window
+bool setupGlfwWindow()
+{
+    // Initialize GLFW
+    if (!glfwInit())
+    {
+        std::cout << "Failed to initialize GLFW" << std::endl;
+        return false;
+    }
+    
+    // Get OpenGL context window from GPUPixel
+    mainWindow = GPUPixelContext::getInstance()->GetGLContext();
+    if (mainWindow == NULL)
+    {
+        std::cout << "Failed to create GLFW window" << std::endl;
+        glfwTerminate();
+        return false;
+    }
+
+    // Initialize GLAD and setup window parameters
+    gladLoadGL();
+    glfwMakeContextCurrent(mainWindow);
+    glfwShowWindow(mainWindow);
+    glfwSetFramebufferSizeCallback(mainWindow, onFramebufferResize);
+    
+    return true;
+}
+
+// Initialize ImGui interface
+void setupImGui()
+{
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+    
+    ImGui::StyleColorsDark();
+    ImGui_ImplGlfw_InitForOpenGL(mainWindow, true);
+    ImGui_ImplOpenGL3_Init("#version 130");
+}
+
+// Initialize GPUPixel filters and pipeline
+void setupFilterPipeline()
+{
+    // Create filters
+    lipstickFilter = LipstickFilter::create();
+    blusherFilter = BlusherFilter::create();
+    reshapeFilter = FaceReshapeFilter::create();
+    beautyFilter = BeautyFaceFilter::create();
+    
+    // Create source image and render sink
+    sourceImage = SourceImage::create("demo.png");
+    renderSink = std::make_shared<SinkRender>();
+
+    // Setup face landmarks callback
+    sourceImage->RegLandmarkCallback([=](std::vector<float> landmarks) {
+       lipstickFilter->SetFaceLandmarks(landmarks);
+       blusherFilter->SetFaceLandmarks(landmarks);
+       reshapeFilter->SetFaceLandmarks(landmarks);
+    });
+
+    // Build filter pipeline
+    sourceImage->addSink(lipstickFilter)
+                ->addSink(blusherFilter)
+                ->addSink(reshapeFilter)
+                ->addSink(beautyFilter)
+                ->addSink(renderSink);
+                    
+    renderSink->onSizeChanged(1280, 720);
+}
+
+// Update filter parameters from UI controls
+void updateFilterParameters()
+{
+    // Beauty filter controls
+    if (ImGui::SliderFloat("Smoothing", &beautyStrength, 0.0f, 10.0f)) {
+        beautyFilter->setBlurAlpha(beautyStrength/10.0f);
+    }
+    
+    if (ImGui::SliderFloat("Whitening", &whiteningStrength, 0.0f, 10.0f)) {
+        beautyFilter->setWhite(whiteningStrength/20.0f);
+    }
+    
+    if (ImGui::SliderFloat("Face Slimming", &faceSlimStrength, 0.0f, 10.0f)) {
+        reshapeFilter->setFaceSlimLevel(faceSlimStrength/200.0f);
+    }
+    
+    if (ImGui::SliderFloat("Eye Enlarging", &eyeEnlargeStrength, 0.0f, 10.0f)) {
+        reshapeFilter->setEyeZoomLevel(eyeEnlargeStrength/100.0f);
+    }
+    
+    if (ImGui::SliderFloat("Lipstick", &lipstickStrength, 0.0f, 10.0f)) {
+        lipstickFilter->setBlendLevel(lipstickStrength/10.0f);
+    }
+    
+    if (ImGui::SliderFloat("Blusher", &blusherStrength, 0.0f, 10.0f)) {
+        blusherFilter->setBlendLevel(blusherStrength/10.0f);
+    }
+}
+
+// Render a single frame
+void renderFrame()
+{
+    // Start ImGui frame
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+    
+    // Create control panel
+    ImGui::Begin("Beauty Control Panel", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
+    updateFilterParameters();
+    ImGui::End();
+    
+    // Process and render image
+    sourceImage->Render();
+    
+    // Render ImGui
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glViewport(0, 0, 1280, 720);
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+    // Swap buffers and poll events
+    glfwSwapBuffers(mainWindow);
+    glfwPollEvents();
+}
+
+// Clean up resources
+void cleanupResources()
+{
+    // Cleanup ImGui
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+    
+    // Cleanup GLFW
+    glfwTerminate();
 }
 
 int main()
 {
-    glfwInit();
-    GLFWwindow* window = GPUPixelContext::getInstance()->GetGLContext();
-  
-    if (window == NULL)
-    {
-        std::cout << "Failed to create GLFW window" << std::endl;
-        glfwTerminate();
+    // Initialize window and OpenGL context
+    if (!setupGlfwWindow()) {
         return -1;
     }
-
-    gladLoadGL();
-    glfwMakeContextCurrent(window);
-
-   glfwShowWindow(window);
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     
-    // create filter
-    // ----
-    lipstickFilter = LipstickFilter::create();
-    blusherFilter = BlusherFilter::create();
-    faceReshapeFilter = FaceReshapeFilter::create();
+    // Setup ImGui interface
+    setupImGui();
     
-    //  filter pipline
-    // ----
-    sourceImage = SourceImage::create("demo.png");
-    sinkRender = std::make_shared<SinkRender>();
-
-    sourceImage->RegLandmarkCallback([=](std::vector<float> landmarks) {
-       lipstickFilter->SetFaceLandmarks(landmarks);
-       blusherFilter->SetFaceLandmarks(landmarks);
-       faceReshapeFilter->SetFaceLandmarks(landmarks);
-     });
-
-    beautyFaceFilter = BeautyFaceFilter::create();
- 
-    sourceImage->addSink(lipstickFilter)
-                ->addSink(blusherFilter)
-                ->addSink(faceReshapeFilter)
-                ->addSink(beautyFaceFilter)
-                ->addSink(sinkRender);
-                    
-    // 
-    sinkRender->onSizeChanged(1280, 720);
+    // Initialize filters and pipeline
+    setupFilterPipeline();
     
-    // render loop
-    // -----------
-    while (!glfwWindowShouldClose(window))
+    // Main render loop
+    while (!glfwWindowShouldClose(mainWindow))
     {
-        // input
-        // -----
-        processInput(window);
-        
-        // 
-        // -----
-        sourceImage->Render();
-
-        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-        // -------------------------------------------------------------------------------
-        glfwSwapBuffers(window);
-        glfwPollEvents();
+        renderFrame();
     }
 
+    // Cleanup
+    cleanupResources();
     
-    // glfw: terminate, clearing all previously allocated GLFW resources.
-    // ------------------------------------------------------------------
-    glfwTerminate();
     return 0;
-}
-
-// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-// ---------------------------------------------------------------------------------------------------------
-void processInput(GLFWwindow *window)
-{
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
-
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-        beautyIntensity++;
-        if(beautyIntensity > 10.0) beautyIntensity = 10.0;
-        beautyFaceFilter->setBlurAlpha(beautyIntensity/10);
-    } 
-
-    if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS) {
-        beautyIntensity--;
-        if(beautyIntensity < 0.0) beautyIntensity = 0.0;
-        beautyFaceFilter->setBlurAlpha(beautyIntensity/10);
-    } 
-
-
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-        whitenIntensity++;
-        if(whitenIntensity > 10.0) whitenIntensity = 10.0;
-        beautyFaceFilter->setWhite(whitenIntensity/20);
-    }
-
-    if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS) {
-        whitenIntensity--;
-        if(whitenIntensity < 0.0) whitenIntensity = 0.0;
-        beautyFaceFilter->setWhite(whitenIntensity/20);
-    }
-
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-        faceSlimIntensity++;
-        if(faceSlimIntensity > 10.0) faceSlimIntensity = 10.0;
-        faceReshapeFilter->setFaceSlimLevel(faceSlimIntensity/200);
-    }
-
-    if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS) {
-        faceSlimIntensity--;
-        if(faceSlimIntensity < 0.0) faceSlimIntensity = 0.0;
-        faceReshapeFilter->setFaceSlimLevel(faceSlimIntensity/200);
-    }
-
-    if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS) {
-        eyeEnlargeIntensity++;
-        if(eyeEnlargeIntensity > 10.0) eyeEnlargeIntensity = 10.0;
-        faceReshapeFilter->setEyeZoomLevel(eyeEnlargeIntensity/100);
-    }
-
-    if (glfwGetKey(window, GLFW_KEY_V) == GLFW_PRESS) {
-        eyeEnlargeIntensity--;
-        if(eyeEnlargeIntensity < 0.0) eyeEnlargeIntensity = 0.0;
-        faceReshapeFilter->setEyeZoomLevel(eyeEnlargeIntensity/100);
-    }
-
-    if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS) {
-        lipstickIntensity++;
-        if(lipstickIntensity > 10.0) lipstickIntensity = 10.0;
-        lipstickFilter->setBlendLevel(lipstickIntensity/10); 
-    }
-
-    if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS) {
-        lipstickIntensity--;
-        if(lipstickIntensity < 0.0) lipstickIntensity = 0.0;
-        lipstickFilter->setBlendLevel(lipstickIntensity/10); 
-    }
-
-    if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS) {
-        blusherIntensity++;
-        if(blusherIntensity > 10.0) blusherIntensity = 10.0;
-        blusherFilter->setBlendLevel(blusherIntensity/10); 
-    }
-
-    if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS) {
-        blusherIntensity--;
-        if(blusherIntensity < 0.0) blusherIntensity = 0.0;
-        blusherFilter->setBlendLevel(blusherIntensity/10); 
-    }
-}
-
-// glfw: whenever the window size changed (by OS or user resize) this callback function executes
-// ---------------------------------------------------------------------------------------------
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-    // make sure the viewport matches the new window dimensions; note that width and 
-    // height will be significantly larger than specified on retina displays.
-    glViewport(0, 0, width, height);
-    
 }

@@ -113,4 +113,4 @@ private:
 - 在 GitHub Discussions 中提问
 - 通过 电子邮件 联系维护者
 ## 许可证
-通过为 GPUPixel 做出贡献，您同意您的贡献将在 MIT 许可证 下授权。
+通过为 GPUPixel 做出贡献，您同意您的贡献将在 Apache-2.0 License 下授权。

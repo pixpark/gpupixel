@@ -113,4 +113,4 @@ private:
 - Ask questions in GitHub Discussions
 - Contact maintainers via email
 ## License
-By contributing to GPUPixel, you agree that your contributions will be licensed under the MIT License .
+By contributing to GPUPixel, you agree that your contributions will be licensed under the Apache-2.0 License .

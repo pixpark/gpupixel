@@ -1,5 +1,5 @@
 <h1 align="center">
-  <a href="https://github.com/pixpark/gpupixel"><img src="./docs/image/describe.png"></a>
+  <a href="https://github.com/pixpark/gpupixel"><img src="./docs/image/cover.png"></a>
 </h1>
 
 <p align="center">
@@ -17,7 +17,7 @@
    <a href="https://github.com/pixpark/gpupixel/stargazers"><img alt="GPUPixel Stars" src="https://img.shields.io/github/stars/pixpark/gpupixel?style=social"/></a>
     <a href="https://github.com/pixpark/gpupixel/releases/latest"><img alt="GPUPixel Release" src="https://img.shields.io/github/v/release/pixpark/gpupixel"/></a>
     <a href="#"><img alt="GPUPixel Stars" src="https://img.shields.io/badge/Platform-iOS_%7C_Android_%7C_Mac_%7C_Win_%7C_Linux-red"/></a>
-     <a href="https://github.com/pixpark/gpupixel/actions/workflows/cmake-multi-platform.yml"><img src="https://github.com/pixpark/gpupixel/actions/workflows/cmake-multi-platform.yml/badge.svg"></a>
+     <a href="https://github.com/pixpark/gpupixel/actions/workflows/release.yml"><img src="https://github.com/pixpark/gpupixel/actions/workflows/release.yml/badge.svg"></a>
     <a href="https://github.com/pixpark/gpupixel/blob/main/LICENSE"><img alt="GPUPixel Stars" src="https://img.shields.io/github/license/pixpark/gpupixel"/></a>
 </p>
 
@@ -150,5 +150,5 @@
 3. [AwemeLike](https://github.com/ZZZZou/AwemeLike)
 4. [VNN](https://github.com/joyycom/VNN)
 
-## 许可证
-📄 此开源项目遵从[MIT许可证](https://github.com/pixpark/gpupixel?tab=MIT-1-ov-file#readme)。
+## License
+📄 此开源项目遵从[Apache-2.0 License](https://github.com/pixpark/gpupixel?tab=Apache-2.0-1-ov-file)。

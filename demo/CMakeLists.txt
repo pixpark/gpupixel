@@ -55,10 +55,21 @@ link_directories(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 include_directories(
     # Project headers
     ${CMAKE_INCLUDE_OUTPUT_DIRECTORY}
-    # Third-party libraries
-    ${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/glfw/include
+)
+
+# Add system-specific include paths
+if(${CURRENT_OS} STREQUAL "windows")
+    # For windows systems, use bundled GLFW
+    include_directories(
+        ${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/glfw/include
+    )
+endif()
+
+# Common third-party includes for all platforms
+include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/stb
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/glad/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/imgui
 )
 
 # Source Files Configuration
@@ -67,6 +78,14 @@ include_directories(
 file(GLOB SOURCE_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/desktop/*"
 )
+
+# Add ImGui source files
+file(GLOB IMGUI_SOURCE_FILES
+    "${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/imgui/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/imgui/backends/imgui_impl_glfw.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../src/third_party/imgui/backends/imgui_impl_opengl3.cpp"
+)
+list(APPEND SOURCE_FILES ${IMGUI_SOURCE_FILES})
 
 # Platform Specific Configuration
 # Add platform-specific source files and settings
@@ -99,7 +118,8 @@ if(${CURRENT_OS} STREQUAL "linux")
     target_link_libraries(${PROJECT_NAME}
                         gpupixel
                         GL
-                        glfw)
+                        glfw
+                        dl)
     set(DEPS_LIBS ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libgpupixel.so
                       ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libmars-face-kit.so)
     set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-Wl,-rpath,./")
@@ -131,7 +151,7 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     ${CMAKE_CURRENT_SOURCE_DIR}/../output/models ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/models
 
     COMMAND ${CMAKE_COMMAND} -E copy
-    "${CMAKE_CURRENT_SOURCE_DIR}/desktop/demo.png" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+    "${CMAKE_CURRENT_SOURCE_DIR}/../demo/desktop/demo.png" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
     
     COMMENT "Copying res and models files to output/app directory.")
 

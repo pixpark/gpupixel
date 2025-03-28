@@ -349,7 +349,7 @@ void GPUPixelContext::releaseContext() {
 void GPUPixelContext::runSync(std::function<void(void)> task) {
   // todo fix android
 #if defined(GPUPIXEL_ANDROID)
-  func();
+  task();
 #else
   task_queue_->runTask([=]() {
       useAsCurrent();
