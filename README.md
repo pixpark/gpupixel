@@ -1,5 +1,5 @@
 <h1 align="center">
-  <a href="https://github.com/pixpark/gpupixel"><img src="./docs/image/describe.png"></a>
+  <a href="https://github.com/pixpark/gpupixel"><img src="./docs/image/cover.png"></a>
 </h1>
 
 <p align="center">
