@@ -7,11 +7,15 @@
 
 #import "VideoFilterController.h"
 #import "VideoCapturer.h"
+#import "FilterToolbarView.h"
+#import "ImageConverter.h"
+#import "FilterResultViewController.h"
 #import <gpupixel/gpupixel.h>
 
 using namespace gpupixel;
 
-@interface VideoFilterController () <VCVideoCapturerDelegate> {
+@interface VideoFilterController () <VCVideoCapturerDelegate, FilterToolbarViewDelegate>
+{
     bool _isCaptureYuvFrame;
     std::shared_ptr<SourceRawData> _sourceRawData;
     std::shared_ptr<SinkRawData> _sinkRawData;
@@ -24,7 +28,7 @@ using namespace gpupixel;
     RawOutputCallback _rawOutputCallback;
 }
 
-//
+// Filter intensity
 @property(nonatomic, assign) CGFloat sharpenValue;
 @property(nonatomic, assign) CGFloat blurValue;
 @property(nonatomic, assign) CGFloat whitenValue;
@@ -35,194 +39,20 @@ using namespace gpupixel;
 @property(nonatomic, assign) CGFloat blusherValue;
 
 // UI
-@property (strong, nonatomic) VideoCapturer* videoCapturer;
-@property (strong, nonatomic) UIButton* cameraSwitchButton;
-@property (strong, nonatomic) UISegmentedControl* filterSegment;
-@property (strong, nonatomic) UISegmentedControl* effectSwitch;
-@property (strong, nonatomic) UISlider *intensitySlider;
+@property (strong, nonatomic) VideoCapturer *videoCapturer;
+@property (strong, nonatomic) UIButton *cameraSwitchButton;
+@property (strong, nonatomic) FilterToolbarView *filterToolbarView;
 
-@property (assign, nonatomic) BOOL isSavingImage;
+@property (assign, nonatomic) BOOL isSave;
 
 @end
 
 @implementation VideoFilterController
-- (void)viewWillDisappear:(BOOL)animated {
-    [self.videoCapturer stopCapture];
-    [super viewWillDisappear:animated];
-}
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    [self.view setBackgroundColor:UIColor.whiteColor];
-    // screen always light
-    [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
-    
-    // init video filter
-    [self initVideoFilter];
-    [self initUI];
-    
-    _isCaptureYuvFrame = false;
-    // start camera capture
-    [self.videoCapturer startCapture];
-}
-- (void) initVideoFilter {
-    gpupixel::GPUPixelContext::getInstance()->runSync([&] {
-        _sourceRawData = SourceRawData::create();
-        _gpuPixelView = [[GPUPixelView alloc] initWithFrame:self.view.frame];
-        [self.view addSubview:_gpuPixelView];
-        
-        _lipstickFilter = LipstickFilter::create();
-        _blusherFilter = BlusherFilter::create();
-        _sourceRawData->RegLandmarkCallback([=](std::vector<float> landmarks) {
-            _lipstickFilter->SetFaceLandmarks(landmarks);
-            _blusherFilter->SetFaceLandmarks(landmarks);
-            _faceReshapeFilter->SetFaceLandmarks(landmarks);
-        });
-        
-        // create filter
-        _sinkRawData = SinkRawData::create();
-        _beautyFaceFilter = BeautyFaceFilter::create();
-        _faceReshapeFilter = FaceReshapeFilter::create();
-        // filter pipline
-        _sourceRawData->addSink(_lipstickFilter)
-        ->addSink(_blusherFilter)
-        ->addSink(_faceReshapeFilter)
-        ->addSink(_beautyFaceFilter)
-        ->addSink(_gpuPixelView);
-        
-        [_gpuPixelView setBackgroundColor:[UIColor grayColor]];
-        [_gpuPixelView setFillMode:(gpupixel::SinkRender::PreserveAspectRatioAndFill)];
-        
-        _beautyFaceFilter->addSink(_sinkRawData);
-        __weak typeof(VideoFilterController*)weakSelf = self;
-        _rawOutputCallback = [weakSelf]( const uint8_t* data, int width, int height, int64_t ts) {
-            if (weakSelf.isSavingImage == YES) {
-                unsigned char *imageData = (unsigned char *)data;
-                size_t bitsPerComponent = 8; //r g b a 每个component bits数目
-                size_t bytesPerRow = width * 4; //一张图片每行字节数目(每个像素点包含r g b a 四个字节)
-                CGColorSpaceRef space = CGColorSpaceCreateDeviceRGB(); //创建rgb颜色空间
-                uint32_t bitmapInfo = kCGImageAlphaPremultipliedFirst | kCGBitmapByteOrder32Little;
-                CGContextRef context = CGBitmapContextCreate(imageData, width, height, bitsPerComponent, bytesPerRow, space, bitmapInfo);
-                CGImageRef cgImage = CGBitmapContextCreateImage(context);
-                CIImage *ciImage = [CIImage imageWithCGImage:cgImage];
-                UIImage *resultImage = [UIImage imageWithCIImage:ciImage];
-                NSLog(@"%@", resultImage);
-                
-                //Release memory
-                CGContextRelease(context);
-                CGImageRelease(cgImage);
-                weakSelf.isSavingImage = NO;
-            }
-        };
-        _sinkRawData->setPixelsCallbck(_rawOutputCallback);
-        self.isSavingImage = NO;
-    });
-}
-- (void)initUI {
-    NSArray *array = [NSArray arrayWithObjects:@"锐化",@"磨皮",@"美白",@"瘦脸",@"大眼", @"口红", @"腮红", nil];
-    //初始化UISegmentedControl
-    self.filterSegment = [[UISegmentedControl alloc]initWithItems:array];
-    //设置frame
-    self.filterSegment.frame = CGRectMake(10,
-                                          self.view.frame.size.height - 70,
-                                          self.view.frame.size.width - 20,
-                                          30);
-    self.filterSegment.apportionsSegmentWidthsByContent = YES;
-    self.filterSegment.selectedSegmentIndex = 0;
-    //添加事件
-    [self.filterSegment addTarget:self action:@selector(onFilterSelectChange:) forControlEvents:UIControlEventValueChanged];
-    
-    //添加到视图
-    [self.view addSubview:self.filterSegment];
-    [self.view addSubview:self.effectSwitch];
-    
-    [self.view addSubview:self.cameraSwitchButton];
-    
-    // 初始化
-    self.intensitySlider = [[UISlider alloc] initWithFrame:CGRectMake(50,
-                                                                      self.view.frame.size.height - 120,
-                                                                      self.view.frame.size.width - 100,
-                                                                      30)];
-    
-    // 设置最小值
-    self.intensitySlider.minimumValue = 0;
-    
-    self.intensitySlider.maximumValue = 10;
-    self.intensitySlider.value = 0;
-    [self.intensitySlider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
-    
-    [self.view addSubview:self.intensitySlider];
-    
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(backAction)];
-    self.navigationItem.leftBarButtonItem = backItem;
-    UIBarButtonItem *saveItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(saveImageAction)];
-    self.navigationItem.rightBarButtonItem = saveItem;
-}
-/// Back to home page and release all memory of gpupixel
-- (void)backAction {
-    [self.videoCapturer stopCapture];
-    self.videoCapturer = nil;
-    
-    _beautyFaceFilter = nil;
-    _faceReshapeFilter = nil;
-    _lipstickFilter = nil;
-    _blusherFilter = nil;
-    [_gpuPixelView removeFromSuperview];
-    _gpuPixelView = nil;
-    _sinkRawData = nil;
-    _sourceRawData = nil;
-    gpupixel::GPUPixelContext::getInstance()->destroy();
-    _rawOutputCallback = nil;
-    
-    [self.navigationController popViewControllerAnimated:true];
-}
-/// Get image from gpupixel after render
-- (void)saveImageAction {
-    self.isSavingImage = YES;
-}
 
-- (void)sliderValueChanged:(UISlider*) slider {
-    if (self.filterSegment.selectedSegmentIndex == 0) {  // 锐化
-        [self setSharpenValue:slider.value];
-    } else if (self.filterSegment.selectedSegmentIndex == 1) { // 磨皮
-        [self setBlurValue: slider.value];
-    } else if (self.filterSegment.selectedSegmentIndex == 2) {  // 美白
-        [self setWhitenValue: slider.value];
-    } else if (self.filterSegment.selectedSegmentIndex == 3) {  // 瘦脸
-        [self setFaceSlimValue: slider.value];
-    } else if (self.filterSegment.selectedSegmentIndex == 4) {  // 大眼
-        [self setEyeEnlargeValue: slider.value];
-    } else if (self.filterSegment.selectedSegmentIndex == 5) {  // 口红
-        [self setLipstickValue: slider.value];
-    } else if (self.filterSegment.selectedSegmentIndex == 6) {  // 腮红
-        [self setBlusherValue: slider.value];
-    }
-}
-
-//点击不同分段就会有不同的事件进行相应
-- (void)onFilterSelectChange:(UISegmentedControl *)sender {
-    if (self.filterSegment.selectedSegmentIndex == 0) {  // 锐化
-        self.intensitySlider.value = _sharpenValue;
-    } else if (self.filterSegment.selectedSegmentIndex == 1) {  // 磨皮
-        self.intensitySlider.value = _blurValue;
-    } else if (self.filterSegment.selectedSegmentIndex == 2) {  // 美白
-        self.intensitySlider.value = _whitenValue;
-    } else if (self.filterSegment.selectedSegmentIndex == 3) {  // 瘦脸
-        self.intensitySlider.value = _faceSlimValue;
-    } else if (self.filterSegment.selectedSegmentIndex == 4) {  // 大眼
-        self.intensitySlider.value = _eyeEnlargeValue;
-    } else if (self.filterSegment.selectedSegmentIndex == 5) {  // 口红
-        self.intensitySlider.value = _lipstickValue;
-    } else if (self.filterSegment.selectedSegmentIndex == 6) {  // 腮红
-        self.intensitySlider.value = _blusherValue;
-    }
-}
-#pragma mark - 属性赋值
-- (void)onCameraSwitchBtnUpInside {
-    [self.videoCapturer reverseCamera];
-}
-
-- (VideoCapturer*)videoCapturer {
-    if(_videoCapturer == nil) {
+#pragma mark - Lazy load
+- (VideoCapturer *)videoCapturer
+{
+    if (!_videoCapturer) {
         VCVideoCapturerParam *param = [[VCVideoCapturerParam alloc] init];
         param.frameRate = 30;
         
@@ -242,61 +72,342 @@ using namespace gpupixel;
     return _videoCapturer;
 }
 
-- (UIButton*)cameraSwitchButton {
-    if(_cameraSwitchButton == nil) {
+- (UIButton *)cameraSwitchButton
+{
+    if (!_cameraSwitchButton) {
         _cameraSwitchButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        _cameraSwitchButton.frame = CGRectMake(self.view.bounds.size.width - 35,
-                                               105,
-                                               25,
-                                               20);
-        
-        [_cameraSwitchButton setBackgroundImage:[UIImage imageNamed:@"CameraIcon"] forState:UIControlStateNormal];
-        [_cameraSwitchButton addTarget: self action: @selector(onCameraSwitchBtnUpInside) forControlEvents: UIControlEventTouchUpInside] ;
+        _cameraSwitchButton.tintColor = UIColor.whiteColor;
+        _cameraSwitchButton.translatesAutoresizingMaskIntoConstraints = NO;
+        [_cameraSwitchButton setImage:[UIImage imageNamed:@"CameraIcon"] forState:UIControlStateNormal];
+        [_cameraSwitchButton addTarget:self action:@selector(onCameraSwitchBtnUpInside) forControlEvents:UIControlEventTouchUpInside];
     }
     return _cameraSwitchButton;
 }
 
-- (void)setSharpenValue:(CGFloat)value {
+- (FilterToolbarView *)filterToolbarView
+{
+    if (!_filterToolbarView) {
+        NSArray *filterTitles = @[
+            @"锐化",
+            @"磨皮",
+            @"美白",
+            @"瘦脸",
+            @"大眼",
+            @"口红",
+            @"腮红"
+        ];
+        _filterToolbarView = [[FilterToolbarView alloc] initWithFrame:CGRectZero filterTitles:filterTitles];
+        _filterToolbarView.delegate = self;
+        _filterToolbarView.translatesAutoresizingMaskIntoConstraints = NO;
+    }
+    return _filterToolbarView;
+}
+
+#pragma mark - Life cycle
+- (void)viewWillAppear:(BOOL)animated
+{
+    [self.videoCapturer startCapture];
+    [super viewWillAppear:animated];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [self.videoCapturer stopCapture];
+    [super viewWillDisappear:animated];
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    [self.view setBackgroundColor:UIColor.whiteColor];
+    // 保持屏幕常亮
+    [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
+    
+    // 初始化视频滤镜
+    [self setupVideoFilter];
+    [self setupUI];
+    
+    // 初始化状态变量
+    _isCaptureYuvFrame = false;
+    
+    // 启动相机捕获
+    [self.videoCapturer startCapture];
+}
+
+#pragma mark - Setup
+- (void)setupVideoFilter
+{
+    gpupixel::GPUPixelContext::getInstance()->runSync([&] {
+        // 创建数据源和视图
+        _sourceRawData = SourceRawData::create();
+        _gpuPixelView = [[GPUPixelView alloc] initWithFrame:self.view.frame];
+        [self.view addSubview:_gpuPixelView];
+        [_gpuPixelView setBackgroundColor:[UIColor grayColor]];
+        [_gpuPixelView setFillMode:(gpupixel::SinkRender::PreserveAspectRatioAndFill)];
+        
+        // 创建所有滤镜
+        _beautyFaceFilter = BeautyFaceFilter::create();
+        _faceReshapeFilter = FaceReshapeFilter::create();
+        _lipstickFilter = LipstickFilter::create();
+        _blusherFilter = BlusherFilter::create();
+        _sinkRawData = SinkRawData::create();
+        
+        // 设置人脸特征点回调
+        _sourceRawData->RegLandmarkCallback([=](std::vector<float> landmarks) {
+            _lipstickFilter->SetFaceLandmarks(landmarks);
+            _blusherFilter->SetFaceLandmarks(landmarks);
+            _faceReshapeFilter->SetFaceLandmarks(landmarks);
+        });
+        
+        _sourceRawData
+        ->addSink(_lipstickFilter)
+        ->addSink(_blusherFilter)
+        ->addSink(_faceReshapeFilter)
+        ->addSink(_beautyFaceFilter)
+        ->addSink(_gpuPixelView);
+        
+        _beautyFaceFilter->addSink(_sinkRawData);
+        __weak typeof(VideoFilterController*)weakSelf = self;
+        _rawOutputCallback = [weakSelf](const uint8_t* data, int width, int height, int64_t ts) {
+            if (weakSelf.isSave) {
+                UIImage *resultImage = [ImageConverter imageFromARGBData:data width:width height:height];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    // 创建并显示结果页面
+                    FilterResultViewController *resultVC = [[FilterResultViewController alloc] initWithImage:resultImage];
+                    [weakSelf.navigationController pushViewController:resultVC animated:YES];
+                    weakSelf.isSave = NO;
+                });
+            }
+        };
+        _sinkRawData->setPixelsCallbck(_rawOutputCallback);
+        self.isSave = NO;
+    });
+}
+
+- (void)setupUI
+{
+    [self setupNavigation];
+    [self.view addSubview:self.filterToolbarView];
+    [self.view addSubview:self.cameraSwitchButton];
+    [self setupConstraints];
+    [self.filterToolbarView selectFilterAtIndex:0 animated:NO];
+}
+
+- (void)setupNavigation
+{
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(backAction)];
+    self.navigationItem.leftBarButtonItem = backItem;
+    UIBarButtonItem *saveItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(saveAction)];
+    self.navigationItem.rightBarButtonItem = saveItem;
+}
+
+- (void)setupConstraints
+{
+    [NSLayoutConstraint activateConstraints:@[
+        [self.filterToolbarView.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor],
+        [self.filterToolbarView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
+        [self.filterToolbarView.bottomAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor],
+        
+        [self.cameraSwitchButton.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor constant:30],
+        [self.cameraSwitchButton.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-16],
+        [self.cameraSwitchButton.heightAnchor constraintEqualToAnchor:self.cameraSwitchButton.widthAnchor],
+        [self.cameraSwitchButton.widthAnchor constraintEqualToConstant:32],
+    ]];
+}
+
+#pragma mark - Selectors
+- (void)backAction
+{
+    [self.videoCapturer stopCapture];
+    self.videoCapturer = nil;
+    
+    _beautyFaceFilter = nil;
+    _faceReshapeFilter = nil;
+    _lipstickFilter = nil;
+    _blusherFilter = nil;
+    [_gpuPixelView removeFromSuperview];
+    _gpuPixelView = nil;
+    _sinkRawData = nil;
+    _sourceRawData = nil;
+    gpupixel::GPUPixelContext::getInstance()->destroy();
+    _rawOutputCallback = nil;
+    
+    [self.navigationController popViewControllerAnimated:true];
+}
+
+/// 保存当前处理后的图像并显示结果页面
+- (void)saveAction
+{
+    self.isSave = YES;
+}
+
+- (void)onCameraSwitchBtnUpInside
+{
+    [self.videoCapturer reverseCamera];
+}
+
+/// 图片保存到相册的回调方法
+- (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo
+{
+    NSString *message = nil;
+    if (error) {
+        message = [NSString stringWithFormat:@"保存图片失败: %@", error.localizedDescription];
+    } else {
+        message = @"图片已保存到相册";
+    }
+    
+    // 显示保存结果提示
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil
+                                                                   message:message
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:nil];
+    [alert addAction:okAction];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+#pragma mark - 属性赋值
+- (void)setSharpenValue:(CGFloat)value
+{
     _sharpenValue = value;
     _beautyFaceFilter->setSharpen(value/5);
 }
 
-- (void)setBlurValue:(CGFloat)value {
+- (void)setBlurValue:(CGFloat)value
+{
     _blurValue = value;
     _beautyFaceFilter->setBlurAlpha(value/10);
 }
-- (void)setWhitenValue:(CGFloat)value{
+
+- (void)setWhitenValue:(CGFloat)value
+{
     _whitenValue = value;
     _beautyFaceFilter->setWhite(value/20);
 }
-- (void)setSaturationValue:(CGFloat)value{
+
+- (void)setSaturationValue:(CGFloat)value
+{
     _saturationValue = value;
 }
 
-- (void)setFaceSlimValue:(CGFloat)value{
+- (void)setFaceSlimValue:(CGFloat)value
+{
     _faceSlimValue = value;
     _faceReshapeFilter->setFaceSlimLevel(value/100);
 }
 
-- (void)setEyeEnlargeValue:(CGFloat)value{
+- (void)setEyeEnlargeValue:(CGFloat)value
+{
     _eyeEnlargeValue = value;
     _faceReshapeFilter->setEyeZoomLevel(value/50);
 }
 
-- (void)setLipstickValue:(CGFloat)value{
+- (void)setLipstickValue:(CGFloat)value
+{
     _lipstickValue = value;
     _lipstickFilter->setBlendLevel(value/10);
 }
 
-- (void)setBlusherValue:(CGFloat)value{
+- (void)setBlusherValue:(CGFloat)value
+{
     _blusherValue = value;
     _blusherFilter->setBlendLevel(value/10);
 }
 
-// camera frame callback
-- (void)videoCaptureOutputDataCallback:(CMSampleBufferRef)sampleBuffer {
-    //If set OFF, cancel all effects for comparing with the original image
-    if (self.effectSwitch.selectedSegmentIndex == 1) {
+#pragma mark - VCVideoCapturerDelegate
+// 相机帧回调处理
+- (void)videoCaptureOutputDataCallback:(CMSampleBufferRef)sampleBuffer
+{
+    if (_isCaptureYuvFrame) {
+        CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
+        if (!imageBuffer) return;
+        
+        CVPixelBufferLockBaseAddress(imageBuffer, 0);
+        const uint8_t* dataY = (const uint8_t*)CVPixelBufferGetBaseAddressOfPlane(imageBuffer, 0);
+        size_t strideY = CVPixelBufferGetBytesPerRowOfPlane(imageBuffer, 0);
+        const uint8_t* dataUV = (const uint8_t*)CVPixelBufferGetBaseAddressOfPlane(imageBuffer, 1);
+        size_t strideUV = CVPixelBufferGetBytesPerRowOfPlane(imageBuffer, 1);
+        size_t width = CVPixelBufferGetWidth(imageBuffer);
+        size_t height = CVPixelBufferGetHeight(imageBuffer);
+        
+        // TODO: 实现NV12格式处理
+        // 这里可以添加NV12格式的处理逻辑
+        
+        CVPixelBufferUnlockBaseAddress(imageBuffer, 0);
+    } else {
+        CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
+        if (!imageBuffer) return;
+        
+        CVPixelBufferLockBaseAddress(imageBuffer, 0);
+        auto width = CVPixelBufferGetWidth(imageBuffer);
+        auto height = CVPixelBufferGetHeight(imageBuffer);
+        auto stride = CVPixelBufferGetBytesPerRow(imageBuffer)/4;
+        auto pixels = (const uint8_t *)CVPixelBufferGetBaseAddress(imageBuffer);
+        
+        // 处理 BGRA 格式数据
+        _sourceRawData->processData(pixels, stride, height, stride);
+        
+        CVPixelBufferUnlockBaseAddress(imageBuffer, 0);
+    }
+}
+
+#pragma mark - FilterToolbarViewDelegate
+- (void)filterToolbarView:(FilterToolbarView *)toolbarView didSelectFilterAtIndex:(NSInteger)index
+{
+    CGFloat filterValues[] = {
+        _sharpenValue,      // 锐化
+        _blurValue,        // 磨皮
+        _whitenValue,      // 美白
+        _faceSlimValue,    // 瘦脸
+        _eyeEnlargeValue,  // 大眼
+        _lipstickValue,    // 口红
+        _blusherValue      // 腮红
+    };
+    
+    if (index >= 0 && index < sizeof(filterValues)/sizeof(filterValues[0])) {
+        [toolbarView updateSliderValue:filterValues[index]];
+    }
+}
+
+- (void)filterToolbarView:(FilterToolbarView *)toolbarView didChangeSliderValue:(CGFloat)value
+{
+    switch (toolbarView.selectedFilterIndex) {
+        case 0: // 锐化
+            [self setSharpenValue:value];
+            break;
+        case 1: // 磨皮
+            [self setBlurValue:value];
+            break;
+        case 2: // 美白
+            [self setWhitenValue:value];
+            break;
+        case 3: // 瘦脸
+            [self setFaceSlimValue:value];
+            break;
+        case 4: // 大眼
+            [self setEyeEnlargeValue:value];
+            break;
+        case 5: // 口红
+            [self setLipstickValue:value];
+            break;
+        case 6: // 腮红
+            [self setBlusherValue:value];
+            break;
+        default:
+            break;
+    }
+}
+
+- (void)filterToolbarView:(FilterToolbarView *)toolbarView didChangeEffectSwitchState:(BOOL)isOn
+{
+    if (isOn) {
+        _beautyFaceFilter->setSharpen(_sharpenValue/5);
+        _beautyFaceFilter->setBlurAlpha(_blurValue/10);
+        _beautyFaceFilter->setWhite(_whitenValue/20);
+        _faceReshapeFilter->setFaceSlimLevel(_faceSlimValue/100);
+        _faceReshapeFilter->setEyeZoomLevel(_eyeEnlargeValue/50);
+        _lipstickFilter->setBlendLevel(_lipstickValue/10);
+        _blusherFilter->setBlendLevel(_blusherValue/10);
+    } else {
         _beautyFaceFilter->setSharpen(0);
         _beautyFaceFilter->setBlurAlpha(0);
         _beautyFaceFilter->setWhite(0);
@@ -305,53 +416,6 @@ using namespace gpupixel;
         _lipstickFilter->setBlendLevel(0);
         _blusherFilter->setBlendLevel(0);
     }
-    
-    if(_isCaptureYuvFrame) {
-        CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
-        CVPixelBufferLockBaseAddress(imageBuffer, 0);
-        const uint8_t* dataY = (const uint8_t*)CVPixelBufferGetBaseAddressOfPlane(imageBuffer, 0);//YYYYYYYY
-        size_t strideY = CVPixelBufferGetBytesPerRowOfPlane(imageBuffer, 0);
-        const uint8_t* dataUV = (const uint8_t*)CVPixelBufferGetBaseAddressOfPlane(imageBuffer, 1);//UVUVUVUV
-        size_t strideUV = CVPixelBufferGetBytesPerRowOfPlane(imageBuffer, 1);
-        size_t width = CVPixelBufferGetWidth(imageBuffer);
-        size_t height = CVPixelBufferGetHeight(imageBuffer);
-        // todo render nv12
-        CVPixelBufferUnlockBaseAddress(imageBuffer, 0);
-    } else { //
-        CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
-        CVPixelBufferUnlockBaseAddress(imageBuffer, 0);
-    }
-}
-
-//点击不同分段就会有不同的事件进行相应
-- (void)onFilterSwitchChange:(UISegmentedControl *)sender {
-    //If set ON, apply all effects for recoverying functions
-    if (sender.selectedSegmentIndex == 0) {
-        [self setSharpenValue:self.sharpenValue];
-        [self setBlurValue: self.blurValue];
-        [self setWhitenValue:self.whitenValue];
-        [self setFaceSlimValue:self.faceSlimValue];
-        [self setEyeEnlargeValue: self.eyeEnlargeValue];
-        [self setLipstickValue: self.lipstickValue];
-        [self setBlusherValue: self.blusherValue];
-    }
-}
-/// For comparing with the original image
-- (UISegmentedControl*)effectSwitch {
-    if (_effectSwitch == nil) {
-        NSArray *array = [NSArray arrayWithObjects:@"ON",@"OFF", nil];
-        _effectSwitch = [[UISegmentedControl alloc]initWithItems:array];
-        _effectSwitch.frame = CGRectMake(self.view.frame.size.width - 90,
-                                         self.view.frame.size.height - 160,
-                                         80,
-                                         30);
-        _effectSwitch.apportionsSegmentWidthsByContent = YES;
-        _effectSwitch.selectedSegmentIndex = 0;
-        
-        [_effectSwitch addTarget:self action:@selector(onFilterSwitchChange:) forControlEvents:UIControlEventValueChanged];
-        
-    }
-    return _effectSwitch;
 }
 
 @end
