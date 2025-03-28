@@ -2,7 +2,7 @@ name: Build
 on:
   pull_request:
     branches: [main, dev]
-    workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
     build-linux-with-docker:
