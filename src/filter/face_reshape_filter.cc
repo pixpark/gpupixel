@@ -7,7 +7,7 @@
 
 #include "face_reshape_filter.h"
 #include "gpupixel_context.h"
-#include "face_detector.h"
+
 namespace gpupixel {
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)

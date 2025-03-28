@@ -5,15 +5,35 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "gpupixel_macros.h"
+#ifdef __APPLE__
+    #include <TargetConditionals.h>
+    #if TARGET_OS_IPHONE
+        #define GPUPIXEL_IOS 1
+    #elif TARGET_OS_MAC
+        #define GPUPIXEL_MAC 1
+    #endif
+#endif
+
 #if defined(GPUPIXEL_IOS)
 #import <UIKit/UIKit.h>
 #else
 #import <AppKit/NSOpenGLView.h>
 #endif
 
-#import "gpupixel_sink.h"
+#include <memory>
+#include "sink.h"
 #include "sink_render.h"
+
+namespace gpupixel {
+    class GPUPixelFramebuffer;
+}
+
+@protocol GPUPixelSink <NSObject>
+- (void)setInputFramebuffer:(std::shared_ptr<gpupixel::GPUPixelFramebuffer>)newInputFramebuffer
+               withRotation:(gpupixel::RotationMode)rotation
+                    atIndex:(NSInteger)texIdx;
+- (void)doRender;
+@end
 
 #if defined(GPUPIXEL_IOS)
 @interface GPUPixelView : UIView <GPUPixelSink>
