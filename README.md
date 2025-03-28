@@ -150,5 +150,5 @@ Please also consider supporting GPUPixel by sharing it on social media and at ev
 4. [VNN](https://github.com/joyycom/VNN)
 
 ## License
-📄 This repository is available under the [MIT License](https://github.com/pixpark/gpupixel?tab=MIT-1-ov-file#readme).
+📄 This repository is available under the [Apache-2.0 License](https://github.com/pixpark/gpupixel?tab=Apache-2.0-1-ov-file).
 
