@@ -16,7 +16,7 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
-
+#include "face_detector.h"
 using namespace gpupixel;
 
 std::shared_ptr<SourceImage> SourceImage::create_from_memory(int width,

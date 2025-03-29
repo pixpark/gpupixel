@@ -8,7 +8,7 @@
 #include "face_makeup_filter.h"
 #include "gpupixel_context.h"
 #include "source_image.h"
-
+#include "face_detector.h"
 
 namespace gpupixel {
 

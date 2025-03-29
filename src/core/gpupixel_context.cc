@@ -104,7 +104,6 @@ GPUPixelContext::GPUPixelContext()
 }
 
 GPUPixelContext::~GPUPixelContext() {
-  task_queue_->stop();
   releaseContext();
   delete _framebufferFactory;
 }
@@ -346,14 +345,14 @@ void GPUPixelContext::releaseContext() {
 #endif
 }
  
-void GPUPixelContext::runSync(std::function<void(void)> task) {
+void GPUPixelContext::runSync(std::function<void(void)> func) {
   // todo fix android
 #if defined(GPUPIXEL_ANDROID)
-  task();
+  func();
 #else
-  task_queue_->runTask([=]() {
+  task_queue_->runSync([=]() {
       useAsCurrent();
-      task();
+      func();
   });
 #endif
 
