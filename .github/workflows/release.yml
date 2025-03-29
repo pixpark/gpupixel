@@ -117,7 +117,7 @@ jobs:
           path: ./gpupixel_windows_x86_64.zip
 
   build-android-gradle:
-    name: Android (Arm64-v8a & Armeabi-v7a)
+    name: Android (Arm64-v8a)
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:

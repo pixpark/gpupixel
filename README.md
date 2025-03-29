@@ -49,7 +49,7 @@
 
 ## Effects Preview
 
- **Video: <a href="https://youtu.be/9BY1Qx1NEPs" target="_blank">YouTube</a>**
+ **Video: <a href="https://www.youtube.com/watch?v=evy4W7Y9Xpg" target="_blank">YouTube</a>**
 
 
 |                   **Origin**                    |                    **Smooth**                     |                    **White**                     |                   **ThinFace**                    |
