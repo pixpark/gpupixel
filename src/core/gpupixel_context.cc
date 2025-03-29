@@ -104,7 +104,6 @@ GPUPixelContext::GPUPixelContext()
 }
 
 GPUPixelContext::~GPUPixelContext() {
-  task_queue_->stop();
   releaseContext();
   delete _framebufferFactory;
 }
