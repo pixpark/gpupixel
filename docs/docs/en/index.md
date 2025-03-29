@@ -3,8 +3,8 @@ layout: home
 
 hero:
   name: "GPUPixel"
-  text: "GPU-based Realtime AI Beauty Filter Library"
-  tagline: 'High Performance, Cross-Platform'
+  text: "Real-time image filter engine based on GPU"
+  tagline: 'high performance and cross-platform'
   image:
       src: /cover.png
       alt: cover

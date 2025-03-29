@@ -4,7 +4,7 @@ layout: home
 
 hero:
   name: "GPUPixel"
-  text: "基于GPU的实时AI图像美颜滤镜库"
+  text: "基于GPU的实时图像滤镜库"
   tagline: '高性能, 跨平台'
   image:
       src: /cover.png
