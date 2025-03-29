@@ -6,7 +6,7 @@
  */
 
 #include "blusher_filter.h"
-
+#include "face_detector.h"
 #include "source_image.h"
 
 namespace gpupixel {

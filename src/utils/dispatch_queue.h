@@ -6,48 +6,45 @@
 #include <queue>
 #include <thread>
 #include <vector>
-#include <future>
+
+/*
+ * Base for DispatchQueue where
+ */
 
 /**
- * @brief Task queue that is executed on a background thread.
+ * @brief Task queue that is executed on the current thread.
  *
- * Tasks are automatically processed by a background thread.
- * The thread waits when the queue is empty and is notified when new tasks are added.
+ * All tasks must be processed by calls to processOne or processAll on the
+ * thread that will execute those tasks.
  */
 class DispatchQueue {
 protected:
     std::queue<std::function<void()>> taskQueue;
     std::mutex m;
-    std::condition_variable cv;
-    std::thread worker;
-    bool running;
-    std::thread::id workerId;
 
 public:
     /**
-     * Constructor starts the worker thread
+     * Add a task to the queue.
+     *
+     * @param task the lambda to execute for the task
      */
-    DispatchQueue();
-    
-    /**
-     * Destructor stops the worker thread
-     */
-    ~DispatchQueue();
+    void add(std::function<void()> task);
 
     /**
-     * Execute a task synchronously
-     * @param task The function to execute
+     * Deque a single task and execute it. This method blocks until the task
+     * is complete.
      */
-    void runTask(std::function<void()> task);
-    
+    void processOne();
+
     /**
-     * Stop the worker thread
+     * Dequeue tasks one at a time and execute them sequentially. This method
+     * blocks until the task queue is empty.
      */
-    void stop();
-    
+    void processAll();
+
     /**
-     * Check if current thread is the worker thread
-     * @return true if current thread is the worker thread
+     * 
+     * @return true if the task queue is empty, false otherwise
      */
-    bool isWorkerThread() const;
+    void runSync(std::function<void()> task);
 };
