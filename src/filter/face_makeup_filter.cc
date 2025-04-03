@@ -8,7 +8,6 @@
 #include "face_makeup_filter.h"
 #include "gpupixel_context.h"
 #include "source_image.h"
-#include "face_detector.h"
 
 namespace gpupixel {
 
@@ -166,38 +165,38 @@ FaceMakeupFilter::FaceMakeupFilter() {}
 
 FaceMakeupFilter::~FaceMakeupFilter() {}
 
-std::shared_ptr<FaceMakeupFilter> FaceMakeupFilter::create() {
+std::shared_ptr<FaceMakeupFilter> FaceMakeupFilter::Create() {
   auto ret = std::shared_ptr<FaceMakeupFilter>(new FaceMakeupFilter());
-  if (ret && !ret->init()) {
+  if (ret && !ret->Init()) {
     ret.reset();
   }
   return ret;
 }
 
-bool FaceMakeupFilter::init() {
-  if (!Filter::initWithShaderString(FaceMakeupFilterVertexShaderString,
+bool FaceMakeupFilter::Init() {
+  if (!Filter::InitWithShaderString(FaceMakeupFilterVertexShaderString,
                                     FaceMakeupFilterFragmentShaderString)) {
     return false;
   }
 
   // lipstick render program
-  _filterPositionAttribute = _filterProgram->getAttribLocation("position");
+  _filterPositionAttribute = _filterProgram->GetAttribLocation("position");
   _filterTexCoordAttribute =
-      _filterProgram->getAttribLocation("inputTextureCoordinate");
+      _filterProgram->GetAttribLocation("inputTextureCoordinate");
 
   // base render program
   _filterProgram2 = GPUPixelGLProgram::createByShaderString(kDefaultVertexShader,
                                                     kDefaultFragmentShader);
-  _filterPositionAttribute2 = _filterProgram2->getAttribLocation("position");
+  _filterPositionAttribute2 = _filterProgram2->GetAttribLocation("position");
   _filterTexCoordAttribute2 =
-      _filterProgram2->getAttribLocation("inputTextureCoordinate");
+      _filterProgram2->GetAttribLocation("inputTextureCoordinate");
 
-  registerProperty("blend_level", 0, "The smoothing of filter with range between -1 and 1.", [this](float& val) {
-      setBlendLevel(val);
+  RegisterProperty("blend_level", 0, "The smoothing of filter with range between -1 and 1.", [this](float& val) {
+      SetBlendLevel(val);
   });
 
   std::vector<float> defaut;
-  registerProperty("face_landmark", defaut, "The face landmark of filter with range between -1 and 1.", [this](std::vector<float> val) {
+  RegisterProperty("face_landmark", defaut, "The face landmark of filter with range between -1 and 1.", [this](std::vector<float> val) {
       SetFaceLandmarks(val);
   });
   return true;
@@ -221,7 +220,7 @@ void FaceMakeupFilter::setImageTexture(std::shared_ptr<SourceImage> texture) {
 }
 
 
-bool FaceMakeupFilter::doRender(bool updateSinks) {
+bool FaceMakeupFilter::DoRender(bool updateSinks) {
   static const GLfloat imageVertices[] = {
     -1.0f, -1.0f,
     1.0f, -1.0f,
@@ -229,17 +228,17 @@ bool FaceMakeupFilter::doRender(bool updateSinks) {
     1.0f, 1.0f,
   };
 
-  _framebuffer->active();
+  _framebuffer->Active();
   // render origin frame --- begin -----//
-  GPUPixelContext::getInstance()->setActiveShaderProgram(_filterProgram2);
-  CHECK_GL(glClearColor(_backgroundColor.r, _backgroundColor.g,
-                        _backgroundColor.b, _backgroundColor.a));
+  GPUPixelContext::GetInstance()->SetActiveGlProgram(_filterProgram2);
+  CHECK_GL(glClearColor(background_color_.r, background_color_.g,
+                        background_color_.b, background_color_.a));
   CHECK_GL(glClear(GL_COLOR_BUFFER_BIT));
 
   CHECK_GL(glActiveTexture(GL_TEXTURE4));
   CHECK_GL(glBindTexture(GL_TEXTURE_2D,
-                         _inputFramebuffers[0].frameBuffer->getTexture()));
-  _filterProgram2->setUniformValue("inputImageTexture", 4);
+                         input_framebuffers_[0].frameBuffer->GetTexture()));
+  _filterProgram2->SetUniformValue("inputImageTexture", 4);
 
   // vertex
   CHECK_GL(glEnableVertexAttribArray(_filterPositionAttribute2));
@@ -248,12 +247,12 @@ bool FaceMakeupFilter::doRender(bool updateSinks) {
 
   CHECK_GL(glEnableVertexAttribArray(_filterTexCoordAttribute2));
   CHECK_GL(glVertexAttribPointer(_filterTexCoordAttribute2, 2, GL_FLOAT, 0, 0,
-                                 _getTexureCoordinate(NoRotation)));
+                                 GetTexureCoordinate(NoRotation)));
 
   CHECK_GL(glDrawArrays(GL_TRIANGLE_STRIP, 0, 4));
 
   // render image --- begin --- //
-  GPUPixelContext::getInstance()->setActiveShaderProgram(_filterProgram);
+  GPUPixelContext::GetInstance()->SetActiveGlProgram(_filterProgram);
 
   CHECK_GL(glEnableVertexAttribArray(_filterPositionAttribute));
   if (face_land_marks_.size() != 0) {
@@ -275,28 +274,28 @@ bool FaceMakeupFilter::doRender(bool updateSinks) {
   CHECK_GL(glVertexAttribPointer(_filterTexCoordAttribute, 2, GL_FLOAT, 0, 0,
                                  textureCoordinates.data()));
 
-  _filterProgram->setUniformValue("intensity", this->blend_level_);
+  _filterProgram->SetUniformValue("intensity", this->blend_level_);
 
-  _filterProgram->setUniformValue("blendMode", 15);
+  _filterProgram->SetUniformValue("blendMode", 15);
 
-  std::shared_ptr<GPUPixelFramebuffer> fb = _inputFramebuffers[0].frameBuffer;
+  std::shared_ptr<GPUPixelFramebuffer> fb = input_framebuffers_[0].frameBuffer;
   CHECK_GL(glActiveTexture(GL_TEXTURE0));
-  CHECK_GL(glBindTexture(GL_TEXTURE_2D, fb->getTexture()));
-  _filterProgram->setUniformValue("inputImageTexture", 0);  // origin image
+  CHECK_GL(glBindTexture(GL_TEXTURE_2D, fb->GetTexture()));
+  _filterProgram->SetUniformValue("inputImageTexture", 0);  // origin image
 
   glActiveTexture(GL_TEXTURE3);
   // assert(image_texture_);
-  glBindTexture(GL_TEXTURE_2D, image_texture_->getFramebuffer()->getTexture());
-  _filterProgram->setUniformValue("inputImageTexture2", 3);
+  glBindTexture(GL_TEXTURE_2D, image_texture_->GetFramebuffer()->GetTexture());
+  _filterProgram->SetUniformValue("inputImageTexture2", 3);
 
   if (has_face_) {
     auto face_indexs = this->getFaceIndexs();
     glDrawElements(GL_TRIANGLES, (GLsizei)face_indexs.size(), GL_UNSIGNED_INT,
                    face_indexs.data());
   }
-  _framebuffer->inactive();
+  _framebuffer->Inactive();
 
-  return Source::doRender(updateSinks);
+  return Source::DoRender(updateSinks);
 }
 
 std::vector<GLuint> FaceMakeupFilter::getFaceIndexs() {

@@ -48,16 +48,16 @@ const std::string kNearbySampling3x3SamplingVertexShaderString = R"(
       vBottomRightTexCoord = inputTextureCoordinate.xy + widthHeightStep;
     })";
 
-bool NearbySampling3x3Filter::initWithFragmentShaderString(
+bool NearbySampling3x3Filter::InitWithFragmentShaderString(
     const std::string& fragmentShaderSource,
     int inputNumber /* = 1*/) {
-  if (Filter::initWithShaderString(kNearbySampling3x3SamplingVertexShaderString,
+  if (Filter::InitWithShaderString(kNearbySampling3x3SamplingVertexShaderString,
                                    fragmentShaderSource)) {
     _texelSizeMultiplier = 1.0;
-    _texelWidthUniform = _filterProgram->getUniformLocation("texelWidth");
-    _texelHeightUniform = _filterProgram->getUniformLocation("texelHeight");
+    _texelWidthUniform = _filterProgram->GetUniformLocation("texelWidth");
+    _texelHeightUniform = _filterProgram->GetUniformLocation("texelHeight");
 
-    registerProperty("texelSizeMultiplier", _texelSizeMultiplier, "",
+    RegisterProperty("texelSizeMultiplier", _texelSizeMultiplier, "",
                      [this](float& texelSizeMultiplier) {
                        setTexelSizeMultiplier(texelSizeMultiplier);
                      });
@@ -67,19 +67,19 @@ bool NearbySampling3x3Filter::initWithFragmentShaderString(
   return false;
 }
 
-bool NearbySampling3x3Filter::doRender(bool updateSinks) {
-  float texelWidth = _texelSizeMultiplier / _framebuffer->getWidth();
-  float texelHeight = _texelSizeMultiplier / _framebuffer->getHeight();
+bool NearbySampling3x3Filter::DoRender(bool updateSinks) {
+  float texelWidth = _texelSizeMultiplier / _framebuffer->GetWidth();
+  float texelHeight = _texelSizeMultiplier / _framebuffer->GetHeight();
 
-  RotationMode inputRotation = _inputFramebuffers.begin()->second.rotationMode;
+  RotationMode inputRotation = input_framebuffers_.begin()->second.rotationMode;
   if (rotationSwapsSize(inputRotation)) {
-    texelWidth = _texelSizeMultiplier / _framebuffer->getHeight();
-    texelHeight = _texelSizeMultiplier / _framebuffer->getWidth();
+    texelWidth = _texelSizeMultiplier / _framebuffer->GetHeight();
+    texelHeight = _texelSizeMultiplier / _framebuffer->GetWidth();
   }
 
-  _filterProgram->setUniformValue(_texelWidthUniform, texelWidth);
-  _filterProgram->setUniformValue(_texelHeightUniform, texelHeight);
-  return Filter::doRender(updateSinks);
+  _filterProgram->SetUniformValue(_texelWidthUniform, texelWidth);
+  _filterProgram->SetUniformValue(_texelHeightUniform, texelHeight);
+  return Filter::DoRender(updateSinks);
 }
 
 void NearbySampling3x3Filter::setTexelSizeMultiplier(

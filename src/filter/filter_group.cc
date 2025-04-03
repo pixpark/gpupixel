@@ -19,28 +19,28 @@ FilterGroup::~FilterGroup() {
   _terminalFilter = 0;
 }
 
-std::shared_ptr<FilterGroup> FilterGroup::create() {
+std::shared_ptr<FilterGroup> FilterGroup::Create() {
   auto ret = std::shared_ptr<FilterGroup>(new FilterGroup());
-  if (ret && !ret->init()) {
+  if (ret && !ret->Init()) {
     ret.reset();
   }
   return ret;
 }
 
-std::shared_ptr<FilterGroup> FilterGroup::create(
+std::shared_ptr<FilterGroup> FilterGroup::Create(
     std::vector<std::shared_ptr<Filter>> filters) {
   auto ret = std::shared_ptr<FilterGroup>(new FilterGroup());
-  if (ret && !ret->init(filters)) {
+  if (ret && !ret->Init(filters)) {
     ret.reset();
   }
   return ret;
 }
 
-bool FilterGroup::init() {
+bool FilterGroup::Init() {
   return true;
 }
 
-bool FilterGroup::init(std::vector<std::shared_ptr<Filter>> filters) {
+bool FilterGroup::Init(std::vector<std::shared_ptr<Filter>> filters) {
   if (filters.size() == 0) {
     return true;
   }
@@ -80,122 +80,122 @@ void FilterGroup::removeAllFilters() {
 
 std::shared_ptr<Filter> FilterGroup::_predictTerminalFilter(
     std::shared_ptr<Filter> filter) {
-  if (filter->getSinks().size() == 0) {
+  if (filter->GetSinks().size() == 0) {
     return filter;
   } else {
     return _predictTerminalFilter(
-        std::dynamic_pointer_cast<Filter>(filter->getSinks().begin()->first));
+        std::dynamic_pointer_cast<Filter>(filter->GetSinks().begin()->first));
   }
 }
 
-std::shared_ptr<Source> FilterGroup::addSink(std::shared_ptr<Sink> sink) {
+std::shared_ptr<Source> FilterGroup::AddSink(std::shared_ptr<Sink> sink) {
   if (_terminalFilter) {
-    return _terminalFilter->addSink(sink);
+    return _terminalFilter->AddSink(sink);
   } else {
     return 0;
   }
 }
 
-std::shared_ptr<Source> FilterGroup::addSink(std::shared_ptr<Sink> sink,
+std::shared_ptr<Source> FilterGroup::AddSink(std::shared_ptr<Sink> sink,
                                                int inputNumber) {
   if (_terminalFilter) {
-    return _terminalFilter->addSink(sink, inputNumber);
+    return _terminalFilter->AddSink(sink, inputNumber);
   } else {
     return 0;
   }
 }
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
-std::shared_ptr<Source> FilterGroup::addSink(id<GPUPixelSink> sink) {
+std::shared_ptr<Source> FilterGroup::AddSink(id<GPUPixelSink> sink) {
   if (_terminalFilter) {
-    return _terminalFilter->addSink(sink);
+    return _terminalFilter->AddSink(sink);
   } else {
     return 0;
   }
 }
 #endif
 
-void FilterGroup::removeSink(std::shared_ptr<Sink> sink) {
+void FilterGroup::RemoveSink(std::shared_ptr<Sink> sink) {
   if (_terminalFilter) {
-    _terminalFilter->removeSink(sink);
+    _terminalFilter->RemoveSink(sink);
   }
 }
 
-void FilterGroup::removeAllSinks() {
+void FilterGroup::RemoveAllSinks() {
   if (_terminalFilter) {
-    _terminalFilter->removeAllSinks();
+    _terminalFilter->RemoveAllSinks();
   }
 }
 
-bool FilterGroup::hasSink(const std::shared_ptr<Sink> sink) const {
+bool FilterGroup::HasSink(const std::shared_ptr<Sink> sink) const {
   if (_terminalFilter) {
-    return _terminalFilter->hasSink(sink);
+    return _terminalFilter->HasSink(sink);
   } else {
     return false;
   }
 }
 
-std::map<std::shared_ptr<Sink>, int>& FilterGroup::getSinks() {
+std::map<std::shared_ptr<Sink>, int>& FilterGroup::GetSinks() {
   assert(_terminalFilter);
-  return _terminalFilter->getSinks();
+  return _terminalFilter->GetSinks();
 }
 
-bool FilterGroup::doRender(bool updateSinks) {
+bool FilterGroup::DoRender(bool updateSinks) {
   return true;
 }
 
-void FilterGroup::render() {
-  doRender();
-  if (GPUPixelContext::getInstance()->isCapturingFrame &&
-      this == GPUPixelContext::getInstance()->captureUpToFilter.get()) {
-    GPUPixelContext::getInstance()->captureUpToFilter = _terminalFilter;
+void FilterGroup::Render() {
+  DoRender();
+  if (GPUPixelContext::GetInstance()->isCapturingFrame &&
+      this == GPUPixelContext::GetInstance()->captureUpToFilter.get()) {
+    GPUPixelContext::GetInstance()->captureUpToFilter = _terminalFilter;
   }
 
   for (auto& filter : _filters) {
-    if (filter->isPrepared()) {
-      filter->render();
+    if (filter->IsReady()) {
+      filter->Render();
     }
   }
 }
 
-void FilterGroup::doUpdateSinks() {
+void FilterGroup::DoUpdateSinks() {
   if (_terminalFilter) {
-    _terminalFilter->doUpdateSinks();
+    _terminalFilter->DoUpdateSinks();
   }
 }
 
-void FilterGroup::setFramebuffer(
+void FilterGroup::SetFramebuffer(
     std::shared_ptr<GPUPixelFramebuffer> fb,
     RotationMode outputRotation /* = RotationMode::NoRotation*/) {
   // if (_terminalFilter)
-  //     _terminalFilter->setFramebuffer(fb);
+  //     _terminalFilter->SetFramebuffer(fb);
 }
 
-std::shared_ptr<GPUPixelFramebuffer> FilterGroup::getFramebuffer() const {
+std::shared_ptr<GPUPixelFramebuffer> FilterGroup::GetFramebuffer() const {
   // if (_terminalFilter)
-  //     return _terminalFilter->getFramebuffer();
+  //     return _terminalFilter->GetFramebuffer();
   return 0;
 }
 
-void FilterGroup::setInputFramebuffer(
+void FilterGroup::SetInputFramebuffer(
     std::shared_ptr<GPUPixelFramebuffer> framebuffer,
     RotationMode rotationMode /* = NoRotation*/,
     int texIdx /* = 0*/) {
   for (auto& filter : _filters) {
-    filter->setInputFramebuffer(framebuffer, rotationMode, texIdx);
+    filter->SetInputFramebuffer(framebuffer, rotationMode, texIdx);
   }
 }
 
-bool FilterGroup::isPrepared() const {
+bool FilterGroup::IsReady() const {
   // todo(Jeayo)
   //    for (auto& filter : _filters) {
-  //        if (!filter->isPrepared())
+  //        if (!filter->IsReady())
   //            return false;
   //    }
   return true;
 }
 
-void FilterGroup::unPrepear() {
+void FilterGroup::ResetAndClean() {
   // todo(Jeayo)
   // for (auto& filter : _filters) {
   //    filter->unPrepeared();

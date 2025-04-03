@@ -13,10 +13,10 @@
 namespace gpupixel {
 class GPUPIXEL_API BoxDifferenceFilter : public Filter {
  public:
-  static std::shared_ptr<BoxDifferenceFilter> create();
+  static std::shared_ptr<BoxDifferenceFilter> Create();
   ~BoxDifferenceFilter();
-  bool init();
-  bool doRender(bool updateSinks = true) override;
+  bool Init();
+  bool DoRender(bool updateSinks = true) override;
 
   //
   void setDelta(float delta);

@@ -7,7 +7,7 @@
 
 #include "glass_sphere_filter.h"
 
-using namespace gpupixel;
+namespace gpupixel {
 
 REGISTER_FILTER_CLASS(GlassSphereFilter)
 
@@ -117,42 +117,44 @@ const std::string kGlassSphereFragmentShaderString = R"(
 
 #endif
 
-std::shared_ptr<GlassSphereFilter> GlassSphereFilter::create() {
+std::shared_ptr<GlassSphereFilter> GlassSphereFilter::Create() {
   auto ret = std::shared_ptr<GlassSphereFilter>(new GlassSphereFilter());
-  if (ret && !ret->init()) {
+  if (ret && !ret->Init()) {
     ret.reset();
   }
   return ret;
 }
 
-bool GlassSphereFilter::init() {
-  if (!initWithFragmentShaderString(kGlassSphereFragmentShaderString)) {
+bool GlassSphereFilter::Init() {
+  if (!InitWithFragmentShaderString(kGlassSphereFragmentShaderString)) {
     return false;
   }
 
   setPositionX(0.5);
-  registerProperty("positionX", _position.x,
+  RegisterProperty("positionX", _position.x,
                    "The position of x about which to apply the distortion, "
                    "with a default of 0.5",
                    [this](float& positionX) { setPositionX(positionX); });
 
   setPositionY(0.5);
-  registerProperty("positionY", _position.y,
+  RegisterProperty("positionY", _position.y,
                    "The position of y about which to apply the distortion, "
                    "with a default of 0.5",
                    [this](float& positionY) { setPositionY(positionY); });
 
-  setRadius(0.25);
-  registerProperty("radius", _radius,
+  SetRadius(0.25);
+  RegisterProperty("radius", _radius,
                    "The radius of the distortion, ranging from 0.0 to 1.0, "
                    "with a default of 0.25",
-                   [this](float& radius) { setRadius(radius); });
+                   [this](float& radius) { SetRadius(radius); });
 
   setRefractiveIndex(0.71);
-  registerProperty(
+  RegisterProperty(
       "refractiveIndex", _refractiveIndex,
       "The index of refraction for the sphere, with a default of 0.71",
       [this](float& refractiveIndex) { setRefractiveIndex(refractiveIndex); });
 
   return true;
 }
+
+} // namespace gpupixel

@@ -25,7 +25,7 @@ public class GPUPixelView extends FrameLayout implements GPUPixelSink {
 
     public GPUPixelView(Context context) {
         super(context);
-        init(context, null);
+        Init(context, null);
     }
 
     public GPUPixelView(Context context, AttributeSet attrs) {
@@ -33,12 +33,12 @@ public class GPUPixelView extends FrameLayout implements GPUPixelSink {
         if (isInEditMode()) { //防止布局界面显示为空白
             return;
         }
-        init(context, attrs);
+        Init(context, attrs);
     }
 
-    private void init(Context context, AttributeSet attrs) {
+    private void Init(Context context, AttributeSet attrs) {
         if (mNativeClassID != 0) return;
-        GPUPixel.getInstance().runOnDraw(new Runnable() {
+        GPUPixel.GetInstance().runOnDraw(new Runnable() {
             @Override
             public void run() {
                 mNativeClassID = GPUPixel.nativeSinkRender();
@@ -46,7 +46,7 @@ public class GPUPixelView extends FrameLayout implements GPUPixelSink {
         });
 
         mGLSurfaceView = new GPUImageViewGLSurfaceView(context, attrs, this);
-        GPUPixel.getInstance().setGLSurfaceView(mGLSurfaceView);
+        GPUPixel.GetInstance().setGLSurfaceView(mGLSurfaceView);
         addView(mGLSurfaceView);
         if (mGLSurfaceView.getWidth() != 0 && mGLSurfaceView.getHeight() != 0) {
             onSurfaceSizeChanged(mGLSurfaceView.getWidth(), mGLSurfaceView.getHeight());
@@ -56,7 +56,7 @@ public class GPUPixelView extends FrameLayout implements GPUPixelSink {
     public long getNativeClassID() { return mNativeClassID; }
 
     protected void onSurfaceSizeChanged(final int w, final int h) {
-        GPUPixel.getInstance().runOnDraw(new Runnable() {
+        GPUPixel.GetInstance().runOnDraw(new Runnable() {
             @Override
             public void run() {
                 if (mNativeClassID != 0)
@@ -65,8 +65,8 @@ public class GPUPixelView extends FrameLayout implements GPUPixelSink {
         });
     }
 
-    public void setFillMode(final int fillMode) {
-        GPUPixel.getInstance().runOnDraw(new Runnable() {
+    public void SetFillMode(final int fillMode) {
+        GPUPixel.GetInstance().runOnDraw(new Runnable() {
             @Override
             public void run() {
                 if (mNativeClassID != 0)
@@ -75,8 +75,8 @@ public class GPUPixelView extends FrameLayout implements GPUPixelSink {
         });
     }
 
-    public void setMirror(final boolean mirror) {
-        GPUPixel.getInstance().runOnDraw(new Runnable() {
+    public void SetMirror(final boolean mirror) {
+        GPUPixel.GetInstance().runOnDraw(new Runnable() {
             @Override
             public void run() {
                 if (mNativeClassID != 0)
@@ -97,15 +97,15 @@ public class GPUPixelView extends FrameLayout implements GPUPixelSink {
     protected void finalize() throws Throwable {
         try {
             if (mNativeClassID != 0) {
-                if (GPUPixel.getInstance().getGLSurfaceView() != null) {
-                    GPUPixel.getInstance().runOnDraw(new Runnable() {
+                if (GPUPixel.GetInstance().getGLSurfaceView() != null) {
+                    GPUPixel.GetInstance().runOnDraw(new Runnable() {
                         @Override
                         public void run() {
                             GPUPixel.nativeSinkRenderFinalize(mNativeClassID);
                             mNativeClassID = 0;
                         }
                     });
-                    GPUPixel.getInstance().requestRender();
+                    GPUPixel.GetInstance().requestRender();
                 } else {
                     GPUPixel.nativeSinkRenderFinalize(mNativeClassID);
                     mNativeClassID = 0;

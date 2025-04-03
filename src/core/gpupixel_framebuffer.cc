@@ -47,7 +47,7 @@ GPUPixelFramebuffer::GPUPixelFramebuffer(
 }
 
 GPUPixelFramebuffer::~GPUPixelFramebuffer() {
-  gpupixel::GPUPixelContext::getInstance()->runSync([&] {
+  gpupixel::GPUPixelContext::GetInstance()->RunSync([&] {
     bool bDeleteTex = (_texture != -1);
     bool bDeleteFB = (_framebuffer != -1);
 
@@ -62,12 +62,12 @@ GPUPixelFramebuffer::~GPUPixelFramebuffer() {
   });
 }
 
-void GPUPixelFramebuffer::active() {
+void GPUPixelFramebuffer::Active() {
   CHECK_GL(glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer));
   CHECK_GL(glViewport(0, 0, _width, _height));
 }
 
-void GPUPixelFramebuffer::inactive() {
+void GPUPixelFramebuffer::Inactive() {
   CHECK_GL(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 }
 

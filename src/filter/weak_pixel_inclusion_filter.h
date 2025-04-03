@@ -13,8 +13,8 @@
 namespace gpupixel {
 class GPUPIXEL_API WeakPixelInclusionFilter : public NearbySampling3x3Filter {
  public:
-  static std::shared_ptr<WeakPixelInclusionFilter> create();
-  bool init();
+  static std::shared_ptr<WeakPixelInclusionFilter> Create();
+  bool Init();
 
  protected:
   WeakPixelInclusionFilter(){};

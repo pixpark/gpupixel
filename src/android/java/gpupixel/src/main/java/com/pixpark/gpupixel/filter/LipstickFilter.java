@@ -20,9 +20,9 @@ public final class LipstickFilter extends GPUPixelFilter {
         return blendLevel;
     }
 
-    public void setBlendLevel(float blendLevel) {
+    public void SetBlendLevel(float blendLevel) {
         this.blendLevel = blendLevel;
-        setProperty(propBlendLevel, blendLevel);
+        SetProperty(propBlendLevel, blendLevel);
     }
 
     public float[] getFaceLandmark() {
@@ -31,6 +31,6 @@ public final class LipstickFilter extends GPUPixelFilter {
 
     public void setFaceLandmark(float[] faceLandmark) {
         this.faceLandmark = faceLandmark;
-        setProperty(propFaceLandmark, faceLandmark);
+        SetProperty(propFaceLandmark, faceLandmark);
     }
 }

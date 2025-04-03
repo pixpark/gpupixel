@@ -14,12 +14,12 @@
 namespace gpupixel {
 class GPUPIXEL_API BoxMonoBlurFilter : public GaussianBlurMonoFilter {
  public:
-  static std::shared_ptr<BoxMonoBlurFilter> create(Type type = HORIZONTAL,
+  static std::shared_ptr<BoxMonoBlurFilter> Create(Type type = HORIZONTAL,
                                                    int radius = 4,
                                                    float sigma = 2.0);
   ~BoxMonoBlurFilter();
-  bool init(int radius, float sigma);
-  void setRadius(int radius);
+  bool Init(int radius, float sigma);
+  void SetRadius(int radius);
 
  protected:
   BoxMonoBlurFilter(Type type);

@@ -15,7 +15,7 @@ class GPUPIXEL_API SingleComponentGaussianBlurMonoFilter
     : public GaussianBlurMonoFilter {
  public:
   static std::shared_ptr<SingleComponentGaussianBlurMonoFilter>
-  create(Type type = HORIZONTAL, int radius = 4, float sigma = 2.0);
+  Create(Type type = HORIZONTAL, int radius = 4, float sigma = 2.0);
 
  protected:
   SingleComponentGaussianBlurMonoFilter(Type type = HORIZONTAL);

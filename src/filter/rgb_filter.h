@@ -13,9 +13,9 @@
 namespace gpupixel {
 class GPUPIXEL_API RGBFilter : public Filter {
  public:
-  static std::shared_ptr<RGBFilter> create();
-  bool init();
-  virtual bool doRender(bool updateSinks = true) override;
+  static std::shared_ptr<RGBFilter> Create();
+  bool Init();
+  virtual bool DoRender(bool updateSinks = true) override;
 
   void setRedAdjustment(float redAdjustment);
   void setGreenAdjustment(float greenAdjustment);

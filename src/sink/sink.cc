@@ -10,20 +10,20 @@
 
 namespace gpupixel {
 
-Sink::Sink(int inputNumber /* = 1*/) : _inputNum(inputNumber) {}
+Sink::Sink(int inputNumber /* = 1*/) : input_count_(inputNumber) {}
 
 Sink::~Sink() {
-  for (auto it = _inputFramebuffers.begin(); it != _inputFramebuffers.end();
+  for (auto it = input_framebuffers_.begin(); it != input_framebuffers_.end();
        ++it) {
     if (it->second.frameBuffer) {
       it->second.frameBuffer.reset();
       it->second.frameBuffer = 0;
     }
   }
-  _inputFramebuffers.clear();
+  input_framebuffers_.clear();
 }
 
-void Sink::setInputFramebuffer(std::shared_ptr<GPUPixelFramebuffer> framebuffer,
+void Sink::SetInputFramebuffer(std::shared_ptr<GPUPixelFramebuffer> framebuffer,
                                  RotationMode rotationMode /* = NoRotation*/,
                                  int texIdx /* = 0*/) {
   InputFrameBufferInfo inputFrameBufferInfo;
@@ -31,39 +31,39 @@ void Sink::setInputFramebuffer(std::shared_ptr<GPUPixelFramebuffer> framebuffer,
   inputFrameBufferInfo.rotationMode = rotationMode;
   inputFrameBufferInfo.texIndex = texIdx;
   inputFrameBufferInfo.ignoreForPrepare = false;
-  _inputFramebuffers[texIdx] = inputFrameBufferInfo;
+  input_framebuffers_[texIdx] = inputFrameBufferInfo;
 }
 
-int Sink::getNextAvailableTextureIndex() const {
-  for (int i = 0; i < _inputNum; ++i) {
-    if (_inputFramebuffers.find(i) == _inputFramebuffers.end()) {
+int Sink::NextAvailableTextureIndex() const {
+  for (int i = 0; i < input_count_; ++i) {
+    if (input_framebuffers_.find(i) == input_framebuffers_.end()) {
       return i;
     }
   }
-  return _inputNum - 1;
+  return input_count_ - 1;
 }
 
-bool Sink::isPrepared() const {
+bool Sink::IsReady() const {
   int preparedNum = 0;
   int ignoreForPrepareNum = 0;
   for (std::map<int, InputFrameBufferInfo>::const_iterator it =
-           _inputFramebuffers.begin();
-       it != _inputFramebuffers.end(); ++it) {
+           input_framebuffers_.begin();
+       it != input_framebuffers_.end(); ++it) {
     if (it->second.ignoreForPrepare) {
       ignoreForPrepareNum++;
     } else if (it->second.frameBuffer) {
       preparedNum++;
     }
   }
-  if (ignoreForPrepareNum + preparedNum >= _inputNum) {
+  if (ignoreForPrepareNum + preparedNum >= input_count_) {
     return true;
   } else {
     return false;
   }
 }
 
-void Sink::unPrepear() {
-  for (auto it = _inputFramebuffers.begin(); it != _inputFramebuffers.end();
+void Sink::ResetAndClean() {
+  for (auto it = input_framebuffers_.begin(); it != input_framebuffers_.end();
        ++it) {
     if (!it->second.ignoreForPrepare) {
       if (it->second.frameBuffer) {

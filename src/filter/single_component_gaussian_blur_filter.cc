@@ -17,38 +17,38 @@ SingleComponentGaussianBlurFilter::SingleComponentGaussianBlurFilter()
 SingleComponentGaussianBlurFilter::~SingleComponentGaussianBlurFilter() {}
 
 std::shared_ptr<SingleComponentGaussianBlurFilter>
-SingleComponentGaussianBlurFilter::create(int radius /* = 4*/,
+SingleComponentGaussianBlurFilter::Create(int radius /* = 4*/,
                                           float sigma /* = 2.0*/) {
   auto ret = std::shared_ptr<SingleComponentGaussianBlurFilter>(
       new SingleComponentGaussianBlurFilter());
-  if (ret && !ret->init(radius, sigma)) {
+  if (ret && !ret->Init(radius, sigma)) {
     ret.reset();
   }
   return ret;
 }
 
-bool SingleComponentGaussianBlurFilter::init(int radius, float sigma) {
-  if (!FilterGroup::init()) {
+bool SingleComponentGaussianBlurFilter::Init(int radius, float sigma) {
+  if (!FilterGroup::Init()) {
     return false;
   }
 
-  _hBlurFilter = SingleComponentGaussianBlurMonoFilter::create(
+  _hBlurFilter = SingleComponentGaussianBlurMonoFilter::Create(
       SingleComponentGaussianBlurMonoFilter::HORIZONTAL, radius, sigma);
-  _vBlurFilter = SingleComponentGaussianBlurMonoFilter::create(
+  _vBlurFilter = SingleComponentGaussianBlurMonoFilter::Create(
       SingleComponentGaussianBlurMonoFilter::VERTICAL, radius, sigma);
-  _hBlurFilter->addSink(_vBlurFilter);
+  _hBlurFilter->AddSink(_vBlurFilter);
   addFilter(_hBlurFilter);
 
-  registerProperty("radius", 4, "", [this](int& radius) { setRadius(radius); });
+  RegisterProperty("radius", 4, "", [this](int& radius) { SetRadius(radius); });
 
-  registerProperty("sigma", 2.0, "", [this](float& sigma) { setSigma(sigma); });
+  RegisterProperty("sigma", 2.0, "", [this](float& sigma) { setSigma(sigma); });
 
   return true;
 }
 
-void SingleComponentGaussianBlurFilter::setRadius(int radius) {
-  _hBlurFilter->setRadius(radius);
-  _vBlurFilter->setRadius(radius);
+void SingleComponentGaussianBlurFilter::SetRadius(int radius) {
+  _hBlurFilter->SetRadius(radius);
+  _vBlurFilter->SetRadius(radius);
 }
 
 void SingleComponentGaussianBlurFilter::setSigma(float sigma) {

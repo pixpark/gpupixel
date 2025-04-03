@@ -359,18 +359,18 @@
                 {
                     [currentTarget setCurrentlyReceivingMonochromeInput:YES];
                     // TODO: Replace optimization for monochrome output
-                    [currentTarget setInputFramebuffer:outputFramebuffer atIndex:textureIndexOfTarget];
+                    [currentTarget SetInputFramebuffer:outputFramebuffer atIndex:textureIndexOfTarget];
                 }
                 else
                 {
                     [currentTarget setCurrentlyReceivingMonochromeInput:NO];
-                    [currentTarget setInputFramebuffer:outputFramebuffer atIndex:textureIndexOfTarget];
+                    [currentTarget SetInputFramebuffer:outputFramebuffer atIndex:textureIndexOfTarget];
                 }
             }
             else
             {
                 [currentTarget setInputRotation:outputRotation atIndex:textureIndexOfTarget];
-                [currentTarget setInputFramebuffer:outputFramebuffer atIndex:textureIndexOfTarget];
+                [currentTarget SetInputFramebuffer:outputFramebuffer atIndex:textureIndexOfTarget];
             }
         }
     }

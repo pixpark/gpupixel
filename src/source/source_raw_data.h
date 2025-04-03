@@ -14,13 +14,13 @@ namespace gpupixel {
 class GPUPIXEL_API SourceRawData : public Filter {
  public:
   ~SourceRawData();
-  static std::shared_ptr<SourceRawData> create();
-  void processData(const uint8_t* pixels,
+  static std::shared_ptr<SourceRawData> Create();
+  void ProcessData(const uint8_t* pixels,
                    int width,
                    int height,
                    int stride,
                    int64_t ts = 0);
-  void processData(int width,
+  void ProcessData(int width,
                    int height,
                    const uint8_t* dataY,
                    int strideY,
@@ -30,11 +30,11 @@ class GPUPIXEL_API SourceRawData : public Filter {
                    int strideV,
                    int64_t ts = 0);
 
-  void setRotation(RotationMode rotation);
+  void SetRotation(RotationMode rotation);
 
  private:
   SourceRawData();
-  bool init();
+  bool Init();
 
   int genTextureWithI420(int width,
                          int height,

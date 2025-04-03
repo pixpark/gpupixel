@@ -18,12 +18,12 @@ class GPUPIXEL_API FilterGroup : public Filter {
  public:
   virtual ~FilterGroup();
 
-  static std::shared_ptr<FilterGroup> create();
-  static std::shared_ptr<FilterGroup> create(
+  static std::shared_ptr<FilterGroup> Create();
+  static std::shared_ptr<FilterGroup> Create(
       std::vector<std::shared_ptr<Filter>> filters);
 
-  bool init();
-  bool init(std::vector<std::shared_ptr<Filter>> filters);
+  bool Init();
+  bool Init(std::vector<std::shared_ptr<Filter>> filters);
   bool hasFilter(const std::shared_ptr<Filter> filter) const;
   void addFilter(std::shared_ptr<Filter> filter);
   void removeFilter(std::shared_ptr<Filter> filter);
@@ -36,31 +36,31 @@ class GPUPIXEL_API FilterGroup : public Filter {
     _terminalFilter = filter;
   }
 
-  virtual std::shared_ptr<Source> addSink(
+  virtual std::shared_ptr<Source> AddSink(
       std::shared_ptr<Sink> sink) override;
-  virtual std::shared_ptr<Source> addSink(std::shared_ptr<Sink> sink,
+  virtual std::shared_ptr<Source> AddSink(std::shared_ptr<Sink> sink,
                                             int inputNumber) override;
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
-  virtual std::shared_ptr<Source> addSink(id<GPUPixelSink> sink) override;
+  virtual std::shared_ptr<Source> AddSink(id<GPUPixelSink> sink) override;
 #endif
-  virtual void removeSink(std::shared_ptr<Sink> sink) override;
-  virtual void removeAllSinks() override;
-  virtual bool hasSink(const std::shared_ptr<Sink> sink) const override;
-  virtual std::map<std::shared_ptr<Sink>, int>& getSinks() override;
-  virtual bool doRender(bool updateSinks = true) override;
-  virtual void render() override;
-  virtual void doUpdateSinks() override;
-  virtual void setFramebuffer(
+  virtual void RemoveSink(std::shared_ptr<Sink> sink) override;
+  virtual void RemoveAllSinks() override;
+  virtual bool HasSink(const std::shared_ptr<Sink> sink) const override;
+  virtual std::map<std::shared_ptr<Sink>, int>& GetSinks() override;
+  virtual bool DoRender(bool updateSinks = true) override;
+  virtual void Render() override;
+  virtual void DoUpdateSinks() override;
+  virtual void SetFramebuffer(
       std::shared_ptr<GPUPixelFramebuffer> fb,
       RotationMode outputRotation = RotationMode::NoRotation) override;
 
-  virtual std::shared_ptr<GPUPixelFramebuffer> getFramebuffer() const override;
-  virtual void setInputFramebuffer(std::shared_ptr<GPUPixelFramebuffer> framebuffer,
+  virtual std::shared_ptr<GPUPixelFramebuffer>GetFramebuffer() const override;
+  virtual void SetInputFramebuffer(std::shared_ptr<GPUPixelFramebuffer> framebuffer,
                                    RotationMode rotationMode = NoRotation,
                                    int texIdx = 0) override;
 
-  virtual bool isPrepared() const override;
-  virtual void unPrepear() override;
+  virtual bool IsReady() const override;
+  virtual void ResetAndClean() override;
 
  protected:
   std::vector<std::shared_ptr<Filter>> _filters;

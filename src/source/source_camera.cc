@@ -8,8 +8,8 @@
 #include "source_camera.h"
 #include "gpupixel_context.h"
 #include "util.h"
-using namespace gpupixel;
 
+namespace gpupixel {
 SourceCamera::SourceCamera() {
 #if defined(GPUPIXEL_IOS)
   _videoDataOutputSampleBufferDelegate =
@@ -28,10 +28,10 @@ SourceCamera::~SourceCamera() {
 #endif
 }
 
-std::shared_ptr<SourceCamera> SourceCamera::create() {
+std::shared_ptr<SourceCamera> SourceCamera::Create() {
   auto sourceCamera = std::shared_ptr<SourceCamera>(new SourceCamera());
 #if defined(GPUPIXEL_IOS)
-  if (!sourceCamera->init()) {
+  if (!sourceCamera->Init()) {
     sourceCamera.reset();
   }
 #endif
@@ -43,10 +43,10 @@ void SourceCamera::setFrameData(
     int height,
     const void* pixels,
     RotationMode outputRotation /* = RotationMode::NoRotation*/) {
-  if (!_framebuffer || (_framebuffer->getWidth() != width ||
-                        _framebuffer->getHeight() != height)) {
+  if (!_framebuffer || (_framebuffer->GetWidth() != width ||
+                        _framebuffer->GetHeight() != height)) {
     _framebuffer =
-        GPUPixelContext::getInstance()->getFramebufferFactory()->fetchFramebuffer(
+        GPUPixelContext::GetInstance()->GetFramebufferFactory()->CreateFramebuffer(
             width, height, true);
   }
   if(_face_detector) {
@@ -54,9 +54,9 @@ void SourceCamera::setFrameData(
                              GPUPIXEL_MODE_FMT_VIDEO,
                              GPUPIXEL_FRAME_TYPE_RGBA8888);
   }
-  this->setFramebuffer(_framebuffer, outputRotation);
+  this->SetFramebuffer(_framebuffer, outputRotation);
 
-  CHECK_GL(glBindTexture(GL_TEXTURE_2D, this->getFramebuffer()->getTexture()));
+  CHECK_GL(glBindTexture(GL_TEXTURE_2D, this->GetFramebuffer()->GetTexture()));
 #if defined(GPUPIXEL_IOS)
   CHECK_GL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_BGRA,
                         GL_UNSIGNED_BYTE, pixels));
@@ -68,15 +68,15 @@ void SourceCamera::setFrameData(
 }
 
 #if defined(GPUPIXEL_IOS)
-bool SourceCamera::init() {
+bool SourceCamera::Init() {
   if (isCameraExist(AVCaptureDevicePositionFront)) {
-    return init(AVCaptureSessionPreset640x480, AVCaptureDevicePositionFront);
+    return Init(AVCaptureSessionPreset640x480, AVCaptureDevicePositionFront);
   } else {
-    return init(AVCaptureSessionPreset640x480, AVCaptureDevicePositionBack);
+    return Init(AVCaptureSessionPreset640x480, AVCaptureDevicePositionBack);
   }
 }
 
-bool SourceCamera::init(NSString* sessionPreset,
+bool SourceCamera::Init(NSString* sessionPreset,
                         AVCaptureDevicePosition cameraPosition) {
   _outputRotation = gpupixel::NoRotation;
   // internalRotation = gpupixel::NoRotation;
@@ -307,6 +307,7 @@ void SourceCamera::_updateOutputRotation() {
   _videoDataOutputSampleBufferDelegate.rotation = _outputRotation;
 }
 #endif
+} // namespace gpupixel
 
 #if defined(GPUPIXEL_IOS)
 @implementation VideoDataOutputSampleBufferDelegate
@@ -315,7 +316,7 @@ void SourceCamera::_updateOutputRotation() {
     didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
            fromConnection:(AVCaptureConnection*)connection {
   if (_sourceCamera) {
-    GPUPixelContext::getInstance()->runSync([&] {
+    gpupixel::GPUPixelContext::GetInstance()->RunSync([&] {
       CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
       CVPixelBufferLockBaseAddress(imageBuffer, 0);
       _sourceCamera->setFrameData((int)CVPixelBufferGetWidth(imageBuffer),
@@ -323,7 +324,7 @@ void SourceCamera::_updateOutputRotation() {
                                   CVPixelBufferGetBaseAddress(imageBuffer),
                                   _rotation);
       CVPixelBufferUnlockBaseAddress(imageBuffer, 0);
-      _sourceCamera->doRender();
+      _sourceCamera->DoRender();
     });
   }
 }

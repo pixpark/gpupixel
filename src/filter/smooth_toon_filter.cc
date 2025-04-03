@@ -15,36 +15,36 @@ SmoothToonFilter::SmoothToonFilter() : _gaussianBlurFilter(0), _toonFilter(0) {}
 
 SmoothToonFilter::~SmoothToonFilter() {}
 
-std::shared_ptr<SmoothToonFilter> SmoothToonFilter::create() {
+std::shared_ptr<SmoothToonFilter> SmoothToonFilter::Create() {
   auto ret = std::shared_ptr<SmoothToonFilter>(new SmoothToonFilter());
-  if (ret && !ret->init()) {
+  if (ret && !ret->Init()) {
     ret.reset();
   }
   return ret;
 }
 
-bool SmoothToonFilter::init() {
-  if (!FilterGroup::init()) {
+bool SmoothToonFilter::Init() {
+  if (!FilterGroup::Init()) {
     return false;
   }
-  _gaussianBlurFilter = GaussianBlurFilter::create();
-  _toonFilter = ToonFilter::create();
-  _gaussianBlurFilter->addSink(_toonFilter);
+  _gaussianBlurFilter = GaussianBlurFilter::Create();
+  _toonFilter = ToonFilter::Create();
+  _gaussianBlurFilter->AddSink(_toonFilter);
   addFilter(_gaussianBlurFilter);
 
   _blurRadius = 2.0;
   setBlurRadius(_blurRadius);
-  registerProperty("blurRadius", _blurRadius, "",
+  RegisterProperty("blurRadius", _blurRadius, "",
                    [this](int& blurRadius) { setBlurRadius(blurRadius); });
 
   _toonThreshold = 0.2;
-  registerProperty(
+  RegisterProperty(
       "toonThreshold", _toonThreshold,
       "The threshold at which to apply the edges",
       [this](float& toonThreshold) { setToonThreshold(toonThreshold); });
 
   _toonQuantizationLevels = 10.0;
-  registerProperty("toonQuantizationLevels", _toonQuantizationLevels,
+  RegisterProperty("toonQuantizationLevels", _toonQuantizationLevels,
                    "The levels of quantization for the posterization of colors "
                    "within the scene",
                    [this](float& toonQuantizationLevels) {
@@ -56,7 +56,7 @@ bool SmoothToonFilter::init() {
 
 void SmoothToonFilter::setBlurRadius(int blurRadius) {
   _blurRadius = blurRadius;
-  _gaussianBlurFilter->setRadius(_blurRadius);
+  _gaussianBlurFilter->SetRadius(_blurRadius);
 }
 
 void SmoothToonFilter::setToonThreshold(float toonThreshold) {

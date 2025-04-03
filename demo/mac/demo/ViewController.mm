@@ -90,16 +90,16 @@ using namespace gpupixel;
 }
  
 -(void) initVideoFilter {
-  gpupixel::GPUPixelContext::getInstance()->runSync([&] {
-    sourceRawData = SourceRawData::create();
+  gpupixel::GPUPixelContext::GetInstance()->RunSync([&] {
+    sourceRawData = SourceRawData::Create();
     gpuPixelView = [[GPUPixelView alloc] initWithFrame: self.view.frame];
     [self.view addSubview:gpuPixelView positioned:NSWindowBelow relativeTo:nil];
  
     // create filter
  
-    lipstickFilter = LipstickFilter::create();
-    blusherFilter = BlusherFilter::create();
-    faceReshapeFilter = FaceReshapeFilter::create();
+    lipstickFilter = LipstickFilter::Create();
+    blusherFilter = BlusherFilter::Create();
+    faceReshapeFilter = FaceReshapeFilter::Create();
     
     sourceRawData->RegLandmarkCallback([=](std::vector<float> landmarks) {
        lipstickFilter->SetFaceLandmarks(landmarks);
@@ -108,14 +108,14 @@ using namespace gpupixel;
      });
  
     // create filter
-    beautyFaceFilter = BeautyFaceFilter::create();
+    beautyFaceFilter = BeautyFaceFilter::Create();
   
     
-    sourceRawData->addSink(lipstickFilter)
-                 ->addSink(blusherFilter)
-                 ->addSink(faceReshapeFilter)
-                 ->addSink(beautyFaceFilter)
-                 ->addSink(gpuPixelView);
+    sourceRawData->AddSink(lipstickFilter)
+                 ->AddSink(blusherFilter)
+                 ->AddSink(faceReshapeFilter)
+                 ->AddSink(beautyFaceFilter)
+                 ->AddSink(gpuPixelView);
   
     [gpuPixelView setFillMode:(gpupixel::SinkRender::PreserveAspectRatioAndFill)];
   
@@ -125,11 +125,11 @@ using namespace gpupixel;
 #pragma mark - 属性赋值
 - (void)setBeautyIntensity:(CGFloat)value {
   _beautyIntensity = value;
-  beautyFaceFilter->setBlurAlpha(value/10);
+  beautyFaceFilter->SetBlurAlpha(value/10);
 }
 - (void)setWhitenIntensity:(CGFloat)value{
   _whitenIntensity = value;
-  beautyFaceFilter->setWhite(value/20);
+  beautyFaceFilter->SetWhite(value/20);
 }
 - (void)setSaturationIntensity:(CGFloat)value{
   _saturationIntensity = value;
@@ -137,22 +137,22 @@ using namespace gpupixel;
 
 - (void)setFaceSlimIntensity:(CGFloat)value{
   _faceSlimIntensity = value;
-  faceReshapeFilter->setFaceSlimLevel(value/100);
+  faceReshapeFilter->SetFaceSlimLevel(value/100);
 }
 
 - (void)setEyeEnlargeIntensity:(CGFloat)value{
   _eyeEnlargeIntensity = value;
-  faceReshapeFilter->setEyeZoomLevel(value/50);
+  faceReshapeFilter->SetEyeZoomLevel(value/50);
 }
 
 - (void)setLipstickIntensity:(CGFloat)value{
   _lipstickIntensity = value;
-  lipstickFilter->setBlendLevel(value/10);
+  lipstickFilter->SetBlendLevel(value/10);
 }
 
 - (void)setBlusherIntensity:(CGFloat)value{
   _blusherIntensity = value;
-  blusherFilter->setBlendLevel(value/10);
+  blusherFilter->SetBlendLevel(value/10);
 }
  
 
@@ -164,7 +164,7 @@ using namespace gpupixel;
     auto height = CVPixelBufferGetHeight(imageBuffer);
     auto stride = CVPixelBufferGetBytesPerRow(imageBuffer)/4;
     auto pixels = (const uint8_t *)CVPixelBufferGetBaseAddress(imageBuffer);
-    sourceRawData->processData(pixels, width, height, stride);
+    sourceRawData->ProcessData(pixels, width, height, stride);
     
     CVPixelBufferUnlockBaseAddress(imageBuffer, 0);
 }

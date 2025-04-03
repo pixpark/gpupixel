@@ -19,12 +19,12 @@ class Sink {
   Sink(int inputNumber = 1);
   
   // 设置输入帧缓冲区
-  virtual void setInputFramebuffer(std::shared_ptr<GPUPixelFramebuffer> framebuffer,
+  virtual void SetInputFramebuffer(std::shared_ptr<GPUPixelFramebuffer> framebuffer,
                                  RotationMode rotationMode = NoRotation,
                                  int texIdx = 0);
   
   // 更新处理
-  virtual void render(){};
+  virtual void Render(){};
 };
 ```
 
@@ -34,7 +34,7 @@ class Sink {
 
 1. 继承 `Sink` 类
 2. 实现构造函数，进行必要的初始化
-3. 重写 `setInputFramebuffer` 方法（可选）
+3. 重写 `SetInputFramebuffer` 方法（可选）
 4. 重写 `update` 方法，实现具体的渲染逻辑
 
 ### 2. 渲染到屏幕 - SinkRender
@@ -51,12 +51,12 @@ class Sink {
 class SinkRender : public Sink {
  public:
   // 初始化着色器程序和属性位置
-  void init() {
+  void Init() {
    
   }
 
   // 实现更新方法，执行实际的渲染
-  void render() override {
+  void Render() override {
      // do render
   }
 };
@@ -80,7 +80,7 @@ class SinkRawData : public Sink {
   void setPixelsCallbck(RawOutputCallback cb);
 
   // 实现更新方法
-  void render() override {
+  void Render() override {
     // 检查输入尺寸变化
     if (_width != width || _height != height) {
       initPBO(width, height);
@@ -138,14 +138,14 @@ class MyCustomTarget : public Sink {
     cleanup();
   }
 
-  void render() override {
-    if (!isPrepared()) return;
+  void Render() override {
+    if (!IsReady()) return;
     
     // 设置渲染状态
     setupRenderState();
     
     // 执行自定义渲染逻辑
-    render();
+    Render();
     
     // 处理输出
     processOutput();

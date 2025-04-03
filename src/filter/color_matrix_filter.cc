@@ -42,20 +42,20 @@ const std::string kColorMatrixFragmentShaderString = R"(
 ColorMatrixFilter::ColorMatrixFilter()
     : _intensity(1.0), _colorMatrix(Matrix4::IDENTITY) {}
 
-std::shared_ptr<ColorMatrixFilter> ColorMatrixFilter::create() {
+std::shared_ptr<ColorMatrixFilter> ColorMatrixFilter::Create() {
   auto ret = std::shared_ptr<ColorMatrixFilter>(new ColorMatrixFilter());
-  if (ret && !ret->init()) {
+  if (ret && !ret->Init()) {
     ret.reset();
   }
   return ret;
 }
 
-bool ColorMatrixFilter::init() {
-  if (!Filter::initWithFragmentShaderString(kColorMatrixFragmentShaderString)) {
+bool ColorMatrixFilter::Init() {
+  if (!Filter::InitWithFragmentShaderString(kColorMatrixFragmentShaderString)) {
     return false;
   }
 
-  registerProperty("intensity", _intensity,
+  RegisterProperty("intensity", _intensity,
                    "The percentage of color applied by color matrix with range "
                    "between 0 and 1.",
                    [this](float& intensity) {
@@ -72,10 +72,10 @@ bool ColorMatrixFilter::init() {
   return true;
 }
 
-bool ColorMatrixFilter::doRender(bool updateSinks) {
-  _filterProgram->setUniformValue("intensity", _intensity);
-  _filterProgram->setUniformValue("colorMatrix", _colorMatrix);
-  return Filter::doRender(updateSinks);
+bool ColorMatrixFilter::DoRender(bool updateSinks) {
+  _filterProgram->SetUniformValue("intensity", _intensity);
+  _filterProgram->SetUniformValue("colorMatrix", _colorMatrix);
+  return Filter::DoRender(updateSinks);
 }
 
 }

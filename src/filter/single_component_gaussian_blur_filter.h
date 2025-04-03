@@ -16,11 +16,11 @@ class GPUPIXEL_API SingleComponentGaussianBlurFilter : public FilterGroup {
  public:
   virtual ~SingleComponentGaussianBlurFilter();
 
-  static std::shared_ptr<SingleComponentGaussianBlurFilter> create(
+  static std::shared_ptr<SingleComponentGaussianBlurFilter> Create(
       int radius = 4,
       float sigma = 2.0);
-  bool init(int radius, float sigma);
-  void setRadius(int radius);
+  bool Init(int radius, float sigma);
+  void SetRadius(int radius);
   void setSigma(float sigma);
 
  protected:

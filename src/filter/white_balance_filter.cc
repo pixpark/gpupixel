@@ -7,7 +7,7 @@
 
 #include "white_balance_filter.h"
 
-using namespace gpupixel;
+namespace gpupixel {
 
 REGISTER_FILTER_CLASS(WhiteBalanceFilter)
 
@@ -43,21 +43,21 @@ const std::string kWhiteBalanceFragmentShaderString = R"(
       gl_FragColor = vec4(mix(rgb, processed, temperature), color.a);
     })";
 
-std::shared_ptr<WhiteBalanceFilter> WhiteBalanceFilter::create() {
+std::shared_ptr<WhiteBalanceFilter> WhiteBalanceFilter::Create() {
   auto ret = std::shared_ptr<WhiteBalanceFilter>(new WhiteBalanceFilter());
-  if (ret && !ret->init()) {
+  if (ret && !ret->Init()) {
     ret.reset();
   }
   return ret;
 }
 
-bool WhiteBalanceFilter::init() {
-  if (!initWithFragmentShaderString(kWhiteBalanceFragmentShaderString)) {
+bool WhiteBalanceFilter::Init() {
+  if (!InitWithFragmentShaderString(kWhiteBalanceFragmentShaderString)) {
     return false;
   }
 
   setTemperature(5000.0);
-  registerProperty(
+  RegisterProperty(
       "temperature", 5000.0,
       "Adjustment of color temperature (in degrees Kelvin) in terms of what an "
       "image was effectively shot in. This means higher Kelvin values will "
@@ -65,7 +65,7 @@ bool WhiteBalanceFilter::init() {
       [this](float& temperature) { setTemperature(temperature); });
 
   setTint(0.0);
-  registerProperty("tint", _tint, "adjust tint to compensate",
+  RegisterProperty("tint", _tint, "adjust tint to compensate",
                    [this](float& tint) { setTint(tint); });
 
   return true;
@@ -80,8 +80,10 @@ void WhiteBalanceFilter::setTint(float tint) {
   _tint = tint / 100.0;
 }
 
-bool WhiteBalanceFilter::doRender(bool updateSinks) {
-  _filterProgram->setUniformValue("temperature", _temperature);
-  _filterProgram->setUniformValue("tint", _tint);
-  return Filter::doRender(updateSinks);
+bool WhiteBalanceFilter::DoRender(bool updateSinks) {
+  _filterProgram->SetUniformValue("temperature", _temperature);
+  _filterProgram->SetUniformValue("tint", _tint);
+  return Filter::DoRender(updateSinks);
 }
+
+} // namespace gpupixel

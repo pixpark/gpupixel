@@ -16,7 +16,7 @@ To create a custom input source, you need to:
 ```cpp
 class YourCustomInput : public Source {
  public:
-  static std::shared_ptr<YourCustomInput> create();
+  static std::shared_ptr<YourCustomInput> Create();
   // Your custom methods
  private:
   // Your private members
@@ -30,9 +30,9 @@ class YourCustomInput : public Source {
 Implement a static create method and constructor:
 
 ```cpp
-std::shared_ptr<YourCustomInput> YourCustomInput::create() {
+std::shared_ptr<YourCustomInput> YourCustomInput::Create() {
   auto input = std::shared_ptr<YourCustomInput>(new YourCustomInput());
-  if (input->init()) {
+  if (input->Init()) {
     return input;
   }
   return nullptr;
@@ -44,13 +44,13 @@ std::shared_ptr<YourCustomInput> YourCustomInput::create() {
 Create and manage framebuffer for your input source:
 
 ```cpp
-if (!_framebuffer || (_framebuffer->getWidth() != width ||
-                      _framebuffer->getHeight() != height)) {
+if (!_framebuffer || (_framebuffer->GetWidth() != width ||
+                      _framebuffer->GetHeight() != height)) {
   _framebuffer =
-      GPUPixelContext::getInstance()->getFramebufferFactory()->fetchFramebuffer(
+      GPUPixelContext::GetInstance()->GetFramebufferFactory()->CreateFramebuffer(
           width, height);
 }
-this->setFramebuffer(_framebuffer, outputRotation);
+this->SetFramebuffer(_framebuffer, outputRotation);
 ```
 
 ### 3. Data Input Processing
@@ -72,7 +72,7 @@ void YourCustomInput::setFrameData(const uint8_t* pixels,
   }
   
   // Update texture
-  glBindTexture(GL_TEXTURE_2D, this->getFramebuffer()->getTexture());
+  glBindTexture(GL_TEXTURE_2D, this->GetFramebuffer()->GetTexture());
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0,
                GL_RGBA, GL_UNSIGNED_BYTE, pixels);
 }
@@ -80,10 +80,10 @@ void YourCustomInput::setFrameData(const uint8_t* pixels,
 
 ### 4. Data Flow Control
 
-Call `doRender()` to process the frame through the filter chain:
+Call `DoRender()` to process the frame through the filter chain:
 
 ```cpp
-Source::doRender(true, timestamp);
+Source::DoRender(true, timestamp);
 ```
 
 ## Example: SourceRawData
@@ -95,7 +95,7 @@ SourceRawData demonstrates handling raw pixel data:
 3. Implements shader programs for format conversion
 
 Key features:
-- `processData()`: Handle RGBA and YUV data
+- `ProcessData()`: Handle RGBA and YUV data
 - Texture management for different formats
 - Shader program for YUV to RGB conversion
 
@@ -140,10 +140,10 @@ Key features:
 To use your custom input source:
 
 ```cpp
-auto input = YourCustomInput::create();
+auto input = YourCustomInput::Create();
 if (input) {
-  auto filter = BeautyFaceFilter::create();
-  input->addSink(filter);
+  auto filter = BeautyFaceFilter::Create();
+  input->AddSink(filter);
   // Setup more filters or outputs
 }
 ```

@@ -15,14 +15,14 @@
 namespace gpupixel {
 class GPUPIXEL_API BoxHighPassFilter : public FilterGroup {
  public:
-  static std::shared_ptr<BoxHighPassFilter> create();
+  static std::shared_ptr<BoxHighPassFilter> Create();
   ~BoxHighPassFilter();
-  bool init();
+  bool Init();
 
-  void setRadius(float radius);
+  void SetRadius(float radius);
   void setDelta(float delta);
 
-  virtual void setInputFramebuffer(std::shared_ptr<GPUPixelFramebuffer> framebuffer,
+  virtual void SetInputFramebuffer(std::shared_ptr<GPUPixelFramebuffer> framebuffer,
                                    RotationMode rotationMode /* = NoRotation*/,
                                    int texIdx /* = 0*/) override;
 

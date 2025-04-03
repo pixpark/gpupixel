@@ -7,7 +7,7 @@
 
 #include "brightness_filter.h"
 
-using namespace gpupixel;
+namespace gpupixel {
 
 REGISTER_FILTER_CLASS(BrightnessFilter)
 
@@ -31,22 +31,22 @@ const std::string kBrightnessFragmentShaderString = R"(
     })";
 #endif
 
-std::shared_ptr<BrightnessFilter> BrightnessFilter::create(
+std::shared_ptr<BrightnessFilter> BrightnessFilter::Create(
     float brightness /* = 0.0*/) {
   auto ret = std::shared_ptr<BrightnessFilter>(new BrightnessFilter());
-  if (ret && !ret->init(brightness)) {
+  if (ret && !ret->Init(brightness)) {
     ret.reset();
   }
   return ret;
 }
 
-bool BrightnessFilter::init(float brightness) {
-  if (!initWithFragmentShaderString(kBrightnessFragmentShaderString)) {
+bool BrightnessFilter::Init(float brightness) {
+  if (!InitWithFragmentShaderString(kBrightnessFragmentShaderString)) {
     return false;
   }
 
   _brightness = 0.01;
-  registerProperty("brightness_para", _brightness,
+  RegisterProperty("brightness_para", _brightness,
                    "The brightness of filter with range between -1 and 1.",
                    [this](float& brightness) { setBrightness(brightness); });
 
@@ -62,7 +62,9 @@ void BrightnessFilter::setBrightness(float brightness) {
   }
 }
 
-bool BrightnessFilter::doRender(bool updateSinks) {
-  _filterProgram->setUniformValue("brightness_para", _brightness);
-  return Filter::doRender(updateSinks);
+bool BrightnessFilter::DoRender(bool updateSinks) {
+  _filterProgram->SetUniformValue("brightness_para", _brightness);
+  return Filter::DoRender(updateSinks);
 }
+
+} // namespace gpupixel

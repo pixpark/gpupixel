@@ -56,28 +56,28 @@ SobelEdgeDetectionFilter::SobelEdgeDetectionFilter()
 
 SobelEdgeDetectionFilter::~SobelEdgeDetectionFilter() {}
 
-std::shared_ptr<SobelEdgeDetectionFilter> SobelEdgeDetectionFilter::create() {
+std::shared_ptr<SobelEdgeDetectionFilter> SobelEdgeDetectionFilter::Create() {
   auto ret =
       std::shared_ptr<SobelEdgeDetectionFilter>(new SobelEdgeDetectionFilter());
-  if (ret && !ret->init()) {
+  if (ret && !ret->Init()) {
     ret.reset();
   }
 
   return ret;
 }
 
-bool SobelEdgeDetectionFilter::init() {
-  if (!FilterGroup::init()) {
+bool SobelEdgeDetectionFilter::Init() {
+  if (!FilterGroup::Init()) {
     return false;
   }
 
-  _grayscaleFilter = GrayscaleFilter::create();
-  _sobelEdgeDetectionFilter = _SobelEdgeDetectionFilter::create();
-  _grayscaleFilter->addSink(_sobelEdgeDetectionFilter);
+  _grayscaleFilter = GrayscaleFilter::Create();
+  _sobelEdgeDetectionFilter = _SobelEdgeDetectionFilter::Create();
+  _grayscaleFilter->AddSink(_sobelEdgeDetectionFilter);
   addFilter(_grayscaleFilter);
 
   _edgeStrength = 1.0;
-  registerProperty("edgeStrength", _edgeStrength,
+  RegisterProperty("edgeStrength", _edgeStrength,
                    "The edge strength of sobel edge detection filter",
                    [this](float& edgeStrength) {
                      _sobelEdgeDetectionFilter->setEdgeStrength(edgeStrength);
@@ -86,18 +86,18 @@ bool SobelEdgeDetectionFilter::init() {
   return true;
 }
 
-std::shared_ptr<_SobelEdgeDetectionFilter> _SobelEdgeDetectionFilter::create() {
+std::shared_ptr<_SobelEdgeDetectionFilter> _SobelEdgeDetectionFilter::Create() {
   auto ret = std::shared_ptr<_SobelEdgeDetectionFilter>(
       new _SobelEdgeDetectionFilter());
-  if (!ret || !ret->init()) {
+  if (!ret || !ret->Init()) {
     ret.reset();
   }
 
   return ret;
 }
 
-bool _SobelEdgeDetectionFilter::init() {
-  if (!initWithFragmentShaderString(kSobelEdgeDetectionFragmentShaderString)) {
+bool _SobelEdgeDetectionFilter::Init() {
+  if (!InitWithFragmentShaderString(kSobelEdgeDetectionFragmentShaderString)) {
     return false;
   }
   _edgeStrength = 1.0;
@@ -108,22 +108,22 @@ void _SobelEdgeDetectionFilter::setEdgeStrength(float edgeStrength) {
   _edgeStrength = edgeStrength;
 }
 
-bool _SobelEdgeDetectionFilter::doRender(bool updateSinks) {
-  float texelWidth = 1.0 / _framebuffer->getWidth();
-  float texelHeight = 1.0 / _framebuffer->getHeight();
+bool _SobelEdgeDetectionFilter::DoRender(bool updateSinks) {
+  float texelWidth = 1.0 / _framebuffer->GetWidth();
+  float texelHeight = 1.0 / _framebuffer->GetHeight();
 
   std::shared_ptr<GPUPixelFramebuffer> inputFramebuffer =
-      _inputFramebuffers.begin()->second.frameBuffer;
-  RotationMode inputRotation = _inputFramebuffers.begin()->second.rotationMode;
+      input_framebuffers_.begin()->second.frameBuffer;
+  RotationMode inputRotation = input_framebuffers_.begin()->second.rotationMode;
   if (rotationSwapsSize(inputRotation)) {
-    texelWidth = 1.0 / _framebuffer->getHeight();
-    texelHeight = 1.0 / _framebuffer->getWidth();
+    texelWidth = 1.0 / _framebuffer->GetHeight();
+    texelHeight = 1.0 / _framebuffer->GetWidth();
   }
 
-  _filterProgram->setUniformValue("texelWidth", texelWidth);
-  _filterProgram->setUniformValue("texelHeight", texelHeight);
-  _filterProgram->setUniformValue("edgeStrength", _edgeStrength);
-  return NearbySampling3x3Filter::doRender(updateSinks);
+  _filterProgram->SetUniformValue("texelWidth", texelWidth);
+  _filterProgram->SetUniformValue("texelHeight", texelHeight);
+  _filterProgram->SetUniformValue("edgeStrength", _edgeStrength);
+  return NearbySampling3x3Filter::DoRender(updateSinks);
 }
 
 }

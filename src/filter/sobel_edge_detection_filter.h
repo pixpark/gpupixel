@@ -18,9 +18,9 @@ class _SobelEdgeDetectionFilter;
 
 class GPUPIXEL_API SobelEdgeDetectionFilter : public FilterGroup {
  public:
-  static std::shared_ptr<SobelEdgeDetectionFilter> create();
+  static std::shared_ptr<SobelEdgeDetectionFilter> Create();
   ~SobelEdgeDetectionFilter();
-  bool init();
+  bool Init();
 
  protected:
   SobelEdgeDetectionFilter();
@@ -33,9 +33,9 @@ class GPUPIXEL_API SobelEdgeDetectionFilter : public FilterGroup {
 
 class GPUPIXEL_API _SobelEdgeDetectionFilter : public NearbySampling3x3Filter {
  public:
-  static std::shared_ptr<_SobelEdgeDetectionFilter> create();
-  bool init();
-  virtual bool doRender(bool updateSinks = true) override;
+  static std::shared_ptr<_SobelEdgeDetectionFilter> Create();
+  bool Init();
+  virtual bool DoRender(bool updateSinks = true) override;
 
   void setEdgeStrength(float edgeStrength);
 

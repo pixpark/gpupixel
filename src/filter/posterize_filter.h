@@ -13,9 +13,9 @@
 namespace gpupixel {
 class GPUPIXEL_API PosterizeFilter : public Filter {
  public:
-  static std::shared_ptr<PosterizeFilter> create();
-  bool init();
-  virtual bool doRender(bool updateSinks = true) override;
+  static std::shared_ptr<PosterizeFilter> Create();
+  bool Init();
+  virtual bool DoRender(bool updateSinks = true) override;
 
   void setColorLevels(int colorLevels);
 

@@ -8,18 +8,17 @@
 #pragma once
 
 #include "filter.h"
-#include "face_detector.h"
 
 namespace gpupixel {
 class GPUPIXEL_API FaceReshapeFilter : public Filter {
  public:
-  static std::shared_ptr<FaceReshapeFilter> create();
+  static std::shared_ptr<FaceReshapeFilter> Create();
   ~FaceReshapeFilter();
-  bool init();
-  virtual bool doRender(bool updateSinks = true) override;
+  bool Init();
+  virtual bool DoRender(bool updateSinks = true) override;
 
-  void setFaceSlimLevel(float level);
-  void setEyeZoomLevel(float level);
+  void SetFaceSlimLevel(float level);
+  void SetEyeZoomLevel(float level);
   void SetFaceLandmarks(std::vector<float> landmarks);
  protected:
   FaceReshapeFilter();

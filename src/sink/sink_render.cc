@@ -10,122 +10,122 @@
 #include "util.h"
 #include "filter.h"
 
-using namespace gpupixel;
+namespace gpupixel {
 
 SinkRender::SinkRender()
     : _viewWidth(0),
       _viewHeight(0),
       _fillMode(FillMode::PreserveAspectRatio),
-      _displayProgram(0),
-      _positionAttribLocation(0),
+      display_glprogram_(0),
+      position_attribute_location_(0),
       _texCoordAttribLocation(0),
       _colorMapUniformLocation(0) {
-  _backgroundColor.r = 0.0;
-  _backgroundColor.g = 0.0;
-  _backgroundColor.b = 0.0;
-  _backgroundColor.a = 0.0;
-  init();
+  background_color_.r = 0.0;
+  background_color_.g = 0.0;
+  background_color_.b = 0.0;
+  background_color_.a = 0.0;
+  Init();
 }
 
 SinkRender::~SinkRender() {
-  if (_displayProgram) {
-    delete _displayProgram;
-    _displayProgram = 0;
+  if (display_glprogram_) {
+    delete display_glprogram_;
+    display_glprogram_ = 0;
   }
 }
 
-void SinkRender::init() {
-  _displayProgram = GPUPixelGLProgram::createByShaderString(kDefaultVertexShader,
+void SinkRender::Init() {
+  display_glprogram_ = GPUPixelGLProgram::createByShaderString(kDefaultVertexShader,
                                                     kDefaultFragmentShader);
-  _positionAttribLocation = _displayProgram->getAttribLocation("position");
+  position_attribute_location_ = display_glprogram_->GetAttribLocation("position");
   _texCoordAttribLocation =
-      _displayProgram->getAttribLocation("inputTextureCoordinate");
+      display_glprogram_->GetAttribLocation("inputTextureCoordinate");
   _colorMapUniformLocation =
-      _displayProgram->getUniformLocation("textureCoordinate");
-  GPUPixelContext::getInstance()->setActiveShaderProgram(_displayProgram);
-  CHECK_GL(glEnableVertexAttribArray(_positionAttribLocation));
+      display_glprogram_->GetUniformLocation("textureCoordinate");
+  GPUPixelContext::GetInstance()->SetActiveGlProgram(display_glprogram_);
+  CHECK_GL(glEnableVertexAttribArray(position_attribute_location_));
   CHECK_GL(glEnableVertexAttribArray(_texCoordAttribLocation));
 };
 
-void SinkRender::setInputFramebuffer(
+void SinkRender::SetInputFramebuffer(
     std::shared_ptr<GPUPixelFramebuffer> framebuffer,
     RotationMode rotationMode /* = NoRotation*/,
     int texIdx /* = 0*/) {
   std::shared_ptr<GPUPixelFramebuffer> lastInputFramebuffer;
   RotationMode lastInputRotation = NoRotation;
-  if (_inputFramebuffers.find(0) != _inputFramebuffers.end()) {
-    lastInputFramebuffer = _inputFramebuffers[0].frameBuffer;
-    lastInputRotation = _inputFramebuffers[0].rotationMode;
+  if (input_framebuffers_.find(0) != input_framebuffers_.end()) {
+    lastInputFramebuffer = input_framebuffers_[0].frameBuffer;
+    lastInputRotation = input_framebuffers_[0].rotationMode;
   }
 
-  Sink::setInputFramebuffer(framebuffer, rotationMode, texIdx);
+  Sink::SetInputFramebuffer(framebuffer, rotationMode, texIdx);
 
   if (lastInputFramebuffer != framebuffer && framebuffer &&
       (!lastInputFramebuffer ||
-       !(lastInputFramebuffer->getWidth() == framebuffer->getWidth() &&
-         lastInputFramebuffer->getHeight() == framebuffer->getHeight() &&
+       !(lastInputFramebuffer->GetWidth() == framebuffer->GetWidth() &&
+         lastInputFramebuffer->GetHeight() == framebuffer->GetHeight() &&
          lastInputRotation == rotationMode))) {
-    _updateDisplayVertices();
+    UpdateDisplayVertices();
   }
 }
 
-void SinkRender::setFillMode(FillMode fillMode) {
+void SinkRender::SetFillMode(FillMode fillMode) {
   if (_fillMode != fillMode) {
     _fillMode = fillMode;
-    _updateDisplayVertices();
+    UpdateDisplayVertices();
   }
 }
 
-void SinkRender::setMirror(bool mirror) {
+void SinkRender::SetMirror(bool mirror) {
   if (_mirror != mirror) {
     _mirror = mirror;
   }
 }
 
 
-void SinkRender::onSizeChanged(int width, int height) {
+void SinkRender::SetRenderSize(int width, int height) {
   if (_viewWidth != width || _viewHeight != height) {
     _viewWidth = width;
     _viewHeight = height;
-    _updateDisplayVertices();
+    UpdateDisplayVertices();
   }
 }
 
-void SinkRender::render() {
+void SinkRender::Render() {
   CHECK_GL(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 
   CHECK_GL(glViewport(0, 0, _viewWidth, _viewHeight));
-  CHECK_GL(glClearColor(_backgroundColor.r, _backgroundColor.g,
-                        _backgroundColor.b, _backgroundColor.a));
+  CHECK_GL(glClearColor(background_color_.r, background_color_.g,
+                        background_color_.b, background_color_.a));
   CHECK_GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-  GPUPixelContext::getInstance()->setActiveShaderProgram(_displayProgram);
+  GPUPixelContext::GetInstance()->SetActiveGlProgram(display_glprogram_);
   CHECK_GL(glActiveTexture(GL_TEXTURE0));
   CHECK_GL(glBindTexture(GL_TEXTURE_2D,
-                         _inputFramebuffers[0].frameBuffer->getTexture()));
+                         input_framebuffers_[0].frameBuffer->GetTexture()));
   CHECK_GL(glUniform1i(_colorMapUniformLocation, 0));
-  CHECK_GL(glVertexAttribPointer(_positionAttribLocation, 2, GL_FLOAT, 0, 0,
-                                 _displayVertices));
+  CHECK_GL(glVertexAttribPointer(position_attribute_location_, 2, GL_FLOAT, 0, 0,
+                                 display_vertices_));
   CHECK_GL(glVertexAttribPointer(
       _texCoordAttribLocation, 2, GL_FLOAT, 0, 0,
-      _getTexureCoordinate(_inputFramebuffers[0].rotationMode)));
+      GetTexureCoordinate(input_framebuffers_[0].rotationMode)));
   CHECK_GL(glDrawArrays(GL_TRIANGLE_STRIP, 0, 4));
 }
 
-void SinkRender::_updateDisplayVertices() {
-  if (_inputFramebuffers.find(0) == _inputFramebuffers.end() ||
-      _inputFramebuffers[0].frameBuffer == 0) {
+void SinkRender::UpdateDisplayVertices() {
+  if (input_framebuffers_.find(0) == input_framebuffers_.end() ||
+      input_framebuffers_[0].frameBuffer == 0) {
     return;
   }
 
   std::shared_ptr<GPUPixelFramebuffer> inputFramebuffer =
-      _inputFramebuffers[0].frameBuffer;
-  RotationMode inputRotation = _inputFramebuffers[0].rotationMode;
+      input_framebuffers_[0].frameBuffer;
+  RotationMode inputRotation = input_framebuffers_[0].rotationMode;
 
-  int rotatedFramebufferWidth = inputFramebuffer->getWidth();
-  int rotatedFramebufferHeight = inputFramebuffer->getHeight();
+  int rotatedFramebufferWidth = inputFramebuffer->GetWidth();
+  int rotatedFramebufferHeight = inputFramebuffer->GetHeight();
   if (rotationSwapsSize(inputRotation)) {
-    rotatedFramebufferWidth = inputFramebuffer->getHeight();
-    rotatedFramebufferHeight = inputFramebuffer->getWidth();
+    rotatedFramebufferWidth = inputFramebuffer->GetHeight();
+    rotatedFramebufferHeight = inputFramebuffer->GetWidth();
   }
 
   float framebufferAspectRatio =
@@ -154,17 +154,17 @@ void SinkRender::_updateDisplayVertices() {
     scaledHeight = _viewHeight / insetFramebufferWidth;
   }
 
-  _displayVertices[0] = -scaledWidth;
-  _displayVertices[1] = -scaledHeight;
-  _displayVertices[2] = scaledWidth;
-  _displayVertices[3] = -scaledHeight;
-  _displayVertices[4] = -scaledWidth;
-  _displayVertices[5] = scaledHeight;
-  _displayVertices[6] = scaledWidth;
-  _displayVertices[7] = scaledHeight;
+  display_vertices_[0] = -scaledWidth;
+  display_vertices_[1] = -scaledHeight;
+  display_vertices_[2] = scaledWidth;
+  display_vertices_[3] = -scaledHeight;
+  display_vertices_[4] = -scaledWidth;
+  display_vertices_[5] = scaledHeight;
+  display_vertices_[6] = scaledWidth;
+  display_vertices_[7] = scaledHeight;
 }
 
-const GLfloat* SinkRender::_getTexureCoordinate(RotationMode rotationMode) {
+const GLfloat* SinkRender::GetTexureCoordinate(RotationMode rotationMode) {
   static const GLfloat noRotationTextureCoordinates[] = {
     0.0f, 1.0f,
     1.0f, 1.0f,
@@ -245,3 +245,5 @@ const GLfloat* SinkRender::_getTexureCoordinate(RotationMode rotationMode) {
       return rotate180TextureCoordinates;
   }
 }
+
+} // namespace gpupixel

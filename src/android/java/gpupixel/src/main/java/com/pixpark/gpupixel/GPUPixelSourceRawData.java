@@ -10,7 +10,7 @@ package com.pixpark.gpupixel;
 public class GPUPixelSourceRawData extends GPUPixelSource {
     public GPUPixelSourceRawData() {
         if (mNativeClassID != 0) return;
-        GPUPixel.getInstance().runOnDraw(new Runnable() {
+        GPUPixel.GetInstance().runOnDraw(new Runnable() {
             @Override
             public void run() {
                 mNativeClassID = GPUPixel.nativeSourceRawDataNew();
@@ -23,9 +23,9 @@ public class GPUPixelSourceRawData extends GPUPixelSource {
         GPUPixel.nativeSourceRawDataSetRotation(mNativeClassID, rotation);
     }
 
-    public void processData(final int[] pixels, int width, int height, int stride) {
+    public void ProcessData(final int[] pixels, int width, int height, int stride) {
         GPUPixel.nativeSourceRawDataUploadBytes(mNativeClassID, pixels, width, height, stride);
-        doRender(true, false);
+        DoRender(true, false);
     }
 
 }

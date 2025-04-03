@@ -7,7 +7,7 @@
 
 #include "saturation_filter.h"
 
-using namespace gpupixel;
+namespace gpupixel {
 
 const std::string kSaturationFragmentShaderString = R"(
     uniform sampler2D inputImageTexture; uniform lowp float saturation;
@@ -25,21 +25,21 @@ const std::string kSaturationFragmentShaderString = R"(
       gl_FragColor = vec4(mix(greyScaleColor, color.rgb, saturation), color.a);
     })";
 
-std::shared_ptr<SaturationFilter> SaturationFilter::create() {
+std::shared_ptr<SaturationFilter> SaturationFilter::Create() {
   auto ret = std::shared_ptr<SaturationFilter>(new SaturationFilter());
-  if (ret && !ret->init()) {
+  if (ret && !ret->Init()) {
     ret.reset();
   }
   return ret;
 }
 
-bool SaturationFilter::init() {
-  if (!initWithFragmentShaderString(kSaturationFragmentShaderString)) {
+bool SaturationFilter::Init() {
+  if (!InitWithFragmentShaderString(kSaturationFragmentShaderString)) {
     return false;
   }
 
   _saturation = 1.0;
-  registerProperty(
+  RegisterProperty(
       "saturation", _saturation,
       "The saturation of an image. Saturation ranges from 0.0 (fully "
       "desaturated) to 2.0 (max saturation), with 1.0 as the normal level",
@@ -57,7 +57,9 @@ void SaturationFilter::setSaturation(float saturation) {
   }
 }
 
-bool SaturationFilter::doRender(bool updateSinks) {
-  _filterProgram->setUniformValue("saturation", _saturation);
-  return Filter::doRender(updateSinks);
+bool SaturationFilter::DoRender(bool updateSinks) {
+  _filterProgram->SetUniformValue("saturation", _saturation);
+  return Filter::DoRender(updateSinks);
 }
+
+} // namespace gpupixel

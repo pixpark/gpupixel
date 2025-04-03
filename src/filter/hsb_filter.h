@@ -13,8 +13,8 @@
 namespace gpupixel {
 class GPUPIXEL_API HSBFilter : public ColorMatrixFilter {
  public:
-  static std::shared_ptr<HSBFilter> create();
-  bool init();
+  static std::shared_ptr<HSBFilter> Create();
+  bool Init();
 
   /** Reset the filter to have no transformations.
    */

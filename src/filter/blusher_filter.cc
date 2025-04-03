@@ -6,23 +6,22 @@
  */
 
 #include "blusher_filter.h"
-#include "face_detector.h"
 #include "source_image.h"
 
 namespace gpupixel {
-std::shared_ptr<BlusherFilter> BlusherFilter::create() {
+std::shared_ptr<BlusherFilter> BlusherFilter::Create() {
   auto ret = std::shared_ptr<BlusherFilter>(new BlusherFilter());
-  if (ret && !ret->init()) {
+  if (ret && !ret->Init()) {
     ret.reset();
   }
   return ret;
 }
 
-bool BlusherFilter::init() {
-  auto blusher  = SourceImage::create(Util::getResourcePath("res/blusher.png"));
+bool BlusherFilter::Init() {
+  auto blusher  = SourceImage::Create(Util::getResourcePath("res/blusher.png"));
   setImageTexture(blusher);
   setTextureBounds(FrameBounds{395, 520, 489, 209});
-  return FaceMakeupFilter::init();
+  return FaceMakeupFilter::Init();
 }
 
 }

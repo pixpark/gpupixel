@@ -39,12 +39,12 @@ const std::string kRGBToI420FragmentShaderString = R"(
     })";
 #endif
 
-std::shared_ptr<SinkRawData> SinkRawData::create() {
+std::shared_ptr<SinkRawData> SinkRawData::Create() {
   return std::shared_ptr<SinkRawData>(new SinkRawData());
 }
 
 SinkRawData::SinkRawData() {
-  initWithShaderString(kRGBToI420VertexShaderString,
+  InitWithShaderString(kRGBToI420VertexShaderString,
                        kRGBToI420FragmentShaderString);
 }
 
@@ -62,13 +62,13 @@ SinkRawData::~SinkRawData() {
   yuv_buffer_ = nullptr;
 }
 
-void SinkRawData::render() {
-  if (_inputFramebuffers.empty()) {
+void SinkRawData::Render() {
+  if (input_framebuffers_.empty()) {
     return;
   }
 
-  int width = _inputFramebuffers[0].frameBuffer->getWidth();
-  int height = _inputFramebuffers[0].frameBuffer->getHeight();
+  int width = input_framebuffers_[0].frameBuffer->GetWidth();
+  int height = input_framebuffers_[0].frameBuffer->GetHeight();
   if (width_ != width || height_ != height) {
     width_ = width;
     height_ = height;
@@ -79,22 +79,22 @@ void SinkRawData::render() {
   renderToOutput();
 }
 
-bool SinkRawData::initWithShaderString(
+bool SinkRawData::InitWithShaderString(
     const std::string& vertex_shader_source,
     const std::string& fragment_shader_source) {
   shader_program_ =
       GPUPixelGLProgram::createByShaderString(vertex_shader_source, fragment_shader_source);
-  GPUPixelContext::getInstance()->setActiveShaderProgram(shader_program_);
-  position_attribute_ = shader_program_->getAttribLocation("position");
+  GPUPixelContext::GetInstance()->SetActiveGlProgram(shader_program_);
+  position_attribute_ = shader_program_->GetAttribLocation("position");
   tex_coord_attribute_ =
-      shader_program_->getAttribLocation("inputTextureCoordinate");
+      shader_program_->GetAttribLocation("inputTextureCoordinate");
 
   return true;
 }
 
 int SinkRawData::renderToOutput() {
-  GPUPixelContext::getInstance()->setActiveShaderProgram(shader_program_);
-  framebuffer_->active();
+  GPUPixelContext::GetInstance()->SetActiveGlProgram(shader_program_);
+  framebuffer_->Active();
 
   CHECK_GL(glViewport(0, 0, width_, height_));
 
@@ -121,9 +121,9 @@ int SinkRawData::renderToOutput() {
                                  texture_vertices));
 
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, _inputFramebuffers[0].frameBuffer->getTexture());
+  glBindTexture(GL_TEXTURE_2D, input_framebuffers_[0].frameBuffer->GetTexture());
 
-  CHECK_GL(shader_program_->setUniformValue("sTexture", 0));
+  CHECK_GL(shader_program_->SetUniformValue("sTexture", 0));
   // Draw frame buffer
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
@@ -144,16 +144,16 @@ int SinkRawData::renderToOutput() {
     pixels_callback_(rgba_buffer_, width_, height_, frame_timestamp_);
   }
 
-  framebuffer_->inactive();
+  framebuffer_->Inactive();
   return 0;
 }
 
-void SinkRawData::setI420Callback(RawOutputCallback callback) {
+void SinkRawData::SetI420Callback(RawOutputCallback callback) {
   std::unique_lock<std::mutex> lock(mutex_);
   i420_callback_ = callback;
 }
 
-void SinkRawData::setPixelsCallback(RawOutputCallback callback) {
+void SinkRawData::SetRgbaCallback(RawOutputCallback callback) {
   std::unique_lock<std::mutex> lock(mutex_);
   pixels_callback_ = callback;
 }
@@ -178,10 +178,10 @@ void SinkRawData::initOutputBuffer(int width, int height) {
 }
 
 void SinkRawData::initFrameBuffer(int width, int height) {
-  if (!framebuffer_ || (framebuffer_->getWidth() != width ||
-                        framebuffer_->getHeight() != height)) {
+  if (!framebuffer_ || (framebuffer_->GetWidth() != width ||
+                        framebuffer_->GetHeight() != height)) {
     framebuffer_ =
-        GPUPixelContext::getInstance()->getFramebufferFactory()->fetchFramebuffer(
+        GPUPixelContext::GetInstance()->GetFramebufferFactory()->CreateFramebuffer(
             width, height);
   }
 }

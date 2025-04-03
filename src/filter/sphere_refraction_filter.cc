@@ -7,7 +7,7 @@
 
 #include "sphere_refraction_filter.h"
 
-using namespace gpupixel;
+namespace gpupixel {
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
 const std::string kSphereRefractionShaderString = R"(
@@ -78,40 +78,40 @@ const std::string kSphereRefractionShaderString = R"(
 )";
 #endif
 
-std::shared_ptr<SphereRefractionFilter> SphereRefractionFilter::create() {
+std::shared_ptr<SphereRefractionFilter> SphereRefractionFilter::Create() {
   auto ret =
       std::shared_ptr<SphereRefractionFilter>(new SphereRefractionFilter());
-  if (ret && !ret->init()) {
+  if (ret && !ret->Init()) {
     ret.reset();
   }
   return ret;
 }
 
-bool SphereRefractionFilter::init() {
-  if (!initWithFragmentShaderString(kSphereRefractionShaderString)) {
+bool SphereRefractionFilter::Init() {
+  if (!InitWithFragmentShaderString(kSphereRefractionShaderString)) {
     return false;
   }
 
   setPositionX(0.5);
-  registerProperty("positionX", _position.x,
+  RegisterProperty("positionX", _position.x,
                    "The position of x about which to apply the distortion, "
                    "with a default of 0.5",
                    [this](float& positionX) { setPositionX(positionX); });
 
   setPositionY(0.5);
-  registerProperty("positionY", _position.y,
+  RegisterProperty("positionY", _position.y,
                    "The position of y about which to apply the distortion, "
                    "with a default of 0.5",
                    [this](float& positionY) { setPositionY(positionY); });
 
-  setRadius(0.25);
-  registerProperty("radius", _radius,
+  SetRadius(0.25);
+  RegisterProperty("radius", _radius,
                    "The radius of the distortion, ranging from 0.0 to 1.0, "
                    "with a default of 0.25",
-                   [this](float& radius) { setRadius(radius); });
+                   [this](float& radius) { SetRadius(radius); });
 
   setRefractiveIndex(0.71);
-  registerProperty(
+  RegisterProperty(
       "refractiveIndex", _refractiveIndex,
       "The index of refraction for the sphere, with a default of 0.71",
       [this](float& refractiveIndex) { setRefractiveIndex(refractiveIndex); });
@@ -119,19 +119,19 @@ bool SphereRefractionFilter::init() {
   return true;
 }
 
-bool SphereRefractionFilter::doRender(bool updateSinks) {
-  _filterProgram->setUniformValue("center", _position);
-  _filterProgram->setUniformValue("radius", _radius);
-  _filterProgram->setUniformValue("refractiveIndex", _refractiveIndex);
+bool SphereRefractionFilter::DoRender(bool updateSinks) {
+  _filterProgram->SetUniformValue("center", _position);
+  _filterProgram->SetUniformValue("radius", _radius);
+  _filterProgram->SetUniformValue("refractiveIndex", _refractiveIndex);
 
   float aspectRatio = 1.0;
   std::shared_ptr<GPUPixelFramebuffer> firstInputFramebuffer =
-      _inputFramebuffers.begin()->second.frameBuffer;
-  aspectRatio = firstInputFramebuffer->getHeight() /
-                (float)(firstInputFramebuffer->getWidth());
-  _filterProgram->setUniformValue("aspectRatio", aspectRatio);
+      input_framebuffers_.begin()->second.frameBuffer;
+  aspectRatio = firstInputFramebuffer->GetHeight() /
+                (float)(firstInputFramebuffer->GetWidth());
+  _filterProgram->SetUniformValue("aspectRatio", aspectRatio);
 
-  return Filter::doRender(updateSinks);
+  return Filter::DoRender(updateSinks);
 }
 
 void SphereRefractionFilter::setPositionX(float x) {
@@ -142,10 +142,12 @@ void SphereRefractionFilter::setPositionY(float y) {
   _position.y = y;
 }
 
-void SphereRefractionFilter::setRadius(float radius) {
+void SphereRefractionFilter::SetRadius(float radius) {
   _radius = radius;
 }
 
 void SphereRefractionFilter::setRefractiveIndex(float refractiveIndex) {
   _refractiveIndex = refractiveIndex;
 }
+
+} // namespace gpupixel

@@ -17,14 +17,14 @@ class GPUPIXEL_API FramebufferFactory {
  public:
   FramebufferFactory();
   ~FramebufferFactory();
-  std::shared_ptr<GPUPixelFramebuffer> fetchFramebuffer(
+  std::shared_ptr<GPUPixelFramebuffer> CreateFramebuffer(
       int width,
       int height,
       bool onlyTexture = false,
       const TextureAttributes textureAttributes =
           GPUPixelFramebuffer::defaultTextureAttribures);
 
-  void clean();
+  void Clean();
 
  private:
   std::string uuid(int width,

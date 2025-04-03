@@ -19,12 +19,12 @@ class Sink {
   Sink(int inputNumber = 1);
   
   // Set input framebuffer
-  virtual void setInputFramebuffer(std::shared_ptr<GPUPixelFramebuffer> framebuffer,
+  virtual void SetInputFramebuffer(std::shared_ptr<GPUPixelFramebuffer> framebuffer,
                                  RotationMode rotationMode = NoRotation,
                                  int texIdx = 0);
   
   // Update processing
-  virtual void render(){};
+  virtual void Render(){};
 };
 ```
 
@@ -34,7 +34,7 @@ class Sink {
 
 1. Inherit from the `Sink` class
 2. Implement constructor with necessary initialization
-3. Override `setInputFramebuffer` method (optional)
+3. Override `SetInputFramebuffer` method (optional)
 4. Override `update` method to implement specific rendering logic
 
 ### 2. Rendering to Screen - SinkRender
@@ -51,12 +51,12 @@ Key implementation:
 class SinkRender : public Sink {
  public:
   // Initialize shader program and attribute locations
-  void init() {
+  void Init() {
  
   }
 
   // Implement update method for actual rendering
-  void render() override {
+  void Render() override {
      // do render
   }
 };
@@ -80,7 +80,7 @@ class SinkRawData : public Sink {
   void setPixelsCallbck(RawOutputCallback cb);
 
   // Implement update method
-  void render() override {
+  void Render() override {
     // Check input size changes
     if (_width != width || _height != height) {
       initPBO(width, height);
@@ -138,14 +138,14 @@ class MyCustomTarget : public Sink {
     cleanup();
   }
 
-  void render() override {
-    if (!isPrepared()) return;
+  void Render() override {
+    if (!IsReady()) return;
     
     // Setup render state
     setupRenderState();
     
     // Execute custom rendering logic
-    render();
+    Render();
     
     // Process output
     processOutput();

@@ -91,46 +91,46 @@ const std::string kDirectionalNonmaximumSuppressionFragmentShaderString =
 #endif
 
 std::shared_ptr<DirectionalNonMaximumSuppressionFilter>
-DirectionalNonMaximumSuppressionFilter::create() {
+DirectionalNonMaximumSuppressionFilter::Create() {
   auto ret = std::shared_ptr<DirectionalNonMaximumSuppressionFilter>(
       new DirectionalNonMaximumSuppressionFilter());
-  if (ret && !ret->init()) {
+  if (ret && !ret->Init()) {
     ret.reset();
   }
   return ret;
 }
 
-bool DirectionalNonMaximumSuppressionFilter::init() {
-  if (initWithFragmentShaderString(
+bool DirectionalNonMaximumSuppressionFilter::Init() {
+  if (InitWithFragmentShaderString(
           kDirectionalNonmaximumSuppressionFragmentShaderString)) {
-    _texelWidthUniform = _filterProgram->getUniformLocation("texelWidth");
-    _texelHeightUniform = _filterProgram->getUniformLocation("texelWidth");
+    _texelWidthUniform = _filterProgram->GetUniformLocation("texelWidth");
+    _texelHeightUniform = _filterProgram->GetUniformLocation("texelWidth");
 
-    _filterProgram->setUniformValue("upperThreshold", (float)0.5);
-    _filterProgram->setUniformValue("lowerThreshold", (float)0.1);
+    _filterProgram->SetUniformValue("upperThreshold", (float)0.5);
+    _filterProgram->SetUniformValue("lowerThreshold", (float)0.1);
 
     return true;
   }
   return false;
 }
 
-bool DirectionalNonMaximumSuppressionFilter::doRender(bool updateSinks) {
-  float texelWidth = 1.0 / _framebuffer->getWidth();
-  float texelHeight = 1.0 / _framebuffer->getHeight();
+bool DirectionalNonMaximumSuppressionFilter::DoRender(bool updateSinks) {
+  float texelWidth = 1.0 / _framebuffer->GetWidth();
+  float texelHeight = 1.0 / _framebuffer->GetHeight();
 
   std::shared_ptr<GPUPixelFramebuffer> inputFramebuffer =
-      _inputFramebuffers.begin()->second.frameBuffer;
-  RotationMode inputRotation = _inputFramebuffers.begin()->second.rotationMode;
+      input_framebuffers_.begin()->second.frameBuffer;
+  RotationMode inputRotation = input_framebuffers_.begin()->second.rotationMode;
 
   if (rotationSwapsSize(inputRotation)) {
-    texelWidth = 1.0 / _framebuffer->getHeight();
-    texelHeight = 1.0 / _framebuffer->getWidth();
+    texelWidth = 1.0 / _framebuffer->GetHeight();
+    texelHeight = 1.0 / _framebuffer->GetWidth();
   }
 
-  _filterProgram->setUniformValue(_texelWidthUniform, texelWidth);
-  _filterProgram->setUniformValue(_texelHeightUniform, texelHeight);
+  _filterProgram->SetUniformValue(_texelWidthUniform, texelWidth);
+  _filterProgram->SetUniformValue(_texelHeightUniform, texelHeight);
 
-  return Filter::doRender(updateSinks);
+  return Filter::DoRender(updateSinks);
 }
 
 }

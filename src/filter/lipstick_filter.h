@@ -12,8 +12,8 @@
 namespace gpupixel {
 class GPUPIXEL_API LipstickFilter : public FaceMakeupFilter {
 public:
-  static std::shared_ptr<LipstickFilter> create();
-  bool init() override;
+  static std::shared_ptr<LipstickFilter> Create();
+  bool Init() override;
 };
 
 }

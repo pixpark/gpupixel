@@ -17,8 +17,8 @@ class GPUPIXEL_API SmoothToonFilter : public FilterGroup {
  public:
   virtual ~SmoothToonFilter();
 
-  static std::shared_ptr<SmoothToonFilter> create();
-  bool init();
+  static std::shared_ptr<SmoothToonFilter> Create();
+  bool Init();
 
   void setBlurRadius(int blurRadius);
   void setToonThreshold(float toonThreshold);

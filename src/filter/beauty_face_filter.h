@@ -14,20 +14,21 @@
 #include "box_blur_filter.h"
 #include "box_high_pass_filter.h"
 #include "gaussian_blur_filter.h"
+
 namespace gpupixel {
 class GPUPIXEL_API BeautyFaceFilter : public FilterGroup {
  public:
-  static std::shared_ptr<BeautyFaceFilter> create();
+  static std::shared_ptr<BeautyFaceFilter> Create();
   ~BeautyFaceFilter();
-  bool init();
+  bool Init();
 
-  void setHighPassDelta(float highPassDelta);
-  void setSharpen(float sharpen);
-  void setBlurAlpha(float blurAlpha);
-  void setWhite(float white);
-  void setRadius(float sigma);
+  void SetHighPassDelta(float highPassDelta);
+  void SetSharpen(float sharpen);
+  void SetBlurAlpha(float blurAlpha);
+  void SetWhite(float white);
+  void SetRadius(float sigma);
 
-  virtual void setInputFramebuffer(std::shared_ptr<GPUPixelFramebuffer> framebuffer,
+  virtual void SetInputFramebuffer(std::shared_ptr<GPUPixelFramebuffer> framebuffer,
                                    RotationMode rotationMode /* = NoRotation*/,
                                    int texIdx /* = 0*/) override;
 

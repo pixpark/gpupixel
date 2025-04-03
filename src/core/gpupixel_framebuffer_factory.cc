@@ -13,10 +13,10 @@ namespace gpupixel {
 FramebufferFactory::FramebufferFactory() {}
 
 FramebufferFactory::~FramebufferFactory() {
-  clean();
+  Clean();
 }
 
-std::shared_ptr<GPUPixelFramebuffer> FramebufferFactory::fetchFramebuffer(
+std::shared_ptr<GPUPixelFramebuffer> FramebufferFactory::CreateFramebuffer(
     int width,
     int height,
     bool onlyTexture /* = false*/,
@@ -83,7 +83,7 @@ std::shared_ptr<GPUPixelFramebuffer> FramebufferFactory::_getFramebufferByUuid(
   return _framebuffers[hash];
 }
 
-void FramebufferFactory::clean() {
+void FramebufferFactory::Clean() {
   _framebuffers.clear();
   _framebufferTypeCounts.clear();
 }

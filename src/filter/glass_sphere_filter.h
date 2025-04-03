@@ -13,8 +13,8 @@
 namespace gpupixel {
 class GPUPIXEL_API GlassSphereFilter : public SphereRefractionFilter {
  public:
-  static std::shared_ptr<GlassSphereFilter> create();
-  bool init();
+  static std::shared_ptr<GlassSphereFilter> Create();
+  bool Init();
 
  protected:
   GlassSphereFilter(){};

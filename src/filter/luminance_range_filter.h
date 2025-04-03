@@ -13,9 +13,9 @@
 namespace gpupixel {
 class GPUPIXEL_API LuminanceRangeFilter : public Filter {
  public:
-  static std::shared_ptr<LuminanceRangeFilter> create();
-  bool init();
-  virtual bool doRender(bool updateSinks = true) override;
+  static std::shared_ptr<LuminanceRangeFilter> Create();
+  bool Init();
+  virtual bool DoRender(bool updateSinks = true) override;
 
   void setRangeReductionFactor(float rangeReductionFactor);
 

@@ -13,9 +13,9 @@
 namespace gpupixel {
 class GPUPIXEL_API HueFilter : public Filter {
  public:
-  static std::shared_ptr<HueFilter> create();
-  bool init();
-  virtual bool doRender(bool updateSinks = true) override;
+  static std::shared_ptr<HueFilter> Create();
+  bool Init();
+  virtual bool DoRender(bool updateSinks = true) override;
 
   void setHueAdjustment(float hueAdjustment);
 

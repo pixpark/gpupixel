@@ -13,37 +13,37 @@ BoxBlurFilter::BoxBlurFilter() : _hBlurFilter(0), _vBlurFilter(0) {}
 
 BoxBlurFilter::~BoxBlurFilter() {}
 
-std::shared_ptr<BoxBlurFilter> BoxBlurFilter::create(int radius /* = 4*/,
+std::shared_ptr<BoxBlurFilter> BoxBlurFilter::Create(int radius /* = 4*/,
                                                      float sigma /* = 2.0*/) {
   auto ret = std::shared_ptr<BoxBlurFilter>(new BoxBlurFilter());
-  if (ret && !ret->init(radius, sigma)) {
+  if (ret && !ret->Init(radius, sigma)) {
     ret.reset();
   }
   return ret;
 }
 
-bool BoxBlurFilter::init(int radius, float sigma) {
-  if (!FilterGroup::init()) {
+bool BoxBlurFilter::Init(int radius, float sigma) {
+  if (!FilterGroup::Init()) {
     return false;
   }
 
   _hBlurFilter =
-      BoxMonoBlurFilter::create(GaussianBlurMonoFilter::HORIZONTAL, 4, 0.0);
+      BoxMonoBlurFilter::Create(GaussianBlurMonoFilter::HORIZONTAL, 4, 0.0);
   _vBlurFilter =
-      BoxMonoBlurFilter::create(GaussianBlurMonoFilter::VERTICAL, 4, 0.0);
-  _hBlurFilter->addSink(_vBlurFilter);
+      BoxMonoBlurFilter::Create(GaussianBlurMonoFilter::VERTICAL, 4, 0.0);
+  _hBlurFilter->AddSink(_vBlurFilter);
   addFilter(_hBlurFilter);
 
-  registerProperty("radius", 4, "", [this](int& radius) { setRadius(radius); });
+  RegisterProperty("radius", 4, "", [this](int& radius) { SetRadius(radius); });
 
-  registerProperty("sigma", 0.0, "", [this](float& sigma) { setSigma(sigma); });
+  RegisterProperty("sigma", 0.0, "", [this](float& sigma) { setSigma(sigma); });
 
   return true;
 }
 
-void BoxBlurFilter::setRadius(int radius) {
-  _hBlurFilter->setRadius(radius);
-  _vBlurFilter->setRadius(radius);
+void BoxBlurFilter::SetRadius(int radius) {
+  _hBlurFilter->SetRadius(radius);
+  _vBlurFilter->SetRadius(radius);
 }
 
 void BoxBlurFilter::setSigma(float sigma) {

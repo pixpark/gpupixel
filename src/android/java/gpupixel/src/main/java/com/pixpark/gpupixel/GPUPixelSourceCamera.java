@@ -34,7 +34,7 @@ public class GPUPixelSourceCamera extends GPUPixelSource implements Camera.Previ
         mContext = context;
         object_this = this;
         if (mNativeClassID != 0) return;
-        GPUPixel.getInstance().runOnDraw(new Runnable() {
+        GPUPixel.GetInstance().runOnDraw(new Runnable() {
             @Override
             public void run() {
                 mNativeClassID = GPUPixel.nativeSourceCameraNew();
@@ -47,7 +47,7 @@ public class GPUPixelSourceCamera extends GPUPixelSource implements Camera.Previ
     public void setLandmarkCallbck(GPUPixel.GPUPixelLandmarkCallback filter) {
         landmarkCallback = filter;
 
-        GPUPixel.getInstance().runOnDraw(new Runnable() {
+        GPUPixel.GetInstance().runOnDraw(new Runnable() {
             @Override
             public void run() {
                 GPUPixel.nativeSetLandmarkCallback(object_this, mNativeClassID);
@@ -70,7 +70,7 @@ public class GPUPixelSourceCamera extends GPUPixelSource implements Camera.Previ
         }
         final Camera cam = camera;
 
-        GPUPixel.getInstance().runOnDraw(new Runnable() {
+        GPUPixel.GetInstance().runOnDraw(new Runnable() {
             @Override
             public void run() {
                 if (mNativeClassID != 0) {
@@ -81,7 +81,7 @@ public class GPUPixelSourceCamera extends GPUPixelSource implements Camera.Previ
                 }
             }
         });
-        doRender(true, true);
+        DoRender(true, true);
     }
 
     public void onResume() {
@@ -167,7 +167,7 @@ public class GPUPixelSourceCamera extends GPUPixelSource implements Camera.Previ
         }
 
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD_MR1) {
-            GPUPixel.getInstance().runOnDraw(new Runnable() {
+            GPUPixel.GetInstance().runOnDraw(new Runnable() {
                 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
                 @Override
                 public void run() {
@@ -185,7 +185,7 @@ public class GPUPixelSourceCamera extends GPUPixelSource implements Camera.Previ
                     }
                 }
             });
-            GPUPixel.getInstance().requestRender();
+            GPUPixel.GetInstance().requestRender();
         } else {
             mCamera.setPreviewCallback(this);
             mCamera.startPreview();
@@ -208,14 +208,14 @@ public class GPUPixelSourceCamera extends GPUPixelSource implements Camera.Previ
         mCamera = null;
     }
 
-    public void destroy() {
-        destroy(true);
+    public void Destroy() {
+        Destroy(true);
     }
 
-    public void destroy(boolean onGLThread) {
+    public void Destroy(boolean onGLThread) {
         if (mNativeClassID != 0) {
             if (onGLThread) {
-                GPUPixel.getInstance().runOnDraw(new Runnable() {
+                GPUPixel.GetInstance().runOnDraw(new Runnable() {
                     @Override
                     public void run() {
                         if (mNativeClassID != 0) {
@@ -235,15 +235,15 @@ public class GPUPixelSourceCamera extends GPUPixelSource implements Camera.Previ
     protected void finalize() throws Throwable {
         try {
             if (mNativeClassID != 0) {
-                if (GPUPixel.getInstance().getGLSurfaceView() != null) {
-                    GPUPixel.getInstance().runOnDraw(new Runnable() {
+                if (GPUPixel.GetInstance().getGLSurfaceView() != null) {
+                    GPUPixel.GetInstance().runOnDraw(new Runnable() {
                         @Override
                         public void run() {
                             GPUPixel.nativeSourceCameraFinalize(mNativeClassID);
                             mNativeClassID = 0;
                         }
                     });
-                    GPUPixel.getInstance().requestRender();
+                    GPUPixel.GetInstance().requestRender();
                 } else {
                     GPUPixel.nativeSourceCameraFinalize(mNativeClassID);
                     mNativeClassID = 0;

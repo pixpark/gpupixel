@@ -21,15 +21,15 @@ class GPUPIXEL_API SourceCamera : public Source {
   SourceCamera();
   virtual ~SourceCamera();
 
-  static std::shared_ptr<SourceCamera> create();
+  static std::shared_ptr<SourceCamera> Create();
 
   void setFrameData(int width,
                     int height,
                     const void* pixels,
                     RotationMode outputRotation = RotationMode::NoRotation);
 #if defined(GPUPIXEL_IOS)
-  bool init();
-  bool init(NSString* sessionPreset, AVCaptureDevicePosition cameraPosition);
+  bool Init();
+  bool Init(NSString* sessionPreset, AVCaptureDevicePosition cameraPosition);
   static bool isCameraExist(AVCaptureDevicePosition cameraPosition);
   void start();
   void stop();

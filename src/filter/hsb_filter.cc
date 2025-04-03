@@ -30,16 +30,16 @@ REGISTER_FILTER_CLASS(HSBFilter)
 #define GLUM (0.59f)
 #define BLUM (0.11f)
 
-std::shared_ptr<HSBFilter> HSBFilter::create() {
+std::shared_ptr<HSBFilter> HSBFilter::Create() {
   auto ret = std::shared_ptr<HSBFilter>(new HSBFilter());
-  if (ret && !ret->init()) {
+  if (ret && !ret->Init()) {
     ret.reset();
   }
   return ret;
 }
 
-bool HSBFilter::init() {
-  if (!ColorMatrixFilter::init()) {
+bool HSBFilter::Init() {
+  if (!ColorMatrixFilter::Init()) {
     return false;
   }
   reset();

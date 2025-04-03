@@ -19,7 +19,7 @@ public final class BeautyFaceFilter extends GPUPixelFilter {
 
     public void setSmoothLevel(float smoothLevel) {
         this.smoothLevel = smoothLevel;
-        setProperty(propSmoothLevel, smoothLevel);
+        SetProperty(propSmoothLevel, smoothLevel);
     }
 
     public float getWhiteLevel() {
@@ -28,6 +28,6 @@ public final class BeautyFaceFilter extends GPUPixelFilter {
 
     public void setWhiteLevel(float whiteLevel) {
         this.whiteLevel = whiteLevel;
-        setProperty(propWhiteLevel, whiteLevel);
+        SetProperty(propWhiteLevel, whiteLevel);
     }
 }

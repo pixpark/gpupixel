@@ -137,20 +137,20 @@ using namespace gpupixel;
 #pragma mark - Setup
 - (void)setupVideoFilter
 {
-    gpupixel::GPUPixelContext::getInstance()->runSync([&] {
+    gpupixel::GPUPixelContext::GetInstance()->RunSync([&] {
         // 创建数据源和视图
-        _sourceRawData = SourceRawData::create();
+        _sourceRawData = SourceRawData::Create();
         _gpuPixelView = [[GPUPixelView alloc] initWithFrame:self.view.frame];
         [self.view addSubview:_gpuPixelView];
         [_gpuPixelView setBackgroundColor:[UIColor grayColor]];
         [_gpuPixelView setFillMode:(gpupixel::SinkRender::PreserveAspectRatioAndFill)];
         
         // 创建所有滤镜
-        _beautyFaceFilter = BeautyFaceFilter::create();
-        _faceReshapeFilter = FaceReshapeFilter::create();
-        _lipstickFilter = LipstickFilter::create();
-        _blusherFilter = BlusherFilter::create();
-        _sinkRawData = SinkRawData::create();
+        _beautyFaceFilter = BeautyFaceFilter::Create();
+        _faceReshapeFilter = FaceReshapeFilter::Create();
+        _lipstickFilter = LipstickFilter::Create();
+        _blusherFilter = BlusherFilter::Create();
+        _sinkRawData = SinkRawData::Create();
         
         // 设置人脸特征点回调
         _sourceRawData->RegLandmarkCallback([=](std::vector<float> landmarks) {
@@ -160,13 +160,13 @@ using namespace gpupixel;
         });
         
         _sourceRawData
-        ->addSink(_lipstickFilter)
-        ->addSink(_blusherFilter)
-        ->addSink(_faceReshapeFilter)
-        ->addSink(_beautyFaceFilter)
-        ->addSink(_gpuPixelView);
+        ->AddSink(_lipstickFilter)
+        ->AddSink(_blusherFilter)
+        ->AddSink(_faceReshapeFilter)
+        ->AddSink(_beautyFaceFilter)
+        ->AddSink(_gpuPixelView);
         
-        _beautyFaceFilter->addSink(_sinkRawData);
+        _beautyFaceFilter->AddSink(_sinkRawData);
         __weak typeof(VideoFilterController*)weakSelf = self;
         _rawOutputCallback = [weakSelf](const uint8_t* data, int width, int height, int64_t ts) {
             if (weakSelf.isSave) {
@@ -179,7 +179,7 @@ using namespace gpupixel;
                 });
             }
         };
-        _sinkRawData->setPixelsCallbck(_rawOutputCallback);
+        _sinkRawData->SetRgbaCallback(_rawOutputCallback);
         self.isSave = NO;
     });
 }
@@ -229,7 +229,7 @@ using namespace gpupixel;
     _gpuPixelView = nil;
     _sinkRawData = nil;
     _sourceRawData = nil;
-    gpupixel::GPUPixelContext::getInstance()->destroy();
+    gpupixel::GPUPixelContext::GetInstance()->Destroy();
     _rawOutputCallback = nil;
     
     [self.navigationController popViewControllerAnimated:true];
@@ -269,19 +269,19 @@ using namespace gpupixel;
 - (void)setSharpenValue:(CGFloat)value
 {
     _sharpenValue = value;
-    _beautyFaceFilter->setSharpen(value/5);
+    _beautyFaceFilter->SetSharpen(value/5);
 }
 
 - (void)setBlurValue:(CGFloat)value
 {
     _blurValue = value;
-    _beautyFaceFilter->setBlurAlpha(value/10);
+    _beautyFaceFilter->SetBlurAlpha(value/10);
 }
 
 - (void)setWhitenValue:(CGFloat)value
 {
     _whitenValue = value;
-    _beautyFaceFilter->setWhite(value/20);
+    _beautyFaceFilter->SetWhite(value/20);
 }
 
 - (void)setSaturationValue:(CGFloat)value
@@ -292,25 +292,25 @@ using namespace gpupixel;
 - (void)setFaceSlimValue:(CGFloat)value
 {
     _faceSlimValue = value;
-    _faceReshapeFilter->setFaceSlimLevel(value/100);
+    _faceReshapeFilter->SetFaceSlimLevel(value/100);
 }
 
 - (void)setEyeEnlargeValue:(CGFloat)value
 {
     _eyeEnlargeValue = value;
-    _faceReshapeFilter->setEyeZoomLevel(value/50);
+    _faceReshapeFilter->SetEyeZoomLevel(value/50);
 }
 
 - (void)setLipstickValue:(CGFloat)value
 {
     _lipstickValue = value;
-    _lipstickFilter->setBlendLevel(value/10);
+    _lipstickFilter->SetBlendLevel(value/10);
 }
 
 - (void)setBlusherValue:(CGFloat)value
 {
     _blusherValue = value;
-    _blusherFilter->setBlendLevel(value/10);
+    _blusherFilter->SetBlendLevel(value/10);
 }
 
 #pragma mark - VCVideoCapturerDelegate
@@ -344,7 +344,7 @@ using namespace gpupixel;
         auto pixels = (const uint8_t *)CVPixelBufferGetBaseAddress(imageBuffer);
         
         // 处理 BGRA 格式数据
-        _sourceRawData->processData(pixels, stride, height, stride);
+        _sourceRawData->ProcessData(pixels, stride, height, stride);
         
         CVPixelBufferUnlockBaseAddress(imageBuffer, 0);
     }
@@ -400,21 +400,21 @@ using namespace gpupixel;
 - (void)filterToolbarView:(FilterToolbarView *)toolbarView didChangeEffectSwitchState:(BOOL)isOn
 {
     if (isOn) {
-        _beautyFaceFilter->setSharpen(_sharpenValue/5);
-        _beautyFaceFilter->setBlurAlpha(_blurValue/10);
-        _beautyFaceFilter->setWhite(_whitenValue/20);
-        _faceReshapeFilter->setFaceSlimLevel(_faceSlimValue/100);
-        _faceReshapeFilter->setEyeZoomLevel(_eyeEnlargeValue/50);
-        _lipstickFilter->setBlendLevel(_lipstickValue/10);
-        _blusherFilter->setBlendLevel(_blusherValue/10);
+        _beautyFaceFilter->SetSharpen(_sharpenValue/5);
+        _beautyFaceFilter->SetBlurAlpha(_blurValue/10);
+        _beautyFaceFilter->SetWhite(_whitenValue/20);
+        _faceReshapeFilter->SetFaceSlimLevel(_faceSlimValue/100);
+        _faceReshapeFilter->SetEyeZoomLevel(_eyeEnlargeValue/50);
+        _lipstickFilter->SetBlendLevel(_lipstickValue/10);
+        _blusherFilter->SetBlendLevel(_blusherValue/10);
     } else {
-        _beautyFaceFilter->setSharpen(0);
-        _beautyFaceFilter->setBlurAlpha(0);
-        _beautyFaceFilter->setWhite(0);
-        _faceReshapeFilter->setFaceSlimLevel(0);
-        _faceReshapeFilter->setEyeZoomLevel(0);
-        _lipstickFilter->setBlendLevel(0);
-        _blusherFilter->setBlendLevel(0);
+        _beautyFaceFilter->SetSharpen(0);
+        _beautyFaceFilter->SetBlurAlpha(0);
+        _beautyFaceFilter->SetWhite(0);
+        _faceReshapeFilter->SetFaceSlimLevel(0);
+        _faceReshapeFilter->SetEyeZoomLevel(0);
+        _lipstickFilter->SetBlendLevel(0);
+        _blusherFilter->SetBlendLevel(0);
     }
 }
 

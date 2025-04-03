@@ -15,14 +15,14 @@ class SourceImage;
 
 class GPUPIXEL_API BeautyFaceUnitFilter : public Filter {
  public:
-  static std::shared_ptr<BeautyFaceUnitFilter> create();
+  static std::shared_ptr<BeautyFaceUnitFilter> Create();
   ~BeautyFaceUnitFilter();
-  bool init();
-  bool doRender(bool updateSinks = true) override;
+  bool Init();
+  bool DoRender(bool updateSinks = true) override;
 
-  void setSharpen(float sharpen);
-  void setBlurAlpha(float blurAlpha);
-  void setWhite(float white);
+  void SetSharpen(float sharpen);
+  void SetBlurAlpha(float blurAlpha);
+  void SetWhite(float white);
 
  protected:
   BeautyFaceUnitFilter();

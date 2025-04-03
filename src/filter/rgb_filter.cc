@@ -7,7 +7,7 @@
 
 #include "rgb_filter.h"
 
-using namespace gpupixel;
+namespace gpupixel {
 
 REGISTER_FILTER_CLASS(RGBFilter)
 
@@ -23,16 +23,16 @@ const std::string kRGBFragmentShaderString = R"(
                           color.b * blueAdjustment, color.a);
     })";
 
-std::shared_ptr<RGBFilter> RGBFilter::create() {
+std::shared_ptr<RGBFilter> RGBFilter::Create() {
   auto ret = std::shared_ptr<RGBFilter>(new RGBFilter());
-  if (ret && !ret->init()) {
+  if (ret && !ret->Init()) {
     ret.reset();
   }
   return ret;
 }
 
-bool RGBFilter::init() {
-  if (!initWithFragmentShaderString(kRGBFragmentShaderString)) {
+bool RGBFilter::Init() {
+  if (!InitWithFragmentShaderString(kRGBFragmentShaderString)) {
     return false;
   }
 
@@ -40,19 +40,19 @@ bool RGBFilter::init() {
   _greenAdjustment = 1.0;
   _blueAdjustment = 1.0;
 
-  registerProperty(
+  RegisterProperty(
       "redAdjustment", _redAdjustment,
       "The red adjustment of the image.The range is from 0.0 up, with 1.0 as "
       "the default.",
       [this](float& redAdjustment) { setRedAdjustment(redAdjustment); });
 
-  registerProperty(
+  RegisterProperty(
       "greenAdjustment", _greenAdjustment,
       "The green adjustment of the image.The range is from 0.0 up, with 1.0 as "
       "the default.",
       [this](float& greenAdjustment) { setGreenAdjustment(greenAdjustment); });
 
-  registerProperty(
+  RegisterProperty(
       "blueAdjustment", _blueAdjustment,
       "The blue adjustment of the image.The range is from 0.0 up, with 1.0 as "
       "the default.",
@@ -81,9 +81,11 @@ void RGBFilter::setBlueAdjustment(float blueAdjustment) {
     _blueAdjustment = 0.0;
   }
 }
-bool RGBFilter::doRender(bool updateSinks) {
-  _filterProgram->setUniformValue("redAdjustment", _redAdjustment);
-  _filterProgram->setUniformValue("greenAdjustment", _greenAdjustment);
-  _filterProgram->setUniformValue("blueAdjustment", _blueAdjustment);
-  return Filter::doRender(updateSinks);
+bool RGBFilter::DoRender(bool updateSinks) {
+  _filterProgram->SetUniformValue("redAdjustment", _redAdjustment);
+  _filterProgram->SetUniformValue("greenAdjustment", _greenAdjustment);
+  _filterProgram->SetUniformValue("blueAdjustment", _blueAdjustment);
+  return Filter::DoRender(updateSinks);
 }
+
+} // namespace gpupixel

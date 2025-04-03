@@ -46,5 +46,5 @@ public:
      * 
      * @return true if the task queue is empty, false otherwise
      */
-    void runSync(std::function<void()> task);
+    void RunSync(std::function<void()> task);
 };

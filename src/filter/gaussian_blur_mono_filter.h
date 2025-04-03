@@ -15,15 +15,15 @@ class GPUPIXEL_API GaussianBlurMonoFilter : public Filter {
  public:
   enum Type { HORIZONTAL, VERTICAL };
 
-  static std::shared_ptr<GaussianBlurMonoFilter> create(Type type = HORIZONTAL,
+  static std::shared_ptr<GaussianBlurMonoFilter> Create(Type type = HORIZONTAL,
                                                         int radius = 4,
                                                         float sigma = 2.0);
-  bool init(int radius, float sigma);
+  bool Init(int radius, float sigma);
 
-  void setRadius(int radius);
+  void SetRadius(int radius);
   void setSigma(float sigma);
 
-  virtual bool doRender(bool updateSinks = true) override;
+  virtual bool DoRender(bool updateSinks = true) override;
   void setTexelSpacingMultiplier(float value);
 
  protected:

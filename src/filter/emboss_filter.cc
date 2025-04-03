@@ -7,27 +7,27 @@
 
 #include "emboss_filter.h"
 
-using namespace gpupixel;
+namespace gpupixel {
 
 // REGISTER_FILTER_CLASS(EmbossFilter)
 
-std::shared_ptr<EmbossFilter> EmbossFilter::create() {
+std::shared_ptr<EmbossFilter> EmbossFilter::Create() {
   auto ret = std::shared_ptr<EmbossFilter>(new EmbossFilter());
-  if (ret && !ret->init()) {
+  if (ret && !ret->Init()) {
     ret.reset();
   }
   return ret;
 }
 
-bool EmbossFilter::init() {
-  if (!Convolution3x3Filter::init()) {
+bool EmbossFilter::Init() {
+  if (!Convolution3x3Filter::Init()) {
     return false;
   }
 
   _intensity = 1.0;
   setIntensity(_intensity);
 
-  registerProperty("intensity", _intensity,
+  RegisterProperty("intensity", _intensity,
                    "The strength of the embossing, from  0.0 to 4.0, with 1.0 "
                    "as the normal level",
                    [this](float& intensity) { setIntensity(intensity); });
@@ -46,3 +46,5 @@ void EmbossFilter::setIntensity(float intensity) {
   _convolutionKernel.set(-2.0 * _intensity, -_intensity, 0.0, -_intensity, 1.0,
                          _intensity, 0.0, _intensity, _intensity * 2.0);
 }
+
+} // namespace gpupixel

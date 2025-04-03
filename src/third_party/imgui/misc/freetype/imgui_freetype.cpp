@@ -881,7 +881,7 @@ static FT_Error ImGuiLunasvgPortRender(FT_GlyphSlot slot, FT_Pointer* _state)
     // rows is height, pitch (or stride) equals to width * sizeof(int32)
     lunasvg::Bitmap bitmap((uint8_t*)slot->bitmap.buffer, slot->bitmap.width, slot->bitmap.rows, slot->bitmap.pitch);
     state->svg->setMatrix(state->svg->matrix().identity()); // Reset the svg matrix to the default value
-    state->svg->render(bitmap, state->matrix);              // state->matrix is already scaled and translated
+    state->svg->Render(bitmap, state->matrix);              // state->matrix is already scaled and translated
     state->err = FT_Err_Ok;
     return state->err;
 }

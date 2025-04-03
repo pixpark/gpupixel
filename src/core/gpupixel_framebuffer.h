@@ -31,19 +31,19 @@ class GPUPIXEL_API GPUPixelFramebuffer {
       const TextureAttributes textureAttributes = defaultTextureAttribures);
   ~GPUPixelFramebuffer();
 
-  GLuint getTexture() const { return _texture; }
+  GLuint GetTexture() const { return _texture; }
 
-  GLuint getFramebuffer() const { return _framebuffer; }
+  GLuint GetFramebuffer() const { return _framebuffer; }
 
-  int getWidth() const { return _width; }
-  int getHeight() const { return _height; }
-  const TextureAttributes& getTextureAttributes() const {
+  int GetWidth() const { return _width; }
+  int GetHeight() const { return _height; }
+  const TextureAttributes& GetTextureAttributes() const {
     return _textureAttributes;
   };
-  bool hasFramebuffer() { return _hasFB; };
+  bool HasFramebuffer() { return _hasFB; };
 
-  void active();
-  void inactive();
+  void Active();
+  void Inactive();
 
   static TextureAttributes defaultTextureAttribures;
 

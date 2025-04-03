@@ -7,7 +7,7 @@
 
 #include "toon_filter.h"
 
-using namespace gpupixel;
+namespace gpupixel {
 
 REGISTER_FILTER_CLASS(ToonFilter)
 
@@ -57,26 +57,26 @@ const std::string kToonFragmentShaderString = R"(
       gl_FragColor = vec4(posterizedImageColor * thresholdTest, color.a);
     })";
 
-std::shared_ptr<ToonFilter> ToonFilter::create() {
+std::shared_ptr<ToonFilter> ToonFilter::Create() {
   auto ret = std::shared_ptr<ToonFilter>(new ToonFilter());
-  if (ret && !ret->init()) {
+  if (ret && !ret->Init()) {
     ret.reset();
   }
   return ret;
 }
 
-bool ToonFilter::init() {
-  if (!initWithFragmentShaderString(kToonFragmentShaderString)) {
+bool ToonFilter::Init() {
+  if (!InitWithFragmentShaderString(kToonFragmentShaderString)) {
     return false;
   }
 
   _threshold = 0.2;
-  registerProperty("threshold", _threshold,
+  RegisterProperty("threshold", _threshold,
                    "The threshold at which to apply the edges",
                    [this](float& threshold) { setThreshold(threshold); });
 
   _quantizationLevels = 10.0;
-  registerProperty("quantizationLevels", _quantizationLevels,
+  RegisterProperty("quantizationLevels", _quantizationLevels,
                    "The levels of quantization for the posterization of colors "
                    "within the scene",
                    [this](float& quantizationLevels) {
@@ -94,8 +94,10 @@ void ToonFilter::setQuantizatinLevels(float quantizationLevels) {
   _quantizationLevels = quantizationLevels;
 }
 
-bool ToonFilter::doRender(bool updateSinks) {
-  _filterProgram->setUniformValue("threshold", _threshold);
-  _filterProgram->setUniformValue("quantizationLevels", _quantizationLevels);
-  return NearbySampling3x3Filter::doRender(updateSinks);
+bool ToonFilter::DoRender(bool updateSinks) {
+  _filterProgram->SetUniformValue("threshold", _threshold);
+  _filterProgram->SetUniformValue("quantizationLevels", _quantizationLevels);
+  return NearbySampling3x3Filter::DoRender(updateSinks);
 }
+
+} // namespace gpupixel

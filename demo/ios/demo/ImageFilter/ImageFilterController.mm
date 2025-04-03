@@ -91,19 +91,19 @@ using namespace gpupixel;
 #pragma mark - Setup
 - (void)setupFilter
 {
-	gpupixel::GPUPixelContext::getInstance()->runSync([&] {
+	gpupixel::GPUPixelContext::GetInstance()->RunSync([&] {
 		_gpuPixelView = [[GPUPixelView alloc] initWithFrame:self.view.frame];
 		_gpuPixelView.backgroundColor = UIColor.grayColor;
 		[self.view addSubview:_gpuPixelView];
 		[_gpuPixelView setFillMode:(gpupixel::SinkRender::PreserveAspectRatioAndFill)];
 		
-		_lipstickFilter = LipstickFilter::create();
-		_blusherFilter = BlusherFilter::create();
-		_beautyFaceFilter = BeautyFaceFilter::create();
-		_faceReshapeFilter = FaceReshapeFilter::create();
+		_lipstickFilter = LipstickFilter::Create();
+		_blusherFilter = BlusherFilter::Create();
+		_beautyFaceFilter = BeautyFaceFilter::Create();
+		_faceReshapeFilter = FaceReshapeFilter::Create();
 		
 		NSString *imagePath = [[NSBundle mainBundle] pathForResource:@"sample_face" ofType:@"png"];
-		_gpuSourceImage = SourceImage::create([imagePath UTF8String]);
+		_gpuSourceImage = SourceImage::Create([imagePath UTF8String]);
 		_gpuSourceImage->RegLandmarkCallback([=](std::vector<float> landmarks) {
 			_lipstickFilter->SetFaceLandmarks(landmarks);
 			_blusherFilter->SetFaceLandmarks(landmarks);
@@ -112,11 +112,11 @@ using namespace gpupixel;
 		
 		// filter pipline
 		_gpuSourceImage
-		->addSink(_lipstickFilter)
-		->addSink(_blusherFilter)
-		->addSink(_faceReshapeFilter)
-		->addSink(_beautyFaceFilter)
-		->addSink(_gpuPixelView);
+		->AddSink(_lipstickFilter)
+		->AddSink(_blusherFilter)
+		->AddSink(_faceReshapeFilter)
+		->AddSink(_beautyFaceFilter)
+		->AddSink(_gpuPixelView);
 	});
 }
 
@@ -173,7 +173,7 @@ using namespace gpupixel;
 	[_gpuPixelView removeFromSuperview];
 	_gpuPixelView = nil;
 	_gpuSourceImage = nil;
-	gpupixel::GPUPixelContext::getInstance()->destroy();
+	gpupixel::GPUPixelContext::GetInstance()->Destroy();
 	
 	[self.navigationController popViewControllerAnimated:true];
 }
@@ -181,10 +181,10 @@ using namespace gpupixel;
 /// Get image from gpupixel after render and show result page
 - (void)saveAction
 {
-	int width = _gpuSourceImage->getRotatedFramebufferWidth();
-	int height = _gpuSourceImage->getRotatedFramebufferHeight();
+	int width = _gpuSourceImage->GetRotatedFramebufferWidth();
+	int height = _gpuSourceImage->GetRotatedFramebufferHeight();
 	// "beauty_face_filter_" is last filter in gpuSourceImage
-	unsigned char *pixels = _gpuSourceImage->captureAProcessedFrameData(_beautyFaceFilter, width, height);
+	unsigned char *pixels = _gpuSourceImage->GetProcessedFrameData(_beautyFaceFilter, width, height);
 	UIImage *resultImage = [ImageConverter imageFromRGBAData:pixels width:width height:height];
 	
 	// 创建并显示结果页面
@@ -198,13 +198,13 @@ using namespace gpupixel;
 - (void)displayLinkDidFire:(CADisplayLink *)displayLink
 {
 	if (!self.filterToolbarView.effectSwitch.isOn) {
-		_beautyFaceFilter->setSharpen(0);
-		_beautyFaceFilter->setBlurAlpha(0);
-		_beautyFaceFilter->setWhite(0);
-		_faceReshapeFilter->setFaceSlimLevel(0);
-		_faceReshapeFilter->setEyeZoomLevel(0);
-		_lipstickFilter->setBlendLevel(0);
-		_blusherFilter->setBlendLevel(0);
+		_beautyFaceFilter->SetSharpen(0);
+		_beautyFaceFilter->SetBlurAlpha(0);
+		_beautyFaceFilter->SetWhite(0);
+		_faceReshapeFilter->SetFaceSlimLevel(0);
+		_faceReshapeFilter->SetEyeZoomLevel(0);
+		_lipstickFilter->SetBlendLevel(0);
+		_blusherFilter->SetBlendLevel(0);
 	}
 	
 	_gpuSourceImage->Render();
@@ -214,19 +214,19 @@ using namespace gpupixel;
 - (void)setSharpenValue:(CGFloat)value
 {
 	_sharpenValue = value;
-	_beautyFaceFilter->setSharpen(value/5);
+	_beautyFaceFilter->SetSharpen(value/5);
 }
 
 - (void)setBlurValue:(CGFloat)value
 {
 	_blurValue = value;
-	_beautyFaceFilter->setBlurAlpha(value/10);
+	_beautyFaceFilter->SetBlurAlpha(value/10);
 }
 
 - (void)setWhitenValue:(CGFloat)value
 {
 	_whitenValue = value;
-	_beautyFaceFilter->setWhite(value/20);
+	_beautyFaceFilter->SetWhite(value/20);
 }
 
 - (void)setSaturationValue:(CGFloat)value
@@ -237,25 +237,25 @@ using namespace gpupixel;
 - (void)setFaceSlimValue:(CGFloat)value
 {
 	_faceSlimValue = value;
-	_faceReshapeFilter->setFaceSlimLevel(value/100);
+	_faceReshapeFilter->SetFaceSlimLevel(value/100);
 }
 
 - (void)setEyeEnlargeValue:(CGFloat)value
 {
 	_eyeEnlargeValue = value;
-	_faceReshapeFilter->setEyeZoomLevel(value/50);
+	_faceReshapeFilter->SetEyeZoomLevel(value/50);
 }
 
 - (void)setLipstickValue:(CGFloat)value
 {
 	_lipstickValue = value;
-	_lipstickFilter->setBlendLevel(value/10);
+	_lipstickFilter->SetBlendLevel(value/10);
 }
 
 - (void)setBlusherValue:(CGFloat)value
 {
 	_blusherValue = value;
-	_blusherFilter->setBlendLevel(value/10);
+	_blusherFilter->SetBlendLevel(value/10);
 }
 
 #pragma mark - FilterToolbarViewDelegate

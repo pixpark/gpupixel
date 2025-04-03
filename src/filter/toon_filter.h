@@ -13,9 +13,9 @@
 namespace gpupixel {
 class GPUPIXEL_API ToonFilter : public NearbySampling3x3Filter {
  public:
-  static std::shared_ptr<ToonFilter> create();
-  bool init();
-  virtual bool doRender(bool updateSinks = true) override;
+  static std::shared_ptr<ToonFilter> Create();
+  bool Init();
+  virtual bool DoRender(bool updateSinks = true) override;
 
   void setThreshold(float threshold);
   void setQuantizatinLevels(float quantizationLevels);
