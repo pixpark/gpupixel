@@ -24,16 +24,18 @@
 
 namespace gpupixel {
 
-using RawOutputCallback = std::function<void(const uint8_t* data, int width, int height, int64_t ts)>;
-
 class GPUPIXEL_API SinkRawData : public Sink {
  public:
   SinkRawData();
   virtual ~SinkRawData();
   static std::shared_ptr<SinkRawData> Create();
   void Render() override;
-  void SetI420Callback(RawOutputCallback callback);
-  void SetRgbaCallback(RawOutputCallback callback);
+  
+  const uint8_t* GetRgbaBuffer() const;
+  const uint8_t* GetI420Buffer() const;
+  int GetWidth() const { return width_; }
+  int GetHeight() const { return height_; }
+  
  private:
   int renderToOutput();
   bool InitWithShaderString(const std::string& vertex_shader_source,
@@ -55,14 +57,10 @@ class GPUPIXEL_API SinkRawData : public Sink {
   // Image dimensions
   int32_t width_ = 0;
   int32_t height_ = 0;
-  int64_t frame_timestamp_ = 0;
 
   // Frame buffers for pixel data
   uint8_t* rgba_buffer_ = nullptr;  // RGBA buffer
   uint8_t* yuv_buffer_ = nullptr;   // YUV buffer
-  // Callback functions
-  RawOutputCallback i420_callback_ = nullptr;
-  RawOutputCallback pixels_callback_ = nullptr;
 };
 
 }  // namespace gpupixel

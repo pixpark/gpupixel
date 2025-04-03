@@ -9,12 +9,11 @@
 
 #include <functional>
 #include <map>
-#include "gpupixel_macros.h"
+#include "gpupixel_define.h"
 #include "sink.h"
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
 #import "gpupixel_sink.h"
 #endif
-#include "face_detector.h"
 
 namespace gpupixel {
 class GPUPIXEL_API Filter;
@@ -55,13 +54,11 @@ class GPUPIXEL_API Source {
       std::shared_ptr<Filter> upToFilter,
       int width = 0,
       int height = 0);
-  int RegLandmarkCallback(FaceDetectorCallback callback);
  protected:
   std::shared_ptr<GPUPixelFramebuffer> _framebuffer;
   RotationMode _outputRotation;
   std::map<std::shared_ptr<Sink>, int> _sinks;
   float _framebufferScale;
-  std::shared_ptr<FaceDetector> _face_detector;
 };
 
 }

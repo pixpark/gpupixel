@@ -8,6 +8,7 @@
 #import "ViewController.h"
 #import "VideoCameraManager.h"
 #import <gpupixel/gpupixel.h>
+#import <gpupixel/face_detector.h>
  
 using namespace gpupixel;
 @interface ViewController() <GPUImageVideoCameraDelegate> {
@@ -17,6 +18,7 @@ using namespace gpupixel;
   std::shared_ptr<FaceReshapeFilter> faceReshapeFilter;
   std::shared_ptr<gpupixel::LipstickFilter> lipstickFilter;
   std::shared_ptr<gpupixel::BlusherFilter> blusherFilter;
+  std::shared_ptr<gpupixel::FaceDetector> faceDetector;
 }
 
 @property (weak) IBOutlet NSSlider *levelSlider;
@@ -100,12 +102,7 @@ using namespace gpupixel;
     lipstickFilter = LipstickFilter::Create();
     blusherFilter = BlusherFilter::Create();
     faceReshapeFilter = FaceReshapeFilter::Create();
-    
-    sourceRawData->RegLandmarkCallback([=](std::vector<float> landmarks) {
-       lipstickFilter->SetFaceLandmarks(landmarks);
-       blusherFilter->SetFaceLandmarks(landmarks);
-       faceReshapeFilter->SetFaceLandmarks(landmarks);
-     });
+    faceDetector = std::make_shared<FaceDetector>();
  
     // create filter
     beautyFaceFilter = BeautyFaceFilter::Create();
@@ -164,8 +161,22 @@ using namespace gpupixel;
     auto height = CVPixelBufferGetHeight(imageBuffer);
     auto stride = CVPixelBufferGetBytesPerRow(imageBuffer)/4;
     auto pixels = (const uint8_t *)CVPixelBufferGetBaseAddress(imageBuffer);
-    sourceRawData->ProcessData(pixels, width, height, stride);
     
+    std::vector<float> landmarks = faceDetector->Detect(
+        pixels, 
+        width, 
+        height, 
+        GPUPIXEL_MODE_FMT_VIDEO, 
+        GPUPIXEL_FRAME_TYPE_BGRA
+    );
+
+    if (!landmarks.empty()) {
+      lipstickFilter->SetFaceLandmarks(landmarks);
+      blusherFilter->SetFaceLandmarks(landmarks);
+      faceReshapeFilter->SetFaceLandmarks(landmarks);
+    }
+    
+    sourceRawData->ProcessData(pixels, width, height, stride, GPUPIXEL_FRAME_TYPE_BGRA);
     CVPixelBufferUnlockBaseAddress(imageBuffer, 0);
 }
 

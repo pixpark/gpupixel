@@ -75,7 +75,7 @@ void SinkRawData::Render() {
     initFrameBuffer(width, height);
     initOutputBuffer(width, height);
   }
-  frame_timestamp_ = 0;
+
   renderToOutput();
 }
 
@@ -130,32 +130,22 @@ int SinkRawData::renderToOutput() {
   // Read pixel data directly using glReadPixels
   CHECK_GL(glReadPixels(0, 0, width_, height_, GL_RGBA, GL_UNSIGNED_BYTE, rgba_buffer_));
 
-  // Convert RGBA to I420 format
-  if (i420_callback_) {
-    libyuv::ARGBToI420(rgba_buffer_, width_ * 4, yuv_buffer_, width_,
-                       yuv_buffer_ + width_ * height_, width_ / 2,
-                       yuv_buffer_ + width_ * height_ * 5 / 4, width_ / 2,
-                       width_, height_);
-    i420_callback_(yuv_buffer_, width_, height_, frame_timestamp_);
-  }
-
-  // Callback for raw RGBA data
-  if (pixels_callback_) {
-    pixels_callback_(rgba_buffer_, width_, height_, frame_timestamp_);
-  }
-
   framebuffer_->Inactive();
   return 0;
 }
 
-void SinkRawData::SetI420Callback(RawOutputCallback callback) {
-  std::unique_lock<std::mutex> lock(mutex_);
-  i420_callback_ = callback;
+const uint8_t* SinkRawData::GetRgbaBuffer() const {
+  return rgba_buffer_;
 }
 
-void SinkRawData::SetRgbaCallback(RawOutputCallback callback) {
-  std::unique_lock<std::mutex> lock(mutex_);
-  pixels_callback_ = callback;
+const uint8_t* SinkRawData::GetI420Buffer() const {
+  // Convert RGBA to I420 format
+  libyuv::ARGBToI420(rgba_buffer_, width_ * 4, yuv_buffer_, width_,
+                     yuv_buffer_ + width_ * height_, width_ / 2,
+                     yuv_buffer_ + width_ * height_ * 5 / 4, width_ / 2,
+                     width_, height_);
+
+  return yuv_buffer_;
 }
 
 void SinkRawData::initOutputBuffer(int width, int height) {

@@ -8,7 +8,7 @@
 #pragma once
 
 #include "filter_group.h"
-#include "gpupixel_macros.h"
+#include "gpupixel_define.h"
 #include "single_component_gaussian_blur_mono_filter.h"
 
 namespace gpupixel {

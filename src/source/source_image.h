@@ -28,7 +28,13 @@ class GPUPIXEL_API SourceImage : public Source {
                                             int height,
                                             int channel_count,
                                             const unsigned char* pixels);
+
+  const unsigned char* GetRgbaImageBuffer() const;
+  int GetWidth() const;
+  int GetHeight() const;
+
   void Render();
+  
  private:
 #if defined(GPUPIXEL_ANDROID)
     static std::shared_ptr<SourceImage> CreateImageForAndroid(std::string name);

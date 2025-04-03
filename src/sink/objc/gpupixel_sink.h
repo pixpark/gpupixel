@@ -4,7 +4,7 @@
  * Created by PixPark on 2021/6/24.
  * Copyright © 2021 PixPark. All rights reserved.
  */
-#include "gpupixel_macros.h"
+#include "gpupixel_define.h"
 #if defined(GPUPIXEL_IOS)
 #import <UIKit/UIKit.h>
 #elif defined(GPUPIXEL_MAC)

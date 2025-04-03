@@ -8,7 +8,7 @@
 #include "source_raw_data.h"
 #include "gpupixel_context.h"
 #include "util.h"
-#include "face_detector.h"
+
 namespace gpupixel {
 
 const std::string kI420VertexShaderString = R"(
@@ -117,41 +117,39 @@ bool SourceRawData::Init() {
   return true;
 }
 
-void SourceRawData::ProcessData(const uint8_t* pixels,
-                                     int width,
-                                     int height,
-                                     int stride,
-                                     int64_t ts) {
-  GPUPixelContext::GetInstance()->RunSync([=] {
-    if(_face_detector) {
-      _face_detector->Detect(pixels, width, height, GPUPIXEL_MODE_FMT_VIDEO,GPUPIXEL_FRAME_TYPE_RGBA8888);
-    }
-    genTextureWithRGBA(pixels, width, height, stride); 
-  });
-}
-
 void SourceRawData::SetRotation(RotationMode rotation) {
   _rotation = rotation;
 }
 
-void SourceRawData::ProcessData(int width,
-                                     int height,
-                                     const uint8_t* dataY,
-                                     int strideY,
-                                     const uint8_t* dataU,
-                                     int strideU,
-                                     const uint8_t* dataV,
-                                     int strideV,
-                                     int64_t ts) {
-  GPUPixelContext::GetInstance()->RunSync([=] {
-    if(_face_detector) {
-      _face_detector->Detect(dataY, width, height, GPUPIXEL_MODE_FMT_VIDEO, GPUPIXEL_FRAME_TYPE_YUVI420);
-    }
+void SourceRawData::ProcessData(const uint8_t* data,
+                   int width,
+                   int height,
+                   int stride,
+                   GPUPIXEL_FRAME_TYPE type) {
+                        if(type == GPUPIXEL_FRAME_TYPE_YUVI420) {
+                          GPUPixelContext::GetInstance()->RunSync([=] {
+                            // 计算YUV各个通道的起始指针和步长
+                            const uint8_t* dataY = data; // Y通道起始位置
+                            int strideY = width; // Y通道的步长等于宽度
+                            
+                            // U通道紧跟在Y通道之后，大小为width*height/4
+                            const uint8_t* dataU = data + (width * height);
+                            int strideU = width / 2; // U通道的步长是宽度的一半
+                            
+                            // V通道紧跟在U通道之后，大小为width*height/4
+                            const uint8_t* dataV = dataU + (width * height / 4);
+                            int strideV = width / 2; // V通道的步长是宽度的一半
+                            
+                            genTextureWithI420(width, height, dataY, strideY, dataU, strideU, dataV,
+                                              strideV);
+                          });
+                        } else {
+                            GPUPixelContext::GetInstance()->RunSync([=] {
+                          genTextureWithPixels(data, width, height, stride, type);
+                            });
+                        }
+  }
 
-    genTextureWithI420(width, height, dataY, strideY, dataU, strideU, dataV,
-                       strideV);
-  });
-}
 
 int SourceRawData::genTextureWithI420(int width,
                                            int height,
@@ -160,8 +158,7 @@ int SourceRawData::genTextureWithI420(int width,
                                            const uint8_t* dataU,
                                            int strideU,
                                            const uint8_t* dataV,
-                                           int strideV,
-                                           int64_t ts) {
+                                           int strideV) {
   if (!_framebuffer || (_framebuffer->GetWidth() != width ||
                         _framebuffer->GetHeight() != height)) {
     _framebuffer =
@@ -209,11 +206,11 @@ int SourceRawData::genTextureWithI420(int width,
   return 0;
 }
 
-int SourceRawData::genTextureWithRGBA(const uint8_t* pixels,
+int SourceRawData::genTextureWithPixels(const uint8_t* pixels,
                                            int width,
                                            int height,
                                            int stride,
-                                           int64_t ts) {
+                                           GPUPIXEL_FRAME_TYPE type) {
   if (!_framebuffer || (_framebuffer->GetWidth() != stride ||
                         _framebuffer->GetHeight() != height)) {
     _framebuffer =
@@ -225,13 +222,15 @@ int SourceRawData::genTextureWithRGBA(const uint8_t* pixels,
   GLuint texture = _textures[3];
   CHECK_GL(glBindTexture(GL_TEXTURE_2D, texture));
 
-#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
-  CHECK_GL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, stride, height, 0, GL_BGRA,
-                        GL_UNSIGNED_BYTE, pixels));
-#else
-  CHECK_GL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, stride, height, 0, GL_RGBA,
-                        GL_UNSIGNED_BYTE, pixels));
-#endif
+  if (type == GPUPIXEL_FRAME_TYPE_BGRA) {
+    #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
+    CHECK_GL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, stride, height, 0, GL_BGRA,
+                          GL_UNSIGNED_BYTE, pixels));
+    #endif
+  } else if (type == GPUPIXEL_FRAME_TYPE_RGBA) {
+    CHECK_GL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, stride, height, 0, GL_RGBA,
+                          GL_UNSIGNED_BYTE, pixels));
+  }
 
   GPUPixelContext::GetInstance()->SetActiveGlProgram(_filterProgram);
   this->GetFramebuffer()->Active();

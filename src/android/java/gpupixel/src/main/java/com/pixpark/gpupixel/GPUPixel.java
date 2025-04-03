@@ -18,10 +18,6 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 
 public class GPUPixel {
-
-    public interface GPUPixelLandmarkCallback {
-        public void onFaceLandmark(float[] landmarks);
-    }
     public static final int NoRotation = 0;
     public static final int RotateLeft = 1;
     public static final int RotateRight = 2;
@@ -222,7 +218,7 @@ public class GPUPixel {
     public static native long nativeSourceCameraNew();
     public static native void nativeSourceCameraDestroy(final long classID);
     public static native void nativeSourceCameraFinalize(final long classID);
-    public static native void nativeSourceCameraSetFrame(final long classID, final int width, final int height, final int[] data, final int rotation);
+    public static native void nativeSourceCameraSetFrame(final long classID, final int width, final int height, final byte[] data, final int rotation);
 
     // SourceRawData
     public static native long nativeSourceRawDataNew();
@@ -250,8 +246,10 @@ public class GPUPixel {
     public static native void nativeContextClean();
 
     // utils
-    public static native void nativeYUVtoRBGA(byte[] yuv, int width, int height, int[] out);
+    public static native void nativeYUVtoRBGA(byte[] yuv, int width, int height, byte[] out);
 
-    public static native void nativeSetLandmarkCallback(Object source, final long classID);
-
+    // FaceDetector 相关方法
+    public static native long nativeFaceDetectorCreate();
+    public static native void nativeFaceDetectorDestroy(long id);
+    public static native float[] nativeFaceDetectorDetect(long id, byte[] data, int width, int height, int format, int frameType);
 }

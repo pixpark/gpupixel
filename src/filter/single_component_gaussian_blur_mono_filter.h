@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "gpupixel_macros.h"
+#include "gpupixel_define.h"
 #include "gaussian_blur_mono_filter.h"
 
 namespace gpupixel {

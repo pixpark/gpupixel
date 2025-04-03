@@ -8,7 +8,7 @@
 #pragma once
 
 #include "filter_group.h"
-#include "gpupixel_macros.h"
+#include "gpupixel_define.h"
 
 #include "beauty_face_unit_filter.h"
 #include "box_blur_filter.h"

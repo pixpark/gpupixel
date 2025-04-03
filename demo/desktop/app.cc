@@ -6,6 +6,7 @@
 #include "imgui.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
+#include "face_detector.h"
 
 using namespace gpupixel;
 
@@ -16,6 +17,7 @@ std::shared_ptr<gpupixel::LipstickFilter> lipstickFilter;
 std::shared_ptr<gpupixel::BlusherFilter> blusherFilter;
 std::shared_ptr<SourceImage> sourceImage;
 std::shared_ptr<SinkRender> renderSink;
+std::shared_ptr<FaceDetector> faceDetector;
 
 // Filter parameters
 float beautyStrength = 0.0f;
@@ -83,17 +85,11 @@ void setupFilterPipeline()
     blusherFilter = BlusherFilter::Create();
     reshapeFilter = FaceReshapeFilter::Create();
     beautyFilter = BeautyFaceFilter::Create();
+    faceDetector = std::make_shared<FaceDetector>();
     
     // Create source image and render sink
     sourceImage = SourceImage::Create("demo.png");
     renderSink = std::make_shared<SinkRender>();
-
-    // Setup face landmarks callback
-    sourceImage->RegLandmarkCallback([=](std::vector<float> landmarks) {
-       lipstickFilter->SetFaceLandmarks(landmarks);
-       blusherFilter->SetFaceLandmarks(landmarks);
-       reshapeFilter->SetFaceLandmarks(landmarks);
-    });
 
     // Build filter pipeline
     sourceImage->AddSink(lipstickFilter)
@@ -147,9 +143,28 @@ void renderFrame()
     updateFilterParameters();
     ImGui::End();
     
+ 
+  	int width = sourceImage->GetWidth();
+	int height = sourceImage->GetHeight();
+	unsigned char *buffer = sourceImage->GetRgbaImageBuffer();
+	
+	std::vector<float> landmarks = faceDetector->Detect(
+		buffer, 
+		width, 
+		height, 
+		GPUPIXEL_MODE_FMT_PICTURE, 
+		GPUPIXEL_FRAME_TYPE_RGBA
+	);
+ 
+    if (!landmarks.empty()) {
+        lipstickFilter->SetFaceLandmarks(landmarks);
+        blusherFilter->SetFaceLandmarks(landmarks);
+        reshapeFilter->SetFaceLandmarks(landmarks);
+    }
+
     // Process and render image
     sourceImage->Render();
-    
+ 
     // Render ImGui
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glViewport(0, 0, 1280, 720);

@@ -11,6 +11,7 @@
 #import "FilterResultViewController.h"
 
 #import <gpupixel/gpupixel.h>
+#import <gpupixel/face_detector.h>
 
 using namespace gpupixel;
 
@@ -22,6 +23,7 @@ using namespace gpupixel;
 	std::shared_ptr<gpupixel::FaceMakeupFilter> _lipstickFilter;
 	std::shared_ptr<gpupixel::FaceMakeupFilter> _blusherFilter;
 	std::shared_ptr<SourceImage> _gpuSourceImage;
+	std::shared_ptr<gpupixel::FaceDetector> _faceDetector;
 	CADisplayLink *_displayLink;
 }
 
@@ -101,14 +103,10 @@ using namespace gpupixel;
 		_blusherFilter = BlusherFilter::Create();
 		_beautyFaceFilter = BeautyFaceFilter::Create();
 		_faceReshapeFilter = FaceReshapeFilter::Create();
+		_faceDetector = std::make_shared<FaceDetector>();
 		
 		NSString *imagePath = [[NSBundle mainBundle] pathForResource:@"sample_face" ofType:@"png"];
 		_gpuSourceImage = SourceImage::Create([imagePath UTF8String]);
-		_gpuSourceImage->RegLandmarkCallback([=](std::vector<float> landmarks) {
-			_lipstickFilter->SetFaceLandmarks(landmarks);
-			_blusherFilter->SetFaceLandmarks(landmarks);
-			_faceReshapeFilter->SetFaceLandmarks(landmarks);
-		});
 		
 		// filter pipline
 		_gpuSourceImage
@@ -173,6 +171,7 @@ using namespace gpupixel;
 	[_gpuPixelView removeFromSuperview];
 	_gpuPixelView = nil;
 	_gpuSourceImage = nil;
+	_faceDetector = nullptr;
 	gpupixel::GPUPixelContext::GetInstance()->Destroy();
 	
 	[self.navigationController popViewControllerAnimated:true];
@@ -205,6 +204,24 @@ using namespace gpupixel;
 		_faceReshapeFilter->SetEyeZoomLevel(0);
 		_lipstickFilter->SetBlendLevel(0);
 		_blusherFilter->SetBlendLevel(0);
+	}
+	
+	int width = _gpuSourceImage->GetWidth();
+	int height = _gpuSourceImage->GetHeight();
+	const unsigned char *buffer = _gpuSourceImage->GetRgbaImageBuffer();
+	
+	std::vector<float> landmarks = _faceDetector->Detect(
+		buffer, 
+		width, 
+		height, 
+		GPUPIXEL_MODE_FMT_PICTURE, 
+		GPUPIXEL_FRAME_TYPE_RGBA
+	);
+
+	if (!landmarks.empty()) {
+		_lipstickFilter->SetFaceLandmarks(landmarks);
+		_blusherFilter->SetFaceLandmarks(landmarks);
+		_faceReshapeFilter->SetFaceLandmarks(landmarks);
 	}
 	
 	_gpuSourceImage->Render();

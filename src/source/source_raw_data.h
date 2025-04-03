@@ -15,20 +15,12 @@ class GPUPIXEL_API SourceRawData : public Filter {
  public:
   ~SourceRawData();
   static std::shared_ptr<SourceRawData> Create();
-  void ProcessData(const uint8_t* pixels,
+ 
+  void ProcessData(const uint8_t* data,
                    int width,
                    int height,
                    int stride,
-                   int64_t ts = 0);
-  void ProcessData(int width,
-                   int height,
-                   const uint8_t* dataY,
-                   int strideY,
-                   const uint8_t* dataU,
-                   int strideU,
-                   const uint8_t* dataV,
-                   int strideV,
-                   int64_t ts = 0);
+                   GPUPIXEL_FRAME_TYPE type);
 
   void SetRotation(RotationMode rotation);
 
@@ -43,14 +35,13 @@ class GPUPIXEL_API SourceRawData : public Filter {
                          const uint8_t* dataU,
                          int strideU,
                          const uint8_t* dataV,
-                         int strideV,
-                         int64_t ts = 0);
+                         int strideV);
 
-  int genTextureWithRGBA(const uint8_t* pixels,
+  int genTextureWithPixels(const uint8_t* pixels,
                          int width,
                          int height,
                          int stride,
-                         int64_t ts = 0);
+                         GPUPIXEL_FRAME_TYPE type);
 
  private:
   GPUPixelGLProgram* _filterProgram;
