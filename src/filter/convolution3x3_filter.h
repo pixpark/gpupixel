@@ -6,7 +6,7 @@
  */
 
 #pragma once
-#include "gpupixel_macros.h"
+#include "gpupixel_define.h"
 #include "math_toolbox.h"
 #include "nearby_sampling3x3_filter.h"
 

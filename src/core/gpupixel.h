@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "gpupixel_macros.h"
+#include "gpupixel_define.h"
 
 // base
 #include "gpupixel_framebuffer.h"
@@ -35,6 +35,9 @@
 #include "gpupixel_view.h"
 #include "objc_sink.h"
 #endif
+
+// face detect
+#include "face_detector.h"
 
 // base filters
 #include "filter.h"

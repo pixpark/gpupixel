@@ -68,7 +68,7 @@ void YourCustomInput::setFrameData(const uint8_t* pixels,
   if(_face_detector) {
     _face_detector->Detect(pixels, width, height,
                           GPUPIXEL_MODE_FMT_VIDEO,
-                          GPUPIXEL_FRAME_TYPE_RGBA8888);
+                          GPUPIXEL_FRAME_TYPE_RGBA);
   }
   
   // Update texture

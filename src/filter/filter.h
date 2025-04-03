@@ -8,7 +8,7 @@
 #pragma once
 
 #include "gpupixel_program.h"
-#include "gpupixel_macros.h"
+#include "gpupixel_define.h"
 #include "source.h"
 #include "sink.h"
 #include "util.h"

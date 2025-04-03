@@ -9,7 +9,7 @@
 
 #include <vector>
 #include "filter.h"
-#include "gpupixel_macros.h"
+#include "gpupixel_define.h"
 #include "source.h"
 #include "sink.h"
 

@@ -16,7 +16,7 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
-#include "face_detector.h"
+
 namespace gpupixel {
 
 std::shared_ptr<SourceImage> SourceImage::CreateFromBuffer(int width,
@@ -60,16 +60,25 @@ void SourceImage::Init(int width, int height, int channel_count, const unsigned 
 }
 
 void SourceImage::Render() {
-  GPUPIXEL_FRAME_TYPE type;
-  if(_face_detector) {
-    _face_detector->Detect(image_bytes.data(),
-                           _framebuffer->GetWidth(),
-                           _framebuffer->GetHeight(),
-                           GPUPIXEL_MODE_FMT_PICTURE,
-                           GPUPIXEL_FRAME_TYPE_RGBA8888);
-  }
-  
   Source::DoRender();
+}
+
+ const unsigned char* SourceImage::GetRgbaImageBuffer() const {
+    return image_bytes.data();
+ }
+
+int SourceImage::GetWidth() const {
+    if (_framebuffer) {
+        return _framebuffer->GetWidth();
+    }
+    return 0;
+}
+
+int SourceImage::GetHeight() const {
+    if (_framebuffer) {
+        return _framebuffer->GetHeight();
+    }
+    return 0;
 }
 
 } // namespace gpupixel

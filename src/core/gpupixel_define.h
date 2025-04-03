@@ -122,4 +122,19 @@
 #else
   #define CHECK_GL(glFunc) glFunc;
 #endif
- 
+
+namespace gpupixel {
+
+GPUPIXEL_API typedef enum {
+        GPUPIXEL_FRAME_TYPE_YUVI420,
+        GPUPIXEL_FRAME_TYPE_RGBA,
+        GPUPIXEL_FRAME_TYPE_BGRA,
+    } GPUPIXEL_FRAME_TYPE;
+
+GPUPIXEL_API typedef enum {
+        GPUPIXEL_MODE_FMT_VIDEO,
+        GPUPIXEL_MODE_FMT_PICTURE,
+    } GPUPIXEL_MODE_FMT;
+
+
+}

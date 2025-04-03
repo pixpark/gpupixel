@@ -15,6 +15,7 @@ import android.view.SurfaceHolder;
 import android.view.WindowManager;
 import android.widget.SeekBar;
 import android.widget.Toast;
+import java.nio.ByteBuffer;
 
 import com.pixpark.GPUPixelApp.databinding.ActivityMainBinding;
 import com.pixpark.gpupixel.GPUPixel;
@@ -23,6 +24,7 @@ import com.pixpark.gpupixel.filter.FaceReshapeFilter;
 import com.pixpark.gpupixel.GPUPixelSourceCamera;
 import com.pixpark.gpupixel.GPUPixelView;
 import com.pixpark.gpupixel.filter.LipstickFilter;
+import com.pixpark.gpupixel.FaceDetector;
 
 public class MainActivity extends AppCompatActivity implements SurfaceHolder.Callback {
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 200;
@@ -38,6 +40,9 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     private SeekBar face_reshap_seekbar;
     private SeekBar big_eye_seekbar;
     private SeekBar lipstick_seekbar;
+    
+    // 添加人脸检测器
+    private FaceDetector faceDetector;
 
     private ActivityMainBinding binding;
 
@@ -119,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         big_eye_seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                faceReshapFilter.setBigeyeLevel(progress / 100.0f);
+                faceReshapFilter.setBigeyeLevel(progress / 50.0f);
             }
 
             @Override
@@ -161,8 +166,38 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         beautyFaceFilter = new BeautyFaceFilter();
         faceReshapFilter = new FaceReshapeFilter();
         lipstickFilter = new LipstickFilter();
+        
+        // 初始化人脸检测器
+        faceDetector = new FaceDetector();
+        
         // camera
         sourceCamera = new GPUPixelSourceCamera(this.getApplicationContext());
+        
+        // 设置数据回调，进行人脸检测
+        sourceCamera.setFrameDataCallback(new GPUPixelSourceCamera.FrameDataCallback() {
+            @Override
+            public void onFrameData(ByteBuffer rgbaData, int width, int height) {
+                // 获取ByteBuffer的数据
+                byte[] byteArray = new byte[rgbaData.remaining()];
+                rgbaData.get(byteArray);
+                
+                // 进行人脸检测
+                float[] landmarks = faceDetector.detect(
+                    byteArray, 
+                    width, 
+                    height, 
+                    FaceDetector.GPUPIXEL_MODE_FMT_VIDEO,
+                    FaceDetector.GPUPIXEL_FRAME_TYPE_RGBA
+                );
+                
+                if (landmarks != null && landmarks.length > 0) {
+                    Log.d(TAG, "检测到人脸特征点: " + landmarks.length);
+                    // 将landmarks应用到滤镜中
+                    lipstickFilter.setFaceLandmark(landmarks);
+                    faceReshapFilter.setFaceLandmark(landmarks);
+                }
+            }
+        });
 
         //
         sourceCamera.AddSink(lipstickFilter);
@@ -170,13 +205,6 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         faceReshapFilter.AddSink(beautyFaceFilter);
         beautyFaceFilter.AddSink(surfaceView);
 
-        sourceCamera.setLandmarkCallbck(new GPUPixel.GPUPixelLandmarkCallback() {
-            @Override
-            public void onFaceLandmark(float[] landmarks) {
-                faceReshapFilter.setFaceLandmark(landmarks);
-                lipstickFilter.setFaceLandmark(landmarks);
-            }
-        });
         // set default value
         beautyFaceFilter.setSmoothLevel(0.5f);
         beautyFaceFilter.setWhiteLevel(0.4f);
@@ -217,5 +245,15 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     @Override
     public void surfaceDestroyed(@NonNull SurfaceHolder holder) {
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        // 销毁FaceDetector
+        if (faceDetector != null) {
+            faceDetector.destroy();
+            faceDetector = null;
+        }
+        super.onDestroy();
     }
 }

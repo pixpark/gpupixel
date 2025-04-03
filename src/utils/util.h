@@ -9,7 +9,7 @@
 
 #include <stdlib.h>
 #include <string>
-#include "gpupixel_macros.h"
+#include "gpupixel_define.h"
 
 namespace gpupixel {
 #define rotationSwapsSize(rotation)                   \

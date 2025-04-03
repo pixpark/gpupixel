@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "gpupixel_macros.h"
+#include "gpupixel_define.h"
 
 #include "box_mono_blur_filter.h"
 #include "filter_group.h"

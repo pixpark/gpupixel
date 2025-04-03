@@ -8,7 +8,7 @@
 #pragma once
 
 #include "color_matrix_filter.h"
-#include "gpupixel_macros.h"
+#include "gpupixel_define.h"
 
 namespace gpupixel {
 class GPUPIXEL_API HSBFilter : public ColorMatrixFilter {

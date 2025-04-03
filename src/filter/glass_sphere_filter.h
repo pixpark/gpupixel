@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "gpupixel_macros.h"
+#include "gpupixel_define.h"
 #include "sphere_refraction_filter.h"
 
 namespace gpupixel {

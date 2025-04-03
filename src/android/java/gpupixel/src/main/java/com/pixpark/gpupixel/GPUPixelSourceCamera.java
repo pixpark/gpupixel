@@ -18,18 +18,26 @@ import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.WindowManager;
 import java.io.IOException;
-import java.nio.IntBuffer;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 public class GPUPixelSourceCamera extends GPUPixelSource implements Camera.PreviewCallback {
     private Camera mCamera;
     private int mCurrentCameraId = 1;
-    private IntBuffer mRGBABuffer;
+    private ByteBuffer mByteBuffer;
     private int mRotation = GPUPixel.NoRotation;
     private Context mContext;
     private SurfaceTexture mSurfaceTexture = null;
     private GPUPixelSourceRawData SourceRawData = null;
     private Object object_this;
-    private GPUPixel.GPUPixelLandmarkCallback landmarkCallback;
+    
+    // 添加数据回调接口
+    public interface FrameDataCallback {
+        void onFrameData(ByteBuffer rgbaData, int width, int height);
+    }
+    
+    private FrameDataCallback mFrameDataCallback = null;
+    
     public GPUPixelSourceCamera(Context context) {
         mContext = context;
         object_this = this;
@@ -43,30 +51,21 @@ public class GPUPixelSourceCamera extends GPUPixelSource implements Camera.Previ
 
         setUpCamera(mCurrentCameraId);
     }
-
-    public void setLandmarkCallbck(GPUPixel.GPUPixelLandmarkCallback filter) {
-        landmarkCallback = filter;
-
-        GPUPixel.GetInstance().runOnDraw(new Runnable() {
-            @Override
-            public void run() {
-                GPUPixel.nativeSetLandmarkCallback(object_this, mNativeClassID);
-            }
-        });
-    }
-
-    // callback by native
-    public void onFaceLandmark(float[] landmarks) {
-        if(landmarkCallback != null) {
-            landmarkCallback.onFaceLandmark(landmarks);
-        }
+    
+    // 设置数据回调
+    public void setFrameDataCallback(FrameDataCallback callback) {
+        mFrameDataCallback = callback;
     }
 
     @Override
     public void onPreviewFrame(final byte[] data, Camera camera) {
         final Camera.Size previewSize = camera.getParameters().getPreviewSize();
-        if (mRGBABuffer == null) {
-            mRGBABuffer = IntBuffer.allocate(previewSize.width * previewSize.height);
+        final int frameSize = previewSize.width * previewSize.height;
+        
+        if (mByteBuffer == null) {
+            // 初始化ByteBuffer用于存储RGBA数据
+            mByteBuffer = ByteBuffer.allocateDirect(frameSize * 4);
+            mByteBuffer.order(ByteOrder.nativeOrder());
         }
         final Camera cam = camera;
 
@@ -74,10 +73,20 @@ public class GPUPixelSourceCamera extends GPUPixelSource implements Camera.Previ
             @Override
             public void run() {
                 if (mNativeClassID != 0) {
-                    // todo(jeayo yuv to texture)
-                    GPUPixel.nativeYUVtoRBGA(data, previewSize.width, previewSize.height, mRGBABuffer.array());
+                    // 直接从YUV转换为RGBA的byte[]
+                    mByteBuffer.clear();
+                    GPUPixel.nativeYUVtoRBGA(data, previewSize.width, previewSize.height, mByteBuffer.array());
+                    mByteBuffer.position(frameSize * 4); // 设置位置到末尾
+                    mByteBuffer.flip(); // 准备读取
+                    
+                    // 通过回调接口将RGBA数据回调出去
+                    if (mFrameDataCallback != null) {
+                        mFrameDataCallback.onFrameData(mByteBuffer, previewSize.height, previewSize.width);
+                        mByteBuffer.rewind(); // 重置以便后续使用
+                    }
+                    
                     cam.addCallbackBuffer(data);
-                    GPUPixel.nativeSourceCameraSetFrame(mNativeClassID, previewSize.height, previewSize.width, mRGBABuffer.array(), GPUPixel.NoRotation);
+                    GPUPixel.nativeSourceCameraSetFrame(mNativeClassID, previewSize.height, previewSize.width, mByteBuffer.array(), GPUPixel.NoRotation);
                 }
             }
         });

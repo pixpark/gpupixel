@@ -9,7 +9,7 @@
 
 #include <mutex>
 #include "gpupixel_framebuffer_factory.h"
-#include "gpupixel_macros.h"
+#include "gpupixel_define.h"
 #include "dispatch_queue.h"
 
 #include "filter.h"

@@ -8,7 +8,7 @@
 #pragma once
 
 #include "filter.h"
-#include "gpupixel_macros.h"
+#include "gpupixel_define.h"
 
 namespace gpupixel {
 class GPUPIXEL_API SaturationFilter : public Filter {

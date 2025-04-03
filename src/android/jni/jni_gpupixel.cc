@@ -13,9 +13,11 @@
 #include "source_image.h"
 #include "source_raw_data.h"
 #include "sink_render.h"
+#include "face_detector.h"
 
 using namespace gpupixel;
 std::list<std::shared_ptr<Filter>>  filter_list_;
+std::shared_ptr<gpupixel::FaceDetector> face_detector_;
 
 extern "C" jlong Java_com_pixpark_gpupixel_GPUPixel_nativeSourceImageNew(
     JNIEnv* env,
@@ -81,12 +83,12 @@ extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeSourceCameraSetFrame(
     jlong classId,
     jint width,
     jint height,
-    jintArray jdata,
+    jbyteArray jdata,
     jint rotation) {
-    jint *data = env->GetIntArrayElements(jdata, NULL);
-  ((SourceCamera*)classId)
-      ->setFrameData(width, height, data, (RotationMode)rotation);
-    env->ReleaseIntArrayElements(jdata, data, 0);
+    jbyte* data = env->GetByteArrayElements(jdata, NULL);
+    ((SourceCamera*)classId)
+        ->setFrameData(width, height, data, (RotationMode)rotation);
+    env->ReleaseByteArrayElements(jdata, data, 0);
 };
 
 extern "C" jlong Java_com_pixpark_gpupixel_GPUPixel_nativeSourceRawDataNew(
@@ -105,7 +107,7 @@ Java_com_pixpark_gpupixel_GPUPixel_nativeSourceRawDataUploadBytes(
     jint height,
     jint stride) {
   jint* pixel = env->GetIntArrayElements(jPixel, 0);
-  ((SourceRawData*)classId)->ProcessData((uint8_t*)pixel, width, height, stride);
+  ((SourceRawData*)classId)->ProcessData((uint8_t*)pixel, width, height, stride, GPUPIXEL_FRAME_TYPE_RGBA);
   env->ReleaseIntArrayElements(jPixel, pixel, 0);
 };
 
@@ -334,9 +336,9 @@ extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeYUVtoRBGA(
     jbyteArray yuv420sp,
     jint width,
     jint height,
-    jintArray rgbOut) {
+    jbyteArray rgbOut) {
 
-    jint* rgbData = (jint*)(env->GetPrimitiveArrayCritical(rgbOut, 0));
+    jbyte* rgbData = (jbyte*)(env->GetPrimitiveArrayCritical(rgbOut, 0));
     jbyte* nv21 = (jbyte*)env->GetPrimitiveArrayCritical(yuv420sp, 0);
 
     uint8_t* src_rgba = (uint8_t*) malloc(width*height*4);
@@ -344,45 +346,29 @@ extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeYUVtoRBGA(
                      width,
                      reinterpret_cast<const uint8_t *>(nv21 + width * height),
                      width,
-                     reinterpret_cast<uint8_t*>(src_rgba),
+                     src_rgba,
                      width*4,
                      width,
                      height);
 
+    // 恢复旋转逻辑，安卓采集的图像需要旋转270度
+    uint8_t* rotated_rgba = (uint8_t*) malloc(width*height*4);
     libyuv::ARGBRotate(src_rgba,
                      width*4,
-                     reinterpret_cast<uint8_t*>(rgbData),
+                     rotated_rgba,
                      height*4,
                      width,
                      height,
                      libyuv::kRotate270);
 
+    // 复制旋转后的数据到输出缓冲区
+    memcpy(rgbData, rotated_rgba, width * height * 4);
+
     free(src_rgba);
+    free(rotated_rgba);
     env->ReleasePrimitiveArrayCritical(rgbOut, rgbData, 0);
     env->ReleasePrimitiveArrayCritical(yuv420sp, nv21, 0);
 }
-
-extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeSetLandmarkCallback (
-        JNIEnv* env,
-        jclass obj,
-        jobject source,
-        jlong classId) {
-
-    jobject globalSourceRef = env->NewGlobalRef(source);
-  ((SourceCamera*)classId)->RegLandmarkCallback([=](std::vector<float> landmarks) {
-      jclass cls = env->GetObjectClass(globalSourceRef);
-    jmethodID methodID = env->GetMethodID(cls, "onFaceLandmark", "([F)V");
-
-      jfloatArray arr = env->NewFloatArray(landmarks.size());
-      env->SetFloatArrayRegion( arr, 0, landmarks.size(), landmarks.data());
-
-      env->CallVoidMethod(globalSourceRef, methodID, arr);
-
-      env->DeleteLocalRef(arr);
-
-  });
-
-};
 
 extern "C"
 JNIEXPORT void JNICALL
@@ -413,5 +399,49 @@ extern "C" jint JNIEXPORT JNICALL JNI_OnLoad(JavaVM* jvm, void* reserved) {
 extern "C" void JNIEXPORT JNICALL JNI_OnUnLoad(JavaVM* jvm, void* reserved) {
 //  RTC_CHECK(rtc::CleanupSSL()) << "Failed to CleanupSSL()";
 }
+
+// FaceDetector JNI 方法
+extern "C" jlong Java_com_pixpark_gpupixel_GPUPixel_nativeFaceDetectorCreate(
+    JNIEnv* env,
+    jclass) {
+  if (!face_detector_) {
+    face_detector_ = std::make_shared<FaceDetector>();
+  }
+  return (jlong)(face_detector_.get());
+};
+
+extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeFaceDetectorDestroy(
+    JNIEnv* env,
+    jclass,
+    jlong classId) {
+  face_detector_.reset();
+};
+
+extern "C" jfloatArray Java_com_pixpark_gpupixel_GPUPixel_nativeFaceDetectorDetect(
+    JNIEnv* env,
+    jclass,
+    jlong classId,
+    jbyteArray jdata,
+    jint width,
+    jint height,
+    jint format,
+    jint frameType) {
+  
+  jbyte* data = env->GetByteArrayElements(jdata, nullptr);
+  std::vector<float> landmarks = ((FaceDetector*)classId)->Detect(
+    (const uint8_t*)data, 
+    width, 
+    height, 
+    (GPUPIXEL_MODE_FMT)format, 
+    (GPUPIXEL_FRAME_TYPE)frameType
+  );
+  env->ReleaseByteArrayElements(jdata, data, JNI_ABORT);
+  
+  jfloatArray result = env->NewFloatArray(landmarks.size());
+  if (result) {
+    env->SetFloatArrayRegion(result, 0, landmarks.size(), landmarks.data());
+  }
+  return result;
+};
 
 #endif

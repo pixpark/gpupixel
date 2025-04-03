@@ -21,12 +21,7 @@ FaceDetector::~FaceDetector() {
  
 }
 
-int FaceDetector::RegCallback(FaceDetectorCallback callback) {
-  _face_detector_callbacks.push_back(callback);
-  return 0;
-}
-
-int FaceDetector::Detect(const uint8_t* data,
+std::vector<float> FaceDetector::Detect(const uint8_t* data,
                     int width,
                     int height,
                     GPUPIXEL_MODE_FMT fmt,
@@ -36,15 +31,19 @@ int FaceDetector::Detect(const uint8_t* data,
   image.data = (uint8_t*)data;
   image.width = width;
   image.height = height;
-  image.pixel_format = mars_face_kit::PixelFormat::RGBA;
+  if(type == GPUPIXEL_FRAME_TYPE_RGBA) {  
+    image.pixel_format = mars_face_kit::PixelFormat::RGBA;
+  } else if(type == GPUPIXEL_FRAME_TYPE_BGRA) {
+    image.pixel_format = mars_face_kit::PixelFormat::BGRA;
+  }
   image.width_step = width;
   image.rotate_type = mars_face_kit::CLOCKWISE_ROTATE_0;
   
   std::vector<mars_face_kit::FaceDetectionInfo> face_info;
+  std::vector<float> landmarks;
  
   mars_face_detector_->Detect(image, face_info);
  
-  std::vector<float> landmarks;
   if(face_info.size() > 0) {
     for (int i = 0; i < face_info[0].landmarks.size(); i++) {
       landmarks.push_back(face_info[0].landmarks[i].x/width);
@@ -83,11 +82,7 @@ int FaceDetector::Detect(const uint8_t* data,
     landmarks.push_back(point_y);
   }
   
-  // do callbck
-  for(auto cb : _face_detector_callbacks) {
-    cb(landmarks);
-  }
-  return 0;
+  return landmarks;
 }
 
 }
