@@ -14,18 +14,18 @@ BoxMonoBlurFilter::BoxMonoBlurFilter(Type type)
 
 BoxMonoBlurFilter::~BoxMonoBlurFilter() {}
 
-std::shared_ptr<BoxMonoBlurFilter> BoxMonoBlurFilter::create(Type type,
+std::shared_ptr<BoxMonoBlurFilter> BoxMonoBlurFilter::Create(Type type,
                                                              int radius,
                                                              float sigma) {
   auto ret = std::shared_ptr<BoxMonoBlurFilter>(new BoxMonoBlurFilter(type));
-  if (ret && !ret->init(radius, sigma)) {
+  if (ret && !ret->Init(radius, sigma)) {
     ret.reset();
   }
   return ret;
 }
 
-bool BoxMonoBlurFilter::init(int radius, float sigma) {
-  if (Filter::initWithShaderString(
+bool BoxMonoBlurFilter::Init(int radius, float sigma) {
+  if (Filter::InitWithShaderString(
           _generateOptimizedVertexShaderString(radius, sigma),
           _generateOptimizedFragmentShaderString(radius, sigma))) {
     return true;
@@ -33,7 +33,7 @@ bool BoxMonoBlurFilter::init(int radius, float sigma) {
   return false;
 }
 
-void BoxMonoBlurFilter::setRadius(int radius) {
+void BoxMonoBlurFilter::SetRadius(int radius) {
   float newBlurRadius =
       std::round(std::round(radius / 2.0) * 2.0);  // For now, only do even radii
 
@@ -44,7 +44,7 @@ void BoxMonoBlurFilter::setRadius(int radius) {
       delete _filterProgram;
       _filterProgram = 0;
     }
-    initWithShaderString(_generateOptimizedVertexShaderString(_radius, 0.0),
+    InitWithShaderString(_generateOptimizedVertexShaderString(_radius, 0.0),
                          _generateOptimizedFragmentShaderString(_radius, 0.0));
   }
 }

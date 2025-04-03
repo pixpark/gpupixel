@@ -28,14 +28,14 @@ class GPUPIXEL_API Sink {
  public:
   Sink(int inputNumber = 1);
   virtual ~Sink();
-  virtual void setInputFramebuffer(std::shared_ptr<GPUPixelFramebuffer> framebuffer,
+  virtual void SetInputFramebuffer(std::shared_ptr<GPUPixelFramebuffer> framebuffer,
                                    RotationMode rotationMode = NoRotation,
                                    int texIdx = 0);
 
-  virtual bool isPrepared() const;
-  virtual void unPrepear();
-  virtual void render(){};
-  virtual int getNextAvailableTextureIndex() const;
+  virtual bool IsReady() const;
+  virtual void ResetAndClean();
+  virtual void Render(){};
+  virtual int NextAvailableTextureIndex() const;
   // virtual void setInputSizeWithIdx(int width, int height, int textureIdx) {};
  protected:
   struct InputFrameBufferInfo {
@@ -45,8 +45,8 @@ class GPUPIXEL_API Sink {
     bool ignoreForPrepare;
   };
 
-  std::map<int, InputFrameBufferInfo> _inputFramebuffers;
-  int _inputNum;
+  std::map<int, InputFrameBufferInfo> input_framebuffers_;
+  int input_count_;
 };
 
 }

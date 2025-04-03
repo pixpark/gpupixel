@@ -15,10 +15,10 @@ class GPUPIXEL_API BilateralMonoFilter : public Filter {
  public:
   enum Type { HORIZONTAL, VERTICAL };
 
-  static std::shared_ptr<BilateralMonoFilter> create(Type type = HORIZONTAL);
-  bool init();
+  static std::shared_ptr<BilateralMonoFilter> Create(Type type = HORIZONTAL);
+  bool Init();
 
-  virtual bool doRender(bool updateSinks = true) override;
+  virtual bool DoRender(bool updateSinks = true) override;
 
   void setTexelSpacingMultiplier(float multiplier);
   void setDistanceNormalizationFactor(float value);
@@ -34,8 +34,8 @@ class GPUPIXEL_API BilateralFilter : public FilterGroup {
  public:
   virtual ~BilateralFilter();
 
-  static std::shared_ptr<BilateralFilter> create();
-  bool init();
+  static std::shared_ptr<BilateralFilter> Create();
+  bool Init();
 
   void setTexelSpacingMultiplier(float multiplier);
   void setDistanceNormalizationFactor(float value);

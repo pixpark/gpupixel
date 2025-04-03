@@ -53,27 +53,27 @@ SketchFilter::SketchFilter() : _grayscaleFilter(0), _sketchFilter(0) {}
 
 SketchFilter::~SketchFilter() {}
 
-std::shared_ptr<SketchFilter> SketchFilter::create() {
+std::shared_ptr<SketchFilter> SketchFilter::Create() {
   auto ret = std::shared_ptr<SketchFilter>(new SketchFilter());
-  if (ret && !ret->init()) {
+  if (ret && !ret->Init()) {
     ret.reset();
   }
 
   return ret;
 }
 
-bool SketchFilter::init() {
-  if (!FilterGroup::init()) {
+bool SketchFilter::Init() {
+  if (!FilterGroup::Init()) {
     return false;
   }
 
-  _grayscaleFilter = GrayscaleFilter::create();
-  _sketchFilter = _SketchFilter::create();
-  _grayscaleFilter->addSink(_sketchFilter);
+  _grayscaleFilter = GrayscaleFilter::Create();
+  _sketchFilter = _SketchFilter::Create();
+  _grayscaleFilter->AddSink(_sketchFilter);
   addFilter(_grayscaleFilter);
 
   _edgeStrength = 1.0;
-  registerProperty("edgeStrength", _edgeStrength,
+  RegisterProperty("edgeStrength", _edgeStrength,
                    "The edge strength of sobel edge detection filter",
                    [this](float& edgeStrength) {
                      _sketchFilter->setEdgeStrength(edgeStrength);
@@ -82,16 +82,16 @@ bool SketchFilter::init() {
   return true;
 }
 
-std::shared_ptr<_SketchFilter> _SketchFilter::create() {
+std::shared_ptr<_SketchFilter> _SketchFilter::Create() {
   auto ret = std::shared_ptr<_SketchFilter>(new _SketchFilter());
-  if (!ret || !ret->init()) {
+  if (!ret || !ret->Init()) {
     ret.reset();
   }
   return ret;
 }
 
-bool _SketchFilter::init() {
-  if (!initWithFragmentShaderString(kSketchFilterFragmentShaderString)) {
+bool _SketchFilter::Init() {
+  if (!InitWithFragmentShaderString(kSketchFilterFragmentShaderString)) {
     return false;
   }
   _edgeStrength = 1.0;
@@ -102,22 +102,22 @@ void _SketchFilter::setEdgeStrength(float edgeStrength) {
   _edgeStrength = edgeStrength;
 }
 
-bool _SketchFilter::doRender(bool updateSinks) {
-  float texelWidth = 1.0 / _framebuffer->getWidth();
-  float texelHeight = 1.0 / _framebuffer->getHeight();
+bool _SketchFilter::DoRender(bool updateSinks) {
+  float texelWidth = 1.0 / _framebuffer->GetWidth();
+  float texelHeight = 1.0 / _framebuffer->GetHeight();
 
   std::shared_ptr<GPUPixelFramebuffer> inputFramebuffer =
-      _inputFramebuffers.begin()->second.frameBuffer;
-  RotationMode inputRotation = _inputFramebuffers.begin()->second.rotationMode;
+      input_framebuffers_.begin()->second.frameBuffer;
+  RotationMode inputRotation = input_framebuffers_.begin()->second.rotationMode;
   if (rotationSwapsSize(inputRotation)) {
-    texelWidth = 1.0 / _framebuffer->getHeight();
-    texelHeight = 1.0 / _framebuffer->getWidth();
+    texelWidth = 1.0 / _framebuffer->GetHeight();
+    texelHeight = 1.0 / _framebuffer->GetWidth();
   }
 
-  _filterProgram->setUniformValue("texelWidth", texelWidth);
-  _filterProgram->setUniformValue("texelHeight", texelHeight);
-  _filterProgram->setUniformValue("edgeStrength", _edgeStrength);
-  return NearbySampling3x3Filter::doRender(updateSinks);
+  _filterProgram->SetUniformValue("texelWidth", texelWidth);
+  _filterProgram->SetUniformValue("texelHeight", texelHeight);
+  _filterProgram->SetUniformValue("edgeStrength", _edgeStrength);
+  return NearbySampling3x3Filter::DoRender(updateSinks);
 }
 
 }

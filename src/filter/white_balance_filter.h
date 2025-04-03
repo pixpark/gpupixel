@@ -13,9 +13,9 @@
 namespace gpupixel {
 class GPUPIXEL_API WhiteBalanceFilter : public Filter {
  public:
-  static std::shared_ptr<WhiteBalanceFilter> create();
-  bool init();
-  virtual bool doRender(bool updateSinks = true) override;
+  static std::shared_ptr<WhiteBalanceFilter> Create();
+  bool Init();
+  virtual bool DoRender(bool updateSinks = true) override;
 
   void setTemperature(float temperature);
   void setTint(float tint);

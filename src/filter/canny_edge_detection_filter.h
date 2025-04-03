@@ -18,9 +18,9 @@
 namespace gpupixel {
 class GPUPIXEL_API CannyEdgeDetectionFilter : public FilterGroup {
  public:
-  static std::shared_ptr<CannyEdgeDetectionFilter> create();
+  static std::shared_ptr<CannyEdgeDetectionFilter> Create();
   ~CannyEdgeDetectionFilter();
-  bool init();
+  bool Init();
 
  protected:
   CannyEdgeDetectionFilter();

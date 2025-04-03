@@ -96,8 +96,8 @@ const std::string kConvolution3x3FragmentShaderString = R"(
     })";
 #endif
 
-bool Convolution3x3Filter::init() {
-  if (!NearbySampling3x3Filter::initWithFragmentShaderString(
+bool Convolution3x3Filter::Init() {
+  if (!NearbySampling3x3Filter::InitWithFragmentShaderString(
           kConvolution3x3FragmentShaderString)) {
     return false;
   }
@@ -107,9 +107,9 @@ bool Convolution3x3Filter::init() {
   return true;
 }
 
-bool Convolution3x3Filter::doRender(bool updateSinks) {
-  _filterProgram->setUniformValue("convolutionMatrix", _convolutionKernel);
-  return NearbySampling3x3Filter::doRender(updateSinks);
+bool Convolution3x3Filter::DoRender(bool updateSinks) {
+  _filterProgram->SetUniformValue("convolutionMatrix", _convolutionKernel);
+  return NearbySampling3x3Filter::DoRender(updateSinks);
 }
 
 }

@@ -16,20 +16,20 @@ REGISTER_FILTER_CLASS(GaussianBlurMonoFilter)
 GaussianBlurMonoFilter::GaussianBlurMonoFilter(Type type /* = HORIZONTAL*/)
     : _type(type), _radius(4), _sigma(2.0) {}
 
-std::shared_ptr<GaussianBlurMonoFilter> GaussianBlurMonoFilter::create(
+std::shared_ptr<GaussianBlurMonoFilter> GaussianBlurMonoFilter::Create(
     Type type /* = HORIZONTAL*/,
     int radius /* = 4*/,
     float sigma /* = 2.0*/) {
   auto ret =
       std::shared_ptr<GaussianBlurMonoFilter>(new GaussianBlurMonoFilter(type));
-  if (ret && !ret->init(radius, sigma)) {
+  if (ret && !ret->Init(radius, sigma)) {
     ret.reset();
   }
   return ret;
 }
 
-bool GaussianBlurMonoFilter::init(int radius, float sigma) {
-  if (Filter::initWithShaderString(
+bool GaussianBlurMonoFilter::Init(int radius, float sigma) {
+  if (Filter::InitWithShaderString(
           _generateOptimizedVertexShaderString(radius, sigma),
           _generateOptimizedFragmentShaderString(radius, sigma))) {
     return true;
@@ -37,7 +37,7 @@ bool GaussianBlurMonoFilter::init(int radius, float sigma) {
   return false;
 }
 
-void GaussianBlurMonoFilter::setRadius(int radius) {
+void GaussianBlurMonoFilter::SetRadius(int radius) {
   if (radius == _radius) {
     return;
   }
@@ -48,7 +48,7 @@ void GaussianBlurMonoFilter::setRadius(int radius) {
     delete _filterProgram;
     _filterProgram = 0;
   }
-  initWithShaderString(_generateOptimizedVertexShaderString(_radius, _sigma),
+  InitWithShaderString(_generateOptimizedVertexShaderString(_radius, _sigma),
                        _generateOptimizedFragmentShaderString(_radius, _sigma));
 }
 
@@ -80,39 +80,39 @@ void GaussianBlurMonoFilter::setSigma(float sigma) {
     delete _filterProgram;
     _filterProgram = 0;
   }
-  initWithShaderString(_generateOptimizedVertexShaderString(_radius, _sigma),
+  InitWithShaderString(_generateOptimizedVertexShaderString(_radius, _sigma),
                        _generateOptimizedFragmentShaderString(_radius, _sigma));
 }
 
-bool GaussianBlurMonoFilter::doRender(bool updateSinks) {
-  RotationMode inputRotation = _inputFramebuffers.begin()->second.rotationMode;
+bool GaussianBlurMonoFilter::DoRender(bool updateSinks) {
+  RotationMode inputRotation = input_framebuffers_.begin()->second.rotationMode;
 
   if (rotationSwapsSize(inputRotation)) {
     if (_type == HORIZONTAL) {
-      _filterProgram->setUniformValue("texelWidthOffset", (float)0.0);
-      _filterProgram->setUniformValue(
+      _filterProgram->SetUniformValue("texelWidthOffset", (float)0.0);
+      _filterProgram->SetUniformValue(
           "texelHeightOffset",
-          (float)(verticalTexelSpacing_ / _framebuffer->getWidth()));
+          (float)(verticalTexelSpacing_ / _framebuffer->GetWidth()));
     } else {
-      _filterProgram->setUniformValue(
+      _filterProgram->SetUniformValue(
           "texelWidthOffset",
-          (float)(horizontalTexelSpacing_ / _framebuffer->getHeight()));
-      _filterProgram->setUniformValue("texelHeightOffset", (float)0.0);
+          (float)(horizontalTexelSpacing_ / _framebuffer->GetHeight()));
+      _filterProgram->SetUniformValue("texelHeightOffset", (float)0.0);
     }
   } else {
     if (_type == HORIZONTAL) {
-      _filterProgram->setUniformValue(
+      _filterProgram->SetUniformValue(
           "texelWidthOffset",
-          (float)(verticalTexelSpacing_ / _framebuffer->getWidth()));
-      _filterProgram->setUniformValue("texelHeightOffset", (float)0.0);
+          (float)(verticalTexelSpacing_ / _framebuffer->GetWidth()));
+      _filterProgram->SetUniformValue("texelHeightOffset", (float)0.0);
     } else {
-      _filterProgram->setUniformValue("texelWidthOffset", (float)0.0);
-      _filterProgram->setUniformValue(
+      _filterProgram->SetUniformValue("texelWidthOffset", (float)0.0);
+      _filterProgram->SetUniformValue(
           "texelHeightOffset",
-          (float)(horizontalTexelSpacing_ / _framebuffer->getHeight()));
+          (float)(horizontalTexelSpacing_ / _framebuffer->GetHeight()));
     }
   }
-  return Filter::doRender(updateSinks);
+  return Filter::DoRender(updateSinks);
 }
 
 void GaussianBlurMonoFilter::setTexelSpacingMultiplier(float value) {

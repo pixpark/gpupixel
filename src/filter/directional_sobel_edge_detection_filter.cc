@@ -118,17 +118,17 @@ const std::string kDirectionalSobelEdgeDetectionFragmentShaderString =
 #endif
 
 std::shared_ptr<DirectionalSobelEdgeDetectionFilter>
-DirectionalSobelEdgeDetectionFilter::create() {
+DirectionalSobelEdgeDetectionFilter::Create() {
   auto ret = std::shared_ptr<DirectionalSobelEdgeDetectionFilter>(
       new DirectionalSobelEdgeDetectionFilter());
-  if (ret && !ret->init()) {
+  if (ret && !ret->Init()) {
     ret.reset();
   }
   return ret;
 }
 
-bool DirectionalSobelEdgeDetectionFilter::init() {
-  if (initWithFragmentShaderString(
+bool DirectionalSobelEdgeDetectionFilter::Init() {
+  if (InitWithFragmentShaderString(
           kDirectionalSobelEdgeDetectionFragmentShaderString)) {
     return true;
   }

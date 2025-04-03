@@ -21,13 +21,13 @@ GPUPIXEL_API typedef struct {
 
 class GPUPIXEL_API FaceMakeupFilter : public Filter {
  public:
-  static std::shared_ptr<FaceMakeupFilter> create();
+  static std::shared_ptr<FaceMakeupFilter> Create();
   ~FaceMakeupFilter();
-  virtual bool init();
-  virtual bool doRender(bool updateSinks = true) override;
+  virtual bool Init();
+  virtual bool DoRender(bool updateSinks = true) override;
 
  
-  inline void setBlendLevel(float level) { this->blend_level_ = level; }
+  inline void SetBlendLevel(float level) { this->blend_level_ = level; }
   void SetFaceLandmarks(std::vector<float> landmarks);
  protected:
   FaceMakeupFilter();

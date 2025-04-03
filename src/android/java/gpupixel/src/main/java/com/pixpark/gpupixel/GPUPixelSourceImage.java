@@ -22,7 +22,7 @@ public class GPUPixelSourceImage extends GPUPixelSource {
     protected  Bitmap bitmap;
     public GPUPixelSourceImage(Bitmap bitmap) {
         if (mNativeClassID != 0) return;
-        GPUPixel.getInstance().runOnDraw(new Runnable() {
+        GPUPixel.GetInstance().runOnDraw(new Runnable() {
             @Override
             public void run() {
                 mNativeClassID = GPUPixel.nativeSourceImageNew();
@@ -33,7 +33,7 @@ public class GPUPixelSourceImage extends GPUPixelSource {
 
     public void setImage(final Bitmap bitmap) {
         this.bitmap = bitmap;
-        GPUPixel.getInstance().runOnDraw(new Runnable() {
+        GPUPixel.GetInstance().runOnDraw(new Runnable() {
             @Override
             public void run() {
                 if (mNativeClassID != 0)
@@ -42,14 +42,14 @@ public class GPUPixelSourceImage extends GPUPixelSource {
         });
     }
 
-    public void destroy() {
-        destroy(true);
+    public void Destroy() {
+        Destroy(true);
     }
 
-    public void destroy(boolean onGLThread) {
+    public void Destroy(boolean onGLThread) {
         if (mNativeClassID != 0) {
             if (onGLThread) {
-                GPUPixel.getInstance().runOnDraw(new Runnable() {
+                GPUPixel.GetInstance().runOnDraw(new Runnable() {
                     @Override
                     public void run() {
                         if (mNativeClassID != 0) {
@@ -69,15 +69,15 @@ public class GPUPixelSourceImage extends GPUPixelSource {
     protected void finalize() throws Throwable {
         try {
             if (mNativeClassID != 0) {
-                if (GPUPixel.getInstance().getGLSurfaceView() != null) {
-                    GPUPixel.getInstance().runOnDraw(new Runnable() {
+                if (GPUPixel.GetInstance().getGLSurfaceView() != null) {
+                    GPUPixel.GetInstance().runOnDraw(new Runnable() {
                         @Override
                         public void run() {
                             GPUPixel.nativeSourceImageFinalize(mNativeClassID);
                             mNativeClassID = 0;
                         }
                     });
-                    GPUPixel.getInstance().requestRender();
+                    GPUPixel.GetInstance().requestRender();
                 } else {
                     GPUPixel.nativeSourceImageFinalize(mNativeClassID);
                     mNativeClassID = 0;

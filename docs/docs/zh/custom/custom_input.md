@@ -16,7 +16,7 @@
 ```cpp
 class YourCustomInput : public Source {
  public:
-  static std::shared_ptr<YourCustomInput> create();
+  static std::shared_ptr<YourCustomInput> Create();
   // 您的自定义方法
  private:
   // 您的私有成员
@@ -30,9 +30,9 @@ class YourCustomInput : public Source {
 实现静态创建方法和构造函数：
 
 ```cpp
-std::shared_ptr<YourCustomInput> YourCustomInput::create() {
+std::shared_ptr<YourCustomInput> YourCustomInput::Create() {
   auto input = std::shared_ptr<YourCustomInput>(new YourCustomInput());
-  if (input->init()) {
+  if (input->Init()) {
     return input;
   }
   return nullptr;
@@ -44,13 +44,13 @@ std::shared_ptr<YourCustomInput> YourCustomInput::create() {
 为您的输入源创建和管理帧缓冲区：
 
 ```cpp
-if (!_framebuffer || (_framebuffer->getWidth() != width ||
-                      _framebuffer->getHeight() != height)) {
+if (!_framebuffer || (_framebuffer->GetWidth() != width ||
+                      _framebuffer->GetHeight() != height)) {
   _framebuffer =
-      GPUPixelContext::getInstance()->getFramebufferFactory()->fetchFramebuffer(
+      GPUPixelContext::GetInstance()->GetFramebufferFactory()->CreateFramebuffer(
           width, height);
 }
-this->setFramebuffer(_framebuffer, outputRotation);
+this->SetFramebuffer(_framebuffer, outputRotation);
 ```
 
 ### 3. 数据输入处理
@@ -72,7 +72,7 @@ void YourCustomInput::setFrameData(const uint8_t* pixels,
   }
   
   // 更新纹理
-  glBindTexture(GL_TEXTURE_2D, this->getFramebuffer()->getTexture());
+  glBindTexture(GL_TEXTURE_2D, this->GetFramebuffer()->GetTexture());
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0,
                GL_RGBA, GL_UNSIGNED_BYTE, pixels);
 }
@@ -80,10 +80,10 @@ void YourCustomInput::setFrameData(const uint8_t* pixels,
 
 ### 4. 数据流控制
 
-调用 `doRender()` 来通过滤镜链处理帧：
+调用 `DoRender()` 来通过滤镜链处理帧：
 
 ```cpp
-Source::doRender(true, timestamp);
+Source::DoRender(true, timestamp);
 ```
 
 ## 示例：SourceRawData
@@ -95,7 +95,7 @@ SourceRawData 演示了如何处理原始像素数据：
 3. 实现格式转换的着色器程序
 
 主要特性：
-- `processData()`：处理 RGBA 和 YUV 数据
+- `ProcessData()`：处理 RGBA 和 YUV 数据
 - 不同格式的纹理管理
 - YUV 到 RGB 转换的着色器程序
 
@@ -140,10 +140,10 @@ SourceCamera 展示了如何处理相机输入：
 要使用您的自定义输入源：
 
 ```cpp
-auto input = YourCustomInput::create();
+auto input = YourCustomInput::Create();
 if (input) {
-  auto filter = BeautyFaceFilter::create();
-  input->addSink(filter);
+  auto filter = BeautyFaceFilter::Create();
+  input->AddSink(filter);
   // 设置更多滤镜或输出
 }
 ```

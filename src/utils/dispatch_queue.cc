@@ -33,7 +33,7 @@ void DispatchQueue::processAll() {
     }
 }
  
-void DispatchQueue::runSync(std::function<void()> task) {
+void DispatchQueue::RunSync(std::function<void()> task) {
     add(task);
     processOne();
 }

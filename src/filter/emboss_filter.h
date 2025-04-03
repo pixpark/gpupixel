@@ -12,8 +12,8 @@
 namespace gpupixel {
 class GPUPIXEL_API EmbossFilter : public Convolution3x3Filter {
  public:
-  static std::shared_ptr<EmbossFilter> create();
-  bool init();
+  static std::shared_ptr<EmbossFilter> Create();
+  bool Init();
 
   void setIntensity(float intensity);
 

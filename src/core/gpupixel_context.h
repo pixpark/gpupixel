@@ -27,23 +27,22 @@
 namespace gpupixel {
 class GPUPIXEL_API GPUPixelContext {
  public:
-  static GPUPixelContext* getInstance();
-  static void destroy();
+  static GPUPixelContext* GetInstance();
+  static void Destroy();
 
-  FramebufferFactory* getFramebufferFactory() const;
+  FramebufferFactory* GetFramebufferFactory() const;
   //todo(zhaoyou)
-  void setActiveShaderProgram(GPUPixelGLProgram* shaderProgram);
-  void clean();
+  void SetActiveGlProgram(GPUPixelGLProgram* shaderProgram);
+  void Clean();
 
-  void runSync(std::function<void(void)> func);
-  void runAsync(std::function<void(void)> func);
-  void useAsCurrent(void);
-  void presentBufferForDisplay();
+  void RunSync(std::function<void(void)> func);
+  void UseAsCurrent(void);
+  void PresentBufferForDisplay();
  
 #if defined(GPUPIXEL_IOS)
-  EAGLContext* getEglContext() const { return _eglContext; };
+  EAGLContext* GetEglContext() const { return _eglContext; };
 #elif defined(GPUPIXEL_MAC)
-  NSOpenGLContext* getOpenGLContext() const { return imageProcessingContext; };
+  NSOpenGLContext* GetOpenGLContext() const { return imageProcessingContext; };
 #elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
   GLFWwindow* GetGLContext() const { return gl_context_; };
 #endif
@@ -60,7 +59,7 @@ class GPUPIXEL_API GPUPixelContext {
   GPUPixelContext();
   ~GPUPixelContext();
 
-  void init();
+  void Init();
 
   void createContext();
   void releaseContext();

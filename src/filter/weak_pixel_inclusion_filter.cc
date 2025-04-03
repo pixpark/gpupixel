@@ -91,17 +91,17 @@ const std::string kWeakPixelInclusionFragmentShaderString = R"(
     })";
 #endif
 
-std::shared_ptr<WeakPixelInclusionFilter> WeakPixelInclusionFilter::create() {
+std::shared_ptr<WeakPixelInclusionFilter> WeakPixelInclusionFilter::Create() {
   auto ret =
       std::shared_ptr<WeakPixelInclusionFilter>(new WeakPixelInclusionFilter());
-  if (ret && !ret->init()) {
+  if (ret && !ret->Init()) {
     ret.reset();
   }
   return ret;
 }
 
-bool WeakPixelInclusionFilter::init() {
-  if (initWithFragmentShaderString(kWeakPixelInclusionFragmentShaderString)) {
+bool WeakPixelInclusionFilter::Init() {
+  if (InitWithFragmentShaderString(kWeakPixelInclusionFragmentShaderString)) {
     return true;
   }
   return false;

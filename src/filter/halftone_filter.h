@@ -13,8 +13,8 @@
 namespace gpupixel {
 class GPUPIXEL_API HalftoneFilter : public PixellationFilter {
  public:
-  static std::shared_ptr<HalftoneFilter> create();
-  bool init();
+  static std::shared_ptr<HalftoneFilter> Create();
+  bool Init();
 
  protected:
   HalftoneFilter(){};

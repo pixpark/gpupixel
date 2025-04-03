@@ -13,9 +13,9 @@
 namespace gpupixel {
 class GPUPIXEL_API BrightnessFilter : public Filter {
  public:
-  static std::shared_ptr<BrightnessFilter> create(float brightness = 0.0);
-  bool init(float brightness);
-  virtual bool doRender(bool updateSinks = true) override;
+  static std::shared_ptr<BrightnessFilter> Create(float brightness = 0.0);
+  bool Init(float brightness);
+  virtual bool DoRender(bool updateSinks = true) override;
 
   void setBrightness(float brightness);
 

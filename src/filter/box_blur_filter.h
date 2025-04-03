@@ -16,10 +16,10 @@ class GPUPIXEL_API BoxBlurFilter : public FilterGroup {
  public:
   virtual ~BoxBlurFilter();
 
-  static std::shared_ptr<BoxBlurFilter> create(int radius = 4,
+  static std::shared_ptr<BoxBlurFilter> Create(int radius = 4,
                                                float sigma = 2.0);
-  bool init(int radius, float sigma);
-  void setRadius(int radius);
+  bool Init(int radius, float sigma);
+  void SetRadius(int radius);
   void setSigma(float sigma);
   void setTexelSpacingMultiplier(float value);
 

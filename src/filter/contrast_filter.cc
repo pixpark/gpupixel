@@ -7,7 +7,7 @@
 
 #include "contrast_filter.h"
 
-using namespace gpupixel;
+namespace gpupixel {
 
 REGISTER_FILTER_CLASS(ContrastFilter)
 
@@ -21,21 +21,21 @@ const std::string kContrastFragmentShaderString = R"(
           vec4(((color.rgb - vec3(0.5)) * contrast + vec3(0.5)), color.a);
     })";
 
-std::shared_ptr<ContrastFilter> ContrastFilter::create() {
+std::shared_ptr<ContrastFilter> ContrastFilter::Create() {
   auto ret = std::shared_ptr<ContrastFilter>(new ContrastFilter());
-  if (ret && !ret->init()) {
+  if (ret && !ret->Init()) {
     ret.reset();
   }
   return ret;
 }
 
-bool ContrastFilter::init() {
-  if (!initWithFragmentShaderString(kContrastFragmentShaderString)) {
+bool ContrastFilter::Init() {
+  if (!InitWithFragmentShaderString(kContrastFragmentShaderString)) {
     return false;
   }
 
   _contrast = 1.0;
-  registerProperty("contrast", _contrast,
+  RegisterProperty("contrast", _contrast,
                    "The contrast of the image. Contrast ranges from 0.0 to 4.0 "
                    "(max contrast), with 1.0 as the normal level",
                    [this](float& contrast) { setContrast(contrast); });
@@ -52,7 +52,9 @@ void ContrastFilter::setContrast(float contrast) {
   }
 }
 
-bool ContrastFilter::doRender(bool updateSinks) {
-  _filterProgram->setUniformValue("contrast", _contrast);
-  return Filter::doRender(updateSinks);
+bool ContrastFilter::DoRender(bool updateSinks) {
+  _filterProgram->SetUniformValue("contrast", _contrast);
+  return Filter::DoRender(updateSinks);
 }
+
+} // namespace gpupixel

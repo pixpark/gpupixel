@@ -45,7 +45,7 @@ bool setupGlfwWindow()
     }
     
     // Get OpenGL context window from GPUPixel
-    mainWindow = GPUPixelContext::getInstance()->GetGLContext();
+    mainWindow = GPUPixelContext::GetInstance()->GetGLContext();
     if (mainWindow == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -79,13 +79,13 @@ void setupImGui()
 void setupFilterPipeline()
 {
     // Create filters
-    lipstickFilter = LipstickFilter::create();
-    blusherFilter = BlusherFilter::create();
-    reshapeFilter = FaceReshapeFilter::create();
-    beautyFilter = BeautyFaceFilter::create();
+    lipstickFilter = LipstickFilter::Create();
+    blusherFilter = BlusherFilter::Create();
+    reshapeFilter = FaceReshapeFilter::Create();
+    beautyFilter = BeautyFaceFilter::Create();
     
     // Create source image and render sink
-    sourceImage = SourceImage::create("demo.png");
+    sourceImage = SourceImage::Create("demo.png");
     renderSink = std::make_shared<SinkRender>();
 
     // Setup face landmarks callback
@@ -96,13 +96,13 @@ void setupFilterPipeline()
     });
 
     // Build filter pipeline
-    sourceImage->addSink(lipstickFilter)
-                ->addSink(blusherFilter)
-                ->addSink(reshapeFilter)
-                ->addSink(beautyFilter)
-                ->addSink(renderSink);
+    sourceImage->AddSink(lipstickFilter)
+                ->AddSink(blusherFilter)
+                ->AddSink(reshapeFilter)
+                ->AddSink(beautyFilter)
+                ->AddSink(renderSink);
                     
-    renderSink->onSizeChanged(1280, 720);
+    renderSink->SetRenderSize(1280, 720);
 }
 
 // Update filter parameters from UI controls
@@ -110,27 +110,27 @@ void updateFilterParameters()
 {
     // Beauty filter controls
     if (ImGui::SliderFloat("Smoothing", &beautyStrength, 0.0f, 10.0f)) {
-        beautyFilter->setBlurAlpha(beautyStrength/10.0f);
+        beautyFilter->SetBlurAlpha(beautyStrength/10.0f);
     }
     
     if (ImGui::SliderFloat("Whitening", &whiteningStrength, 0.0f, 10.0f)) {
-        beautyFilter->setWhite(whiteningStrength/20.0f);
+        beautyFilter->SetWhite(whiteningStrength/20.0f);
     }
     
     if (ImGui::SliderFloat("Face Slimming", &faceSlimStrength, 0.0f, 10.0f)) {
-        reshapeFilter->setFaceSlimLevel(faceSlimStrength/200.0f);
+        reshapeFilter->SetFaceSlimLevel(faceSlimStrength/200.0f);
     }
     
     if (ImGui::SliderFloat("Eye Enlarging", &eyeEnlargeStrength, 0.0f, 10.0f)) {
-        reshapeFilter->setEyeZoomLevel(eyeEnlargeStrength/100.0f);
+        reshapeFilter->SetEyeZoomLevel(eyeEnlargeStrength/100.0f);
     }
     
     if (ImGui::SliderFloat("Lipstick", &lipstickStrength, 0.0f, 10.0f)) {
-        lipstickFilter->setBlendLevel(lipstickStrength/10.0f);
+        lipstickFilter->SetBlendLevel(lipstickStrength/10.0f);
     }
     
     if (ImGui::SliderFloat("Blusher", &blusherStrength, 0.0f, 10.0f)) {
-        blusherFilter->setBlendLevel(blusherStrength/10.0f);
+        blusherFilter->SetBlendLevel(blusherStrength/10.0f);
     }
 }
 

@@ -13,10 +13,10 @@
 namespace gpupixel {
 class GPUPIXEL_API ColorMatrixFilter : public Filter {
  public:
-  static std::shared_ptr<ColorMatrixFilter> create();
-  bool init();
+  static std::shared_ptr<ColorMatrixFilter> Create();
+  bool Init();
 
-  virtual bool doRender(bool updateSinks = true) override;
+  virtual bool DoRender(bool updateSinks = true) override;
 
   void setIntensity(float intensity) { _intensity = intensity; }
   void setColorMatrix(Matrix4 colorMatrix) { _colorMatrix = colorMatrix; }

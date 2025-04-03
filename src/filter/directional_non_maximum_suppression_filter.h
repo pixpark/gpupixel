@@ -13,10 +13,10 @@
 namespace gpupixel {
 class GPUPIXEL_API DirectionalNonMaximumSuppressionFilter : public Filter {
  public:
-  static std::shared_ptr<DirectionalNonMaximumSuppressionFilter> create();
-  bool init();
+  static std::shared_ptr<DirectionalNonMaximumSuppressionFilter> Create();
+  bool Init();
 
-  virtual bool doRender(bool updateSinks = true) override;
+  virtual bool DoRender(bool updateSinks = true) override;
 
  protected:
   GLuint _texelWidthUniform;

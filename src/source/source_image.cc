@@ -17,18 +17,18 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 #include "face_detector.h"
-using namespace gpupixel;
+namespace gpupixel {
 
-std::shared_ptr<SourceImage> SourceImage::create_from_memory(int width,
+std::shared_ptr<SourceImage> SourceImage::CreateFromBuffer(int width,
                                                  int height,
                                                  int channel_count,
                                                  const unsigned char *pixels) {
     auto sourceImage = std::shared_ptr<SourceImage>(new SourceImage());
-    sourceImage->init(width, height, channel_count, pixels);
+    sourceImage->Init(width, height, channel_count, pixels);
     return sourceImage;
 }
 
-std::shared_ptr<SourceImage> SourceImage::create(const std::string name) {
+std::shared_ptr<SourceImage> SourceImage::Create(const std::string name) {
     int width, height, channel_count;
     unsigned char *data = stbi_load(name.c_str(), &width, &height, &channel_count, 4);
 //   todo(logo info)
@@ -36,21 +36,21 @@ std::shared_ptr<SourceImage> SourceImage::create(const std::string name) {
         Util::Log("SourceImage", "SourceImage: input data in null! file name: %s", name.c_str());
         return nullptr;
     }
-    auto image = SourceImage::create_from_memory(width, height, channel_count, data);
+    auto image = SourceImage::CreateFromBuffer(width, height, channel_count, data);
     stbi_image_free(data);
     return image;
 }
 
-void SourceImage::init(int width, int height, int channel_count, const unsigned char* pixels) {
-    this->setFramebuffer(0);
-    if (!_framebuffer || (_framebuffer->getWidth() != width ||
-                            _framebuffer->getHeight() != height)) {
+void SourceImage::Init(int width, int height, int channel_count, const unsigned char* pixels) {
+    this->SetFramebuffer(0);
+    if (!_framebuffer || (_framebuffer->GetWidth() != width ||
+                            _framebuffer->GetHeight() != height)) {
         _framebuffer =
-                GPUPixelContext::getInstance()->getFramebufferFactory()->fetchFramebuffer(
+                GPUPixelContext::GetInstance()->GetFramebufferFactory()->CreateFramebuffer(
                         width, height, true);
     }
-    this->setFramebuffer(_framebuffer);
-    CHECK_GL(glBindTexture(GL_TEXTURE_2D, this->getFramebuffer()->getTexture()));
+    this->SetFramebuffer(_framebuffer);
+    CHECK_GL(glBindTexture(GL_TEXTURE_2D, this->GetFramebuffer()->GetTexture()));
   
     CHECK_GL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
                           GL_UNSIGNED_BYTE, pixels));
@@ -63,12 +63,13 @@ void SourceImage::Render() {
   GPUPIXEL_FRAME_TYPE type;
   if(_face_detector) {
     _face_detector->Detect(image_bytes.data(),
-                           _framebuffer->getWidth(),
-                           _framebuffer->getHeight(),
+                           _framebuffer->GetWidth(),
+                           _framebuffer->GetHeight(),
                            GPUPIXEL_MODE_FMT_PICTURE,
                            GPUPIXEL_FRAME_TYPE_RGBA8888);
   }
   
-  Source::doRender();
+  Source::DoRender();
 }
 
+} // namespace gpupixel

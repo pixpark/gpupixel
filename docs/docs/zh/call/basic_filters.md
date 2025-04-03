@@ -20,7 +20,7 @@ GPUPixel 采用滤镜链架构设计，视频或图像数据通过一系列滤�
 
 ```cpp
 // 初始化 GPUPixel 上下文并在其线程中运行操作
-gpupixel::GPUPixelContext::getInstance()->runSync([&] {
+gpupixel::GPUPixelContext::GetInstance()->RunSync([&] {
     // 在这里创建你的滤镜并设置滤镜链
 });
 ```
@@ -36,19 +36,19 @@ std::shared_ptr<BeautyFaceFilter> beauty_face_filter_;
 std::shared_ptr<SinkRawData> target_raw_output_;
 
 // 初始化并链接组件
-gpupixel::GPUPixelContext::getInstance()->runSync([&] {
+gpupixel::GPUPixelContext::GetInstance()->RunSync([&] {
     // 创建源
-    source_raw_input_ = SourceRawData::create();
+    source_raw_input_ = SourceRawData::Create();
     
     // 创建滤镜
-    beauty_face_filter_ = BeautyFaceFilter::create();
+    beauty_face_filter_ = BeautyFaceFilter::Create();
     
     // 创建目标
-    target_raw_output_ = SinkRawData::create();
+    target_raw_output_ = SinkRawData::Create();
     
     // 链接滤镜链
-    source_raw_input_->addSink(beauty_face_filter_)
-                     ->addSink(target_raw_output_);
+    source_raw_input_->AddSink(beauty_face_filter_)
+                     ->AddSink(target_raw_output_);
 });
 ```
 
@@ -58,7 +58,7 @@ gpupixel::GPUPixelContext::getInstance()->runSync([&] {
 
 ```cpp
 // 清理 GPUPixel 资源
-gpupixel::GPUPixelContext::getInstance()->runSync([&] {
+gpupixel::GPUPixelContext::GetInstance()->RunSync([&] {
     // 释放你的滤镜引用
     source_raw_input_.reset();
     beauty_face_filter_.reset();

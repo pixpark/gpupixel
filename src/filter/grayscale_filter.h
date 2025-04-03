@@ -13,10 +13,10 @@
 namespace gpupixel {
 class GPUPIXEL_API GrayscaleFilter : public Filter {
  public:
-  static std::shared_ptr<GrayscaleFilter> create();
-  bool init();
+  static std::shared_ptr<GrayscaleFilter> Create();
+  bool Init();
 
-  virtual bool doRender(bool updateSinks = true) override;
+  virtual bool DoRender(bool updateSinks = true) override;
 
  protected:
   GrayscaleFilter(){};

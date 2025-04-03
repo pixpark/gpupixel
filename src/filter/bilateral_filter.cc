@@ -213,58 +213,58 @@ BilateralMonoFilter::BilateralMonoFilter(Type type)
       _texelSpacingMultiplier(4.0),
       _distanceNormalizationFactor(8.0) {}
 
-std::shared_ptr<BilateralMonoFilter> BilateralMonoFilter::create(
+std::shared_ptr<BilateralMonoFilter> BilateralMonoFilter::Create(
     Type type /* = HORIZONTAL*/) {
   auto ret =
       std::shared_ptr<BilateralMonoFilter>(new BilateralMonoFilter(type));
-  if (!ret || !ret->init()) {
+  if (!ret || !ret->Init()) {
     ret.reset();
   }
   return ret;
 }
 
-bool BilateralMonoFilter::init() {
-  if (Filter::initWithShaderString(kBilateralBlurVertexShaderString,
+bool BilateralMonoFilter::Init() {
+  if (Filter::InitWithShaderString(kBilateralBlurVertexShaderString,
                                    kBilateralBlurFragmentShaderString)) {
     return true;
   }
   return false;
 }
 
-bool BilateralMonoFilter::doRender(bool updateSinks) {
+bool BilateralMonoFilter::DoRender(bool updateSinks) {
   std::shared_ptr<GPUPixelFramebuffer> inputFramebuffer =
-      _inputFramebuffers.begin()->second.frameBuffer;
-  RotationMode inputRotation = _inputFramebuffers.begin()->second.rotationMode;
+      input_framebuffers_.begin()->second.frameBuffer;
+  RotationMode inputRotation = input_framebuffers_.begin()->second.rotationMode;
 
   if (rotationSwapsSize(inputRotation)) {
     if (_type == HORIZONTAL) {
-      _filterProgram->setUniformValue("texelSpacingU", (float)0.0);
-      _filterProgram->setUniformValue(
+      _filterProgram->SetUniformValue("texelSpacingU", (float)0.0);
+      _filterProgram->SetUniformValue(
           "texelSpacingV",
-          (float)(_texelSpacingMultiplier / _framebuffer->getWidth()));
+          (float)(_texelSpacingMultiplier / _framebuffer->GetWidth()));
     } else {
-      _filterProgram->setUniformValue(
+      _filterProgram->SetUniformValue(
           "texelSpacingU",
-          (float)(_texelSpacingMultiplier / _framebuffer->getHeight()));
-      _filterProgram->setUniformValue("texelSpacingV", (float)0.0);
+          (float)(_texelSpacingMultiplier / _framebuffer->GetHeight()));
+      _filterProgram->SetUniformValue("texelSpacingV", (float)0.0);
     }
   } else {
     if (_type == HORIZONTAL) {
-      _filterProgram->setUniformValue(
+      _filterProgram->SetUniformValue(
           "texelSpacingU",
-          (float)(_texelSpacingMultiplier / _framebuffer->getWidth()));
-      _filterProgram->setUniformValue("texelSpacingV", (float)0.0);
+          (float)(_texelSpacingMultiplier / _framebuffer->GetWidth()));
+      _filterProgram->SetUniformValue("texelSpacingV", (float)0.0);
     } else {
-      _filterProgram->setUniformValue("texelSpacingU", (float)0.0);
-      _filterProgram->setUniformValue(
+      _filterProgram->SetUniformValue("texelSpacingU", (float)0.0);
+      _filterProgram->SetUniformValue(
           "texelSpacingV",
-          (float)(_texelSpacingMultiplier / _framebuffer->getHeight()));
+          (float)(_texelSpacingMultiplier / _framebuffer->GetHeight()));
     }
   }
 
-  _filterProgram->setUniformValue("distanceNormalizationFactor",
+  _filterProgram->SetUniformValue("distanceNormalizationFactor",
                                   _distanceNormalizationFactor);
-  return Filter::doRender(updateSinks);
+  return Filter::DoRender(updateSinks);
 }
 
 void BilateralMonoFilter::setTexelSpacingMultiplier(float multiplier) {
@@ -281,31 +281,31 @@ BilateralFilter::BilateralFilter() : _hBlurFilter(0), _vBlurFilter(0) {}
 
 BilateralFilter::~BilateralFilter() {}
 
-std::shared_ptr<BilateralFilter> BilateralFilter::create() {
+std::shared_ptr<BilateralFilter> BilateralFilter::Create() {
   auto ret = std::shared_ptr<BilateralFilter>(new BilateralFilter());
-  if (ret && !ret->init()) {
+  if (ret && !ret->Init()) {
     ret.reset();
   }
   return ret;
 }
 
-bool BilateralFilter::init() {
-  if (!FilterGroup::init()) {
+bool BilateralFilter::Init() {
+  if (!FilterGroup::Init()) {
     return false;
   }
 
-  _hBlurFilter = BilateralMonoFilter::create(BilateralMonoFilter::HORIZONTAL);
-  _vBlurFilter = BilateralMonoFilter::create(BilateralMonoFilter::VERTICAL);
-  _hBlurFilter->addSink(_vBlurFilter);
+  _hBlurFilter = BilateralMonoFilter::Create(BilateralMonoFilter::HORIZONTAL);
+  _vBlurFilter = BilateralMonoFilter::Create(BilateralMonoFilter::VERTICAL);
+  _hBlurFilter->AddSink(_vBlurFilter);
   addFilter(_hBlurFilter);
 
-  registerProperty("texelSpacingMultiplier", 4.0,
+  RegisterProperty("texelSpacingMultiplier", 4.0,
                    "The texel spacing multiplier.",
                    [this](float& texelSpacingMultiplier) {
                      setTexelSpacingMultiplier(texelSpacingMultiplier);
                    });
 
-  registerProperty(
+  RegisterProperty(
       "distanceNormalizationFactor", 8.0, "The distance normalization factor.",
       [this](float& distanceNormalizationFactor) {
         setDistanceNormalizationFactor(distanceNormalizationFactor);

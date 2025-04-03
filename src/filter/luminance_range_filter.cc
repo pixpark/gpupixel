@@ -7,7 +7,7 @@
 
 #include "luminance_range_filter.h"
 
-using namespace gpupixel;
+namespace gpupixel {
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
 const std::string kLuminanceRangeFragmentShaderString = R"(
@@ -42,21 +42,21 @@ const std::string kLuminanceRangeFragmentShaderString = R"(
     })";
 #endif
 
-std::shared_ptr<LuminanceRangeFilter> LuminanceRangeFilter::create() {
+std::shared_ptr<LuminanceRangeFilter> LuminanceRangeFilter::Create() {
   auto ret = std::shared_ptr<LuminanceRangeFilter>(new LuminanceRangeFilter());
-  if (ret && !ret->init()) {
+  if (ret && !ret->Init()) {
     ret.reset();
   }
   return ret;
 }
 
-bool LuminanceRangeFilter::init() {
-  if (!initWithFragmentShaderString(kLuminanceRangeFragmentShaderString)) {
+bool LuminanceRangeFilter::Init() {
+  if (!InitWithFragmentShaderString(kLuminanceRangeFragmentShaderString)) {
     return false;
   }
 
   _rangeReductionFactor = 0.6;
-  registerProperty("rangeReductionFactor", _rangeReductionFactor,
+  RegisterProperty("rangeReductionFactor", _rangeReductionFactor,
                    "The degree to reduce the luminance range, from 0.0 to 1.0. "
                    "Default is 0.6.",
                    [this](float& rangeReductionFactor) {
@@ -75,8 +75,10 @@ void LuminanceRangeFilter::setRangeReductionFactor(float rangeReductionFactor) {
   }
 }
 
-bool LuminanceRangeFilter::doRender(bool updateSinks) {
-  _filterProgram->setUniformValue("rangeReductionFactor",
+bool LuminanceRangeFilter::DoRender(bool updateSinks) {
+  _filterProgram->SetUniformValue("rangeReductionFactor",
                                   _rangeReductionFactor);
-  return Filter::doRender(updateSinks);
+  return Filter::DoRender(updateSinks);
 }
+
+} // namespace gpupixel

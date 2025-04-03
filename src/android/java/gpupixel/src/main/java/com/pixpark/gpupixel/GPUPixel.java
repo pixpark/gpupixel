@@ -41,11 +41,11 @@ public class GPUPixel {
     }
 
 
-    private GPUPixel(){ init(); }
-    public static final GPUPixel getInstance() {
+    private GPUPixel(){ Init(); }
+    public static final GPUPixel GetInstance() {
         GPUPixel instance = SingletonHolder.INSTANCE;
         if (!instance.isInited()) {
-            instance.init();
+            instance.Init();
         }
         return instance;
     }
@@ -57,7 +57,7 @@ public class GPUPixel {
         copyResource(context);
     }
 
-    public void init() {
+    public void Init() {
         mRenderer = new GPUPixelRenderer();
         runOnDraw(new Runnable() {
             @Override
@@ -67,7 +67,7 @@ public class GPUPixel {
         });
     }
 
-    public void destroy() {
+    public void Destroy() {
         if (!isInited()) return;
         clean();
         setGLSurfaceView(null);
@@ -116,7 +116,7 @@ public class GPUPixel {
 
     public void clean() {
         if (mGLSurfaceView != null) {
-            GPUPixel.getInstance().runOnDraw(new Runnable() {
+            GPUPixel.GetInstance().runOnDraw(new Runnable() {
                 @Override
                 public void run() {
                     GPUPixel.nativeContextClean();
@@ -236,7 +236,7 @@ public class GPUPixel {
     public static native boolean nativeSourceProceed(final long classID, final boolean updateSinks);
     public static native int nativeSourceGetRotatedFramebuferWidth(final long classID);
     public static native int nativeSourceGetRotatedFramebuferHeight(final long classID);
-    public static native byte[] nativeSourceCaptureAProcessedFrameData(final long classId, final long upToFilterClassId, final int width, final int height);
+    public static native byte[] nativeSourceGetProcessedFrameData(final long classId, final long upToFilterClassId, final int width, final int height);
 
     // view
     public static native long nativeSinkRender();

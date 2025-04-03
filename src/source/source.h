@@ -23,35 +23,35 @@ class GPUPIXEL_API Source {
  public:
   Source();
   virtual ~Source();
-  virtual std::shared_ptr<Source> addSink(std::shared_ptr<Sink> sink);
-  virtual std::shared_ptr<Source> addSink(std::shared_ptr<Sink> sink,
+  virtual std::shared_ptr<Source> AddSink(std::shared_ptr<Sink> sink);
+  virtual std::shared_ptr<Source> AddSink(std::shared_ptr<Sink> sink,
                                             int texIdx);
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
-  virtual std::shared_ptr<Source> addSink(id<GPUPixelSink> sink);
+  virtual std::shared_ptr<Source> AddSink(id<GPUPixelSink> sink);
 #endif
-  virtual void removeSink(std::shared_ptr<Sink> sink);
-  virtual void removeAllSinks();
-  virtual bool hasSink(const std::shared_ptr<Sink> sink) const;
-  virtual std::map<std::shared_ptr<Sink>, int>& getSinks() {
+  virtual void RemoveSink(std::shared_ptr<Sink> sink);
+  virtual void RemoveAllSinks();
+  virtual bool HasSink(const std::shared_ptr<Sink> sink) const;
+  virtual std::map<std::shared_ptr<Sink>, int>& GetSinks() {
     return _sinks;
   };
 
-  virtual void setFramebuffer(
+  virtual void SetFramebuffer(
       std::shared_ptr<GPUPixelFramebuffer> fb,
       RotationMode outputRotation = RotationMode::NoRotation);
-  virtual std::shared_ptr<GPUPixelFramebuffer> getFramebuffer() const;
-  virtual void releaseFramebuffer(bool returnToCache = true);
+  virtual std::shared_ptr<GPUPixelFramebuffer> GetFramebuffer() const;
+  virtual void ReleaseFramebuffer(bool returnToCache = true);
 
-  void setFramebufferScale(float framebufferScale) {
+  void SetFramebufferScale(float framebufferScale) {
     _framebufferScale = framebufferScale;
   }
-  int getRotatedFramebufferWidth() const;
-  int getRotatedFramebufferHeight() const;
+  int GetRotatedFramebufferWidth() const;
+  int GetRotatedFramebufferHeight() const;
 
-  virtual bool doRender(bool updateSinks = true);
-  virtual void doUpdateSinks();
+  virtual bool DoRender(bool updateSinks = true);
+  virtual void DoUpdateSinks();
 
-  virtual unsigned char* captureAProcessedFrameData(
+  virtual unsigned char* GetProcessedFrameData(
       std::shared_ptr<Filter> upToFilter,
       int width = 0,
       int height = 0);

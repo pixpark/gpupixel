@@ -7,7 +7,7 @@
 
 #include "posterize_filter.h"
 
-using namespace gpupixel;
+namespace gpupixel {
 
 REGISTER_FILTER_CLASS(PosterizeFilter)
 
@@ -33,21 +33,21 @@ const std::string kPosterizeFragmentShaderString = R"(
     })";
 #endif
 
-std::shared_ptr<PosterizeFilter> PosterizeFilter::create() {
+std::shared_ptr<PosterizeFilter> PosterizeFilter::Create() {
   auto ret = std::shared_ptr<PosterizeFilter>(new PosterizeFilter());
-  if (ret && !ret->init()) {
+  if (ret && !ret->Init()) {
     // todo zhaoyou
   }
   return ret;
 }
 
-bool PosterizeFilter::init() {
-  if (!initWithFragmentShaderString(kPosterizeFragmentShaderString)) {
+bool PosterizeFilter::Init() {
+  if (!InitWithFragmentShaderString(kPosterizeFragmentShaderString)) {
     return false;
   }
 
   _colorLevels = 10;
-  registerProperty("colorLevels", _colorLevels,
+  RegisterProperty("colorLevels", _colorLevels,
                    "The number of color levels to reduce the image space to. "
                    "This ranges from 1 to 256, with a default of 10.",
                    [this](int& colorLevels) { setColorLevels(colorLevels); });
@@ -64,7 +64,9 @@ void PosterizeFilter::setColorLevels(int colorLevels) {
   }
 }
 
-bool PosterizeFilter::doRender(bool updateSinks) {
-  _filterProgram->setUniformValue("colorLevels", (float)_colorLevels);
-  return Filter::doRender(updateSinks);
+bool PosterizeFilter::DoRender(bool updateSinks) {
+  _filterProgram->SetUniformValue("colorLevels", (float)_colorLevels);
+  return Filter::DoRender(updateSinks);
 }
+
+} // namespace gpupixel

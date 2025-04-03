@@ -18,27 +18,27 @@ class ObjcSink : public Sink {
 
   virtual ~ObjcSink() { _gpuSink = 0; }
 
-  virtual void render() override {
-    [_gpuSink doRender];
+  virtual void Render() override {
+    [_gpuSink DoRender];
   };
 
-  virtual void setInputFramebuffer(std::shared_ptr<GPUPixelFramebuffer> framebuffer,
+  virtual void SetInputFramebuffer(std::shared_ptr<GPUPixelFramebuffer> framebuffer,
                                    RotationMode rotationMode = NoRotation,
                                    int texIdx = 0) override {
-    [_gpuSink setInputFramebuffer:framebuffer
+    [_gpuSink SetInputFramebuffer:framebuffer
                         withRotation:rotationMode
                              atIndex:texIdx];
   };
 
-  virtual bool isPrepared() const override {
-    if ([_gpuSink respondsToSelector:@selector(isPrepared)]) {
-      return [_gpuSink isPrepared];
+  virtual bool IsReady() const override {
+    if ([_gpuSink respondsToSelector:@selector(IsReady)]) {
+      return [_gpuSink IsReady];
     } else {
       return true;
     }
   }
 
-  virtual void unPrepear() override {
+  virtual void ResetAndClean() override {
     if ([_gpuSink respondsToSelector:@selector(unPrepared)]) {
       [_gpuSink unPrepared];
     }

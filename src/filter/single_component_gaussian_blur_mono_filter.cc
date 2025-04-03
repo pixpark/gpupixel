@@ -17,12 +17,12 @@ SingleComponentGaussianBlurMonoFilter::SingleComponentGaussianBlurMonoFilter(
     : GaussianBlurMonoFilter(type) {}
 
 std::shared_ptr<SingleComponentGaussianBlurMonoFilter>
-SingleComponentGaussianBlurMonoFilter::create(Type type /* = HORIZONTAL*/,
+SingleComponentGaussianBlurMonoFilter::Create(Type type /* = HORIZONTAL*/,
                                               int radius /* = 4*/,
                                               float sigma /* = 2.0*/) {
   auto ret = std::shared_ptr<SingleComponentGaussianBlurMonoFilter>(
       new SingleComponentGaussianBlurMonoFilter(type));
-  if (ret && !ret->init(radius, sigma)) {
+  if (ret && !ret->Init(radius, sigma)) {
     ret.reset();
   }
   return ret;

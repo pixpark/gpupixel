@@ -16,50 +16,50 @@ IOSBlurFilter::IOSBlurFilter()
 
 IOSBlurFilter::~IOSBlurFilter() {}
 
-std::shared_ptr<IOSBlurFilter> IOSBlurFilter::create() {
+std::shared_ptr<IOSBlurFilter> IOSBlurFilter::Create() {
   auto ret = std::shared_ptr<IOSBlurFilter>(new IOSBlurFilter());
-  if (ret && !ret->init()) {
+  if (ret && !ret->Init()) {
     ret.reset();
   }
   return ret;
 }
 
-bool IOSBlurFilter::init() {
-  if (!FilterGroup::init()) {
+bool IOSBlurFilter::Init() {
+  if (!FilterGroup::Init()) {
     return false;
   }
 
-  _saturationFilter = SaturationFilter::create();
-  _blurFilter = GaussianBlurFilter::create();
-  _luminanceRangeFilter = LuminanceRangeFilter::create();
+  _saturationFilter = SaturationFilter::Create();
+  _blurFilter = GaussianBlurFilter::Create();
+  _luminanceRangeFilter = LuminanceRangeFilter::Create();
 
   _saturationFilter             // 1. downsample and desaturate
-      ->addSink(_blurFilter)  // 2. apply a strong Gaussian blur
-      ->addSink(
+      ->AddSink(_blurFilter)  // 2. apply a strong Gaussian blur
+      ->AddSink(
           _luminanceRangeFilter);  // 3. upsample and adjust luminance range
 
   addFilter(_saturationFilter);
 
   _blurSigma = 12.0;
   setBlurSigma(_blurSigma);
-  registerProperty("blurSigma", _blurSigma, "",
+  RegisterProperty("blurSigma", _blurSigma, "",
                    [this](float& blurSigma) { setBlurSigma(blurSigma); });
 
   _saturation = 0.8;
   setSaturation(_saturation);
-  registerProperty("saturation", _saturation, "",
+  RegisterProperty("saturation", _saturation, "",
                    [this](float& saturation) { setSaturation(saturation); });
 
   _rangeReductionFactor = 0.6;
   setRangeReductionFactor(_rangeReductionFactor);
-  registerProperty("rangeReductionFactor", _rangeReductionFactor, "",
+  RegisterProperty("rangeReductionFactor", _rangeReductionFactor, "",
                    [this](float& rangeReductionFactor) {
                      setRangeReductionFactor(rangeReductionFactor);
                    });
 
   _downSampling = 4.0;
   setDownSampling(_downSampling);
-  registerProperty(
+  RegisterProperty(
       "downSampling", _downSampling, "",
       [this](float& downSampling) { setDownSampling(downSampling); });
 
@@ -83,8 +83,8 @@ void IOSBlurFilter::setRangeReductionFactor(float rangeReductionFactor) {
 
 void IOSBlurFilter::setDownSampling(float downSampling) {
   _downSampling = downSampling;
-  _saturationFilter->setFramebufferScale(1 / downSampling);
-  _luminanceRangeFilter->setFramebufferScale(downSampling);
+  _saturationFilter->SetFramebufferScale(1 / downSampling);
+  _luminanceRangeFilter->SetFramebufferScale(downSampling);
 }
 
 }

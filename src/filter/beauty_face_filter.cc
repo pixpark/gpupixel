@@ -13,73 +13,73 @@ BeautyFaceFilter::BeautyFaceFilter() {}
 
 BeautyFaceFilter::~BeautyFaceFilter() {}
 
-std::shared_ptr<BeautyFaceFilter> BeautyFaceFilter::create() {
+std::shared_ptr<BeautyFaceFilter> BeautyFaceFilter::Create() {
   auto ret = std::shared_ptr<BeautyFaceFilter>(new BeautyFaceFilter());
-  if (ret && !ret->init()) {
+  if (ret && !ret->Init()) {
     ret.reset();
   }
   return ret;
 }
 
-bool BeautyFaceFilter::init() {
-  if (!FilterGroup::init()) {
+bool BeautyFaceFilter::Init() {
+  if (!FilterGroup::Init()) {
     return false;
   }
 
-  boxBlurFilter = BoxBlurFilter::create();
+  boxBlurFilter = BoxBlurFilter::Create();
   addFilter(boxBlurFilter);
 
-  boxHighPassFilter = BoxHighPassFilter::create();
+  boxHighPassFilter = BoxHighPassFilter::Create();
   addFilter(boxHighPassFilter);
 
-  beautyFilter = BeautyFaceUnitFilter::create();
+  beautyFilter = BeautyFaceUnitFilter::Create();
   addFilter(beautyFilter);
 
-  boxBlurFilter->addSink(beautyFilter, 1);
-  boxHighPassFilter->addSink(beautyFilter, 2);
+  boxBlurFilter->AddSink(beautyFilter, 1);
+  boxHighPassFilter->AddSink(beautyFilter, 2);
 
   setTerminalFilter(beautyFilter);
 
   boxBlurFilter->setTexelSpacingMultiplier(4);
-  setRadius(4);
+  SetRadius(4);
 
-  registerProperty("whiteness", 0, "The whiteness of filter with range between -1 and 1.", [this](float& val) {
-      setWhite(val);
+  RegisterProperty("whiteness", 0, "The whiteness of filter with range between -1 and 1.", [this](float& val) {
+      SetWhite(val);
   });
 
-  registerProperty("skin_smoothing", 0, "The smoothing of filter with range between -1 and 1.", [this](float& val) {
-      setBlurAlpha(val);
+  RegisterProperty("skin_smoothing", 0, "The smoothing of filter with range between -1 and 1.", [this](float& val) {
+      SetBlurAlpha(val);
   });
   return true;
 }
 
-void BeautyFaceFilter::setInputFramebuffer(
+void BeautyFaceFilter::SetInputFramebuffer(
     std::shared_ptr<GPUPixelFramebuffer> framebuffer,
     RotationMode rotationMode /* = NoRotation*/,
     int texIdx /* = 0*/) {
   for (auto& filter : _filters) {
-    filter->setInputFramebuffer(framebuffer, rotationMode, texIdx);
+    filter->SetInputFramebuffer(framebuffer, rotationMode, texIdx);
   }
 }
 
-void BeautyFaceFilter::setHighPassDelta(float highPassDelta) {
+void BeautyFaceFilter::SetHighPassDelta(float highPassDelta) {
   boxHighPassFilter->setDelta(highPassDelta);
 }
 
-void BeautyFaceFilter::setSharpen(float sharpen) {
-  beautyFilter->setSharpen(sharpen);
+void BeautyFaceFilter::SetSharpen(float sharpen) {
+  beautyFilter->SetSharpen(sharpen);
 }
 
-void BeautyFaceFilter::setBlurAlpha(float blurAlpha) {
-  beautyFilter->setBlurAlpha(blurAlpha);
+void BeautyFaceFilter::SetBlurAlpha(float blurAlpha) {
+  beautyFilter->SetBlurAlpha(blurAlpha);
 }
 
-void BeautyFaceFilter::setWhite(float white) {
-  beautyFilter->setWhite(white);
+void BeautyFaceFilter::SetWhite(float white) {
+  beautyFilter->SetWhite(white);
 }
 
-void BeautyFaceFilter::setRadius(float radius) {
-  boxBlurFilter->setRadius(radius);
-  boxHighPassFilter->setRadius(radius);
+void BeautyFaceFilter::SetRadius(float radius) {
+  boxBlurFilter->SetRadius(radius);
+  boxHighPassFilter->SetRadius(radius);
 }
 }

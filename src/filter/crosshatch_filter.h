@@ -13,9 +13,9 @@
 namespace gpupixel {
 class GPUPIXEL_API CrosshatchFilter : public Filter {
  public:
-  static std::shared_ptr<CrosshatchFilter> create();
-  bool init();
-  virtual bool doRender(bool updateSinks = true) override;
+  static std::shared_ptr<CrosshatchFilter> Create();
+  bool Init();
+  virtual bool DoRender(bool updateSinks = true) override;
 
   void setCrossHatchSpacing(float crossHatchSpacing);
   void setLineWidth(float lineWidth);

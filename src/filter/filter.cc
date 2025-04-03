@@ -13,19 +13,19 @@ namespace gpupixel {
 
 std::map<std::string, std::function<std::shared_ptr<Filter>()>> initFilterFactory() {
     std::map<std::string, std::function<std::shared_ptr<Filter>()>> factory;
-    factory["BeautyFaceFilter"] = BeautyFaceFilter::create;
-    factory["FaceReshapeFilter"] = FaceReshapeFilter::create;
-    factory["LipstickFilter"] = LipstickFilter::create;
-    factory["BlusherFilter"] = BlusherFilter::create;
+    factory["BeautyFaceFilter"] = BeautyFaceFilter::Create;
+    factory["FaceReshapeFilter"] = FaceReshapeFilter::Create;
+    factory["LipstickFilter"] = LipstickFilter::Create;
+    factory["BlusherFilter"] = BlusherFilter::Create;
     return  factory;
 }
 std::map<std::string, std::function<std::shared_ptr<Filter>()>> Filter::_filterFactories = initFilterFactory();
 
 Filter::Filter() : _filterProgram(0), _filterClassName("") {
-  _backgroundColor.r = 0.0;
-  _backgroundColor.g = 0.0;
-  _backgroundColor.b = 0.0;
-  _backgroundColor.a = 1.0;
+  background_color_.r = 0.0;
+  background_color_.g = 0.0;
+  background_color_.b = 0.0;
+  background_color_.a = 1.0;
 }
 
 Filter::~Filter() {
@@ -35,7 +35,7 @@ Filter::~Filter() {
   }
 }
 
-std::shared_ptr<Filter> Filter::create(const std::string& filterClassName) {
+std::shared_ptr<Filter> Filter::Create(const std::string& filterClassName) {
   for(auto filter : _filterFactories) {
     if(filter.first == filterClassName) {
       return filter.second();
@@ -44,41 +44,41 @@ std::shared_ptr<Filter> Filter::create(const std::string& filterClassName) {
   return nullptr;
 }
 
-std::shared_ptr<Filter> Filter::createWithShaderString(
+std::shared_ptr<Filter> Filter::CreateWithShaderString(
     const std::string& vertexShaderSource,
     const std::string& fragmentShaderSource) {
   auto filter = std::shared_ptr<Filter>(new Filter());
-  if (!filter->initWithShaderString(vertexShaderSource, fragmentShaderSource)) {
+  if (!filter->InitWithShaderString(vertexShaderSource, fragmentShaderSource)) {
     // todo(Jeayo)
   }
   return filter;
 }
 
-std::shared_ptr<Filter> Filter::createWithFragmentShaderString(
+std::shared_ptr<Filter> Filter::CreateWithFragmentShaderString(
     const std::string& fragmentShaderSource) {
   auto filter = std::shared_ptr<Filter>(new Filter());
-  if (!filter->initWithFragmentShaderString(fragmentShaderSource)) {
+  if (!filter->InitWithFragmentShaderString(fragmentShaderSource)) {
     // todo(Jeayo)
   }
   return filter;
 }
 
-bool Filter::initWithShaderString(const std::string& vertexShaderSource,
+bool Filter::InitWithShaderString(const std::string& vertexShaderSource,
                                   const std::string& fragmentShaderSource,
                                   int inputNumber /* = 1*/) {
-  _inputNum = inputNumber;
+  input_count_ = inputNumber;
   _filterProgram =
       GPUPixelGLProgram::createByShaderString(vertexShaderSource, fragmentShaderSource);
-  _filterPositionAttribute = _filterProgram->getAttribLocation("position");
-  GPUPixelContext::getInstance()->setActiveShaderProgram(_filterProgram);
+  _filterPositionAttribute = _filterProgram->GetAttribLocation("position");
+  GPUPixelContext::GetInstance()->SetActiveGlProgram(_filterProgram);
   CHECK_GL(glEnableVertexAttribArray(_filterPositionAttribute));
   return true;
 }
 
-bool Filter::initWithFragmentShaderString(
+bool Filter::InitWithFragmentShaderString(
     const std::string& fragmentShaderSource,
     int inputNumber /* = 1*/) {
-  return initWithShaderString(_getVertexShaderString(inputNumber),
+  return InitWithShaderString(_getVertexShaderString(inputNumber),
                               fragmentShaderSource, inputNumber);
 }
 
@@ -117,46 +117,46 @@ std::string Filter::_getVertexShaderString(int inputNumber) const {
   return shaderStr;
 }
 
-bool Filter::doRender(bool updateSinks) {
+bool Filter::DoRender(bool updateSinks) {
   static const GLfloat imageVertices[] = {
       -1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f,
   };
 
-  GPUPixelContext::getInstance()->setActiveShaderProgram(_filterProgram);
-  _framebuffer->active();
-  CHECK_GL(glClearColor(_backgroundColor.r, _backgroundColor.g,
-                        _backgroundColor.b, _backgroundColor.a));
+  GPUPixelContext::GetInstance()->SetActiveGlProgram(_filterProgram);
+  _framebuffer->Active();
+  CHECK_GL(glClearColor(background_color_.r, background_color_.g,
+                        background_color_.b, background_color_.a));
   CHECK_GL(glClear(GL_COLOR_BUFFER_BIT));
   for (std::map<int, InputFrameBufferInfo>::const_iterator it =
-           _inputFramebuffers.begin();
-       it != _inputFramebuffers.end(); ++it) {
+           input_framebuffers_.begin();
+       it != input_framebuffers_.end(); ++it) {
     int texIdx = it->first;
     std::shared_ptr<GPUPixelFramebuffer> fb = it->second.frameBuffer;
     CHECK_GL(glActiveTexture(GL_TEXTURE0 + texIdx));
-    CHECK_GL(glBindTexture(GL_TEXTURE_2D, fb->getTexture()));
-    _filterProgram->setUniformValue(
+    CHECK_GL(glBindTexture(GL_TEXTURE_2D, fb->GetTexture()));
+    _filterProgram->SetUniformValue(
         texIdx == 0 ? "inputImageTexture"
                     : Util::str_format("inputImageTexture%d", texIdx),
         texIdx);
     // texcoord attribute
-    GLuint filterTexCoordAttribute = _filterProgram->getAttribLocation(
+    GLuint filterTexCoordAttribute = _filterProgram->GetAttribLocation(
         texIdx == 0 ? "inputTextureCoordinate"
                     : Util::str_format("inputTextureCoordinate%d", texIdx));
     CHECK_GL(glEnableVertexAttribArray(filterTexCoordAttribute));
     CHECK_GL(
         glVertexAttribPointer(filterTexCoordAttribute, 2, GL_FLOAT, 0, 0,
-                              _getTexureCoordinate(it->second.rotationMode)));
+                              GetTexureCoordinate(it->second.rotationMode)));
   }
   CHECK_GL(glVertexAttribPointer(_filterPositionAttribute, 2, GL_FLOAT, 0, 0,
                                  imageVertices));
   CHECK_GL(glDrawArrays(GL_TRIANGLE_STRIP, 0, 4));
 
-  _framebuffer->inactive();
+  _framebuffer->Inactive();
 
-  return Source::doRender(updateSinks);
+  return Source::DoRender(updateSinks);
 }
 
-const GLfloat* Filter::_getTexureCoordinate(
+const GLfloat* Filter::GetTexureCoordinate(
     const RotationMode& rotationMode) const {
   static const GLfloat noRotationTextureCoordinates[] = {
     0.0f, 0.0f,
@@ -244,47 +244,47 @@ const GLfloat* Filter::_getTexureCoordinate(
   }
 }
 
-void Filter::render() {
-  if (_inputFramebuffers.empty()) {
+void Filter::Render() {
+  if (input_framebuffers_.empty()) {
     return;
   }
 
-  if (GPUPixelContext::getInstance()->isCapturingFrame &&
-      this == GPUPixelContext::getInstance()->captureUpToFilter.get()) {
-    int captureWidth = GPUPixelContext::getInstance()->captureWidth;
-    int captureHeight = GPUPixelContext::getInstance()->captureHeight;
+  if (GPUPixelContext::GetInstance()->isCapturingFrame &&
+      this == GPUPixelContext::GetInstance()->captureUpToFilter.get()) {
+    int captureWidth = GPUPixelContext::GetInstance()->captureWidth;
+    int captureHeight = GPUPixelContext::GetInstance()->captureHeight;
 
-    if (!_framebuffer || (_framebuffer->getWidth() != captureWidth ||
-                          _framebuffer->getHeight() != captureHeight)) {
-      _framebuffer = GPUPixelContext::getInstance()
-                         ->getFramebufferFactory()
-                         ->fetchFramebuffer(captureWidth, captureHeight);
+    if (!_framebuffer || (_framebuffer->GetWidth() != captureWidth ||
+                          _framebuffer->GetHeight() != captureHeight)) {
+      _framebuffer = GPUPixelContext::GetInstance()
+                         ->GetFramebufferFactory()
+                         ->CreateFramebuffer(captureWidth, captureHeight);
     }
 
-    doRender(false);
+    DoRender(false);
 
-    _framebuffer->active();
-    GPUPixelContext::getInstance()->capturedFrameData =
+    _framebuffer->Active();
+    GPUPixelContext::GetInstance()->capturedFrameData =
         new unsigned char[captureWidth * captureHeight * 4];
     CHECK_GL(glReadPixels(0, 0, captureWidth, captureHeight, GL_RGBA,
                           GL_UNSIGNED_BYTE,
-                          GPUPixelContext::getInstance()->capturedFrameData));
-    _framebuffer->inactive();
+                          GPUPixelContext::GetInstance()->capturedFrameData));
+    _framebuffer->Inactive();
   } else {
     // todo(Jeayo)
     std::shared_ptr<GPUPixelFramebuffer> firstInputFramebuffer =
-        _inputFramebuffers.begin()->second.frameBuffer;
+        input_framebuffers_.begin()->second.frameBuffer;
     RotationMode firstInputRotation =
-        _inputFramebuffers.begin()->second.rotationMode;
+        input_framebuffers_.begin()->second.rotationMode;
     if (!firstInputFramebuffer) {
       return;
     }
 
-    int rotatedFramebufferWidth = firstInputFramebuffer->getWidth();
-    int rotatedFramebufferHeight = firstInputFramebuffer->getHeight();
+    int rotatedFramebufferWidth = firstInputFramebuffer->GetWidth();
+    int rotatedFramebufferHeight = firstInputFramebuffer->GetHeight();
     if (rotationSwapsSize(firstInputRotation)) {
-      rotatedFramebufferWidth = firstInputFramebuffer->getHeight();
-      rotatedFramebufferHeight = firstInputFramebuffer->getWidth();
+      rotatedFramebufferWidth = firstInputFramebuffer->GetHeight();
+      rotatedFramebufferHeight = firstInputFramebuffer->GetWidth();
     }
 
     if (_framebufferScale != 1.0) {
@@ -294,22 +294,22 @@ void Filter::render() {
           int(rotatedFramebufferHeight * _framebufferScale);
     }
     if (!_framebuffer ||
-        (_framebuffer->getWidth() != rotatedFramebufferWidth ||
-         _framebuffer->getHeight() != rotatedFramebufferHeight)) {
-      _framebuffer = GPUPixelContext::getInstance()
-                         ->getFramebufferFactory()
-                         ->fetchFramebuffer(rotatedFramebufferWidth,
+        (_framebuffer->GetWidth() != rotatedFramebufferWidth ||
+         _framebuffer->GetHeight() != rotatedFramebufferHeight)) {
+      _framebuffer = GPUPixelContext::GetInstance()
+                         ->GetFramebufferFactory()
+                         ->CreateFramebuffer(rotatedFramebufferWidth,
                                             rotatedFramebufferHeight);
     }
-    doRender(true);
+    DoRender(true);
   }
 }
 
-bool Filter::registerProperty(const std::string& name,
+bool Filter::RegisterProperty(const std::string& name,
                               int defaultValue,
                               const std::string& comment /* = ""*/,
                               std::function<void(int&)> setCallback /* = 0*/) {
-  if (hasProperty(name)) {
+  if (HasProperty(name)) {
     return false;
   }
   IntProperty property;
@@ -321,12 +321,12 @@ bool Filter::registerProperty(const std::string& name,
   return true;
 }
 
-bool Filter::registerProperty(
+bool Filter::RegisterProperty(
     const std::string& name,
     float defaultValue,
     const std::string& comment /* = ""*/,
     std::function<void(float&)> setCallback /* = 0*/) {
-  if (hasProperty(name)) {
+  if (HasProperty(name)) {
     return false;
   }
   FloatProperty property;
@@ -338,12 +338,12 @@ bool Filter::registerProperty(
   return true;
 }
 
-bool Filter::registerProperty(
+bool Filter::RegisterProperty(
         const std::string& name,
         std::vector<float> defaultValue,
         const std::string& comment /* = ""*/,
         std::function<void(std::vector<float>)> setCallback /* = 0*/) {
-  if (hasProperty(name)) {
+  if (HasProperty(name)) {
     return false;
   }
   VectorProperty property;
@@ -355,12 +355,12 @@ bool Filter::registerProperty(
   return true;
 }
 
-bool Filter::registerProperty(
+bool Filter::RegisterProperty(
     const std::string& name,
     const std::string& defaultValue,
     const std::string& comment /* = ""*/,
     std::function<void(std::string&)> setCallback /* = 0*/) {
-  if (hasProperty(name)) {
+  if (HasProperty(name)) {
     return false;
   }
   StringProperty property;
@@ -372,7 +372,7 @@ bool Filter::registerProperty(
   return true;
 }
 
-bool Filter::setProperty(const std::string& name, int value) {
+bool Filter::SetProperty(const std::string& name, int value) {
   Property* rawProperty = _getProperty(name);
   if (!rawProperty) {
     Util::Log("WARNING", "Filter::setProperty invalid property %s",
@@ -392,7 +392,7 @@ bool Filter::setProperty(const std::string& name, int value) {
   return true;
 }
 
-bool Filter::setProperty(const std::string& name, float value) {
+bool Filter::SetProperty(const std::string& name, float value) {
   Property* rawProperty = _getProperty(name);
   if (!rawProperty) {
     Util::Log("WARNING", "Filter::setProperty invalid property %s",
@@ -413,7 +413,7 @@ bool Filter::setProperty(const std::string& name, float value) {
   return true;
 }
 
-bool Filter::setProperty(const std::string& name, std::vector<float> value) {
+bool Filter::SetProperty(const std::string& name, std::vector<float> value) {
   Property* rawProperty = _getProperty(name);
   if (!rawProperty) {
     Util::Log("WARNING", "Filter::setProperty invalid property %s",
@@ -434,7 +434,7 @@ bool Filter::setProperty(const std::string& name, std::vector<float> value) {
   return true;
 }
 
-bool Filter::setProperty(const std::string& name, std::string value) {
+bool Filter::SetProperty(const std::string& name, std::string value) {
   Property* rawProperty = _getProperty(name);
   if (!rawProperty) {
     Util::Log("WARNING", "Filter::setProperty invalid property %s",
@@ -454,7 +454,7 @@ bool Filter::setProperty(const std::string& name, std::string value) {
   return true;
 }
 
-bool Filter::getProperty(const std::string& name, int& retValue) {
+bool Filter::GetProperty(const std::string& name, int& retValue) {
   Property* property = _getProperty(name);
   if (!property) {
     return false;
@@ -463,7 +463,7 @@ bool Filter::getProperty(const std::string& name, int& retValue) {
   return true;
 }
 
-bool Filter::getProperty(const std::string& name, float& retValue) {
+bool Filter::GetProperty(const std::string& name, float& retValue) {
   Property* property = _getProperty(name);
   if (!property) {
     return false;
@@ -472,7 +472,7 @@ bool Filter::getProperty(const std::string& name, float& retValue) {
   return true;
 }
 
-bool Filter::getProperty(const std::string& name, std::string& retValue) {
+bool Filter::GetProperty(const std::string& name, std::string& retValue) {
   Property* property = _getProperty(name);
   if (!property) {
     return false;
@@ -497,16 +497,16 @@ Filter::Property* Filter::_getProperty(const std::string& name) {
   return 0;
 }
 
-bool Filter::hasProperty(const std::string& name, const std::string type) {
+bool Filter::HasProperty(const std::string& name, const std::string type) {
   Property* property = _getProperty(name);
   return property && property->type == type ? true : false;
 }
 
-bool Filter::hasProperty(const std::string& name) {
+bool Filter::HasProperty(const std::string& name) {
   return _getProperty(name) ? true : false;
 }
 
-bool Filter::getPropertyComment(const std::string& name,
+bool Filter::GetPropertyComment(const std::string& name,
                                 std::string& retComment) {
   Property* property = _getProperty(name);
   if (!property) {
@@ -516,7 +516,7 @@ bool Filter::getPropertyComment(const std::string& name,
   return true;
 }
 
-bool Filter::getPropertyType(const std::string& name, std::string& retType) {
+bool Filter::GetPropertyType(const std::string& name, std::string& retType) {
   Property* property = _getProperty(name);
   if (!property) {
     return false;

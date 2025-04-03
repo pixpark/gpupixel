@@ -30,13 +30,13 @@ class GPUPIXEL_API SinkRawData : public Sink {
  public:
   SinkRawData();
   virtual ~SinkRawData();
-  static std::shared_ptr<SinkRawData> create();
-  void render() override;
-  void setI420Callback(RawOutputCallback callback);
-  void setPixelsCallback(RawOutputCallback callback);
+  static std::shared_ptr<SinkRawData> Create();
+  void Render() override;
+  void SetI420Callback(RawOutputCallback callback);
+  void SetRgbaCallback(RawOutputCallback callback);
  private:
   int renderToOutput();
-  bool initWithShaderString(const std::string& vertex_shader_source,
+  bool InitWithShaderString(const std::string& vertex_shader_source,
                             const std::string& fragment_shader_source);
   void initTextureCache(int width, int height);
   void initFrameBuffer(int width, int height);
@@ -63,8 +63,6 @@ class GPUPIXEL_API SinkRawData : public Sink {
   // Callback functions
   RawOutputCallback i420_callback_ = nullptr;
   RawOutputCallback pixels_callback_ = nullptr;
-
-  bool is_frame_valid_ = true;
 };
 
 }  // namespace gpupixel

@@ -288,108 +288,108 @@ BeautyFaceUnitFilter::BeautyFaceUnitFilter() {}
 
 BeautyFaceUnitFilter::~BeautyFaceUnitFilter() {}
 
-std::shared_ptr<BeautyFaceUnitFilter> BeautyFaceUnitFilter::create() {
+std::shared_ptr<BeautyFaceUnitFilter> BeautyFaceUnitFilter::Create() {
   auto ret = std::shared_ptr<BeautyFaceUnitFilter>(new BeautyFaceUnitFilter());
-  if (ret && !ret->init()) {
+  if (ret && !ret->Init()) {
     ret.reset();
   }
   return ret;
 }
 
-bool BeautyFaceUnitFilter::init() {
-  if (!Filter::initWithShaderString(kGPUImageBaseBeautyFaceVertexShaderString,
+bool BeautyFaceUnitFilter::Init() {
+  if (!Filter::InitWithShaderString(kGPUImageBaseBeautyFaceVertexShaderString,
                                     kGPUImageBaseBeautyFaceFragmentShaderString,
                                     3)) {
     return false;
   }
 
-  grayImage_ = SourceImage::create(Util::getResourcePath("res/lookup_gray.png"));
-  originImage_ = SourceImage::create(Util::getResourcePath("res/lookup_origin.png"));
-  skinImage_ = SourceImage::create(Util::getResourcePath("res/lookup_skin.png"));
-  customImage_ = SourceImage::create(Util::getResourcePath("res/lookup_light.png"));
+  grayImage_ = SourceImage::Create(Util::getResourcePath("res/lookup_gray.png"));
+  originImage_ = SourceImage::Create(Util::getResourcePath("res/lookup_origin.png"));
+  skinImage_ = SourceImage::Create(Util::getResourcePath("res/lookup_skin.png"));
+  customImage_ = SourceImage::Create(Util::getResourcePath("res/lookup_light.png"));
   return true;
 }
 
-bool BeautyFaceUnitFilter::doRender(bool updateSinks) {
+bool BeautyFaceUnitFilter::DoRender(bool updateSinks) {
   static const GLfloat imageVertices[] = {
       -1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f,
   };
 
-  GPUPixelContext::getInstance()->setActiveShaderProgram(_filterProgram);
-  _framebuffer->active();
-  CHECK_GL(glClearColor(_backgroundColor.r, _backgroundColor.g,
-                        _backgroundColor.b, _backgroundColor.a));
+  GPUPixelContext::GetInstance()->SetActiveGlProgram(_filterProgram);
+  _framebuffer->Active();
+  CHECK_GL(glClearColor(background_color_.r, background_color_.g,
+                        background_color_.b, background_color_.a));
   CHECK_GL(glClear(GL_COLOR_BUFFER_BIT));
 
   CHECK_GL(glActiveTexture(GL_TEXTURE2));
   CHECK_GL(glBindTexture(GL_TEXTURE_2D,
-                         _inputFramebuffers[0].frameBuffer->getTexture()));
-  _filterProgram->setUniformValue("inputImageTexture", 2);
+                         input_framebuffers_[0].frameBuffer->GetTexture()));
+  _filterProgram->SetUniformValue("inputImageTexture", 2);
 
   CHECK_GL(glActiveTexture(GL_TEXTURE3));
   CHECK_GL(glBindTexture(GL_TEXTURE_2D,
-                         _inputFramebuffers[1].frameBuffer->getTexture()));
-  _filterProgram->setUniformValue("inputImageTexture2", 3);
+                         input_framebuffers_[1].frameBuffer->GetTexture()));
+  _filterProgram->SetUniformValue("inputImageTexture2", 3);
 
   CHECK_GL(glActiveTexture(GL_TEXTURE4));
   CHECK_GL(glBindTexture(GL_TEXTURE_2D,
-                         _inputFramebuffers[2].frameBuffer->getTexture()));
-  _filterProgram->setUniformValue("inputImageTexture3", 4);
+                         input_framebuffers_[2].frameBuffer->GetTexture()));
+  _filterProgram->SetUniformValue("inputImageTexture3", 4);
 
   // texcoord attribute
   GLuint filterTexCoordAttribute =
-      _filterProgram->getAttribLocation("inputTextureCoordinate");
+      _filterProgram->GetAttribLocation("inputTextureCoordinate");
   CHECK_GL(glEnableVertexAttribArray(filterTexCoordAttribute));
   CHECK_GL(glVertexAttribPointer(
       filterTexCoordAttribute, 2, GL_FLOAT, 0, 0,
-      _getTexureCoordinate(_inputFramebuffers[0].rotationMode)));
+      GetTexureCoordinate(input_framebuffers_[0].rotationMode)));
 
   glActiveTexture(GL_TEXTURE5);
-  glBindTexture(GL_TEXTURE_2D, grayImage_->getFramebuffer()->getTexture());
-  _filterProgram->setUniformValue("lookUpGray", 5);
+  glBindTexture(GL_TEXTURE_2D, grayImage_->GetFramebuffer()->GetTexture());
+  _filterProgram->SetUniformValue("lookUpGray", 5);
 
   glActiveTexture(GL_TEXTURE6);
-  glBindTexture(GL_TEXTURE_2D, originImage_->getFramebuffer()->getTexture());
-  _filterProgram->setUniformValue("lookUpOrigin", 6);
+  glBindTexture(GL_TEXTURE_2D, originImage_->GetFramebuffer()->GetTexture());
+  _filterProgram->SetUniformValue("lookUpOrigin", 6);
 
   glActiveTexture(GL_TEXTURE7);
-  glBindTexture(GL_TEXTURE_2D, skinImage_->getFramebuffer()->getTexture());
-  _filterProgram->setUniformValue("lookUpSkin", 7);
+  glBindTexture(GL_TEXTURE_2D, skinImage_->GetFramebuffer()->GetTexture());
+  _filterProgram->SetUniformValue("lookUpSkin", 7);
 
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, customImage_->getFramebuffer()->getTexture());
-  _filterProgram->setUniformValue("lookUpCustom", 0);
+  glBindTexture(GL_TEXTURE_2D, customImage_->GetFramebuffer()->GetTexture());
+  _filterProgram->SetUniformValue("lookUpCustom", 0);
 
-  float widthOffset = 1.0/this->getRotatedFramebufferWidth();
-  float heightOffset = 1.0/this->getRotatedFramebufferHeight();
-  _filterProgram->setUniformValue("widthOffset", widthOffset);
-  _filterProgram->setUniformValue("heightOffset", heightOffset);
+  float widthOffset = 1.0/this->GetRotatedFramebufferWidth();
+  float heightOffset = 1.0/this->GetRotatedFramebufferHeight();
+  _filterProgram->SetUniformValue("widthOffset", widthOffset);
+  _filterProgram->SetUniformValue("heightOffset", heightOffset);
     
   // vertex position
   CHECK_GL(glVertexAttribPointer(_filterPositionAttribute, 2, GL_FLOAT, 0, 0,
                                  imageVertices));
 
-  _filterProgram->setUniformValue("sharpen", sharpen_);
-  _filterProgram->setUniformValue("blurAlpha", blurAlpha_);
-  _filterProgram->setUniformValue("whiten", white_);
+  _filterProgram->SetUniformValue("sharpen", sharpen_);
+  _filterProgram->SetUniformValue("blurAlpha", blurAlpha_);
+  _filterProgram->SetUniformValue("whiten", white_);
 
   // draw
   CHECK_GL(glDrawArrays(GL_TRIANGLE_STRIP, 0, 4));
 
-  _framebuffer->inactive();
+  _framebuffer->Inactive();
 
-  return Source::doRender(updateSinks);
+  return Source::DoRender(updateSinks);
 }
 
-void BeautyFaceUnitFilter::setSharpen(float sharpen) {
+void BeautyFaceUnitFilter::SetSharpen(float sharpen) {
   sharpen_ = sharpen;
 }
 
-void BeautyFaceUnitFilter::setBlurAlpha(float blurAlpha) {
+void BeautyFaceUnitFilter::SetBlurAlpha(float blurAlpha) {
   blurAlpha_ = blurAlpha;
 }
 
-void BeautyFaceUnitFilter::setWhite(float white) {
+void BeautyFaceUnitFilter::SetWhite(float white) {
 #if defined(GPUPIXEL_MAC)
   white_ = white / 10;
 #else

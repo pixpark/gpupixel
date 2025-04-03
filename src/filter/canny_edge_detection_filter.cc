@@ -20,40 +20,40 @@ CannyEdgeDetectionFilter::CannyEdgeDetectionFilter()
 
 CannyEdgeDetectionFilter::~CannyEdgeDetectionFilter() {}
 
-std::shared_ptr<CannyEdgeDetectionFilter> CannyEdgeDetectionFilter::create() {
+std::shared_ptr<CannyEdgeDetectionFilter> CannyEdgeDetectionFilter::Create() {
   auto ret =
       std::shared_ptr<CannyEdgeDetectionFilter>(new CannyEdgeDetectionFilter());
-  if (ret && !ret->init()) {
+  if (ret && !ret->Init()) {
     ret.reset();
   }
   return ret;
 }
 
-bool CannyEdgeDetectionFilter::init() {
-  if (!FilterGroup::init()) {
+bool CannyEdgeDetectionFilter::Init() {
+  if (!FilterGroup::Init()) {
     return false;
   }
 
   // 1. convert image to luminance
-  _grayscaleFilter = GrayscaleFilter::create();
+  _grayscaleFilter = GrayscaleFilter::Create();
 
   // 2. apply a varialbe Gaussian blur
-  _blurFilter = SingleComponentGaussianBlurFilter::create();
+  _blurFilter = SingleComponentGaussianBlurFilter::Create();
 
   // 3. soble edge detection
-  _edgeDetectionFilter = DirectionalSobelEdgeDetectionFilter::create();
+  _edgeDetectionFilter = DirectionalSobelEdgeDetectionFilter::Create();
 
   // 4. apply non-maximum suppression
   _nonMaximumSuppressionFilter =
-      DirectionalNonMaximumSuppressionFilter::create();
+      DirectionalNonMaximumSuppressionFilter::Create();
 
   // 5. include weak pixels to complete edges
-  _weakPixelInclusionFilter = WeakPixelInclusionFilter::create();
+  _weakPixelInclusionFilter = WeakPixelInclusionFilter::Create();
 
-  _grayscaleFilter->addSink(_blurFilter)
-      ->addSink(_edgeDetectionFilter)
-      ->addSink(_nonMaximumSuppressionFilter)
-      ->addSink(_weakPixelInclusionFilter);
+  _grayscaleFilter->AddSink(_blurFilter)
+      ->AddSink(_edgeDetectionFilter)
+      ->AddSink(_nonMaximumSuppressionFilter)
+      ->AddSink(_weakPixelInclusionFilter);
   addFilter(_grayscaleFilter);
 
   return true;

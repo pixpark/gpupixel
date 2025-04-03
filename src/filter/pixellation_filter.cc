@@ -7,7 +7,7 @@
 
 #include "pixellation_filter.h"
 
-using namespace gpupixel;
+namespace gpupixel {
 
 REGISTER_FILTER_CLASS(PixellationFilter)
 
@@ -25,21 +25,21 @@ const std::string kPixellationFragmentShaderString = R"(
       gl_FragColor = texture2D(inputImageTexture, samplePos);
     })";
 
-std::shared_ptr<PixellationFilter> PixellationFilter::create() {
+std::shared_ptr<PixellationFilter> PixellationFilter::Create() {
   auto ret = std::shared_ptr<PixellationFilter>(new PixellationFilter());
-  if (ret && !ret->init()) {
+  if (ret && !ret->Init()) {
     ret.reset();
   }
   return ret;
 }
 
-bool PixellationFilter::init() {
-  if (!initWithFragmentShaderString(kPixellationFragmentShaderString)) {
+bool PixellationFilter::Init() {
+  if (!InitWithFragmentShaderString(kPixellationFragmentShaderString)) {
     return false;
   }
 
   _pixelSize = 0.1;
-  registerProperty(
+  RegisterProperty(
       "pixelSize", _pixelSize,
       "The size of a pixel that you want to pixellate, ranges from 0 to 1.",
       [this](float& pixelSize) { setPixelSize(pixelSize); });
@@ -56,20 +56,22 @@ void PixellationFilter::setPixelSize(float pixelSize) {
   }
 }
 
-bool PixellationFilter::doRender(bool updateSinks) {
+bool PixellationFilter::DoRender(bool updateSinks) {
   float aspectRatio = 1.0;
   std::shared_ptr<GPUPixelFramebuffer> firstInputFramebuffer =
-      _inputFramebuffers.begin()->second.frameBuffer;
-  aspectRatio = firstInputFramebuffer->getHeight() /
-                (float)(firstInputFramebuffer->getWidth());
-  _filterProgram->setUniformValue("aspectRatio", aspectRatio);
+      input_framebuffers_.begin()->second.frameBuffer;
+  aspectRatio = firstInputFramebuffer->GetHeight() /
+                (float)(firstInputFramebuffer->GetWidth());
+  _filterProgram->SetUniformValue("aspectRatio", aspectRatio);
 
   float pixelSize = _pixelSize;
-  float singlePixelWidth = 1.0 / firstInputFramebuffer->getWidth();
+  float singlePixelWidth = 1.0 / firstInputFramebuffer->GetWidth();
   if (pixelSize < singlePixelWidth) {
     pixelSize = singlePixelWidth;
   }
-  _filterProgram->setUniformValue("pixelSize", pixelSize);
+  _filterProgram->SetUniformValue("pixelSize", pixelSize);
 
-  return Filter::doRender(updateSinks);
+  return Filter::DoRender(updateSinks);
 }
+
+} // namespace gpupixel

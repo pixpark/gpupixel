@@ -100,7 +100,7 @@ GPUPixelContext::GPUPixelContext()
       capturedFrameData(0) {
   _framebufferFactory = new FramebufferFactory();
   task_queue_ = std::make_shared<DispatchQueue>();
-  init();
+  Init();
 }
 
 GPUPixelContext::~GPUPixelContext() {
@@ -108,7 +108,7 @@ GPUPixelContext::~GPUPixelContext() {
   delete _framebufferFactory;
 }
 
-GPUPixelContext* GPUPixelContext::getInstance() {
+GPUPixelContext* GPUPixelContext::GetInstance() {
   if (!_instance) {
     std::unique_lock<std::mutex> lock(_mutex);
     if (!_instance) {
@@ -118,7 +118,7 @@ GPUPixelContext* GPUPixelContext::getInstance() {
   return _instance;
 };
 
-void GPUPixelContext::destroy() {
+void GPUPixelContext::Destroy() {
   if (_instance) {
     delete _instance;
     _instance = 0;
@@ -128,26 +128,26 @@ void GPUPixelContext::destroy() {
   }
 }
 
-void GPUPixelContext::init() {
-  runSync([=] {
+void GPUPixelContext::Init() {
+  RunSync([=] {
     Util::Log("INFO", "start init GPUPixelContext");
     this->createContext();
   });
 }
 
-FramebufferFactory* GPUPixelContext::getFramebufferFactory() const {
+FramebufferFactory* GPUPixelContext::GetFramebufferFactory() const {
   return _framebufferFactory;
 }
 
-void GPUPixelContext::setActiveShaderProgram(GPUPixelGLProgram* shaderProgram) {
+void GPUPixelContext::SetActiveGlProgram(GPUPixelGLProgram* shaderProgram) {
   if (_curShaderProgram != shaderProgram) {
     _curShaderProgram = shaderProgram;
-    shaderProgram->use();
+    shaderProgram->UseProgram();
   }
 }
 
-void GPUPixelContext::clean() {
-  _framebufferFactory->clean();
+void GPUPixelContext::Clean() {
+  _framebufferFactory->Clean();
 }
  
 void GPUPixelContext::createContext() {
@@ -281,7 +281,7 @@ void GPUPixelContext::createContext() {
 #endif
 }
 
-void GPUPixelContext::useAsCurrent() {
+void GPUPixelContext::UseAsCurrent() {
   #if defined(GPUPIXEL_IOS)
     if ([EAGLContext currentContext] != _eglContext) {
       [EAGLContext setCurrentContext:_eglContext];
@@ -303,7 +303,7 @@ void GPUPixelContext::useAsCurrent() {
 #endif
 }
 
-void GPUPixelContext::presentBufferForDisplay() {
+void GPUPixelContext::PresentBufferForDisplay() {
 #if defined(GPUPIXEL_IOS)
   [_eglContext presentRenderbuffer:GL_RENDERBUFFER];
 #elif defined(GPUPIXEL_MAC)
@@ -345,13 +345,13 @@ void GPUPixelContext::releaseContext() {
 #endif
 }
  
-void GPUPixelContext::runSync(std::function<void(void)> func) {
+void GPUPixelContext::RunSync(std::function<void(void)> func) {
   // todo fix android
 #if defined(GPUPIXEL_ANDROID)
   func();
 #else
-  task_queue_->runSync([=]() {
-      useAsCurrent();
+  task_queue_->RunSync([=]() {
+      UseAsCurrent();
       func();
   });
 #endif

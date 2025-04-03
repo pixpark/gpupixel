@@ -16,10 +16,10 @@ kNearbySampling3x3SamplingVertexShaderString;
 
 class GPUPIXEL_API NearbySampling3x3Filter : public Filter {
  public:
-  virtual bool initWithFragmentShaderString(
+  virtual bool InitWithFragmentShaderString(
       const std::string& fragmentShaderSource,
       int inputNumber = 1) override;
-  virtual bool doRender(bool updateSinks = true) override;
+  virtual bool DoRender(bool updateSinks = true) override;
 
   void setTexelSizeMultiplier(float texelSizeMultiplier);
 

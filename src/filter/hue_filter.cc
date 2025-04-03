@@ -8,7 +8,7 @@
 #include "hue_filter.h"
 #include "math_toolbox.h"
 
-using namespace gpupixel;
+namespace gpupixel {
 
 // Adapted from
 // http://stackoverflow.com/questions/9234724/how-to-change-hue-of-a-texture-with-glsl
@@ -54,21 +54,21 @@ const std::string kHueFragmentShaderString = R"(
       gl_FragColor = color;
     })";
 
-std::shared_ptr<HueFilter> HueFilter::create() {
+std::shared_ptr<HueFilter> HueFilter::Create() {
   auto ret = std::shared_ptr<HueFilter>(new HueFilter());
-  if (ret && !ret->init()) {
+  if (ret && !ret->Init()) {
     ret.reset();
   }
   return ret;
 }
 
-bool HueFilter::init() {
-  if (!initWithFragmentShaderString(kHueFragmentShaderString)) {
+bool HueFilter::Init() {
+  if (!InitWithFragmentShaderString(kHueFragmentShaderString)) {
     return false;
   }
 
   _hueAdjustment = 90;
-  registerProperty(
+  RegisterProperty(
       "hueAdjustment", _hueAdjustment,
       "The hueAdjustment (in degree) of the image",
       [this](float& hueAdjustment) { setHueAdjustment(hueAdjustment); });
@@ -81,7 +81,9 @@ void HueFilter::setHueAdjustment(float hueAdjustment) {
   _hueAdjustment = fmodf(hueAdjustment, 360.0) * M_PI / 180;
 }
 
-bool HueFilter::doRender(bool updateSinks) {
-  _filterProgram->setUniformValue("hueAdjustment", _hueAdjustment);
-  return Filter::doRender(updateSinks);
+bool HueFilter::DoRender(bool updateSinks) {
+  _filterProgram->SetUniformValue("hueAdjustment", _hueAdjustment);
+  return Filter::DoRender(updateSinks);
 }
+
+} // namespace gpupixel

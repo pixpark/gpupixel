@@ -19,13 +19,13 @@
 @protocol GPUPixelSink <NSObject>
 
 @required
-- (void)doRender;
-- (void)setInputFramebuffer:
+- (void)DoRender;
+- (void)SetInputFramebuffer:
             (std::shared_ptr<gpupixel::GPUPixelFramebuffer>)inputFramebuffer
                withRotation:(gpupixel::RotationMode)rotationMode
                     atIndex:(NSInteger)texIdx;
 @optional
-- (bool)isPrepared;
+- (bool)IsReady;
 - (void)unPrepared;
 
 @end

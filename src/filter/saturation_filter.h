@@ -13,9 +13,9 @@
 namespace gpupixel {
 class GPUPIXEL_API SaturationFilter : public Filter {
  public:
-  static std::shared_ptr<SaturationFilter> create();
-  bool init();
-  virtual bool doRender(bool updateSinks = true) override;
+  static std::shared_ptr<SaturationFilter> Create();
+  bool Init();
+  virtual bool DoRender(bool updateSinks = true) override;
 
   void setSaturation(float saturation);
 

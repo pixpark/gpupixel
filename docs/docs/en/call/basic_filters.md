@@ -20,7 +20,7 @@ Before using GPUPixel, you need to initialize the context and create the filter 
 
 ```cpp
 // Initialize GPUPixel context and run operations in its thread
-gpupixel::GPUPixelContext::getInstance()->runSync([&] {
+gpupixel::GPUPixelContext::GetInstance()->RunSync([&] {
     // Create your filters and set up the chain here
 });
 ```
@@ -36,19 +36,19 @@ std::shared_ptr<BeautyFaceFilter> beauty_face_filter_;
 std::shared_ptr<SinkRawData> target_raw_output_;
 
 // Initialize and link components
-gpupixel::GPUPixelContext::getInstance()->runSync([&] {
+gpupixel::GPUPixelContext::GetInstance()->RunSync([&] {
     // Create source
-    source_raw_input_ = SourceRawData::create();
+    source_raw_input_ = SourceRawData::Create();
     
     // Create filters
-    beauty_face_filter_ = BeautyFaceFilter::create();
+    beauty_face_filter_ = BeautyFaceFilter::Create();
     
     // Create sink
-    target_raw_output_ = SinkRawData::create();
+    target_raw_output_ = SinkRawData::Create();
     
     // Link the chain
-    source_raw_input_->addSink(beauty_face_filter_)
-                     ->addSink(target_raw_output_);
+    source_raw_input_->AddSink(beauty_face_filter_)
+                     ->AddSink(target_raw_output_);
 });
 ```
 
@@ -58,7 +58,7 @@ When you're done with GPUPixel, you should clean up resources:
 
 ```cpp
 // Clean up GPUPixel resources
-gpupixel::GPUPixelContext::getInstance()->runSync([&] {
+gpupixel::GPUPixelContext::GetInstance()->RunSync([&] {
     // Release your filter references
     source_raw_input_.reset();
     beauty_face_filter_.reset();

@@ -14,8 +14,8 @@ namespace gpupixel {
 class GPUPIXEL_API
     NonMaximumSuppressionFilter : public NearbySampling3x3Filter {
  public:
-  static std::shared_ptr<NonMaximumSuppressionFilter> create();
-  bool init();
+  static std::shared_ptr<NonMaximumSuppressionFilter> Create();
+  bool Init();
 
  protected:
   NonMaximumSuppressionFilter(){};

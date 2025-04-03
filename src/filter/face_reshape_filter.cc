@@ -7,7 +7,7 @@
 
 #include "face_reshape_filter.h"
 #include "gpupixel_context.h"
-#include "face_detector.h"
+
 namespace gpupixel {
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
@@ -211,28 +211,28 @@ FaceReshapeFilter::FaceReshapeFilter() {}
 
 FaceReshapeFilter::~FaceReshapeFilter() {}
 
-std::shared_ptr<FaceReshapeFilter> FaceReshapeFilter::create() {
+std::shared_ptr<FaceReshapeFilter> FaceReshapeFilter::Create() {
   auto ret = std::shared_ptr<FaceReshapeFilter>(new FaceReshapeFilter());
-  if (ret && !ret->init()) {
+  if (ret && !ret->Init()) {
     ret.reset();
   }
   return ret;
 }
 
-bool FaceReshapeFilter::init() {
-  if (!initWithFragmentShaderString(kGPUPixelThinFaceFragmentShaderString)) {
+bool FaceReshapeFilter::Init() {
+  if (!InitWithFragmentShaderString(kGPUPixelThinFaceFragmentShaderString)) {
     return false;
   }
-    registerProperty("thin_face", 0, "The smoothing of filter with range between -1 and 1.", [this](float& val) {
-        setFaceSlimLevel(val);
+    RegisterProperty("thin_face", 0, "The smoothing of filter with range between -1 and 1.", [this](float& val) {
+        SetFaceSlimLevel(val);
     });
 
-    registerProperty("big_eye", 0, "The smoothing of filter with range between -1 and 1.", [this](float& val) {
-        setEyeZoomLevel(val);
+    RegisterProperty("big_eye", 0, "The smoothing of filter with range between -1 and 1.", [this](float& val) {
+        SetEyeZoomLevel(val);
     });
 
     std::vector<float> defaut;
-    registerProperty("face_landmark", defaut, "The face landmark of filter with range between -1 and 1.", [this](std::vector<float> val) {
+    RegisterProperty("face_landmark", defaut, "The face landmark of filter with range between -1 and 1.", [this](std::vector<float> val) {
         SetFaceLandmarks(val);
     });
 
@@ -252,29 +252,29 @@ void FaceReshapeFilter::SetFaceLandmarks(std::vector<float> landmarks) {
   has_face_ = true;
 }
 
-bool FaceReshapeFilter::doRender(bool updateSinks) {
-  float aspect = (float)_framebuffer->getWidth() / _framebuffer->getHeight();
-  _filterProgram->setUniformValue("aspectRatio", aspect);
+bool FaceReshapeFilter::DoRender(bool updateSinks) {
+  float aspect = (float)_framebuffer->GetWidth() / _framebuffer->GetHeight();
+  _filterProgram->SetUniformValue("aspectRatio", aspect);
 
-  _filterProgram->setUniformValue("thinFaceDelta", this->thinFaceDelta_);
+  _filterProgram->SetUniformValue("thinFaceDelta", this->thinFaceDelta_);
 
-  _filterProgram->setUniformValue("bigEyeDelta", this->bigEyeDelta_);
+  _filterProgram->SetUniformValue("bigEyeDelta", this->bigEyeDelta_);
 
-  _filterProgram->setUniformValue("hasFace", has_face_);
+  _filterProgram->SetUniformValue("hasFace", has_face_);
   if (has_face_) {
-    _filterProgram->setUniformValue("facePoints", face_land_marks_.data(),
+    _filterProgram->SetUniformValue("facePoints", face_land_marks_.data(),
                                     static_cast<int>(face_land_marks_.size()));
   }
-  return Filter::doRender(updateSinks);
+  return Filter::DoRender(updateSinks);
 }
 
 #pragma mark - face slim
-void FaceReshapeFilter::setFaceSlimLevel(float level) {
+void FaceReshapeFilter::SetFaceSlimLevel(float level) {
   thinFaceDelta_ = level;
 }
 
 #pragma mark - eye zoom
-void FaceReshapeFilter::setEyeZoomLevel(float level) {
+void FaceReshapeFilter::SetEyeZoomLevel(float level) {
   bigEyeDelta_ = level;
 }
 

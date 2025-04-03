@@ -13,43 +13,43 @@ BoxHighPassFilter::BoxHighPassFilter() {}
 
 BoxHighPassFilter::~BoxHighPassFilter() {}
 
-std::shared_ptr<BoxHighPassFilter> BoxHighPassFilter::create() {
+std::shared_ptr<BoxHighPassFilter> BoxHighPassFilter::Create() {
   auto ret = std::shared_ptr<BoxHighPassFilter>(new BoxHighPassFilter());
-  if (ret && !ret->init()) {
+  if (ret && !ret->Init()) {
     ret.reset();
   }
   return ret;
 }
 
-bool BoxHighPassFilter::init() {
-  if (!FilterGroup::init()) {
+bool BoxHighPassFilter::Init() {
+  if (!FilterGroup::Init()) {
     return false;
   }
 
-  boxBlurFilter = BoxBlurFilter::create();
+  boxBlurFilter = BoxBlurFilter::Create();
   addFilter(boxBlurFilter);
 
-  boxDifferenceFilter = BoxDifferenceFilter::create();
+  boxDifferenceFilter = BoxDifferenceFilter::Create();
   addFilter(boxDifferenceFilter);
 
-  boxBlurFilter->addSink(boxDifferenceFilter, 1);
+  boxBlurFilter->AddSink(boxDifferenceFilter, 1);
   setTerminalFilter(boxDifferenceFilter);
 
   boxBlurFilter->setTexelSpacingMultiplier(4);
   return true;
 }
 
-void BoxHighPassFilter::setInputFramebuffer(
+void BoxHighPassFilter::SetInputFramebuffer(
     std::shared_ptr<GPUPixelFramebuffer> framebuffer,
     RotationMode rotationMode /* = NoRotation*/,
     int texIdx /* = 0*/) {
   for (auto& filter : _filters) {
-    filter->setInputFramebuffer(framebuffer, rotationMode, texIdx);
+    filter->SetInputFramebuffer(framebuffer, rotationMode, texIdx);
   }
 }
 
-void BoxHighPassFilter::setRadius(float radius) {
-  boxBlurFilter->setRadius(radius);
+void BoxHighPassFilter::SetRadius(float radius) {
+  boxBlurFilter->SetRadius(radius);
 }
 
 void BoxHighPassFilter::setDelta(float delta) {

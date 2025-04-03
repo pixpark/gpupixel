@@ -18,8 +18,8 @@ class GPUPIXEL_API IOSBlurFilter : public FilterGroup {
  public:
   virtual ~IOSBlurFilter();
 
-  static std::shared_ptr<IOSBlurFilter> create();
-  bool init();
+  static std::shared_ptr<IOSBlurFilter> Create();
+  bool Init();
 
   void setBlurSigma(float blurSigma);
   void setSaturation(float saturation);

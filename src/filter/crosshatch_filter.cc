@@ -7,7 +7,7 @@
 
 #include "crosshatch_filter.h"
 
-using namespace gpupixel;
+namespace gpupixel {
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
 const std::string kCrosshatchFragmentShaderString = R"(
@@ -95,21 +95,21 @@ const std::string kCrosshatchFragmentShaderString = R"(
     })";
 #endif
 
-std::shared_ptr<CrosshatchFilter> CrosshatchFilter::create() {
+std::shared_ptr<CrosshatchFilter> CrosshatchFilter::Create() {
   auto ret = std::shared_ptr<CrosshatchFilter>(new CrosshatchFilter());
-  if (ret && !ret->init()) {
+  if (ret && !ret->Init()) {
     ret.reset();
   }
   return ret;
 }
 
-bool CrosshatchFilter::init() {
-  if (!initWithFragmentShaderString(kCrosshatchFragmentShaderString)) {
+bool CrosshatchFilter::Init() {
+  if (!InitWithFragmentShaderString(kCrosshatchFragmentShaderString)) {
     return false;
   }
 
   setCrossHatchSpacing(0.03);
-  registerProperty("crossHatchSpacing", _crossHatchSpacing,
+  RegisterProperty("crossHatchSpacing", _crossHatchSpacing,
                    "The fractional width of the image to use as the spacing "
                    "for the crosshatch. The default is 0.03.",
                    [this](float& crossHatchSpacing) {
@@ -117,17 +117,17 @@ bool CrosshatchFilter::init() {
                    });
 
   setLineWidth(0.003);
-  registerProperty(
+  RegisterProperty(
       "lineWidth", _lineWidth,
       "A relative width for the crosshatch lines. The default is 0.003.",
       [this](float& lineWidth) { setLineWidth(lineWidth); });
   return true;
 }
 
-bool CrosshatchFilter::doRender(bool updateSinks) {
-  _filterProgram->setUniformValue("crossHatchSpacing", _crossHatchSpacing);
-  _filterProgram->setUniformValue("lineWidth", _lineWidth);
-  return Filter::doRender(updateSinks);
+bool CrosshatchFilter::DoRender(bool updateSinks) {
+  _filterProgram->SetUniformValue("crossHatchSpacing", _crossHatchSpacing);
+  _filterProgram->SetUniformValue("lineWidth", _lineWidth);
+  return Filter::DoRender(updateSinks);
 }
 
 void CrosshatchFilter::setCrossHatchSpacing(float crossHatchSpacing) {
@@ -137,3 +137,5 @@ void CrosshatchFilter::setCrossHatchSpacing(float crossHatchSpacing) {
 void CrosshatchFilter::setLineWidth(float lineWidth) {
   _lineWidth = lineWidth;
 }
+
+} // namespace gpupixel

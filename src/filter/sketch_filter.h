@@ -22,8 +22,8 @@ class _SketchFilter;
 class GPUPIXEL_API SketchFilter : public FilterGroup {
  public:
   ~SketchFilter();
-  static std::shared_ptr<SketchFilter> create();
-  bool init();
+  static std::shared_ptr<SketchFilter> Create();
+  bool Init();
 
  protected:
   SketchFilter();
@@ -36,9 +36,9 @@ class GPUPIXEL_API SketchFilter : public FilterGroup {
 
 class GPUPIXEL_API _SketchFilter : public NearbySampling3x3Filter {
  public:
-  static std::shared_ptr<_SketchFilter> create();
-  bool init();
-  virtual bool doRender(bool updateSinks = true) override;
+  static std::shared_ptr<_SketchFilter> Create();
+  bool Init();
+  virtual bool DoRender(bool updateSinks = true) override;
 
   void setEdgeStrength(float edgeStrength);
 

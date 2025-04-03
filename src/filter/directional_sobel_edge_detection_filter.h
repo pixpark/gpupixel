@@ -14,8 +14,8 @@ namespace gpupixel {
 class GPUPIXEL_API DirectionalSobelEdgeDetectionFilter
     : public NearbySampling3x3Filter {
  public:
-  static std::shared_ptr<DirectionalSobelEdgeDetectionFilter> create();
-  bool init();
+  static std::shared_ptr<DirectionalSobelEdgeDetectionFilter> Create();
+  bool Init();
 
  protected:
   DirectionalSobelEdgeDetectionFilter(){};

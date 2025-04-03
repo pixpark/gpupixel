@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
         // preview
         surfaceView = binding.surfaceView;
-        surfaceView.setMirror(true);
+        surfaceView.SetMirror(true);
 
         smooth_seekbar = binding.smoothSeekbar;
         smooth_seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         lipstick_seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                lipstickFilter.setBlendLevel(progress / 10.0f);
+                lipstickFilter.SetBlendLevel(progress / 10.0f);
             }
 
             @Override
@@ -165,10 +165,10 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         sourceCamera = new GPUPixelSourceCamera(this.getApplicationContext());
 
         //
-        sourceCamera.addSink(lipstickFilter);
-        lipstickFilter.addSink(faceReshapFilter);
-        faceReshapFilter.addSink(beautyFaceFilter);
-        beautyFaceFilter.addSink(surfaceView);
+        sourceCamera.AddSink(lipstickFilter);
+        lipstickFilter.AddSink(faceReshapFilter);
+        faceReshapFilter.AddSink(beautyFaceFilter);
+        beautyFaceFilter.AddSink(surfaceView);
 
         sourceCamera.setLandmarkCallbck(new GPUPixel.GPUPixelLandmarkCallback() {
             @Override

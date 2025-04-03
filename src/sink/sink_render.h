@@ -24,22 +24,22 @@ class GPUPIXEL_API SinkRender : public Sink {
   SinkRender();
   ~SinkRender();
 
-  void init();
-  virtual void setInputFramebuffer(std::shared_ptr<GPUPixelFramebuffer> framebuffer,
+  void Init();
+  virtual void SetInputFramebuffer(std::shared_ptr<GPUPixelFramebuffer> framebuffer,
                                    RotationMode rotationMode = NoRotation,
                                    int texIdx = 0) override;
-  void setFillMode(FillMode fillMode);
-  void setMirror(bool mirror);
-  void onSizeChanged(int width, int height);
-  virtual void render() override;
+  void SetFillMode(FillMode fillMode);
+  void SetMirror(bool mirror);
+  void SetRenderSize(int width, int height);
+  virtual void Render() override;
 
  private:
   int _viewWidth;
   int _viewHeight;
   FillMode _fillMode;
   bool _mirror = false;
-  GPUPixelGLProgram* _displayProgram;
-  GLuint _positionAttribLocation;
+  GPUPixelGLProgram* display_glprogram_;
+  GLuint position_attribute_location_;
   GLuint _texCoordAttribLocation;
   GLuint _colorMapUniformLocation;
   struct {
@@ -47,12 +47,12 @@ class GPUPIXEL_API SinkRender : public Sink {
     float g;
     float b;
     float a;
-  } _backgroundColor;
+  } background_color_;
 
-  GLfloat _displayVertices[8];
+  GLfloat display_vertices_[8];
 
-  void _updateDisplayVertices();
-  const GLfloat* _getTexureCoordinate(RotationMode rotationMode);
+  void UpdateDisplayVertices();
+  const GLfloat* GetTexureCoordinate(RotationMode rotationMode);
 };
 
 }

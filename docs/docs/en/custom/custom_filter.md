@@ -13,9 +13,9 @@ A typical custom filter class has the following structure:
 ```cpp
 class CustomFilter : public Filter {
  public:
-  static std::shared_ptr<CustomFilter> create();
-  bool init();
-  virtual bool doRender(bool updateSinks = true) override;
+  static std::shared_ptr<CustomFilter> Create();
+  bool Init();
+  virtual bool DoRender(bool updateSinks = true) override;
 
   // Custom parameter setters
   void setParameter(float value);
@@ -35,9 +35,9 @@ class CustomFilter : public Filter {
 Implement a static factory method that creates and initializes the filter:
 
 ```cpp
-std::shared_ptr<CustomFilter> CustomFilter::create() {
+std::shared_ptr<CustomFilter> CustomFilter::Create() {
   auto ret = std::shared_ptr<CustomFilter>(new CustomFilter());
-  if (ret && !ret->init()) {
+  if (ret && !ret->Init()) {
     ret.reset();
   }
   return ret;
@@ -46,18 +46,18 @@ std::shared_ptr<CustomFilter> CustomFilter::create() {
 
 ### 2. Initialize Filter
 
-Implement the `init()` method to set up shader programs and register parameters:
+Implement the `Init()` method to set up shader programs and register parameters:
 
 ```cpp
-bool CustomFilter::init() {
+bool CustomFilter::Init() {
   // Initialize with shader string
-  if (!initWithFragmentShaderString(kCustomFragmentShader)) {
+  if (!InitWithFragmentShaderString(kCustomFragmentShader)) {
     return false;
   }
 
   // Register parameters
   _parameter = 1.0f;
-  registerProperty(
+  RegisterProperty(
       "parameter",
       _parameter,
       "Description of the parameter",
@@ -87,15 +87,15 @@ const std::string kCustomFragmentShader = R"(
 
 ### 4. Implement Processing Logic
 
-Override the `doRender()` method to update shader uniforms and process the image:
+Override the `DoRender()` method to update shader uniforms and process the image:
 
 ```cpp
-bool CustomFilter::doRender(bool updateSinks) {
+bool CustomFilter::DoRender(bool updateSinks) {
   // Update shader uniforms
-  _filterProgram->setUniformValue("parameter", _parameter);
+  _filterProgram->SetUniformValue("parameter", _parameter);
   
   // Call base class implementation
-  return Filter::doRender(updateSinks);
+  return Filter::DoRender(updateSinks);
 }
 ```
 
@@ -106,9 +106,9 @@ Here's a real example of the `HueFilter` that adjusts image hue:
 ```cpp
 class HueFilter : public Filter {
  public:
-  static std::shared_ptr<HueFilter> create();
-  bool init();
-  virtual bool doRender(bool updateSinks = true) override;
+  static std::shared_ptr<HueFilter> Create();
+  bool Init();
+  virtual bool DoRender(bool updateSinks = true) override;
 
   void setHueAdjustment(float hueAdjustment);
 
@@ -120,7 +120,7 @@ class HueFilter : public Filter {
 
 The `HueFilter` demonstrates:
 - Parameter registration with callback
-- Shader uniform updates in doRender()
+- Shader uniform updates in DoRender()
 - Value conversion in parameter setter
 
 ## Best Practices

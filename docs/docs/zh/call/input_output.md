@@ -14,20 +14,20 @@ GPUPixel 支持不同的输入格式：
 
 ```cpp
 // 对于 RGBA 数据
-source_raw_input_->processData(pixels, width, height, stride);
+source_raw_input_->ProcessData(pixels, width, height, stride);
 ```
 
 相机帧处理示例：
 
 ```cpp
-gpuPixelRawInput->processData(pixels, width, height, stride);
+gpuPixelRawInput->ProcessData(pixels, width, height, stride);
 ```
 
 ### YUV 数据输入
 
 ```cpp
 // 对于 YUV420P 数据
-source_raw_input_->processData(width, height, 
+source_raw_input_->ProcessData(width, height, 
                               bufferY, strideY, 
                               bufferU, strideU,
                               bufferV, strideV);

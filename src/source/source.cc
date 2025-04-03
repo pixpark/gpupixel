@@ -21,32 +21,32 @@ Source::Source()
       _framebufferScale(1.0) {}
 
 Source::~Source() {
-  removeAllSinks();
+  RemoveAllSinks();
 }
 
-std::shared_ptr<Source> Source::addSink(std::shared_ptr<Sink> sink) {
-  int sinkTexIdx = sink->getNextAvailableTextureIndex();
-  return addSink(sink, sinkTexIdx);
+std::shared_ptr<Source> Source::AddSink(std::shared_ptr<Sink> sink) {
+  int sinkTexIdx = sink->NextAvailableTextureIndex();
+  return AddSink(sink, sinkTexIdx);
 }
 
-std::shared_ptr<Source> Source::addSink(std::shared_ptr<Sink> sink,
+std::shared_ptr<Source> Source::AddSink(std::shared_ptr<Sink> sink,
                                           int texIdx) {
-  if (!hasSink(sink)) {
+  if (!HasSink(sink)) {
     _sinks[sink] = texIdx;
-    sink->setInputFramebuffer(_framebuffer, RotationMode::NoRotation, texIdx);
+    sink->SetInputFramebuffer(_framebuffer, RotationMode::NoRotation, texIdx);
   }
   return std::dynamic_pointer_cast<Source>(sink);
 }
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
-std::shared_ptr<Source> Source::addSink(id<GPUPixelSink> sink) {
+std::shared_ptr<Source> Source::AddSink(id<GPUPixelSink> sink) {
   auto ios_sink = std::shared_ptr<Sink>(new ObjcSink(sink));
-  addSink(ios_sink);
+  AddSink(ios_sink);
   return 0;
 }
 #endif
 
-bool Source::hasSink(const std::shared_ptr<Sink> sink) const {
+bool Source::HasSink(const std::shared_ptr<Sink> sink) const {
   if (_sinks.find(sink) != _sinks.end()) {
     return true;
   } else {
@@ -54,41 +54,41 @@ bool Source::hasSink(const std::shared_ptr<Sink> sink) const {
   }
 }
 
-void Source::removeSink(std::shared_ptr<Sink> sink) {
+void Source::RemoveSink(std::shared_ptr<Sink> sink) {
   auto itr = _sinks.find(sink);
   if (itr != _sinks.end()) {
     _sinks.erase(itr);
   }
 }
 
-void Source::removeAllSinks() {
+void Source::RemoveAllSinks() {
   _sinks.clear();
 }
 
-bool Source::doRender(bool updateSinks) {
+bool Source::DoRender(bool updateSinks) {
   if (updateSinks) {
-    doUpdateSinks();
+    DoUpdateSinks();
   }
   return true;
 }
 
-void Source::doUpdateSinks() {
+void Source::DoUpdateSinks() {
   for (auto& it : _sinks) {
     auto sink = it.first;
-    sink->setInputFramebuffer(_framebuffer, _outputRotation,
+    sink->SetInputFramebuffer(_framebuffer, _outputRotation,
                                 _sinks[sink]);
-    if (sink->isPrepared()) {
-      sink->render();
-      sink->unPrepear();
+    if (sink->IsReady()) {
+      sink->Render();
+      sink->ResetAndClean();
     }
   }
 }
 
-unsigned char* Source::captureAProcessedFrameData(
+unsigned char* Source::GetProcessedFrameData(
     std::shared_ptr<Filter> upToFilter,
     int width /* = 0*/,
     int height /* = 0*/) {
-  if (GPUPixelContext::getInstance()->isCapturingFrame) {
+  if (GPUPixelContext::GetInstance()->isCapturingFrame) {
     return 0;
   }
 
@@ -96,41 +96,41 @@ unsigned char* Source::captureAProcessedFrameData(
     if (!_framebuffer) {
       return 0;
     }
-    width = getRotatedFramebufferWidth();
-    height = getRotatedFramebufferHeight();
+    width =GetRotatedFramebufferWidth();
+    height = GetRotatedFramebufferHeight();
   }
 
-  GPUPixelContext::getInstance()->isCapturingFrame = true;
-  GPUPixelContext::getInstance()->captureWidth = width;
-  GPUPixelContext::getInstance()->captureHeight = height;
-  GPUPixelContext::getInstance()->captureUpToFilter = upToFilter;
+  GPUPixelContext::GetInstance()->isCapturingFrame = true;
+  GPUPixelContext::GetInstance()->captureWidth = width;
+  GPUPixelContext::GetInstance()->captureHeight = height;
+  GPUPixelContext::GetInstance()->captureUpToFilter = upToFilter;
 
-  doRender(true);
+  DoRender(true);
   unsigned char* processedFrameData =
-      GPUPixelContext::getInstance()->capturedFrameData;
+      GPUPixelContext::GetInstance()->capturedFrameData;
 
-  GPUPixelContext::getInstance()->capturedFrameData = 0;
-  GPUPixelContext::getInstance()->captureWidth = 0;
-  GPUPixelContext::getInstance()->captureHeight = 0;
-  GPUPixelContext::getInstance()->isCapturingFrame = false;
-  GPUPixelContext::getInstance()->captureUpToFilter.reset();
+  GPUPixelContext::GetInstance()->capturedFrameData = 0;
+  GPUPixelContext::GetInstance()->captureWidth = 0;
+  GPUPixelContext::GetInstance()->captureHeight = 0;
+  GPUPixelContext::GetInstance()->isCapturingFrame = false;
+  GPUPixelContext::GetInstance()->captureUpToFilter.reset();
         
   return processedFrameData;
 }
 
-void Source::setFramebuffer(
+void Source::SetFramebuffer(
     std::shared_ptr<GPUPixelFramebuffer> fb,
     RotationMode outputRotation /* = RotationMode::NoRotation*/) {
   _framebuffer = fb;
   _outputRotation = outputRotation;
 }
 
-int Source::getRotatedFramebufferWidth() const {
+int Source::GetRotatedFramebufferWidth() const {
   if (_framebuffer) {
     if (rotationSwapsSize(_outputRotation)) {
-      return _framebuffer->getHeight();
+      return _framebuffer->GetHeight();
     } else {
-      return _framebuffer->getWidth();
+      return _framebuffer->GetWidth();
     }
   } else {
     return 0;
@@ -146,22 +146,22 @@ int Source::RegLandmarkCallback(FaceDetectorCallback callback) {
   return _face_detector->RegCallback(callback);
 }
 
-int Source::getRotatedFramebufferHeight() const {
+int Source::GetRotatedFramebufferHeight() const {
   if (_framebuffer) {
     if (rotationSwapsSize(_outputRotation)) {
-      return _framebuffer->getWidth();
+      return _framebuffer->GetWidth();
     } else {
-      return _framebuffer->getHeight();
+      return _framebuffer->GetHeight();
     }
   } else {
     return 0;
   }
 }
 
-std::shared_ptr<GPUPixelFramebuffer> Source::getFramebuffer() const {
+std::shared_ptr<GPUPixelFramebuffer> Source::GetFramebuffer() const {
   return _framebuffer;
 }
 
-void Source::releaseFramebuffer(bool returnToCache /* = true*/) {}
+void Source::ReleaseFramebuffer(bool returnToCache /* = true*/) {}
 
 }

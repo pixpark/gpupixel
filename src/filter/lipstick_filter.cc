@@ -6,23 +6,22 @@
  */
 
 #include "lipstick_filter.h"
-#include "face_detector.h"
 #include "source_image.h"
 
 namespace gpupixel {
-std::shared_ptr<LipstickFilter> LipstickFilter::create() {
+std::shared_ptr<LipstickFilter> LipstickFilter::Create() {
   auto ret = std::shared_ptr<LipstickFilter>(new LipstickFilter());
-  if (ret && !ret->init()) {
+  if (ret && !ret->Init()) {
     ret.reset();
   }
   return ret;
 }
 
-bool LipstickFilter::init() {
-  auto mouth = SourceImage::create(Util::getResourcePath("res/mouth.png"));
+bool LipstickFilter::Init() {
+  auto mouth = SourceImage::Create(Util::getResourcePath("res/mouth.png"));
   setImageTexture(mouth);
   setTextureBounds(FrameBounds{502.5, 710, 262.5, 167.5});
-  return FaceMakeupFilter::init();
+  return FaceMakeupFilter::Init();
 }
 
 }

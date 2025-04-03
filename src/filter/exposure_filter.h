@@ -12,11 +12,11 @@
 namespace gpupixel {
 class GPUPIXEL_API ExposureFilter : public Filter {
  public:
-  static std::shared_ptr<ExposureFilter> create();
-  bool init();
-  virtual bool doRender(bool updateSinks = true) override;
+  static std::shared_ptr<ExposureFilter> Create();
+  bool Init();
+  virtual bool DoRender(bool updateSinks = true) override;
 
-  void setExposure(float exposure);
+  void SetExposure(float exposure);
 
  protected:
   ExposureFilter(){};

@@ -13,8 +13,8 @@
 namespace gpupixel {
 class GPUPIXEL_API Convolution3x3Filter : public NearbySampling3x3Filter {
  public:
-  virtual bool init();
-  virtual bool doRender(bool updateSinks = true) override;
+  virtual bool Init();
+  virtual bool DoRender(bool updateSinks = true) override;
 
  protected:
   Convolution3x3Filter(){};

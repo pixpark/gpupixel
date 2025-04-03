@@ -22,28 +22,28 @@ class GPUPIXEL_API GPUPixelGLProgram {
   static GPUPixelGLProgram* createByShaderString(
       const std::string& vertexShaderSource,
       const std::string& fragmentShaderSource);
-  void use();
-  GLuint getID() const { return _program; }
+  void UseProgram();
+  GLuint GetProgram() const { return _program; }
 
-  GLuint getAttribLocation(const std::string& attribute);
-  GLuint getUniformLocation(const std::string& uniformName);
+  GLuint GetAttribLocation(const std::string& attribute);
+  GLuint GetUniformLocation(const std::string& uniformName);
 
-  void setUniformValue(const std::string& uniformName, int value);
-  void setUniformValue(const std::string& uniformName, float value);
-  void setUniformValue(const std::string& uniformName, Vector2 value);
-  void setUniformValue(const std::string& uniformName, Matrix3 value);
-  void setUniformValue(const std::string& uniformName, Matrix4 value);
+  void SetUniformValue(const std::string& uniformName, int value);
+  void SetUniformValue(const std::string& uniformName, float value);
+  void SetUniformValue(const std::string& uniformName, Vector2 value);
+  void SetUniformValue(const std::string& uniformName, Matrix3 value);
+  void SetUniformValue(const std::string& uniformName, Matrix4 value);
 
-  void setUniformValue(const std::string& uniformName,
+  void SetUniformValue(const std::string& uniformName,
                        const void* array,
                        int length);
 
-  void setUniformValue(int uniformLocation, int value);
-  void setUniformValue(int uniformLocation, float value);
-  void setUniformValue(int uniformLocation, Vector2 value);
-  void setUniformValue(int uniformLocation, Matrix3 value);
-  void setUniformValue(int uniformLocation, Matrix4 value);
-  void setUniformValue(int uniformLocation, const void* array, int length);
+  void SetUniformValue(int uniformLocation, int value);
+  void SetUniformValue(int uniformLocation, float value);
+  void SetUniformValue(int uniformLocation, Vector2 value);
+  void SetUniformValue(int uniformLocation, Matrix3 value);
+  void SetUniformValue(int uniformLocation, Matrix4 value);
+  void SetUniformValue(int uniformLocation, const void* array, int length);
 
  private:
   static std::vector<GPUPixelGLProgram*> _programs;

@@ -71,7 +71,7 @@
     eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], kEAGLDrawablePropertyRetainedBacking, kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
     
 #else
-    [self setOpenGLContext:gpupixel::GPUPixelContext::getInstance()->getOpenGLContext()];
+    [self setOpenGLContext:gpupixel::GPUPixelContext::GetInstance()->GetOpenGLContext()];
     if ([self respondsToSelector:@selector(setWantsBestResolutionOpenGLSurface:)])
     {
         [self  setWantsBestResolutionOpenGLSurface:YES];
@@ -79,14 +79,14 @@
     //    inputRotation = kGPUImageNoRotation;
     self.hidden = NO;
 #endif
-    gpupixel::GPUPixelContext::getInstance()->runSync([&]{
+    gpupixel::GPUPixelContext::GetInstance()->RunSync([&]{
         displayProgram = gpupixel::GPUPixelGLProgram::createByShaderString(gpupixel::kDefaultVertexShader, gpupixel::kDefaultFragmentShader);
         
-        positionAttribLocation = displayProgram->getAttribLocation("position");
-        texCoordAttribLocation = displayProgram->getAttribLocation("inputTextureCoordinate");
-        colorMapUniformLocation = displayProgram->getUniformLocation("inputImageTexture");
+        positionAttribLocation = displayProgram->GetAttribLocation("position");
+        texCoordAttribLocation = displayProgram->GetAttribLocation("inputTextureCoordinate");
+        colorMapUniformLocation = displayProgram->GetUniformLocation("inputImageTexture");
         
-        gpupixel::GPUPixelContext::getInstance()->setActiveShaderProgram(displayProgram);
+        gpupixel::GPUPixelContext::GetInstance()->SetActiveGlProgram(displayProgram);
         glEnableVertexAttribArray(positionAttribLocation);
         glEnableVertexAttribArray(texCoordAttribLocation);
         
@@ -139,12 +139,12 @@
 
 - (void)createDisplayFramebuffer;
 {
-    gpupixel::GPUPixelContext::getInstance()->runSync([&]{
+    gpupixel::GPUPixelContext::GetInstance()->RunSync([&]{
 #if defined(GPUPIXEL_IOS)
         glGenRenderbuffers(1, &displayRenderbuffer);
         glBindRenderbuffer(GL_RENDERBUFFER, displayRenderbuffer);
         
-        [gpupixel::GPUPixelContext::getInstance()->getEglContext() renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer*)self.layer];
+        [gpupixel::GPUPixelContext::GetInstance()->GetEglContext() renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer*)self.layer];
         
         glGenFramebuffers(1, &displayFramebuffer);
         glBindFramebuffer(GL_FRAMEBUFFER, displayFramebuffer);
@@ -172,7 +172,7 @@
 
 - (void)destroyDisplayFramebuffer;
 {
-    gpupixel::GPUPixelContext::getInstance()->runSync([&]{
+    gpupixel::GPUPixelContext::GetInstance()->RunSync([&]{
 #if defined(GPUPIXEL_IOS)
         if (displayFramebuffer)
         {
@@ -199,12 +199,12 @@
         [self createDisplayFramebuffer];
     }
     
-    gpupixel::GPUPixelContext::getInstance()->runSync([&]{
+    gpupixel::GPUPixelContext::GetInstance()->RunSync([&]{
         glBindFramebuffer(GL_FRAMEBUFFER, displayFramebuffer);
         glViewport(0, 0, framebufferWidth, framebufferHeight);
     });
 #else
-    gpupixel::GPUPixelContext::getInstance()->runSync([&]{
+    gpupixel::GPUPixelContext::GetInstance()->RunSync([&]{
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         glBindRenderbuffer(GL_RENDERBUFFER, 0);
         glViewport(0, 0, self.sizeInPixels.width, self.sizeInPixels.height);
@@ -213,10 +213,10 @@
 }
  
 - (void)presentFramebuffer {
-    gpupixel::GPUPixelContext::getInstance()->runSync([&] {
+    gpupixel::GPUPixelContext::GetInstance()->RunSync([&] {
 #if defined(GPUPIXEL_IOS)
         glBindRenderbuffer(GL_RENDERBUFFER, displayRenderbuffer);
-        gpupixel::GPUPixelContext::getInstance()->presentBufferForDisplay();
+        gpupixel::GPUPixelContext::GetInstance()->PresentBufferForDisplay();
 #else
         [self.openGLContext flushBuffer];
 #endif
@@ -231,9 +231,9 @@
     backgroundColorAlpha = alphaComponent;
 }
 
-- (void)doRender {
-    gpupixel::GPUPixelContext::getInstance()->runSync([&]{
-        gpupixel::GPUPixelContext::getInstance()->setActiveShaderProgram(displayProgram);
+- (void)DoRender {
+    gpupixel::GPUPixelContext::GetInstance()->RunSync([&]{
+        gpupixel::GPUPixelContext::GetInstance()->SetActiveGlProgram(displayProgram);
         [self setDisplayFramebuffer];
         glClearColor(backgroundColorRed, backgroundColorGreen, backgroundColorBlue, backgroundColorAlpha);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -243,7 +243,7 @@
         CHECK_GL(glBindRenderbuffer(GL_RENDERBUFFER, 0));
 #endif
         CHECK_GL(glActiveTexture(GL_TEXTURE0));
-        CHECK_GL(glBindTexture(GL_TEXTURE_2D, inputFramebuffer->getTexture()));
+        CHECK_GL(glBindTexture(GL_TEXTURE_2D, inputFramebuffer->GetTexture()));
         CHECK_GL(glUniform1i(colorMapUniformLocation, 0));
 
         CHECK_GL(glVertexAttribPointer(positionAttribLocation, 2, GL_FLOAT, 0, 0, displayVertices));
@@ -279,7 +279,7 @@
     });
 }
 
-- (void)setInputFramebuffer:(std::shared_ptr<gpupixel::GPUPixelFramebuffer>)newInputFramebuffer
+- (void)SetInputFramebuffer:(std::shared_ptr<gpupixel::GPUPixelFramebuffer>)newInputFramebuffer
                withRotation:(gpupixel::RotationMode)rotation
                     atIndex:(NSInteger)texIdx {
     std::shared_ptr<gpupixel::GPUPixelFramebuffer> lastFramebuffer = inputFramebuffer;
@@ -290,8 +290,8 @@
     
     if (lastFramebuffer != newInputFramebuffer && newInputFramebuffer &&
         ( !lastFramebuffer ||
-         !(lastFramebuffer->getWidth() == newInputFramebuffer->getWidth() &&
-           lastFramebuffer->getHeight() == newInputFramebuffer->getHeight() &&
+         !(lastFramebuffer->GetWidth() == newInputFramebuffer->GetWidth() &&
+           lastFramebuffer->GetHeight() == newInputFramebuffer->GetHeight() &&
            lastInputRotation == rotation)
          ))
     {
@@ -314,12 +314,12 @@
     CGFloat scaledWidth = 1.0;
     CGFloat scaledHeight = 1.0;
     
-    int rotatedFramebufferWidth = inputFramebuffer->getWidth();
-    int rotatedFramebufferHeight = inputFramebuffer->getHeight();
+    int rotatedFramebufferWidth = inputFramebuffer->GetWidth();
+    int rotatedFramebufferHeight = inputFramebuffer->GetHeight();
     if (rotationSwapsSize(inputRotation))
     {
-        rotatedFramebufferWidth = inputFramebuffer->getHeight();
-        rotatedFramebufferHeight = inputFramebuffer->getWidth();
+        rotatedFramebufferWidth = inputFramebuffer->GetHeight();
+        rotatedFramebufferHeight = inputFramebuffer->GetWidth();
     }
     
     CGRect insetRect = AVMakeRectWithAspectRatioInsideRect(CGSizeMake(rotatedFramebufferWidth, rotatedFramebufferHeight), self.bounds);

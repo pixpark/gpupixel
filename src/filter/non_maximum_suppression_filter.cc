@@ -55,17 +55,17 @@ const std::string kNonMaximumSuppressionShaderString = R"(
     })";
 
 std::shared_ptr<NonMaximumSuppressionFilter>
-NonMaximumSuppressionFilter::create() {
+NonMaximumSuppressionFilter::Create() {
   auto ret = std::shared_ptr<NonMaximumSuppressionFilter>(
       new NonMaximumSuppressionFilter());
-  if (ret && !ret->init()) {
+  if (ret && !ret->Init()) {
     ret.reset();
   }
   return ret;
 }
 
-bool NonMaximumSuppressionFilter::init() {
-  if (initWithFragmentShaderString(kNonMaximumSuppressionShaderString)) {
+bool NonMaximumSuppressionFilter::Init() {
+  if (InitWithFragmentShaderString(kNonMaximumSuppressionShaderString)) {
     return true;
   }
   return false;

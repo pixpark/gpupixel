@@ -13,13 +13,13 @@
 namespace gpupixel {
 class GPUPIXEL_API SphereRefractionFilter : public Filter {
  public:
-  static std::shared_ptr<SphereRefractionFilter> create();
-  bool init();
-  virtual bool doRender(bool updateSinks = true) override;
+  static std::shared_ptr<SphereRefractionFilter> Create();
+  bool Init();
+  virtual bool DoRender(bool updateSinks = true) override;
 
   void setPositionX(float x);
   void setPositionY(float y);
-  void setRadius(float radius);
+  void SetRadius(float radius);
   void setRefractiveIndex(float refractiveIndex);
 
  protected:

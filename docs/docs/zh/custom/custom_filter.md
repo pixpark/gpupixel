@@ -13,9 +13,9 @@ GPUPixel 的滤镜系统基于 OpenGL 着色器构建。每个滤镜都继承自
 ```cpp
 class CustomFilter : public Filter {
  public:
-  static std::shared_ptr<CustomFilter> create();
-  bool init();
-  virtual bool doRender(bool updateSinks = true) override;
+  static std::shared_ptr<CustomFilter> Create();
+  bool Init();
+  virtual bool DoRender(bool updateSinks = true) override;
 
   // 自定义参数设置器
   void setParameter(float value);
@@ -35,9 +35,9 @@ class CustomFilter : public Filter {
 实现一个静态工厂方法来创建和初始化滤镜：
 
 ```cpp
-std::shared_ptr<CustomFilter> CustomFilter::create() {
+std::shared_ptr<CustomFilter> CustomFilter::Create() {
   auto ret = std::shared_ptr<CustomFilter>(new CustomFilter());
-  if (ret && !ret->init()) {
+  if (ret && !ret->Init()) {
     ret.reset();
   }
   return ret;
@@ -46,18 +46,18 @@ std::shared_ptr<CustomFilter> CustomFilter::create() {
 
 ### 2. 初始化滤镜
 
-实现 `init()` 方法来设置着色器程序和注册参数：
+实现 `Init()` 方法来设置着色器程序和注册参数：
 
 ```cpp
-bool CustomFilter::init() {
+bool CustomFilter::Init() {
   // 使用着色器字符串初始化
-  if (!initWithFragmentShaderString(kCustomFragmentShader)) {
+  if (!InitWithFragmentShaderString(kCustomFragmentShader)) {
     return false;
   }
 
   // 注册参数
   _parameter = 1.0f;
-  registerProperty(
+  RegisterProperty(
       "parameter",
       _parameter,
       "参数描述",
@@ -87,15 +87,15 @@ const std::string kCustomFragmentShader = R"(
 
 ### 4. 实现处理逻辑
 
-重写 `doRender()` 方法来更新着色器 uniform 变量并处理图像：
+重写 `DoRender()` 方法来更新着色器 uniform 变量并处理图像：
 
 ```cpp
-bool CustomFilter::doRender(bool updateSinks) {
+bool CustomFilter::DoRender(bool updateSinks) {
   // 更新着色器 uniform 变量
-  _filterProgram->setUniformValue("parameter", _parameter);
+  _filterProgram->SetUniformValue("parameter", _parameter);
   
   // 调用基类实现
-  return Filter::doRender(updateSinks);
+  return Filter::DoRender(updateSinks);
 }
 ```
 
@@ -106,9 +106,9 @@ bool CustomFilter::doRender(bool updateSinks) {
 ```cpp
 class HueFilter : public Filter {
  public:
-  static std::shared_ptr<HueFilter> create();
-  bool init();
-  virtual bool doRender(bool updateSinks = true) override;
+  static std::shared_ptr<HueFilter> Create();
+  bool Init();
+  virtual bool DoRender(bool updateSinks = true) override;
 
   void setHueAdjustment(float hueAdjustment);
 
@@ -120,7 +120,7 @@ class HueFilter : public Filter {
 
 `HueFilter` 展示了：
 - 带回调的参数注册
-- doRender() 中的着色器 uniform 更新
+- DoRender() 中的着色器 uniform 更新
 - 参数设置器中的值转换
 
 ## 最佳实践

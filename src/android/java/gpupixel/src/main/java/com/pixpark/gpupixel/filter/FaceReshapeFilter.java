@@ -25,7 +25,7 @@ public final class FaceReshapeFilter extends GPUPixelFilter {
 
     public void setThinLevel(float thinLevel) {
         this.thinLevel = thinLevel;
-        setProperty(propThinLevel, thinLevel);
+        SetProperty(propThinLevel, thinLevel);
     }
 
     public float getBigeyeLevel() {
@@ -34,7 +34,7 @@ public final class FaceReshapeFilter extends GPUPixelFilter {
 
     public void setBigeyeLevel(float bigeyeLevel) {
         this.bigeyeLevel = bigeyeLevel;
-        setProperty(propBigeyeLevel, bigeyeLevel);
+        SetProperty(propBigeyeLevel, bigeyeLevel);
     }
 
     public float[] getFaceLandmark() {
@@ -43,6 +43,6 @@ public final class FaceReshapeFilter extends GPUPixelFilter {
 
     public void setFaceLandmark(float[] faceLandmark) {
         this.faceLandmark = faceLandmark;
-        setProperty(propFaceLandmark, faceLandmark);
+        SetProperty(propFaceLandmark, faceLandmark);
     }
 }

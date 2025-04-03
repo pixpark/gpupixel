@@ -20,23 +20,23 @@ const std::string kColorInvertFragmentShaderString = R"(
       gl_FragColor = vec4((1.0 - color.rgb), color.a);
     })";
 
-std::shared_ptr<ColorInvertFilter> ColorInvertFilter::create() {
+std::shared_ptr<ColorInvertFilter> ColorInvertFilter::Create() {
   auto ret = std::shared_ptr<ColorInvertFilter>(new ColorInvertFilter());
-  if (ret && !ret->init()) {
+  if (ret && !ret->Init()) {
     ret.reset();
   }
   return ret;
 }
 
-bool ColorInvertFilter::init() {
-  if (!Filter::initWithFragmentShaderString(kColorInvertFragmentShaderString)) {
+bool ColorInvertFilter::Init() {
+  if (!Filter::InitWithFragmentShaderString(kColorInvertFragmentShaderString)) {
     return false;
   }
   return true;
 }
 
-bool ColorInvertFilter::doRender(bool updateSinks) {
-  return Filter::doRender(updateSinks);
+bool ColorInvertFilter::DoRender(bool updateSinks) {
+  return Filter::DoRender(updateSinks);
 }
 
 }

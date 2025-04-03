@@ -9,7 +9,7 @@
 #include "gpupixel_context.h"
 #include "util.h"
 #include "face_detector.h"
-using namespace gpupixel;
+namespace gpupixel {
 
 const std::string kI420VertexShaderString = R"(
     attribute vec4 position; 
@@ -70,10 +70,10 @@ const std::string kI420FragmentShaderString = R"(
     })";
 #endif
 
-std::shared_ptr<SourceRawData> SourceRawData::create() {
+std::shared_ptr<SourceRawData> SourceRawData::Create() {
   auto sourceRawDataInput =
       std::shared_ptr<SourceRawData>(new SourceRawData());
-  if (sourceRawDataInput->init()) {
+  if (sourceRawDataInput->Init()) {
     return sourceRawDataInput;
   }
   return nullptr;
@@ -82,23 +82,23 @@ std::shared_ptr<SourceRawData> SourceRawData::create() {
 SourceRawData::SourceRawData() {}
 
 SourceRawData::~SourceRawData() {
-  GPUPixelContext::getInstance()->runSync(
+  GPUPixelContext::GetInstance()->RunSync(
       [=] { glDeleteTextures(4, _textures); });
 }
 
-bool SourceRawData::init() {
+bool SourceRawData::Init() {
   _filterProgram = GPUPixelGLProgram::createByShaderString(kI420VertexShaderString,
                                                    kI420FragmentShaderString);
-  GPUPixelContext::getInstance()->setActiveShaderProgram(_filterProgram);
+  GPUPixelContext::GetInstance()->SetActiveGlProgram(_filterProgram);
 
   //
-  _filterPositionAttribute = _filterProgram->getAttribLocation("position");
+  _filterPositionAttribute = _filterProgram->GetAttribLocation("position");
   _filterTexCoordAttribute =
-      _filterProgram->getAttribLocation("inputTextureCoordinate");
+      _filterProgram->GetAttribLocation("inputTextureCoordinate");
 
-  _filterProgram->setUniformValue("yTexture", 0);
-  _filterProgram->setUniformValue("uTexture", 1);
-  _filterProgram->setUniformValue("vTexture", 2);
+  _filterProgram->SetUniformValue("yTexture", 0);
+  _filterProgram->SetUniformValue("uTexture", 1);
+  _filterProgram->SetUniformValue("vTexture", 2);
 
   if (0 == _textures[0]) {
     glGenTextures(4, _textures);
@@ -117,12 +117,12 @@ bool SourceRawData::init() {
   return true;
 }
 
-void SourceRawData::processData(const uint8_t* pixels,
+void SourceRawData::ProcessData(const uint8_t* pixels,
                                      int width,
                                      int height,
                                      int stride,
                                      int64_t ts) {
-  GPUPixelContext::getInstance()->runSync([=] {
+  GPUPixelContext::GetInstance()->RunSync([=] {
     if(_face_detector) {
       _face_detector->Detect(pixels, width, height, GPUPIXEL_MODE_FMT_VIDEO,GPUPIXEL_FRAME_TYPE_RGBA8888);
     }
@@ -130,11 +130,11 @@ void SourceRawData::processData(const uint8_t* pixels,
   });
 }
 
-void SourceRawData::setRotation(RotationMode rotation) {
+void SourceRawData::SetRotation(RotationMode rotation) {
   _rotation = rotation;
 }
 
-void SourceRawData::processData(int width,
+void SourceRawData::ProcessData(int width,
                                      int height,
                                      const uint8_t* dataY,
                                      int strideY,
@@ -143,7 +143,7 @@ void SourceRawData::processData(int width,
                                      const uint8_t* dataV,
                                      int strideV,
                                      int64_t ts) {
-  GPUPixelContext::getInstance()->runSync([=] {
+  GPUPixelContext::GetInstance()->RunSync([=] {
     if(_face_detector) {
       _face_detector->Detect(dataY, width, height, GPUPIXEL_MODE_FMT_VIDEO, GPUPIXEL_FRAME_TYPE_YUVI420);
     }
@@ -162,17 +162,17 @@ int SourceRawData::genTextureWithI420(int width,
                                            const uint8_t* dataV,
                                            int strideV,
                                            int64_t ts) {
-  if (!_framebuffer || (_framebuffer->getWidth() != width ||
-                        _framebuffer->getHeight() != height)) {
+  if (!_framebuffer || (_framebuffer->GetWidth() != width ||
+                        _framebuffer->GetHeight() != height)) {
     _framebuffer =
-        GPUPixelContext::getInstance()->getFramebufferFactory()->fetchFramebuffer(
+        GPUPixelContext::GetInstance()->GetFramebufferFactory()->CreateFramebuffer(
             width, height);
   }
 
-  this->setFramebuffer(_framebuffer, NoRotation);
+  this->SetFramebuffer(_framebuffer, NoRotation);
 
-  GPUPixelContext::getInstance()->setActiveShaderProgram(_filterProgram);
-  this->getFramebuffer()->active();
+  GPUPixelContext::GetInstance()->SetActiveGlProgram(_filterProgram);
+  this->GetFramebuffer()->Active();
 
   GLfloat imageVertices[]{
       -1.0, -1.0,  // left down
@@ -187,7 +187,7 @@ int SourceRawData::genTextureWithI420(int width,
 
   CHECK_GL(glEnableVertexAttribArray(_filterTexCoordAttribute));
   CHECK_GL(glVertexAttribPointer(_filterTexCoordAttribute, 2, GL_FLOAT, 0, 0,
-                                 _getTexureCoordinate(_rotation)));
+                                 GetTexureCoordinate(_rotation)));
 
   const uint8_t* pixels[3] = {dataY, dataU, dataV};
   const int widths[3] = {width, width / 2, width / 2};
@@ -200,12 +200,12 @@ int SourceRawData::genTextureWithI420(int width,
                  GL_LUMINANCE, GL_UNSIGNED_BYTE, pixels[i]);
   }
   
-  _filterProgram->setUniformValue("texture_type", 0);
+  _filterProgram->SetUniformValue("texture_type", 0);
   // draw frame buffer
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-  this->getFramebuffer()->inactive();
+  this->GetFramebuffer()->Inactive();
 
-  Source::doRender(true);
+  Source::DoRender(true);
   return 0;
 }
 
@@ -214,13 +214,13 @@ int SourceRawData::genTextureWithRGBA(const uint8_t* pixels,
                                            int height,
                                            int stride,
                                            int64_t ts) {
-  if (!_framebuffer || (_framebuffer->getWidth() != stride ||
-                        _framebuffer->getHeight() != height)) {
+  if (!_framebuffer || (_framebuffer->GetWidth() != stride ||
+                        _framebuffer->GetHeight() != height)) {
     _framebuffer =
-        GPUPixelContext::getInstance()->getFramebufferFactory()->fetchFramebuffer(
+        GPUPixelContext::GetInstance()->GetFramebufferFactory()->CreateFramebuffer(
             stride, height);
   }
-  this->setFramebuffer(_framebuffer, NoRotation);
+  this->SetFramebuffer(_framebuffer, NoRotation);
 
   GLuint texture = _textures[3];
   CHECK_GL(glBindTexture(GL_TEXTURE_2D, texture));
@@ -233,8 +233,8 @@ int SourceRawData::genTextureWithRGBA(const uint8_t* pixels,
                         GL_UNSIGNED_BYTE, pixels));
 #endif
 
-  GPUPixelContext::getInstance()->setActiveShaderProgram(_filterProgram);
-  this->getFramebuffer()->active();
+  GPUPixelContext::GetInstance()->SetActiveGlProgram(_filterProgram);
+  this->GetFramebuffer()->Active();
 
   GLfloat imageVertices[]{
     -1.0f, -1.0f,
@@ -243,7 +243,7 @@ int SourceRawData::genTextureWithRGBA(const uint8_t* pixels,
     1.0f, 1.0f,
   };
 
-  _filterProgram->setUniformValue("texture_type", 1);
+  _filterProgram->SetUniformValue("texture_type", 1);
 
   CHECK_GL(glEnableVertexAttribArray(_filterPositionAttribute));
   CHECK_GL(glVertexAttribPointer(_filterPositionAttribute, 2, GL_FLOAT, 0, 0,
@@ -251,16 +251,18 @@ int SourceRawData::genTextureWithRGBA(const uint8_t* pixels,
 
   CHECK_GL(glEnableVertexAttribArray(_filterTexCoordAttribute));
   CHECK_GL(glVertexAttribPointer(_filterTexCoordAttribute, 2, GL_FLOAT, 0, 0,
-                                 _getTexureCoordinate(_rotation)));
+                                 GetTexureCoordinate(_rotation)));
 
   CHECK_GL(glActiveTexture(GL_TEXTURE4));
   CHECK_GL(glBindTexture(GL_TEXTURE_2D, texture));
-  _filterProgram->setUniformValue("inputImageTexture", 4);
+  _filterProgram->SetUniformValue("inputImageTexture", 4);
 
   // draw frame buffer
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-  this->getFramebuffer()->inactive();
+  this->GetFramebuffer()->Inactive();
 
-  Source::doRender(true);
+  Source::DoRender(true);
   return 0;
 }
+
+} // namespace gpupixel

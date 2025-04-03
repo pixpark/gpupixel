@@ -13,10 +13,10 @@
 namespace gpupixel {
 class GPUPIXEL_API ColorInvertFilter : public Filter {
  public:
-  static std::shared_ptr<ColorInvertFilter> create();
-  bool init();
+  static std::shared_ptr<ColorInvertFilter> Create();
+  bool Init();
 
-  virtual bool doRender(bool updateSinks = true) override;
+  virtual bool DoRender(bool updateSinks = true) override;
 
  protected:
   ColorInvertFilter(){};

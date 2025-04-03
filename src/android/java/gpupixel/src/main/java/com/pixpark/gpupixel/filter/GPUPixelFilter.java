@@ -16,7 +16,7 @@ public class GPUPixelFilter extends GPUPixelSource implements GPUPixelSink {
 
     GPUPixelFilter(final String filterClassName) {
         if (mNativeClassID != 0) return;
-        GPUPixel.getInstance().runOnDraw(new Runnable() {
+        GPUPixel.GetInstance().runOnDraw(new Runnable() {
             @Override
             public void run() {
                 mNativeClassID = GPUPixel.nativeFilterCreate(filterClassName);
@@ -25,16 +25,16 @@ public class GPUPixelFilter extends GPUPixelSource implements GPUPixelSink {
         this.filterClassName = filterClassName;
     }
 
-    public String getFilterClassName() {
+    public String GetFilterClassName() {
         return filterClassName;
     }
 
-    public final void setProperty(final String property, final double value) {
-        setProperty(property, (float) value);
+    public final void SetProperty(final String property, final double value) {
+        SetProperty(property, (float) value);
     }
 
-    public final void setProperty(final String property, final float value) {
-        GPUPixel.getInstance().runOnDraw(new Runnable() {
+    public final void SetProperty(final String property, final float value) {
+        GPUPixel.GetInstance().runOnDraw(new Runnable() {
             @Override
             public void run() {
                 if (mNativeClassID != 0) {
@@ -44,8 +44,8 @@ public class GPUPixelFilter extends GPUPixelSource implements GPUPixelSink {
         });
     }
 
-    public final void setProperty(final String property, final float[] array) {
-        GPUPixel.getInstance().runOnDraw(new Runnable() {
+    public final void SetProperty(final String property, final float[] array) {
+        GPUPixel.GetInstance().runOnDraw(new Runnable() {
             @Override
             public void run() {
                 if (mNativeClassID != 0) {
@@ -55,8 +55,8 @@ public class GPUPixelFilter extends GPUPixelSource implements GPUPixelSink {
         });
     }
 
-    public final void setProperty(final String property, final int value) {
-        GPUPixel.getInstance().runOnDraw(new Runnable() {
+    public final void SetProperty(final String property, final int value) {
+        GPUPixel.GetInstance().runOnDraw(new Runnable() {
             @Override
             public void run() {
                 if (mNativeClassID != 0) {
@@ -66,8 +66,8 @@ public class GPUPixelFilter extends GPUPixelSource implements GPUPixelSink {
         });
     }
 
-    public final void setProperty(final String property, final String value) {
-        GPUPixel.getInstance().runOnDraw(new Runnable() {
+    public final void SetProperty(final String property, final String value) {
+        GPUPixel.GetInstance().runOnDraw(new Runnable() {
             @Override
             public void run() {
                 if (mNativeClassID != 0) {
@@ -77,14 +77,14 @@ public class GPUPixelFilter extends GPUPixelSource implements GPUPixelSink {
         });
     }
 
-    public final void destroy() {
-        destroy(true);
+    public final void Destroy() {
+        Destroy(true);
     }
 
-    public final void destroy(boolean onGLThread) {
+    public final void Destroy(boolean onGLThread) {
         if (mNativeClassID != 0) {
             if (onGLThread) {
-                GPUPixel.getInstance().runOnDraw(new Runnable() {
+                GPUPixel.GetInstance().runOnDraw(new Runnable() {
                     @Override
                     public void run() {
                         if (mNativeClassID != 0) {
@@ -104,15 +104,15 @@ public class GPUPixelFilter extends GPUPixelSource implements GPUPixelSink {
     protected void finalize() throws Throwable {
         try {
             if (mNativeClassID != 0) {
-                if (GPUPixel.getInstance().getGLSurfaceView() != null) {
-                    GPUPixel.getInstance().runOnDraw(new Runnable() {
+                if (GPUPixel.GetInstance().getGLSurfaceView() != null) {
+                    GPUPixel.GetInstance().runOnDraw(new Runnable() {
                         @Override
                         public void run() {
                             GPUPixel.nativeFilterFinalize(mNativeClassID);
                             mNativeClassID = 0;
                         }
                     });
-                    GPUPixel.getInstance().requestRender();
+                    GPUPixel.GetInstance().requestRender();
                 } else {
                     GPUPixel.nativeFilterFinalize(mNativeClassID);
                     mNativeClassID = 0;

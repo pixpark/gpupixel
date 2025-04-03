@@ -34,23 +34,23 @@ const std::string kGrayscaleFragmentShaderString = R"(
     })";
 #endif
 
-std::shared_ptr<GrayscaleFilter> GrayscaleFilter::create() {
+std::shared_ptr<GrayscaleFilter> GrayscaleFilter::Create() {
   auto ret = std::shared_ptr<GrayscaleFilter>(new GrayscaleFilter());
-  if (!ret->init()) {
+  if (!ret->Init()) {
     ret.reset();
   }
   return ret;
 }
 
-bool GrayscaleFilter::init() {
-  if (Filter::initWithFragmentShaderString(kGrayscaleFragmentShaderString)) {
+bool GrayscaleFilter::Init() {
+  if (Filter::InitWithFragmentShaderString(kGrayscaleFragmentShaderString)) {
     return true;
   }
   return false;
 }
 
-bool GrayscaleFilter::doRender(bool updateSinks) {
-  return Filter::doRender(updateSinks);
+bool GrayscaleFilter::DoRender(bool updateSinks) {
+  return Filter::DoRender(updateSinks);
 }
 
 }
