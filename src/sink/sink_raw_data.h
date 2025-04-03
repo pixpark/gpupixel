@@ -9,22 +9,22 @@
 #pragma once
 
 #include <stdio.h>
+#include <string>
+#include <memory>
+#include <functional>
+#include <mutex>
+
 #include "gpupixel_program.h"
 #include "sink.h"
-#include <functional>
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
 #import <AVFoundation/AVFoundation.h>
 #import <Foundation/Foundation.h>
 #endif
 
-#include <mutex>
 namespace gpupixel {
-GPUPIXEL_API typedef std::function<
-    void(const uint8_t* data, int width, int height, int64_t ts)>
-    RawOutputCallback;
-    
-#define PBO_SIZE 2
+
+using RawOutputCallback = std::function<void(const uint8_t* data, int width, int height, int64_t ts)>;
 
 class GPUPIXEL_API SinkRawData : public Sink {
  public:
@@ -32,58 +32,39 @@ class GPUPIXEL_API SinkRawData : public Sink {
   virtual ~SinkRawData();
   static std::shared_ptr<SinkRawData> create();
   void render() override;
-  void setI420Callbck(RawOutputCallback cb);
-  void setPixelsCallbck(RawOutputCallback cb);
+  void setI420Callback(RawOutputCallback callback);
+  void setPixelsCallback(RawOutputCallback callback);
  private:
   int renderToOutput();
-  bool initWithShaderString(const std::string& vertexShaderSource,
-                            const std::string& fragmentShaderSource);
+  bool initWithShaderString(const std::string& vertex_shader_source,
+                            const std::string& fragment_shader_source);
   void initTextureCache(int width, int height);
   void initFrameBuffer(int width, int height);
-#if defined(GPUPIXEL_IOS)
-  void readPixelsFromCVPixelBuffer();
-#endif
   void initOutputBuffer(int width, int height);
-  void initPBO(int width, int height);
-  void readPixelsWithPBO(int width, int height);
 
  private:
-  std::mutex mtx_;
-  GPUPixelGLProgram* _filterProgram;
-  GLuint _filterPositionAttribute;
-  GLuint _filterTexCoordAttribute;
-  //
-#if defined(GPUPIXEL_IOS)
-  GLuint _framebuffer = 0;
-  CVOpenGLESTextureRef renderTexture = NULL;
-  CVOpenGLESTextureCacheRef textureCache = NULL;
-  CVPixelBufferRef renderTarget = NULL;
-#else
-  std::shared_ptr<GPUPixelFramebuffer> _framebuffer;
-#endif
+  std::mutex mutex_;
+  GPUPixelGLProgram* shader_program_;
+  GLuint position_attribute_;
+  GLuint tex_coord_attribute_;
+ 
+  std::shared_ptr<GPUPixelFramebuffer> framebuffer_;
+ 
+  bool is_initialized_ = false;
 
-  bool init_ = false;
+  // Image dimensions
+  int32_t width_ = 0;
+  int32_t height_ = 0;
+  int64_t frame_timestamp_ = 0;
 
-  GLuint pboIds[PBO_SIZE] = {0};
-
-  GLuint pboIds_yuvdata[PBO_SIZE] = {0};
-
-  int32_t index = 0;
-  int32_t nextIndex = 0;
-
-  // iamge width & height
-  int32_t _width = 0;
-  int32_t _height = 0;
-  int64_t _frame_ts = 0;
-
-  // rgb buffer
-  uint8_t* _readPixelData = nullptr;
-  uint8_t* _yuvFrameBuffer = nullptr;
-  // callback
+  // Frame buffers for pixel data
+  uint8_t* rgba_buffer_ = nullptr;  // RGBA buffer
+  uint8_t* yuv_buffer_ = nullptr;   // YUV buffer
+  // Callback functions
   RawOutputCallback i420_callback_ = nullptr;
   RawOutputCallback pixels_callback_ = nullptr;
 
-  bool current_frame_invalid_ = true;
+  bool is_frame_valid_ = true;
 };
 
-}
+}  // namespace gpupixel
