@@ -92,7 +92,7 @@ const std::string kCustomFragmentShader = R"(
 ```cpp
 bool CustomFilter::DoRender(bool updateSinks) {
   // 更新着色器 uniform 变量
-  _filterProgram->SetUniformValue("parameter", _parameter);
+  filter_program_->SetUniformValue("parameter", _parameter);
   
   // 调用基类实现
   return Filter::DoRender(updateSinks);

@@ -26,34 +26,34 @@ bool BoxHighPassFilter::Init() {
     return false;
   }
 
-  boxBlurFilter = BoxBlurFilter::Create();
-  addFilter(boxBlurFilter);
+  box_blur_filter_ = BoxBlurFilter::Create();
+  AddFilter(box_blur_filter_);
 
-  boxDifferenceFilter = BoxDifferenceFilter::Create();
-  addFilter(boxDifferenceFilter);
+  box_difference_filter_ = BoxDifferenceFilter::Create();
+  AddFilter(box_difference_filter_);
 
-  boxBlurFilter->AddSink(boxDifferenceFilter, 1);
-  setTerminalFilter(boxDifferenceFilter);
+  box_blur_filter_->AddSink(box_difference_filter_, 1);
+  SetTerminalFilter(box_difference_filter_);
 
-  boxBlurFilter->setTexelSpacingMultiplier(4);
+  box_blur_filter_->SetTexelSpacingMultiplier(4);
   return true;
 }
 
 void BoxHighPassFilter::SetInputFramebuffer(
     std::shared_ptr<GPUPixelFramebuffer> framebuffer,
-    RotationMode rotationMode /* = NoRotation*/,
+    RotationMode rotation_mode /* = NoRotation*/,
     int texIdx /* = 0*/) {
-  for (auto& filter : _filters) {
-    filter->SetInputFramebuffer(framebuffer, rotationMode, texIdx);
+  for (auto& filter : filters_) {
+    filter->SetInputFramebuffer(framebuffer, rotation_mode, texIdx);
   }
 }
 
 void BoxHighPassFilter::SetRadius(float radius) {
-  boxBlurFilter->SetRadius(radius);
+  box_blur_filter_->SetRadius(radius);
 }
 
-void BoxHighPassFilter::setDelta(float delta) {
-  boxDifferenceFilter->setDelta(delta);
+void BoxHighPassFilter::SetDelta(float delta) {
+  box_difference_filter_->SetDelta(delta);
 }
 
-}
+}  // namespace gpupixel

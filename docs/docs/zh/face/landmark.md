@@ -39,66 +39,68 @@ SDK检测的106个基础面部特征点覆盖了以下关键面部特征：
 #include "face_detector.h"
 
 // 创建人脸检测器实例
-FaceDetector detector;
-
-// 检测器将自动使用资源路径进行初始化
+std::shared_ptr<FaceDetector> faceDetector = std::make_shared<FaceDetector>();
 ```
 
 ### 人脸检测和特征点提取
 ```cpp
-// 注册回调函数以接收检测结果
-detector.RegCallback([](std::vector<float> landmarks) {
-    // 处理特征点数据
-    // landmarks包含所有111个点的归一化坐标(x,y)
-});
-
-// 对图像数据进行检测
-detector.Detect(
-    imageData,      // 图像数据指针
-    width,          // 图像宽度
-    height,         // 图像高度
-    format,         // 图像格式
-    frameType       // 帧类型
+// 直接对图像数据进行检测并获取特征点
+std::vector<float> landmarks = faceDetector->Detect(
+    buffer,                     // 图像数据指针 (const unsigned char*)
+    width,                      // 图像宽度 (int)
+    height,                     // 图像高度 (int)
+    GPUPIXEL_MODE_FMT_PICTURE,  // 图像格式 (GPUPIXEL_MODE_FMT)
+    GPUPIXEL_FRAME_TYPE_RGBA    // 帧类型 (GPUPIXEL_FRAME_TYPE)
 );
+
+// 检查是否检测到特征点
+if (!landmarks.empty()) {
+    // 将特征点应用到滤镜
+    lipstickFilter->SetFaceLandmarks(landmarks);
+    blusherFilter->SetFaceLandmarks(landmarks);
+    reshapeFilter->SetFaceLandmarks(landmarks);
+}
 ```
 
 ### 支持的图像格式
-SDK支持多种输入格式，包括：
-- RGBA8888
-- YUVI420
+检测器支持多种输入格式：
+
+**格式参数 (GPUPIXEL_MODE_FMT)**:
+- `GPUPIXEL_MODE_FMT_VIDEO`: 视频源格式
+- `GPUPIXEL_MODE_FMT_PICTURE`: 静态图像格式
+
+**帧类型参数 (GPUPIXEL_FRAME_TYPE)**:
+- `GPUPIXEL_FRAME_TYPE_YUVI420`: YUV I420格式
+- `GPUPIXEL_FRAME_TYPE_RGBA`: RGBA格式
+- `GPUPIXEL_FRAME_TYPE_BGRA`: BGRA格式
 
 ## 性能考虑
-- SDK使用MNN框架针对移动端和嵌入式设备进行了优化
+- 检测器针对实时视频和静态图像处理进行了优化
 - 特征点坐标已归一化到[0,1]范围
-- 通过回调机制提供检测结果，实现高效集成
+- 检测结果直接作为float向量返回
 
 ## API参考
 
 ### FaceDetector类
 ```cpp
 class FaceDetector {
-    public:
-        FaceDetector();
-        ~FaceDetector();
-        
-        // 对图像数据进行人脸检测
-        int Detect(const uint8_t* data,
-                   int width,
-                   int height,
-                   GPUPIXEL_MODE_FMT fmt,
-                   GPUPIXEL_FRAME_TYPE type);
-        
-        // 注册检测结果回调函数
-        int RegCallback(FaceDetectorCallback callback);
+public:
+    FaceDetector();
+    ~FaceDetector();
+    
+    // 对图像数据进行人脸检测并返回特征点
+    std::vector<float> Detect(
+        const uint8_t* data,         // 图像数据指针
+        int width,                   // 图像宽度
+        int height,                  // 图像高度
+        GPUPIXEL_MODE_FMT fmt,       // 图像格式
+        GPUPIXEL_FRAME_TYPE type     // 帧类型
+    );
 };
 ```
 
-### 回调函数
-```cpp
-typedef std::function<void(std::vector<float> landmarks)> FaceDetectorCallback;
-```
-
-### 检测结果
-回调中的landmarks向量包含所有111个点的归一化坐标(x,y)，按顺序排列：
-- 索引0-211：基础106个特征点（x,y对）
-- 索引212-221：扩展的5个特征点（x,y对）
+### 特征点结果格式
+返回的landmarks向量包含所有检测到的点的归一化坐标(x,y)，按顺序排列：
+- 对于每个特征点，两个连续的float值表示其(x,y)坐标
+- 坐标已归一化到图像尺寸范围（0.0到1.0）
+- 如果未检测到人脸，则返回空向量

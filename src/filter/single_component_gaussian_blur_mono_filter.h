@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include "gpupixel_define.h"
 #include "gaussian_blur_mono_filter.h"
+#include "gpupixel_define.h"
 
 namespace gpupixel {
 class GPUPIXEL_API SingleComponentGaussianBlurMonoFilter
@@ -21,10 +21,10 @@ class GPUPIXEL_API SingleComponentGaussianBlurMonoFilter
   SingleComponentGaussianBlurMonoFilter(Type type = HORIZONTAL);
 
  private:
-  std::string _generateOptimizedVertexShaderString(int radius,
-                                                   float sigma) override;
-  std::string _generateOptimizedFragmentShaderString(int radius,
-                                                     float sigma) override;
+  std::string GenerateOptimizedVertexShaderString(int radius,
+                                                  float sigma) override;
+  std::string GenerateOptimizedFragmentShaderString(int radius,
+                                                    float sigma) override;
 };
 
-}
+}  // namespace gpupixel

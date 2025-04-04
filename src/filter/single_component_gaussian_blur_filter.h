@@ -27,8 +27,8 @@ class GPUPIXEL_API SingleComponentGaussianBlurFilter : public FilterGroup {
   SingleComponentGaussianBlurFilter();
 
  private:
-  std::shared_ptr<SingleComponentGaussianBlurMonoFilter> _hBlurFilter;
-  std::shared_ptr<SingleComponentGaussianBlurMonoFilter> _vBlurFilter;
+  std::shared_ptr<SingleComponentGaussianBlurMonoFilter> h_blur_filter_;
+  std::shared_ptr<SingleComponentGaussianBlurMonoFilter> v_blur_filter_;
 };
 
-}
+}  // namespace gpupixel

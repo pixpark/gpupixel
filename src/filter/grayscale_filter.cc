@@ -53,4 +53,4 @@ bool GrayscaleFilter::DoRender(bool updateSinks) {
   return Filter::DoRender(updateSinks);
 }
 
-}
+}  // namespace gpupixel

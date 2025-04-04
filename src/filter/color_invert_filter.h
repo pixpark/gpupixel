@@ -19,7 +19,7 @@ class GPUPIXEL_API ColorInvertFilter : public Filter {
   virtual bool DoRender(bool updateSinks = true) override;
 
  protected:
-  ColorInvertFilter(){};
+  ColorInvertFilter() {};
 };
 
-}
+}  // namespace gpupixel

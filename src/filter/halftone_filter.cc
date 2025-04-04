@@ -85,11 +85,11 @@ bool HalftoneFilter::Init() {
 
   setPixelSize(0.01);
   RegisterProperty(
-      "pixelSize", _pixelSize,
+      "pixelSize", pixel_size_,
       "The size of a pixel that you want to pixellate, ranges from 0 to 0.05.",
       [this](float& pixelSize) { setPixelSize(pixelSize); });
 
   return true;
 }
 
-} // namespace gpupixel
+}  // namespace gpupixel

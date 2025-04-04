@@ -11,9 +11,9 @@
 
 namespace gpupixel {
 class GPUPIXEL_API BlusherFilter : public FaceMakeupFilter {
-public:
+ public:
   static std::shared_ptr<BlusherFilter> Create();
   bool Init() override;
 };
 
-}
+}  // namespace gpupixel

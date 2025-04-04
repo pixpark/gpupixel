@@ -12,19 +12,19 @@
 namespace gpupixel {
 SourceCamera::SourceCamera() {
 #if defined(GPUPIXEL_IOS)
-  _videoDataOutputSampleBufferDelegate =
+  video_data_output_sample_buffer_delegate_ =
       [[VideoDataOutputSampleBufferDelegate alloc] init];
-  _videoDataOutputSampleBufferDelegate.sourceCamera = this;
+  video_data_output_sample_buffer_delegate_.sourceCamera = this;
 
-  _horizontallyMirrorFrontFacingCamera = false;
-  _horizontallyMirrorRearFacingCamera = false;
+  horizontally_mirror_front_facing_camera_ = false;
+  horizontally_mirror_rear_facing_camera_ = false;
 #endif
 }
 
 SourceCamera::~SourceCamera() {
 #if defined(GPUPIXEL_IOS)
-  stop();
-  _videoDataOutputSampleBufferDelegate = 0;
+  Stop();
+  video_data_output_sample_buffer_delegate_ = 0;
 #endif
 }
 
@@ -38,18 +38,18 @@ std::shared_ptr<SourceCamera> SourceCamera::Create() {
   return sourceCamera;
 }
 
-void SourceCamera::setFrameData(
+void SourceCamera::SetFrameData(
     int width,
     int height,
     const void* pixels,
     RotationMode outputRotation /* = RotationMode::NoRotation*/) {
-  if (!_framebuffer || (_framebuffer->GetWidth() != width ||
-                        _framebuffer->GetHeight() != height)) {
-    _framebuffer =
-        GPUPixelContext::GetInstance()->GetFramebufferFactory()->CreateFramebuffer(
-            width, height, true);
+  if (!framebuffer_ || (framebuffer_->GetWidth() != width ||
+                        framebuffer_->GetHeight() != height)) {
+    framebuffer_ = GPUPixelContext::GetInstance()
+                       ->GetFramebufferFactory()
+                       ->CreateFramebuffer(width, height, true);
   }
-  this->SetFramebuffer(_framebuffer, outputRotation);
+  this->SetFramebuffer(framebuffer_, outputRotation);
 
   CHECK_GL(glBindTexture(GL_TEXTURE_2D, this->GetFramebuffer()->GetTexture()));
 #if defined(GPUPIXEL_IOS)
@@ -64,7 +64,7 @@ void SourceCamera::setFrameData(
 
 #if defined(GPUPIXEL_IOS)
 bool SourceCamera::Init() {
-  if (isCameraExist(AVCaptureDevicePositionFront)) {
+  if (IsCameraExist(AVCaptureDevicePositionFront)) {
     return Init(AVCaptureSessionPreset640x480, AVCaptureDevicePositionFront);
   } else {
     return Init(AVCaptureSessionPreset640x480, AVCaptureDevicePositionBack);
@@ -73,12 +73,12 @@ bool SourceCamera::Init() {
 
 bool SourceCamera::Init(NSString* sessionPreset,
                         AVCaptureDevicePosition cameraPosition) {
-  _outputRotation = gpupixel::NoRotation;
+  output_rotation_ = gpupixel::NoRotation;
   // internalRotation = gpupixel::NoRotation;
-  _capturePaused = NO;
+  capture_paused_ = NO;
 
-  _captureSession = [[AVCaptureSession alloc] init];
-  _captureSession.sessionPreset = sessionPreset;
+  capture_session_ = [[AVCaptureSession alloc] init];
+  capture_session_.sessionPreset = sessionPreset;
 
   // input
   AVCaptureDevice* device = 0;
@@ -94,34 +94,34 @@ bool SourceCamera::Init(NSString* sessionPreset,
   }
 
   NSError* error = nil;
-  _captureDeviceInput =
+  capture_device_input_ =
       [AVCaptureDeviceInput deviceInputWithDevice:device error:&error];
-  if ([_captureSession canAddInput:_captureDeviceInput]) {
-    [_captureSession addInput:_captureDeviceInput];
+  if ([capture_session_ canAddInput:capture_device_input_]) {
+    [capture_session_ addInput:capture_device_input_];
   } else {
     return false;
   }
 
   // output
-  _captureVideoDataOutput = [[AVCaptureVideoDataOutput alloc] init];
-  [_captureVideoDataOutput setAlwaysDiscardsLateVideoFrames:YES];
-  [_captureSession addOutput:_captureVideoDataOutput];
+  capture_video_data_output_ = [[AVCaptureVideoDataOutput alloc] init];
+  [capture_video_data_output_ setAlwaysDiscardsLateVideoFrames:YES];
+  [capture_session_ addOutput:capture_video_data_output_];
   dispatch_queue_t queue =
       dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
-  [_captureVideoDataOutput
-      setSampleBufferDelegate:_videoDataOutputSampleBufferDelegate
+  [capture_video_data_output_
+      setSampleBufferDelegate:video_data_output_sample_buffer_delegate_
                         queue:queue];
-  _captureVideoDataOutput.videoSettings = [NSDictionary
+  capture_video_data_output_.videoSettings = [NSDictionary
       dictionaryWithObjectsAndKeys:[NSNumber
                                        numberWithInt:kCVPixelFormatType_32BGRA],
                                    kCVPixelBufferPixelFormatTypeKey, nil];
 
-  setOutputImageOrientation(UIInterfaceOrientationPortrait);
+  SetOutputImageOrientation(UIInterfaceOrientationPortrait);
 
   return true;
 }
 
-bool SourceCamera::isCameraExist(AVCaptureDevicePosition cameraPosition) {
+bool SourceCamera::IsCameraExist(AVCaptureDevicePosition cameraPosition) {
   NSArray* devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
   for (AVCaptureDevice* device in devices) {
     if ([device position] == cameraPosition) {
@@ -131,42 +131,42 @@ bool SourceCamera::isCameraExist(AVCaptureDevicePosition cameraPosition) {
   return false;
 }
 
-void SourceCamera::start() {
-  if (![_captureSession isRunning]) {
-    _videoDataOutputSampleBufferDelegate.sourceCamera = this;
-    [_captureSession startRunning];
+void SourceCamera::Start() {
+  if (![capture_session_ isRunning]) {
+    video_data_output_sample_buffer_delegate_.sourceCamera = this;
+    [capture_session_ startRunning];
   };
 }
 
-void SourceCamera::stop() {
-  if ([_captureSession isRunning]) {
-    _videoDataOutputSampleBufferDelegate.sourceCamera = 0;
-    [_captureSession stopRunning];
+void SourceCamera::Stop() {
+  if ([capture_session_ isRunning]) {
+    video_data_output_sample_buffer_delegate_.sourceCamera = 0;
+    [capture_session_ stopRunning];
   }
 }
 
-void SourceCamera::pause() {
-  _capturePaused = true;
+void SourceCamera::Pause() {
+  capture_paused_ = true;
 }
 
-void SourceCamera::resume() {
-  _capturePaused = false;
+void SourceCamera::Resume() {
+  capture_paused_ = false;
 }
 
-bool SourceCamera::isRunning() {
-  return [_captureSession isRunning];
+bool SourceCamera::IsRunning() {
+  return [capture_session_ isRunning];
 }
 
-bool SourceCamera::flip() {
+bool SourceCamera::Flip() {
   AVCaptureDevicePosition cameraPosition =
-      [[_captureDeviceInput device] position];
+      [[capture_device_input_ device] position];
   if (cameraPosition == AVCaptureDevicePositionBack) {
     cameraPosition = AVCaptureDevicePositionFront;
   } else {
     cameraPosition = AVCaptureDevicePositionBack;
   }
 
-  if (!isCameraExist(cameraPosition)) {
+  if (!IsCameraExist(cameraPosition)) {
     return false;
   }
 
@@ -189,120 +189,120 @@ bool SourceCamera::flip() {
     return false;
   }
 
-  [_captureSession beginConfiguration];
+  [capture_session_ beginConfiguration];
 
-  [_captureSession removeInput:_captureDeviceInput];
-  if ([_captureSession canAddInput:newCaptureDeviceInput]) {
-    [_captureSession addInput:newCaptureDeviceInput];
-    _captureDeviceInput = newCaptureDeviceInput;
+  [capture_session_ removeInput:capture_device_input_];
+  if ([capture_session_ canAddInput:newCaptureDeviceInput]) {
+    [capture_session_ addInput:newCaptureDeviceInput];
+    capture_device_input_ = newCaptureDeviceInput;
   } else {
-    [_captureSession addInput:_captureDeviceInput];
+    [capture_session_ addInput:capture_device_input_];
   }
-  [_captureSession commitConfiguration];
+  [capture_session_ commitConfiguration];
 
-  _updateOutputRotation();
+  UpdateOutputRotation();
 
   return true;
 }
 
-AVCaptureDevicePosition SourceCamera::getCameraPosition() {
-  return [[_captureDeviceInput device] position];
+AVCaptureDevicePosition SourceCamera::GetCameraPosition() {
+  return [[capture_device_input_ device] position];
 }
 
-void SourceCamera::setOutputImageOrientation(
+void SourceCamera::SetOutputImageOrientation(
     UIInterfaceOrientation orientation) {
-  _outputImageOrientation = orientation;
-  _updateOutputRotation();
+  output_image_orientation_ = orientation;
+  UpdateOutputRotation();
 }
 
-void SourceCamera::setHorizontallyMirrorFrontFacingCamera(bool newValue) {
-  _horizontallyMirrorFrontFacingCamera = newValue;
-  _updateOutputRotation();
+void SourceCamera::SetHorizontallyMirrorFrontFacingCamera(bool newValue) {
+  horizontally_mirror_front_facing_camera_ = newValue;
+  UpdateOutputRotation();
 }
 
-void SourceCamera::setHorizontallyMirrorRearFacingCamera(bool newValue) {
-  _horizontallyMirrorRearFacingCamera = newValue;
-  _updateOutputRotation();
+void SourceCamera::SetHorizontallyMirrorRearFacingCamera(bool newValue) {
+  horizontally_mirror_rear_facing_camera_ = newValue;
+  UpdateOutputRotation();
 }
 
-void SourceCamera::_updateOutputRotation() {
-  if (getCameraPosition() == AVCaptureDevicePositionBack) {
-    if (_horizontallyMirrorRearFacingCamera) {
-      switch (_outputImageOrientation) {
+void SourceCamera::UpdateOutputRotation() {
+  if (GetCameraPosition() == AVCaptureDevicePositionBack) {
+    if (horizontally_mirror_rear_facing_camera_) {
+      switch (output_image_orientation_) {
         case UIInterfaceOrientationPortrait:
-          _outputRotation = gpupixel::RotateRightFlipVertical;
+          output_rotation_ = gpupixel::RotateRightFlipVertical;
           break;
         case UIInterfaceOrientationPortraitUpsideDown:
-          _outputRotation = gpupixel::Rotate180;
+          output_rotation_ = gpupixel::Rotate180;
           break;
         case UIInterfaceOrientationLandscapeLeft:
-          _outputRotation = gpupixel::FlipHorizontal;
+          output_rotation_ = gpupixel::FlipHorizontal;
           break;
         case UIInterfaceOrientationLandscapeRight:
-          _outputRotation = gpupixel::FlipVertical;
+          output_rotation_ = gpupixel::FlipVertical;
           break;
         default:
-          _outputRotation = gpupixel::NoRotation;
+          output_rotation_ = gpupixel::NoRotation;
       }
     } else {
-      switch (_outputImageOrientation) {
+      switch (output_image_orientation_) {
         case UIInterfaceOrientationPortrait:
-          _outputRotation = gpupixel::RotateRight;
+          output_rotation_ = gpupixel::RotateRight;
           break;
         case UIInterfaceOrientationPortraitUpsideDown:
-          _outputRotation = gpupixel::RotateLeft;
+          output_rotation_ = gpupixel::RotateLeft;
           break;
         case UIInterfaceOrientationLandscapeLeft:
-          _outputRotation = gpupixel::Rotate180;
+          output_rotation_ = gpupixel::Rotate180;
           break;
         case UIInterfaceOrientationLandscapeRight:
-          _outputRotation = gpupixel::NoRotation;
+          output_rotation_ = gpupixel::NoRotation;
           break;
         default:
-          _outputRotation = gpupixel::NoRotation;
+          output_rotation_ = gpupixel::NoRotation;
       }
     }
   } else {
-    if (_horizontallyMirrorFrontFacingCamera) {
-      switch (_outputImageOrientation) {
+    if (horizontally_mirror_front_facing_camera_) {
+      switch (output_image_orientation_) {
         case UIInterfaceOrientationPortrait:
-          _outputRotation = gpupixel::RotateRightFlipVertical;
+          output_rotation_ = gpupixel::RotateRightFlipVertical;
           break;
         case UIInterfaceOrientationPortraitUpsideDown:
-          _outputRotation = gpupixel::RotateRightFlipHorizontal;
+          output_rotation_ = gpupixel::RotateRightFlipHorizontal;
           break;
         case UIInterfaceOrientationLandscapeLeft:
-          _outputRotation = gpupixel::FlipHorizontal;
+          output_rotation_ = gpupixel::FlipHorizontal;
           break;
         case UIInterfaceOrientationLandscapeRight:
-          _outputRotation = gpupixel::FlipVertical;
+          output_rotation_ = gpupixel::FlipVertical;
           break;
         default:
-          _outputRotation = gpupixel::NoRotation;
+          output_rotation_ = gpupixel::NoRotation;
       }
     } else {
-      switch (_outputImageOrientation) {
+      switch (output_image_orientation_) {
         case UIInterfaceOrientationPortrait:
-          _outputRotation = gpupixel::RotateRight;
+          output_rotation_ = gpupixel::RotateRight;
           break;
         case UIInterfaceOrientationPortraitUpsideDown:
-          _outputRotation = gpupixel::RotateLeft;
+          output_rotation_ = gpupixel::RotateLeft;
           break;
         case UIInterfaceOrientationLandscapeLeft:
-          _outputRotation = gpupixel::NoRotation;
+          output_rotation_ = gpupixel::NoRotation;
           break;
         case UIInterfaceOrientationLandscapeRight:
-          _outputRotation = gpupixel::Rotate180;
+          output_rotation_ = gpupixel::Rotate180;
           break;
         default:
-          _outputRotation = gpupixel::NoRotation;
+          output_rotation_ = gpupixel::NoRotation;
       }
     }
   }
-  _videoDataOutputSampleBufferDelegate.rotation = _outputRotation;
+  video_data_output_sample_buffer_delegate_.rotation = output_rotation_;
 }
 #endif
-} // namespace gpupixel
+}  // namespace gpupixel
 
 #if defined(GPUPIXEL_IOS)
 @implementation VideoDataOutputSampleBufferDelegate
@@ -314,7 +314,7 @@ void SourceCamera::_updateOutputRotation() {
     gpupixel::GPUPixelContext::GetInstance()->RunSync([&] {
       CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
       CVPixelBufferLockBaseAddress(imageBuffer, 0);
-      _sourceCamera->setFrameData((int)CVPixelBufferGetWidth(imageBuffer),
+      _sourceCamera->SetFrameData((int)CVPixelBufferGetWidth(imageBuffer),
                                   (int)CVPixelBufferGetHeight(imageBuffer),
                                   CVPixelBufferGetBaseAddress(imageBuffer),
                                   _rotation);

@@ -17,16 +17,16 @@ class GPUPIXEL_API RGBFilter : public Filter {
   bool Init();
   virtual bool DoRender(bool updateSinks = true) override;
 
-  void setRedAdjustment(float redAdjustment);
-  void setGreenAdjustment(float greenAdjustment);
-  void setBlueAdjustment(float blueAdjustment);
+  void setRedAdjustment(float red_adjustment);
+  void setGreenAdjustment(float green_adjustment);
+  void setBlueAdjustment(float blue_adjustment);
 
  protected:
-  RGBFilter(){};
+  RGBFilter() {};
 
-  float _redAdjustment;
-  float _greenAdjustment;
-  float _blueAdjustment;
+  float red_adjustment_;
+  float green_adjustment_;
+  float blue_adjustment_;
 };
 
-}
+}  // namespace gpupixel

@@ -6,8 +6,8 @@
  */
 
 #include "util.h"
-#include "gpupixel_context.h"
 #include <cstdarg>
+#include "gpupixel_context.h"
 #if defined(GPUPIXEL_ANDROID)
 #include <android/log.h>
 #include "jni_helpers.h"
@@ -19,7 +19,7 @@
 #include <stdio.h>
 #endif
 #include <chrono>
- 
+
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
 @interface GPXObjcHelper : NSObject
 + (NSString*)getResourcePath:(NSString*)name;
@@ -57,7 +57,6 @@
 
 #endif
 
-
 namespace gpupixel {
 
 std::string Util::resourceRoot = "";
@@ -70,13 +69,13 @@ std::string Util::getResourcePath(std::string name) {
 #elif defined(GPUPIXEL_ANDROID)
   std::string path = getResourcePathJni(name);
 #else
-    std::string path = resourceRoot.empty() ? name : (resourceRoot + "/" + name);
+  std::string path = resourceRoot.empty() ? name : (resourceRoot + "/" + name);
 #endif
   return path;
 }
 
 void Util::setResourceRoot(std::string root) {
-    resourceRoot = root;
+  resourceRoot = root;
 }
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
 std::string Util::getResourcePath(std::string bundle_name,
@@ -117,17 +116,17 @@ int vasprintf(char** strp, const char* fmt, va_list ap) {
 }
 #endif
 
-
 #if defined(GPUPIXEL_ANDROID)
 std::string Util::getResourcePathJni(std::string name) {
-  // Todo(Jeayo) @see https://developer.android.com/ndk/guides/image-decoder?hl=zh-cn
-  JavaVM *jvm = GetJVM();
-  JNIEnv *env = GetEnv(jvm);
+  // @see
+  // https://developer.android.com/ndk/guides/image-decoder?hl=zh-cn
+  JavaVM* jvm = GetJVM();
+  JNIEnv* env = GetEnv(jvm);
 
-  // 定义类路径和方法签名
-  const char *className = "com/pixpark/gpupixel/GPUPixel";
-  const char *methodName = "getResource_path";
-  const char *methodSignature = "()Ljava/lang/String;";
+  // Define class path and method signature
+  const char* className = "com/pixpark/gpupixel/GPUPixel";
+  const char* methodName = "getResource_path";
+  const char* methodSignature = "()Ljava/lang/String;";
 
   // GPUPixel
   jclass class_id = env->FindClass(className);
@@ -135,15 +134,13 @@ std::string Util::getResourcePathJni(std::string name) {
     return NULL;
   }
 
-  jmethodID mtd = env->GetStaticMethodID(class_id, methodName,
-                                         methodSignature);
+  jmethodID mtd = env->GetStaticMethodID(class_id, methodName, methodSignature);
   if (mtd == NULL) {
     return NULL;
   }
 
-  // 调用createBitmap方法
-  jstring path = (jstring)env->CallStaticObjectMethod(class_id,
-                                                      mtd);
+  // Call createBitmap method
+  jstring path = (jstring)env->CallStaticObjectMethod(class_id, mtd);
 
   std::string str = env->GetStringUTFChars(path, nullptr);
   env->DeleteLocalRef(class_id);
@@ -185,15 +182,15 @@ int64_t Util::nowTimeMs() {
   return ts;
 }
 
- void Util::Log(const std::string& tag, std::string format, ...) {
+void Util::Log(const std::string& tag, std::string format, ...) {
   char buffer[10240];
   va_list args;
   va_start(args, format);
 #if defined(GPUPIXEL_WIN)
-  // 使用 vsnprintf_s 在 Windows 上
+  // Use vsnprintf_s on Windows
   vsnprintf_s(buffer, sizeof(buffer), _TRUNCATE, format.c_str(), args);
 #else
-  // 使用 vsnprintf 在其他平台上
+  // Use vsnprintf on other platforms
   vsnprintf(buffer, sizeof(buffer), format.c_str(), args);
 #endif
   va_end(args);
@@ -206,4 +203,4 @@ int64_t Util::nowTimeMs() {
 #endif
 }
 
-}
+}  // namespace gpupixel

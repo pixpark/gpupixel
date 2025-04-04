@@ -9,8 +9,6 @@
 
 namespace gpupixel {
 
-REGISTER_FILTER_CLASS(DirectionalNonMaximumSuppressionFilter)
-
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
 const std::string kDirectionalNonmaximumSuppressionFragmentShaderString =
     R"(
@@ -103,11 +101,11 @@ DirectionalNonMaximumSuppressionFilter::Create() {
 bool DirectionalNonMaximumSuppressionFilter::Init() {
   if (InitWithFragmentShaderString(
           kDirectionalNonmaximumSuppressionFragmentShaderString)) {
-    _texelWidthUniform = _filterProgram->GetUniformLocation("texelWidth");
-    _texelHeightUniform = _filterProgram->GetUniformLocation("texelWidth");
+    texel_width_uniform_ = filter_program_->GetUniformLocation("texelWidth");
+    texel_height_uniform_ = filter_program_->GetUniformLocation("texelHeight");
 
-    _filterProgram->SetUniformValue("upperThreshold", (float)0.5);
-    _filterProgram->SetUniformValue("lowerThreshold", (float)0.1);
+    filter_program_->SetUniformValue("upperThreshold", (float)0.5);
+    filter_program_->SetUniformValue("lowerThreshold", (float)0.1);
 
     return true;
   }
@@ -115,22 +113,23 @@ bool DirectionalNonMaximumSuppressionFilter::Init() {
 }
 
 bool DirectionalNonMaximumSuppressionFilter::DoRender(bool updateSinks) {
-  float texelWidth = 1.0 / _framebuffer->GetWidth();
-  float texelHeight = 1.0 / _framebuffer->GetHeight();
+  float texelWidth = 1.0 / framebuffer_->GetWidth();
+  float texelHeight = 1.0 / framebuffer_->GetHeight();
 
   std::shared_ptr<GPUPixelFramebuffer> inputFramebuffer =
-      input_framebuffers_.begin()->second.frameBuffer;
-  RotationMode inputRotation = input_framebuffers_.begin()->second.rotationMode;
+      input_framebuffers_.begin()->second.frame_buffer;
+  RotationMode inputRotation =
+      input_framebuffers_.begin()->second.rotation_mode;
 
   if (rotationSwapsSize(inputRotation)) {
-    texelWidth = 1.0 / _framebuffer->GetHeight();
-    texelHeight = 1.0 / _framebuffer->GetWidth();
+    texelWidth = 1.0 / framebuffer_->GetHeight();
+    texelHeight = 1.0 / framebuffer_->GetWidth();
   }
 
-  _filterProgram->SetUniformValue(_texelWidthUniform, texelWidth);
-  _filterProgram->SetUniformValue(_texelHeightUniform, texelHeight);
+  filter_program_->SetUniformValue(texel_width_uniform_, texelWidth);
+  filter_program_->SetUniformValue(texel_height_uniform_, texelHeight);
 
   return Filter::DoRender(updateSinks);
 }
 
-}
+}  // namespace gpupixel

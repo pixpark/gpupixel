@@ -42,11 +42,11 @@ class GPUPIXEL_API HSBFilter : public ColorMatrixFilter {
   void adjustBrightness(float b);
 
  protected:
-  HSBFilter(){};
+  HSBFilter() {};
 
  private:
-  Matrix4 brightnessMatrix_;
-  Matrix4 saturationMatrix_;
+  Matrix4 brightness_matrix_;
+  Matrix4 saturation_matrix_;
 };
 
-}
+}  // namespace gpupixel

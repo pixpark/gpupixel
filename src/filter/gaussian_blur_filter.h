@@ -8,8 +8,8 @@
 #pragma once
 
 #include "filter_group.h"
-#include "gpupixel_define.h"
 #include "gaussian_blur_mono_filter.h"
+#include "gpupixel_define.h"
 
 namespace gpupixel {
 class GPUPIXEL_API GaussianBlurFilter : public FilterGroup {
@@ -26,8 +26,8 @@ class GPUPIXEL_API GaussianBlurFilter : public FilterGroup {
   GaussianBlurFilter();
 
  private:
-  std::shared_ptr<GaussianBlurMonoFilter> _hBlurFilter;
-  std::shared_ptr<GaussianBlurMonoFilter> _vBlurFilter;
+  std::shared_ptr<GaussianBlurMonoFilter> horizontal_blur_filter_;
+  std::shared_ptr<GaussianBlurMonoFilter> vertical_blur_filter_;
 };
 
-}
+}  // namespace gpupixel

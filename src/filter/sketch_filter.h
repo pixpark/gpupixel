@@ -28,10 +28,10 @@ class GPUPIXEL_API SketchFilter : public FilterGroup {
  protected:
   SketchFilter();
 
-  std::shared_ptr<GrayscaleFilter> _grayscaleFilter;
-  std::shared_ptr<_SketchFilter> _sketchFilter;
+  std::shared_ptr<GrayscaleFilter> grayscale_filter_;
+  std::shared_ptr<_SketchFilter> sketch_filter_;
 
-  float _edgeStrength;
+  float edge_strength_;
 };
 
 class GPUPIXEL_API _SketchFilter : public NearbySampling3x3Filter {
@@ -40,12 +40,12 @@ class GPUPIXEL_API _SketchFilter : public NearbySampling3x3Filter {
   bool Init();
   virtual bool DoRender(bool updateSinks = true) override;
 
-  void setEdgeStrength(float edgeStrength);
+  void setEdgeStrength(float edge_strength);
 
  protected:
-  _SketchFilter(){};
+  _SketchFilter() {};
 
-  float _edgeStrength;
+  float edge_strength_;
 };
 
-}
+}  // namespace gpupixel

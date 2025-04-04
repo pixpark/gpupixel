@@ -9,8 +9,6 @@
 
 namespace gpupixel {
 
-REGISTER_FILTER_CLASS(ToonFilter)
-
 const std::string kToonFragmentShaderString = R"(
     precision mediump float; uniform sampler2D inputImageTexture;
     uniform float threshold;
@@ -70,13 +68,13 @@ bool ToonFilter::Init() {
     return false;
   }
 
-  _threshold = 0.2;
-  RegisterProperty("threshold", _threshold,
+  threshold_ = 0.2;
+  RegisterProperty("threshold", threshold_,
                    "The threshold at which to apply the edges",
                    [this](float& threshold) { setThreshold(threshold); });
 
-  _quantizationLevels = 10.0;
-  RegisterProperty("quantizationLevels", _quantizationLevels,
+  quantization_levels_ = 10.0;
+  RegisterProperty("quantizationLevels", quantization_levels_,
                    "The levels of quantization for the posterization of colors "
                    "within the scene",
                    [this](float& quantizationLevels) {
@@ -87,17 +85,17 @@ bool ToonFilter::Init() {
 }
 
 void ToonFilter::setThreshold(float threshold) {
-  _threshold = threshold;
+  threshold_ = threshold;
 }
 
 void ToonFilter::setQuantizatinLevels(float quantizationLevels) {
-  _quantizationLevels = quantizationLevels;
+  quantization_levels_ = quantizationLevels;
 }
 
 bool ToonFilter::DoRender(bool updateSinks) {
-  _filterProgram->SetUniformValue("threshold", _threshold);
-  _filterProgram->SetUniformValue("quantizationLevels", _quantizationLevels);
+  filter_program_->SetUniformValue("threshold", threshold_);
+  filter_program_->SetUniformValue("quantizationLevels", quantization_levels_);
   return NearbySampling3x3Filter::DoRender(updateSinks);
 }
 
-} // namespace gpupixel
+}  // namespace gpupixel

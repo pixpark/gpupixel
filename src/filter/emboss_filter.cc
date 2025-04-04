@@ -9,7 +9,7 @@
 
 namespace gpupixel {
 
-// REGISTER_FILTER_CLASS(EmbossFilter)
+//
 
 std::shared_ptr<EmbossFilter> EmbossFilter::Create() {
   auto ret = std::shared_ptr<EmbossFilter>(new EmbossFilter());
@@ -24,10 +24,10 @@ bool EmbossFilter::Init() {
     return false;
   }
 
-  _intensity = 1.0;
-  setIntensity(_intensity);
+  intensity_factor_ = 1.0;
+  setIntensity(intensity_factor_);
 
-  RegisterProperty("intensity", _intensity,
+  RegisterProperty("intensity", intensity_factor_,
                    "The strength of the embossing, from  0.0 to 4.0, with 1.0 "
                    "as the normal level",
                    [this](float& intensity) { setIntensity(intensity); });
@@ -36,15 +36,16 @@ bool EmbossFilter::Init() {
 }
 
 void EmbossFilter::setIntensity(float intensity) {
-  _intensity = intensity;
-  if (_intensity > 4.0) {
-    _intensity = 4.0;
-  } else if (_intensity < 0.0) {
-    _intensity = 0.0;
+  intensity_factor_ = intensity;
+  if (intensity_factor_ > 4.0) {
+    intensity_factor_ = 4.0;
+  } else if (intensity_factor_ < 0.0) {
+    intensity_factor_ = 0.0;
   }
 
-  _convolutionKernel.set(-2.0 * _intensity, -_intensity, 0.0, -_intensity, 1.0,
-                         _intensity, 0.0, _intensity, _intensity * 2.0);
+  convolution_kernel_.set(-2.0 * intensity_factor_, -intensity_factor_, 0.0,
+                          -intensity_factor_, 1.0, intensity_factor_, 0.0,
+                          intensity_factor_, intensity_factor_ * 2.0);
 }
 
-} // namespace gpupixel
+}  // namespace gpupixel

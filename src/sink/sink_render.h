@@ -25,23 +25,24 @@ class GPUPIXEL_API SinkRender : public Sink {
   ~SinkRender();
 
   void Init();
-  virtual void SetInputFramebuffer(std::shared_ptr<GPUPixelFramebuffer> framebuffer,
-                                   RotationMode rotationMode = NoRotation,
-                                   int texIdx = 0) override;
-  void SetFillMode(FillMode fillMode);
+  virtual void SetInputFramebuffer(
+      std::shared_ptr<GPUPixelFramebuffer> framebuffer,
+      RotationMode rotation_mode = NoRotation,
+      int tex_idx = 0) override;
+  void SetFillMode(FillMode fill_mode);
   void SetMirror(bool mirror);
   void SetRenderSize(int width, int height);
   virtual void Render() override;
 
  private:
-  int _viewWidth;
-  int _viewHeight;
-  FillMode _fillMode;
-  bool _mirror = false;
-  GPUPixelGLProgram* display_glprogram_;
+  int view_width_;
+  int view_height_;
+  FillMode fill_mode_;
+  bool mirror_ = false;
+  GPUPixelGLProgram* display_program_;
   GLuint position_attribute_location_;
-  GLuint _texCoordAttribLocation;
-  GLuint _colorMapUniformLocation;
+  GLuint tex_coord_attribute_location_;
+  GLuint color_map_uniform_location_;
   struct {
     float r;
     float g;
@@ -52,7 +53,7 @@ class GPUPIXEL_API SinkRender : public Sink {
   GLfloat display_vertices_[8];
 
   void UpdateDisplayVertices();
-  const GLfloat* GetTexureCoordinate(RotationMode rotationMode);
+  const GLfloat* GetTextureCoordinate(RotationMode rotation_mode);
 };
 
-}
+}  // namespace gpupixel

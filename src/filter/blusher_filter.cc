@@ -18,10 +18,10 @@ std::shared_ptr<BlusherFilter> BlusherFilter::Create() {
 }
 
 bool BlusherFilter::Init() {
-  auto blusher  = SourceImage::Create(Util::getResourcePath("res/blusher.png"));
-  setImageTexture(blusher);
-  setTextureBounds(FrameBounds{395, 520, 489, 209});
+  auto blusher = SourceImage::Create(Util::getResourcePath("res/blusher.png"));
+  SetImageTexture(blusher);
+  SetTextureBounds(FrameBounds{395, 520, 489, 209});
   return FaceMakeupFilter::Init();
 }
 
-}
+}  // namespace gpupixel

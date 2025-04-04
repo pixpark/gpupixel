@@ -20,7 +20,7 @@ class Sink {
   
   // Set input framebuffer
   virtual void SetInputFramebuffer(std::shared_ptr<GPUPixelFramebuffer> framebuffer,
-                                 RotationMode rotationMode = NoRotation,
+                                 RotationMode rotation_mode = NoRotation,
                                  int texIdx = 0);
   
   // Update processing

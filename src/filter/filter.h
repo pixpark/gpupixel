@@ -7,12 +7,12 @@
 
 #pragma once
 
-#include "gpupixel_program.h"
 #include "gpupixel_define.h"
-#include "source.h"
+#include "gpupixel_program.h"
 #include "sink.h"
-#include "util.h"
+#include "source.h"
 #include "string"
+#include "util.h"
 
 namespace gpupixel {
 const std::string kDefaultVertexShader = R"(
@@ -45,56 +45,56 @@ class GPUPIXEL_API Filter : public Source, public Sink {
  public:
   virtual ~Filter();
 
-  static std::shared_ptr<Filter> Create(const std::string& filterClassName);
+  static std::shared_ptr<Filter> Create(const std::string& filter_class_name);
 
   static std::shared_ptr<Filter> CreateWithShaderString(
-      const std::string& vertexShaderSource,
-      const std::string& fragmentShaderSource);
+      const std::string& vertex_shader_source,
+      const std::string& fragment_shader_source);
 
   static std::shared_ptr<Filter> CreateWithFragmentShaderString(
-      const std::string& fragmentShaderSource);
+      const std::string& fragment_shader_source);
 
-  bool InitWithShaderString(const std::string& vertexShaderSource,
-                            const std::string& fragmentShaderSource,
-                            int inputNumber = 1);
+  bool InitWithShaderString(const std::string& vertex_shader_source,
+                            const std::string& fragment_shader_source,
+                            int input_number = 1);
 
   virtual bool InitWithFragmentShaderString(
-      const std::string& fragmentShaderSource,
-      int inputNumber = 1);
+      const std::string& fragment_shader_source,
+      int input_number = 1);
 
-  void SetFilterClassName(const std::string filterClassName) {
-    _filterClassName = filterClassName;
+  void SetFilterClassName(const std::string filter_class_name) {
+    filter_class_name_ = filter_class_name;
   }
 
-  std::string GetFilterClassName() const { return _filterClassName; };
+  std::string GetFilterClassName() const { return filter_class_name_; };
 
   virtual void Render() override;
 
-  virtual bool DoRender(bool updateSinks = true) override;
+  virtual bool DoRender(bool update_sinks = true) override;
 
-  GPUPixelGLProgram* GetGlProgram() const { return _filterProgram; };
+  GPUPixelGLProgram* GetGlProgram() const { return filter_program_; };
 
   // property setters & getters
   bool RegisterProperty(const std::string& name,
-                        int defaultValue,
+                        int default_value,
                         const std::string& comment = "",
-                        std::function<void(int&)> setCallback = 0);
+                        std::function<void(int&)> set_callback = 0);
 
   bool RegisterProperty(const std::string& name,
-                        float defaultValue,
+                        float default_value,
                         const std::string& comment = "",
-                        std::function<void(float&)> setCallback = 0);
+                        std::function<void(float&)> set_callback = 0);
 
-bool RegisterProperty(
-        const std::string& name,
-        std::vector<float> defaultValue,
-        const std::string& comment /* = ""*/,
-        std::function<void(std::vector<float>)> setCallback /* = 0*/);
+  bool RegisterProperty(
+      const std::string& name,
+      std::vector<float> default_value,
+      const std::string& comment /* = ""*/,
+      std::function<void(std::vector<float>&)> set_callback /* = 0*/);
 
   bool RegisterProperty(const std::string& name,
-                        const std::string& defaultValue,
+                        const std::string& default_value,
                         const std::string& comment = "",
-                        std::function<void(std::string&)> setCallback = 0);
+                        std::function<void(std::string&)> set_callback = 0);
 
   bool SetProperty(const std::string& name, int value);
 
@@ -102,26 +102,26 @@ bool RegisterProperty(
 
   bool SetProperty(const std::string& name, std::string value);
 
-  bool GetProperty(const std::string& name, int& retValue);
+  bool GetProperty(const std::string& name, int& ret_value);
 
-  bool GetProperty(const std::string& name, float& retValue);
+  bool GetProperty(const std::string& name, float& ret_value);
 
   bool SetProperty(const std::string& name, std::vector<float> value);
 
-  bool GetProperty(const std::string& name, std::string& retValue);
+  bool GetProperty(const std::string& name, std::string& ret_value);
 
   bool HasProperty(const std::string& name);
 
   bool HasProperty(const std::string& name, const std::string type);
 
-  bool GetPropertyComment(const std::string& name, std::string& retComment);
+  bool GetPropertyComment(const std::string& name, std::string& ret_comment);
 
-  bool GetPropertyType(const std::string& name, std::string& retType);
+  bool GetPropertyType(const std::string& name, std::string& ret_type);
 
  protected:
-  GPUPixelGLProgram* _filterProgram;
-  GLuint _filterPositionAttribute;
-  std::string _filterClassName;
+  GPUPixelGLProgram* filter_program_;
+  GLuint filter_position_attribute_;
+  std::string filter_class_name_;
   struct {
     float r;
     float g;
@@ -131,9 +131,9 @@ bool RegisterProperty(
 
   Filter();
 
-  std::string _getVertexShaderString(int inputNumber) const;
+  std::string GetVertexShaderString(int input_number) const;
 
-  const GLfloat* GetTexureCoordinate(const RotationMode& rotationMode) const;
+  const GLfloat* GetTextureCoordinate(const RotationMode& rotation_mode) const;
 
   // properties
   struct Property {
@@ -141,37 +141,35 @@ bool RegisterProperty(
     std::string comment;
   };
 
-  Property* _getProperty(const std::string& name);
+  Property* GetProperty(const std::string& name);
 
   struct IntProperty : Property {
     int value;
-    std::function<void(int&)> setCallback;
+    std::function<void(int&)> set_callback;
   };
-  std::map<std::string, IntProperty> _intProperties;
+  std::map<std::string, IntProperty> int_properties_;
 
   struct FloatProperty : Property {
     float value;
-    std::function<void(float&)> setCallback;
+    std::function<void(float&)> set_callback;
   };
-  std::map<std::string, FloatProperty> _floatProperties;
+  std::map<std::string, FloatProperty> float_properties_;
 
   struct VectorProperty : Property {
-      std::vector<float> value;
-      std::function<void(std::vector<float>&)> setCallback;
+    std::vector<float> value;
+    std::function<void(std::vector<float>&)> set_callback;
   };
-  std::map<std::string, VectorProperty> _vectorProperties;
+  std::map<std::string, VectorProperty> vector_properties_;
 
-
-    struct StringProperty : Property {
+  struct StringProperty : Property {
     std::string value;
-    std::function<void(std::string&)> setCallback;
+    std::function<void(std::string&)> set_callback;
   };
-  std::map<std::string, StringProperty> _stringProperties;
+  std::map<std::string, StringProperty> string_properties_;
 
  private:
-  static std::map<std::string, std::function<std::shared_ptr<Filter>()>> _filterFactories;
+  static std::map<std::string, std::function<std::shared_ptr<Filter>()>>
+      filter_factories_;
 };
 
-#define REGISTER_FILTER_CLASS(className)
-
-}
+}  // namespace gpupixel

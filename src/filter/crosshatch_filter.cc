@@ -109,7 +109,7 @@ bool CrosshatchFilter::Init() {
   }
 
   setCrossHatchSpacing(0.03);
-  RegisterProperty("crossHatchSpacing", _crossHatchSpacing,
+  RegisterProperty("crossHatchSpacing", cross_hatch_spacing_,
                    "The fractional width of the image to use as the spacing "
                    "for the crosshatch. The default is 0.03.",
                    [this](float& crossHatchSpacing) {
@@ -118,24 +118,24 @@ bool CrosshatchFilter::Init() {
 
   setLineWidth(0.003);
   RegisterProperty(
-      "lineWidth", _lineWidth,
+      "lineWidth", line_width_,
       "A relative width for the crosshatch lines. The default is 0.003.",
       [this](float& lineWidth) { setLineWidth(lineWidth); });
   return true;
 }
 
 bool CrosshatchFilter::DoRender(bool updateSinks) {
-  _filterProgram->SetUniformValue("crossHatchSpacing", _crossHatchSpacing);
-  _filterProgram->SetUniformValue("lineWidth", _lineWidth);
+  filter_program_->SetUniformValue("crossHatchSpacing", cross_hatch_spacing_);
+  filter_program_->SetUniformValue("lineWidth", line_width_);
   return Filter::DoRender(updateSinks);
 }
 
 void CrosshatchFilter::setCrossHatchSpacing(float crossHatchSpacing) {
-  _crossHatchSpacing = crossHatchSpacing;
+  cross_hatch_spacing_ = crossHatchSpacing;
 }
 
 void CrosshatchFilter::setLineWidth(float lineWidth) {
-  _lineWidth = lineWidth;
+  line_width_ = lineWidth;
 }
 
-} // namespace gpupixel
+}  // namespace gpupixel

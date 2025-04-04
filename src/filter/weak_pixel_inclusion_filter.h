@@ -17,7 +17,7 @@ class GPUPIXEL_API WeakPixelInclusionFilter : public NearbySampling3x3Filter {
   bool Init();
 
  protected:
-  WeakPixelInclusionFilter(){};
+  WeakPixelInclusionFilter() {};
 };
 
-}
+}  // namespace gpupixel

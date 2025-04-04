@@ -11,7 +11,8 @@
 
 namespace gpupixel {
 
-GaussianBlurFilter::GaussianBlurFilter() : _hBlurFilter(0), _vBlurFilter(0) {}
+GaussianBlurFilter::GaussianBlurFilter()
+    : horizontal_blur_filter_(nullptr), vertical_blur_filter_(nullptr) {}
 
 GaussianBlurFilter::~GaussianBlurFilter() {}
 
@@ -30,12 +31,12 @@ bool GaussianBlurFilter::Init(int radius, float sigma) {
     return false;
   }
 
-  _hBlurFilter = GaussianBlurMonoFilter::Create(
+  horizontal_blur_filter_ = GaussianBlurMonoFilter::Create(
       GaussianBlurMonoFilter::HORIZONTAL, radius, sigma);
-  _vBlurFilter = GaussianBlurMonoFilter::Create(
+  vertical_blur_filter_ = GaussianBlurMonoFilter::Create(
       GaussianBlurMonoFilter::VERTICAL, radius, sigma);
-  _hBlurFilter->AddSink(_vBlurFilter);
-  addFilter(_hBlurFilter);
+  horizontal_blur_filter_->AddSink(vertical_blur_filter_);
+  AddFilter(horizontal_blur_filter_);
 
   RegisterProperty("radius", 4, "", [this](int& radius) { SetRadius(radius); });
 
@@ -45,13 +46,13 @@ bool GaussianBlurFilter::Init(int radius, float sigma) {
 }
 
 void GaussianBlurFilter::SetRadius(int radius) {
-  _hBlurFilter->SetRadius(radius);
-  _vBlurFilter->SetRadius(radius);
+  horizontal_blur_filter_->SetRadius(radius);
+  vertical_blur_filter_->SetRadius(radius);
 }
 
 void GaussianBlurFilter::setSigma(float sigma) {
-  _hBlurFilter->setSigma(sigma);
-  _vBlurFilter->setSigma(sigma);
+  horizontal_blur_filter_->setSigma(sigma);
+  vertical_blur_filter_->setSigma(sigma);
 }
 
-}
+}  // namespace gpupixel

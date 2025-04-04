@@ -18,16 +18,15 @@ class ObjcSink : public Sink {
 
   virtual ~ObjcSink() { _gpuSink = 0; }
 
-  virtual void Render() override {
-    [_gpuSink DoRender];
-  };
+  virtual void Render() override { [_gpuSink DoRender]; };
 
-  virtual void SetInputFramebuffer(std::shared_ptr<GPUPixelFramebuffer> framebuffer,
-                                   RotationMode rotationMode = NoRotation,
-                                   int texIdx = 0) override {
+  virtual void SetInputFramebuffer(
+      std::shared_ptr<GPUPixelFramebuffer> framebuffer,
+      RotationMode rotation_mode = NoRotation,
+      int texIdx = 0) override {
     [_gpuSink SetInputFramebuffer:framebuffer
-                        withRotation:rotationMode
-                             atIndex:texIdx];
+                     withRotation:rotation_mode
+                          atIndex:texIdx];
   };
 
   virtual bool IsReady() const override {
@@ -48,6 +47,6 @@ class ObjcSink : public Sink {
   id<GPUPixelSink> _gpuSink;
 };
 
-}
+}  // namespace gpupixel
 
 #endif  // IOSTarget_hpp

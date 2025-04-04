@@ -8,8 +8,8 @@
 #pragma once
 
 #include "filter_group.h"
-#include "gpupixel_define.h"
 #include "gaussian_blur_filter.h"
+#include "gpupixel_define.h"
 #include "toon_filter.h"
 
 namespace gpupixel {
@@ -20,20 +20,20 @@ class GPUPIXEL_API SmoothToonFilter : public FilterGroup {
   static std::shared_ptr<SmoothToonFilter> Create();
   bool Init();
 
-  void setBlurRadius(int blurRadius);
-  void setToonThreshold(float toonThreshold);
-  void setToonQuantizationLevels(float toonQuantizationLevels);
+  void setBlurRadius(int blur_radius);
+  void setToonThreshold(float toon_threshold);
+  void setToonQuantizationLevels(float toon_quantization_levels);
 
  protected:
   SmoothToonFilter();
 
  private:
-  std::shared_ptr<GaussianBlurFilter> _gaussianBlurFilter;
-  std::shared_ptr<ToonFilter> _toonFilter;
+  std::shared_ptr<GaussianBlurFilter> gaussian_blur_filter_;
+  std::shared_ptr<ToonFilter> toon_filter_;
 
-  float _blurRadius;
-  float _toonThreshold;
-  float _toonQuantizationLevels;
+  float blur_radius_;
+  float toon_threshold_;
+  float toon_quantization_levels_;
 };
 
-}
+}  // namespace gpupixel

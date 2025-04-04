@@ -8,8 +8,8 @@
 #pragma once
 
 #include "filter_group.h"
-#include "gpupixel_define.h"
 #include "gaussian_blur_filter.h"
+#include "gpupixel_define.h"
 #include "luminance_range_filter.h"
 #include "saturation_filter.h"
 
@@ -21,21 +21,21 @@ class GPUPIXEL_API IOSBlurFilter : public FilterGroup {
   static std::shared_ptr<IOSBlurFilter> Create();
   bool Init();
 
-  void setBlurSigma(float blurSigma);
+  void setBlurSigma(float blur_sigma);
   void setSaturation(float saturation);
-  void setRangeReductionFactor(float rangeReductionFactor);
-  void setDownSampling(float downSampling);
+  void setRangeReductionFactor(float range_reduction_factor);
+  void setDownSampling(float down_sampling);
 
  protected:
   IOSBlurFilter();
-  std::shared_ptr<SaturationFilter> _saturationFilter;
-  std::shared_ptr<GaussianBlurFilter> _blurFilter;
-  std::shared_ptr<LuminanceRangeFilter> _luminanceRangeFilter;
+  std::shared_ptr<SaturationFilter> saturation_filter_;
+  std::shared_ptr<GaussianBlurFilter> blur_filter_;
+  std::shared_ptr<LuminanceRangeFilter> luminance_range_filter_;
 
-  float _blurSigma;
-  float _saturation;
-  float _rangeReductionFactor;
-  float _downSampling;
+  float blur_sigma_;
+  float saturation_;
+  float range_reduction_factor_;
+  float down_sampling_;
 };
 
-}
+}  // namespace gpupixel

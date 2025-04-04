@@ -18,7 +18,7 @@ class GPUPIXEL_API DirectionalSobelEdgeDetectionFilter
   bool Init();
 
  protected:
-  DirectionalSobelEdgeDetectionFilter(){};
+  DirectionalSobelEdgeDetectionFilter() {};
 };
 
-}
+}  // namespace gpupixel

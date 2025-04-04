@@ -1,5 +1,5 @@
 //
-//  mars-face-kit
+//  mars-face
 //
 //  Created by PixPark on 2024/11/18.
 //

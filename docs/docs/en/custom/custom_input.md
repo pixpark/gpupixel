@@ -44,13 +44,13 @@ std::shared_ptr<YourCustomInput> YourCustomInput::Create() {
 Create and manage framebuffer for your input source:
 
 ```cpp
-if (!_framebuffer || (_framebuffer->GetWidth() != width ||
-                      _framebuffer->GetHeight() != height)) {
-  _framebuffer =
+if (!framebuffer_ || (framebuffer_->GetWidth() != width ||
+                      framebuffer_->GetHeight() != height)) {
+  framebuffer_ =
       GPUPixelContext::GetInstance()->GetFramebufferFactory()->CreateFramebuffer(
           width, height);
 }
-this->SetFramebuffer(_framebuffer, outputRotation);
+this->SetFramebuffer(framebuffer_, outputRotation);
 ```
 
 ### 3. Data Input Processing
@@ -62,14 +62,7 @@ void YourCustomInput::setFrameData(const uint8_t* pixels,
                                    int width,
                                    int height,
                                    int stride) {
-  // Process input data
-  // Update framebuffer
-  // Optional: Face detection
-  if(_face_detector) {
-    _face_detector->Detect(pixels, width, height,
-                          GPUPIXEL_MODE_FMT_VIDEO,
-                          GPUPIXEL_FRAME_TYPE_RGBA);
-  }
+ 
   
   // Update texture
   glBindTexture(GL_TEXTURE_2D, this->GetFramebuffer()->GetTexture());

@@ -7,12 +7,13 @@
 
 package com.pixpark.gpupixel;
 
-
 import android.opengl.GLSurfaceView.Renderer;
+
+import java.util.LinkedList;
+import java.util.Queue;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
-import java.util.Queue;
-import java.util.LinkedList;
 
 public class GPUPixelRenderer implements Renderer {
     private final Queue<Runnable> mPreDrawQueue;
@@ -32,8 +33,7 @@ public class GPUPixelRenderer implements Renderer {
     }
 
     @Override
-    public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-    }
+    public void onSurfaceCreated(GL10 gl, EGLConfig config) {}
 
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {

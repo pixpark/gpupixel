@@ -24,10 +24,10 @@ class GPUPIXEL_API BoxMonoBlurFilter : public GaussianBlurMonoFilter {
  protected:
   BoxMonoBlurFilter(Type type);
 
-  std::string _generateOptimizedVertexShaderString(int radius,
-                                                   float sigma) override;
-  std::string _generateOptimizedFragmentShaderString(int radius,
-                                                     float sigma) override;
+  std::string GenerateOptimizedVertexShaderString(int radius,
+                                                  float sigma) override;
+  std::string GenerateOptimizedFragmentShaderString(int radius,
+                                                    float sigma) override;
 };
 
-}
+}  // namespace gpupixel

@@ -72,12 +72,12 @@ bool BoxDifferenceFilter::Init() {
   }
 
   // texcoord attribute
-  filterTexCoordAttribute_ =
-      _filterProgram->GetAttribLocation("inputTextureCoordinate");
-  filterTexCoordAttribute2_ =
-      _filterProgram->GetAttribLocation("inputTextureCoordinate2");
+  filter_texture_coordinate_attribute_ =
+      filter_program_->GetAttribLocation("inputTextureCoordinate");
+  filter_texture_coordinate_attribute2_ =
+      filter_program_->GetAttribLocation("inputTextureCoordinate2");
 
-  setDelta(7.07);
+  SetDelta(7.07);
   return true;
 }
 
@@ -86,8 +86,8 @@ bool BoxDifferenceFilter::DoRender(bool updateSinks) {
       -1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f,
   };
 
-  GPUPixelContext::GetInstance()->SetActiveGlProgram(_filterProgram);
-  _framebuffer->Active();
+  GPUPixelContext::GetInstance()->SetActiveGlProgram(filter_program_);
+  framebuffer_->Activate();
   CHECK_GL(glClearColor(background_color_.r, background_color_.g,
                         background_color_.b, background_color_.a));
   CHECK_GL(glClear(GL_COLOR_BUFFER_BIT));
@@ -95,41 +95,41 @@ bool BoxDifferenceFilter::DoRender(bool updateSinks) {
   // Texture 0
   CHECK_GL(glActiveTexture(GL_TEXTURE0));
   CHECK_GL(glBindTexture(GL_TEXTURE_2D,
-                         input_framebuffers_[0].frameBuffer->GetTexture()));
-  _filterProgram->SetUniformValue("inputImageTexture", 0);
+                         input_framebuffers_[0].frame_buffer->GetTexture()));
+  filter_program_->SetUniformValue("inputImageTexture", 0);
 
   // Texture 1
   CHECK_GL(glActiveTexture(GL_TEXTURE1));
   CHECK_GL(glBindTexture(GL_TEXTURE_2D,
-                         input_framebuffers_[1].frameBuffer->GetTexture()));
-  _filterProgram->SetUniformValue("inputImageTexture2", 1);
+                         input_framebuffers_[1].frame_buffer->GetTexture()));
+  filter_program_->SetUniformValue("inputImageTexture2", 1);
 
-  CHECK_GL(glEnableVertexAttribArray(filterTexCoordAttribute_));
+  CHECK_GL(glEnableVertexAttribArray(filter_texture_coordinate_attribute_));
   CHECK_GL(glVertexAttribPointer(
-      filterTexCoordAttribute_, 2, GL_FLOAT, 0, 0,
-      GetTexureCoordinate(input_framebuffers_[0].rotationMode)));
+      filter_texture_coordinate_attribute_, 2, GL_FLOAT, 0, 0,
+      GetTextureCoordinate(input_framebuffers_[0].rotation_mode)));
 
-  CHECK_GL(glEnableVertexAttribArray(filterTexCoordAttribute2_));
+  CHECK_GL(glEnableVertexAttribArray(filter_texture_coordinate_attribute2_));
   CHECK_GL(glVertexAttribPointer(
-      filterTexCoordAttribute2_, 2, GL_FLOAT, 0, 0,
-      GetTexureCoordinate(input_framebuffers_[1].rotationMode)));
+      filter_texture_coordinate_attribute2_, 2, GL_FLOAT, 0, 0,
+      GetTextureCoordinate(input_framebuffers_[1].rotation_mode)));
 
   // vertex position
-  CHECK_GL(glVertexAttribPointer(_filterPositionAttribute, 2, GL_FLOAT, 0, 0,
+  CHECK_GL(glVertexAttribPointer(filter_position_attribute_, 2, GL_FLOAT, 0, 0,
                                  imageVertices));
 
   // update uniform
-  _filterProgram->SetUniformValue("delta", delta_);
+  filter_program_->SetUniformValue("delta", delta_);
 
   // draw
   CHECK_GL(glDrawArrays(GL_TRIANGLE_STRIP, 0, 4));
 
-  _framebuffer->Inactive();
+  framebuffer_->Deactivate();
 
   return Source::DoRender(updateSinks);
 }
 
-void BoxDifferenceFilter::setDelta(float delta) {
+void BoxDifferenceFilter::SetDelta(float delta) {
   this->delta_ = delta;
 }
-}
+}  // namespace gpupixel

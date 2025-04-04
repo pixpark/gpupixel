@@ -20,9 +20,9 @@ class GPUPIXEL_API SaturationFilter : public Filter {
   void setSaturation(float saturation);
 
  protected:
-  SaturationFilter(){};
+  SaturationFilter() {};
 
-  float _saturation;
+  float saturation_;
 };
 
-}
+}  // namespace gpupixel

@@ -8,8 +8,8 @@
 package com.pixpark.gpupixel.filter;
 
 import com.pixpark.gpupixel.GPUPixel;
-import com.pixpark.gpupixel.GPUPixelSource;
 import com.pixpark.gpupixel.GPUPixelSink;
+import com.pixpark.gpupixel.GPUPixelSource;
 
 public class GPUPixelFilter extends GPUPixelSource implements GPUPixelSink {
     private String filterClassName;
@@ -122,5 +122,4 @@ public class GPUPixelFilter extends GPUPixelSource implements GPUPixelSink {
             super.finalize();
         }
     }
-
 }

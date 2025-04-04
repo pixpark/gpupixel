@@ -9,10 +9,8 @@
 
 namespace gpupixel {
 
-REGISTER_FILTER_CLASS(IOSBlurFilter)
-
 IOSBlurFilter::IOSBlurFilter()
-    : _saturationFilter(0), _blurFilter(0), _luminanceRangeFilter(0) {}
+    : saturation_filter_(0), blur_filter_(0), luminance_range_filter_(0) {}
 
 IOSBlurFilter::~IOSBlurFilter() {}
 
@@ -29,62 +27,62 @@ bool IOSBlurFilter::Init() {
     return false;
   }
 
-  _saturationFilter = SaturationFilter::Create();
-  _blurFilter = GaussianBlurFilter::Create();
-  _luminanceRangeFilter = LuminanceRangeFilter::Create();
+  saturation_filter_ = SaturationFilter::Create();
+  blur_filter_ = GaussianBlurFilter::Create();
+  luminance_range_filter_ = LuminanceRangeFilter::Create();
 
-  _saturationFilter             // 1. downsample and desaturate
-      ->AddSink(_blurFilter)  // 2. apply a strong Gaussian blur
+  saturation_filter_           // 1. downsample and desaturate
+      ->AddSink(blur_filter_)  // 2. apply a strong Gaussian blur
       ->AddSink(
-          _luminanceRangeFilter);  // 3. upsample and adjust luminance range
+          luminance_range_filter_);  // 3. upsample and adjust luminance range
 
-  addFilter(_saturationFilter);
+  AddFilter(saturation_filter_);
 
-  _blurSigma = 12.0;
-  setBlurSigma(_blurSigma);
-  RegisterProperty("blurSigma", _blurSigma, "",
+  blur_sigma_ = 12.0;
+  setBlurSigma(blur_sigma_);
+  RegisterProperty("blurSigma", blur_sigma_, "",
                    [this](float& blurSigma) { setBlurSigma(blurSigma); });
 
-  _saturation = 0.8;
-  setSaturation(_saturation);
-  RegisterProperty("saturation", _saturation, "",
+  saturation_ = 0.8;
+  setSaturation(saturation_);
+  RegisterProperty("saturation", saturation_, "",
                    [this](float& saturation) { setSaturation(saturation); });
 
-  _rangeReductionFactor = 0.6;
-  setRangeReductionFactor(_rangeReductionFactor);
-  RegisterProperty("rangeReductionFactor", _rangeReductionFactor, "",
+  range_reduction_factor_ = 0.6;
+  setRangeReductionFactor(range_reduction_factor_);
+  RegisterProperty("rangeReductionFactor", range_reduction_factor_, "",
                    [this](float& rangeReductionFactor) {
                      setRangeReductionFactor(rangeReductionFactor);
                    });
 
-  _downSampling = 4.0;
-  setDownSampling(_downSampling);
+  down_sampling_ = 4.0;
+  setDownSampling(down_sampling_);
   RegisterProperty(
-      "downSampling", _downSampling, "",
+      "downSampling", down_sampling_, "",
       [this](float& downSampling) { setDownSampling(downSampling); });
 
   return true;
 }
 
 void IOSBlurFilter::setBlurSigma(float blurSigma) {
-  _blurSigma = blurSigma;
-  _blurFilter->setSigma(blurSigma);
+  blur_sigma_ = blurSigma;
+  blur_filter_->setSigma(blurSigma);
 }
 
 void IOSBlurFilter::setSaturation(float saturation) {
-  _saturation = saturation;
-  _saturationFilter->setSaturation(saturation);
+  saturation_ = saturation;
+  saturation_filter_->setSaturation(saturation);
 }
 
 void IOSBlurFilter::setRangeReductionFactor(float rangeReductionFactor) {
-  _rangeReductionFactor = rangeReductionFactor;
-  _luminanceRangeFilter->setRangeReductionFactor(rangeReductionFactor);
+  range_reduction_factor_ = rangeReductionFactor;
+  luminance_range_filter_->setRangeReductionFactor(rangeReductionFactor);
 }
 
 void IOSBlurFilter::setDownSampling(float downSampling) {
-  _downSampling = downSampling;
-  _saturationFilter->SetFramebufferScale(1 / downSampling);
-  _luminanceRangeFilter->SetFramebufferScale(downSampling);
+  down_sampling_ = downSampling;
+  saturation_filter_->SetFramebufferScale(1 / downSampling);
+  luminance_range_filter_->SetFramebufferScale(downSampling);
 }
 
-}
+}  // namespace gpupixel

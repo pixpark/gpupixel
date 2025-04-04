@@ -18,13 +18,13 @@ class GPUPIXEL_API ToonFilter : public NearbySampling3x3Filter {
   virtual bool DoRender(bool updateSinks = true) override;
 
   void setThreshold(float threshold);
-  void setQuantizatinLevels(float quantizationLevels);
+  void setQuantizatinLevels(float quantization_levels);
 
  protected:
-  ToonFilter(){};
+  ToonFilter() {};
 
-  float _threshold;
-  float _quantizationLevels;
+  float threshold_;
+  float quantization_levels_;
 };
 
-}
+}  // namespace gpupixel

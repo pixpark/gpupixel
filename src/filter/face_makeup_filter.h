@@ -26,30 +26,30 @@ class GPUPIXEL_API FaceMakeupFilter : public Filter {
   virtual bool Init();
   virtual bool DoRender(bool updateSinks = true) override;
 
- 
   inline void SetBlendLevel(float level) { this->blend_level_ = level; }
   void SetFaceLandmarks(std::vector<float> landmarks);
+
  protected:
   FaceMakeupFilter();
-  void setImageTexture(std::shared_ptr<SourceImage> texture);
-  void setTextureBounds(FrameBounds bounds) { texture_bounds_ = bounds; }
+  void SetImageTexture(std::shared_ptr<SourceImage> texture);
+  void SetTextureBounds(FrameBounds bounds) { texture_bounds_ = bounds; }
 
  private:
-  std::vector<GLuint> getFaceIndexs();
-  std::vector<GLfloat> faceTextureCoordinates();
+  std::vector<GLuint> GetFaceIndexs();
+  std::vector<GLfloat> FaceTextureCoordinates();
 
  private:
-  std::vector<float> face_land_marks_;
+  std::vector<float> face_landmarks_;
   float blend_level_ = 0;  //[0. 0.5]
   bool has_face_ = false;
   //
-  GPUPixelGLProgram* _filterProgram2;
-  GLuint _filterPositionAttribute2;
-  GLuint _filterTexCoordAttribute = 0;
-  GLuint _filterTexCoordAttribute2 = 0;
+  GPUPixelGLProgram* filter_program2_ = nullptr;
+  GLuint filter_position_attribute2_ = 0;
+  GLuint filter_tex_coord_attribute_ = 0;
+  GLuint filter_tex_coord_attribute2_ = 0;
 
   FrameBounds texture_bounds_;
   std::shared_ptr<SourceImage> image_texture_;
 };
 
-}
+}  // namespace gpupixel

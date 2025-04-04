@@ -24,16 +24,14 @@ class GPUPIXEL_API Source {
   virtual ~Source();
   virtual std::shared_ptr<Source> AddSink(std::shared_ptr<Sink> sink);
   virtual std::shared_ptr<Source> AddSink(std::shared_ptr<Sink> sink,
-                                            int texIdx);
+                                          int texIdx);
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
   virtual std::shared_ptr<Source> AddSink(id<GPUPixelSink> sink);
 #endif
   virtual void RemoveSink(std::shared_ptr<Sink> sink);
   virtual void RemoveAllSinks();
   virtual bool HasSink(const std::shared_ptr<Sink> sink) const;
-  virtual std::map<std::shared_ptr<Sink>, int>& GetSinks() {
-    return _sinks;
-  };
+  virtual std::map<std::shared_ptr<Sink>, int>& GetSinks() { return sinks_; };
 
   virtual void SetFramebuffer(
       std::shared_ptr<GPUPixelFramebuffer> fb,
@@ -42,7 +40,7 @@ class GPUPIXEL_API Source {
   virtual void ReleaseFramebuffer(bool returnToCache = true);
 
   void SetFramebufferScale(float framebufferScale) {
-    _framebufferScale = framebufferScale;
+    framebuffer_scale_ = framebufferScale;
   }
   int GetRotatedFramebufferWidth() const;
   int GetRotatedFramebufferHeight() const;
@@ -54,11 +52,12 @@ class GPUPIXEL_API Source {
       std::shared_ptr<Filter> upToFilter,
       int width = 0,
       int height = 0);
+
  protected:
-  std::shared_ptr<GPUPixelFramebuffer> _framebuffer;
-  RotationMode _outputRotation;
-  std::map<std::shared_ptr<Sink>, int> _sinks;
-  float _framebufferScale;
+  std::shared_ptr<GPUPixelFramebuffer> framebuffer_;
+  RotationMode output_rotation_;
+  std::map<std::shared_ptr<Sink>, int> sinks_;
+  float framebuffer_scale_;
 };
 
-}
+}  // namespace gpupixel

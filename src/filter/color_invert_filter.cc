@@ -9,8 +9,6 @@
 
 namespace gpupixel {
 
-REGISTER_FILTER_CLASS(ColorInvertFilter)
-
 const std::string kColorInvertFragmentShaderString = R"(
 
     uniform sampler2D inputImageTexture; varying highp vec2 textureCoordinate;
@@ -39,4 +37,4 @@ bool ColorInvertFilter::DoRender(bool updateSinks) {
   return Filter::DoRender(updateSinks);
 }
 
-}
+}  // namespace gpupixel

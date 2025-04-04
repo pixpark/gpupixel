@@ -26,30 +26,30 @@ std::shared_ptr<BoxMonoBlurFilter> BoxMonoBlurFilter::Create(Type type,
 
 bool BoxMonoBlurFilter::Init(int radius, float sigma) {
   if (Filter::InitWithShaderString(
-          _generateOptimizedVertexShaderString(radius, sigma),
-          _generateOptimizedFragmentShaderString(radius, sigma))) {
+          GenerateOptimizedVertexShaderString(radius, sigma),
+          GenerateOptimizedFragmentShaderString(radius, sigma))) {
     return true;
   }
   return false;
 }
 
 void BoxMonoBlurFilter::SetRadius(int radius) {
-  float newBlurRadius =
-      std::round(std::round(radius / 2.0) * 2.0);  // For now, only do even radii
+  float newBlurRadius = std::round(std::round(radius / 2.0) *
+                                   2.0);  // For now, only do even radii
 
-  if (newBlurRadius != _radius) {
-    _radius = newBlurRadius;
+  if (newBlurRadius != radius_) {
+    radius_ = newBlurRadius;
 
-    if (_filterProgram) {
-      delete _filterProgram;
-      _filterProgram = 0;
+    if (filter_program_) {
+      delete filter_program_;
+      filter_program_ = 0;
     }
-    InitWithShaderString(_generateOptimizedVertexShaderString(_radius, 0.0),
-                         _generateOptimizedFragmentShaderString(_radius, 0.0));
+    InitWithShaderString(GenerateOptimizedVertexShaderString(radius_, 0.0),
+                         GenerateOptimizedFragmentShaderString(radius_, 0.0));
   }
 }
 
-std::string BoxMonoBlurFilter::_generateOptimizedVertexShaderString(
+std::string BoxMonoBlurFilter::GenerateOptimizedVertexShaderString(
     int radius,
     float sigma) {
   if (radius < 1) {
@@ -99,7 +99,7 @@ std::string BoxMonoBlurFilter::_generateOptimizedVertexShaderString(
   return shaderStr;
 }
 
-std::string BoxMonoBlurFilter::_generateOptimizedFragmentShaderString(
+std::string BoxMonoBlurFilter::GenerateOptimizedFragmentShaderString(
     int radius,
     float sigma) {
   if (radius < 1) {
@@ -197,4 +197,4 @@ std::string BoxMonoBlurFilter::_generateOptimizedFragmentShaderString(
   return shaderStr;
 }
 
-}
+}  // namespace gpupixel

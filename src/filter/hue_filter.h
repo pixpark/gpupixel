@@ -17,12 +17,12 @@ class GPUPIXEL_API HueFilter : public Filter {
   bool Init();
   virtual bool DoRender(bool updateSinks = true) override;
 
-  void setHueAdjustment(float hueAdjustment);
+  void setHueAdjustment(float hue_adjustment);
 
  protected:
-  HueFilter(){};
+  HueFilter() {};
 
-  float _hueAdjustment;
+  float hue_adjustment_;
 };
 
-}
+}  // namespace gpupixel

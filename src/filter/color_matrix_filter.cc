@@ -40,7 +40,7 @@ const std::string kColorMatrixFragmentShaderString = R"(
 #endif
 
 ColorMatrixFilter::ColorMatrixFilter()
-    : _intensity(1.0), _colorMatrix(Matrix4::IDENTITY) {}
+    : intensity_factor_(1.0), color_matrix_(Matrix4::IDENTITY) {}
 
 std::shared_ptr<ColorMatrixFilter> ColorMatrixFilter::Create() {
   auto ret = std::shared_ptr<ColorMatrixFilter>(new ColorMatrixFilter());
@@ -55,7 +55,7 @@ bool ColorMatrixFilter::Init() {
     return false;
   }
 
-  RegisterProperty("intensity", _intensity,
+  RegisterProperty("intensity", intensity_factor_,
                    "The percentage of color applied by color matrix with range "
                    "between 0 and 1.",
                    [this](float& intensity) {
@@ -73,9 +73,9 @@ bool ColorMatrixFilter::Init() {
 }
 
 bool ColorMatrixFilter::DoRender(bool updateSinks) {
-  _filterProgram->SetUniformValue("intensity", _intensity);
-  _filterProgram->SetUniformValue("colorMatrix", _colorMatrix);
+  filter_program_->SetUniformValue("intensity", intensity_factor_);
+  filter_program_->SetUniformValue("colorMatrix", color_matrix_);
   return Filter::DoRender(updateSinks);
 }
 
-}
+}  // namespace gpupixel

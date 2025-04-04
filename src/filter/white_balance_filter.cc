@@ -9,8 +9,6 @@
 
 namespace gpupixel {
 
-REGISTER_FILTER_CLASS(WhiteBalanceFilter)
-
 const std::string kWhiteBalanceFragmentShaderString = R"(
     uniform sampler2D inputImageTexture; uniform lowp float temperature;
     uniform lowp float tint;
@@ -65,25 +63,25 @@ bool WhiteBalanceFilter::Init() {
       [this](float& temperature) { setTemperature(temperature); });
 
   setTint(0.0);
-  RegisterProperty("tint", _tint, "adjust tint to compensate",
+  RegisterProperty("tint", tint_, "adjust tint to compensate",
                    [this](float& tint) { setTint(tint); });
 
   return true;
 }
 
 void WhiteBalanceFilter::setTemperature(float temperature) {
-  _temperature = temperature < 5000 ? 0.0004 * (temperature - 5000.0)
+  temperature_ = temperature < 5000 ? 0.0004 * (temperature - 5000.0)
                                     : 0.00006 * (temperature - 5000.0);
 }
 
 void WhiteBalanceFilter::setTint(float tint) {
-  _tint = tint / 100.0;
+  tint_ = tint / 100.0;
 }
 
 bool WhiteBalanceFilter::DoRender(bool updateSinks) {
-  _filterProgram->SetUniformValue("temperature", _temperature);
-  _filterProgram->SetUniformValue("tint", _tint);
+  filter_program_->SetUniformValue("temperature", temperature_);
+  filter_program_->SetUniformValue("tint", tint_);
   return Filter::DoRender(updateSinks);
 }
 
-} // namespace gpupixel
+}  // namespace gpupixel

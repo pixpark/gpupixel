@@ -22,7 +22,7 @@
 - (void)DoRender;
 - (void)SetInputFramebuffer:
             (std::shared_ptr<gpupixel::GPUPixelFramebuffer>)inputFramebuffer
-               withRotation:(gpupixel::RotationMode)rotationMode
+               withRotation:(gpupixel::RotationMode)rotation_mode
                     atIndex:(NSInteger)texIdx;
 @optional
 - (bool)IsReady;

@@ -19,13 +19,13 @@ class GPUPIXEL_API BoxDifferenceFilter : public Filter {
   bool DoRender(bool updateSinks = true) override;
 
   //
-  void setDelta(float delta);
+  void SetDelta(float delta);
 
  protected:
   BoxDifferenceFilter();
   float delta_;
-  GLuint filterTexCoordAttribute_;
-  GLuint filterTexCoordAttribute2_;
+  GLuint filter_texture_coordinate_attribute_;
+  GLuint filter_texture_coordinate_attribute2_;
 };
 
-}
+}  // namespace gpupixel

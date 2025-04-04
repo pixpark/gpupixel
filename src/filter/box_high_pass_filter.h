@@ -20,17 +20,18 @@ class GPUPIXEL_API BoxHighPassFilter : public FilterGroup {
   bool Init();
 
   void SetRadius(float radius);
-  void setDelta(float delta);
+  void SetDelta(float delta);
 
-  virtual void SetInputFramebuffer(std::shared_ptr<GPUPixelFramebuffer> framebuffer,
-                                   RotationMode rotationMode /* = NoRotation*/,
-                                   int texIdx /* = 0*/) override;
+  virtual void SetInputFramebuffer(
+      std::shared_ptr<GPUPixelFramebuffer> framebuffer,
+      RotationMode rotation_mode /* = NoRotation*/,
+      int texIdx /* = 0*/) override;
 
  protected:
   BoxHighPassFilter();
 
-  std::shared_ptr<BoxBlurFilter> boxBlurFilter;
-  std::shared_ptr<BoxDifferenceFilter> boxDifferenceFilter;
+  std::shared_ptr<BoxBlurFilter> box_blur_filter_;
+  std::shared_ptr<BoxDifferenceFilter> box_difference_filter_;
 };
 
-}
+}  // namespace gpupixel

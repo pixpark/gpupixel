@@ -9,7 +9,8 @@
 
 namespace gpupixel {
 
-BoxBlurFilter::BoxBlurFilter() : _hBlurFilter(0), _vBlurFilter(0) {}
+BoxBlurFilter::BoxBlurFilter()
+    : horizontal_blur_filter_(nullptr), vertical_blur_filter_(nullptr) {}
 
 BoxBlurFilter::~BoxBlurFilter() {}
 
@@ -27,12 +28,12 @@ bool BoxBlurFilter::Init(int radius, float sigma) {
     return false;
   }
 
-  _hBlurFilter =
+  horizontal_blur_filter_ =
       BoxMonoBlurFilter::Create(GaussianBlurMonoFilter::HORIZONTAL, 4, 0.0);
-  _vBlurFilter =
+  vertical_blur_filter_ =
       BoxMonoBlurFilter::Create(GaussianBlurMonoFilter::VERTICAL, 4, 0.0);
-  _hBlurFilter->AddSink(_vBlurFilter);
-  addFilter(_hBlurFilter);
+  horizontal_blur_filter_->AddSink(vertical_blur_filter_);
+  AddFilter(horizontal_blur_filter_);
 
   RegisterProperty("radius", 4, "", [this](int& radius) { SetRadius(radius); });
 
@@ -42,18 +43,18 @@ bool BoxBlurFilter::Init(int radius, float sigma) {
 }
 
 void BoxBlurFilter::SetRadius(int radius) {
-  _hBlurFilter->SetRadius(radius);
-  _vBlurFilter->SetRadius(radius);
+  horizontal_blur_filter_->SetRadius(radius);
+  vertical_blur_filter_->SetRadius(radius);
 }
 
 void BoxBlurFilter::setSigma(float sigma) {
-  _hBlurFilter->setSigma(sigma);
-  _vBlurFilter->setSigma(sigma);
+  horizontal_blur_filter_->setSigma(sigma);
+  vertical_blur_filter_->setSigma(sigma);
 }
 
-void BoxBlurFilter::setTexelSpacingMultiplier(float value) {
-  _hBlurFilter->setTexelSpacingMultiplier(value);
-  _vBlurFilter->setTexelSpacingMultiplier(value);
+void BoxBlurFilter::SetTexelSpacingMultiplier(float value) {
+  horizontal_blur_filter_->SetTexelSpacingMultiplier(value);
+  vertical_blur_filter_->SetTexelSpacingMultiplier(value);
 }
 
-}
+}  // namespace gpupixel

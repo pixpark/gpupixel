@@ -55,10 +55,10 @@
                                error:(NSError**)error;
 
 /** 开始采集 */
-- (NSError *)startCapture;
+- (NSError*)startCapture;
 
 /** 停止采集 */
-- (NSError *)stopCapture;
+- (NSError*)stopCapture;
 
 /** 抓图 block返回UIImage */
 #if TARGET_OS_IPHONE
@@ -66,10 +66,10 @@
 #endif
 
 /** 动态调整帧率 */
-- (NSError *)adjustFrameRate:(NSInteger)frameRate;
+- (NSError*)adjustFrameRate:(NSInteger)frameRate;
 
 /** 翻转摄像头 */
-- (NSError *)reverseCamera;
+- (NSError*)reverseCamera;
 
 /** 采集过程中动态修改视频分辨率 */
 - (void)changeSessionPreset:(AVCaptureSessionPreset)sessionPreset;

@@ -19,9 +19,9 @@ class GPUPIXEL_API ExposureFilter : public Filter {
   void SetExposure(float exposure);
 
  protected:
-  ExposureFilter(){};
+  ExposureFilter() {};
 
-  float _exposure;
+  float exposure_factor_;
 };
 
-}
+}  // namespace gpupixel

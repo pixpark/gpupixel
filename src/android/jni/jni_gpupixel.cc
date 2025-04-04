@@ -1,22 +1,22 @@
 #if PLATFORM == PLATFORM_ANDROID
 
 #include <android/bitmap.h>
-#include <jni.h>
-#include <string>
-#include <list>
 #include <face_reshape_filter.h>
+#include <jni.h>
+#include <list>
+#include <string>
+#include "face_detector.h"
+#include "filter.h"
 #include "gpupixel_context.h"
 #include "jni_helpers.h"
 #include "libyuv.h"
-#include "filter.h"
+#include "sink_render.h"
 #include "source_camera.h"
 #include "source_image.h"
 #include "source_raw_data.h"
-#include "sink_render.h"
-#include "face_detector.h"
 
 using namespace gpupixel;
-std::list<std::shared_ptr<Filter>>  filter_list_;
+std::list<std::shared_ptr<Filter>> filter_list_;
 std::shared_ptr<gpupixel::FaceDetector> face_detector_;
 
 extern "C" jlong Java_com_pixpark_gpupixel_GPUPixel_nativeSourceImageNew(
@@ -28,7 +28,7 @@ extern "C" jlong Java_com_pixpark_gpupixel_GPUPixel_nativeSourceImageNew(
 extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeSourceImageDestroy(
     JNIEnv* env,
     jclass,
-    jlong classId){};
+    jlong classId) {};
 
 extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeSourceImageFinalize(
     JNIEnv* env,
@@ -51,7 +51,8 @@ extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeSourceImageSetImage(
   }
 
   if ((AndroidBitmap_lockPixels(env, bitmap, &pixels)) >= 0) {
-    ((SourceImage*)classId)->Init(info.width, info.height, 4, (const unsigned char *)pixels);
+    ((SourceImage*)classId)
+        ->Init(info.width, info.height, 4, (const unsigned char*)pixels);
   }
 
   AndroidBitmap_unlockPixels(env, bitmap);
@@ -66,7 +67,7 @@ extern "C" jlong Java_com_pixpark_gpupixel_GPUPixel_nativeSourceCameraNew(
 extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeSourceCameraDestroy(
     JNIEnv* env,
     jclass,
-    jlong classId){
+    jlong classId) {
 
 };
 
@@ -85,10 +86,10 @@ extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeSourceCameraSetFrame(
     jint height,
     jbyteArray jdata,
     jint rotation) {
-    jbyte* data = env->GetByteArrayElements(jdata, NULL);
-    ((SourceCamera*)classId)
-        ->setFrameData(width, height, data, (RotationMode)rotation);
-    env->ReleaseByteArrayElements(jdata, data, 0);
+  jbyte* data = env->GetByteArrayElements(jdata, NULL);
+  ((SourceCamera*)classId)
+      ->SetFrameData(width, height, data, (RotationMode)rotation);
+  env->ReleaseByteArrayElements(jdata, data, 0);
 };
 
 extern "C" jlong Java_com_pixpark_gpupixel_GPUPixel_nativeSourceRawDataNew(
@@ -107,7 +108,9 @@ Java_com_pixpark_gpupixel_GPUPixel_nativeSourceRawDataUploadBytes(
     jint height,
     jint stride) {
   jint* pixel = env->GetIntArrayElements(jPixel, 0);
-  ((SourceRawData*)classId)->ProcessData((uint8_t*)pixel, width, height, stride, GPUPIXEL_FRAME_TYPE_RGBA);
+  ((SourceRawData*)classId)
+      ->ProcessData((uint8_t*)pixel, width, height, stride,
+                    GPUPIXEL_FRAME_TYPE_RGBA);
   env->ReleaseIntArrayElements(jPixel, pixel, 0);
 };
 
@@ -128,9 +131,9 @@ extern "C" jlong Java_com_pixpark_gpupixel_GPUPixel_nativeSourceAddSink(
     jint texID,
     jboolean isFilter) {
   Source* source = (Source*)classId;
-  std::shared_ptr<Sink> sink =
-      isFilter ? std::shared_ptr<Sink>((Filter*)sinkClassId)
-               : std::shared_ptr<Sink>((Sink*)sinkClassId);
+  std::shared_ptr<Sink> sink = isFilter
+                                   ? std::shared_ptr<Sink>((Filter*)sinkClassId)
+                                   : std::shared_ptr<Sink>((Sink*)sinkClassId);
   if (texID >= 0) {
     return (uintptr_t)(source->AddSink(sink, texID)).get();
   } else {
@@ -145,8 +148,8 @@ extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeSourceRemoveSink(
     jlong sinkClassId,
     jboolean isFilter) {
   Source* source = (Source*)classId;
-  Sink* sink = isFilter ? dynamic_cast<Sink*>((Filter*)sinkClassId)
-                            : (Sink*)sinkClassId;
+  Sink* sink =
+      isFilter ? dynamic_cast<Sink*>((Filter*)sinkClassId) : (Sink*)sinkClassId;
   source->RemoveSink(std::shared_ptr<Sink>(sink));
 };
 
@@ -216,7 +219,7 @@ extern "C" jlong Java_com_pixpark_gpupixel_GPUPixel_nativeSinkRender(
 extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeSinkRenderFinalize(
     JNIEnv* env,
     jclass,
-    jlong classId){
+    jlong classId) {
 
 };
 
@@ -237,12 +240,12 @@ extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeSinkRenderSetFillMode(
   ((SinkRender*)classId)->SetFillMode((SinkRender::FillMode)fillMode);
 };
 
-
-extern "C"
-JNIEXPORT void JNICALL
-Java_com_pixpark_gpupixel_GPUPixel_nativeSinkRenderSetMirror(JNIEnv *env, jclass clazz,
-                                                             jlong class_id, jboolean mirror) {
-    ((SinkRender*)class_id)->SetMirror(mirror);
+extern "C" JNIEXPORT void JNICALL
+Java_com_pixpark_gpupixel_GPUPixel_nativeSinkRenderSetMirror(JNIEnv* env,
+                                                             jclass clazz,
+                                                             jlong class_id,
+                                                             jboolean mirror) {
+  ((SinkRender*)class_id)->SetMirror(mirror);
 }
 
 extern "C" jlong Java_com_pixpark_gpupixel_GPUPixel_nativeFilterCreate(
@@ -261,12 +264,12 @@ extern "C" jlong Java_com_pixpark_gpupixel_GPUPixel_nativeFilterCreate(
 extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeFilterDestroy(
     JNIEnv* env,
     jclass obj,
-    jlong classId){
-    for(auto ft : filter_list_) {
-        if(classId == (jlong)ft.get()){
-            filter_list_.remove(ft);
-        }
+    jlong classId) {
+  for (auto ft : filter_list_) {
+    if (classId == (jlong)ft.get()) {
+      filter_list_.remove(ft);
     }
+  }
 };
 
 extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeFilterFinalize(
@@ -314,7 +317,7 @@ Java_com_pixpark_gpupixel_GPUPixel_nativeFilterSetPropertyString(
 
 extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeContextInit(
     JNIEnv* env,
-    jclass obj){
+    jclass obj) {
 
 };
 
@@ -337,58 +340,48 @@ extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeYUVtoRBGA(
     jint width,
     jint height,
     jbyteArray rgbOut) {
+  jbyte* rgbData = (jbyte*)(env->GetPrimitiveArrayCritical(rgbOut, 0));
+  jbyte* nv21 = (jbyte*)env->GetPrimitiveArrayCritical(yuv420sp, 0);
 
-    jbyte* rgbData = (jbyte*)(env->GetPrimitiveArrayCritical(rgbOut, 0));
-    jbyte* nv21 = (jbyte*)env->GetPrimitiveArrayCritical(yuv420sp, 0);
+  uint8_t* src_rgba = (uint8_t*)malloc(width * height * 4);
+  libyuv::NV21ToABGR(reinterpret_cast<const uint8_t*>(nv21), width,
+                     reinterpret_cast<const uint8_t*>(nv21 + width * height),
+                     width, src_rgba, width * 4, width, height);
 
-    uint8_t* src_rgba = (uint8_t*) malloc(width*height*4);
-    libyuv::NV21ToABGR(reinterpret_cast<const uint8_t *>(nv21),
-                     width,
-                     reinterpret_cast<const uint8_t *>(nv21 + width * height),
-                     width,
-                     src_rgba,
-                     width*4,
-                     width,
-                     height);
+  // Restore rotation logic, Android captured images need to be rotated 270 degrees
+  uint8_t* rotated_rgba = (uint8_t*)malloc(width * height * 4);
+  libyuv::ARGBRotate(src_rgba, width * 4, rotated_rgba, height * 4, width,
+                     height, libyuv::kRotate270);
 
-    // 恢复旋转逻辑，安卓采集的图像需要旋转270度
-    uint8_t* rotated_rgba = (uint8_t*) malloc(width*height*4);
-    libyuv::ARGBRotate(src_rgba,
-                     width*4,
-                     rotated_rgba,
-                     height*4,
-                     width,
-                     height,
-                     libyuv::kRotate270);
+  // Copy rotated data to output buffer
+  memcpy(rgbData, rotated_rgba, width * height * 4);
 
-    // 复制旋转后的数据到输出缓冲区
-    memcpy(rgbData, rotated_rgba, width * height * 4);
-
-    free(src_rgba);
-    free(rotated_rgba);
-    env->ReleasePrimitiveArrayCritical(rgbOut, rgbData, 0);
-    env->ReleasePrimitiveArrayCritical(yuv420sp, nv21, 0);
+  free(src_rgba);
+  free(rotated_rgba);
+  env->ReleasePrimitiveArrayCritical(rgbOut, rgbData, 0);
+  env->ReleasePrimitiveArrayCritical(yuv420sp, nv21, 0);
 }
 
-extern "C"
-JNIEXPORT void JNICALL
-Java_com_pixpark_gpupixel_GPUPixel_nativeFilterSetPropertyFloatArray(JNIEnv *env, jclass clazz,
-                                                                     jlong class_id,
-                                                                     jstring jProperty,
-                                                                     jfloatArray jarray) {
-    const char* property = env->GetStringUTFChars(jProperty, 0);
-    jsize length = env->GetArrayLength(jarray);
+extern "C" JNIEXPORT void JNICALL
+Java_com_pixpark_gpupixel_GPUPixel_nativeFilterSetPropertyFloatArray(
+    JNIEnv* env,
+    jclass clazz,
+    jlong class_id,
+    jstring jProperty,
+    jfloatArray jarray) {
+  const char* property = env->GetStringUTFChars(jProperty, 0);
+  jsize length = env->GetArrayLength(jarray);
 
-    // 获取指向原始Java数组的指针
-    jfloat* c_array = env->GetFloatArrayElements(jarray, nullptr);
-    std::vector<float> vector;
-    for(int i = 0; i < length; i++) {
-        vector.push_back(c_array[i]);
-    }
-    ((Filter*)class_id)->SetProperty(property, vector);
-    env->ReleaseStringUTFChars(jProperty, property);
-    // 释放Java数组的内存
-    env->ReleaseFloatArrayElements(jarray, c_array, JNI_ABORT);
+  // Get pointer to the original Java array
+  jfloat* c_array = env->GetFloatArrayElements(jarray, nullptr);
+  std::vector<float> vector;
+  for (int i = 0; i < length; i++) {
+    vector.push_back(c_array[i]);
+  }
+  ((Filter*)class_id)->SetProperty(property, vector);
+  env->ReleaseStringUTFChars(jProperty, property);
+  // Release Java array memory
+  env->ReleaseFloatArrayElements(jarray, c_array, JNI_ABORT);
 }
 
 extern "C" jint JNIEXPORT JNICALL JNI_OnLoad(JavaVM* jvm, void* reserved) {
@@ -397,10 +390,10 @@ extern "C" jint JNIEXPORT JNICALL JNI_OnLoad(JavaVM* jvm, void* reserved) {
 }
 
 extern "C" void JNIEXPORT JNICALL JNI_OnUnLoad(JavaVM* jvm, void* reserved) {
-//  RTC_CHECK(rtc::CleanupSSL()) << "Failed to CleanupSSL()";
+  //  RTC_CHECK(rtc::CleanupSSL()) << "Failed to CleanupSSL()";
 }
 
-// FaceDetector JNI 方法
+// FaceDetector JNI methods
 extern "C" jlong Java_com_pixpark_gpupixel_GPUPixel_nativeFaceDetectorCreate(
     JNIEnv* env,
     jclass) {
@@ -417,26 +410,22 @@ extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeFaceDetectorDestroy(
   face_detector_.reset();
 };
 
-extern "C" jfloatArray Java_com_pixpark_gpupixel_GPUPixel_nativeFaceDetectorDetect(
-    JNIEnv* env,
-    jclass,
-    jlong classId,
-    jbyteArray jdata,
-    jint width,
-    jint height,
-    jint format,
-    jint frameType) {
-  
+extern "C" jfloatArray
+Java_com_pixpark_gpupixel_GPUPixel_nativeFaceDetectorDetect(JNIEnv* env,
+                                                            jclass,
+                                                            jlong classId,
+                                                            jbyteArray jdata,
+                                                            jint width,
+                                                            jint height,
+                                                            jint format,
+                                                            jint frameType) {
   jbyte* data = env->GetByteArrayElements(jdata, nullptr);
-  std::vector<float> landmarks = ((FaceDetector*)classId)->Detect(
-    (const uint8_t*)data, 
-    width, 
-    height, 
-    (GPUPIXEL_MODE_FMT)format, 
-    (GPUPIXEL_FRAME_TYPE)frameType
-  );
+  std::vector<float> landmarks =
+      ((FaceDetector*)classId)
+          ->Detect((const uint8_t*)data, width, height,
+                   (GPUPIXEL_MODE_FMT)format, (GPUPIXEL_FRAME_TYPE)frameType);
   env->ReleaseByteArrayElements(jdata, data, JNI_ABORT);
-  
+
   jfloatArray result = env->NewFloatArray(landmarks.size());
   if (result) {
     env->SetFloatArrayRegion(result, 0, landmarks.size(), landmarks.data());

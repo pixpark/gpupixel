@@ -20,13 +20,14 @@ class GPUPIXEL_API FaceReshapeFilter : public Filter {
   void SetFaceSlimLevel(float level);
   void SetEyeZoomLevel(float level);
   void SetFaceLandmarks(std::vector<float> landmarks);
+
  protected:
   FaceReshapeFilter();
-  float thinFaceDelta_ = 0;
-  float bigEyeDelta_ = 0;
+  float thin_face_delta_ = 0.0;
+  float big_eye_delta_ = 0.0;
 
-  std::vector<float> face_land_marks_;
+  std::vector<float> face_landmarks_;
   int has_face_ = 0;
 };
 
-}
+}  // namespace gpupixel

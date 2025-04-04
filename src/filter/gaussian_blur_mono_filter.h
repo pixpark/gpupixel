@@ -24,25 +24,25 @@ class GPUPIXEL_API GaussianBlurMonoFilter : public Filter {
   void setSigma(float sigma);
 
   virtual bool DoRender(bool updateSinks = true) override;
-  void setTexelSpacingMultiplier(float value);
+  void SetTexelSpacingMultiplier(float value);
 
  protected:
   GaussianBlurMonoFilter(Type type = HORIZONTAL);
-  Type _type;
-  int _radius;
-  float _sigma;
+  Type type_;
+  int radius_;
+  float sigma_;
 
-  float verticalTexelSpacing_ = 1.0;
-  float horizontalTexelSpacing_ = 1.0;
+  float vertical_texel_spacing_ = 1.0;
+  float horizontal_texel_spacing_ = 1.0;
+
+  virtual std::string GenerateOptimizedVertexShaderString(int radius,
+                                                          float sigma);
+  virtual std::string GenerateOptimizedFragmentShaderString(int radius,
+                                                            float sigma);
 
  private:
-  virtual std::string _generateVertexShaderString(int radius, float sigma);
-  virtual std::string _generateFragmentShaderString(int radius, float sigma);
-
-  virtual std::string _generateOptimizedVertexShaderString(int radius,
-                                                           float sigma);
-  virtual std::string _generateOptimizedFragmentShaderString(int radius,
-                                                             float sigma);
+  virtual std::string GenerateVertexShaderString(int radius, float sigma);
+  virtual std::string GenerateFragmentShaderString(int radius, float sigma);
 };
 
-}
+}  // namespace gpupixel

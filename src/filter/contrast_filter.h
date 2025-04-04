@@ -20,9 +20,9 @@ class GPUPIXEL_API ContrastFilter : public Filter {
   void setContrast(float contrast);
 
  protected:
-  ContrastFilter(){};
+  ContrastFilter() {};
 
-  float _contrast;
+  float contrast_factor_;
 };
 
-}
+}  // namespace gpupixel

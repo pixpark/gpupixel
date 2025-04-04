@@ -21,10 +21,10 @@ class GPUPIXEL_API WhiteBalanceFilter : public Filter {
   void setTint(float tint);
 
  protected:
-  WhiteBalanceFilter(){};
+  WhiteBalanceFilter() {};
 
-  float _temperature;
-  float _tint;
+  float temperature_;
+  float tint_;
 };
 
-}
+}  // namespace gpupixel

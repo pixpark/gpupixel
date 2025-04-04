@@ -67,9 +67,9 @@ bool HueFilter::Init() {
     return false;
   }
 
-  _hueAdjustment = 90;
+  hue_adjustment_ = 90;
   RegisterProperty(
-      "hueAdjustment", _hueAdjustment,
+      "hueAdjustment", hue_adjustment_,
       "The hueAdjustment (in degree) of the image",
       [this](float& hueAdjustment) { setHueAdjustment(hueAdjustment); });
 
@@ -78,12 +78,12 @@ bool HueFilter::Init() {
 
 void HueFilter::setHueAdjustment(float hueAdjustment) {
   // Convert degrees to radians for hue rotation
-  _hueAdjustment = fmodf(hueAdjustment, 360.0) * M_PI / 180;
+  hue_adjustment_ = fmodf(hueAdjustment, 360.0) * M_PI / 180;
 }
 
 bool HueFilter::DoRender(bool updateSinks) {
-  _filterProgram->SetUniformValue("hueAdjustment", _hueAdjustment);
+  filter_program_->SetUniformValue("hueAdjustment", hue_adjustment_);
   return Filter::DoRender(updateSinks);
 }
 
-} // namespace gpupixel
+}  // namespace gpupixel

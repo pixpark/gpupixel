@@ -9,25 +9,23 @@
 
 namespace gpupixel {
 
-REGISTER_FILTER_CLASS(BrightnessFilter)
-
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID) || defined(GPUPIXEL_MAC)
 const std::string kBrightnessFragmentShaderString = R"(
-    uniform sampler2D inputImageTexture; uniform lowp float brightness_para;
+    uniform sampler2D inputImageTexture; uniform lowp float brightness_factor;
     varying highp vec2 textureCoordinate;
 
     void main() {
       lowp vec4 color = texture2D(inputImageTexture, textureCoordinate);
-      gl_FragColor = vec4((color.rgb + vec3(brightness_para)), color.a);
+      gl_FragColor = vec4((color.rgb + vec3(brightness_factor)), color.a);
     })";
 #elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_MAC) || defined(GPUPIXEL_LINUX)
 const std::string kBrightnessFragmentShaderString = R"(
-    uniform sampler2D inputImageTexture; uniform float brightness_para;
+    uniform sampler2D inputImageTexture; uniform float brightness_factor;
     varying vec2 textureCoordinate;
 
     void main() {
       vec4 color = texture2D(inputImageTexture, textureCoordinate);
-      gl_FragColor = vec4((color.rgb + vec3(brightness_para)), color.a);
+      gl_FragColor = vec4((color.rgb + vec3(brightness_factor)), color.a);
     })";
 #endif
 
@@ -45,8 +43,8 @@ bool BrightnessFilter::Init(float brightness) {
     return false;
   }
 
-  _brightness = 0.01;
-  RegisterProperty("brightness_para", _brightness,
+  brightness_factor_ = 0.01;
+  RegisterProperty("brightness_factor", brightness_factor_,
                    "The brightness of filter with range between -1 and 1.",
                    [this](float& brightness) { setBrightness(brightness); });
 
@@ -54,17 +52,17 @@ bool BrightnessFilter::Init(float brightness) {
 }
 
 void BrightnessFilter::setBrightness(float brightness) {
-  _brightness = brightness;
-  if (_brightness > 1.0) {
-    _brightness = 1.0;
-  } else if (_brightness < -1.0) {
-    _brightness = -1.0;
+  brightness_factor_ = brightness;
+  if (brightness_factor_ > 1.0) {
+    brightness_factor_ = 1.0;
+  } else if (brightness_factor_ < -1.0) {
+    brightness_factor_ = -1.0;
   }
 }
 
 bool BrightnessFilter::DoRender(bool updateSinks) {
-  _filterProgram->SetUniformValue("brightness_para", _brightness);
+  filter_program_->SetUniformValue("brightness_factor", brightness_factor_);
   return Filter::DoRender(updateSinks);
 }
 
-} // namespace gpupixel
+}  // namespace gpupixel

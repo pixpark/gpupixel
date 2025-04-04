@@ -35,7 +35,7 @@ class GPUPIXEL_API Util {
   static std::string getResourcePathJni(std::string name);
 #endif
 
-private:
+ private:
   static std::string resourceRoot;
 };
-}
+}  // namespace gpupixel

@@ -31,8 +31,8 @@ bool ExposureFilter::Init() {
     return false;
   }
 
-  _exposure = 0.0;
-  RegisterProperty("exposure", _exposure,
+  exposure_factor_ = 0.0;
+  RegisterProperty("exposure", exposure_factor_,
                    "The exposure of the image. Exposure ranges from -10.0 to "
                    "10.0 (max contrast), with 0.0 as the normal level",
                    [this](float& exposure) { SetExposure(exposure); });
@@ -41,17 +41,17 @@ bool ExposureFilter::Init() {
 }
 
 void ExposureFilter::SetExposure(float exposure) {
-  _exposure = exposure;
-  if (_exposure > 10.0) {
-    _exposure = 10.0;
-  } else if (_exposure < -10.0) {
-    _exposure = -10.0;
+  exposure_factor_ = exposure;
+  if (exposure_factor_ > 10.0) {
+    exposure_factor_ = 10.0;
+  } else if (exposure_factor_ < -10.0) {
+    exposure_factor_ = -10.0;
   }
 }
 
 bool ExposureFilter::DoRender(bool updateSinks) {
-  _filterProgram->SetUniformValue("exposure", _exposure);
+  filter_program_->SetUniformValue("exposure", exposure_factor_);
   return Filter::DoRender(updateSinks);
 }
 
-} // namespace gpupixel
+}  // namespace gpupixel

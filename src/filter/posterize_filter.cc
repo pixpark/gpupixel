@@ -9,8 +9,6 @@
 
 namespace gpupixel {
 
-REGISTER_FILTER_CLASS(PosterizeFilter)
-
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
 const std::string kPosterizeFragmentShaderString = R"(
     uniform sampler2D inputImageTexture; uniform highp float colorLevels;
@@ -36,7 +34,6 @@ const std::string kPosterizeFragmentShaderString = R"(
 std::shared_ptr<PosterizeFilter> PosterizeFilter::Create() {
   auto ret = std::shared_ptr<PosterizeFilter>(new PosterizeFilter());
   if (ret && !ret->Init()) {
-    // todo zhaoyou
   }
   return ret;
 }
@@ -46,8 +43,8 @@ bool PosterizeFilter::Init() {
     return false;
   }
 
-  _colorLevels = 10;
-  RegisterProperty("colorLevels", _colorLevels,
+  color_levels_ = 10;
+  RegisterProperty("colorLevels", color_levels_,
                    "The number of color levels to reduce the image space to. "
                    "This ranges from 1 to 256, with a default of 10.",
                    [this](int& colorLevels) { setColorLevels(colorLevels); });
@@ -56,17 +53,17 @@ bool PosterizeFilter::Init() {
 }
 
 void PosterizeFilter::setColorLevels(int colorLevels) {
-  _colorLevels = colorLevels;
-  if (_colorLevels > 256) {
-    _colorLevels = 256;
-  } else if (_colorLevels < 1) {
-    _colorLevels = 1;
+  color_levels_ = colorLevels;
+  if (color_levels_ > 256) {
+    color_levels_ = 256;
+  } else if (color_levels_ < 1) {
+    color_levels_ = 1;
   }
 }
 
 bool PosterizeFilter::DoRender(bool updateSinks) {
-  _filterProgram->SetUniformValue("colorLevels", (float)_colorLevels);
+  filter_program_->SetUniformValue("colorLevels", (float)color_levels_);
   return Filter::DoRender(updateSinks);
 }
 
-} // namespace gpupixel
+}  // namespace gpupixel

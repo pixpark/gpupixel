@@ -19,9 +19,9 @@ class GPUPIXEL_API DirectionalNonMaximumSuppressionFilter : public Filter {
   virtual bool DoRender(bool updateSinks = true) override;
 
  protected:
-  GLuint _texelWidthUniform;
-  GLuint _texelHeightUniform;
-  DirectionalNonMaximumSuppressionFilter(){};
+  GLuint texel_width_uniform_;
+  GLuint texel_height_uniform_;
+  DirectionalNonMaximumSuppressionFilter() {};
 };
 
-}
+}  // namespace gpupixel

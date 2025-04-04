@@ -9,9 +9,8 @@
 
 namespace gpupixel {
 
-REGISTER_FILTER_CLASS(SmoothToonFilter)
-
-SmoothToonFilter::SmoothToonFilter() : _gaussianBlurFilter(0), _toonFilter(0) {}
+SmoothToonFilter::SmoothToonFilter()
+    : gaussian_blur_filter_(0), toon_filter_(0) {}
 
 SmoothToonFilter::~SmoothToonFilter() {}
 
@@ -27,24 +26,24 @@ bool SmoothToonFilter::Init() {
   if (!FilterGroup::Init()) {
     return false;
   }
-  _gaussianBlurFilter = GaussianBlurFilter::Create();
-  _toonFilter = ToonFilter::Create();
-  _gaussianBlurFilter->AddSink(_toonFilter);
-  addFilter(_gaussianBlurFilter);
+  gaussian_blur_filter_ = GaussianBlurFilter::Create();
+  toon_filter_ = ToonFilter::Create();
+  gaussian_blur_filter_->AddSink(toon_filter_);
+  AddFilter(gaussian_blur_filter_);
 
-  _blurRadius = 2.0;
-  setBlurRadius(_blurRadius);
-  RegisterProperty("blurRadius", _blurRadius, "",
-                   [this](int& blurRadius) { setBlurRadius(blurRadius); });
+  blur_radius_ = 2.0;
+  setBlurRadius(blur_radius_);
+  RegisterProperty("blurRadius", blur_radius_, "",
+                   [this](float& blurRadius) { setBlurRadius(blurRadius); });
 
-  _toonThreshold = 0.2;
+  toon_threshold_ = 0.2;
   RegisterProperty(
-      "toonThreshold", _toonThreshold,
+      "toonThreshold", toon_threshold_,
       "The threshold at which to apply the edges",
       [this](float& toonThreshold) { setToonThreshold(toonThreshold); });
 
-  _toonQuantizationLevels = 10.0;
-  RegisterProperty("toonQuantizationLevels", _toonQuantizationLevels,
+  toon_quantization_levels_ = 10.0;
+  RegisterProperty("toonQuantizationLevels", toon_quantization_levels_,
                    "The levels of quantization for the posterization of colors "
                    "within the scene",
                    [this](float& toonQuantizationLevels) {
@@ -55,18 +54,18 @@ bool SmoothToonFilter::Init() {
 }
 
 void SmoothToonFilter::setBlurRadius(int blurRadius) {
-  _blurRadius = blurRadius;
-  _gaussianBlurFilter->SetRadius(_blurRadius);
+  blur_radius_ = blurRadius;
+  gaussian_blur_filter_->SetRadius(blur_radius_);
 }
 
 void SmoothToonFilter::setToonThreshold(float toonThreshold) {
-  _toonThreshold = toonThreshold;
-  _toonFilter->setThreshold(_toonThreshold);
+  toon_threshold_ = toonThreshold;
+  toon_filter_->setThreshold(toon_threshold_);
 }
 
 void SmoothToonFilter::setToonQuantizationLevels(float toonQuantizationLevels) {
-  _toonQuantizationLevels = toonQuantizationLevels;
-  _toonFilter->setQuantizatinLevels(_toonQuantizationLevels);
+  toon_quantization_levels_ = toonQuantizationLevels;
+  toon_filter_->setQuantizatinLevels(toon_quantization_levels_);
 }
 
-}
+}  // namespace gpupixel

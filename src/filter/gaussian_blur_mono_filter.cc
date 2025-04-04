@@ -11,10 +11,8 @@
 
 namespace gpupixel {
 
-REGISTER_FILTER_CLASS(GaussianBlurMonoFilter)
-
 GaussianBlurMonoFilter::GaussianBlurMonoFilter(Type type /* = HORIZONTAL*/)
-    : _type(type), _radius(4), _sigma(2.0) {}
+    : type_(type), radius_(4), sigma_(2.0) {}
 
 std::shared_ptr<GaussianBlurMonoFilter> GaussianBlurMonoFilter::Create(
     Type type /* = HORIZONTAL*/,
@@ -30,98 +28,99 @@ std::shared_ptr<GaussianBlurMonoFilter> GaussianBlurMonoFilter::Create(
 
 bool GaussianBlurMonoFilter::Init(int radius, float sigma) {
   if (Filter::InitWithShaderString(
-          _generateOptimizedVertexShaderString(radius, sigma),
-          _generateOptimizedFragmentShaderString(radius, sigma))) {
+          GenerateOptimizedVertexShaderString(radius, sigma),
+          GenerateOptimizedFragmentShaderString(radius, sigma))) {
     return true;
   }
   return false;
 }
 
 void GaussianBlurMonoFilter::SetRadius(int radius) {
-  if (radius == _radius) {
+  if (radius == radius_) {
     return;
   }
 
-  _radius = radius;
+  radius_ = radius;
 
-  if (_filterProgram) {
-    delete _filterProgram;
-    _filterProgram = 0;
+  if (filter_program_) {
+    delete filter_program_;
+    filter_program_ = 0;
   }
-  InitWithShaderString(_generateOptimizedVertexShaderString(_radius, _sigma),
-                       _generateOptimizedFragmentShaderString(_radius, _sigma));
+  InitWithShaderString(GenerateOptimizedVertexShaderString(radius_, sigma_),
+                       GenerateOptimizedFragmentShaderString(radius_, sigma_));
 }
 
 void GaussianBlurMonoFilter::setSigma(float sigma) {
-  if (sigma == _sigma) {
+  if (sigma == sigma_) {
     return;
   }
 
-  _sigma = round(sigma);
+  sigma_ = round(sigma);
 
   int calculatedSampleRadius = 0;
-  if (_sigma >= 1)  // Avoid a divide-by-zero error here
+  if (sigma_ >= 1)  // Avoid a divide-by-zero error here
   {
     // Calculate the number of pixels to sample from by setting a bottom limit
     // for the contribution of the outermost pixel
     float minimumWeightToFindEdgeOfSamplingArea = 1.0 / 256.0;
     calculatedSampleRadius =
-        floor(sqrt(-2.0 * pow(_sigma, 2.0) *
+        floor(sqrt(-2.0 * pow(sigma_, 2.0) *
                    log(minimumWeightToFindEdgeOfSamplingArea *
-                       sqrt(2.0 * M_PI * pow(_sigma, 2.0)))));
+                       sqrt(2.0 * M_PI * pow(sigma_, 2.0)))));
     calculatedSampleRadius +=
         calculatedSampleRadius %
         2;  // There's nothing to gain from handling odd
             // radius sizes, due to the optimizations I use
   }
-  _radius = calculatedSampleRadius;
+  radius_ = calculatedSampleRadius;
 
-  if (_filterProgram) {
-    delete _filterProgram;
-    _filterProgram = 0;
+  if (filter_program_) {
+    delete filter_program_;
+    filter_program_ = 0;
   }
-  InitWithShaderString(_generateOptimizedVertexShaderString(_radius, _sigma),
-                       _generateOptimizedFragmentShaderString(_radius, _sigma));
+  InitWithShaderString(GenerateOptimizedVertexShaderString(radius_, sigma_),
+                       GenerateOptimizedFragmentShaderString(radius_, sigma_));
 }
 
 bool GaussianBlurMonoFilter::DoRender(bool updateSinks) {
-  RotationMode inputRotation = input_framebuffers_.begin()->second.rotationMode;
+  RotationMode inputRotation =
+      input_framebuffers_.begin()->second.rotation_mode;
 
   if (rotationSwapsSize(inputRotation)) {
-    if (_type == HORIZONTAL) {
-      _filterProgram->SetUniformValue("texelWidthOffset", (float)0.0);
-      _filterProgram->SetUniformValue(
+    if (type_ == HORIZONTAL) {
+      filter_program_->SetUniformValue("texelWidthOffset", (float)0.0);
+      filter_program_->SetUniformValue(
           "texelHeightOffset",
-          (float)(verticalTexelSpacing_ / _framebuffer->GetWidth()));
+          (float)(vertical_texel_spacing_ / framebuffer_->GetWidth()));
     } else {
-      _filterProgram->SetUniformValue(
+      filter_program_->SetUniformValue(
           "texelWidthOffset",
-          (float)(horizontalTexelSpacing_ / _framebuffer->GetHeight()));
-      _filterProgram->SetUniformValue("texelHeightOffset", (float)0.0);
+          (float)(horizontal_texel_spacing_ / framebuffer_->GetHeight()));
+      filter_program_->SetUniformValue("texelHeightOffset", (float)0.0);
     }
   } else {
-    if (_type == HORIZONTAL) {
-      _filterProgram->SetUniformValue(
+    if (type_ == HORIZONTAL) {
+      filter_program_->SetUniformValue(
           "texelWidthOffset",
-          (float)(verticalTexelSpacing_ / _framebuffer->GetWidth()));
-      _filterProgram->SetUniformValue("texelHeightOffset", (float)0.0);
+          (float)(horizontal_texel_spacing_ / framebuffer_->GetWidth()));
+      filter_program_->SetUniformValue("texelHeightOffset", (float)0.0);
     } else {
-      _filterProgram->SetUniformValue("texelWidthOffset", (float)0.0);
-      _filterProgram->SetUniformValue(
+      filter_program_->SetUniformValue("texelWidthOffset", (float)0.0);
+      filter_program_->SetUniformValue(
           "texelHeightOffset",
-          (float)(horizontalTexelSpacing_ / _framebuffer->GetHeight()));
+          (float)(vertical_texel_spacing_ / framebuffer_->GetHeight()));
     }
   }
   return Filter::DoRender(updateSinks);
 }
 
-void GaussianBlurMonoFilter::setTexelSpacingMultiplier(float value) {
-  verticalTexelSpacing_ = value;
-  horizontalTexelSpacing_ = value;
+void GaussianBlurMonoFilter::SetTexelSpacingMultiplier(float value) {
+  vertical_texel_spacing_ = value;
+  horizontal_texel_spacing_ = value;
 }
 
-std::string GaussianBlurMonoFilter::_generateVertexShaderString(int radius,
-                                                                float sigma) {
+std::string GaussianBlurMonoFilter::GenerateVertexShaderString(int radius,
+                                                               float sigma) {
   if (radius < 1 || sigma <= 0.0) {
     return kDefaultVertexShader;
   }
@@ -160,8 +159,8 @@ std::string GaussianBlurMonoFilter::_generateVertexShaderString(int radius,
   return shaderStr;
 }
 
-std::string GaussianBlurMonoFilter::_generateFragmentShaderString(int radius,
-                                                                  float sigma) {
+std::string GaussianBlurMonoFilter::GenerateFragmentShaderString(int radius,
+                                                                 float sigma) {
   if (radius < 1 || sigma <= 0.0) {
     return kDefaultFragmentShader;
   }
@@ -215,7 +214,7 @@ std::string GaussianBlurMonoFilter::_generateFragmentShaderString(int radius,
   return shaderStr;
 }
 
-std::string GaussianBlurMonoFilter::_generateOptimizedVertexShaderString(
+std::string GaussianBlurMonoFilter::GenerateOptimizedVertexShaderString(
     int radius,
     float sigma) {
   if (radius < 1 || sigma <= 0.0) {
@@ -307,7 +306,7 @@ std::string GaussianBlurMonoFilter::_generateOptimizedVertexShaderString(
   return shaderStr;
 }
 
-std::string GaussianBlurMonoFilter::_generateOptimizedFragmentShaderString(
+std::string GaussianBlurMonoFilter::GenerateOptimizedFragmentShaderString(
     int radius,
     float sigma) {
   if (radius < 1 || sigma <= 0.0) {
@@ -419,4 +418,4 @@ std::string GaussianBlurMonoFilter::_generateOptimizedFragmentShaderString(
   return shaderStr;
 }
 
-}
+}  // namespace gpupixel

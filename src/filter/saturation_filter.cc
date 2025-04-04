@@ -38,9 +38,9 @@ bool SaturationFilter::Init() {
     return false;
   }
 
-  _saturation = 1.0;
+  saturation_ = 1.0;
   RegisterProperty(
-      "saturation", _saturation,
+      "saturation", saturation_,
       "The saturation of an image. Saturation ranges from 0.0 (fully "
       "desaturated) to 2.0 (max saturation), with 1.0 as the normal level",
       [this](float& saturation) { setSaturation(saturation); });
@@ -49,17 +49,17 @@ bool SaturationFilter::Init() {
 }
 
 void SaturationFilter::setSaturation(float saturation) {
-  _saturation = saturation;
-  if (_saturation > 2.0) {
-    _saturation = 2.0;
-  } else if (_saturation < 0.0) {
-    _saturation = 0.0;
+  saturation_ = saturation;
+  if (saturation_ > 2.0) {
+    saturation_ = 2.0;
+  } else if (saturation_ < 0.0) {
+    saturation_ = 0.0;
   }
 }
 
 bool SaturationFilter::DoRender(bool updateSinks) {
-  _filterProgram->SetUniformValue("saturation", _saturation);
+  filter_program_->SetUniformValue("saturation", saturation_);
   return Filter::DoRender(updateSinks);
 }
 
-} // namespace gpupixel
+}  // namespace gpupixel

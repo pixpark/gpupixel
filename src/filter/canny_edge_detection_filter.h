@@ -25,12 +25,12 @@ class GPUPIXEL_API CannyEdgeDetectionFilter : public FilterGroup {
  protected:
   CannyEdgeDetectionFilter();
 
-  std::shared_ptr<GrayscaleFilter> _grayscaleFilter;
-  std::shared_ptr<SingleComponentGaussianBlurFilter> _blurFilter;
-  std::shared_ptr<DirectionalSobelEdgeDetectionFilter> _edgeDetectionFilter;
+  std::shared_ptr<GrayscaleFilter> grayscale_filter_;
+  std::shared_ptr<SingleComponentGaussianBlurFilter> blur_filter_;
+  std::shared_ptr<DirectionalSobelEdgeDetectionFilter> edge_detection_filter_;
   std::shared_ptr<DirectionalNonMaximumSuppressionFilter>
-      _nonMaximumSuppressionFilter;
-  std::shared_ptr<WeakPixelInclusionFilter> _weakPixelInclusionFilter;
+      non_maximum_suppression_filter_;
+  std::shared_ptr<WeakPixelInclusionFilter> weak_pixel_inclusion_filter_;
 };
 
-}
+}  // namespace gpupixel
