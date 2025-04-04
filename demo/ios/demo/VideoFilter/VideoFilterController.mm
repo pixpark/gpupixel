@@ -170,7 +170,7 @@ using namespace gpupixel;
         __weak typeof(VideoFilterController*)weakSelf = self;
         _rawOutputCallback = [weakSelf](const uint8_t* data, int width, int height, int64_t ts) {
             if (weakSelf.isSave) {
-                UIImage *resultImage = [ImageConverter imageFromARGBData:data width:width height:height];
+                UIImage *resultImage = [ImageConverter imageFromRGBAData:data width:width height:height];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     // 创建并显示结果页面
                     FilterResultViewController *resultVC = [[FilterResultViewController alloc] initWithImage:resultImage];
