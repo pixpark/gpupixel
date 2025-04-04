@@ -410,39 +410,6 @@
     
 	CMTime currentTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
 
-#if 0
-    [GPUImageContext useImageProcessingContext];
-
-    CVPixelBufferLockBaseAddress(cameraFrame, 0);
-    
-    outputFramebuffer = [[GPUImageContext sharedFramebufferCache] fetchFramebufferForSize:CGSizeMake(bufferWidth, bufferHeight) onlyTexture:YES];
-    
-    glBindTexture(GL_TEXTURE_2D, [outputFramebuffer texture]);
-    
-    //        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufferWidth, bufferHeight, 0, GL_BGRA, GL_UNSIGNED_BYTE, CVPixelBufferGetBaseAddress(cameraFrame));
-    
-    // Using BGRA extension to pull in video frame data directly
-//    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, bytesPerRow / 3, bufferHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, CVPixelBufferGetBaseAddress(cameraFrame));
-//	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufferWidth, bufferHeight, 0, GL_YCBCR_422_APPLE, GL_UNSIGNED_SHORT_8_8_REV_APPLE, CVPixelBufferGetBaseAddress(cameraFrame));
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufferWidth, bufferHeight, 0, GL_BGRA, GL_UNSIGNED_BYTE, CVPixelBufferGetBaseAddress(cameraFrame));
-
-    [self updateTargetsForVideoCameraUsingCacheTextureAtWidth:bufferWidth height:bufferHeight time:currentTime];
-#endif
-//    for (id<GPUImageInput> currentTarget in targets)
-//    {
-//        if ([currentTarget enabled])
-//        {
-//            if (currentTarget != self.targetToIgnoreForUpdates)
-//            {
-//                NSInteger indexOfObject = [targets indexOfObject:currentTarget];
-//                NSInteger textureIndexOfTarget = [[targetTextureIndices objectAtIndex:indexOfObject] integerValue];
-//                
-//                [currentTarget setInputSize:CGSizeMake(bufferWidth, bufferHeight) atIndex:textureIndexOfTarget];
-//                [currentTarget newFrameReadyAtTime:currentTime atIndex:textureIndexOfTarget];
-//            }
-//        }
-//    }
-    
     CVPixelBufferUnlockBaseAddress(cameraFrame, 0);
     
     if (_runBenchmark)
