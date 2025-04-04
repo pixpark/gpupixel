@@ -146,7 +146,7 @@ void renderFrame()
  
   	int width = sourceImage->GetWidth();
 	int height = sourceImage->GetHeight();
-	unsigned char *buffer = sourceImage->GetRgbaImageBuffer();
+	const unsigned char *buffer = sourceImage->GetRgbaImageBuffer();
 	
 	std::vector<float> landmarks = faceDetector->Detect(
 		buffer, 
