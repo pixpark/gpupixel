@@ -11,10 +11,10 @@
 #include "gpupixel_define.h"
 
 // base
+#include "gpupixel_context.h"
 #include "gpupixel_framebuffer.h"
 #include "gpupixel_framebuffer_factory.h"
 #include "gpupixel_program.h"
-#include "gpupixel_context.h"
 
 // utils
 #include "math_toolbox.h"
@@ -45,10 +45,10 @@
 
 // face filters
 #include "beauty_face_filter.h"
-#include "face_makeup_filter.h"
-#include "lipstick_filter.h"
 #include "blusher_filter.h"
+#include "face_makeup_filter.h"
 #include "face_reshape_filter.h"
+#include "lipstick_filter.h"
 
 #include "box_blur_filter.h"
 #include "box_high_pass_filter.h"
@@ -70,8 +70,8 @@
 #include "gaussian_blur_mono_filter.h"
 #include "glass_sphere_filter.h"
 #include "grayscale_filter.h"
-#include "hsb_filter.h"
 #include "halftone_filter.h"
+#include "hsb_filter.h"
 #include "hue_filter.h"
 #include "ios_blur_filter.h"
 #include "luminance_range_filter.h"

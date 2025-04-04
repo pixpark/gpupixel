@@ -29,7 +29,8 @@ public abstract class GPUPixelSource {
             @Override
             public void run() {
                 if (mNativeClassID != 0)
-                    GPUPixel.nativeSourceAddSink(mNativeClassID, sink.getNativeClassID(), texID, sink instanceof GPUPixelFilter);
+                    GPUPixel.nativeSourceAddSink(mNativeClassID, sink.getNativeClassID(), texID,
+                            sink instanceof GPUPixelFilter);
             }
         });
         if (sink instanceof GPUPixelSource)
@@ -43,7 +44,8 @@ public abstract class GPUPixelSource {
             @Override
             public void run() {
                 if (mNativeClassID != 0 && sink.getNativeClassID() != 0)
-                    GPUPixel.nativeSourceRemoveSink(mNativeClassID, sink.getNativeClassID(), sink instanceof GPUPixelFilter);
+                    GPUPixel.nativeSourceRemoveSink(mNativeClassID, sink.getNativeClassID(),
+                            sink instanceof GPUPixelFilter);
             }
         });
     }
@@ -52,8 +54,7 @@ public abstract class GPUPixelSource {
         GPUPixel.GetInstance().runOnDraw(new Runnable() {
             @Override
             public void run() {
-                if (mNativeClassID != 0)
-                    GPUPixel.nativeSourceRemoveAllSinks(mNativeClassID);
+                if (mNativeClassID != 0) GPUPixel.nativeSourceRemoveAllSinks(mNativeClassID);
             }
         });
     }
@@ -66,8 +67,7 @@ public abstract class GPUPixelSource {
         GPUPixel.GetInstance().runOnDraw(new Runnable() {
             @Override
             public void run() {
-                if (mNativeClassID != 0)
-                    GPUPixel.nativeSourceProceed(mNativeClassID, updateSinks);
+                if (mNativeClassID != 0) GPUPixel.nativeSourceProceed(mNativeClassID, updateSinks);
             }
         });
         if (bRequestRender) {
@@ -83,16 +83,20 @@ public abstract class GPUPixelSource {
         return GPUPixel.nativeSourceGetRotatedFramebuferHeight(mNativeClassID);
     }
 
-    public void GetProcessedFrameData(final GPUPixelFilter upToFilter, final ProcessedFrameDataCallback proceedResult) {
-        GetProcessedFrameData(upToFilter, GetRotatedFramebufferWidth(), GetRotatedFramebufferHeight(), proceedResult);
+    public void GetProcessedFrameData(
+            final GPUPixelFilter upToFilter, final ProcessedFrameDataCallback proceedResult) {
+        GetProcessedFrameData(upToFilter, GetRotatedFramebufferWidth(),
+                GetRotatedFramebufferHeight(), proceedResult);
     }
 
-    public void GetProcessedFrameData(final GPUPixelFilter upToFilter, final int width, final int height, final ProcessedFrameDataCallback proceedResult) {
+    public void GetProcessedFrameData(final GPUPixelFilter upToFilter, final int width,
+            final int height, final ProcessedFrameDataCallback proceedResult) {
         GPUPixel.GetInstance().runOnDraw(new Runnable() {
             @Override
             public void run() {
                 if (mNativeClassID != 0) {
-                    byte[] resultData = GPUPixel.nativeSourceGetProcessedFrameData(mNativeClassID, upToFilter.getNativeClassID(), width, height);
+                    byte[] resultData = GPUPixel.nativeSourceGetProcessedFrameData(
+                            mNativeClassID, upToFilter.getNativeClassID(), width, height);
                     if (resultData != null) {
                         Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
                         bmp.copyPixelsFromBuffer(ByteBuffer.wrap(resultData));

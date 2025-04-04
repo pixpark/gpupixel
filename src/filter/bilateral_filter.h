@@ -20,14 +20,14 @@ class GPUPIXEL_API BilateralMonoFilter : public Filter {
 
   virtual bool DoRender(bool updateSinks = true) override;
 
-  void setTexelSpacingMultiplier(float multiplier);
+  void SetTexelSpacingMultiplier(float multiplier);
   void setDistanceNormalizationFactor(float value);
 
  protected:
   BilateralMonoFilter(Type type);
-  Type _type;
-  float _texelSpacingMultiplier;
-  float _distanceNormalizationFactor;
+  Type type_;
+  float texel_spacing_multiplier_;
+  float distance_normalization_factor_;
 };
 
 class GPUPIXEL_API BilateralFilter : public FilterGroup {
@@ -37,7 +37,7 @@ class GPUPIXEL_API BilateralFilter : public FilterGroup {
   static std::shared_ptr<BilateralFilter> Create();
   bool Init();
 
-  void setTexelSpacingMultiplier(float multiplier);
+  void SetTexelSpacingMultiplier(float multiplier);
   void setDistanceNormalizationFactor(float value);
 
  protected:
@@ -45,8 +45,8 @@ class GPUPIXEL_API BilateralFilter : public FilterGroup {
 
  private:
   // friend BilateralMonoFilter;
-  std::shared_ptr<BilateralMonoFilter> _hBlurFilter;
-  std::shared_ptr<BilateralMonoFilter> _vBlurFilter;
+  std::shared_ptr<BilateralMonoFilter> horizontal_blur_filter_;
+  std::shared_ptr<BilateralMonoFilter> vertical_blur_filter_;
 };
 
-}
+}  // namespace gpupixel

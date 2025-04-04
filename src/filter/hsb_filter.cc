@@ -9,8 +9,6 @@
 
 namespace gpupixel {
 
-REGISTER_FILTER_CLASS(HSBFilter)
-
 /* Matrix algorithms adapted from
  http://www.graficaobscura.com/matrix/index.html
 
@@ -78,20 +76,20 @@ void HSBFilter::adjustSaturation(float sat) {
   sMat.m[14] = 0.0;
   sMat.m[15] = 1.0;
 
-  saturationMatrix_ = sMat;
+  saturation_matrix_ = sMat;
 
-  _colorMatrix = Matrix4::IDENTITY;
-  _colorMatrix *= brightnessMatrix_;
-  _colorMatrix = saturationMatrix_ * _colorMatrix;
+  color_matrix_ = Matrix4::IDENTITY;
+  color_matrix_ *= brightness_matrix_;
+  color_matrix_ = saturation_matrix_ * color_matrix_;
 }
 
 void HSBFilter::adjustBrightness(float b) {
-  brightnessMatrix_ = Matrix4::IDENTITY;
-  brightnessMatrix_ *= b;
+  brightness_matrix_ = Matrix4::IDENTITY;
+  brightness_matrix_ *= b;
 
-  _colorMatrix = Matrix4::IDENTITY;
-  _colorMatrix *= brightnessMatrix_;
-  _colorMatrix = saturationMatrix_ * _colorMatrix;
+  color_matrix_ = Matrix4::IDENTITY;
+  color_matrix_ *= brightness_matrix_;
+  color_matrix_ = saturation_matrix_ * color_matrix_;
 }
 
-}
+}  // namespace gpupixel

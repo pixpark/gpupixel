@@ -13,11 +13,11 @@ import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.widget.FrameLayout;
 
-
 public class GPUPixelView extends FrameLayout implements GPUPixelSink {
-    static final int FillModeStretch = 0;                   // Stretch to fill the view, and may distort the image
-    static final int FillModePreserveAspectRatio = 1;       // preserve the aspect ratio of the image
-    static final int FillModePreserveAspectRatioAndFill =2; // preserve the aspect ratio, and zoom in to fill the view
+    static final int FillModeStretch = 0; // Stretch to fill the view, and may distort the image
+    static final int FillModePreserveAspectRatio = 1; // preserve the aspect ratio of the image
+    static final int FillModePreserveAspectRatioAndFill =
+            2; // preserve the aspect ratio, and zoom in to fill the view
 
     protected long mNativeClassID = 0;
 
@@ -30,7 +30,7 @@ public class GPUPixelView extends FrameLayout implements GPUPixelSink {
 
     public GPUPixelView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        if (isInEditMode()) { //防止布局界面显示为空白
+        if (isInEditMode()) { // Prevent layout interface from displaying as blank
             return;
         }
         Init(context, attrs);
@@ -53,7 +53,9 @@ public class GPUPixelView extends FrameLayout implements GPUPixelSink {
         }
     }
 
-    public long getNativeClassID() { return mNativeClassID; }
+    public long getNativeClassID() {
+        return mNativeClassID;
+    }
 
     protected void onSurfaceSizeChanged(final int w, final int h) {
         GPUPixel.GetInstance().runOnDraw(new Runnable() {
@@ -79,8 +81,7 @@ public class GPUPixelView extends FrameLayout implements GPUPixelSink {
         GPUPixel.GetInstance().runOnDraw(new Runnable() {
             @Override
             public void run() {
-                if (mNativeClassID != 0)
-                    GPUPixel.nativeSinkRenderSetMirror(mNativeClassID, mirror);
+                if (mNativeClassID != 0) GPUPixel.nativeSinkRenderSetMirror(mNativeClassID, mirror);
             }
         });
     }
@@ -140,5 +141,4 @@ public class GPUPixelView extends FrameLayout implements GPUPixelSink {
             super.surfaceDestroyed(holder);
         }
     }
-
 }

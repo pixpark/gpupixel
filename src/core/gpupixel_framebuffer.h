@@ -27,37 +27,38 @@ class GPUPIXEL_API GPUPixelFramebuffer {
   GPUPixelFramebuffer(
       int width,
       int height,
-      bool onlyGenerateTexture = false,
-      const TextureAttributes textureAttributes = defaultTextureAttribures);
+      bool only_generate_texture = false,
+      const TextureAttributes texture_attributes = default_texture_attributes);
   ~GPUPixelFramebuffer();
 
-  GLuint GetTexture() const { return _texture; }
+  GLuint GetTexture() const { return texture_; }
 
-  GLuint GetFramebuffer() const { return _framebuffer; }
+  GLuint GetFramebuffer() const { return framebuffer_; }
 
-  int GetWidth() const { return _width; }
-  int GetHeight() const { return _height; }
+  int GetWidth() const { return width_; }
+  int GetHeight() const { return height_; }
   const TextureAttributes& GetTextureAttributes() const {
-    return _textureAttributes;
+    return texture_attributes_;
   };
-  bool HasFramebuffer() { return _hasFB; };
+  bool HasFramebuffer() { return has_framebuffer_; };
 
-  void Active();
-  void Inactive();
+  void Activate();
+  void Deactivate();
 
-  static TextureAttributes defaultTextureAttribures;
+  static TextureAttributes default_texture_attributes;
 
  private:
-  int _width, _height;
-  TextureAttributes _textureAttributes;
-  bool _hasFB;
-  GLuint _texture;
-  GLuint _framebuffer;
+  int width_;
+  int height_;
+  TextureAttributes texture_attributes_;
+  bool has_framebuffer_;
+  GLuint texture_;
+  GLuint framebuffer_;
 
-  void _generateTexture();
-  void _generateFramebuffer();
+  void GenerateTexture();
+  void GenerateFramebuffer();
 
-  //    static std::vector<std::shared_ptr<GPUPixelFramebuffer>> _framebuffers;
+  //    static std::vector<std::shared_ptr<GPUPixelFramebuffer>> framebuffers_;
 };
 
-}
+}  // namespace gpupixel

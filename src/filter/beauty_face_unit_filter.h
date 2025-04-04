@@ -27,15 +27,15 @@ class GPUPIXEL_API BeautyFaceUnitFilter : public Filter {
  protected:
   BeautyFaceUnitFilter();
 
-  std::shared_ptr<SourceImage> grayImage_;
-  std::shared_ptr<SourceImage> originImage_;
-  std::shared_ptr<SourceImage> skinImage_;
-  std::shared_ptr<SourceImage> customImage_;
+  std::shared_ptr<SourceImage> gray_image_;
+  std::shared_ptr<SourceImage> original_image_;
+  std::shared_ptr<SourceImage> skin_image_;
+  std::shared_ptr<SourceImage> custom_image_;
 
  private:
-  float sharpen_ = 0.0;
-  float blurAlpha_ = 0.0;
-  float white_ = 0.0;
+  float sharpen_factor_ = 0.0;
+  float blur_alpha_ = 0.0;
+  float white_balance_ = 0.0;
 };
 
-}
+}  // namespace gpupixel

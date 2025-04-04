@@ -55,8 +55,8 @@ bool LuminanceRangeFilter::Init() {
     return false;
   }
 
-  _rangeReductionFactor = 0.6;
-  RegisterProperty("rangeReductionFactor", _rangeReductionFactor,
+  range_reduction_factor_ = 0.6;
+  RegisterProperty("rangeReductionFactor", range_reduction_factor_,
                    "The degree to reduce the luminance range, from 0.0 to 1.0. "
                    "Default is 0.6.",
                    [this](float& rangeReductionFactor) {
@@ -67,18 +67,18 @@ bool LuminanceRangeFilter::Init() {
 }
 
 void LuminanceRangeFilter::setRangeReductionFactor(float rangeReductionFactor) {
-  _rangeReductionFactor = rangeReductionFactor;
-  if (_rangeReductionFactor > 1.0) {
-    _rangeReductionFactor = 1.0;
-  } else if (_rangeReductionFactor < 0.0) {
-    _rangeReductionFactor = 0.0;
+  range_reduction_factor_ = rangeReductionFactor;
+  if (range_reduction_factor_ > 1.0) {
+    range_reduction_factor_ = 1.0;
+  } else if (range_reduction_factor_ < 0.0) {
+    range_reduction_factor_ = 0.0;
   }
 }
 
 bool LuminanceRangeFilter::DoRender(bool updateSinks) {
-  _filterProgram->SetUniformValue("rangeReductionFactor",
-                                  _rangeReductionFactor);
+  filter_program_->SetUniformValue("rangeReductionFactor",
+                                   range_reduction_factor_);
   return Filter::DoRender(updateSinks);
 }
 
-} // namespace gpupixel
+}  // namespace gpupixel

@@ -40,66 +40,68 @@ These additional points provide more detailed facial feature information for adv
 #include "face_detector.h"
 
 // Create face detector instance
-FaceDetector detector;
-
-// The detector will be automatically initialized with the resource path
+std::shared_ptr<FaceDetector> faceDetector = std::make_shared<FaceDetector>();
 ```
 
 ### Face Detection and Landmark Extraction
 ```cpp
-// Register callback to receive detection results
-detector.RegCallback([](std::vector<float> landmarks) {
-    // Process landmarks
-    // landmarks contains normalized coordinates (x,y) for all 111 points
-});
-
-// Perform detection on image data
-detector.Detect(
-    imageData,      // image data pointer
-    width,          // image width
-    height,         // image height
-    format,         // image format
-    frameType       // frame type
+// Perform detection on image data and get landmarks directly
+std::vector<float> landmarks = faceDetector->Detect(
+    buffer,                     // image data pointer (const unsigned char*)
+    width,                      // image width (int)
+    height,                     // image height (int)
+    GPUPIXEL_MODE_FMT_PICTURE,  // image format (GPUPIXEL_MODE_FMT)
+    GPUPIXEL_FRAME_TYPE_RGBA    // frame type (GPUPIXEL_FRAME_TYPE)
 );
+
+// Check if landmarks were detected
+if (!landmarks.empty()) {
+    // Apply landmarks to filters
+    lipstickFilter->SetFaceLandmarks(landmarks);
+    blusherFilter->SetFaceLandmarks(landmarks);
+    reshapeFilter->SetFaceLandmarks(landmarks);
+}
 ```
 
 ### Image Format Support
-The SDK supports various input formats including:
-- RGBA8888
-- YUVI420
+The detector supports various input formats:
+
+**Format Parameter (GPUPIXEL_MODE_FMT)**:
+- `GPUPIXEL_MODE_FMT_VIDEO`: For video source
+- `GPUPIXEL_MODE_FMT_PICTURE`: For still images
+
+**Frame Type Parameter (GPUPIXEL_FRAME_TYPE)**:
+- `GPUPIXEL_FRAME_TYPE_YUVI420`: YUV I420 format
+- `GPUPIXEL_FRAME_TYPE_RGBA`: RGBA format
+- `GPUPIXEL_FRAME_TYPE_BGRA`: BGRA format
 
 ## Performance Considerations
-- The SDK is optimized for mobile and embedded devices using MNN framework
+- The detector is optimized for both real-time video and still image processing
 - Landmark coordinates are normalized to [0,1] range
-- Detection results are provided through callback mechanism for efficient integration
+- Detection results are returned directly as a vector of float values
 
 ## API Reference
 
 ### FaceDetector Class
 ```cpp
 class FaceDetector {
-    public:
-        FaceDetector();
-        ~FaceDetector();
-        
-        // Perform face detection on image data
-        int Detect(const uint8_t* data,
-                   int width,
-                   int height,
-                   GPUPIXEL_MODE_FMT fmt,
-                   GPUPIXEL_FRAME_TYPE type);
-        
-        // Register callback for detection results
-        int RegCallback(FaceDetectorCallback callback);
+public:
+    FaceDetector();
+    ~FaceDetector();
+    
+    // Perform face detection on image data and return landmarks
+    std::vector<float> Detect(
+        const uint8_t* data,         // image data pointer
+        int width,                   // image width
+        int height,                  // image height
+        GPUPIXEL_MODE_FMT fmt,       // image format
+        GPUPIXEL_FRAME_TYPE type     // frame type
+    );
 };
 ```
 
-### Callback Function
-```cpp
-typedef std::function<void(std::vector<float> landmarks)> FaceDetectorCallback;
-```
-
-### Detection Result
-The landmarks vector in the callback contains normalized (x,y) coordinates for all 111 points, arranged sequentially:
-- Index 0-211: Basic 106 landmarks (x,y pairs)
-- Index 212-221: Extended 5 landmarks (x,y pairs)
+### Landmark Result Format
+The returned landmarks vector contains normalized (x,y) coordinates for all detected points, arranged sequentially:
+- For each landmark point, two consecutive float values represent its (x,y) coordinates
+- The coordinates are normalized to the image dimensions (range 0.0 to 1.0)
+- If no face is detected, an empty vector is returned

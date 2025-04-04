@@ -9,8 +9,6 @@
 
 namespace gpupixel {
 
-REGISTER_FILTER_CLASS(ContrastFilter)
-
 const std::string kContrastFragmentShaderString = R"(
     uniform sampler2D inputImageTexture; uniform lowp float contrast;
     varying highp vec2 textureCoordinate;
@@ -34,8 +32,8 @@ bool ContrastFilter::Init() {
     return false;
   }
 
-  _contrast = 1.0;
-  RegisterProperty("contrast", _contrast,
+  contrast_factor_ = 1.0;
+  RegisterProperty("contrast", contrast_factor_,
                    "The contrast of the image. Contrast ranges from 0.0 to 4.0 "
                    "(max contrast), with 1.0 as the normal level",
                    [this](float& contrast) { setContrast(contrast); });
@@ -44,17 +42,17 @@ bool ContrastFilter::Init() {
 }
 
 void ContrastFilter::setContrast(float contrast) {
-  _contrast = contrast;
-  if (_contrast > 4.0) {
-    _contrast = 4.0;
-  } else if (_contrast < 0.0) {
-    _contrast = 0.0;
+  contrast_factor_ = contrast;
+  if (contrast_factor_ > 4.0) {
+    contrast_factor_ = 4.0;
+  } else if (contrast_factor_ < 0.0) {
+    contrast_factor_ = 0.0;
   }
 }
 
 bool ContrastFilter::DoRender(bool updateSinks) {
-  _filterProgram->SetUniformValue("contrast", _contrast);
+  filter_program_->SetUniformValue("contrast", contrast_factor_);
   return Filter::DoRender(updateSinks);
 }
 
-} // namespace gpupixel
+}  // namespace gpupixel

@@ -11,9 +11,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ToobarCollectionViewCell : UICollectionViewCell
 
-@property (nonatomic, strong) NSString *title;
+@property(nonatomic, strong) NSString* title;
 
-+ (NSString *)reuseIdentifier;
++ (NSString*)reuseIdentifier;
 
 @end
 

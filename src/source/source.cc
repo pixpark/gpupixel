@@ -16,9 +16,9 @@
 namespace gpupixel {
 
 Source::Source()
-    : _framebuffer(0),
-      _outputRotation(RotationMode::NoRotation),
-      _framebufferScale(1.0) {}
+    : framebuffer_(0),
+      output_rotation_(RotationMode::NoRotation),
+      framebuffer_scale_(1.0) {}
 
 Source::~Source() {
   RemoveAllSinks();
@@ -30,10 +30,10 @@ std::shared_ptr<Source> Source::AddSink(std::shared_ptr<Sink> sink) {
 }
 
 std::shared_ptr<Source> Source::AddSink(std::shared_ptr<Sink> sink,
-                                          int texIdx) {
+                                        int texIdx) {
   if (!HasSink(sink)) {
-    _sinks[sink] = texIdx;
-    sink->SetInputFramebuffer(_framebuffer, RotationMode::NoRotation, texIdx);
+    sinks_[sink] = texIdx;
+    sink->SetInputFramebuffer(framebuffer_, RotationMode::NoRotation, texIdx);
   }
   return std::dynamic_pointer_cast<Source>(sink);
 }
@@ -47,7 +47,7 @@ std::shared_ptr<Source> Source::AddSink(id<GPUPixelSink> sink) {
 #endif
 
 bool Source::HasSink(const std::shared_ptr<Sink> sink) const {
-  if (_sinks.find(sink) != _sinks.end()) {
+  if (sinks_.find(sink) != sinks_.end()) {
     return true;
   } else {
     return false;
@@ -55,14 +55,14 @@ bool Source::HasSink(const std::shared_ptr<Sink> sink) const {
 }
 
 void Source::RemoveSink(std::shared_ptr<Sink> sink) {
-  auto itr = _sinks.find(sink);
-  if (itr != _sinks.end()) {
-    _sinks.erase(itr);
+  auto itr = sinks_.find(sink);
+  if (itr != sinks_.end()) {
+    sinks_.erase(itr);
   }
 }
 
 void Source::RemoveAllSinks() {
-  _sinks.clear();
+  sinks_.clear();
 }
 
 bool Source::DoRender(bool updateSinks) {
@@ -73,10 +73,9 @@ bool Source::DoRender(bool updateSinks) {
 }
 
 void Source::DoUpdateSinks() {
-  for (auto& it : _sinks) {
+  for (auto& it : sinks_) {
     auto sink = it.first;
-    sink->SetInputFramebuffer(_framebuffer, _outputRotation,
-                                _sinks[sink]);
+    sink->SetInputFramebuffer(framebuffer_, output_rotation_, sinks_[sink]);
     if (sink->IsReady()) {
       sink->Render();
       sink->ResetAndClean();
@@ -84,53 +83,52 @@ void Source::DoUpdateSinks() {
   }
 }
 
-unsigned char* Source::GetProcessedFrameData(
-    std::shared_ptr<Filter> upToFilter,
-    int width /* = 0*/,
-    int height /* = 0*/) {
-  if (GPUPixelContext::GetInstance()->isCapturingFrame) {
+unsigned char* Source::GetProcessedFrameData(std::shared_ptr<Filter> upToFilter,
+                                             int width /* = 0*/,
+                                             int height /* = 0*/) {
+  if (GPUPixelContext::GetInstance()->is_capturing_frame_) {
     return 0;
   }
 
   if (width <= 0 || height <= 0) {
-    if (!_framebuffer) {
+    if (!framebuffer_) {
       return 0;
     }
-    width =GetRotatedFramebufferWidth();
+    width = GetRotatedFramebufferWidth();
     height = GetRotatedFramebufferHeight();
   }
 
-  GPUPixelContext::GetInstance()->isCapturingFrame = true;
-  GPUPixelContext::GetInstance()->captureWidth = width;
-  GPUPixelContext::GetInstance()->captureHeight = height;
-  GPUPixelContext::GetInstance()->captureUpToFilter = upToFilter;
+  GPUPixelContext::GetInstance()->is_capturing_frame_ = true;
+  GPUPixelContext::GetInstance()->capture_width_ = width;
+  GPUPixelContext::GetInstance()->capture_height_ = height;
+  GPUPixelContext::GetInstance()->capture_frame_filter_ = upToFilter;
 
   DoRender(true);
   unsigned char* processedFrameData =
-      GPUPixelContext::GetInstance()->capturedFrameData;
+      GPUPixelContext::GetInstance()->capture_frame_data_;
 
-  GPUPixelContext::GetInstance()->capturedFrameData = 0;
-  GPUPixelContext::GetInstance()->captureWidth = 0;
-  GPUPixelContext::GetInstance()->captureHeight = 0;
-  GPUPixelContext::GetInstance()->isCapturingFrame = false;
-  GPUPixelContext::GetInstance()->captureUpToFilter.reset();
-        
+  GPUPixelContext::GetInstance()->capture_frame_data_ = 0;
+  GPUPixelContext::GetInstance()->capture_width_ = 0;
+  GPUPixelContext::GetInstance()->capture_height_ = 0;
+  GPUPixelContext::GetInstance()->is_capturing_frame_ = false;
+  GPUPixelContext::GetInstance()->capture_frame_filter_.reset();
+
   return processedFrameData;
 }
 
 void Source::SetFramebuffer(
     std::shared_ptr<GPUPixelFramebuffer> fb,
     RotationMode outputRotation /* = RotationMode::NoRotation*/) {
-  _framebuffer = fb;
-  _outputRotation = outputRotation;
+  framebuffer_ = fb;
+  output_rotation_ = outputRotation;
 }
 
 int Source::GetRotatedFramebufferWidth() const {
-  if (_framebuffer) {
-    if (rotationSwapsSize(_outputRotation)) {
-      return _framebuffer->GetHeight();
+  if (framebuffer_) {
+    if (rotationSwapsSize(output_rotation_)) {
+      return framebuffer_->GetHeight();
     } else {
-      return _framebuffer->GetWidth();
+      return framebuffer_->GetWidth();
     }
   } else {
     return 0;
@@ -138,11 +136,11 @@ int Source::GetRotatedFramebufferWidth() const {
 }
 
 int Source::GetRotatedFramebufferHeight() const {
-  if (_framebuffer) {
-    if (rotationSwapsSize(_outputRotation)) {
-      return _framebuffer->GetWidth();
+  if (framebuffer_) {
+    if (rotationSwapsSize(output_rotation_)) {
+      return framebuffer_->GetWidth();
     } else {
-      return _framebuffer->GetHeight();
+      return framebuffer_->GetHeight();
     }
   } else {
     return 0;
@@ -150,9 +148,9 @@ int Source::GetRotatedFramebufferHeight() const {
 }
 
 std::shared_ptr<GPUPixelFramebuffer> Source::GetFramebuffer() const {
-  return _framebuffer;
+  return framebuffer_;
 }
 
 void Source::ReleaseFramebuffer(bool returnToCache /* = true*/) {}
 
-}
+}  // namespace gpupixel

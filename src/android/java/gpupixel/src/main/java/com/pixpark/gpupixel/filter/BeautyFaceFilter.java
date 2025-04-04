@@ -1,6 +1,6 @@
 package com.pixpark.gpupixel.filter;
 
-// 美颜 美白
+// Beauty and whitening filter
 public final class BeautyFaceFilter extends GPUPixelFilter {
     private static final String name = "BeautyFaceFilter";
     private static final String propSmoothLevel = "skin_smoothing";

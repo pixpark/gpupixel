@@ -28,16 +28,17 @@ class GPUPIXEL_API BeautyFaceFilter : public FilterGroup {
   void SetWhite(float white);
   void SetRadius(float sigma);
 
-  virtual void SetInputFramebuffer(std::shared_ptr<GPUPixelFramebuffer> framebuffer,
-                                   RotationMode rotationMode /* = NoRotation*/,
-                                   int texIdx /* = 0*/) override;
+  virtual void SetInputFramebuffer(
+      std::shared_ptr<GPUPixelFramebuffer> framebuffer,
+      RotationMode rotation_mode /* = NoRotation*/,
+      int texIdx /* = 0*/) override;
 
  protected:
   BeautyFaceFilter();
 
-  std::shared_ptr<BoxBlurFilter> boxBlurFilter;
-  std::shared_ptr<BoxHighPassFilter> boxHighPassFilter;
-  std::shared_ptr<BeautyFaceUnitFilter> beautyFilter;
+  std::shared_ptr<BoxBlurFilter> box_blur_filter_;
+  std::shared_ptr<BoxHighPassFilter> box_high_pass_filter_;
+  std::shared_ptr<BeautyFaceUnitFilter> beauty_face_filter_;
 };
 
-}
+}  // namespace gpupixel

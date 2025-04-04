@@ -40,11 +40,11 @@
 
 ## Introduction
 
-🚀 GPUPixel is a real-time, high-performance image and video filter library that's extremely easy to compile and integrate with a small footprint.
+🚀 A high-performance, cross-platform image and video filter library with a small footprint.
 
-💻 GPUPixel is written in C++11 and built on OpenGL/ES, featuring built-in beauty face filters that deliver commercial-grade results.
+💻 Built with C++11 and OpenGL/ES, featuring beauty filters.
 
-🌐 GPUPixel supports multiple platforms including `iOS`, `Android`, `Mac`, `Win` and `Linux`, and can be ported to virtually any platform that supports OpenGL/ES.
+🌐 Supports iOS, Android, Mac, Windows, and Linux—compatible with any OpenGL/ES platform.
 
 ## Effects Preview
 
@@ -62,7 +62,7 @@
 
 ## Features
 
-✨ This table compares the features supported by **GPUPixel**, **GPUImage**, and **Android-GPUImage**:
+✨ Features comparison between **GPUPixel**, **GPUImage**, and **Android-GPUImage**:
 
 ✅: Supported | ❌: Not supported | ✏️: Planning
 
@@ -95,7 +95,7 @@
 
 
 ## Before You Start
-⭐ Star us on GitHub to receive instant notifications about new releases!
+⭐ Star us on GitHub for notifications about new releases!
 
 ![](./docs/image/give-star.gif)
 
@@ -107,22 +107,22 @@
 
 ## Contributing
 
-🤝 Help make GPUPixel better by joining our [discussions](https://github.com/pixpark/gpupixel/discussions), opening [issues](https://github.com/pixpark/gpupixel/issues/new/choose), or submitting [PRs](https://github.com/pixpark/gpupixel/pulls). Check our [Contributing Guide](docs/docs/en/guide/contributing.md) to get started.
+🤝 Improve GPUPixel by joining [discussions](https://github.com/pixpark/gpupixel/discussions), opening [issues](https://github.com/pixpark/gpupixel/issues/new/choose), or submitting [PRs](https://github.com/pixpark/gpupixel/pulls). See our [Contributing Guide](docs/docs/en/guide/contributing.md) to get started.
 
-Please also consider supporting GPUPixel by sharing it on social media and at events and conferences.
+Consider sharing GPUPixel on social media and at events.
 
 ## Contributors
  [![](https://opencollective.com/gpupixel/contributors.svg?width=890&button=false)](https://github.com/pixpark/gpupixel/graphs/contributors)
 
 ## Sponsorship
-💖 If you like this project, consider supporting us through the following methods:
+💖 Support this project through:
 
 | [☕ Support me on Ko-fi](docs/docs/en/sponsor.md#ko-fi) | [💝 Support on Open Collective](docs/docs/en/sponsor.md#open-collective) | [💰 WeChat Sponsor](docs/docs/en/sponsor.md#wechat) |
 |:---:|:---:|:---:|
 
 ## Sponsors
 
-🙏 Thank you to the following contributors for their generous support of the project:
+🙏 Thanks to these contributors for their generous support:
 
 <a href="https://github.com/leavenotrace">
   <picture>
@@ -136,10 +136,10 @@ Please also consider supporting GPUPixel by sharing it on social media and at ev
 </a>
 
 ## Contact & Support
-- 📚 [Docs](https://gpupixel.pixpark.net/) : Online documentation
-- 🐛 [Issues](https://github.com/pixpark/gpupixel/issues/new/choose) : Report bugs or request features
-- 📧 [Email](mailto:jaaronkot@gmail.com?subject=[GitHub]Questions%20About%20GPUPixel) : Send us a message
-- 📞 [Contact](docs/docs/en/about/contact.md) : Get in touch with us
+- 📚 [Docs](https://gpupixel.pixpark.net/): Documentation
+- 🐛 [Issues](https://github.com/pixpark/gpupixel/issues/new/choose): Bug reports and feature requests
+- 📧 [Email](mailto:jaaronkot@gmail.com?subject=[GitHub]Questions%20About%20GPUPixel): Contact us
+- 📞 [Contact](docs/docs/en/about/contact.md): More ways to connect
 
 ## Acknowledgements
 ### 🔗 Reference Projects

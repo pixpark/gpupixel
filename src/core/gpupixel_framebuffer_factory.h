@@ -9,8 +9,8 @@
 
 #include <map>
 #include <string>
-#include "gpupixel_framebuffer.h"
 #include "gpupixel_define.h"
+#include "gpupixel_framebuffer.h"
 
 namespace gpupixel {
 class GPUPIXEL_API FramebufferFactory {
@@ -20,21 +20,22 @@ class GPUPIXEL_API FramebufferFactory {
   std::shared_ptr<GPUPixelFramebuffer> CreateFramebuffer(
       int width,
       int height,
-      bool onlyTexture = false,
-      const TextureAttributes textureAttributes =
-          GPUPixelFramebuffer::defaultTextureAttribures);
+      bool only_texture = false,
+      const TextureAttributes texture_attributes =
+          GPUPixelFramebuffer::default_texture_attributes);
 
   void Clean();
 
  private:
-  std::string uuid(int width,
-                       int height,
-                       bool onlyTexture,
-                       const TextureAttributes textureAttributes) const;
-  std::shared_ptr<GPUPixelFramebuffer> _getFramebufferByUuid(const std::string& hash);
+  std::string GenerateUuid(int width,
+                           int height,
+                           bool only_texture,
+                           const TextureAttributes texture_attributes) const;
+  std::shared_ptr<GPUPixelFramebuffer> GetFramebufferByUuid(
+      const std::string& hash);
 
-  std::map<std::string, std::shared_ptr<GPUPixelFramebuffer>> _framebuffers;
-  std::map<std::string, int> _framebufferTypeCounts;
+  std::map<std::string, std::shared_ptr<GPUPixelFramebuffer>> framebuffers_;
+  std::map<std::string, int> framebuffer_type_counts_;
 };
 
-}
+}  // namespace gpupixel

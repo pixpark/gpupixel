@@ -10,8 +10,8 @@
 #include <vector>
 #include "filter.h"
 #include "gpupixel_define.h"
-#include "source.h"
 #include "sink.h"
+#include "source.h"
 
 namespace gpupixel {
 class GPUPIXEL_API FilterGroup : public Filter {
@@ -24,22 +24,21 @@ class GPUPIXEL_API FilterGroup : public Filter {
 
   bool Init();
   bool Init(std::vector<std::shared_ptr<Filter>> filters);
-  bool hasFilter(const std::shared_ptr<Filter> filter) const;
-  void addFilter(std::shared_ptr<Filter> filter);
-  void removeFilter(std::shared_ptr<Filter> filter);
-  void removeAllFilters();
+  bool HasFilter(const std::shared_ptr<Filter> filter) const;
+  void AddFilter(std::shared_ptr<Filter> filter);
+  void RemoveFilter(std::shared_ptr<Filter> filter);
+  void RemoveAllFilters();
 
   // Manually specify the terminal filter, which is the final output filter of
   // sequence Most often, it's not necessary to specify the terminal filter
   // manually, as the terminal filter will be specified automatically.
-  void setTerminalFilter(std::shared_ptr<Filter> filter) {
-    _terminalFilter = filter;
+  void SetTerminalFilter(std::shared_ptr<Filter> filter) {
+    terminal_filter_ = filter;
   }
 
-  virtual std::shared_ptr<Source> AddSink(
-      std::shared_ptr<Sink> sink) override;
+  virtual std::shared_ptr<Source> AddSink(std::shared_ptr<Sink> sink) override;
   virtual std::shared_ptr<Source> AddSink(std::shared_ptr<Sink> sink,
-                                            int inputNumber) override;
+                                          int inputNumber) override;
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
   virtual std::shared_ptr<Source> AddSink(id<GPUPixelSink> sink) override;
 #endif
@@ -54,21 +53,22 @@ class GPUPIXEL_API FilterGroup : public Filter {
       std::shared_ptr<GPUPixelFramebuffer> fb,
       RotationMode outputRotation = RotationMode::NoRotation) override;
 
-  virtual std::shared_ptr<GPUPixelFramebuffer>GetFramebuffer() const override;
-  virtual void SetInputFramebuffer(std::shared_ptr<GPUPixelFramebuffer> framebuffer,
-                                   RotationMode rotationMode = NoRotation,
-                                   int texIdx = 0) override;
+  virtual std::shared_ptr<GPUPixelFramebuffer> GetFramebuffer() const override;
+  virtual void SetInputFramebuffer(
+      std::shared_ptr<GPUPixelFramebuffer> framebuffer,
+      RotationMode rotation_mode = NoRotation,
+      int texIdx = 0) override;
 
   virtual bool IsReady() const override;
   virtual void ResetAndClean() override;
 
  protected:
-  std::vector<std::shared_ptr<Filter>> _filters;
-  std::shared_ptr<Filter> _terminalFilter;
+  std::vector<std::shared_ptr<Filter>> filters_;
+  std::shared_ptr<Filter> terminal_filter_;
 
   FilterGroup();
-  static std::shared_ptr<Filter> _predictTerminalFilter(
+  static std::shared_ptr<Filter> PredictTerminalFilter(
       std::shared_ptr<Filter> filter);
 };
 
-}
+}  // namespace gpupixel

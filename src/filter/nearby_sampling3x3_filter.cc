@@ -53,11 +53,11 @@ bool NearbySampling3x3Filter::InitWithFragmentShaderString(
     int inputNumber /* = 1*/) {
   if (Filter::InitWithShaderString(kNearbySampling3x3SamplingVertexShaderString,
                                    fragmentShaderSource)) {
-    _texelSizeMultiplier = 1.0;
-    _texelWidthUniform = _filterProgram->GetUniformLocation("texelWidth");
-    _texelHeightUniform = _filterProgram->GetUniformLocation("texelHeight");
+    texel_size_multiplier_ = 1.0;
+    texel_width_uniform_ = filter_program_->GetUniformLocation("texelWidth");
+    texel_height_uniform_ = filter_program_->GetUniformLocation("texelHeight");
 
-    RegisterProperty("texelSizeMultiplier", _texelSizeMultiplier, "",
+    RegisterProperty("texelSizeMultiplier", texel_size_multiplier_, "",
                      [this](float& texelSizeMultiplier) {
                        setTexelSizeMultiplier(texelSizeMultiplier);
                      });
@@ -68,25 +68,26 @@ bool NearbySampling3x3Filter::InitWithFragmentShaderString(
 }
 
 bool NearbySampling3x3Filter::DoRender(bool updateSinks) {
-  float texelWidth = _texelSizeMultiplier / _framebuffer->GetWidth();
-  float texelHeight = _texelSizeMultiplier / _framebuffer->GetHeight();
+  float texelWidth = texel_size_multiplier_ / framebuffer_->GetWidth();
+  float texelHeight = texel_size_multiplier_ / framebuffer_->GetHeight();
 
-  RotationMode inputRotation = input_framebuffers_.begin()->second.rotationMode;
+  RotationMode inputRotation =
+      input_framebuffers_.begin()->second.rotation_mode;
   if (rotationSwapsSize(inputRotation)) {
-    texelWidth = _texelSizeMultiplier / _framebuffer->GetHeight();
-    texelHeight = _texelSizeMultiplier / _framebuffer->GetWidth();
+    texelWidth = texel_size_multiplier_ / framebuffer_->GetHeight();
+    texelHeight = texel_size_multiplier_ / framebuffer_->GetWidth();
   }
 
-  _filterProgram->SetUniformValue(_texelWidthUniform, texelWidth);
-  _filterProgram->SetUniformValue(_texelHeightUniform, texelHeight);
+  filter_program_->SetUniformValue(texel_width_uniform_, texelWidth);
+  filter_program_->SetUniformValue(texel_height_uniform_, texelHeight);
   return Filter::DoRender(updateSinks);
 }
 
 void NearbySampling3x3Filter::setTexelSizeMultiplier(
     float texelSizeMultiplier) {
   if (texelSizeMultiplier > 0) {
-    _texelSizeMultiplier = texelSizeMultiplier;
+    texel_size_multiplier_ = texelSizeMultiplier;
   }
 }
 
-}
+}  // namespace gpupixel

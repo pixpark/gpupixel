@@ -780,4 +780,4 @@ Matrix3& Matrix3::operator*=(float scalar) {
   return *this;
 }
 
-}
+}  // namespace gpupixel

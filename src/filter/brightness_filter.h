@@ -20,9 +20,9 @@ class GPUPIXEL_API BrightnessFilter : public Filter {
   void setBrightness(float brightness);
 
  protected:
-  BrightnessFilter(){};
+  BrightnessFilter() {};
 
-  float _brightness;
+  float brightness_factor_;
 };
 
-}
+}  // namespace gpupixel

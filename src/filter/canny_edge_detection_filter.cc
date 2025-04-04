@@ -9,14 +9,12 @@
 
 namespace gpupixel {
 
-REGISTER_FILTER_CLASS(CannyEdgeDetectionFilter)
-
 CannyEdgeDetectionFilter::CannyEdgeDetectionFilter()
-    : _grayscaleFilter(0),
-      _blurFilter(0),
-      _edgeDetectionFilter(0),
-      _nonMaximumSuppressionFilter(0),
-      _weakPixelInclusionFilter(0) {}
+    : grayscale_filter_(0),
+      blur_filter_(0),
+      edge_detection_filter_(0),
+      non_maximum_suppression_filter_(0),
+      weak_pixel_inclusion_filter_(0) {}
 
 CannyEdgeDetectionFilter::~CannyEdgeDetectionFilter() {}
 
@@ -35,28 +33,28 @@ bool CannyEdgeDetectionFilter::Init() {
   }
 
   // 1. convert image to luminance
-  _grayscaleFilter = GrayscaleFilter::Create();
+  grayscale_filter_ = GrayscaleFilter::Create();
 
   // 2. apply a varialbe Gaussian blur
-  _blurFilter = SingleComponentGaussianBlurFilter::Create();
+  blur_filter_ = SingleComponentGaussianBlurFilter::Create();
 
   // 3. soble edge detection
-  _edgeDetectionFilter = DirectionalSobelEdgeDetectionFilter::Create();
+  edge_detection_filter_ = DirectionalSobelEdgeDetectionFilter::Create();
 
   // 4. apply non-maximum suppression
-  _nonMaximumSuppressionFilter =
+  non_maximum_suppression_filter_ =
       DirectionalNonMaximumSuppressionFilter::Create();
 
   // 5. include weak pixels to complete edges
-  _weakPixelInclusionFilter = WeakPixelInclusionFilter::Create();
+  weak_pixel_inclusion_filter_ = WeakPixelInclusionFilter::Create();
 
-  _grayscaleFilter->AddSink(_blurFilter)
-      ->AddSink(_edgeDetectionFilter)
-      ->AddSink(_nonMaximumSuppressionFilter)
-      ->AddSink(_weakPixelInclusionFilter);
-  addFilter(_grayscaleFilter);
+  grayscale_filter_->AddSink(blur_filter_)
+      ->AddSink(edge_detection_filter_)
+      ->AddSink(non_maximum_suppression_filter_)
+      ->AddSink(weak_pixel_inclusion_filter_);
+  AddFilter(grayscale_filter_);
 
   return true;
 }
 
-}
+}  // namespace gpupixel

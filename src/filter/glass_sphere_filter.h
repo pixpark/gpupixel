@@ -17,7 +17,7 @@ class GPUPIXEL_API GlassSphereFilter : public SphereRefractionFilter {
   bool Init();
 
  protected:
-  GlassSphereFilter(){};
+  GlassSphereFilter() {};
 };
 
-}
+}  // namespace gpupixel

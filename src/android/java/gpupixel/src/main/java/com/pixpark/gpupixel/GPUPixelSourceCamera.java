@@ -17,6 +17,7 @@ import android.os.Build;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.WindowManager;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -30,14 +31,14 @@ public class GPUPixelSourceCamera extends GPUPixelSource implements Camera.Previ
     private SurfaceTexture mSurfaceTexture = null;
     private GPUPixelSourceRawData SourceRawData = null;
     private Object object_this;
-    
-    // 添加数据回调接口
+
+    // Add data callback interface
     public interface FrameDataCallback {
         void onFrameData(ByteBuffer rgbaData, int width, int height);
     }
-    
+
     private FrameDataCallback mFrameDataCallback = null;
-    
+
     public GPUPixelSourceCamera(Context context) {
         mContext = context;
         object_this = this;
@@ -51,8 +52,8 @@ public class GPUPixelSourceCamera extends GPUPixelSource implements Camera.Previ
 
         setUpCamera(mCurrentCameraId);
     }
-    
-    // 设置数据回调
+
+    // Set data callback
     public void setFrameDataCallback(FrameDataCallback callback) {
         mFrameDataCallback = callback;
     }
@@ -61,9 +62,9 @@ public class GPUPixelSourceCamera extends GPUPixelSource implements Camera.Previ
     public void onPreviewFrame(final byte[] data, Camera camera) {
         final Camera.Size previewSize = camera.getParameters().getPreviewSize();
         final int frameSize = previewSize.width * previewSize.height;
-        
+
         if (mByteBuffer == null) {
-            // 初始化ByteBuffer用于存储RGBA数据
+            // Initialize ByteBuffer for storing RGBA data
             mByteBuffer = ByteBuffer.allocateDirect(frameSize * 4);
             mByteBuffer.order(ByteOrder.nativeOrder());
         }
@@ -73,20 +74,23 @@ public class GPUPixelSourceCamera extends GPUPixelSource implements Camera.Previ
             @Override
             public void run() {
                 if (mNativeClassID != 0) {
-                    // 直接从YUV转换为RGBA的byte[]
+                    // Convert directly from YUV to RGBA byte[]
                     mByteBuffer.clear();
-                    GPUPixel.nativeYUVtoRBGA(data, previewSize.width, previewSize.height, mByteBuffer.array());
-                    mByteBuffer.position(frameSize * 4); // 设置位置到末尾
-                    mByteBuffer.flip(); // 准备读取
-                    
-                    // 通过回调接口将RGBA数据回调出去
+                    GPUPixel.nativeYUVtoRBGA(
+                            data, previewSize.width, previewSize.height, mByteBuffer.array());
+                    mByteBuffer.position(frameSize * 4); // Set position to the end
+                    mByteBuffer.flip(); // Prepare for reading
+
+                    // Callback RGBA data through callback interface
                     if (mFrameDataCallback != null) {
-                        mFrameDataCallback.onFrameData(mByteBuffer, previewSize.height, previewSize.width);
-                        mByteBuffer.rewind(); // 重置以便后续使用
+                        mFrameDataCallback.onFrameData(
+                                mByteBuffer, previewSize.height, previewSize.width);
+                        mByteBuffer.rewind(); // Reset for subsequent use
                     }
-                    
+
                     cam.addCallbackBuffer(data);
-                    GPUPixel.nativeSourceCameraSetFrame(mNativeClassID, previewSize.height, previewSize.width, mByteBuffer.array(), GPUPixel.NoRotation);
+                    GPUPixel.nativeSourceCameraSetFrame(mNativeClassID, previewSize.height,
+                            previewSize.width, mByteBuffer.array(), GPUPixel.NoRotation);
                 }
             }
         });
@@ -115,15 +119,16 @@ public class GPUPixelSourceCamera extends GPUPixelSource implements Camera.Previ
         mCamera = Camera.open(id);
         Camera.Parameters parameters = mCamera.getParameters();
         if (parameters.getSupportedFocusModes().contains(
-                Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
+                    Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
             parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
         }
         parameters.setPreviewSize(1280, 720);
         parameters.setPreviewFormat(ImageFormat.NV21);
         mCamera.setParameters(parameters);
 
-        int deviceRotation = ((WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay()
-                .getRotation();
+        int deviceRotation = ((WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE))
+                                     .getDefaultDisplay()
+                                     .getRotation();
         android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
         android.hardware.Camera.getCameraInfo(mCurrentCameraId, info);
 
@@ -208,7 +213,6 @@ public class GPUPixelSourceCamera extends GPUPixelSource implements Camera.Previ
         }
         mCamera.startPreview();
     };
-
 
     private void releaseCamera() {
         mSurfaceTexture = null;

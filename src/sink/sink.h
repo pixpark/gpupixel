@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include "gpupixel_framebuffer.h"
 #include "gpupixel_define.h"
+#include "gpupixel_framebuffer.h"
 
 #include <map>
 
@@ -26,27 +26,29 @@ GPUPIXEL_API enum RotationMode {
 
 class GPUPIXEL_API Sink {
  public:
-  Sink(int inputNumber = 1);
+  Sink(int input_number = 1);
   virtual ~Sink();
-  virtual void SetInputFramebuffer(std::shared_ptr<GPUPixelFramebuffer> framebuffer,
-                                   RotationMode rotationMode = NoRotation,
-                                   int texIdx = 0);
+  virtual void SetInputFramebuffer(
+      std::shared_ptr<GPUPixelFramebuffer> framebuffer,
+      RotationMode rotation_mode = NoRotation,
+      int tex_idx = 0);
 
   virtual bool IsReady() const;
   virtual void ResetAndClean();
-  virtual void Render(){};
+  virtual void Render() {};
   virtual int NextAvailableTextureIndex() const;
-  // virtual void setInputSizeWithIdx(int width, int height, int textureIdx) {};
+  // virtual void SetInputSizeWithIdx(int width, int height, int texture_idx)
+  // {};
  protected:
   struct InputFrameBufferInfo {
-    std::shared_ptr<GPUPixelFramebuffer> frameBuffer;
-    RotationMode rotationMode;
-    int texIndex;
-    bool ignoreForPrepare;
+    std::shared_ptr<GPUPixelFramebuffer> frame_buffer;
+    RotationMode rotation_mode;
+    int tex_index;
+    bool ignore_for_prepare;
   };
 
   std::map<int, InputFrameBufferInfo> input_framebuffers_;
   int input_count_;
 };
 
-}
+}  // namespace gpupixel

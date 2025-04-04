@@ -19,9 +19,9 @@ std::shared_ptr<LipstickFilter> LipstickFilter::Create() {
 
 bool LipstickFilter::Init() {
   auto mouth = SourceImage::Create(Util::getResourcePath("res/mouth.png"));
-  setImageTexture(mouth);
-  setTextureBounds(FrameBounds{502.5, 710, 262.5, 167.5});
+  SetImageTexture(mouth);
+  SetTextureBounds(FrameBounds{502.5, 710, 262.5, 167.5});
   return FaceMakeupFilter::Init();
 }
 
-}
+}  // namespace gpupixel

@@ -12,11 +12,11 @@
 
 namespace gpupixel {
 
-FilterGroup::FilterGroup() : _terminalFilter(0) {}
+FilterGroup::FilterGroup() : terminal_filter_(0) {}
 
 FilterGroup::~FilterGroup() {
-  removeAllFilters();
-  _terminalFilter = 0;
+  RemoveAllFilters();
+  terminal_filter_ = 0;
 }
 
 std::shared_ptr<FilterGroup> FilterGroup::Create() {
@@ -44,62 +44,62 @@ bool FilterGroup::Init(std::vector<std::shared_ptr<Filter>> filters) {
   if (filters.size() == 0) {
     return true;
   }
-  _filters = filters;
-  setTerminalFilter(_predictTerminalFilter(filters[filters.size() - 1]));
+  filters_ = filters;
+  SetTerminalFilter(PredictTerminalFilter(filters[filters.size() - 1]));
   return true;
 }
 
-bool FilterGroup::hasFilter(const std::shared_ptr<Filter> filter) const {
-  auto it = std::find(_filters.begin(), _filters.end(), filter);
-  if (it != _filters.end()) {
+bool FilterGroup::HasFilter(const std::shared_ptr<Filter> filter) const {
+  auto it = std::find(filters_.begin(), filters_.end(), filter);
+  if (it != filters_.end()) {
     return true;
   } else {
     return false;
   }
 }
 
-void FilterGroup::addFilter(std::shared_ptr<Filter> filter) {
-  if (hasFilter(filter)) {
+void FilterGroup::AddFilter(std::shared_ptr<Filter> filter) {
+  if (HasFilter(filter)) {
     return;
   }
 
-  _filters.push_back(filter);
-  setTerminalFilter(_predictTerminalFilter(filter));
+  filters_.push_back(filter);
+  SetTerminalFilter(PredictTerminalFilter(filter));
 }
 
-void FilterGroup::removeFilter(std::shared_ptr<Filter> filter) {
-  auto itr = std::find(_filters.begin(), _filters.end(), filter);
-  if (itr != _filters.end()) {
-    _filters.erase(itr);
+void FilterGroup::RemoveFilter(std::shared_ptr<Filter> filter) {
+  auto itr = std::find(filters_.begin(), filters_.end(), filter);
+  if (itr != filters_.end()) {
+    filters_.erase(itr);
   }
 }
 
-void FilterGroup::removeAllFilters() {
-  _filters.clear();
+void FilterGroup::RemoveAllFilters() {
+  filters_.clear();
 }
 
-std::shared_ptr<Filter> FilterGroup::_predictTerminalFilter(
+std::shared_ptr<Filter> FilterGroup::PredictTerminalFilter(
     std::shared_ptr<Filter> filter) {
   if (filter->GetSinks().size() == 0) {
     return filter;
   } else {
-    return _predictTerminalFilter(
+    return PredictTerminalFilter(
         std::dynamic_pointer_cast<Filter>(filter->GetSinks().begin()->first));
   }
 }
 
 std::shared_ptr<Source> FilterGroup::AddSink(std::shared_ptr<Sink> sink) {
-  if (_terminalFilter) {
-    return _terminalFilter->AddSink(sink);
+  if (terminal_filter_) {
+    return terminal_filter_->AddSink(sink);
   } else {
     return 0;
   }
 }
 
 std::shared_ptr<Source> FilterGroup::AddSink(std::shared_ptr<Sink> sink,
-                                               int inputNumber) {
-  if (_terminalFilter) {
-    return _terminalFilter->AddSink(sink, inputNumber);
+                                             int inputNumber) {
+  if (terminal_filter_) {
+    return terminal_filter_->AddSink(sink, inputNumber);
   } else {
     return 0;
   }
@@ -107,8 +107,8 @@ std::shared_ptr<Source> FilterGroup::AddSink(std::shared_ptr<Sink> sink,
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
 std::shared_ptr<Source> FilterGroup::AddSink(id<GPUPixelSink> sink) {
-  if (_terminalFilter) {
-    return _terminalFilter->AddSink(sink);
+  if (terminal_filter_) {
+    return terminal_filter_->AddSink(sink);
   } else {
     return 0;
   }
@@ -116,28 +116,28 @@ std::shared_ptr<Source> FilterGroup::AddSink(id<GPUPixelSink> sink) {
 #endif
 
 void FilterGroup::RemoveSink(std::shared_ptr<Sink> sink) {
-  if (_terminalFilter) {
-    _terminalFilter->RemoveSink(sink);
+  if (terminal_filter_) {
+    terminal_filter_->RemoveSink(sink);
   }
 }
 
 void FilterGroup::RemoveAllSinks() {
-  if (_terminalFilter) {
-    _terminalFilter->RemoveAllSinks();
+  if (terminal_filter_) {
+    terminal_filter_->RemoveAllSinks();
   }
 }
 
 bool FilterGroup::HasSink(const std::shared_ptr<Sink> sink) const {
-  if (_terminalFilter) {
-    return _terminalFilter->HasSink(sink);
+  if (terminal_filter_) {
+    return terminal_filter_->HasSink(sink);
   } else {
     return false;
   }
 }
 
 std::map<std::shared_ptr<Sink>, int>& FilterGroup::GetSinks() {
-  assert(_terminalFilter);
-  return _terminalFilter->GetSinks();
+  assert(terminal_filter_);
+  return terminal_filter_->GetSinks();
 }
 
 bool FilterGroup::DoRender(bool updateSinks) {
@@ -146,12 +146,12 @@ bool FilterGroup::DoRender(bool updateSinks) {
 
 void FilterGroup::Render() {
   DoRender();
-  if (GPUPixelContext::GetInstance()->isCapturingFrame &&
-      this == GPUPixelContext::GetInstance()->captureUpToFilter.get()) {
-    GPUPixelContext::GetInstance()->captureUpToFilter = _terminalFilter;
+  if (GPUPixelContext::GetInstance()->is_capturing_frame_ &&
+      this == GPUPixelContext::GetInstance()->capture_frame_filter_.get()) {
+    GPUPixelContext::GetInstance()->capture_frame_filter_ = terminal_filter_;
   }
 
-  for (auto& filter : _filters) {
+  for (auto& filter : filters_) {
     if (filter->IsReady()) {
       filter->Render();
     }
@@ -159,36 +159,35 @@ void FilterGroup::Render() {
 }
 
 void FilterGroup::DoUpdateSinks() {
-  if (_terminalFilter) {
-    _terminalFilter->DoUpdateSinks();
+  if (terminal_filter_) {
+    terminal_filter_->DoUpdateSinks();
   }
 }
 
 void FilterGroup::SetFramebuffer(
     std::shared_ptr<GPUPixelFramebuffer> fb,
     RotationMode outputRotation /* = RotationMode::NoRotation*/) {
-  // if (_terminalFilter)
-  //     _terminalFilter->SetFramebuffer(fb);
+  // if (terminal_filter_)
+  //     terminal_filter_->SetFramebuffer(fb);
 }
 
 std::shared_ptr<GPUPixelFramebuffer> FilterGroup::GetFramebuffer() const {
-  // if (_terminalFilter)
-  //     return _terminalFilter->GetFramebuffer();
+  // if (terminal_filter_)
+  //     return terminal_filter_->GetFramebuffer();
   return 0;
 }
 
 void FilterGroup::SetInputFramebuffer(
     std::shared_ptr<GPUPixelFramebuffer> framebuffer,
-    RotationMode rotationMode /* = NoRotation*/,
+    RotationMode rotation_mode /* = NoRotation*/,
     int texIdx /* = 0*/) {
-  for (auto& filter : _filters) {
-    filter->SetInputFramebuffer(framebuffer, rotationMode, texIdx);
+  for (auto& filter : filters_) {
+    filter->SetInputFramebuffer(framebuffer, rotation_mode, texIdx);
   }
 }
 
 bool FilterGroup::IsReady() const {
-  // todo(Jeayo)
-  //    for (auto& filter : _filters) {
+  //    for (auto& filter : filters_) {
   //        if (!filter->IsReady())
   //            return false;
   //    }
@@ -196,10 +195,9 @@ bool FilterGroup::IsReady() const {
 }
 
 void FilterGroup::ResetAndClean() {
-  // todo(Jeayo)
-  // for (auto& filter : _filters) {
+  // for (auto& filter : filters_) {
   //    filter->unPrepeared();
   //}
 }
 
-}
+}  // namespace gpupixel

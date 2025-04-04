@@ -9,8 +9,6 @@
 
 namespace gpupixel {
 
-REGISTER_FILTER_CLASS(WeakPixelInclusionFilter)
-
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
 const std::string kWeakPixelInclusionFragmentShaderString = R"(
     precision mediump float; uniform sampler2D inputImageTexture;
@@ -107,4 +105,4 @@ bool WeakPixelInclusionFilter::Init() {
   return false;
 }
 
-}
+}  // namespace gpupixel

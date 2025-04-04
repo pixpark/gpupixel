@@ -18,14 +18,14 @@ class GPUPIXEL_API ColorMatrixFilter : public Filter {
 
   virtual bool DoRender(bool updateSinks = true) override;
 
-  void setIntensity(float intensity) { _intensity = intensity; }
-  void setColorMatrix(Matrix4 colorMatrix) { _colorMatrix = colorMatrix; }
+  void setIntensity(float intensity) { intensity_factor_ = intensity; }
+  void setColorMatrix(Matrix4 color_matrix) { color_matrix_ = color_matrix; }
 
  protected:
   ColorMatrixFilter();
 
-  float _intensity;
-  Matrix4 _colorMatrix;
+  float intensity_factor_;
+  Matrix4 color_matrix_;
 };
 
-}
+}  // namespace gpupixel

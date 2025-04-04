@@ -18,8 +18,7 @@ public class GPUPixelSourceRawData extends GPUPixelSource {
         });
     }
 
-    public void SetRotation(int rotation)
-    {
+    public void SetRotation(int rotation) {
         GPUPixel.nativeSourceRawDataSetRotation(mNativeClassID, rotation);
     }
 
@@ -27,5 +26,4 @@ public class GPUPixelSourceRawData extends GPUPixelSource {
         GPUPixel.nativeSourceRawDataUploadBytes(mNativeClassID, pixels, width, height, stride);
         DoRender(true, false);
     }
-
 }

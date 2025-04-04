@@ -9,8 +9,6 @@
 
 namespace gpupixel {
 
-REGISTER_FILTER_CLASS(PixellationFilter)
-
 const std::string kPixellationFragmentShaderString = R"(
     uniform highp float pixelSize; uniform highp float aspectRatio;
 
@@ -38,9 +36,9 @@ bool PixellationFilter::Init() {
     return false;
   }
 
-  _pixelSize = 0.1;
+  pixel_size_ = 0.1;
   RegisterProperty(
-      "pixelSize", _pixelSize,
+      "pixelSize", pixel_size_,
       "The size of a pixel that you want to pixellate, ranges from 0 to 1.",
       [this](float& pixelSize) { setPixelSize(pixelSize); });
 
@@ -48,30 +46,30 @@ bool PixellationFilter::Init() {
 }
 
 void PixellationFilter::setPixelSize(float pixelSize) {
-  _pixelSize = pixelSize;
-  if (_pixelSize > 1.0) {
-    _pixelSize = 1.0;
-  } else if (_pixelSize < 0.0) {
-    _pixelSize = 0.0;
+  pixel_size_ = pixelSize;
+  if (pixel_size_ > 1.0) {
+    pixel_size_ = 1.0;
+  } else if (pixel_size_ < 0.0) {
+    pixel_size_ = 0.0;
   }
 }
 
 bool PixellationFilter::DoRender(bool updateSinks) {
   float aspectRatio = 1.0;
   std::shared_ptr<GPUPixelFramebuffer> firstInputFramebuffer =
-      input_framebuffers_.begin()->second.frameBuffer;
+      input_framebuffers_.begin()->second.frame_buffer;
   aspectRatio = firstInputFramebuffer->GetHeight() /
                 (float)(firstInputFramebuffer->GetWidth());
-  _filterProgram->SetUniformValue("aspectRatio", aspectRatio);
+  filter_program_->SetUniformValue("aspectRatio", aspectRatio);
 
-  float pixelSize = _pixelSize;
+  float pixelSize = pixel_size_;
   float singlePixelWidth = 1.0 / firstInputFramebuffer->GetWidth();
   if (pixelSize < singlePixelWidth) {
     pixelSize = singlePixelWidth;
   }
-  _filterProgram->SetUniformValue("pixelSize", pixelSize);
+  filter_program_->SetUniformValue("pixelSize", pixelSize);
 
   return Filter::DoRender(updateSinks);
 }
 
-} // namespace gpupixel
+}  // namespace gpupixel

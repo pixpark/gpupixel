@@ -9,16 +9,16 @@ package com.pixpark.gpupixel;
 
 public class FaceDetector {
     private long mNativeClassID = 0;
-    
-    // 图像格式常量
+
+    // Image format constants
     public static final int GPUPIXEL_MODE_FMT_VIDEO = 0;
     public static final int GPUPIXEL_MODE_FMT_PICTURE = 1;
-    
-    // 帧类型常量
+
+    // Frame type constants
     public static final int GPUPIXEL_FRAME_TYPE_YUVI420 = 0;
     public static final int GPUPIXEL_FRAME_TYPE_RGBA = 1;
     public static final int GPUPIXEL_FRAME_TYPE_BGRA = 2;
-    
+
     public FaceDetector() {
         GPUPixel.GetInstance().runOnDraw(new Runnable() {
             @Override
@@ -27,26 +27,29 @@ public class FaceDetector {
             }
         });
     }
-    
+
     public long getNativeClassID() {
         return mNativeClassID;
     }
-    
+
     /**
-     * 检测人脸特征点
-     * @param data 图像数据
-     * @param width 图像宽度
-     * @param height 图像高度
-     * @param format 图像格式 (GPUPIXEL_MODE_FMT_VIDEO 或 GPUPIXEL_MODE_FMT_PICTURE)
-     * @param frameType 帧类型 (GPUPIXEL_FRAME_TYPE_YUVI420, GPUPIXEL_FRAME_TYPE_RGBA 或 GPUPIXEL_FRAME_TYPE_BGRA)
-     * @return 人脸特征点坐标数组
+     * Detect face landmarks
+     * @param data Image data
+     * @param width Image width
+     * @param height Image height
+     * @param format Image format (GPUPIXEL_MODE_FMT_VIDEO or GPUPIXEL_MODE_FMT_PICTURE)
+     * @param frameType Frame type (GPUPIXEL_FRAME_TYPE_YUVI420, GPUPIXEL_FRAME_TYPE_RGBA or
+     *         GPUPIXEL_FRAME_TYPE_BGRA)
+     * @return Face landmark coordinate array
      */
-    public float[] detect(final byte[] data, final int width, final int height, final int format, final int frameType) {
-        return GPUPixel.nativeFaceDetectorDetect(mNativeClassID, data, width, height, format, frameType);
+    public float[] detect(final byte[] data, final int width, final int height, final int format,
+            final int frameType) {
+        return GPUPixel.nativeFaceDetectorDetect(
+                mNativeClassID, data, width, height, format, frameType);
     }
-    
+
     /**
-     * 销毁人脸检测器
+     * Destroy face detector
      */
     public void destroy() {
         if (mNativeClassID != 0) {
@@ -61,7 +64,7 @@ public class FaceDetector {
             });
         }
     }
-    
+
     @Override
     protected void finalize() throws Throwable {
         try {
@@ -84,4 +87,4 @@ public class FaceDetector {
             super.finalize();
         }
     }
-} 
+}

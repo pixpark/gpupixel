@@ -8,22 +8,12 @@
 #pragma once
 
 #include <mutex>
-#include "gpupixel_framebuffer_factory.h"
 #include "gpupixel_define.h"
-#include "dispatch_queue.h"
+#include "gpupixel_framebuffer_factory.h"
 
 #include "filter.h"
 #include "gpupixel_program.h"
 
-#if defined(GPUPIXEL_ANDROID)
-  typedef struct _gpu_context_t {
-    EGLDisplay egldisplay;
-    EGLSurface eglsurface;
-    EGLContext eglcontext;
-  } _gpu_context_t;
-#endif
- 
- 
 namespace gpupixel {
 class GPUPIXEL_API GPUPixelContext {
  public:
@@ -31,29 +21,29 @@ class GPUPIXEL_API GPUPixelContext {
   static void Destroy();
 
   FramebufferFactory* GetFramebufferFactory() const;
-  //todo(zhaoyou)
   void SetActiveGlProgram(GPUPixelGLProgram* shaderProgram);
   void Clean();
 
   void RunSync(std::function<void(void)> func);
   void UseAsCurrent(void);
   void PresentBufferForDisplay();
- 
+
 #if defined(GPUPIXEL_IOS)
-  EAGLContext* GetEglContext() const { return _eglContext; };
+  EAGLContext* GetEglContext() const { return egl_context_; };
 #elif defined(GPUPIXEL_MAC)
-  NSOpenGLContext* GetOpenGLContext() const { return imageProcessingContext; };
+  NSOpenGLContext* GetOpenGLContext() const {
+    return image_processing_context_;
+  };
 #elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
   GLFWwindow* GetGLContext() const { return gl_context_; };
 #endif
- 
 
   // used for capturing a processed frame data
-  bool isCapturingFrame;
-  std::shared_ptr<Filter> captureUpToFilter;
-  unsigned char* capturedFrameData;
-  int captureWidth;
-  int captureHeight;
+  bool is_capturing_frame_;
+  std::shared_ptr<Filter> capture_frame_filter_;
+  unsigned char* capture_frame_data_;
+  int capture_width_;
+  int capture_height_;
 
  private:
   GPUPixelContext();
@@ -61,29 +51,23 @@ class GPUPIXEL_API GPUPixelContext {
 
   void Init();
 
-  void createContext();
-  void releaseContext();
+  void CreateContext();
+  void ReleaseContext();
+
  private:
-  static GPUPixelContext* _instance;
-  static std::mutex _mutex;
-  FramebufferFactory* _framebufferFactory;
-  GPUPixelGLProgram* _curShaderProgram;
-  std::shared_ptr<DispatchQueue> task_queue_;
-  
-#if defined(GPUPIXEL_ANDROID)
-  bool context_inited = false;
-  int m_surfacewidth;
-  int m_surfaceheight;
-  _gpu_context_t* m_gpu_context;
-#elif defined(GPUPIXEL_IOS)
-  EAGLContext* _eglContext;
+  static GPUPixelContext* instance_;
+  static std::mutex mutex_;
+  FramebufferFactory* framebuffer_factory_;
+  GPUPixelGLProgram* current_shader_program_;
+
+#if defined(GPUPIXEL_IOS)
+  EAGLContext* egl_context_;
 #elif defined(GPUPIXEL_MAC)
-  NSOpenGLContext* imageProcessingContext;
-  NSOpenGLPixelFormat* _pixelFormat;
+  NSOpenGLContext* image_processing_context_;
+  NSOpenGLPixelFormat* pixel_format_;
 #elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
   GLFWwindow* gl_context_ = nullptr;
 #endif
-
 };
 
-}
+}  // namespace gpupixel

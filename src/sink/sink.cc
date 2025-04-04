@@ -10,28 +10,28 @@
 
 namespace gpupixel {
 
-Sink::Sink(int inputNumber /* = 1*/) : input_count_(inputNumber) {}
+Sink::Sink(int input_number /* = 1*/) : input_count_(input_number) {}
 
 Sink::~Sink() {
   for (auto it = input_framebuffers_.begin(); it != input_framebuffers_.end();
        ++it) {
-    if (it->second.frameBuffer) {
-      it->second.frameBuffer.reset();
-      it->second.frameBuffer = 0;
+    if (it->second.frame_buffer) {
+      it->second.frame_buffer.reset();
+      it->second.frame_buffer = 0;
     }
   }
   input_framebuffers_.clear();
 }
 
 void Sink::SetInputFramebuffer(std::shared_ptr<GPUPixelFramebuffer> framebuffer,
-                                 RotationMode rotationMode /* = NoRotation*/,
-                                 int texIdx /* = 0*/) {
-  InputFrameBufferInfo inputFrameBufferInfo;
-  inputFrameBufferInfo.frameBuffer = framebuffer;
-  inputFrameBufferInfo.rotationMode = rotationMode;
-  inputFrameBufferInfo.texIndex = texIdx;
-  inputFrameBufferInfo.ignoreForPrepare = false;
-  input_framebuffers_[texIdx] = inputFrameBufferInfo;
+                               RotationMode rotation_mode /* = NoRotation*/,
+                               int tex_idx /* = 0*/) {
+  InputFrameBufferInfo input_frame_buffer_info;
+  input_frame_buffer_info.frame_buffer = framebuffer;
+  input_frame_buffer_info.rotation_mode = rotation_mode;
+  input_frame_buffer_info.tex_index = tex_idx;
+  input_frame_buffer_info.ignore_for_prepare = false;
+  input_framebuffers_[tex_idx] = input_frame_buffer_info;
 }
 
 int Sink::NextAvailableTextureIndex() const {
@@ -44,18 +44,18 @@ int Sink::NextAvailableTextureIndex() const {
 }
 
 bool Sink::IsReady() const {
-  int preparedNum = 0;
-  int ignoreForPrepareNum = 0;
+  int prepared_num = 0;
+  int ignore_for_prepare_num = 0;
   for (std::map<int, InputFrameBufferInfo>::const_iterator it =
            input_framebuffers_.begin();
        it != input_framebuffers_.end(); ++it) {
-    if (it->second.ignoreForPrepare) {
-      ignoreForPrepareNum++;
-    } else if (it->second.frameBuffer) {
-      preparedNum++;
+    if (it->second.ignore_for_prepare) {
+      ignore_for_prepare_num++;
+    } else if (it->second.frame_buffer) {
+      prepared_num++;
     }
   }
-  if (ignoreForPrepareNum + preparedNum >= input_count_) {
+  if (ignore_for_prepare_num + prepared_num >= input_count_) {
     return true;
   } else {
     return false;
@@ -65,13 +65,13 @@ bool Sink::IsReady() const {
 void Sink::ResetAndClean() {
   for (auto it = input_framebuffers_.begin(); it != input_framebuffers_.end();
        ++it) {
-    if (!it->second.ignoreForPrepare) {
-      if (it->second.frameBuffer) {
-        it->second.frameBuffer.reset();
-        it->second.frameBuffer = 0;
+    if (!it->second.ignore_for_prepare) {
+      if (it->second.frame_buffer) {
+        it->second.frame_buffer.reset();
+        it->second.frame_buffer = 0;
       }
     }
   }
 }
 
-}
+}  // namespace gpupixel

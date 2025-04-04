@@ -18,9 +18,9 @@ class GPUPIXEL_API EmbossFilter : public Convolution3x3Filter {
   void setIntensity(float intensity);
 
  protected:
-  EmbossFilter(){};
+  EmbossFilter() {};
 
-  float _intensity;
+  float intensity_factor_;
 };
 
-}
+}  // namespace gpupixel

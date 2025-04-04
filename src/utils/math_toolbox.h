@@ -7,9 +7,9 @@
 
 #pragma once
 
-#include "gpupixel_define.h"
 #include <cmath>
 #include <cstring>
+#include "gpupixel_define.h"
 
 namespace gpupixel {
 class GPUPIXEL_API Vector2 {
@@ -67,8 +67,7 @@ class GPUPIXEL_API Vector2 {
   bool operator!=(const Vector2& v) const;
 };
 
-class GPUPIXEL_API Vector3 {
-};
+class GPUPIXEL_API Vector3 {};
 
 class GPUPIXEL_API Matrix4 {
  public:
@@ -220,4 +219,4 @@ class GPUPIXEL_API Matrix3 {
   static const Matrix3 IDENTITY;
 };
 
-}
+}  // namespace gpupixel

@@ -2,11 +2,6 @@ package com.pixpark.GPUPixelApp;
 
 import static android.widget.Toast.LENGTH_LONG;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -15,16 +10,22 @@ import android.view.SurfaceHolder;
 import android.view.WindowManager;
 import android.widget.SeekBar;
 import android.widget.Toast;
-import java.nio.ByteBuffer;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.pixpark.GPUPixelApp.databinding.ActivityMainBinding;
+import com.pixpark.gpupixel.FaceDetector;
 import com.pixpark.gpupixel.GPUPixel;
-import com.pixpark.gpupixel.filter.BeautyFaceFilter;
-import com.pixpark.gpupixel.filter.FaceReshapeFilter;
 import com.pixpark.gpupixel.GPUPixelSourceCamera;
 import com.pixpark.gpupixel.GPUPixelView;
+import com.pixpark.gpupixel.filter.BeautyFaceFilter;
+import com.pixpark.gpupixel.filter.FaceReshapeFilter;
 import com.pixpark.gpupixel.filter.LipstickFilter;
-import com.pixpark.gpupixel.FaceDetector;
+
+import java.nio.ByteBuffer;
 
 public class MainActivity extends AppCompatActivity implements SurfaceHolder.Callback {
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 200;
@@ -40,8 +41,8 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     private SeekBar face_reshap_seekbar;
     private SeekBar big_eye_seekbar;
     private SeekBar lipstick_seekbar;
-    
-    // 添加人脸检测器
+
+    // Add face detector
     private FaceDetector faceDetector;
 
     private ActivityMainBinding binding;
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         Log.i(TAG, path);
 
         GPUPixel.setContext(this);
-        // 保持屏幕常亮
+        // Keep the screen on
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         // preview
@@ -73,14 +74,10 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
+            public void onStartTrackingTouch(SeekBar seekBar) {}
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
+            public void onStopTrackingTouch(SeekBar seekBar) {}
         });
 
         whiteness_seekbar = binding.whitenessSeekbar;
@@ -91,16 +88,11 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
+            public void onStartTrackingTouch(SeekBar seekBar) {}
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
+            public void onStopTrackingTouch(SeekBar seekBar) {}
         });
-
 
         face_reshap_seekbar = binding.thinfaceSeekbar;
         face_reshap_seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -110,14 +102,10 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
+            public void onStartTrackingTouch(SeekBar seekBar) {}
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
+            public void onStopTrackingTouch(SeekBar seekBar) {}
         });
 
         big_eye_seekbar = binding.bigeyeSeekbar;
@@ -128,14 +116,10 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
+            public void onStartTrackingTouch(SeekBar seekBar) {}
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
+            public void onStopTrackingTouch(SeekBar seekBar) {}
         });
 
         lipstick_seekbar = binding.lipstickSeekbar;
@@ -146,53 +130,44 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
+            public void onStartTrackingTouch(SeekBar seekBar) {}
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
+            public void onStopTrackingTouch(SeekBar seekBar) {}
         });
 
         //
         this.checkCameraPermission();
-
     }
 
     public void startCameraFilter() {
-        // 美颜滤镜
+        // Beauty filters
         beautyFaceFilter = new BeautyFaceFilter();
         faceReshapFilter = new FaceReshapeFilter();
         lipstickFilter = new LipstickFilter();
-        
-        // 初始化人脸检测器
+
+        // Initialize face detector
         faceDetector = new FaceDetector();
-        
+
         // camera
         sourceCamera = new GPUPixelSourceCamera(this.getApplicationContext());
-        
-        // 设置数据回调，进行人脸检测
+
+        // Set data callback for face detection
         sourceCamera.setFrameDataCallback(new GPUPixelSourceCamera.FrameDataCallback() {
             @Override
             public void onFrameData(ByteBuffer rgbaData, int width, int height) {
-                // 获取ByteBuffer的数据
+                // Get data from ByteBuffer
                 byte[] byteArray = new byte[rgbaData.remaining()];
                 rgbaData.get(byteArray);
-                
-                // 进行人脸检测
-                float[] landmarks = faceDetector.detect(
-                    byteArray, 
-                    width, 
-                    height, 
-                    FaceDetector.GPUPIXEL_MODE_FMT_VIDEO,
-                    FaceDetector.GPUPIXEL_FRAME_TYPE_RGBA
-                );
-                
+
+                // Perform face detection
+                float[] landmarks = faceDetector.detect(byteArray, width, height,
+                        FaceDetector.GPUPIXEL_MODE_FMT_VIDEO,
+                        FaceDetector.GPUPIXEL_FRAME_TYPE_RGBA);
+
                 if (landmarks != null && landmarks.length > 0) {
-                    Log.d(TAG, "检测到人脸特征点: " + landmarks.length);
-                    // 将landmarks应用到滤镜中
+                    Log.d(TAG, "Face landmarks detected: " + landmarks.length);
+                    // Apply landmarks to filters
                     lipstickFilter.setFaceLandmark(landmarks);
                     faceReshapFilter.setFaceLandmark(landmarks);
                 }
@@ -211,17 +186,20 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     }
 
     public void checkCameraPermission() {
-        // 检查相机权限是否已授予
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            // 如果未授予相机权限，向用户请求权限
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
+        // Check if camera permission is granted
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            // If camera permission is not granted, request it from the user
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA},
+                    CAMERA_PERMISSION_REQUEST_CODE);
         } else {
             startCameraFilter();
         }
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(
+            int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -232,24 +210,19 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         }
     }
 
-
     public void surfaceCreated(SurfaceHolder holder) {
         sourceCamera.setPreviewHolder(holder);
     }
 
     @Override
-    public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {
-
-    }
+    public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {}
 
     @Override
-    public void surfaceDestroyed(@NonNull SurfaceHolder holder) {
-
-    }
+    public void surfaceDestroyed(@NonNull SurfaceHolder holder) {}
 
     @Override
     protected void onDestroy() {
-        // 销毁FaceDetector
+        // Destroy FaceDetector
         if (faceDetector != null) {
             faceDetector.destroy();
             faceDetector = null;

@@ -102,14 +102,14 @@ bool Convolution3x3Filter::Init() {
     return false;
   }
 
-  _convolutionKernel.set(0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f);
+  convolution_kernel_.set(0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f);
 
   return true;
 }
 
 bool Convolution3x3Filter::DoRender(bool updateSinks) {
-  _filterProgram->SetUniformValue("convolutionMatrix", _convolutionKernel);
+  filter_program_->SetUniformValue("convolutionMatrix", convolution_kernel_);
   return NearbySampling3x3Filter::DoRender(updateSinks);
 }
 
-}
+}  // namespace gpupixel

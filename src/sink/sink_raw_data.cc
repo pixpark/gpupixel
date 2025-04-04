@@ -7,8 +7,8 @@
 //
 
 #include "sink_raw_data.h"
-#include "gpupixel_context.h"
 #include <cstring>
+#include "gpupixel_context.h"
 #include "libyuv.h"
 
 namespace gpupixel {
@@ -67,23 +67,23 @@ void SinkRawData::Render() {
     return;
   }
 
-  int width = input_framebuffers_[0].frameBuffer->GetWidth();
-  int height = input_framebuffers_[0].frameBuffer->GetHeight();
+  int width = input_framebuffers_[0].frame_buffer->GetWidth();
+  int height = input_framebuffers_[0].frame_buffer->GetHeight();
   if (width_ != width || height_ != height) {
     width_ = width;
     height_ = height;
-    initFrameBuffer(width, height);
-    initOutputBuffer(width, height);
+    InitFramebuffer(width, height);
+    InitOutputBuffer(width, height);
   }
 
-  renderToOutput();
+  RenderToOutput();
 }
 
 bool SinkRawData::InitWithShaderString(
     const std::string& vertex_shader_source,
     const std::string& fragment_shader_source) {
-  shader_program_ =
-      GPUPixelGLProgram::createByShaderString(vertex_shader_source, fragment_shader_source);
+  shader_program_ = GPUPixelGLProgram::CreateWithShaderString(
+      vertex_shader_source, fragment_shader_source);
   GPUPixelContext::GetInstance()->SetActiveGlProgram(shader_program_);
   position_attribute_ = shader_program_->GetAttribLocation("position");
   tex_coord_attribute_ =
@@ -92,9 +92,9 @@ bool SinkRawData::InitWithShaderString(
   return true;
 }
 
-int SinkRawData::renderToOutput() {
+int SinkRawData::RenderToOutput() {
   GPUPixelContext::GetInstance()->SetActiveGlProgram(shader_program_);
-  framebuffer_->Active();
+  framebuffer_->Activate();
 
   CHECK_GL(glViewport(0, 0, width_, height_));
 
@@ -121,16 +121,18 @@ int SinkRawData::renderToOutput() {
                                  texture_vertices));
 
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, input_framebuffers_[0].frameBuffer->GetTexture());
+  glBindTexture(GL_TEXTURE_2D,
+                input_framebuffers_[0].frame_buffer->GetTexture());
 
   CHECK_GL(shader_program_->SetUniformValue("sTexture", 0));
   // Draw frame buffer
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
   // Read pixel data directly using glReadPixels
-  CHECK_GL(glReadPixels(0, 0, width_, height_, GL_RGBA, GL_UNSIGNED_BYTE, rgba_buffer_));
+  CHECK_GL(glReadPixels(0, 0, width_, height_, GL_RGBA, GL_UNSIGNED_BYTE,
+                        rgba_buffer_));
 
-  framebuffer_->Inactive();
+  framebuffer_->Deactivate();
   return 0;
 }
 
@@ -142,13 +144,13 @@ const uint8_t* SinkRawData::GetI420Buffer() const {
   // Convert RGBA to I420 format
   libyuv::ARGBToI420(rgba_buffer_, width_ * 4, yuv_buffer_, width_,
                      yuv_buffer_ + width_ * height_, width_ / 2,
-                     yuv_buffer_ + width_ * height_ * 5 / 4, width_ / 2,
-                     width_, height_);
+                     yuv_buffer_ + width_ * height_ * 5 / 4, width_ / 2, width_,
+                     height_);
 
   return yuv_buffer_;
 }
 
-void SinkRawData::initOutputBuffer(int width, int height) {
+void SinkRawData::InitOutputBuffer(int width, int height) {
   uint32_t rgba_size = width * height * 4;
   uint32_t yuv_size = width * height * 3 / 2;
 
@@ -158,7 +160,7 @@ void SinkRawData::initOutputBuffer(int width, int height) {
   }
   rgba_buffer_ = new uint8_t[rgba_size];
   std::memset(rgba_buffer_, 0, rgba_size);
-  
+
   // Allocate YUV frame buffer
   if (yuv_buffer_ != nullptr) {
     delete[] yuv_buffer_;
@@ -167,14 +169,13 @@ void SinkRawData::initOutputBuffer(int width, int height) {
   std::memset(yuv_buffer_, 0, yuv_size);
 }
 
-void SinkRawData::initFrameBuffer(int width, int height) {
+void SinkRawData::InitFramebuffer(int width, int height) {
   if (!framebuffer_ || (framebuffer_->GetWidth() != width ||
                         framebuffer_->GetHeight() != height)) {
-    framebuffer_ =
-        GPUPixelContext::GetInstance()->GetFramebufferFactory()->CreateFramebuffer(
-            width, height);
+    framebuffer_ = GPUPixelContext::GetInstance()
+                       ->GetFramebufferFactory()
+                       ->CreateFramebuffer(width, height);
   }
 }
 
 }  // namespace gpupixel
- 

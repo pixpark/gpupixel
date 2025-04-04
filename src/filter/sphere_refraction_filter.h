@@ -20,21 +20,21 @@ class GPUPIXEL_API SphereRefractionFilter : public Filter {
   void setPositionX(float x);
   void setPositionY(float y);
   void SetRadius(float radius);
-  void setRefractiveIndex(float refractiveIndex);
+  void setRefractiveIndex(float refractive_index);
 
  protected:
-  SphereRefractionFilter(){};
+  SphereRefractionFilter() {};
 
   // The position about which to apply the distortion, with a default of (0.5,
   // 0.5)
-  Vector2 _position;
+  Vector2 position_;
 
   // The radius of the distortion, ranging from 0.0 to 1.0, with a default of
   // 0.25
-  float _radius;
+  float radius_;
 
   // The index of refraction for the sphere, with a default of 0.71
-  float _refractiveIndex;
+  float refractive_index_;
 };
 
-}
+}  // namespace gpupixel

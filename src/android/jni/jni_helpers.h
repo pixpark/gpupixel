@@ -19,29 +19,29 @@
 #include <string>
 
 // Given a UTF-8 encoded |native| string return a new (UTF-16) jstring.
-jstring JavaStringFromStdString(JNIEnv *jni, const std::string &native);
+jstring JavaStringFromStdString(JNIEnv* jni, const std::string& native);
 
 // Given a (UTF-16) jstring return a new UTF-8 native string.
-std::string JavaToStdString(JNIEnv *jni, const jstring &j_string);
+std::string JavaToStdString(JNIEnv* jni, const jstring& j_string);
 
-JavaVM *GetJVM();
-void SetJVM(JavaVM *jvm);
+JavaVM* GetJVM();
+void SetJVM(JavaVM* jvm);
 
-JNIEnv *GetEnv(JavaVM *jvm);
+JNIEnv* GetEnv(JavaVM* jvm);
 
 // Attach thread to JVM if necessary and detach at scope end if originally
 // attached.
 class AttachThreadScoped {
  public:
-  explicit AttachThreadScoped(JavaVM *jvm);
+  explicit AttachThreadScoped(JavaVM* jvm);
   ~AttachThreadScoped();
-  JNIEnv *env();
+  JNIEnv* env();
 
  private:
   bool attached_;
-  JavaVM *jvm_;
-  JNIEnv *env_;
+  JavaVM* jvm_;
+  JNIEnv* env_;
 };
 
-char *Jstring2CStr(JNIEnv *env, jstring jstr);
+char* Jstring2CStr(JNIEnv* env, jstring jstr);
 #endif  // WEBRTC_API_JAVA_JNI_JNI_HELPERS_H_

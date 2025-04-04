@@ -1,7 +1,7 @@
 package com.pixpark.gpupixel.filter;
 
 /**
- * 口红
+ * Lipstick filter
  */
 public final class LipstickFilter extends GPUPixelFilter {
     private static final String name = "LipstickFilter";

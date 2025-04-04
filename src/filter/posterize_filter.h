@@ -17,12 +17,12 @@ class GPUPIXEL_API PosterizeFilter : public Filter {
   bool Init();
   virtual bool DoRender(bool updateSinks = true) override;
 
-  void setColorLevels(int colorLevels);
+  void setColorLevels(int color_levels);
 
  protected:
-  PosterizeFilter(){};
+  PosterizeFilter() {};
 
-  int _colorLevels;
+  int color_levels_;
 };
 
-}
+}  // namespace gpupixel

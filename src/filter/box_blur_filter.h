@@ -21,14 +21,14 @@ class GPUPIXEL_API BoxBlurFilter : public FilterGroup {
   bool Init(int radius, float sigma);
   void SetRadius(int radius);
   void setSigma(float sigma);
-  void setTexelSpacingMultiplier(float value);
+  void SetTexelSpacingMultiplier(float value);
 
  protected:
   BoxBlurFilter();
 
  private:
-  std::shared_ptr<BoxMonoBlurFilter> _hBlurFilter;
-  std::shared_ptr<BoxMonoBlurFilter> _vBlurFilter;
+  std::shared_ptr<BoxMonoBlurFilter> horizontal_blur_filter_;
+  std::shared_ptr<BoxMonoBlurFilter> vertical_blur_filter_;
 };
 
-}
+}  // namespace gpupixel

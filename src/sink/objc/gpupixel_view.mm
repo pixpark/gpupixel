@@ -80,7 +80,7 @@
     self.hidden = NO;
 #endif
     gpupixel::GPUPixelContext::GetInstance()->RunSync([&]{
-        displayProgram = gpupixel::GPUPixelGLProgram::createByShaderString(gpupixel::kDefaultVertexShader, gpupixel::kDefaultFragmentShader);
+        displayProgram = gpupixel::GPUPixelGLProgram::CreateWithShaderString(gpupixel::kDefaultVertexShader, gpupixel::kDefaultFragmentShader);
         
         positionAttribLocation = displayProgram->GetAttribLocation("position");
         texCoordAttribLocation = displayProgram->GetAttribLocation("inputTextureCoordinate");
@@ -343,7 +343,7 @@
 }
 
 
-- (const GLfloat *)textureCoordinatesForRotation:(gpupixel::RotationMode)rotationMode;
+- (const GLfloat *)textureCoordinatesForRotation:(gpupixel::RotationMode)rotation_mode;
 {
     static const GLfloat noRotationTextureCoordinates[] = {
         0.0f, 1.0f,

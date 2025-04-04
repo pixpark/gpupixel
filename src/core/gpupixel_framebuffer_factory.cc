@@ -19,73 +19,76 @@ FramebufferFactory::~FramebufferFactory() {
 std::shared_ptr<GPUPixelFramebuffer> FramebufferFactory::CreateFramebuffer(
     int width,
     int height,
-    bool onlyTexture /* = false*/,
-    const TextureAttributes textureAttributes /* = defaultTextureAttribure*/) {
-  std::shared_ptr<GPUPixelFramebuffer> framebufferFromCache;
-  std::string lookupHash =
-      uuid(width, height, onlyTexture, textureAttributes);
-  int numberOfMatchingFramebuffers = 0;
-  if (_framebufferTypeCounts.find(lookupHash) != _framebufferTypeCounts.end()) {
-    numberOfMatchingFramebuffers = _framebufferTypeCounts[lookupHash];
+    bool only_texture /* = false*/,
+    const TextureAttributes texture_attributes /* = defaultTextureAttribure*/) {
+  std::shared_ptr<GPUPixelFramebuffer> framebuffer_from_cache;
+  std::string lookup_hash =
+      GenerateUuid(width, height, only_texture, texture_attributes);
+  int number_of_matching_framebuffers = 0;
+  if (framebuffer_type_counts_.find(lookup_hash) !=
+      framebuffer_type_counts_.end()) {
+    number_of_matching_framebuffers = framebuffer_type_counts_[lookup_hash];
   }
-  if (numberOfMatchingFramebuffers < 1) {
-    framebufferFromCache = std::shared_ptr<GPUPixelFramebuffer>(
-        new GPUPixelFramebuffer(width, height, onlyTexture, textureAttributes));
+  if (number_of_matching_framebuffers < 1) {
+    framebuffer_from_cache =
+        std::shared_ptr<GPUPixelFramebuffer>(new GPUPixelFramebuffer(
+            width, height, only_texture, texture_attributes));
   } else {
-    int curFramebufferId = numberOfMatchingFramebuffers - 1;
-    while (!framebufferFromCache && curFramebufferId >= 0) {
-      std::string framebufferHash =
-          Util::str_format("%s-%ld", lookupHash.c_str(), curFramebufferId);
-      if (_framebuffers.find(framebufferHash) != _framebuffers.end()) {
-        framebufferFromCache = _framebuffers[framebufferHash];
-        _framebuffers.erase(framebufferHash);
+    int cur_framebuffer_id = number_of_matching_framebuffers - 1;
+    while (!framebuffer_from_cache && cur_framebuffer_id >= 0) {
+      std::string framebuffer_hash =
+          Util::str_format("%s-%ld", lookup_hash.c_str(), cur_framebuffer_id);
+      if (framebuffers_.find(framebuffer_hash) != framebuffers_.end()) {
+        framebuffer_from_cache = framebuffers_[framebuffer_hash];
+        framebuffers_.erase(framebuffer_hash);
       } else {
-        framebufferFromCache = 0;
+        framebuffer_from_cache = 0;
       }
-      curFramebufferId--;
+      cur_framebuffer_id--;
     }
-    curFramebufferId++;
-    _framebufferTypeCounts[lookupHash] = curFramebufferId;
+    cur_framebuffer_id++;
+    framebuffer_type_counts_[lookup_hash] = cur_framebuffer_id;
 
-    if (!framebufferFromCache) {
-      framebufferFromCache = std::shared_ptr<GPUPixelFramebuffer>(
-          new GPUPixelFramebuffer(width, height, onlyTexture, textureAttributes));
+    if (!framebuffer_from_cache) {
+      framebuffer_from_cache =
+          std::shared_ptr<GPUPixelFramebuffer>(new GPUPixelFramebuffer(
+              width, height, only_texture, texture_attributes));
     }
   }
 
-  return framebufferFromCache;
+  return framebuffer_from_cache;
 }
- 
-std::string FramebufferFactory::uuid(
+
+std::string FramebufferFactory::GenerateUuid(
     int width,
     int height,
-    bool onlyTexture,
-    const TextureAttributes textureAttributes) const {
-  if (onlyTexture) {
+    bool only_texture,
+    const TextureAttributes texture_attributes) const {
+  if (only_texture) {
     return Util::str_format("%.1dx%.1d-%d:%d:%d:%d:%d:%d:%d-NOFB", width,
-                            height, textureAttributes.minFilter,
-                            textureAttributes.magFilter,
-                            textureAttributes.wrapS, textureAttributes.wrapT,
-                            textureAttributes.internalFormat,
-                            textureAttributes.format, textureAttributes.type);
+                            height, texture_attributes.minFilter,
+                            texture_attributes.magFilter,
+                            texture_attributes.wrapS, texture_attributes.wrapT,
+                            texture_attributes.internalFormat,
+                            texture_attributes.format, texture_attributes.type);
   } else {
     return Util::str_format("%.1dx%.1d-%d:%d:%d:%d:%d:%d:%d", width, height,
-                            textureAttributes.minFilter,
-                            textureAttributes.magFilter,
-                            textureAttributes.wrapS, textureAttributes.wrapT,
-                            textureAttributes.internalFormat,
-                            textureAttributes.format, textureAttributes.type);
+                            texture_attributes.minFilter,
+                            texture_attributes.magFilter,
+                            texture_attributes.wrapS, texture_attributes.wrapT,
+                            texture_attributes.internalFormat,
+                            texture_attributes.format, texture_attributes.type);
   }
 }
 
-std::shared_ptr<GPUPixelFramebuffer> FramebufferFactory::_getFramebufferByUuid(
+std::shared_ptr<GPUPixelFramebuffer> FramebufferFactory::GetFramebufferByUuid(
     const std::string& hash) {
-  return _framebuffers[hash];
+  return framebuffers_[hash];
 }
 
 void FramebufferFactory::Clean() {
-  _framebuffers.clear();
-  _framebufferTypeCounts.clear();
+  framebuffers_.clear();
+  framebuffer_type_counts_.clear();
 }
 
-}
+}  // namespace gpupixel

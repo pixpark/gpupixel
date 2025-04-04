@@ -44,13 +44,13 @@ std::shared_ptr<YourCustomInput> YourCustomInput::Create() {
 为您的输入源创建和管理帧缓冲区：
 
 ```cpp
-if (!_framebuffer || (_framebuffer->GetWidth() != width ||
-                      _framebuffer->GetHeight() != height)) {
-  _framebuffer =
+if (!framebuffer_ || (framebuffer_->GetWidth() != width ||
+                      framebuffer_->GetHeight() != height)) {
+  framebuffer_ =
       GPUPixelContext::GetInstance()->GetFramebufferFactory()->CreateFramebuffer(
           width, height);
 }
-this->SetFramebuffer(_framebuffer, outputRotation);
+this->SetFramebuffer(framebuffer_, outputRotation);
 ```
 
 ### 3. 数据输入处理
@@ -62,15 +62,7 @@ void YourCustomInput::setFrameData(const uint8_t* pixels,
                                    int width,
                                    int height,
                                    int stride) {
-  // 处理输入数据
-  // 更新帧缓冲区
-  // 可选：人脸检测
-  if(_face_detector) {
-    _face_detector->Detect(pixels, width, height,
-                          GPUPIXEL_MODE_FMT_VIDEO,
-                          GPUPIXEL_FRAME_TYPE_RGB);
-  }
-  
+ 
   // 更新纹理
   glBindTexture(GL_TEXTURE_2D, this->GetFramebuffer()->GetTexture());
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0,

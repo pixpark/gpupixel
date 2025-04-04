@@ -17,14 +17,14 @@ class GPUPIXEL_API CrosshatchFilter : public Filter {
   bool Init();
   virtual bool DoRender(bool updateSinks = true) override;
 
-  void setCrossHatchSpacing(float crossHatchSpacing);
-  void setLineWidth(float lineWidth);
+  void setCrossHatchSpacing(float cross_hatch_spacing);
+  void setLineWidth(float line_width);
 
  protected:
-  CrosshatchFilter(){};
+  CrosshatchFilter() {};
 
-  float _crossHatchSpacing;
-  float _lineWidth;
+  float cross_hatch_spacing_;
+  float line_width_;
 };
 
-}
+}  // namespace gpupixel

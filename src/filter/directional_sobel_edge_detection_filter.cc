@@ -135,4 +135,4 @@ bool DirectionalSobelEdgeDetectionFilter::Init() {
   return false;
 }
 
-}
+}  // namespace gpupixel

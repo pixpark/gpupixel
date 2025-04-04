@@ -92,7 +92,7 @@ Override the `DoRender()` method to update shader uniforms and process the image
 ```cpp
 bool CustomFilter::DoRender(bool updateSinks) {
   // Update shader uniforms
-  _filterProgram->SetUniformValue("parameter", _parameter);
+  filter_program_->SetUniformValue("parameter", _parameter);
   
   // Call base class implementation
   return Filter::DoRender(updateSinks);

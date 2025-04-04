@@ -19,7 +19,7 @@ class GPUPIXEL_API GrayscaleFilter : public Filter {
   virtual bool DoRender(bool updateSinks = true) override;
 
  protected:
-  GrayscaleFilter(){};
+  GrayscaleFilter() {};
 };
 
-}
+}  // namespace gpupixel

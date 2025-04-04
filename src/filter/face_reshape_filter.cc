@@ -223,22 +223,22 @@ bool FaceReshapeFilter::Init() {
   if (!InitWithFragmentShaderString(kGPUPixelThinFaceFragmentShaderString)) {
     return false;
   }
-    RegisterProperty("thin_face", 0, "The smoothing of filter with range between -1 and 1.", [this](float& val) {
-        SetFaceSlimLevel(val);
-    });
+  RegisterProperty("thin_face", 0,
+                   "The smoothing of filter with range between -1 and 1.",
+                   [this](float& val) { SetFaceSlimLevel(val); });
 
-    RegisterProperty("big_eye", 0, "The smoothing of filter with range between -1 and 1.", [this](float& val) {
-        SetEyeZoomLevel(val);
-    });
+  RegisterProperty("big_eye", 0,
+                   "The smoothing of filter with range between -1 and 1.",
+                   [this](float& val) { SetEyeZoomLevel(val); });
 
-    std::vector<float> defaut;
-    RegisterProperty("face_landmark", defaut, "The face landmark of filter with range between -1 and 1.", [this](std::vector<float> val) {
-        SetFaceLandmarks(val);
-    });
+  std::vector<float> defaut;
+  RegisterProperty("face_landmark", defaut,
+                   "The face landmark of filter with range between -1 and 1.",
+                   [this](std::vector<float> val) { SetFaceLandmarks(val); });
 
-  this->thinFaceDelta_ = 0.0;
+  this->thin_face_delta_ = 0.0;
   // [0, 0.15]
-  this->bigEyeDelta_ = 0.0;
+  this->big_eye_delta_ = 0.0;
   return true;
 }
 
@@ -248,34 +248,34 @@ void FaceReshapeFilter::SetFaceLandmarks(std::vector<float> landmarks) {
     return;
   }
 
-  face_land_marks_ = landmarks;
+  face_landmarks_ = landmarks;
   has_face_ = true;
 }
 
 bool FaceReshapeFilter::DoRender(bool updateSinks) {
-  float aspect = (float)_framebuffer->GetWidth() / _framebuffer->GetHeight();
-  _filterProgram->SetUniformValue("aspectRatio", aspect);
+  float aspect = (float)framebuffer_->GetWidth() / framebuffer_->GetHeight();
+  filter_program_->SetUniformValue("aspectRatio", aspect);
 
-  _filterProgram->SetUniformValue("thinFaceDelta", this->thinFaceDelta_);
+  filter_program_->SetUniformValue("thinFaceDelta", this->thin_face_delta_);
 
-  _filterProgram->SetUniformValue("bigEyeDelta", this->bigEyeDelta_);
+  filter_program_->SetUniformValue("bigEyeDelta", this->big_eye_delta_);
 
-  _filterProgram->SetUniformValue("hasFace", has_face_);
+  filter_program_->SetUniformValue("hasFace", has_face_);
   if (has_face_) {
-    _filterProgram->SetUniformValue("facePoints", face_land_marks_.data(),
-                                    static_cast<int>(face_land_marks_.size()));
+    filter_program_->SetUniformValue("facePoints", face_landmarks_.data(),
+                                     static_cast<int>(face_landmarks_.size()));
   }
   return Filter::DoRender(updateSinks);
 }
 
 #pragma mark - face slim
 void FaceReshapeFilter::SetFaceSlimLevel(float level) {
-  thinFaceDelta_ = level;
+  thin_face_delta_ = level;
 }
 
 #pragma mark - eye zoom
 void FaceReshapeFilter::SetEyeZoomLevel(float level) {
-  bigEyeDelta_ = level;
+  big_eye_delta_ = level;
 }
 
-}
+}  // namespace gpupixel

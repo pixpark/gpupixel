@@ -26,60 +26,60 @@ bool BeautyFaceFilter::Init() {
     return false;
   }
 
-  boxBlurFilter = BoxBlurFilter::Create();
-  addFilter(boxBlurFilter);
+  box_blur_filter_ = BoxBlurFilter::Create();
+  AddFilter(box_blur_filter_);
 
-  boxHighPassFilter = BoxHighPassFilter::Create();
-  addFilter(boxHighPassFilter);
+  box_high_pass_filter_ = BoxHighPassFilter::Create();
+  AddFilter(box_high_pass_filter_);
 
-  beautyFilter = BeautyFaceUnitFilter::Create();
-  addFilter(beautyFilter);
+  beauty_face_filter_ = BeautyFaceUnitFilter::Create();
+  AddFilter(beauty_face_filter_);
 
-  boxBlurFilter->AddSink(beautyFilter, 1);
-  boxHighPassFilter->AddSink(beautyFilter, 2);
+  box_blur_filter_->AddSink(beauty_face_filter_, 1);
+  box_high_pass_filter_->AddSink(beauty_face_filter_, 2);
 
-  setTerminalFilter(beautyFilter);
+  SetTerminalFilter(beauty_face_filter_);
 
-  boxBlurFilter->setTexelSpacingMultiplier(4);
+  box_blur_filter_->SetTexelSpacingMultiplier(4);
   SetRadius(4);
 
-  RegisterProperty("whiteness", 0, "The whiteness of filter with range between -1 and 1.", [this](float& val) {
-      SetWhite(val);
-  });
+  RegisterProperty("whiteness", 0,
+                   "The whiteness of filter with range between -1 and 1.",
+                   [this](float& val) { SetWhite(val); });
 
-  RegisterProperty("skin_smoothing", 0, "The smoothing of filter with range between -1 and 1.", [this](float& val) {
-      SetBlurAlpha(val);
-  });
+  RegisterProperty("skin_smoothing", 0,
+                   "The smoothing of filter with range between -1 and 1.",
+                   [this](float& val) { SetBlurAlpha(val); });
   return true;
 }
 
 void BeautyFaceFilter::SetInputFramebuffer(
     std::shared_ptr<GPUPixelFramebuffer> framebuffer,
-    RotationMode rotationMode /* = NoRotation*/,
+    RotationMode rotation_mode /* = NoRotation*/,
     int texIdx /* = 0*/) {
-  for (auto& filter : _filters) {
-    filter->SetInputFramebuffer(framebuffer, rotationMode, texIdx);
+  for (auto& filter : filters_) {
+    filter->SetInputFramebuffer(framebuffer, rotation_mode, texIdx);
   }
 }
 
 void BeautyFaceFilter::SetHighPassDelta(float highPassDelta) {
-  boxHighPassFilter->setDelta(highPassDelta);
+  box_high_pass_filter_->SetDelta(highPassDelta);
 }
 
 void BeautyFaceFilter::SetSharpen(float sharpen) {
-  beautyFilter->SetSharpen(sharpen);
+  beauty_face_filter_->SetSharpen(sharpen);
 }
 
 void BeautyFaceFilter::SetBlurAlpha(float blurAlpha) {
-  beautyFilter->SetBlurAlpha(blurAlpha);
+  beauty_face_filter_->SetBlurAlpha(blurAlpha);
 }
 
 void BeautyFaceFilter::SetWhite(float white) {
-  beautyFilter->SetWhite(white);
+  beauty_face_filter_->SetWhite(white);
 }
 
 void BeautyFaceFilter::SetRadius(float radius) {
-  boxBlurFilter->SetRadius(radius);
-  boxHighPassFilter->SetRadius(radius);
+  box_blur_filter_->SetRadius(radius);
+  box_high_pass_filter_->SetRadius(radius);
 }
-}
+}  // namespace gpupixel

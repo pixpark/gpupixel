@@ -17,7 +17,7 @@ class GPUPIXEL_API HalftoneFilter : public PixellationFilter {
   bool Init();
 
  protected:
-  HalftoneFilter(){};
+  HalftoneFilter() {};
 };
 
-}
+}  // namespace gpupixel

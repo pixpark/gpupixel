@@ -9,8 +9,6 @@
 
 namespace gpupixel {
 
-REGISTER_FILTER_CLASS(BilateralMonoFilter)
-
 const std::string kBilateralBlurVertexShaderString = R"(
     attribute vec4 position; attribute vec4 inputTextureCoordinate;
 
@@ -209,9 +207,9 @@ const std::string kBilateralBlurFragmentShaderString = R"(
     })";
 #endif
 BilateralMonoFilter::BilateralMonoFilter(Type type)
-    : _type(type),
-      _texelSpacingMultiplier(4.0),
-      _distanceNormalizationFactor(8.0) {}
+    : type_(type),
+      texel_spacing_multiplier_(4.0),
+      distance_normalization_factor_(8.0) {}
 
 std::shared_ptr<BilateralMonoFilter> BilateralMonoFilter::Create(
     Type type /* = HORIZONTAL*/) {
@@ -233,51 +231,51 @@ bool BilateralMonoFilter::Init() {
 
 bool BilateralMonoFilter::DoRender(bool updateSinks) {
   std::shared_ptr<GPUPixelFramebuffer> inputFramebuffer =
-      input_framebuffers_.begin()->second.frameBuffer;
-  RotationMode inputRotation = input_framebuffers_.begin()->second.rotationMode;
+      input_framebuffers_.begin()->second.frame_buffer;
+  RotationMode inputRotation =
+      input_framebuffers_.begin()->second.rotation_mode;
 
   if (rotationSwapsSize(inputRotation)) {
-    if (_type == HORIZONTAL) {
-      _filterProgram->SetUniformValue("texelSpacingU", (float)0.0);
-      _filterProgram->SetUniformValue(
+    if (type_ == HORIZONTAL) {
+      filter_program_->SetUniformValue("texelSpacingU", (float)0.0);
+      filter_program_->SetUniformValue(
           "texelSpacingV",
-          (float)(_texelSpacingMultiplier / _framebuffer->GetWidth()));
+          (float)(texel_spacing_multiplier_ / framebuffer_->GetWidth()));
     } else {
-      _filterProgram->SetUniformValue(
+      filter_program_->SetUniformValue(
           "texelSpacingU",
-          (float)(_texelSpacingMultiplier / _framebuffer->GetHeight()));
-      _filterProgram->SetUniformValue("texelSpacingV", (float)0.0);
+          (float)(texel_spacing_multiplier_ / framebuffer_->GetHeight()));
+      filter_program_->SetUniformValue("texelSpacingV", (float)0.0);
     }
   } else {
-    if (_type == HORIZONTAL) {
-      _filterProgram->SetUniformValue(
+    if (type_ == HORIZONTAL) {
+      filter_program_->SetUniformValue(
           "texelSpacingU",
-          (float)(_texelSpacingMultiplier / _framebuffer->GetWidth()));
-      _filterProgram->SetUniformValue("texelSpacingV", (float)0.0);
+          (float)(texel_spacing_multiplier_ / framebuffer_->GetWidth()));
+      filter_program_->SetUniformValue("texelSpacingV", (float)0.0);
     } else {
-      _filterProgram->SetUniformValue("texelSpacingU", (float)0.0);
-      _filterProgram->SetUniformValue(
+      filter_program_->SetUniformValue("texelSpacingU", (float)0.0);
+      filter_program_->SetUniformValue(
           "texelSpacingV",
-          (float)(_texelSpacingMultiplier / _framebuffer->GetHeight()));
+          (float)(texel_spacing_multiplier_ / framebuffer_->GetHeight()));
     }
   }
 
-  _filterProgram->SetUniformValue("distanceNormalizationFactor",
-                                  _distanceNormalizationFactor);
+  filter_program_->SetUniformValue("distanceNormalizationFactor",
+                                   distance_normalization_factor_);
   return Filter::DoRender(updateSinks);
 }
 
-void BilateralMonoFilter::setTexelSpacingMultiplier(float multiplier) {
-  _texelSpacingMultiplier = multiplier;
+void BilateralMonoFilter::SetTexelSpacingMultiplier(float multiplier) {
+  texel_spacing_multiplier_ = multiplier;
 }
 
 void BilateralMonoFilter::setDistanceNormalizationFactor(float value) {
-  _distanceNormalizationFactor = value;
+  distance_normalization_factor_ = value;
 }
 
-REGISTER_FILTER_CLASS(BilateralFilter)
-
-BilateralFilter::BilateralFilter() : _hBlurFilter(0), _vBlurFilter(0) {}
+BilateralFilter::BilateralFilter()
+    : horizontal_blur_filter_(nullptr), vertical_blur_filter_(nullptr) {}
 
 BilateralFilter::~BilateralFilter() {}
 
@@ -294,15 +292,17 @@ bool BilateralFilter::Init() {
     return false;
   }
 
-  _hBlurFilter = BilateralMonoFilter::Create(BilateralMonoFilter::HORIZONTAL);
-  _vBlurFilter = BilateralMonoFilter::Create(BilateralMonoFilter::VERTICAL);
-  _hBlurFilter->AddSink(_vBlurFilter);
-  addFilter(_hBlurFilter);
+  horizontal_blur_filter_ =
+      BilateralMonoFilter::Create(BilateralMonoFilter::HORIZONTAL);
+  vertical_blur_filter_ =
+      BilateralMonoFilter::Create(BilateralMonoFilter::VERTICAL);
+  horizontal_blur_filter_->AddSink(vertical_blur_filter_);
+  AddFilter(horizontal_blur_filter_);
 
   RegisterProperty("texelSpacingMultiplier", 4.0,
                    "The texel spacing multiplier.",
                    [this](float& texelSpacingMultiplier) {
-                     setTexelSpacingMultiplier(texelSpacingMultiplier);
+                     SetTexelSpacingMultiplier(texelSpacingMultiplier);
                    });
 
   RegisterProperty(
@@ -314,13 +314,13 @@ bool BilateralFilter::Init() {
   return true;
 }
 
-void BilateralFilter::setTexelSpacingMultiplier(float multiplier) {
-  _hBlurFilter->setTexelSpacingMultiplier(multiplier);
-  _vBlurFilter->setTexelSpacingMultiplier(multiplier);
+void BilateralFilter::SetTexelSpacingMultiplier(float multiplier) {
+  horizontal_blur_filter_->SetTexelSpacingMultiplier(multiplier);
+  vertical_blur_filter_->SetTexelSpacingMultiplier(multiplier);
 }
 
 void BilateralFilter::setDistanceNormalizationFactor(float value) {
-  _hBlurFilter->setDistanceNormalizationFactor(value);
-  _vBlurFilter->setDistanceNormalizationFactor(value);
+  horizontal_blur_filter_->setDistanceNormalizationFactor(value);
+  vertical_blur_filter_->setDistanceNormalizationFactor(value);
 }
-}
+}  // namespace gpupixel

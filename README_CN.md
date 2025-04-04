@@ -40,11 +40,11 @@
 
 ## 简介
 
-🚀 GPUPixel是一个实时、高性能图像和视频滤镜库，非常容易编译和集成，并且库文件非常小。
+🚀 一个高性能、跨平台的图像和视频滤镜库，体积小巧。
 
-💻 它是使用C++11编写的，基于OpenGL/ES，并且带有内置的美颜效果滤镜，可以实现商业级别的效果。
+💻 使用C++11和OpenGL/ES构建，提供美颜滤镜。
 
-🌐 它支持的平台包括`iOS`、`Android`、`Mac`、`Win`和`Linux`，理论上可以移植到任何支持OpenGL/ES的平台。
+🌐 支持iOS、Android、Mac、Windows和Linux，兼容所有OpenGL/ES平台。
 
 ## 效果预览
 🎬 **视频: <a href="https://youtu.be/9BY1Qx1NEPs" target="_blank">YouTube</a>**
@@ -60,7 +60,7 @@
 
 ## 特性对比
 
-✨ 此表比较了**GPUPixel**、**GPUImage**和**Android-GPUImage**支持的功能：
+✨ **GPUPixel**、**GPUImage**和**Android-GPUImage**功能对比：
 
 ✅: 支持 | ❌: 不支持 | ✏️: 计划中
 
@@ -103,7 +103,7 @@
 |    耗时    |    6ms    |      5ms      |   -   |    -    |      -       |
 
 ## 开始之前
-⭐ 给我们在GitHub上点个星！这样您可以第一时间收到新版本的通知！
+⭐ 在GitHub上给我们点个星，获取新版本发布通知！
 
 ![](./docs/image/give-star.gif)
 
@@ -113,21 +113,21 @@
 
 ## 参与贡献
 
-🤝 欢迎加入我们，通过参与[讨论](https://github.com/pixpark/gpupixel/discussions)、创建[问题](https://github.com/pixpark/gpupixel/issues/new/choose)、提交[PRs](https://github.com/pixpark/gpupixel/pulls)，让GPUPixel变得更好。查看我们的[贡献指南](docs/docs/zh/guide/contributing.md)了解如何开始。
+🤝 通过参与[讨论](https://github.com/pixpark/gpupixel/discussions)、创建[问题](https://github.com/pixpark/gpupixel/issues/new/choose)或提交[PR](https://github.com/pixpark/gpupixel/pulls)来改进GPUPixel。查看我们的[贡献指南](docs/docs/zh/guide/contributing.md)了解如何开始。
 
-同时，希望您可以通过在社交媒体、活动、会议上分享GPUPixel来支持本项目。
+欢迎在社交媒体和活动中分享GPUPixel。
 
 ## 贡献者
  [![](https://opencollective.com/gpupixel/contributors.svg?width=890&button=false)](https://github.com/pixpark/gpupixel/graphs/contributors)
 
 ## 赞助
-💖 如果你喜欢这个项目，可以考虑通过以下方式支持我：
+💖 支持本项目：
 
 | [☕ 在 Ko-fi 上支持](docs/docs/zh/sponsor.md#ko-fi) | [💝 在 Open Collective 上支持](docs/docs/zh/sponsor.md#open-collective) | [💰 微信赞助](docs/docs/zh/sponsor.md#微信赞赏) |
 |:---:|:---:|:---:|
 
 ## 赞助者
-🙏 感谢以下朋友对本项目的慷慨支持：
+🙏 感谢这些贡献者的慷慨支持：
 
 <a href="https://github.com/leavenotrace">
   <img src="https://github.com/leavenotrace.png" style="border-radius:50%; width: 50px; height: 50px;" >
@@ -137,10 +137,10 @@
 </a>
 
 ## 联系 & 支持
-- 📚 [文档](https://gpupixel.pixpark.net/)：在线文档
-- 🐛 [提问](https://github.com/pixpark/gpupixel/issues/new/choose)：报告问题或请求功能
-- 📧 [邮件](mailto:jaaronkot@gmail.com?subject=[GitHub]Questions%20About%20GPUPixel)：向我们发送邮件
-- 📞 [联系](docs/docs/zh/about/contact.md)：与我们联系
+- 📚 [文档](https://gpupixel.pixpark.net/)：文档中心
+- 🐛 [提问](https://github.com/pixpark/gpupixel/issues/new/choose)：问题报告和功能请求
+- 📧 [邮件](mailto:jaaronkot@gmail.com?subject=[GitHub]Questions%20About%20GPUPixel)：联系我们
+- 📞 [联系](docs/docs/zh/about/contact.md)：更多联系方式
 
 ## 感谢
 ### 🔗 参考项目

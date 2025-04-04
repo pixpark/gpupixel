@@ -17,12 +17,12 @@ class GPUPIXEL_API PixellationFilter : public Filter {
   bool Init();
   virtual bool DoRender(bool updateSinks = true) override;
 
-  void setPixelSize(float pixelSize);
+  void setPixelSize(float pixel_size);
 
  protected:
-  PixellationFilter(){};
+  PixellationFilter() {};
 
-  float _pixelSize;
+  float pixel_size_;
 };
 
-}
+}  // namespace gpupixel

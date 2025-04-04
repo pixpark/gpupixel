@@ -9,8 +9,6 @@
 
 namespace gpupixel {
 
-REGISTER_FILTER_CLASS(SketchFilter)
-
 const std::string kSketchFilterFragmentShaderString = R"(
     precision mediump float; uniform sampler2D inputImageTexture;
     uniform float edgeStrength;
@@ -49,7 +47,7 @@ const std::string kSketchFilterFragmentShaderString = R"(
       gl_FragColor = vec4(vec3(mag), 1.0);
     })";
 
-SketchFilter::SketchFilter() : _grayscaleFilter(0), _sketchFilter(0) {}
+SketchFilter::SketchFilter() : grayscale_filter_(0), sketch_filter_(0) {}
 
 SketchFilter::~SketchFilter() {}
 
@@ -67,16 +65,16 @@ bool SketchFilter::Init() {
     return false;
   }
 
-  _grayscaleFilter = GrayscaleFilter::Create();
-  _sketchFilter = _SketchFilter::Create();
-  _grayscaleFilter->AddSink(_sketchFilter);
-  addFilter(_grayscaleFilter);
+  grayscale_filter_ = GrayscaleFilter::Create();
+  sketch_filter_ = _SketchFilter::Create();
+  grayscale_filter_->AddSink(sketch_filter_);
+  AddFilter(grayscale_filter_);
 
-  _edgeStrength = 1.0;
-  RegisterProperty("edgeStrength", _edgeStrength,
+  edge_strength_ = 1.0;
+  RegisterProperty("edgeStrength", edge_strength_,
                    "The edge strength of sobel edge detection filter",
                    [this](float& edgeStrength) {
-                     _sketchFilter->setEdgeStrength(edgeStrength);
+                     sketch_filter_->setEdgeStrength(edgeStrength);
                    });
 
   return true;
@@ -94,30 +92,31 @@ bool _SketchFilter::Init() {
   if (!InitWithFragmentShaderString(kSketchFilterFragmentShaderString)) {
     return false;
   }
-  _edgeStrength = 1.0;
+  edge_strength_ = 1.0;
   return true;
 }
 
 void _SketchFilter::setEdgeStrength(float edgeStrength) {
-  _edgeStrength = edgeStrength;
+  edge_strength_ = edgeStrength;
 }
 
 bool _SketchFilter::DoRender(bool updateSinks) {
-  float texelWidth = 1.0 / _framebuffer->GetWidth();
-  float texelHeight = 1.0 / _framebuffer->GetHeight();
+  float texelWidth = 1.0 / framebuffer_->GetWidth();
+  float texelHeight = 1.0 / framebuffer_->GetHeight();
 
   std::shared_ptr<GPUPixelFramebuffer> inputFramebuffer =
-      input_framebuffers_.begin()->second.frameBuffer;
-  RotationMode inputRotation = input_framebuffers_.begin()->second.rotationMode;
+      input_framebuffers_.begin()->second.frame_buffer;
+  RotationMode inputRotation =
+      input_framebuffers_.begin()->second.rotation_mode;
   if (rotationSwapsSize(inputRotation)) {
-    texelWidth = 1.0 / _framebuffer->GetHeight();
-    texelHeight = 1.0 / _framebuffer->GetWidth();
+    texelWidth = 1.0 / framebuffer_->GetHeight();
+    texelHeight = 1.0 / framebuffer_->GetWidth();
   }
 
-  _filterProgram->SetUniformValue("texelWidth", texelWidth);
-  _filterProgram->SetUniformValue("texelHeight", texelHeight);
-  _filterProgram->SetUniformValue("edgeStrength", _edgeStrength);
+  filter_program_->SetUniformValue("texelWidth", texelWidth);
+  filter_program_->SetUniformValue("texelHeight", texelHeight);
+  filter_program_->SetUniformValue("edgeStrength", edge_strength_);
   return NearbySampling3x3Filter::DoRender(updateSinks);
 }
 
-}
+}  // namespace gpupixel

@@ -25,10 +25,10 @@ class GPUPIXEL_API SobelEdgeDetectionFilter : public FilterGroup {
  protected:
   SobelEdgeDetectionFilter();
 
-  std::shared_ptr<GrayscaleFilter> _grayscaleFilter;
-  std::shared_ptr<_SobelEdgeDetectionFilter> _sobelEdgeDetectionFilter;
+  std::shared_ptr<GrayscaleFilter> grayscale_filter_;
+  std::shared_ptr<_SobelEdgeDetectionFilter> sobel_edge_detection_filter_;
 
-  float _edgeStrength;
+  float edge_strength_;
 };
 
 class GPUPIXEL_API _SobelEdgeDetectionFilter : public NearbySampling3x3Filter {
@@ -37,12 +37,12 @@ class GPUPIXEL_API _SobelEdgeDetectionFilter : public NearbySampling3x3Filter {
   bool Init();
   virtual bool DoRender(bool updateSinks = true) override;
 
-  void setEdgeStrength(float edgeStrength);
+  void setEdgeStrength(float edge_strength);
 
  protected:
-  _SobelEdgeDetectionFilter(){};
+  _SobelEdgeDetectionFilter() {};
 
-  float _edgeStrength;
+  float edge_strength_;
 };
 
-}
+}  // namespace gpupixel

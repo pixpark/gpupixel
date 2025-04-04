@@ -1,5 +1,5 @@
 /*
- *  Copyright 2015 The devzhaoyou@alita_media project authors. All Rights
+ *  Copyright 2015 The GPUPixel project authors. All Rights
  * Reserved.
  *
  *  Use of this source code is governed by a BSD-style license
@@ -15,30 +15,34 @@
 #include <sys/syscall.h>
 #include <unistd.h>
 
-JavaVM *g_jvm = nullptr;
-JavaVM *GetJVM() { return g_jvm; }
+JavaVM* g_jvm = nullptr;
+JavaVM* GetJVM() {
+  return g_jvm;
+}
 
-void SetJVM(JavaVM *jvm) { g_jvm = jvm; }
+void SetJVM(JavaVM* jvm) {
+  g_jvm = jvm;
+}
 
-JNIEnv *GetEnv(JavaVM *jvm) {
-  void *env = NULL;
+JNIEnv* GetEnv(JavaVM* jvm) {
+  void* env = NULL;
   jint status = jvm->GetEnv(&env, JNI_VERSION_1_6);
   //    RTC_CHECK(((env != NULL) && (status == JNI_OK)) ||
   //              ((env == NULL) && (status == JNI_EDETACHED)))
   //            << "Unexpected GetEnv return: " << status << ":" << env;
-  return reinterpret_cast<JNIEnv *>(env);
+  return reinterpret_cast<JNIEnv*>(env);
 }
 
 // Given a UTF-8 encoded |native| string return a new (UTF-16) jstring.
-jstring JavaStringFromStdString(JNIEnv *jni, const std::string &native) {
+jstring JavaStringFromStdString(JNIEnv* jni, const std::string& native) {
   jstring jstr = jni->NewStringUTF(native.c_str());
   //    CHECK_EXCEPTION(jni) << "error during NewStringUTF";
   return jstr;
 }
 
 // Given a (UTF-16) jstring return a new UTF-8 native string.
-std::string JavaToStdString(JNIEnv *jni, const jstring &j_string) {
-  const char *chars = jni->GetStringUTFChars(j_string, nullptr);
+std::string JavaToStdString(JNIEnv* jni, const jstring& j_string) {
+  const char* chars = jni->GetStringUTFChars(j_string, nullptr);
   //    CHECK_EXCEPTION(jni) << "Error during GetStringUTFChars";
   std::string str(chars, jni->GetStringUTFLength(j_string));
   //    CHECK_EXCEPTION(jni) << "Error during GetStringUTFLength";
@@ -47,7 +51,7 @@ std::string JavaToStdString(JNIEnv *jni, const jstring &j_string) {
   return str;
 }
 
-AttachThreadScoped::AttachThreadScoped(JavaVM *jvm)
+AttachThreadScoped::AttachThreadScoped(JavaVM* jvm)
     : attached_(false), jvm_(jvm), env_(NULL) {
   env_ = GetEnv(jvm);
   if (!env_) {
@@ -70,19 +74,21 @@ AttachThreadScoped::~AttachThreadScoped() {
   }
 }
 
-JNIEnv *AttachThreadScoped::env() { return env_; }
+JNIEnv* AttachThreadScoped::env() {
+  return env_;
+}
 
-char *Jstring2CStr(JNIEnv *env, jstring jstr) {
-  char *rtn = NULL;
+char* Jstring2CStr(JNIEnv* env, jstring jstr) {
+  char* rtn = NULL;
   jclass cls_string = env->FindClass("java/lang/String");
   jstring str_encode = env->NewStringUTF("GB2312");
   jmethodID mid =
       env->GetMethodID(cls_string, "getBytes", "(Ljava/lang/String;)[B");
   jbyteArray barr = (jbyteArray)env->CallObjectMethod(jstr, mid, str_encode);
   jsize alen = env->GetArrayLength(barr);
-  jbyte *ba = env->GetByteArrayElements(barr, JNI_FALSE);
+  jbyte* ba = env->GetByteArrayElements(barr, JNI_FALSE);
   if (alen > 0) {
-    rtn = (char *)malloc(alen + 1);  // new char[alen+1];
+    rtn = (char*)malloc(alen + 1);  // new char[alen+1];
     memcpy(rtn, ba, alen);
     rtn[alen] = 0;
   }

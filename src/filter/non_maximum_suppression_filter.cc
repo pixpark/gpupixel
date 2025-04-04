@@ -71,4 +71,4 @@ bool NonMaximumSuppressionFilter::Init() {
   return false;
 }
 
-}
+}  // namespace gpupixel

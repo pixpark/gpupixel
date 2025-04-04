@@ -17,11 +17,11 @@ class GPUPIXEL_API LuminanceRangeFilter : public Filter {
   bool Init();
   virtual bool DoRender(bool updateSinks = true) override;
 
-  void setRangeReductionFactor(float rangeReductionFactor);
+  void setRangeReductionFactor(float range_reduction_factor);
 
  protected:
-  LuminanceRangeFilter(){};
-  float _rangeReductionFactor;
+  LuminanceRangeFilter() {};
+  float range_reduction_factor_;
 };
 
-}
+}  // namespace gpupixel

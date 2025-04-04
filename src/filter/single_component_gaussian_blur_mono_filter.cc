@@ -10,8 +10,6 @@
 
 namespace gpupixel {
 
-REGISTER_FILTER_CLASS(SingleComponentGaussianBlurMonoFilter)
-
 SingleComponentGaussianBlurMonoFilter::SingleComponentGaussianBlurMonoFilter(
     Type type /* = HORIZONTAL*/)
     : GaussianBlurMonoFilter(type) {}
@@ -29,7 +27,7 @@ SingleComponentGaussianBlurMonoFilter::Create(Type type /* = HORIZONTAL*/,
 }
 
 std::string
-SingleComponentGaussianBlurMonoFilter::_generateOptimizedVertexShaderString(
+SingleComponentGaussianBlurMonoFilter::GenerateOptimizedVertexShaderString(
     int radius,
     float sigma) {
   if (radius < 1 || sigma <= 0.0) {
@@ -122,7 +120,7 @@ SingleComponentGaussianBlurMonoFilter::_generateOptimizedVertexShaderString(
 }
 
 std::string
-SingleComponentGaussianBlurMonoFilter::_generateOptimizedFragmentShaderString(
+SingleComponentGaussianBlurMonoFilter::GenerateOptimizedFragmentShaderString(
     int radius,
     float sigma) {
   if (radius < 1 || sigma <= 0.0) {
@@ -231,4 +229,4 @@ SingleComponentGaussianBlurMonoFilter::_generateOptimizedFragmentShaderString(
   return shaderStr;
 }
 
-}
+}  // namespace gpupixel

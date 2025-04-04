@@ -9,10 +9,10 @@
 #pragma once
 
 #include <stdio.h>
-#include <string>
-#include <memory>
 #include <functional>
+#include <memory>
 #include <mutex>
+#include <string>
 
 #include "gpupixel_program.h"
 #include "sink.h"
@@ -30,28 +30,28 @@ class GPUPIXEL_API SinkRawData : public Sink {
   virtual ~SinkRawData();
   static std::shared_ptr<SinkRawData> Create();
   void Render() override;
-  
+
   const uint8_t* GetRgbaBuffer() const;
   const uint8_t* GetI420Buffer() const;
   int GetWidth() const { return width_; }
   int GetHeight() const { return height_; }
-  
+
  private:
-  int renderToOutput();
+  int RenderToOutput();
   bool InitWithShaderString(const std::string& vertex_shader_source,
                             const std::string& fragment_shader_source);
-  void initTextureCache(int width, int height);
-  void initFrameBuffer(int width, int height);
-  void initOutputBuffer(int width, int height);
+  void InitTextureCache(int width, int height);
+  void InitFramebuffer(int width, int height);
+  void InitOutputBuffer(int width, int height);
 
  private:
   std::mutex mutex_;
   GPUPixelGLProgram* shader_program_;
   GLuint position_attribute_;
   GLuint tex_coord_attribute_;
- 
+
   std::shared_ptr<GPUPixelFramebuffer> framebuffer_;
- 
+
   bool is_initialized_ = false;
 
   // Image dimensions

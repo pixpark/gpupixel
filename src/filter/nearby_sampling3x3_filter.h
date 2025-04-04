@@ -12,7 +12,7 @@
 
 namespace gpupixel {
 GPUPIXEL_API extern const std::string
-kNearbySampling3x3SamplingVertexShaderString;
+    kNearbySampling3x3SamplingVertexShaderString;
 
 class GPUPIXEL_API NearbySampling3x3Filter : public Filter {
  public:
@@ -21,14 +21,14 @@ class GPUPIXEL_API NearbySampling3x3Filter : public Filter {
       int inputNumber = 1) override;
   virtual bool DoRender(bool updateSinks = true) override;
 
-  void setTexelSizeMultiplier(float texelSizeMultiplier);
+  void setTexelSizeMultiplier(float texel_size_multiplier);
 
  protected:
-  NearbySampling3x3Filter(){};
+  NearbySampling3x3Filter() {};
 
-  float _texelSizeMultiplier;
-  GLuint _texelWidthUniform;
-  GLuint _texelHeightUniform;
+  float texel_size_multiplier_;
+  GLuint texel_width_uniform_;
+  GLuint texel_height_uniform_;
 };
 
-}
+}  // namespace gpupixel

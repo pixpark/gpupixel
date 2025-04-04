@@ -9,8 +9,6 @@
 
 namespace gpupixel {
 
-REGISTER_FILTER_CLASS(GlassSphereFilter)
-
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
 const std::string kGlassSphereFragmentShaderString = R"(
 
@@ -131,30 +129,30 @@ bool GlassSphereFilter::Init() {
   }
 
   setPositionX(0.5);
-  RegisterProperty("positionX", _position.x,
+  RegisterProperty("positionX", position_.x,
                    "The position of x about which to apply the distortion, "
                    "with a default of 0.5",
                    [this](float& positionX) { setPositionX(positionX); });
 
   setPositionY(0.5);
-  RegisterProperty("positionY", _position.y,
+  RegisterProperty("positionY", position_.y,
                    "The position of y about which to apply the distortion, "
                    "with a default of 0.5",
                    [this](float& positionY) { setPositionY(positionY); });
 
   SetRadius(0.25);
-  RegisterProperty("radius", _radius,
+  RegisterProperty("radius", radius_,
                    "The radius of the distortion, ranging from 0.0 to 1.0, "
                    "with a default of 0.25",
                    [this](float& radius) { SetRadius(radius); });
 
   setRefractiveIndex(0.71);
   RegisterProperty(
-      "refractiveIndex", _refractiveIndex,
+      "refractiveIndex", refractive_index_,
       "The index of refraction for the sphere, with a default of 0.71",
       [this](float& refractiveIndex) { setRefractiveIndex(refractiveIndex); });
 
   return true;
 }
 
-} // namespace gpupixel
+}  // namespace gpupixel
