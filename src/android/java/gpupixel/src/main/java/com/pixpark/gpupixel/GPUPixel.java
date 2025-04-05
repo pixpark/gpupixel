@@ -170,8 +170,8 @@ public class GPUPixel {
 
     public static void copyAssetsToFiles(Context context, String oldPath, String newPath) {
         try {
-            String fileNames[] =
-                    context.getAssets().list(oldPath); // Get all files and directory names under assets directory
+            String fileNames[] = context.getAssets().list(
+                    oldPath); // Get all files and directory names under assets directory
             if (fileNames.length > 0) { // If it's a directory
                 File file = new File(newPath);
                 if (!file.exists()) {
@@ -192,8 +192,10 @@ public class GPUPixel {
                     FileOutputStream fos = new FileOutputStream(file);
                     byte[] buffer = new byte[1024];
                     int byteCount = 0;
-                    while ((byteCount = is.read(buffer)) != -1) { // Loop to read bytes from input stream
-                        fos.write(buffer, 0, byteCount); // Write the read input stream to the output stream
+                    while ((byteCount = is.read(buffer))
+                            != -1) { // Loop to read bytes from input stream
+                        fos.write(buffer, 0,
+                                byteCount); // Write the read input stream to the output stream
                     }
                     fos.flush(); // Flush buffer
                     is.close();
