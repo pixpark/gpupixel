@@ -50,6 +50,7 @@ std::vector<float> landmarks = faceDetector->Detect(
     buffer,                     // image data pointer (const unsigned char*)
     width,                      // image width (int)
     height,                     // image height (int)
+    int stride,                 //
     GPUPIXEL_MODE_FMT_PICTURE,  // image format (GPUPIXEL_MODE_FMT)
     GPUPIXEL_FRAME_TYPE_RGBA    // frame type (GPUPIXEL_FRAME_TYPE)
 );

@@ -21,11 +21,12 @@ FaceDetector::~FaceDetector() {}
 std::vector<float> FaceDetector::Detect(const uint8_t* data,
                                         int width,
                                         int height,
+                                        int stride,
                                         GPUPIXEL_MODE_FMT fmt,
                                         GPUPIXEL_FRAME_TYPE type) {
   mars_face_kit::MarsImage image;
   image.data = (uint8_t*)data;
-  image.width = width;
+  image.width = width == stride ? width : stride;
   image.height = height;
   if (type == GPUPIXEL_FRAME_TYPE_RGBA) {
     image.pixel_format = mars_face_kit::PixelFormat::RGBA;

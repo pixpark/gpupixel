@@ -160,7 +160,7 @@ using namespace gpupixel;
   auto pixels = (const uint8_t*)CVPixelBufferGetBaseAddress(imageBuffer);
 
   std::vector<float> landmarks = faceDetector->Detect(
-      pixels, width, height, GPUPIXEL_MODE_FMT_VIDEO, GPUPIXEL_FRAME_TYPE_BGRA);
+      pixels, width, height, width, GPUPIXEL_MODE_FMT_VIDEO, GPUPIXEL_FRAME_TYPE_BGRA);
 
   if (!landmarks.empty()) {
     lipstickFilter->SetFaceLandmarks(landmarks);

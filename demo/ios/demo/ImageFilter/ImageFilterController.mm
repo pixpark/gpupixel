@@ -209,7 +209,7 @@ using namespace gpupixel;
   const unsigned char* buffer = _gpuSourceImage->GetRgbaImageBuffer();
 
   std::vector<float> landmarks =
-      _faceDetector->Detect(buffer, width, height, GPUPIXEL_MODE_FMT_PICTURE,
+      _faceDetector->Detect(buffer, width, height, width, GPUPIXEL_MODE_FMT_PICTURE,
                             GPUPIXEL_FRAME_TYPE_RGBA);
 
   if (!landmarks.empty()) {

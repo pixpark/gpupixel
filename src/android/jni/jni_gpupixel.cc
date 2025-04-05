@@ -423,7 +423,7 @@ Java_com_pixpark_gpupixel_GPUPixel_nativeFaceDetectorDetect(JNIEnv* env,
   jbyte* data = env->GetByteArrayElements(jdata, nullptr);
   std::vector<float> landmarks =
       ((FaceDetector*)classId)
-          ->Detect((const uint8_t*)data, width, height,
+          ->Detect((const uint8_t*)data, width, height, width,
                    (GPUPIXEL_MODE_FMT)format, (GPUPIXEL_FRAME_TYPE)frameType);
   env->ReleaseByteArrayElements(jdata, data, JNI_ABORT);
 
