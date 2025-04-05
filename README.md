@@ -57,9 +57,6 @@
 |                   **BigEye**                    |                   **Lipstick**                    |                   **Blusher**                    |                    **ON-OFF**                     |
 | <img src="./docs/image/bigeye.gif" width="180px"> | <img src="./docs/image/lipstick.gif" width="180px"> | <img src="./docs/image/blusher.gif" width="180px"> |  <img src="./docs/image/on-off.gif" width="180px">  |
 
-## Architecture
-![](./docs/image/arch.jpg)
-
 ## Features
 
 ✨ Features comparison between **GPUPixel**, **GPUImage**, and **Android-GPUImage**:
@@ -144,8 +141,8 @@ Consider sharing GPUPixel on social media and at events.
 ## Acknowledgements
 ### 🔗 Reference Projects
 1. [GPUImage](https://github.com/BradLarson/GPUImage) 
-2. [CainCamera](https://github.com/CainKernel/CainCamera)
-3. [AwemeLike](https://github.com/ZZZZou/AwemeLike)
+2. [GPUImage-x](https://github.com/wangyijin/GPUImage-x)
+3. [CainCamera](https://github.com/CainKernel/CainCamera)
 4. [VNN](https://github.com/joyycom/VNN)
 
 ## License
