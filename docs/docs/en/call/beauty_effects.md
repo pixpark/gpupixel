@@ -11,33 +11,31 @@ description: This article introduces how to use beauty effects filters in GPUPix
 For more complex effects, you can create multiple filters and chain them together:
 
 ```cpp
-gpupixel::GPUPixelContext::GetInstance()->RunSync([&] {
-    // Create source
-    gpuPixelRawInput = SourceRawData::Create();
-    
-     // Create sink
-    target_raw_output_ = SinkRawData::Create();
-    
-    // Create filters
-    lipstick_filter_ = LipstickFilter::Create();
-    blusher_filter_ = BlusherFilter::Create();
-    face_reshape_filter_ = FaceReshapeFilter::Create();
-    beauty_face_filter_ = BeautyFaceFilter::Create();
-    
-    // Register face landmark callback for filters that need facial features
-    gpuPixelRawInput->RegLandmarkCallback([=](std::vector<float> landmarks) {
-       lipstick_filter_->SetFaceLandmarks(landmarks);
-       blusher_filter_->SetFaceLandmarks(landmarks);
-       face_reshape_filter_->SetFaceLandmarks(landmarks);
-    });
-    
-    // Link the filter chain
-    gpuPixelRawInput->AddSink(lipstick_filter_)
-                     ->AddSink(blusher_filter_)
-                     ->AddSink(face_reshape_filter_)
-                     ->AddSink(beauty_face_filter_)
-                     ->AddSink(target_raw_output_);
-});
+   // Create source
+   gpuPixelRawInput = SourceRawData::Create();
+   
+   // Create sink
+   target_raw_output_ = SinkRawData::Create();
+   
+   // Create filters
+   lipstick_filter_ = LipstickFilter::Create();
+   blusher_filter_ = BlusherFilter::Create();
+   face_reshape_filter_ = FaceReshapeFilter::Create();
+   beauty_face_filter_ = BeautyFaceFilter::Create();
+   
+   // Register face landmark callback for filters that need facial features
+   gpuPixelRawInput->RegLandmarkCallback([=](std::vector<float> landmarks) {
+      lipstick_filter_->SetFaceLandmarks(landmarks);
+      blusher_filter_->SetFaceLandmarks(landmarks);
+      face_reshape_filter_->SetFaceLandmarks(landmarks);
+   });
+   
+   // Link the filter chain
+   gpuPixelRawInput->AddSink(lipstick_filter_)
+                  ->AddSink(blusher_filter_)
+                  ->AddSink(face_reshape_filter_)
+                  ->AddSink(beauty_face_filter_)
+                  ->AddSink(target_raw_output_);
 ```
 
 ## Adjusting Filter Parameters

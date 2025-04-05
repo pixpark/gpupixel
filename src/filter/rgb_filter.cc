@@ -6,7 +6,7 @@
  */
 
 #include "rgb_filter.h"
-
+#include "gpupixel_context.h"
 namespace gpupixel {
 
 const std::string kRGBFragmentShaderString = R"(
@@ -23,9 +23,11 @@ const std::string kRGBFragmentShaderString = R"(
 
 std::shared_ptr<RGBFilter> RGBFilter::Create() {
   auto ret = std::shared_ptr<RGBFilter>(new RGBFilter());
-  if (ret && !ret->Init()) {
-    ret.reset();
-  }
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (ret && !ret->Init()) {
+      ret.reset();
+    }
+  });
   return ret;
 }
 
@@ -46,13 +48,15 @@ bool RGBFilter::Init() {
 
   RegisterProperty(
       "greenAdjustment", green_adjustment_,
-      "The green adjustment of the image.The range is from 0.0 up, with 1.0 as "
+      "The green adjustment of the image.The range is from 0.0 "
+      "up, with 1.0 as "
       "the default.",
       [this](float& greenAdjustment) { setGreenAdjustment(greenAdjustment); });
 
   RegisterProperty(
       "blueAdjustment", blue_adjustment_,
-      "The blue adjustment of the image.The range is from 0.0 up, with 1.0 as "
+      "The blue adjustment of the image.The range is from 0.0 up, with 1.0 "
+      "as "
       "the default.",
       [this](float& blueAdjustment) { setBlueAdjustment(blueAdjustment); });
 

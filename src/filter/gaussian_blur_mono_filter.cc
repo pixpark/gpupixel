@@ -7,8 +7,8 @@
 
 #include "gaussian_blur_mono_filter.h"
 #include <cmath>
+#include "gpupixel_context.h"
 #include "util.h"
-
 namespace gpupixel {
 
 GaussianBlurMonoFilter::GaussianBlurMonoFilter(Type type /* = HORIZONTAL*/)
@@ -20,9 +20,11 @@ std::shared_ptr<GaussianBlurMonoFilter> GaussianBlurMonoFilter::Create(
     float sigma /* = 2.0*/) {
   auto ret =
       std::shared_ptr<GaussianBlurMonoFilter>(new GaussianBlurMonoFilter(type));
-  if (ret && !ret->Init(radius, sigma)) {
-    ret.reset();
-  }
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (ret && !ret->Init(radius, sigma)) {
+      ret.reset();
+    }
+  });
   return ret;
 }
 
@@ -234,14 +236,14 @@ std::string GaussianBlurMonoFilter::GenerateOptimizedVertexShaderString(
     }
   }
 
-  // 2. normalize these weights to prevent the clipping of the Gaussian curve at
-  // the end of the discrete samples from reducing luminance
+  // 2. normalize these weights to prevent the clipping of the Gaussian curve
+  // at the end of the discrete samples from reducing luminance
   for (int i = 0; i < radius + 1; ++i) {
     standardGaussianWeights[i] = standardGaussianWeights[i] / sumOfWeights;
   }
 
-  // 3. From these weights we calculate the offsets to read interpolated values
-  // from
+  // 3. From these weights we calculate the offsets to read interpolated
+  // values from
   int numberOfOptimizedOffsets = fmin(radius / 2 + (radius % 2), 7);
   float* optimizedGaussianOffsets = new float[numberOfOptimizedOffsets];
 
@@ -326,14 +328,14 @@ std::string GaussianBlurMonoFilter::GenerateOptimizedFragmentShaderString(
     }
   }
 
-  // 2. normalize these weights to prevent the clipping of the Gaussian curve at
-  // the end of the discrete samples from reducing luminance
+  // 2. normalize these weights to prevent the clipping of the Gaussian curve
+  // at the end of the discrete samples from reducing luminance
   for (int i = 0; i < radius + 1; ++i) {
     standardGaussianWeights[i] = standardGaussianWeights[i] / sumOfWeights;
   }
 
-  // 3. From these weights we calculate the offsets to read interpolated values
-  // from
+  // 3. From these weights we calculate the offsets to read interpolated
+  // values from
   int trueNumberOfOptimizedOffsets = radius / 2 + (radius % 2);
   int numberOfOptimizedOffsets = fmin(trueNumberOfOptimizedOffsets, 7);
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)

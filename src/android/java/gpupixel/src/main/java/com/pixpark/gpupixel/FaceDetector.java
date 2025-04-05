@@ -7,6 +7,9 @@
 
 package com.pixpark.gpupixel;
 
+/**
+ * Face detector class for detecting facial landmarks in images
+ */
 public class FaceDetector {
     private long mNativeClassID = 0;
 
@@ -19,33 +22,38 @@ public class FaceDetector {
     public static final int GPUPIXEL_FRAME_TYPE_RGBA = 1;
     public static final int GPUPIXEL_FRAME_TYPE_BGRA = 2;
 
+    /**
+     * Create a face detector instance
+     */
     public FaceDetector() {
-        GPUPixel.GetInstance().runOnDraw(new Runnable() {
-            @Override
-            public void run() {
-                mNativeClassID = GPUPixel.nativeFaceDetectorCreate();
-            }
-        });
+        mNativeClassID = nativeFaceDetectorCreate();
     }
 
+    /**
+     * Get native class ID
+     * @return Native class ID
+     */
     public long getNativeClassID() {
         return mNativeClassID;
     }
 
     /**
-     * Detect face landmarks
+     * Detect facial landmarks
      * @param data Image data
      * @param width Image width
      * @param height Image height
      * @param format Image format (GPUPIXEL_MODE_FMT_VIDEO or GPUPIXEL_MODE_FMT_PICTURE)
      * @param frameType Frame type (GPUPIXEL_FRAME_TYPE_YUVI420, GPUPIXEL_FRAME_TYPE_RGBA or
      *         GPUPIXEL_FRAME_TYPE_BGRA)
-     * @return Face landmark coordinate array
+     * @return Array of facial landmark coordinates, each landmark consists of x,y values
      */
-    public float[] detect(final byte[] data, final int width, final int height, final int format,
-            final int frameType) {
-        return GPUPixel.nativeFaceDetectorDetect(
-                mNativeClassID, data, width, height, format, frameType);
+    public float[] detect(final byte[] data, final int width, final int height, final int stide,
+            final int format, final int frameType) {
+        if (mNativeClassID == 0) {
+            return new float[0];
+        }
+        return nativeFaceDetectorDetect(
+                mNativeClassID, data, width, height, stide, format, frameType);
     }
 
     /**
@@ -53,15 +61,8 @@ public class FaceDetector {
      */
     public void destroy() {
         if (mNativeClassID != 0) {
-            GPUPixel.GetInstance().runOnDraw(new Runnable() {
-                @Override
-                public void run() {
-                    if (mNativeClassID != 0) {
-                        GPUPixel.nativeFaceDetectorDestroy(mNativeClassID);
-                        mNativeClassID = 0;
-                    }
-                }
-            });
+            nativeFaceDetectorDestroy(mNativeClassID);
+            mNativeClassID = 0;
         }
     }
 
@@ -69,22 +70,17 @@ public class FaceDetector {
     protected void finalize() throws Throwable {
         try {
             if (mNativeClassID != 0) {
-                if (GPUPixel.GetInstance().getGLSurfaceView() != null) {
-                    GPUPixel.GetInstance().runOnDraw(new Runnable() {
-                        @Override
-                        public void run() {
-                            GPUPixel.nativeFaceDetectorDestroy(mNativeClassID);
-                            mNativeClassID = 0;
-                        }
-                    });
-                    GPUPixel.GetInstance().requestRender();
-                } else {
-                    GPUPixel.nativeFaceDetectorDestroy(mNativeClassID);
-                    mNativeClassID = 0;
-                }
+                nativeFaceDetectorDestroy(mNativeClassID);
+                mNativeClassID = 0;
             }
         } finally {
             super.finalize();
         }
     }
+
+    // Native method declarations
+    private static native long nativeFaceDetectorCreate();
+    private static native void nativeFaceDetectorDestroy(long classId);
+    private static native float[] nativeFaceDetectorDetect(long classId, byte[] data, int width,
+            int height, int stride, int format, int frameType);
 }

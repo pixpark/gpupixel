@@ -18,13 +18,6 @@ GPUPixel is designed with a filter chain architecture, where video or image data
 
 Before using GPUPixel, you need to initialize the context and create the filter chain:
 
-```cpp
-// Initialize GPUPixel context and run operations in its thread
-gpupixel::GPUPixelContext::GetInstance()->RunSync([&] {
-    // Create your filters and set up the chain here
-});
-```
-
 ## Creating a Filter Chain
 
 A typical filter chain setup includes creating sources, filters, and targets, then linking them together:
@@ -35,21 +28,18 @@ std::shared_ptr<SourceRawData> source_raw_input_;
 std::shared_ptr<BeautyFaceFilter> beauty_face_filter_;
 std::shared_ptr<SinkRawData> target_raw_output_;
 
-// Initialize and link components
-gpupixel::GPUPixelContext::GetInstance()->RunSync([&] {
-    // Create source
-    source_raw_input_ = SourceRawData::Create();
-    
-    // Create filters
-    beauty_face_filter_ = BeautyFaceFilter::Create();
-    
-    // Create sink
-    target_raw_output_ = SinkRawData::Create();
-    
-    // Link the chain
-    source_raw_input_->AddSink(beauty_face_filter_)
-                     ->AddSink(target_raw_output_);
-});
+// Create source
+source_raw_input_ = SourceRawData::Create();
+
+// Create filters
+beauty_face_filter_ = BeautyFaceFilter::Create();
+
+// Create sink
+target_raw_output_ = SinkRawData::Create();
+
+// Link the chain
+source_raw_input_->AddSink(beauty_face_filter_)
+                    ->AddSink(target_raw_output_);
 ```
 
 ## Cleanup
@@ -58,11 +48,9 @@ When you're done with GPUPixel, you should clean up resources:
 
 ```cpp
 // Clean up GPUPixel resources
-gpupixel::GPUPixelContext::GetInstance()->RunSync([&] {
-    // Release your filter references
-    source_raw_input_.reset();
-    beauty_face_filter_.reset();
-    target_raw_output_.reset();
-    // Other filters...
-});
+// Release your filter references
+source_raw_input_.reset();
+beauty_face_filter_.reset();
+target_raw_output_.reset();
+// Other filters...
 ```

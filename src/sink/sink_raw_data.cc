@@ -40,7 +40,9 @@ const std::string kRGBToI420FragmentShaderString = R"(
 #endif
 
 std::shared_ptr<SinkRawData> SinkRawData::Create() {
-  return std::shared_ptr<SinkRawData>(new SinkRawData());
+  std::shared_ptr<SinkRawData> ret;
+  SYNC_RUN_WITH_CONTEXT(ret = std::shared_ptr<SinkRawData>(new SinkRawData()););
+  return ret;
 }
 
 SinkRawData::SinkRawData() {

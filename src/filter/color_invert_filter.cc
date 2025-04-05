@@ -6,7 +6,7 @@
  */
 
 #include "color_invert_filter.h"
-
+#include "gpupixel_context.h"
 namespace gpupixel {
 
 const std::string kColorInvertFragmentShaderString = R"(
@@ -20,9 +20,11 @@ const std::string kColorInvertFragmentShaderString = R"(
 
 std::shared_ptr<ColorInvertFilter> ColorInvertFilter::Create() {
   auto ret = std::shared_ptr<ColorInvertFilter>(new ColorInvertFilter());
-  if (ret && !ret->Init()) {
-    ret.reset();
-  }
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (ret && !ret->Init()) {
+      ret.reset();
+    }
+  });
   return ret;
 }
 

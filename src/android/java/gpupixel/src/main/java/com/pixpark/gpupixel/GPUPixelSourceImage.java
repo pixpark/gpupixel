@@ -7,38 +7,55 @@
 
 package com.pixpark.gpupixel;
 
-import android.content.Context;
-import android.content.res.AssetManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.opengl.GLES20;
-import android.opengl.GLUtils;
-import android.util.Log;
 
-import java.io.IOException;
+import java.nio.ByteBuffer;
 
 public class GPUPixelSourceImage extends GPUPixelSource {
-    private static final String TAG = "GPUPixelSourceImage";
-    protected Bitmap bitmap;
-    public GPUPixelSourceImage(Bitmap bitmap) {
-        if (mNativeClassID != 0) return;
-        GPUPixel.GetInstance().runOnDraw(new Runnable() {
-            @Override
-            public void run() {
-                mNativeClassID = GPUPixel.nativeSourceImageNew();
-            }
-        });
-        setImage(bitmap);
+    public GPUPixelSourceImage() {
+        // Empty constructor, instance should be created via static methods
     }
 
-    public void setImage(final Bitmap bitmap) {
-        this.bitmap = bitmap;
-        GPUPixel.GetInstance().runOnDraw(new Runnable() {
-            @Override
-            public void run() {
-                if (mNativeClassID != 0) GPUPixel.nativeSourceImageSetImage(mNativeClassID, bitmap);
-            }
-        });
+    // Create image source from file
+    public static GPUPixelSourceImage CreateFromFile(final String filePath) {
+        final GPUPixelSourceImage source = new GPUPixelSourceImage();
+        source.mNativeClassID = nativeCreateFromFile(filePath);
+        return source;
+    }
+
+    // Create image source from byte buffer
+    public static GPUPixelSourceImage CreateFromBuffer(
+            final byte[] data, final int width, final int height, final int channelCount) {
+        final GPUPixelSourceImage source = new GPUPixelSourceImage();
+        source.mNativeClassID = nativeCreateFromBuffer(width, height, channelCount, data);
+        return source;
+    }
+
+    // Create image source from Bitmap
+    public static GPUPixelSourceImage CreateFromBitmap(final Bitmap bitmap) {
+        final GPUPixelSourceImage source = new GPUPixelSourceImage();
+        source.mNativeClassID = nativeCreateFromBitmap(bitmap);
+        return source;
+    }
+
+    // Get image width
+    public int GetWidth() {
+        return nativeGetWidth(mNativeClassID);
+    }
+
+    // Get image height
+    public int GetHeight() {
+        return nativeGetHeight(mNativeClassID);
+    }
+
+    // Get RGBA image data
+    public byte[] GetRgbaImageBuffer() {
+        return nativeGetRgbaImageBuffer(mNativeClassID);
+    }
+
+    // Execute rendering
+    public void Render() {
+        nativeRender(mNativeClassID);
     }
 
     public void Destroy() {
@@ -47,20 +64,8 @@ public class GPUPixelSourceImage extends GPUPixelSource {
 
     public void Destroy(boolean onGLThread) {
         if (mNativeClassID != 0) {
-            if (onGLThread) {
-                GPUPixel.GetInstance().runOnDraw(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (mNativeClassID != 0) {
-                            GPUPixel.nativeSourceImageDestroy(mNativeClassID);
-                            mNativeClassID = 0;
-                        }
-                    }
-                });
-            } else {
-                GPUPixel.nativeSourceImageDestroy(mNativeClassID);
-                mNativeClassID = 0;
-            }
+            nativeDestroy(mNativeClassID);
+            mNativeClassID = 0;
         }
     }
 
@@ -68,64 +73,24 @@ public class GPUPixelSourceImage extends GPUPixelSource {
     protected void finalize() throws Throwable {
         try {
             if (mNativeClassID != 0) {
-                if (GPUPixel.GetInstance().getGLSurfaceView() != null) {
-                    GPUPixel.GetInstance().runOnDraw(new Runnable() {
-                        @Override
-                        public void run() {
-                            GPUPixel.nativeSourceImageFinalize(mNativeClassID);
-                            mNativeClassID = 0;
-                        }
-                    });
-                    GPUPixel.GetInstance().requestRender();
-                } else {
-                    GPUPixel.nativeSourceImageFinalize(mNativeClassID);
-                    mNativeClassID = 0;
-                }
+                nativeFinalize(mNativeClassID);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             super.finalize();
         }
     }
 
-    public static Bitmap createBitmap(Context context, String img_name) {
-        Bitmap bitmap = null;
-        try {
-            bitmap = BitmapFactory.decodeStream(context.getAssets().open(img_name));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return bitmap;
-    }
-
-    private int createTexture(Context context, String img_name) {
-        try {
-            bitmap = BitmapFactory.decodeStream(context.getAssets().open(img_name));
-            int[] textureIds = new int[1];
-            GLES20.glGenTextures(1, textureIds, 0);
-            int error;
-            while ((error = GLES20.glGetError()) != GLES20.GL_NO_ERROR) {
-                Log.e(TAG, "OpenGL error: " + error);
-            }
-            int textureId = textureIds[0];
-
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
-            GLES20.glTexParameteri(
-                    GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
-            GLES20.glTexParameteri(
-                    GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
-            GLES20.glTexParameteri(
-                    GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
-            GLES20.glTexParameteri(
-                    GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
-
-            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
-
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
-            return textureId;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return -1;
-        }
-    }
+    // JNI Native methods
+    private static native long nativeCreateFromFile(String filePath);
+    private static native long nativeCreateFromBuffer(
+            int width, int height, int channelCount, byte[] data);
+    private static native long nativeCreateFromBitmap(Bitmap bitmap);
+    private static native void nativeDestroy(long nativeObj);
+    private static native void nativeFinalize(long nativeObj);
+    private static native int nativeGetWidth(long nativeObj);
+    private static native int nativeGetHeight(long nativeObj);
+    private static native byte[] nativeGetRgbaImageBuffer(long nativeObj);
+    private static native void nativeRender(long nativeObj);
 }

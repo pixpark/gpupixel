@@ -91,30 +91,27 @@ using namespace gpupixel;
 }
 
 - (void)initVideoFilter {
-  gpupixel::GPUPixelContext::GetInstance()->RunSync([&] {
-    sourceRawData = SourceRawData::Create();
-    gpuPixelView = [[GPUPixelView alloc] initWithFrame:self.view.frame];
-    [self.view addSubview:gpuPixelView positioned:NSWindowBelow relativeTo:nil];
+  gpuPixelView = [[GPUPixelView alloc] initWithFrame:self.view.frame];
+  [self.view addSubview:gpuPixelView positioned:NSWindowBelow relativeTo:nil];
+  [gpuPixelView setFillMode:(gpupixel::SinkRender::PreserveAspectRatioAndFill)];
 
-    // create filter
+  sourceRawData = SourceRawData::Create();
 
-    lipstickFilter = LipstickFilter::Create();
-    blusherFilter = BlusherFilter::Create();
-    faceReshapeFilter = FaceReshapeFilter::Create();
-    faceDetector = std::make_shared<FaceDetector>();
+  // create filter
 
-    // create filter
-    beautyFaceFilter = BeautyFaceFilter::Create();
+  lipstickFilter = LipstickFilter::Create();
+  blusherFilter = BlusherFilter::Create();
+  faceReshapeFilter = FaceReshapeFilter::Create();
+  faceDetector = FaceDetector::Create();
 
-    sourceRawData->AddSink(lipstickFilter)
-        ->AddSink(blusherFilter)
-        ->AddSink(faceReshapeFilter)
-        ->AddSink(beautyFaceFilter)
-        ->AddSink(gpuPixelView);
+  // create filter
+  beautyFaceFilter = BeautyFaceFilter::Create();
 
-    [gpuPixelView
-        setFillMode:(gpupixel::SinkRender::PreserveAspectRatioAndFill)];
-  });
+  sourceRawData->AddSink(lipstickFilter)
+      ->AddSink(blusherFilter)
+      ->AddSink(faceReshapeFilter)
+      ->AddSink(beautyFaceFilter)
+      ->AddSink(gpuPixelView);
 }
 
 #pragma mark - 属性赋值
@@ -156,11 +153,12 @@ using namespace gpupixel;
 
   auto width = CVPixelBufferGetWidth(imageBuffer);
   auto height = CVPixelBufferGetHeight(imageBuffer);
-  auto stride = CVPixelBufferGetBytesPerRow(imageBuffer) / 4;
+  auto stride = CVPixelBufferGetBytesPerRow(imageBuffer);
   auto pixels = (const uint8_t*)CVPixelBufferGetBaseAddress(imageBuffer);
 
-  std::vector<float> landmarks = faceDetector->Detect(
-      pixels, width, height, width, GPUPIXEL_MODE_FMT_VIDEO, GPUPIXEL_FRAME_TYPE_BGRA);
+  std::vector<float> landmarks =
+      faceDetector->Detect(pixels, width, height, stride,
+                           GPUPIXEL_MODE_FMT_VIDEO, GPUPIXEL_FRAME_TYPE_BGRA);
 
   if (!landmarks.empty()) {
     lipstickFilter->SetFaceLandmarks(landmarks);

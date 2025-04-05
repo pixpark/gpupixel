@@ -6,14 +6,16 @@
  */
 
 #include "lipstick_filter.h"
+#include "gpupixel_context.h"
 #include "source_image.h"
-
 namespace gpupixel {
 std::shared_ptr<LipstickFilter> LipstickFilter::Create() {
   auto ret = std::shared_ptr<LipstickFilter>(new LipstickFilter());
-  if (ret && !ret->Init()) {
-    ret.reset();
-  }
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (ret && !ret->Init()) {
+      ret.reset();
+    }
+  });
   return ret;
 }
 

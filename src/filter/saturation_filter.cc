@@ -6,7 +6,7 @@
  */
 
 #include "saturation_filter.h"
-
+#include "gpupixel_context.h"
 namespace gpupixel {
 
 const std::string kSaturationFragmentShaderString = R"(
@@ -27,9 +27,11 @@ const std::string kSaturationFragmentShaderString = R"(
 
 std::shared_ptr<SaturationFilter> SaturationFilter::Create() {
   auto ret = std::shared_ptr<SaturationFilter>(new SaturationFilter());
-  if (ret && !ret->Init()) {
-    ret.reset();
-  }
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (ret && !ret->Init()) {
+      ret.reset();
+    }
+  });
   return ret;
 }
 

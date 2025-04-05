@@ -6,7 +6,7 @@
  */
 
 #include "box_blur_filter.h"
-
+#include "gpupixel_context.h"
 namespace gpupixel {
 
 BoxBlurFilter::BoxBlurFilter()
@@ -17,9 +17,11 @@ BoxBlurFilter::~BoxBlurFilter() {}
 std::shared_ptr<BoxBlurFilter> BoxBlurFilter::Create(int radius /* = 4*/,
                                                      float sigma /* = 2.0*/) {
   auto ret = std::shared_ptr<BoxBlurFilter>(new BoxBlurFilter());
-  if (ret && !ret->Init(radius, sigma)) {
-    ret.reset();
-  }
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (ret && !ret->Init(radius, sigma)) {
+      ret.reset();
+    }
+  });
   return ret;
 }
 

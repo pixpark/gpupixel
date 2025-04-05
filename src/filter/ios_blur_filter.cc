@@ -6,7 +6,7 @@
  */
 
 #include "ios_blur_filter.h"
-
+#include "gpupixel_context.h"
 namespace gpupixel {
 
 IOSBlurFilter::IOSBlurFilter()
@@ -16,9 +16,11 @@ IOSBlurFilter::~IOSBlurFilter() {}
 
 std::shared_ptr<IOSBlurFilter> IOSBlurFilter::Create() {
   auto ret = std::shared_ptr<IOSBlurFilter>(new IOSBlurFilter());
-  if (ret && !ret->Init()) {
-    ret.reset();
-  }
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (ret && !ret->Init()) {
+      ret.reset();
+    }
+  });
   return ret;
 }
 

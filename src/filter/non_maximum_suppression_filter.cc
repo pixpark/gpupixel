@@ -6,7 +6,7 @@
  */
 
 #include "non_maximum_suppression_filter.h"
-
+#include "gpupixel_context.h"
 namespace gpupixel {
 
 const std::string kNonMaximumSuppressionShaderString = R"(
@@ -58,9 +58,11 @@ std::shared_ptr<NonMaximumSuppressionFilter>
 NonMaximumSuppressionFilter::Create() {
   auto ret = std::shared_ptr<NonMaximumSuppressionFilter>(
       new NonMaximumSuppressionFilter());
-  if (ret && !ret->Init()) {
-    ret.reset();
-  }
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (ret && !ret->Init()) {
+      ret.reset();
+    }
+  });
   return ret;
 }
 

@@ -80,7 +80,7 @@
   //    inputRotation = kGPUImageNoRotation;
   self.hidden = NO;
 #endif
-  gpupixel::GPUPixelContext::GetInstance()->RunSync([&] {
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
     displayProgram = gpupixel::GPUPixelGLProgram::CreateWithShaderString(
         gpupixel::kDefaultVertexShader, gpupixel::kDefaultFragmentShader);
 
@@ -140,14 +140,14 @@
 
 - (void)createDisplayFramebuffer;
 {
-  gpupixel::GPUPixelContext::GetInstance()->RunSync([&] {
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
 #if defined(GPUPIXEL_IOS)
     glGenRenderbuffers(1, &displayRenderbuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, displayRenderbuffer);
-
     [gpupixel::GPUPixelContext::GetInstance()->GetEglContext()
         renderbufferStorage:GL_RENDERBUFFER
                fromDrawable:(CAEAGLLayer*)self.layer];
+    lastBoundsSize = self.bounds.size;
 
     glGenFramebuffers(1, &displayFramebuffer);
     glBindFramebuffer(GL_FRAMEBUFFER, displayFramebuffer);
@@ -159,8 +159,9 @@
     glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT,
                                  &framebufferHeight);
 
-    lastBoundsSize = self.bounds.size;
-    [self updateDisplayVertices];
+    [self performSelectorOnMainThread:@selector(updateDisplayVertices)
+                           withObject:nil
+                        waitUntilDone:NO];
 #else
     // Perhaps I'll use an FBO at some time later, but for now will render
     // directly to the screen
@@ -175,7 +176,7 @@
 
 - (void)destroyDisplayFramebuffer;
 {
-  gpupixel::GPUPixelContext::GetInstance()->RunSync([&] {
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
 #if defined(GPUPIXEL_IOS)
     if (displayFramebuffer) {
       glDeleteFramebuffers(1, &displayFramebuffer);
@@ -199,12 +200,12 @@
     [self createDisplayFramebuffer];
   }
 
-  gpupixel::GPUPixelContext::GetInstance()->RunSync([&] {
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
     glBindFramebuffer(GL_FRAMEBUFFER, displayFramebuffer);
     glViewport(0, 0, framebufferWidth, framebufferHeight);
   });
 #else
-  gpupixel::GPUPixelContext::GetInstance()->RunSync([&] {
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
     glViewport(0, 0, self.sizeInPixels.width, self.sizeInPixels.height);
@@ -213,7 +214,7 @@
 }
 
 - (void)presentFramebuffer {
-  gpupixel::GPUPixelContext::GetInstance()->RunSync([&] {
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
 #if defined(GPUPIXEL_IOS)
     glBindRenderbuffer(GL_RENDERBUFFER, displayRenderbuffer);
     gpupixel::GPUPixelContext::GetInstance()->PresentBufferForDisplay();
@@ -235,7 +236,7 @@
 }
 
 - (void)DoRender {
-  gpupixel::GPUPixelContext::GetInstance()->RunSync([&] {
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
     gpupixel::GPUPixelContext::GetInstance()->SetActiveGlProgram(
         displayProgram);
     [self setDisplayFramebuffer];
@@ -296,7 +297,7 @@
          lastInputRotation == rotation))) {
     [self performSelectorOnMainThread:@selector(updateDisplayVertices)
                            withObject:nil
-                        waitUntilDone:YES];
+                        waitUntilDone:NO];
   }
 }
 

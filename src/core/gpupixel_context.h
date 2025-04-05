@@ -14,7 +14,10 @@
 #include "filter.h"
 #include "gpupixel_program.h"
 
+class DispatchQueue;
+
 namespace gpupixel {
+
 class GPUPIXEL_API GPUPixelContext {
  public:
   static GPUPixelContext* GetInstance();
@@ -24,7 +27,7 @@ class GPUPIXEL_API GPUPixelContext {
   void SetActiveGlProgram(GPUPixelGLProgram* shaderProgram);
   void Clean();
 
-  void RunSync(std::function<void(void)> func);
+  void SyncRunWithContext(std::function<void(void)> func);
   void UseAsCurrent(void);
   void PresentBufferForDisplay();
 
@@ -34,6 +37,10 @@ class GPUPIXEL_API GPUPixelContext {
   NSOpenGLContext* GetOpenGLContext() const {
     return image_processing_context_;
   };
+#elif defined(GPUPIXEL_ANDROID)
+  EGLContext GetEglContext() const { return egl_context_; };
+  EGLDisplay GetEglDisplay() const { return egl_display_; };
+  EGLSurface GetEglSurface() const { return egl_surface_; };
 #elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
   GLFWwindow* GetGLContext() const { return gl_context_; };
 #endif
@@ -59,12 +66,18 @@ class GPUPIXEL_API GPUPixelContext {
   static std::mutex mutex_;
   FramebufferFactory* framebuffer_factory_;
   GPUPixelGLProgram* current_shader_program_;
+  std::shared_ptr<DispatchQueue> task_queue_;
 
 #if defined(GPUPIXEL_IOS)
   EAGLContext* egl_context_;
 #elif defined(GPUPIXEL_MAC)
   NSOpenGLContext* image_processing_context_;
   NSOpenGLPixelFormat* pixel_format_;
+#elif defined(GPUPIXEL_ANDROID)
+  EGLContext egl_context_;
+  EGLDisplay egl_display_;
+  EGLSurface egl_surface_;
+  EGLConfig egl_config_;
 #elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
   GLFWwindow* gl_context_ = nullptr;
 #endif

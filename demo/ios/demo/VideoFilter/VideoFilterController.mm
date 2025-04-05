@@ -120,31 +120,29 @@ using namespace gpupixel;
 
 #pragma mark - Setup
 - (void)setupGPUPixel {
-  gpupixel::GPUPixelContext::GetInstance()->RunSync([&] {
-    _sourceRawData = SourceRawData::Create();
-    _gpuPixelView = [[GPUPixelView alloc] initWithFrame:self.view.frame];
-    _gpuPixelView.backgroundColor = UIColor.grayColor;
-    [self.view addSubview:_gpuPixelView];
+  _gpuPixelView = [[GPUPixelView alloc] initWithFrame:self.view.frame];
+  _gpuPixelView.backgroundColor = UIColor.grayColor;
+  [self.view addSubview:_gpuPixelView];
+  [_gpuPixelView
+      setFillMode:(gpupixel::SinkRender::PreserveAspectRatioAndFill)];
 
-    [_gpuPixelView
-        setFillMode:(gpupixel::SinkRender::PreserveAspectRatioAndFill)];
+  _sourceRawData = SourceRawData::Create();
 
-    _beautyFaceFilter = BeautyFaceFilter::Create();
-    _faceReshapeFilter = FaceReshapeFilter::Create();
-    _lipstickFilter = LipstickFilter::Create();
-    _blusherFilter = BlusherFilter::Create();
-    _sinkRawData = SinkRawData::Create();
-    _faceDetector = std::make_shared<FaceDetector>();
+  _beautyFaceFilter = BeautyFaceFilter::Create();
+  _faceReshapeFilter = FaceReshapeFilter::Create();
+  _lipstickFilter = LipstickFilter::Create();
+  _blusherFilter = BlusherFilter::Create();
+  _sinkRawData = SinkRawData::Create();
+  _faceDetector = FaceDetector::Create();
 
-    _sourceRawData->AddSink(_lipstickFilter)
-        ->AddSink(_blusherFilter)
-        ->AddSink(_faceReshapeFilter)
-        ->AddSink(_beautyFaceFilter)
-        ->AddSink(_gpuPixelView);
+  _sourceRawData->AddSink(_lipstickFilter)
+      ->AddSink(_blusherFilter)
+      ->AddSink(_faceReshapeFilter)
+      ->AddSink(_beautyFaceFilter)
+      ->AddSink(_gpuPixelView);
 
-    _beautyFaceFilter->AddSink(_sinkRawData);
-    self.isSave = NO;
-  });
+  _beautyFaceFilter->AddSink(_sinkRawData);
+  self.isSave = NO;
 }
 
 - (void)setupUI {
@@ -292,12 +290,13 @@ using namespace gpupixel;
   CVPixelBufferLockBaseAddress(imageBuffer, 0);
   auto width = CVPixelBufferGetWidth(imageBuffer);
   auto height = CVPixelBufferGetHeight(imageBuffer);
-  auto stride = CVPixelBufferGetBytesPerRow(imageBuffer) / 4;
+  auto stride = CVPixelBufferGetBytesPerRow(imageBuffer);
   auto pixels = (const uint8_t*)CVPixelBufferGetBaseAddress(imageBuffer);
 
   // 使用FaceDetector进行人脸检测
-  std::vector<float> landmarks = _faceDetector->Detect(
-      pixels, width, height, stride, GPUPIXEL_MODE_FMT_VIDEO, GPUPIXEL_FRAME_TYPE_BGRA);
+  std::vector<float> landmarks =
+      _faceDetector->Detect(pixels, width, height, stride,
+                            GPUPIXEL_MODE_FMT_VIDEO, GPUPIXEL_FRAME_TYPE_BGRA);
 
   if (!landmarks.empty()) {
     _lipstickFilter->SetFaceLandmarks(landmarks);

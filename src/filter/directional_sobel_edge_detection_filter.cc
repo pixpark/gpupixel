@@ -6,7 +6,7 @@
  */
 
 #include "directional_sobel_edge_detection_filter.h"
-
+#include "gpupixel_context.h"
 namespace gpupixel {
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
@@ -121,9 +121,11 @@ std::shared_ptr<DirectionalSobelEdgeDetectionFilter>
 DirectionalSobelEdgeDetectionFilter::Create() {
   auto ret = std::shared_ptr<DirectionalSobelEdgeDetectionFilter>(
       new DirectionalSobelEdgeDetectionFilter());
-  if (ret && !ret->Init()) {
-    ret.reset();
-  }
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (ret && !ret->Init()) {
+      ret.reset();
+    }
+  });
   return ret;
 }
 

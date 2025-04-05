@@ -114,7 +114,7 @@ SourceCamera 展示了如何处理相机输入：
    - 尽可能重用帧缓冲区
 
 2. 线程安全
-   - 使用 GPUPixelContext::runSync 进行 OpenGL 操作
+   - 使用 GPUPixelContext::SyncRunWithContext 进行 OpenGL 操作
    - 在适当的线程中处理帧捕获
 
 3. 错误处理

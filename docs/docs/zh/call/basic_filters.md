@@ -17,14 +17,6 @@ GPUPixel 采用滤镜链架构设计，视频或图像数据通过一系列滤�
 ## 初始化
 
 在使用 GPUPixel 之前，你需要初始化上下文并创建滤镜链：
-
-```cpp
-// 初始化 GPUPixel 上下文并在其线程中运行操作
-gpupixel::GPUPixelContext::GetInstance()->RunSync([&] {
-    // 在这里创建你的滤镜并设置滤镜链
-});
-```
-
 ## 创建滤镜链
 
 典型的滤镜链设置包括创建源、滤镜和目标，然后将它们链接在一起：
@@ -36,20 +28,18 @@ std::shared_ptr<BeautyFaceFilter> beauty_face_filter_;
 std::shared_ptr<SinkRawData> target_raw_output_;
 
 // 初始化并链接组件
-gpupixel::GPUPixelContext::GetInstance()->RunSync([&] {
-    // 创建源
-    source_raw_input_ = SourceRawData::Create();
-    
-    // 创建滤镜
-    beauty_face_filter_ = BeautyFaceFilter::Create();
-    
-    // 创建目标
-    target_raw_output_ = SinkRawData::Create();
-    
-    // 链接滤镜链
-    source_raw_input_->AddSink(beauty_face_filter_)
-                     ->AddSink(target_raw_output_);
-});
+// 创建源
+source_raw_input_ = SourceRawData::Create();
+
+// 创建滤镜
+beauty_face_filter_ = BeautyFaceFilter::Create();
+
+// 创建目标
+target_raw_output_ = SinkRawData::Create();
+
+// 链接滤镜链
+source_raw_input_->AddSink(beauty_face_filter_)
+                    ->AddSink(target_raw_output_);
 ```
 
 ## 清理
@@ -58,11 +48,9 @@ gpupixel::GPUPixelContext::GetInstance()->RunSync([&] {
 
 ```cpp
 // 清理 GPUPixel 资源
-gpupixel::GPUPixelContext::GetInstance()->RunSync([&] {
-    // 释放你的滤镜引用
-    source_raw_input_.reset();
-    beauty_face_filter_.reset();
-    target_raw_output_.reset();
-    // 其他滤镜...
-});
+// 释放你的滤镜引用
+source_raw_input_.reset();
+beauty_face_filter_.reset();
+target_raw_output_.reset();
+// 其他滤镜...
 ```

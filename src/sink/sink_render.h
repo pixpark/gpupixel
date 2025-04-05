@@ -21,7 +21,7 @@ class GPUPIXEL_API SinkRender : public Sink {
   };
 
  public:
-  SinkRender();
+  static std::shared_ptr<SinkRender> Create();
   ~SinkRender();
 
   void Init();
@@ -35,6 +35,7 @@ class GPUPIXEL_API SinkRender : public Sink {
   virtual void Render() override;
 
  private:
+  SinkRender();
   int view_width_;
   int view_height_;
   FillMode fill_mode_;

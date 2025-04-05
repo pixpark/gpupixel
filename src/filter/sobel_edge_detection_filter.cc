@@ -6,7 +6,7 @@
  */
 
 #include "sobel_edge_detection_filter.h"
-
+#include "gpupixel_context.h"
 namespace gpupixel {
 
 //   Code from "Graphics Shaders: Theory and Practice" by M. Bailey and S.
@@ -57,9 +57,11 @@ SobelEdgeDetectionFilter::~SobelEdgeDetectionFilter() {}
 std::shared_ptr<SobelEdgeDetectionFilter> SobelEdgeDetectionFilter::Create() {
   auto ret =
       std::shared_ptr<SobelEdgeDetectionFilter>(new SobelEdgeDetectionFilter());
-  if (ret && !ret->Init()) {
-    ret.reset();
-  }
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (ret && !ret->Init()) {
+      ret.reset();
+    }
+  });
 
   return ret;
 }

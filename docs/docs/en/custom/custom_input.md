@@ -115,7 +115,7 @@ Key features:
    - Reuse framebuffers when possible
 
 2. Thread Safety
-   - Use GPUPixelContext::runSync for OpenGL operations
+   - Use GPUPixelContext::SyncRunWithContext for OpenGL operations
    - Handle frame capture in appropriate threads
 
 3. Error Handling

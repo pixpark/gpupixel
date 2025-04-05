@@ -6,7 +6,7 @@
  */
 
 #include "contrast_filter.h"
-
+#include "gpupixel_context.h"
 namespace gpupixel {
 
 const std::string kContrastFragmentShaderString = R"(
@@ -21,9 +21,11 @@ const std::string kContrastFragmentShaderString = R"(
 
 std::shared_ptr<ContrastFilter> ContrastFilter::Create() {
   auto ret = std::shared_ptr<ContrastFilter>(new ContrastFilter());
-  if (ret && !ret->Init()) {
-    ret.reset();
-  }
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (ret && !ret->Init()) {
+      ret.reset();
+    }
+  });
   return ret;
 }
 

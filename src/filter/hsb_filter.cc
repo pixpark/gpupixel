@@ -6,7 +6,7 @@
  */
 
 #include "hsb_filter.h"
-
+#include "gpupixel_context.h"
 namespace gpupixel {
 
 /* Matrix algorithms adapted from
@@ -30,9 +30,11 @@ namespace gpupixel {
 
 std::shared_ptr<HSBFilter> HSBFilter::Create() {
   auto ret = std::shared_ptr<HSBFilter>(new HSBFilter());
-  if (ret && !ret->Init()) {
-    ret.reset();
-  }
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (ret && !ret->Init()) {
+      ret.reset();
+    }
+  });
   return ret;
 }
 

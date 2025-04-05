@@ -6,16 +6,18 @@
  */
 
 #include "emboss_filter.h"
-
+#include "gpupixel_context.h"
 namespace gpupixel {
 
 //
 
 std::shared_ptr<EmbossFilter> EmbossFilter::Create() {
   auto ret = std::shared_ptr<EmbossFilter>(new EmbossFilter());
-  if (ret && !ret->Init()) {
-    ret.reset();
-  }
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (ret && !ret->Init()) {
+      ret.reset();
+    }
+  });
   return ret;
 }
 

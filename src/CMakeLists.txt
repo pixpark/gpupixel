@@ -69,7 +69,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/third_party/stb
     ${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/include
     ${CMAKE_CURRENT_SOURCE_DIR}/third_party/libyuv/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/third_party/mars-face/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/third_party/mars-face-kit/include
 )
 
 # Collect source files
@@ -98,7 +98,7 @@ file(GLOB EXPORT_HEADER
 # Collect resource files
 file(GLOB RESOURCE_FILES 
     "${CMAKE_CURRENT_SOURCE_DIR}/res*"  
-    "${CMAKE_CURRENT_SOURCE_DIR}/third_party/mars-face/mod*"                     
+    "${CMAKE_CURRENT_SOURCE_DIR}/third_party/mars-face-kit/mod*"                     
 )
 
 message(STATUS "RESOURCE_FILES: ${RESOURCE_FILES}")
@@ -131,22 +131,22 @@ add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${RESOURCE_FILES})
 # Platform specific library configuration
 if(${CURRENT_OS} STREQUAL "linux")
     # Configure Linux specific settings
-    add_library(mars-face SHARED IMPORTED)
-    set_target_properties(mars-face PROPERTIES IMPORTED_LOCATION
-        ${CMAKE_CURRENT_SOURCE_DIR}/third_party/mars-face/libs/${CURRENT_OS}/libmars-face.so)
+    add_library(mars-face-kit SHARED IMPORTED)
+    set_target_properties(mars-face-kit PROPERTIES IMPORTED_LOCATION
+        ${CMAKE_CURRENT_SOURCE_DIR}/third_party/mars-face-kit/libs/${CURRENT_OS}/libmars-face-kit.so)
 
     # Copy resources and libraries
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD 
         COMMAND ${CMAKE_COMMAND} -E copy_directory 
             ${CMAKE_CURRENT_SOURCE_DIR}/res ${OUTPUT_INSTALL_PATH}/res
         COMMAND ${CMAKE_COMMAND} -E copy_directory 
-            ${CMAKE_CURRENT_SOURCE_DIR}/third_party/mars-face/models ${OUTPUT_INSTALL_PATH}/models
+            ${CMAKE_CURRENT_SOURCE_DIR}/third_party/mars-face-kit/models ${OUTPUT_INSTALL_PATH}/models
         COMMAND ${CMAKE_COMMAND} -E make_directory 
             ${CMAKE_INCLUDE_OUTPUT_DIRECTORY}
         COMMAND ${CMAKE_COMMAND} -E copy 
             ${EXPORT_HEADER} ${CMAKE_INCLUDE_OUTPUT_DIRECTORY}
         COMMAND ${CMAKE_COMMAND} -E copy 
-            "${CMAKE_CURRENT_SOURCE_DIR}/third_party/mars-face/libs/${CURRENT_OS}/libmars-face.so" 
+            "${CMAKE_CURRENT_SOURCE_DIR}/third_party/mars-face-kit/libs/${CURRENT_OS}/libmars-face-kit.so" 
             ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
         COMMENT "Copying res and lib files to output/app directory.")
 
@@ -161,13 +161,13 @@ elseif(${CURRENT_OS} STREQUAL "windows")
         COMMAND ${CMAKE_COMMAND} -E copy_directory 
             ${CMAKE_CURRENT_SOURCE_DIR}/res ${OUTPUT_INSTALL_PATH}/res
         COMMAND ${CMAKE_COMMAND} -E copy_directory 
-            ${CMAKE_CURRENT_SOURCE_DIR}/third_party/mars-face/models ${OUTPUT_INSTALL_PATH}/models
+            ${CMAKE_CURRENT_SOURCE_DIR}/third_party/mars-face-kit/models ${OUTPUT_INSTALL_PATH}/models
         COMMAND ${CMAKE_COMMAND} -E make_directory 
             ${CMAKE_INCLUDE_OUTPUT_DIRECTORY}
         COMMAND ${CMAKE_COMMAND} -E copy 
             ${EXPORT_HEADER} ${CMAKE_INCLUDE_OUTPUT_DIRECTORY}
         COMMAND ${CMAKE_COMMAND} -E copy 
-            "${CMAKE_CURRENT_SOURCE_DIR}/third_party/mars-face/libs/${CURRENT_OS}/msvc-x64/mars-face.dll" 
+            "${CMAKE_CURRENT_SOURCE_DIR}/third_party/mars-face-kit/libs/${CURRENT_OS}/msvc-x64/mars-face-kit.dll" 
             ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
         COMMENT "Copying res and lib files to output/app directory.")
 
@@ -188,9 +188,9 @@ elseif(${CURRENT_OS} STREQUAL "macos" OR ${CURRENT_OS} STREQUAL "ios")
 
 elseif(${CURRENT_OS} STREQUAL "android")
     # Configure Android specific settings
-    add_library(mars-face SHARED IMPORTED)
-    set_target_properties(mars-face PROPERTIES IMPORTED_LOCATION
-        ${CMAKE_CURRENT_SOURCE_DIR}/third_party/mars-face/libs/${CURRENT_OS}/${ANDROID_ABI}/libmars-face.so)
+    add_library(mars-face-kit SHARED IMPORTED)
+    set_target_properties(mars-face-kit PROPERTIES IMPORTED_LOCATION
+        ${CMAKE_CURRENT_SOURCE_DIR}/third_party/mars-face-kit/libs/${CURRENT_OS}/${ANDROID_ABI}/libmars-face-kit.so)
 endif()
 
 # Library Dependencies
@@ -199,12 +199,12 @@ if(${CURRENT_OS} STREQUAL "linux")
     target_link_libraries(${PROJECT_NAME} PRIVATE
         GL
         glfw
-        mars-face)
+        mars-face-kit)
 elseif(${CURRENT_OS} STREQUAL "windows")
     target_link_libraries(${PROJECT_NAME} 
         opengl32
         ${CMAKE_CURRENT_SOURCE_DIR}/third_party/glfw/libs/msvc-x64/glfw3.lib
-        ${CMAKE_CURRENT_SOURCE_DIR}/third_party/mars-face/libs/${CURRENT_OS}/msvc-x64/mars-face.lib)
+        ${CMAKE_CURRENT_SOURCE_DIR}/third_party/mars-face-kit/libs/${CURRENT_OS}/msvc-x64/mars-face-kit.lib)
 elseif(${CURRENT_OS} STREQUAL "macos")
     target_link_libraries(${PROJECT_NAME}
         "-framework OpenGL"
@@ -216,7 +216,7 @@ elseif(${CURRENT_OS} STREQUAL "macos")
         "-framework CoreMedia"
         "-framework Metal"
         "${CMAKE_CURRENT_SOURCE_DIR}/third_party/mnn/libs/${CURRENT_OS}/MNN.framework"
-        "${CMAKE_CURRENT_SOURCE_DIR}/third_party/mars-face/libs/${CURRENT_OS}/libmars-face.a"
+        "${CMAKE_CURRENT_SOURCE_DIR}/third_party/mars-face-kit/libs/${CURRENT_OS}/libmars-face-kit.a"
     )
 elseif(${CURRENT_OS} STREQUAL "ios")
     target_link_libraries(${PROJECT_NAME}
@@ -230,7 +230,7 @@ elseif(${CURRENT_OS} STREQUAL "ios")
         "-framework Metal"
         "-framework CoreML"
         "${CMAKE_CURRENT_SOURCE_DIR}/third_party/mnn/libs/${CURRENT_OS}/MNN.framework"
-        "${CMAKE_CURRENT_SOURCE_DIR}/third_party/mars-face/libs/${CURRENT_OS}/libmars-face.a"
+        "${CMAKE_CURRENT_SOURCE_DIR}/third_party/mars-face-kit/libs/${CURRENT_OS}/libmars-face-kit.a"
     )
 elseif(${CURRENT_OS} STREQUAL "android")
     target_link_libraries(${PROJECT_NAME}
@@ -239,5 +239,5 @@ elseif(${CURRENT_OS} STREQUAL "android")
         GLESv3
         EGL
         jnigraphics
-        mars-face)
+        mars-face-kit)
 endif()

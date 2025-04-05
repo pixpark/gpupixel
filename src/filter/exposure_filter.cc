@@ -6,7 +6,7 @@
  */
 
 #include "exposure_filter.h"
-
+#include "gpupixel_context.h"
 namespace gpupixel {
 
 const std::string kExposureFragmentShaderString = R"(
@@ -20,9 +20,11 @@ const std::string kExposureFragmentShaderString = R"(
 
 std::shared_ptr<ExposureFilter> ExposureFilter::Create() {
   auto ret = std::shared_ptr<ExposureFilter>(new ExposureFilter());
-  if (ret && !ret->Init()) {
-    ret.reset();
-  }
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (ret && !ret->Init()) {
+      ret.reset();
+    }
+  });
   return ret;
 }
 

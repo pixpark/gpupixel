@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <com.pixpark.gpupixel.GPUPixelView
+    <android.opengl.GLSurfaceView
         android:id="@+id/surfaceView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -66,7 +66,7 @@
         android:layout_marginBottom="120dp" />
 
     <SeekBar
-        android:id="@+id/thinface_seekbar"
+        android:id="@+id/thinfaceSeekbar"
         android:layout_width="match_parent"
         android:layout_height="20dp"
         android:layout_alignParentBottom="true"
@@ -87,7 +87,7 @@
         android:layout_marginBottom="80dp" />
 
     <SeekBar
-        android:id="@+id/bigeye_seekbar"
+        android:id="@+id/bigeyeSeekbar"
         android:layout_width="match_parent"
         android:layout_height="20dp"
         android:layout_alignParentBottom="true"
@@ -108,7 +108,7 @@
         android:layout_marginBottom="40dp" />
 
     <SeekBar
-        android:id="@+id/lipstick_seekbar"
+        android:id="@+id/lipstickSeekbar"
         android:layout_width="match_parent"
         android:layout_height="20dp"
         android:layout_alignParentBottom="true"

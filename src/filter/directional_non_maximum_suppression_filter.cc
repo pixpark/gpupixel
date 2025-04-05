@@ -6,7 +6,7 @@
  */
 
 #include "directional_non_maximum_suppression_filter.h"
-
+#include "gpupixel_context.h"
 namespace gpupixel {
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
@@ -92,9 +92,11 @@ std::shared_ptr<DirectionalNonMaximumSuppressionFilter>
 DirectionalNonMaximumSuppressionFilter::Create() {
   auto ret = std::shared_ptr<DirectionalNonMaximumSuppressionFilter>(
       new DirectionalNonMaximumSuppressionFilter());
-  if (ret && !ret->Init()) {
-    ret.reset();
-  }
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (ret && !ret->Init()) {
+      ret.reset();
+    }
+  });
   return ret;
 }
 

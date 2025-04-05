@@ -78,23 +78,24 @@ class GPUPIXEL_API Filter : public Source, public Sink {
   bool RegisterProperty(const std::string& name,
                         int default_value,
                         const std::string& comment = "",
-                        std::function<void(int&)> set_callback = 0);
+                        std::function<void(int&)> on_property_set_func = 0);
 
   bool RegisterProperty(const std::string& name,
                         float default_value,
                         const std::string& comment = "",
-                        std::function<void(float&)> set_callback = 0);
+                        std::function<void(float&)> on_property_set_func = 0);
 
   bool RegisterProperty(
       const std::string& name,
       std::vector<float> default_value,
       const std::string& comment /* = ""*/,
-      std::function<void(std::vector<float>&)> set_callback /* = 0*/);
+      std::function<void(std::vector<float>&)> on_property_set_func /* = 0*/);
 
-  bool RegisterProperty(const std::string& name,
-                        const std::string& default_value,
-                        const std::string& comment = "",
-                        std::function<void(std::string&)> set_callback = 0);
+  bool RegisterProperty(
+      const std::string& name,
+      const std::string& default_value,
+      const std::string& comment = "",
+      std::function<void(std::string&)> on_property_set_func = 0);
 
   bool SetProperty(const std::string& name, int value);
 
@@ -145,25 +146,25 @@ class GPUPIXEL_API Filter : public Source, public Sink {
 
   struct IntProperty : Property {
     int value;
-    std::function<void(int&)> set_callback;
+    std::function<void(int&)> on_property_set_func;
   };
   std::map<std::string, IntProperty> int_properties_;
 
   struct FloatProperty : Property {
     float value;
-    std::function<void(float&)> set_callback;
+    std::function<void(float&)> on_property_set_func;
   };
   std::map<std::string, FloatProperty> float_properties_;
 
   struct VectorProperty : Property {
     std::vector<float> value;
-    std::function<void(std::vector<float>&)> set_callback;
+    std::function<void(std::vector<float>&)> on_property_set_func;
   };
   std::map<std::string, VectorProperty> vector_properties_;
 
   struct StringProperty : Property {
     std::string value;
-    std::function<void(std::string&)> set_callback;
+    std::function<void(std::string&)> on_property_set_func;
   };
   std::map<std::string, StringProperty> string_properties_;
 

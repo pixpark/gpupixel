@@ -6,7 +6,7 @@
  */
 
 #include "halftone_filter.h"
-
+#include "gpupixel_context.h"
 namespace gpupixel {
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
@@ -72,9 +72,11 @@ const std::string kHalftoneFragmentShaderString = R"(
 
 std::shared_ptr<HalftoneFilter> HalftoneFilter::Create() {
   auto ret = std::shared_ptr<HalftoneFilter>(new HalftoneFilter());
-  if (ret && !ret->Init()) {
-    ret.reset();
-  }
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (ret && !ret->Init()) {
+      ret.reset();
+    }
+  });
   return ret;
 }
 
@@ -84,10 +86,10 @@ bool HalftoneFilter::Init() {
   }
 
   setPixelSize(0.01);
-  RegisterProperty(
-      "pixelSize", pixel_size_,
-      "The size of a pixel that you want to pixellate, ranges from 0 to 0.05.",
-      [this](float& pixelSize) { setPixelSize(pixelSize); });
+  RegisterProperty("pixelSize", pixel_size_,
+                   "The size of a pixel that you want to pixellate, ranges "
+                   "from 0 to 0.05.",
+                   [this](float& pixelSize) { setPixelSize(pixelSize); });
 
   return true;
 }
