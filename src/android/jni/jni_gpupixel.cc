@@ -348,7 +348,8 @@ extern "C" void Java_com_pixpark_gpupixel_GPUPixel_nativeYUVtoRBGA(
                      reinterpret_cast<const uint8_t*>(nv21 + width * height),
                      width, src_rgba, width * 4, width, height);
 
-  // Restore rotation logic, Android captured images need to be rotated 270 degrees
+  // Restore rotation logic, Android captured images need to be rotated 270
+  // degrees
   uint8_t* rotated_rgba = (uint8_t*)malloc(width * height * 4);
   libyuv::ARGBRotate(src_rgba, width * 4, rotated_rgba, height * 4, width,
                      height, libyuv::kRotate270);

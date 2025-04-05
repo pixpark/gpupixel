@@ -11,13 +11,13 @@ CLANG_FORMAT="clang-format -i"
 echo "开始格式化代码文件..."
 
 # 格式化src目录下的文件
-find "$SRC_DIR" -type f \( -name "*.cc" -o -name "*.h" -o -name "*.java" \) \
+find "$SRC_DIR" -type f \( -name "*.cc" -o -name "*.h" -o -name "*.mm" -o -name "*.java" \) \
      -not -path "*/third_party/*" \
      -exec echo "格式化：{}" \; \
      -exec $CLANG_FORMAT {} \;
 
 # 格式化demo目录下的文件
-find "$DEMO_DIR" -type f \( -name "*.cc" -o -name "*.h" -o -name "*.java" \) \
+find "$DEMO_DIR" -type f \( -name "*.cc" -o -name "*.h" -o -name "*.mm" -o -name "*.java" \) \
      -not -path "*/third_party/*" \
      -exec echo "格式化：{}" \; \
      -exec $CLANG_FORMAT {} \;

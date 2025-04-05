@@ -20,7 +20,7 @@ init_filter_factory() {
   factory["LipstickFilter"] = LipstickFilter::Create;
   factory["BlusherFilter"] = BlusherFilter::Create;
   factory["FaceMakeupFilter"] = FaceMakeupFilter::Create;
-  
+
   // Basic adjustment filters
   // factory["BrightnessFilter"] = BrightnessFilter::Create;
   factory["ContrastFilter"] = ContrastFilter::Create;
@@ -32,7 +32,7 @@ init_filter_factory() {
   factory["ColorInvertFilter"] = ColorInvertFilter::Create;
   factory["WhiteBalanceFilter"] = WhiteBalanceFilter::Create;
   factory["ColorMatrixFilter"] = ColorMatrixFilter::Create;
-  
+
   // Blur filters
   // factory["GaussianBlurFilter"] = GaussianBlurFilter::Create;
   // factory["GaussianBlurMonoFilter"] = GaussianBlurMonoFilter::Create;
@@ -40,15 +40,18 @@ init_filter_factory() {
   factory["IOSBlurFilter"] = IOSBlurFilter::Create;
   factory["BilateralFilter"] = BilateralFilter::Create;
   // factory["BilateralMonoFilter"] = BilateralMonoFilter::Create;
-  // factory["SingleComponentGaussianBlurFilter"] = SingleComponentGaussianBlurFilter::Create;
-  // factory["SingleComponentGaussianBlurMonoFilter"] = SingleComponentGaussianBlurMonoFilter::Create;
-  
+  // factory["SingleComponentGaussianBlurFilter"] =
+  // SingleComponentGaussianBlurFilter::Create;
+  // factory["SingleComponentGaussianBlurMonoFilter"] =
+  // SingleComponentGaussianBlurMonoFilter::Create;
+
   // Edge detection and effect filters
   factory["SobelEdgeDetectionFilter"] = SobelEdgeDetectionFilter::Create;
   factory["CannyEdgeDetectionFilter"] = CannyEdgeDetectionFilter::Create;
-  factory["DirectionalNonMaximumSuppressionFilter"] = DirectionalNonMaximumSuppressionFilter::Create;
+  factory["DirectionalNonMaximumSuppressionFilter"] =
+      DirectionalNonMaximumSuppressionFilter::Create;
   factory["WeakPixelInclusionFilter"] = WeakPixelInclusionFilter::Create;
-  
+
   // Effect filters
   factory["ToonFilter"] = ToonFilter::Create;
   factory["SmoothToonFilter"] = SmoothToonFilter::Create;
@@ -61,7 +64,7 @@ init_filter_factory() {
 
   // Other processing filters
   factory["LuminanceRangeFilter"] = LuminanceRangeFilter::Create;
-  
+
   return factory;
 }
 std::map<std::string, std::function<std::shared_ptr<Filter>()>>
@@ -96,7 +99,6 @@ std::shared_ptr<Filter> Filter::CreateWithShaderString(
   auto filter = std::shared_ptr<Filter>(new Filter());
   if (!filter->InitWithShaderString(vertex_shader_source,
                                     fragment_shader_source)) {
-
   }
   return filter;
 }
