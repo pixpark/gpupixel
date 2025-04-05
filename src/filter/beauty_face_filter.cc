@@ -6,7 +6,7 @@
  */
 
 #include "beauty_face_filter.h"
-
+#include "gpupixel_context.h"
 namespace gpupixel {
 
 BeautyFaceFilter::BeautyFaceFilter() {}
@@ -15,9 +15,11 @@ BeautyFaceFilter::~BeautyFaceFilter() {}
 
 std::shared_ptr<BeautyFaceFilter> BeautyFaceFilter::Create() {
   auto ret = std::shared_ptr<BeautyFaceFilter>(new BeautyFaceFilter());
-  if (ret && !ret->Init()) {
-    ret.reset();
-  }
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (ret && !ret->Init()) {
+      ret.reset();
+    }
+  });
   return ret;
 }
 

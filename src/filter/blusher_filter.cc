@@ -6,14 +6,16 @@
  */
 
 #include "blusher_filter.h"
+#include "gpupixel_context.h"
 #include "source_image.h"
-
 namespace gpupixel {
 std::shared_ptr<BlusherFilter> BlusherFilter::Create() {
   auto ret = std::shared_ptr<BlusherFilter>(new BlusherFilter());
-  if (ret && !ret->Init()) {
-    ret.reset();
-  }
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (ret && !ret->Init()) {
+      ret.reset();
+    }
+  });
   return ret;
 }
 

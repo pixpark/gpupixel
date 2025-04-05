@@ -7,10 +7,10 @@
 
 #include "util.h"
 #include <cstdarg>
-#include "gpupixel_context.h"
+#include "../core/gpupixel_context.h"
 #if defined(GPUPIXEL_ANDROID)
 #include <android/log.h>
-#include "jni_helpers.h"
+#include "../android/jni/jni_helpers.h"
 #elif defined(GPUPIXEL_IOS)
 #import <Foundation/foundation.h>
 #import <UIKit/UIKit.h>
@@ -118,33 +118,121 @@ int vasprintf(char** strp, const char* fmt, va_list ap) {
 
 #if defined(GPUPIXEL_ANDROID)
 std::string Util::getResourcePathJni(std::string name) {
-  // @see
-  // https://developer.android.com/ndk/guides/image-decoder?hl=zh-cn
+  // Get JVM and environment
   JavaVM* jvm = GetJVM();
-  JNIEnv* env = GetEnv(jvm);
-
-  // Define class path and method signature
-  const char* className = "com/pixpark/gpupixel/GPUPixel";
-  const char* methodName = "getResource_path";
-  const char* methodSignature = "()Ljava/lang/String;";
-
-  // GPUPixel
-  jclass class_id = env->FindClass(className);
-  if (class_id == NULL) {
-    return NULL;
+  if (!jvm) {
+    Log("GPUPixel", "GetJVM() returned null in getResourcePathJni");
+    return getDefaultResourcePath(name);
   }
 
-  jmethodID mtd = env->GetStaticMethodID(class_id, methodName, methodSignature);
-  if (mtd == NULL) {
-    return NULL;
+  // Create JNI attach scope to ensure thread is attached to JVM
+  AttachThreadScoped ats(jvm);
+  JNIEnv* env = ats.env();
+  if (!env) {
+    Log("GPUPixel", "Failed to get JNIEnv in getResourcePathJni");
+    return getDefaultResourcePath(name);
   }
 
-  // Call createBitmap method
-  jstring path = (jstring)env->CallStaticObjectMethod(class_id, mtd);
+  std::string result = "";
 
-  std::string str = env->GetStringUTFChars(path, nullptr);
-  env->DeleteLocalRef(class_id);
-  return str + "/" + name;
+  // Find GPUPixel class - use fully qualified name
+  jclass gpuPixelClass = nullptr;
+
+  // Try different class paths
+  const char* classNames[] = {
+      "com/pixpark/gpupixel/GPUPixel",
+  };
+
+  for (const auto& className : classNames) {
+    Log("GPUPixel", "Trying to find class: %s", className);
+    gpuPixelClass = env->FindClass(className);
+    if (gpuPixelClass) {
+      Log("GPUPixel", "Found GPUPixel class: %s", className);
+      break;
+    }
+    if (env->ExceptionCheck()) {
+      env->ExceptionClear();
+    }
+  }
+
+  if (!gpuPixelClass) {
+    Log("GPUPixel",
+        "Failed to find GPUPixel class after trying all alternatives");
+    return getDefaultResourcePath(name);
+  }
+
+  // Get init static method to ensure initialization has been called
+  jmethodID initMethod = env->GetStaticMethodID(gpuPixelClass, "Init",
+                                                "(Landroid/content/Context;)V");
+  if (initMethod) {
+    Log("GPUPixel",
+        "Found Init method, but we're not calling it because we don't have "
+        "Context object");
+  }
+
+  // Get getResource_path static method
+  jmethodID getResourcePathMethod = env->GetStaticMethodID(
+      gpuPixelClass, "getResource_path", "()Ljava/lang/String;");
+  if (!getResourcePathMethod) {
+    if (env->ExceptionCheck()) {
+      env->ExceptionClear();
+    }
+    Log("GPUPixel", "Failed to find getResource_path method");
+    env->DeleteLocalRef(gpuPixelClass);
+    return getDefaultResourcePath(name);
+  }
+
+  // Call static method to get resource path
+  jstring jPath = (jstring)env->CallStaticObjectMethod(gpuPixelClass,
+                                                       getResourcePathMethod);
+  if (env->ExceptionCheck()) {
+    env->ExceptionClear();
+    Log("GPUPixel", "Exception occurred when calling getResource_path");
+    env->DeleteLocalRef(gpuPixelClass);
+    return getDefaultResourcePath(name);
+  }
+
+  if (jPath != NULL) {
+    // Convert Java string to C++ string
+    const char* pathChars = env->GetStringUTFChars(jPath, NULL);
+    if (pathChars) {
+      result = pathChars;
+      env->ReleaseStringUTFChars(jPath, pathChars);
+
+      Log("GPUPixel", "Got resource path: %s", result.c_str());
+
+      // If given name is not empty, append to path
+      if (!name.empty() && !result.empty()) {
+        if (result[result.length() - 1] != '/') {
+          result += "/";
+        }
+        result += name;
+      }
+    }
+    env->DeleteLocalRef(jPath);
+  } else {
+    Log("GPUPixel", "getResource_path returned null");
+    result = getDefaultResourcePath(name);
+  }
+
+  env->DeleteLocalRef(gpuPixelClass);
+  return result;
+}
+
+// Helper function to provide default resource path
+std::string Util::getDefaultResourcePath(std::string name) {
+  std::string defaultPath =
+      "/sdcard/Android/data/com.pixpark.gpupixeldemo/files/resource";
+  Log("GPUPixel", "Using default resource path: %s", defaultPath.c_str());
+
+  if (!name.empty()) {
+    if (defaultPath[defaultPath.length() - 1] != '/') {
+      defaultPath += "/";
+    }
+    defaultPath += name;
+  }
+
+  return defaultPath;
 }
 #endif
 

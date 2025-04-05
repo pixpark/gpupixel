@@ -7,7 +7,6 @@
 
 #include "box_difference_filter.h"
 #include "gpupixel_context.h"
-
 namespace gpupixel {
 
 const std::string kBoxDifferenceVertexShaderString = R"(
@@ -59,9 +58,11 @@ BoxDifferenceFilter::~BoxDifferenceFilter() {}
 
 std::shared_ptr<BoxDifferenceFilter> BoxDifferenceFilter::Create() {
   auto ret = std::shared_ptr<BoxDifferenceFilter>(new BoxDifferenceFilter());
-  if (ret && !ret->Init()) {
-    ret.reset();
-  }
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (ret && !ret->Init()) {
+      ret.reset();
+    }
+  });
   return ret;
 }
 

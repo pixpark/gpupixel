@@ -6,25 +6,23 @@
  */
 
 #include "gpupixel_context.h"
+#include "dispatch_queue.h"
 #include "util.h"
-
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
 
-typedef void (^TaskBlock)(void);
-
+// Helper class to manage iOS application state
 @interface iOSHelper : NSObject {
   bool isActive;
 }
 
 - (bool)isAppActive;
-- (void)run:(TaskBlock)task;
 @end
 
 @implementation iOSHelper
 - (id)init {
   if (self = [super init]) {
 #if defined(GPUPIXEL_IOS)
-    // register notification
+    // Register for application state change notifications
     [[NSNotificationCenter defaultCenter]
         addObserver:self
            selector:@selector(willResignActive)
@@ -41,6 +39,7 @@ typedef void (^TaskBlock)(void);
   return self;
 }
 
+// Handle application state changes
 - (void)willResignActive {
   @synchronized(self) {
     isActive = false;
@@ -59,17 +58,9 @@ typedef void (^TaskBlock)(void);
   }
 }
 
-- (void)run:(TaskBlock)task {
-  [self performSelectorOnMainThread:@selector(doRunTask:)
-                         withObject:task
-                      waitUntilDone:NO];
-}
-- (void)doRunTask:(TaskBlock)task {
-  task();
-}
-
 - (void)dealloc {
 #if defined(GPUPIXEL_IOS)
+  // Remove notification observers
   [[NSNotificationCenter defaultCenter]
       removeObserver:self
                 name:UIApplicationWillResignActiveNotification
@@ -89,6 +80,7 @@ namespace gpupixel {
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
 iOSHelper* ios_helper_;
 #elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
+// Default view dimensions for Windows/Linux platforms
 const unsigned int VIEW_WIDTH = 1280;
 const unsigned int VIEW_HEIGHT = 720;
 
@@ -102,6 +94,7 @@ GPUPixelContext::GPUPixelContext()
       is_capturing_frame_(false),
       capture_frame_filter_(0),
       capture_frame_data_(0) {
+  task_queue_ = std::make_shared<DispatchQueue>();
   framebuffer_factory_ = new FramebufferFactory();
   Init();
 }
@@ -109,6 +102,7 @@ GPUPixelContext::GPUPixelContext()
 GPUPixelContext::~GPUPixelContext() {
   ReleaseContext();
   delete framebuffer_factory_;
+  task_queue_->stop();
 }
 
 GPUPixelContext* GPUPixelContext::GetInstance() {
@@ -132,7 +126,7 @@ void GPUPixelContext::Destroy() {
 }
 
 void GPUPixelContext::Init() {
-  RunSync([=] {
+  SyncRunWithContext([=] {
     Util::Log("INFO", "start init GPUPixelContext");
     this->CreateContext();
   });
@@ -182,6 +176,71 @@ void GPUPixelContext::CreateContext() {
   [image_processing_context_ makeCurrentContext];
   [image_processing_context_ setValues:&interval
                           forParameter:NSOpenGLContextParameterSwapInterval];
+#elif defined(GPUPIXEL_ANDROID)
+  // Initialize EGL
+  egl_display_ = eglGetDisplay(EGL_DEFAULT_DISPLAY);
+  if (egl_display_ == EGL_NO_DISPLAY) {
+    Util::Log("ERROR", "Failed to get EGL display");
+    return;
+  }
+
+  EGLint major, minor;
+  if (!eglInitialize(egl_display_, &major, &minor)) {
+    Util::Log("ERROR", "Failed to initialize EGL");
+    return;
+  }
+
+  // Configure EGL
+  const EGLint configAttribs[] = {EGL_RED_SIZE,
+                                  8,
+                                  EGL_GREEN_SIZE,
+                                  8,
+                                  EGL_BLUE_SIZE,
+                                  8,
+                                  EGL_ALPHA_SIZE,
+                                  8,
+                                  EGL_DEPTH_SIZE,
+                                  16,
+                                  EGL_STENCIL_SIZE,
+                                  0,
+                                  EGL_SURFACE_TYPE,
+                                  EGL_PBUFFER_BIT,
+                                  EGL_RENDERABLE_TYPE,
+                                  EGL_OPENGL_ES2_BIT,
+                                  EGL_NONE};
+
+  EGLint numConfigs;
+  if (!eglChooseConfig(egl_display_, configAttribs, &egl_config_, 1,
+                       &numConfigs)) {
+    Util::Log("ERROR", "Failed to choose EGL config");
+    return;
+  }
+
+  // Create EGL context
+  const EGLint contextAttribs[] = {EGL_CONTEXT_CLIENT_VERSION, 2, EGL_NONE};
+
+  egl_context_ = eglCreateContext(egl_display_, egl_config_, EGL_NO_CONTEXT,
+                                  contextAttribs);
+  if (egl_context_ == EGL_NO_CONTEXT) {
+    Util::Log("ERROR", "Failed to create EGL context");
+    return;
+  }
+
+  // Create offscreen rendering surface
+  const EGLint pbufferAttribs[] = {EGL_WIDTH, 1, EGL_HEIGHT, 1, EGL_NONE};
+
+  egl_surface_ =
+      eglCreatePbufferSurface(egl_display_, egl_config_, pbufferAttribs);
+  if (egl_surface_ == EGL_NO_SURFACE) {
+    Util::Log("ERROR", "Failed to create EGL surface");
+    return;
+  }
+
+  // Set current context
+  if (!eglMakeCurrent(egl_display_, egl_surface_, egl_surface_, egl_context_)) {
+    Util::Log("ERROR", "Failed to make EGL context current");
+    return;
+  }
 #elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
   int ret = glfwInit();
 
@@ -216,6 +275,10 @@ void GPUPixelContext::UseAsCurrent() {
   if ([NSOpenGLContext currentContext] != image_processing_context_) {
     [image_processing_context_ makeCurrentContext];
   }
+#elif defined(GPUPIXEL_ANDROID)
+  if (eglGetCurrentContext() != egl_context_) {
+    eglMakeCurrent(egl_display_, egl_surface_, egl_surface_, egl_context_);
+  }
 #elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
   if (glfwGetCurrentContext() != gl_context_) {
     glfwMakeContextCurrent(gl_context_);
@@ -228,11 +291,33 @@ void GPUPixelContext::PresentBufferForDisplay() {
   [egl_context_ presentRenderbuffer:GL_RENDERBUFFER];
 #elif defined(GPUPIXEL_MAC)
   // No implementation needed
+#elif defined(GPUPIXEL_ANDROID)
+  // For offscreen rendering, no need to swap buffers
+  // If display to screen is needed, use eglSwapBuffers(egl_display_,
+  // egl_surface_);
 #endif
 }
 
 void GPUPixelContext::ReleaseContext() {
-#if defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
+#if defined(GPUPIXEL_ANDROID)
+  if (egl_display_ != EGL_NO_DISPLAY) {
+    eglMakeCurrent(egl_display_, EGL_NO_SURFACE, EGL_NO_SURFACE,
+                   EGL_NO_CONTEXT);
+
+    if (egl_surface_ != EGL_NO_SURFACE) {
+      eglDestroySurface(egl_display_, egl_surface_);
+      egl_surface_ = EGL_NO_SURFACE;
+    }
+
+    if (egl_context_ != EGL_NO_CONTEXT) {
+      eglDestroyContext(egl_display_, egl_context_);
+      egl_context_ = EGL_NO_CONTEXT;
+    }
+
+    eglTerminate(egl_display_);
+    egl_display_ = EGL_NO_DISPLAY;
+  }
+#elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
   if (gl_context_) {
     glfwDestroyWindow(gl_context_);
   }
@@ -240,23 +325,11 @@ void GPUPixelContext::ReleaseContext() {
 #endif
 }
 
-void GPUPixelContext::RunSync(std::function<void(void)> func) {
-#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
-  if ([NSThread isMainThread]) {
+void GPUPixelContext::SyncRunWithContext(std::function<void(void)> task) {
+  task_queue_->runTask([=]() {
     UseAsCurrent();
-    func();
-  } else {
-    dispatch_sync(dispatch_get_main_queue(), ^{
-      UseAsCurrent();
-      func();
-    });
-  }
-#elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
-  UseAsCurrent();
-  func();
-#else
-  func();
-#endif
+    task();
+  });
 }
 
 }  // namespace gpupixel

@@ -8,13 +8,13 @@
 #include "filter.h"
 #include "gpupixel.h"
 #include "gpupixel_context.h"
-
 namespace gpupixel {
 
 std::map<std::string, std::function<std::shared_ptr<Filter>()>>
 init_filter_factory() {
   std::map<std::string, std::function<std::shared_ptr<Filter>()>> factory;
-  // Beauty related filters
+
+  // Beauty filters
   factory["BeautyFaceFilter"] = BeautyFaceFilter::Create;
   factory["FaceReshapeFilter"] = FaceReshapeFilter::Create;
   factory["LipstickFilter"] = LipstickFilter::Create;
@@ -22,7 +22,6 @@ init_filter_factory() {
   factory["FaceMakeupFilter"] = FaceMakeupFilter::Create;
 
   // Basic adjustment filters
-  // factory["BrightnessFilter"] = BrightnessFilter::Create;
   factory["ContrastFilter"] = ContrastFilter::Create;
   factory["ExposureFilter"] = ExposureFilter::Create;
   factory["SaturationFilter"] = SaturationFilter::Create;
@@ -34,25 +33,17 @@ init_filter_factory() {
   factory["ColorMatrixFilter"] = ColorMatrixFilter::Create;
 
   // Blur filters
-  // factory["GaussianBlurFilter"] = GaussianBlurFilter::Create;
-  // factory["GaussianBlurMonoFilter"] = GaussianBlurMonoFilter::Create;
-  // factory["BoxBlurFilter"] = BoxBlurFilter::Create;
   factory["IOSBlurFilter"] = IOSBlurFilter::Create;
   factory["BilateralFilter"] = BilateralFilter::Create;
-  // factory["BilateralMonoFilter"] = BilateralMonoFilter::Create;
-  // factory["SingleComponentGaussianBlurFilter"] =
-  // SingleComponentGaussianBlurFilter::Create;
-  // factory["SingleComponentGaussianBlurMonoFilter"] =
-  // SingleComponentGaussianBlurMonoFilter::Create;
 
-  // Edge detection and effect filters
+  // Edge detection filters
   factory["SobelEdgeDetectionFilter"] = SobelEdgeDetectionFilter::Create;
   factory["CannyEdgeDetectionFilter"] = CannyEdgeDetectionFilter::Create;
   factory["DirectionalNonMaximumSuppressionFilter"] =
       DirectionalNonMaximumSuppressionFilter::Create;
   factory["WeakPixelInclusionFilter"] = WeakPixelInclusionFilter::Create;
 
-  // Effect filters
+  // Special effect filters
   factory["ToonFilter"] = ToonFilter::Create;
   factory["SmoothToonFilter"] = SmoothToonFilter::Create;
   factory["PosterizeFilter"] = PosterizeFilter::Create;
@@ -62,7 +53,7 @@ init_filter_factory() {
   factory["SphereRefractionFilter"] = SphereRefractionFilter::Create;
   factory["EmbossFilter"] = EmbossFilter::Create;
 
-  // Other processing filters
+  // Image processing filters
   factory["LuminanceRangeFilter"] = LuminanceRangeFilter::Create;
 
   return factory;
@@ -328,10 +319,11 @@ void Filter::Render() {
   }
 }
 
-bool Filter::RegisterProperty(const std::string& name,
-                              int default_value,
-                              const std::string& comment /* = ""*/,
-                              std::function<void(int&)> set_callback /* = 0*/) {
+bool Filter::RegisterProperty(
+    const std::string& name,
+    int default_value,
+    const std::string& comment /* = ""*/,
+    std::function<void(int&)> on_property_set_func /* = 0*/) {
   if (HasProperty(name)) {
     return false;
   }
@@ -339,7 +331,7 @@ bool Filter::RegisterProperty(const std::string& name,
   property.type = "int";
   property.value = default_value;
   property.comment = comment;
-  property.set_callback = set_callback;
+  property.on_property_set_func = on_property_set_func;
   int_properties_[name] = property;
   return true;
 }
@@ -348,7 +340,7 @@ bool Filter::RegisterProperty(
     const std::string& name,
     float default_value,
     const std::string& comment /* = ""*/,
-    std::function<void(float&)> set_callback /* = 0*/) {
+    std::function<void(float&)> on_property_set_func /* = 0*/) {
   if (HasProperty(name)) {
     return false;
   }
@@ -356,7 +348,7 @@ bool Filter::RegisterProperty(
   property.type = "float";
   property.value = default_value;
   property.comment = comment;
-  property.set_callback = set_callback;
+  property.on_property_set_func = on_property_set_func;
   float_properties_[name] = property;
   return true;
 }
@@ -365,7 +357,7 @@ bool Filter::RegisterProperty(
     const std::string& name,
     std::vector<float> default_value,
     const std::string& comment /* = ""*/,
-    std::function<void(std::vector<float>&)> set_callback /* = 0*/) {
+    std::function<void(std::vector<float>&)> on_property_set_func /* = 0*/) {
   if (HasProperty(name)) {
     return false;
   }
@@ -373,7 +365,7 @@ bool Filter::RegisterProperty(
   property.type = "vector";
   property.value = default_value;
   property.comment = comment;
-  property.set_callback = set_callback;
+  property.on_property_set_func = on_property_set_func;
   vector_properties_[name] = property;
   return true;
 }
@@ -382,7 +374,7 @@ bool Filter::RegisterProperty(
     const std::string& name,
     const std::string& default_value,
     const std::string& comment /* = ""*/,
-    std::function<void(std::string&)> set_callback /* = 0*/) {
+    std::function<void(std::string&)> on_property_set_func /* = 0*/) {
   if (HasProperty(name)) {
     return false;
   }
@@ -390,7 +382,7 @@ bool Filter::RegisterProperty(
   property.type = "string";
   property.value = default_value;
   property.comment = comment;
-  property.set_callback = set_callback;
+  property.on_property_set_func = on_property_set_func;
   string_properties_[name] = property;
   return true;
 }
@@ -409,8 +401,8 @@ bool Filter::SetProperty(const std::string& name, int value) {
   }
   IntProperty* property = ((IntProperty*)raw_property);
   property->value = value;
-  if (property->set_callback) {
-    property->set_callback(value);
+  if (property->on_property_set_func) {
+    property->on_property_set_func(value);
   }
   return true;
 }
@@ -428,8 +420,8 @@ bool Filter::SetProperty(const std::string& name, float value) {
     return false;
   }
   FloatProperty* property = ((FloatProperty*)raw_property);
-  if (property->set_callback) {
-    property->set_callback(value);
+  if (property->on_property_set_func) {
+    property->on_property_set_func(value);
   }
   property->value = value;
 
@@ -449,8 +441,8 @@ bool Filter::SetProperty(const std::string& name, std::vector<float> value) {
     return false;
   }
   VectorProperty* property = ((VectorProperty*)raw_property);
-  if (property->set_callback) {
-    property->set_callback(value);
+  if (property->on_property_set_func) {
+    property->on_property_set_func(value);
   }
   property->value = value;
 
@@ -471,8 +463,8 @@ bool Filter::SetProperty(const std::string& name, std::string value) {
   }
   StringProperty* property = ((StringProperty*)raw_property);
   property->value = value;
-  if (property->set_callback) {
-    property->set_callback(value);
+  if (property->on_property_set_func) {
+    property->on_property_set_func(value);
   }
   return true;
 }

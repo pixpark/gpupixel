@@ -6,7 +6,7 @@
  */
 
 #include "posterize_filter.h"
-
+#include "gpupixel_context.h"
 namespace gpupixel {
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
@@ -33,8 +33,11 @@ const std::string kPosterizeFragmentShaderString = R"(
 
 std::shared_ptr<PosterizeFilter> PosterizeFilter::Create() {
   auto ret = std::shared_ptr<PosterizeFilter>(new PosterizeFilter());
-  if (ret && !ret->Init()) {
-  }
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (ret && !ret->Init()) {
+      ret.reset();
+    }
+  });
   return ret;
 }
 

@@ -102,8 +102,8 @@ unsigned char* Source::GetProcessedFrameData(std::shared_ptr<Filter> upToFilter,
   GPUPixelContext::GetInstance()->capture_width_ = width;
   GPUPixelContext::GetInstance()->capture_height_ = height;
   GPUPixelContext::GetInstance()->capture_frame_filter_ = upToFilter;
-
-  DoRender(true);
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext(
+      [&] { DoRender(true); });
   unsigned char* processedFrameData =
       GPUPixelContext::GetInstance()->capture_frame_data_;
 

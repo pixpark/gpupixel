@@ -6,7 +6,7 @@
  */
 
 #include "grayscale_filter.h"
-
+#include "gpupixel_context.h"
 namespace gpupixel {
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)

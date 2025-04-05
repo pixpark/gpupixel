@@ -6,8 +6,8 @@
  */
 
 #include "hue_filter.h"
+#include "gpupixel_context.h"
 #include "math_toolbox.h"
-
 namespace gpupixel {
 
 // Adapted from
@@ -56,9 +56,11 @@ const std::string kHueFragmentShaderString = R"(
 
 std::shared_ptr<HueFilter> HueFilter::Create() {
   auto ret = std::shared_ptr<HueFilter>(new HueFilter());
-  if (ret && !ret->Init()) {
-    ret.reset();
-  }
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (ret && !ret->Init()) {
+      ret.reset();
+    }
+  });
   return ret;
 }
 

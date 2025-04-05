@@ -6,7 +6,7 @@
  */
 
 #include "box_high_pass_filter.h"
-
+#include "gpupixel_context.h"
 namespace gpupixel {
 
 BoxHighPassFilter::BoxHighPassFilter() {}
@@ -15,9 +15,11 @@ BoxHighPassFilter::~BoxHighPassFilter() {}
 
 std::shared_ptr<BoxHighPassFilter> BoxHighPassFilter::Create() {
   auto ret = std::shared_ptr<BoxHighPassFilter>(new BoxHighPassFilter());
-  if (ret && !ret->Init()) {
-    ret.reset();
-  }
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (ret && !ret->Init()) {
+      ret.reset();
+    }
+  });
   return ret;
 }
 

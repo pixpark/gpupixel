@@ -121,12 +121,12 @@ if(${CURRENT_OS} STREQUAL "linux")
                         glfw
                         dl)
     set(DEPS_LIBS ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libgpupixel.so
-                      ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libmars-face.so)
+                      ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libmars-face-kit.so)
     set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-Wl,-rpath,./")
 elseif(${CURRENT_OS} STREQUAL "windows")
     # Windows dependencies
     set(DEPS_LIBS ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/gpupixel.dll
-                      ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/mars-face.dll)
+                      ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/mars-face-kit.dll)
 
     target_link_libraries(${PROJECT_NAME}
                         ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/gpupixel.lib

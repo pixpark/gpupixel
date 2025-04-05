@@ -22,7 +22,6 @@
 
 // source
 #include "source.h"
-#include "source_camera.h"
 #include "source_image.h"
 #include "source_raw_data.h"
 

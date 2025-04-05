@@ -6,7 +6,7 @@
  */
 
 #include "crosshatch_filter.h"
-
+#include "gpupixel_context.h"
 namespace gpupixel {
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
@@ -97,9 +97,11 @@ const std::string kCrosshatchFragmentShaderString = R"(
 
 std::shared_ptr<CrosshatchFilter> CrosshatchFilter::Create() {
   auto ret = std::shared_ptr<CrosshatchFilter>(new CrosshatchFilter());
-  if (ret && !ret->Init()) {
-    ret.reset();
-  }
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (ret && !ret->Init()) {
+      ret.reset();
+    }
+  });
   return ret;
 }
 

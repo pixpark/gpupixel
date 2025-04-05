@@ -6,7 +6,7 @@
  */
 
 #include "weak_pixel_inclusion_filter.h"
-
+#include "gpupixel_context.h"
 namespace gpupixel {
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
@@ -92,9 +92,11 @@ const std::string kWeakPixelInclusionFragmentShaderString = R"(
 std::shared_ptr<WeakPixelInclusionFilter> WeakPixelInclusionFilter::Create() {
   auto ret =
       std::shared_ptr<WeakPixelInclusionFilter>(new WeakPixelInclusionFilter());
-  if (ret && !ret->Init()) {
-    ret.reset();
-  }
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (ret && !ret->Init()) {
+      ret.reset();
+    }
+  });
   return ret;
 }
 

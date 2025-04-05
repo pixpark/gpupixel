@@ -19,7 +19,7 @@ GPUPixelGLProgram::GPUPixelGLProgram() : program_(-1) {
 }
 
 GPUPixelGLProgram::~GPUPixelGLProgram() {
-  GPUPixelContext::GetInstance()->RunSync([=] {
+  GPUPixelContext::GetInstance()->SyncRunWithContext([=] {
     std::vector<GPUPixelGLProgram*>::iterator itr =
         std::find(programs_.begin(), programs_.end(), this);
     if (itr != programs_.end()) {

@@ -6,7 +6,7 @@
  */
 
 #include "glass_sphere_filter.h"
-
+#include "gpupixel_context.h"
 namespace gpupixel {
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
@@ -117,9 +117,11 @@ const std::string kGlassSphereFragmentShaderString = R"(
 
 std::shared_ptr<GlassSphereFilter> GlassSphereFilter::Create() {
   auto ret = std::shared_ptr<GlassSphereFilter>(new GlassSphereFilter());
-  if (ret && !ret->Init()) {
-    ret.reset();
-  }
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (ret && !ret->Init()) {
+      ret.reset();
+    }
+  });
   return ret;
 }
 

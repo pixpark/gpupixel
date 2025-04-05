@@ -19,8 +19,7 @@ namespace gpupixel {
 
 class GPUPIXEL_API FaceDetector {
  public:
-  FaceDetector();
-
+  static std::shared_ptr<FaceDetector> Create();
   ~FaceDetector();
 
   std::vector<float> Detect(const uint8_t* data,
@@ -31,6 +30,8 @@ class GPUPIXEL_API FaceDetector {
                             GPUPIXEL_FRAME_TYPE type);
 
  private:
+  FaceDetector();
+
   std::shared_ptr<mars_face_kit::MarsFaceDetector> mars_face_detector_;
 };
 }  // namespace gpupixel

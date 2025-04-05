@@ -8,7 +8,6 @@
 #include "face_makeup_filter.h"
 #include "gpupixel_context.h"
 #include "source_image.h"
-
 namespace gpupixel {
 
 const std::string FaceMakeupFilterVertexShaderString = R"(
@@ -167,9 +166,11 @@ FaceMakeupFilter::~FaceMakeupFilter() {}
 
 std::shared_ptr<FaceMakeupFilter> FaceMakeupFilter::Create() {
   auto ret = std::shared_ptr<FaceMakeupFilter>(new FaceMakeupFilter());
-  if (ret && !ret->Init()) {
-    ret.reset();
-  }
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (ret && !ret->Init()) {
+      ret.reset();
+    }
+  });
   return ret;
 }
 
@@ -337,7 +338,8 @@ std::vector<GLuint> FaceMakeupFilter::GetFaceIndexs() {
       // Between lips part - 8 triangles
       96, 97, 103, 97, 103, 106, 97, 106, 98, 106, 103, 102, 106, 102, 101, 106,
       101, 99, 106, 98, 99, 99, 101, 100,
-      // Part between mouth and chin (key points 7 to 25 and area surrounded by
+      // Part between mouth and chin (key points 7 to 25 and area surrounded
+      // by
       // mouth and nostrils) - 24 triangles
       7, 84, 8, 8, 84, 9, 9, 84, 10, 10, 84, 95, 10, 95, 11, 11, 95, 12, 12, 95,
       94, 12, 94, 13, 13, 94, 14, 14, 94, 93, 14, 93, 15, 15, 93, 16, 16, 93,

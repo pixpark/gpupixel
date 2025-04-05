@@ -81,30 +81,28 @@ using namespace gpupixel;
 
 #pragma mark - Setup
 - (void)setupFilter {
-  gpupixel::GPUPixelContext::GetInstance()->RunSync([&] {
-    _gpuPixelView = [[GPUPixelView alloc] initWithFrame:self.view.frame];
-    _gpuPixelView.backgroundColor = UIColor.grayColor;
-    [self.view addSubview:_gpuPixelView];
-    [_gpuPixelView
-        setFillMode:(gpupixel::SinkRender::PreserveAspectRatioAndFill)];
+  _gpuPixelView = [[GPUPixelView alloc] initWithFrame:self.view.frame];
+  _gpuPixelView.backgroundColor = UIColor.grayColor;
+  [self.view addSubview:_gpuPixelView];
+  [_gpuPixelView
+      setFillMode:(gpupixel::SinkRender::PreserveAspectRatioAndFill)];
 
-    _lipstickFilter = LipstickFilter::Create();
-    _blusherFilter = BlusherFilter::Create();
-    _beautyFaceFilter = BeautyFaceFilter::Create();
-    _faceReshapeFilter = FaceReshapeFilter::Create();
-    _faceDetector = std::make_shared<FaceDetector>();
+  _lipstickFilter = LipstickFilter::Create();
+  _blusherFilter = BlusherFilter::Create();
+  _beautyFaceFilter = BeautyFaceFilter::Create();
+  _faceReshapeFilter = FaceReshapeFilter::Create();
+  _faceDetector = FaceDetector::Create();
 
-    NSString* imagePath = [[NSBundle mainBundle] pathForResource:@"sample_face"
-                                                          ofType:@"png"];
-    _gpuSourceImage = SourceImage::Create([imagePath UTF8String]);
+  NSString* imagePath = [[NSBundle mainBundle] pathForResource:@"sample_face"
+                                                        ofType:@"png"];
+  _gpuSourceImage = SourceImage::Create([imagePath UTF8String]);
 
-    // filter pipline
-    _gpuSourceImage->AddSink(_lipstickFilter)
-        ->AddSink(_blusherFilter)
-        ->AddSink(_faceReshapeFilter)
-        ->AddSink(_beautyFaceFilter)
-        ->AddSink(_gpuPixelView);
-  });
+  // filter pipline
+  _gpuSourceImage->AddSink(_lipstickFilter)
+      ->AddSink(_blusherFilter)
+      ->AddSink(_faceReshapeFilter)
+      ->AddSink(_beautyFaceFilter)
+      ->AddSink(_gpuPixelView);
 }
 
 - (void)setupUI {
@@ -208,9 +206,9 @@ using namespace gpupixel;
   int height = _gpuSourceImage->GetHeight();
   const unsigned char* buffer = _gpuSourceImage->GetRgbaImageBuffer();
 
-  std::vector<float> landmarks =
-      _faceDetector->Detect(buffer, width, height, width, GPUPIXEL_MODE_FMT_PICTURE,
-                            GPUPIXEL_FRAME_TYPE_RGBA);
+  std::vector<float> landmarks = _faceDetector->Detect(
+      buffer, width, height, width * 4, GPUPIXEL_MODE_FMT_PICTURE,
+      GPUPIXEL_FRAME_TYPE_RGBA);
 
   if (!landmarks.empty()) {
     _lipstickFilter->SetFaceLandmarks(landmarks);

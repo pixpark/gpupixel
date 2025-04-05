@@ -6,7 +6,7 @@
  */
 
 #include "brightness_filter.h"
-
+#include "gpupixel_context.h"
 namespace gpupixel {
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID) || defined(GPUPIXEL_MAC)
@@ -32,9 +32,11 @@ const std::string kBrightnessFragmentShaderString = R"(
 std::shared_ptr<BrightnessFilter> BrightnessFilter::Create(
     float brightness /* = 0.0*/) {
   auto ret = std::shared_ptr<BrightnessFilter>(new BrightnessFilter());
-  if (ret && !ret->Init(brightness)) {
-    ret.reset();
-  }
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (ret && !ret->Init(brightness)) {
+      ret.reset();
+    }
+  });
   return ret;
 }
 

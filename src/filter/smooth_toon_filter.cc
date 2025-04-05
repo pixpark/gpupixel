@@ -6,7 +6,7 @@
  */
 
 #include "smooth_toon_filter.h"
-
+#include "gpupixel_context.h"
 namespace gpupixel {
 
 SmoothToonFilter::SmoothToonFilter()
@@ -16,9 +16,11 @@ SmoothToonFilter::~SmoothToonFilter() {}
 
 std::shared_ptr<SmoothToonFilter> SmoothToonFilter::Create() {
   auto ret = std::shared_ptr<SmoothToonFilter>(new SmoothToonFilter());
-  if (ret && !ret->Init()) {
-    ret.reset();
-  }
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (ret && !ret->Init()) {
+      ret.reset();
+    }
+  });
   return ret;
 }
 

@@ -6,7 +6,7 @@
  */
 
 #include "canny_edge_detection_filter.h"
-
+#include "gpupixel_context.h"
 namespace gpupixel {
 
 CannyEdgeDetectionFilter::CannyEdgeDetectionFilter()
@@ -21,9 +21,11 @@ CannyEdgeDetectionFilter::~CannyEdgeDetectionFilter() {}
 std::shared_ptr<CannyEdgeDetectionFilter> CannyEdgeDetectionFilter::Create() {
   auto ret =
       std::shared_ptr<CannyEdgeDetectionFilter>(new CannyEdgeDetectionFilter());
-  if (ret && !ret->Init()) {
-    ret.reset();
-  }
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (ret && !ret->Init()) {
+      ret.reset();
+    }
+  });
   return ret;
 }
 

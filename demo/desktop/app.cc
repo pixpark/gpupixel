@@ -79,11 +79,11 @@ void SetupFilterPipeline() {
   blusher_filter_ = BlusherFilter::Create();
   reshape_filter_ = FaceReshapeFilter::Create();
   beauty_filter_ = BeautyFaceFilter::Create();
-  face_detector_ = std::make_shared<FaceDetector>();
+  face_detector_ = FaceDetector::Create();
 
   // Create source image and render sink
   source_image_ = SourceImage::Create("demo.png");
-  render_sink_ = std::make_shared<SinkRender>();
+  render_sink_ = SinkRender::Create();
 
   // Build filter pipeline
   source_image_->AddSink(lipstick_filter_)
@@ -141,9 +141,9 @@ void RenderFrame() {
   int height = source_image_->GetHeight();
   const unsigned char* buffer = source_image_->GetRgbaImageBuffer();
 
-  std::vector<float> landmarks =
-      face_detector_->Detect(buffer, width, height, width, GPUPIXEL_MODE_FMT_PICTURE,
-                             GPUPIXEL_FRAME_TYPE_RGBA);
+  std::vector<float> landmarks = face_detector_->Detect(
+      buffer, width, height, width * 4, GPUPIXEL_MODE_FMT_PICTURE,
+      GPUPIXEL_FRAME_TYPE_RGBA);
 
   if (!landmarks.empty()) {
     lipstick_filter_->SetFaceLandmarks(landmarks);

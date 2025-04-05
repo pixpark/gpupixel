@@ -71,17 +71,19 @@ const std::string kI420FragmentShaderString = R"(
 #endif
 
 std::shared_ptr<SourceRawData> SourceRawData::Create() {
-  auto sourceRawDataInput = std::shared_ptr<SourceRawData>(new SourceRawData());
-  if (sourceRawDataInput->Init()) {
-    return sourceRawDataInput;
-  }
-  return nullptr;
+  auto ret = std::shared_ptr<SourceRawData>(new SourceRawData());
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (!ret->Init()) {
+      return ret.reset();
+    }
+  });
+  return ret;
 }
 
 SourceRawData::SourceRawData() {}
 
 SourceRawData::~SourceRawData() {
-  GPUPixelContext::GetInstance()->RunSync(
+  GPUPixelContext::GetInstance()->SyncRunWithContext(
       [=] { glDeleteTextures(4, textures_); });
 }
 
@@ -125,8 +127,8 @@ void SourceRawData::ProcessData(const uint8_t* data,
                                 int height,
                                 int stride,
                                 GPUPIXEL_FRAME_TYPE type) {
-  if (type == GPUPIXEL_FRAME_TYPE_YUVI420) {
-    GPUPixelContext::GetInstance()->RunSync([=] {
+  GPUPixelContext::GetInstance()->SyncRunWithContext([=] {
+    if (type == GPUPIXEL_FRAME_TYPE_YUVI420) {
       // Calculate the starting pointers and strides for each YUV channel
       const uint8_t* dataY = data;  // Y channel start position
       int strideY = width;          // Y channel stride equals width
@@ -141,11 +143,11 @@ void SourceRawData::ProcessData(const uint8_t* data,
 
       GenerateTextureWithI420(width, height, dataY, strideY, dataU, strideU,
                               dataV, strideV);
-    });
-  } else {
-    GPUPixelContext::GetInstance()->RunSync(
-        [=] { GenerateTextureWithPixels(data, width, height, stride, type); });
-  }
+
+    } else {
+      GenerateTextureWithPixels(data, width, height, stride, type);
+    }
+  });
 }
 
 int SourceRawData::GenerateTextureWithI420(int width,
@@ -208,11 +210,11 @@ int SourceRawData::GenerateTextureWithPixels(const uint8_t* pixels,
                                              int height,
                                              int stride,
                                              GPUPIXEL_FRAME_TYPE type) {
-  if (!framebuffer_ || (framebuffer_->GetWidth() != stride ||
+  if (!framebuffer_ || (framebuffer_->GetWidth() != stride / 4 ||
                         framebuffer_->GetHeight() != height)) {
     framebuffer_ = GPUPixelContext::GetInstance()
                        ->GetFramebufferFactory()
-                       ->CreateFramebuffer(stride, height);
+                       ->CreateFramebuffer(stride / 4, height);
   }
   this->SetFramebuffer(framebuffer_, NoRotation);
 
@@ -221,12 +223,12 @@ int SourceRawData::GenerateTextureWithPixels(const uint8_t* pixels,
 
   if (type == GPUPIXEL_FRAME_TYPE_BGRA) {
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
-    CHECK_GL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, stride, height, 0, GL_BGRA,
-                          GL_UNSIGNED_BYTE, pixels));
+    CHECK_GL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, stride / 4, height, 0,
+                          GL_BGRA, GL_UNSIGNED_BYTE, pixels));
 #endif
   } else if (type == GPUPIXEL_FRAME_TYPE_RGBA) {
-    CHECK_GL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, stride, height, 0, GL_RGBA,
-                          GL_UNSIGNED_BYTE, pixels));
+    CHECK_GL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, stride / 4, height, 0,
+                          GL_RGBA, GL_UNSIGNED_BYTE, pixels));
   }
 
   GPUPixelContext::GetInstance()->SetActiveGlProgram(filter_program_);

@@ -6,7 +6,7 @@
  */
 
 #include "luminance_range_filter.h"
-
+#include "gpupixel_context.h"
 namespace gpupixel {
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
@@ -44,9 +44,11 @@ const std::string kLuminanceRangeFragmentShaderString = R"(
 
 std::shared_ptr<LuminanceRangeFilter> LuminanceRangeFilter::Create() {
   auto ret = std::shared_ptr<LuminanceRangeFilter>(new LuminanceRangeFilter());
-  if (ret && !ret->Init()) {
-    ret.reset();
-  }
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (ret && !ret->Init()) {
+      ret.reset();
+    }
+  });
   return ret;
 }
 

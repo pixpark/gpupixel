@@ -12,6 +12,12 @@
 
 namespace gpupixel {
 
+std::shared_ptr<SinkRender> SinkRender::Create() {
+  auto ret = std::shared_ptr<SinkRender>(new SinkRender());
+  SYNC_RUN_WITH_CONTEXT(ret->Init(););
+  return ret;
+}
+
 SinkRender::SinkRender()
     : view_width_(0),
       view_height_(0),
@@ -24,7 +30,6 @@ SinkRender::SinkRender()
   background_color_.g = 0.0;
   background_color_.b = 0.0;
   background_color_.a = 0.0;
-  Init();
 }
 
 SinkRender::~SinkRender() {

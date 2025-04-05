@@ -6,7 +6,7 @@
  */
 
 #include "white_balance_filter.h"
-
+#include "gpupixel_context.h"
 namespace gpupixel {
 
 const std::string kWhiteBalanceFragmentShaderString = R"(
@@ -43,9 +43,11 @@ const std::string kWhiteBalanceFragmentShaderString = R"(
 
 std::shared_ptr<WhiteBalanceFilter> WhiteBalanceFilter::Create() {
   auto ret = std::shared_ptr<WhiteBalanceFilter>(new WhiteBalanceFilter());
-  if (ret && !ret->Init()) {
-    ret.reset();
-  }
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (ret && !ret->Init()) {
+      ret.reset();
+    }
+  });
   return ret;
 }
 
@@ -57,7 +59,8 @@ bool WhiteBalanceFilter::Init() {
   setTemperature(5000.0);
   RegisterProperty(
       "temperature", 5000.0,
-      "Adjustment of color temperature (in degrees Kelvin) in terms of what an "
+      "Adjustment of color temperature (in degrees Kelvin) in terms of what "
+      "an "
       "image was effectively shot in. This means higher Kelvin values will "
       "warm the image, while lower values will cool it.",
       [this](float& temperature) { setTemperature(temperature); });

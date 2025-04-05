@@ -6,7 +6,7 @@
  */
 
 #include "toon_filter.h"
-
+#include "gpupixel_context.h"
 namespace gpupixel {
 
 const std::string kToonFragmentShaderString = R"(
@@ -57,9 +57,11 @@ const std::string kToonFragmentShaderString = R"(
 
 std::shared_ptr<ToonFilter> ToonFilter::Create() {
   auto ret = std::shared_ptr<ToonFilter>(new ToonFilter());
-  if (ret && !ret->Init()) {
-    ret.reset();
-  }
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (ret && !ret->Init()) {
+      ret.reset();
+    }
+  });
   return ret;
 }
 

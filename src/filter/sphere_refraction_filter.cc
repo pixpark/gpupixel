@@ -6,7 +6,7 @@
  */
 
 #include "sphere_refraction_filter.h"
-
+#include "gpupixel_context.h"
 namespace gpupixel {
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
@@ -81,9 +81,11 @@ const std::string kSphereRefractionShaderString = R"(
 std::shared_ptr<SphereRefractionFilter> SphereRefractionFilter::Create() {
   auto ret =
       std::shared_ptr<SphereRefractionFilter>(new SphereRefractionFilter());
-  if (ret && !ret->Init()) {
-    ret.reset();
-  }
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (ret && !ret->Init()) {
+      ret.reset();
+    }
+  });
   return ret;
 }
 

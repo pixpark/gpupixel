@@ -21,18 +21,22 @@ FilterGroup::~FilterGroup() {
 
 std::shared_ptr<FilterGroup> FilterGroup::Create() {
   auto ret = std::shared_ptr<FilterGroup>(new FilterGroup());
-  if (ret && !ret->Init()) {
-    ret.reset();
-  }
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (ret && !ret->Init()) {
+      ret.reset();
+    }
+  });
   return ret;
 }
 
 std::shared_ptr<FilterGroup> FilterGroup::Create(
     std::vector<std::shared_ptr<Filter>> filters) {
   auto ret = std::shared_ptr<FilterGroup>(new FilterGroup());
-  if (ret && !ret->Init(filters)) {
-    ret.reset();
-  }
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (ret && !ret->Init(filters)) {
+      ret.reset();
+    }
+  });
   return ret;
 }
 

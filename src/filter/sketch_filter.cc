@@ -6,7 +6,7 @@
  */
 
 #include "sketch_filter.h"
-
+#include "gpupixel_context.h"
 namespace gpupixel {
 
 const std::string kSketchFilterFragmentShaderString = R"(
@@ -53,9 +53,11 @@ SketchFilter::~SketchFilter() {}
 
 std::shared_ptr<SketchFilter> SketchFilter::Create() {
   auto ret = std::shared_ptr<SketchFilter>(new SketchFilter());
-  if (ret && !ret->Init()) {
-    ret.reset();
-  }
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (ret && !ret->Init()) {
+      ret.reset();
+    }
+  });
 
   return ret;
 }

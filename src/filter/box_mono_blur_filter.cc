@@ -7,6 +7,7 @@
 
 #include "box_mono_blur_filter.h"
 #include <cmath>
+#include "gpupixel_context.h"
 namespace gpupixel {
 
 BoxMonoBlurFilter::BoxMonoBlurFilter(Type type)
@@ -18,9 +19,11 @@ std::shared_ptr<BoxMonoBlurFilter> BoxMonoBlurFilter::Create(Type type,
                                                              int radius,
                                                              float sigma) {
   auto ret = std::shared_ptr<BoxMonoBlurFilter>(new BoxMonoBlurFilter(type));
-  if (ret && !ret->Init(radius, sigma)) {
-    ret.reset();
-  }
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (ret && !ret->Init(radius, sigma)) {
+      ret.reset();
+    }
+  });
   return ret;
 }
 
@@ -169,7 +172,8 @@ std::string BoxMonoBlurFilter::GenerateOptimizedFragmentShaderString(
         "texelHeightOffset);\n");
 #else
     shaderStr += Util::str_format(
-        "vec2 singleStepOffset = vec2(texelWidthOffset, texelHeightOffset);\n");
+        "vec2 singleStepOffset = vec2(texelWidthOffset, "
+        "texelHeightOffset);\n");
 #endif
 
     for (uint32_t currentOverlowTextureRead = numberOfOptimizedOffsets;

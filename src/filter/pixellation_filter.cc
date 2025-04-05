@@ -6,7 +6,7 @@
  */
 
 #include "pixellation_filter.h"
-
+#include "gpupixel_context.h"
 namespace gpupixel {
 
 const std::string kPixellationFragmentShaderString = R"(
@@ -25,9 +25,11 @@ const std::string kPixellationFragmentShaderString = R"(
 
 std::shared_ptr<PixellationFilter> PixellationFilter::Create() {
   auto ret = std::shared_ptr<PixellationFilter>(new PixellationFilter());
-  if (ret && !ret->Init()) {
-    ret.reset();
-  }
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (ret && !ret->Init()) {
+      ret.reset();
+    }
+  });
   return ret;
 }
 

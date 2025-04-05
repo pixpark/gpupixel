@@ -6,7 +6,7 @@
  */
 
 #include "bilateral_filter.h"
-
+#include "gpupixel_context.h"
 namespace gpupixel {
 
 const std::string kBilateralBlurVertexShaderString = R"(
@@ -281,9 +281,11 @@ BilateralFilter::~BilateralFilter() {}
 
 std::shared_ptr<BilateralFilter> BilateralFilter::Create() {
   auto ret = std::shared_ptr<BilateralFilter>(new BilateralFilter());
-  if (ret && !ret->Init()) {
-    ret.reset();
-  }
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (ret && !ret->Init()) {
+      ret.reset();
+    }
+  });
   return ret;
 }
 

@@ -7,6 +7,7 @@
 
 #include "single_component_gaussian_blur_mono_filter.h"
 #include <cmath>
+#include "gpupixel_context.h"
 
 namespace gpupixel {
 
@@ -20,9 +21,11 @@ SingleComponentGaussianBlurMonoFilter::Create(Type type /* = HORIZONTAL*/,
                                               float sigma /* = 2.0*/) {
   auto ret = std::shared_ptr<SingleComponentGaussianBlurMonoFilter>(
       new SingleComponentGaussianBlurMonoFilter(type));
-  if (ret && !ret->Init(radius, sigma)) {
-    ret.reset();
-  }
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (ret && !ret->Init(radius, sigma)) {
+      ret.reset();
+    }
+  });
   return ret;
 }
 

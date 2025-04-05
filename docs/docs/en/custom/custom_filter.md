@@ -37,9 +37,10 @@ Implement a static factory method that creates and initializes the filter:
 ```cpp
 std::shared_ptr<CustomFilter> CustomFilter::Create() {
   auto ret = std::shared_ptr<CustomFilter>(new CustomFilter());
+SYNC_RUN_WITH_CONTEXT(
   if (ret && !ret->Init()) {
     ret.reset();
-  }
+  });
   return ret;
 }
 ```
