@@ -142,7 +142,7 @@ void RenderFrame() {
   const unsigned char* buffer = source_image_->GetRgbaImageBuffer();
 
   std::vector<float> landmarks =
-      face_detector_->Detect(buffer, width, height, GPUPIXEL_MODE_FMT_PICTURE,
+      face_detector_->Detect(buffer, width, height, width, GPUPIXEL_MODE_FMT_PICTURE,
                              GPUPIXEL_FRAME_TYPE_RGBA);
 
   if (!landmarks.empty()) {

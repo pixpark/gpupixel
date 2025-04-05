@@ -49,6 +49,7 @@ std::vector<float> landmarks = faceDetector->Detect(
     buffer,                     // 图像数据指针 (const unsigned char*)
     width,                      // 图像宽度 (int)
     height,                     // 图像高度 (int)
+    int stride,                 // 
     GPUPIXEL_MODE_FMT_PICTURE,  // 图像格式 (GPUPIXEL_MODE_FMT)
     GPUPIXEL_FRAME_TYPE_RGBA    // 帧类型 (GPUPIXEL_FRAME_TYPE)
 );

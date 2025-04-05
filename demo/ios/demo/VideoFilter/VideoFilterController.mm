@@ -297,7 +297,7 @@ using namespace gpupixel;
 
   // 使用FaceDetector进行人脸检测
   std::vector<float> landmarks = _faceDetector->Detect(
-      pixels, width, height, GPUPIXEL_MODE_FMT_VIDEO, GPUPIXEL_FRAME_TYPE_BGRA);
+      pixels, width, height, stride, GPUPIXEL_MODE_FMT_VIDEO, GPUPIXEL_FRAME_TYPE_BGRA);
 
   if (!landmarks.empty()) {
     _lipstickFilter->SetFaceLandmarks(landmarks);

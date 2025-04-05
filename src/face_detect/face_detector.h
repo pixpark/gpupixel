@@ -26,6 +26,7 @@ class GPUPIXEL_API FaceDetector {
   std::vector<float> Detect(const uint8_t* data,
                             int width,
                             int height,
+                            int stride,
                             GPUPIXEL_MODE_FMT fmt,
                             GPUPIXEL_FRAME_TYPE type);
 
