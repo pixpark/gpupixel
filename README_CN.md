@@ -54,10 +54,7 @@
 | ![origin](./docs/image/origin.gif) |   ![smooth](./docs/image/smooth.gif)   |   ![white](./docs/image/white.gif)   | ![thinface](./docs/image/thinface.gif) |
 |              **大眼**              |                **口红**                |               **腮红**               |                 **开关**               |
 | ![bigeye](./docs/image/bigeye.gif) | ![lipstick](./docs/image/lipstick.gif) | ![blusher](./docs/image/blusher.gif) |   ![on-off](./docs/image/on-off.gif)   |
-
-## 架构流程
-![](./docs/image/arch.jpg)
-
+ 
 ## 特性对比
 
 ✨ **GPUPixel**、**GPUImage**和**Android-GPUImage**功能对比：
@@ -89,19 +86,7 @@
 | Android               |                        ✅                        |                         ❌                          |                              ✅                               |
 | Win                   |                        ✅                        |                         ❌                          |                              ❌                               |
 | Linux                 |                        ✅                        |                         ❌                          |                              ❌                               |
-
-## ⚡ 性能
-### iPhone
-|       -        | iPhone 6P | iPhone 8 | iPhone X | iPhone 11 | iPhone 14 pro |
-| :------------: | :-------: | :------: | :------: | :-------: | :-----------: |
-|    **CPU**     |    5%     |    5%    |    3%    |    3%     |      3%       |
-|    **耗时**    |   10ms    |   4ms    |   3ms    |    3ms    |      3ms      |
-### Android
-|     -      | Xiaomi 10 | Huawei Mate30 | Vivo  | SAMSUNG | Google Pixel |
-| :--------: | :-------: | :-----------: | :---: | :-----: | :----------: |
-|    CPU     |    3%     |      5%       |   -   |    -    |      -       |
-|    耗时    |    6ms    |      5ms      |   -   |    -    |      -       |
-
+ 
 ## 开始之前
 ⭐ 在GitHub上给我们点个星，获取新版本发布通知！
 
@@ -145,8 +130,8 @@
 ## 感谢
 ### 🔗 参考项目
 1. [GPUImage](https://github.com/BradLarson/GPUImage) 
-2. [CainCamera](https://github.com/CainKernel/CainCamera)
-3. [AwemeLike](https://github.com/ZZZZou/AwemeLike)
+2. [GPUImage-x](https://github.com/wangyijin/GPUImage-x)
+3. [CainCamera](https://github.com/CainKernel/CainCamera)
 4. [VNN](https://github.com/joyycom/VNN)
 
 ## License
