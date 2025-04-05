@@ -7,22 +7,21 @@
 //
 
 #import "ViewController.h"
-#import "VideoFilterController.h"
 #import "ImageFilterController.h"
+#import "VideoFilterController.h"
 
 @interface ViewController ()
 
-@property (weak, nonatomic) IBOutlet UIButton *videoFilterTestBtn;
-@property (weak, nonatomic) IBOutlet UIButton *imageFilterTestBtn;
+@property(weak, nonatomic) IBOutlet UIButton* videoFilterTestBtn;
+@property(weak, nonatomic) IBOutlet UIButton* imageFilterTestBtn;
 
 @end
 
 @implementation ViewController
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    // Do any additional setup after loading the view.
+- (void)viewDidLoad {
+  [super viewDidLoad];
+  // Do any additional setup after loading the view.
 }
 
 @end

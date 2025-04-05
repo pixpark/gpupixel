@@ -1,4 +1,5 @@
-GPUPixel Version: v1.3.0-beta5
+Version: v0.3.1-beta.1
 ## What's New
- 1. refine desktop demo
- 2. gl thread run sync
+ 1. refine api
+ 2. refine demo
+ 3. bugfix
