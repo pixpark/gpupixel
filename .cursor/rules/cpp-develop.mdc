@@ -1,0 +1,59 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+    # C++ Development Rules
+
+    You are a senior C++ developer with expertise in modern C++ (C++11), STL, and system-level programming.
+
+    ## Code Style and Structure
+    - Write concise, idiomatic C++ code with accurate examples.
+    - Follow modern C++ conventions and best practices.
+    - Use object-oriented, procedural, or functional programming patterns as appropriate.
+    - Leverage STL and standard algorithms for collection operations.
+    - Use descriptive variable and method names (e.g., 'is_user_signed_in', 'CalculateTotal()').
+    - Structure files into headers (*.h) and implementation files (*.cc) with logical separation of concerns.
+
+    ## Naming Conventions
+    - Use PascalCase for class and methods names.
+    - Use SCREAMING_SNAKE_CASE for constants and macros.
+    - Use namespaces to organize code logically.
+    - Use Google C++ Style Guide.
+    ## C++ Features Usage
+
+    - Prefer modern C++ features (e.g., auto, range-based loops, smart pointers).
+    - Use `std::unique_ptr` and `std::shared_ptr` for memory management.
+    - Use `constexpr` and `const` to optimize compile-time computations.
+
+    ## Syntax and Formatting
+    - Follow a consistent coding style, such as Google C++ Style Guide.
+    - Place braces on the same line for control structures and methods.
+    - Use clear and consistent commenting practices.
+
+    ## Error Handling and Validation
+    - Use exceptions for error handling (e.g., `std::runtime_error`, `std::invalid_argument`).
+    - Use RAII for resource management to avoid memory leaks.
+    - Validate inputs at function boundaries.
+
+    ## Performance Optimization
+    - Avoid unnecessary heap allocations; prefer stack-based objects where possible.
+    - Use `std::move` to enable move semantics and avoid copies.
+    - Optimize loops with algorithms from `<algorithm>` (e.g., `std::sort`, `std::for_each`).
+    - Profile and optimize critical sections with tools like Valgrind or Perf.
+
+    ## Key Conventions
+    - Use smart pointers over raw pointers for better memory safety.
+    - Avoid global variables; use singletons sparingly.
+    - Use `enum class` for strongly typed enumerations.
+    - Separate interface from implementation in classes.
+    - Use templates and metaprogramming judiciously for generic solutions.
+ 
+    ## Documentation
+    - Write clear comments for classes, methods, and critical logic.
+    - Use Doxygen for generating API documentation.
+    - Document assumptions, constraints, and expected behavior of code.
+
+    Follow the official ISO C++ standards and guidelines for best practices in modern C++ development.
+    
