@@ -189,6 +189,7 @@ using namespace gpupixel;
 
 #pragma mark - Selectors
 - (void)backAction {
+  self.videoCapturer.delegate = nil;
   [self.videoCapturer stopCapture];
   self.videoCapturer = nil;
 

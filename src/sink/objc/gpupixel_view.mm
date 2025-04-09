@@ -35,9 +35,10 @@
 @implementation GPUPixelView
 
 @synthesize sizeInPixels = _sizeInPixels;
+#if defined(GPUPIXEL_IOS)
 @synthesize currentlayer;
 @synthesize currentFrame;
-
+#endif
 - (id)initWithFrame:(CGRect)frame {
   if (!(self = [super initWithFrame:frame])) {
     return nil;
@@ -71,7 +72,9 @@
                                    kEAGLDrawablePropertyRetainedBacking,
                                    kEAGLColorFormatRGBA8,
                                    kEAGLDrawablePropertyColorFormat, nil];
-
+  currentlayer = (CAEAGLLayer *)self.layer;
+  currentlayer.opaque = YES;
+  currentlayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], kEAGLDrawablePropertyRetainedBacking, kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
 #else
   [self setOpenGLContext:gpupixel::GPUPixelContext::GetInstance()
                              ->GetOpenGLContext()];
@@ -82,10 +85,6 @@
   //    inputRotation = kGPUImageNoRotation;
   self.hidden = NO;
 #endif
-  currentlayer = (CAEAGLLayer *)self.layer;
-  currentlayer.opaque = YES;
-  currentlayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], kEAGLDrawablePropertyRetainedBacking, kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
-    
   gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
     displayProgram = gpupixel::GPUPixelGLProgram::CreateWithShaderString(
         gpupixel::kDefaultVertexShader, gpupixel::kDefaultFragmentShader);
