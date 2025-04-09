@@ -22,4 +22,8 @@
 #endif
 @property(readwrite, nonatomic) gpupixel::SinkRender::FillMode fillMode;
 @property(readonly, nonatomic) CGSize sizeInPixels;
+
+@property(nonatomic) CAEAGLLayer *currentlayer;
+@property(nonatomic) CGRect currentFrame;
+
 @end
