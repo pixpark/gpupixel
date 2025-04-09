@@ -9,9 +9,6 @@
 
 using namespace gpupixel;
 
-// Maintain all created SourceRawData objects
-static std::list<std::shared_ptr<SourceRawData>> source_raw_data_list_;
-
 // Create new SourceRawData instance
 extern "C" JNIEXPORT jlong JNICALL
 Java_com_pixpark_gpupixel_GPUPixelSourceRawData_nativeCreate(JNIEnv* env,
@@ -20,8 +17,10 @@ Java_com_pixpark_gpupixel_GPUPixelSourceRawData_nativeCreate(JNIEnv* env,
   if (!source_raw_data) {
     return 0;
   }
-  source_raw_data_list_.push_back(source_raw_data);
-  return (jlong)(source_raw_data.get());
+  
+  // 创建堆上的智能指针对象
+  auto* ptr = new std::shared_ptr<SourceRawData>(source_raw_data);
+  return reinterpret_cast<jlong>(ptr);
 }
 
 // Destroy SourceRawData instance
@@ -30,12 +29,9 @@ Java_com_pixpark_gpupixel_GPUPixelSourceRawData_nativeDestroy(
     JNIEnv* env,
     jclass clazz,
     jlong native_obj) {
-  for (auto srd : source_raw_data_list_) {
-    if ((jlong)srd.get() == native_obj) {
-      source_raw_data_list_.remove(srd);
-      break;
-    }
-  }
+  // 释放堆上分配的智能指针
+  auto* ptr = reinterpret_cast<std::shared_ptr<SourceRawData>*>(native_obj);
+  delete ptr;
 }
 
 // Release SourceRawData framebuffer
@@ -44,7 +40,11 @@ Java_com_pixpark_gpupixel_GPUPixelSourceRawData_nativeFinalize(
     JNIEnv* env,
     jclass clazz,
     jlong native_obj) {
-  ((SourceRawData*)native_obj)->ReleaseFramebuffer(false);
+  // 获取智能指针然后访问对象
+  auto* ptr = reinterpret_cast<std::shared_ptr<SourceRawData>*>(native_obj);
+  if (ptr && *ptr) {
+    (*ptr)->ReleaseFramebuffer(false);
+  }
 }
 
 // Process data (unified interface) - only handles byte[]
@@ -58,11 +58,15 @@ Java_com_pixpark_gpupixel_GPUPixelSourceRawData_nativeProcessData(
     jint height,
     jint stride,
     jint type) {
+  auto* ptr = reinterpret_cast<std::shared_ptr<SourceRawData>*>(native_obj);
+  if (!ptr || !*ptr) {
+    return;
+  }
+  
   jbyte* bytes = env->GetByteArrayElements(data, NULL);
 
-  ((SourceRawData*)native_obj)
-      ->ProcessData((uint8_t*)bytes, width, height, stride,
-                    (GPUPIXEL_FRAME_TYPE)type);
+  (*ptr)->ProcessData((uint8_t*)bytes, width, height, stride,
+                   (GPUPIXEL_FRAME_TYPE)type);
 
   env->ReleaseByteArrayElements(data, bytes, 0);
 }
@@ -74,5 +78,8 @@ Java_com_pixpark_gpupixel_GPUPixelSourceRawData_nativeSetRotation(
     jclass clazz,
     jlong native_obj,
     jint rotation) {
-  ((SourceRawData*)native_obj)->SetRotation((RotationMode)rotation);
+  auto* ptr = reinterpret_cast<std::shared_ptr<SourceRawData>*>(native_obj);
+  if (ptr && *ptr) {
+    (*ptr)->SetRotation((RotationMode)rotation);
+  }
 }

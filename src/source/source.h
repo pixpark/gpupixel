@@ -47,12 +47,6 @@ class GPUPIXEL_API Source {
 
   virtual bool DoRender(bool updateSinks = true);
   virtual void DoUpdateSinks();
-
-  virtual unsigned char* GetProcessedFrameData(
-      std::shared_ptr<Filter> upToFilter,
-      int width = 0,
-      int height = 0);
-
  protected:
   std::shared_ptr<GPUPixelFramebuffer> framebuffer_;
   RotationMode output_rotation_;

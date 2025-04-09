@@ -83,39 +83,6 @@ void Source::DoUpdateSinks() {
   }
 }
 
-unsigned char* Source::GetProcessedFrameData(std::shared_ptr<Filter> upToFilter,
-                                             int width /* = 0*/,
-                                             int height /* = 0*/) {
-  if (GPUPixelContext::GetInstance()->is_capturing_frame_) {
-    return 0;
-  }
-
-  if (width <= 0 || height <= 0) {
-    if (!framebuffer_) {
-      return 0;
-    }
-    width = GetRotatedFramebufferWidth();
-    height = GetRotatedFramebufferHeight();
-  }
-
-  GPUPixelContext::GetInstance()->is_capturing_frame_ = true;
-  GPUPixelContext::GetInstance()->capture_width_ = width;
-  GPUPixelContext::GetInstance()->capture_height_ = height;
-  GPUPixelContext::GetInstance()->capture_frame_filter_ = upToFilter;
-  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext(
-      [&] { DoRender(true); });
-  unsigned char* processedFrameData =
-      GPUPixelContext::GetInstance()->capture_frame_data_;
-
-  GPUPixelContext::GetInstance()->capture_frame_data_ = 0;
-  GPUPixelContext::GetInstance()->capture_width_ = 0;
-  GPUPixelContext::GetInstance()->capture_height_ = 0;
-  GPUPixelContext::GetInstance()->is_capturing_frame_ = false;
-  GPUPixelContext::GetInstance()->capture_frame_filter_.reset();
-
-  return processedFrameData;
-}
-
 void Source::SetFramebuffer(
     std::shared_ptr<GPUPixelFramebuffer> fb,
     RotationMode outputRotation /* = RotationMode::NoRotation*/) {

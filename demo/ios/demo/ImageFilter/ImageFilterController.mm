@@ -23,10 +23,11 @@ using namespace gpupixel;
   std::shared_ptr<gpupixel::FaceMakeupFilter> _blusherFilter;
   std::shared_ptr<SourceImage> _gpuSourceImage;
   std::shared_ptr<gpupixel::FaceDetector> _faceDetector;
+  std::shared_ptr<SinkRawData> _sinkRawData;
   CADisplayLink* _displayLink;
 }
 
-// Filter intensity
+// Filter intensity properties
 @property(nonatomic, assign) CGFloat sharpenValue;
 @property(nonatomic, assign) CGFloat blurValue;
 @property(nonatomic, assign) CGFloat whitenValue;
@@ -36,7 +37,7 @@ using namespace gpupixel;
 @property(nonatomic, assign) CGFloat lipstickValue;
 @property(nonatomic, assign) CGFloat blusherValue;
 
-// UI
+// UI components
 @property(nonatomic, strong) FilterToolbarView* filterToolbarView;
 
 @end
@@ -47,7 +48,7 @@ using namespace gpupixel;
 - (FilterToolbarView*)filterToolbarView {
   if (!_filterToolbarView) {
     NSArray* filterTitles =
-        @[ @"锐化", @"磨皮", @"美白", @"瘦脸", @"大眼", @"口红", @"腮红" ];
+        @[ @"Sharpen", @"Smooth", @"Whiten", @"Face Slim", @"Eye Enlarge", @"Lipstick", @"Blusher" ];
     _filterToolbarView = [[FilterToolbarView alloc] initWithFrame:CGRectZero
                                                      filterTitles:filterTitles];
     _filterToolbarView.delegate = self;
@@ -70,10 +71,10 @@ using namespace gpupixel;
 - (void)viewDidLoad {
   [super viewDidLoad];
   [self.view setBackgroundColor:UIColor.whiteColor];
-  // screen always light
+  // Keep screen on
   [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
 
-  // setup filter
+  // Setup components
   [self setupFilter];
   [self setupUI];
   [self setupDisplayLink];
@@ -92,17 +93,21 @@ using namespace gpupixel;
   _beautyFaceFilter = BeautyFaceFilter::Create();
   _faceReshapeFilter = FaceReshapeFilter::Create();
   _faceDetector = FaceDetector::Create();
+  _sinkRawData = SinkRawData::Create();
 
   NSString* imagePath = [[NSBundle mainBundle] pathForResource:@"sample_face"
                                                         ofType:@"png"];
   _gpuSourceImage = SourceImage::Create([imagePath UTF8String]);
 
-  // filter pipline
+  // Configure filter pipeline
   _gpuSourceImage->AddSink(_lipstickFilter)
       ->AddSink(_blusherFilter)
       ->AddSink(_faceReshapeFilter)
       ->AddSink(_beautyFaceFilter)
       ->AddSink(_gpuPixelView);
+  
+  // Add SinkRawData to get processed data
+  _beautyFaceFilter->AddSink(_sinkRawData);
 }
 
 - (void)setupUI {
@@ -153,7 +158,7 @@ using namespace gpupixel;
 }
 
 #pragma mark - Selectors
-/// Back to home page and release all memory of gpupixel
+/// Return to home page and release GPU resources
 - (void)backAction {
   [_displayLink invalidate];
   _displayLink = nil;
@@ -171,24 +176,26 @@ using namespace gpupixel;
   [self.navigationController popViewControllerAnimated:true];
 }
 
-/// Get image from gpupixel after render and show result page
+/// Save processed image and display result
 - (void)saveAction {
-  int width = _gpuSourceImage->GetRotatedFramebufferWidth();
-  int height = _gpuSourceImage->GetRotatedFramebufferHeight();
-  // "beauty_face_filter_" is last filter in gpuSourceImage
-  unsigned char* pixels =
-      _gpuSourceImage->GetProcessedFrameData(_beautyFaceFilter, width, height);
-  UIImage* resultImage = [ImageConverter imageFromRGBAData:pixels
+  // Render once to update data in SinkRawData
+  _gpuSourceImage->Render();
+  
+  // Get processed RGBA data from SinkRawData
+  int width = _sinkRawData->GetWidth();
+  int height = _sinkRawData->GetHeight();
+  const uint8_t* pixels = _sinkRawData->GetRgbaBuffer();
+  
+  UIImage* resultImage = [ImageConverter imageFromRGBAData:(unsigned char*)pixels
                                                      width:width
                                                     height:height];
 
-  // 创建并显示结果页面
+  // Create and show result page
   FilterResultViewController* resultVC =
       [[FilterResultViewController alloc] initWithImage:resultImage];
   [self.navigationController pushViewController:resultVC animated:YES];
-
-  // Release memory
-  free(pixels);
+  
+  // Note: No need to free(pixels), SinkRawData manages the memory
 }
 
 - (void)displayLinkDidFire:(CADisplayLink*)displayLink {
@@ -219,7 +226,7 @@ using namespace gpupixel;
   _gpuSourceImage->Render();
 }
 
-#pragma mark - 属性赋值
+#pragma mark - Property setters
 - (void)setSharpenValue:(CGFloat)value {
   _sharpenValue = value;
   _beautyFaceFilter->SetSharpen(value / 5);
@@ -263,13 +270,13 @@ using namespace gpupixel;
 - (void)filterToolbarView:(FilterToolbarView*)toolbarView
     didSelectFilterAtIndex:(NSInteger)index {
   CGFloat filterValues[] = {
-      _sharpenValue,     // 锐化
-      _blurValue,        // 磨皮
-      _whitenValue,      // 美白
-      _faceSlimValue,    // 瘦脸
-      _eyeEnlargeValue,  // 大眼
-      _lipstickValue,    // 口红
-      _blusherValue      // 腮红
+      _sharpenValue,     // Sharpen
+      _blurValue,        // Smooth
+      _whitenValue,      // Whiten
+      _faceSlimValue,    // Face Slim
+      _eyeEnlargeValue,  // Eye Enlarge
+      _lipstickValue,    // Lipstick
+      _blusherValue      // Blusher
   };
 
   if (index >= 0 && index < sizeof(filterValues) / sizeof(filterValues[0])) {
@@ -280,25 +287,25 @@ using namespace gpupixel;
 - (void)filterToolbarView:(FilterToolbarView*)toolbarView
      didChangeSliderValue:(CGFloat)value {
   switch (toolbarView.selectedFilterIndex) {
-    case 0:  // 锐化
+    case 0:  // Sharpen
       [self setSharpenValue:value];
       break;
-    case 1:  // 磨皮
+    case 1:  // Smooth
       [self setBlurValue:value];
       break;
-    case 2:  // 美白
+    case 2:  // Whiten
       [self setWhitenValue:value];
       break;
-    case 3:  // 瘦脸
+    case 3:  // Face Slim
       [self setFaceSlimValue:value];
       break;
-    case 4:  // 大眼
+    case 4:  // Eye Enlarge
       [self setEyeEnlargeValue:value];
       break;
-    case 5:  // 口红
+    case 5:  // Lipstick
       [self setLipstickValue:value];
       break;
-    case 6:  // 腮红
+    case 6:  // Blusher
       [self setBlusherValue:value];
       break;
     default:

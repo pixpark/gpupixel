@@ -150,10 +150,6 @@ bool FilterGroup::DoRender(bool updateSinks) {
 
 void FilterGroup::Render() {
   DoRender();
-  if (GPUPixelContext::GetInstance()->is_capturing_frame_ &&
-      this == GPUPixelContext::GetInstance()->capture_frame_filter_.get()) {
-    GPUPixelContext::GetInstance()->capture_frame_filter_ = terminal_filter_;
-  }
 
   for (auto& filter : filters_) {
     if (filter->IsReady()) {

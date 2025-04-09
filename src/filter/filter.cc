@@ -264,59 +264,36 @@ void Filter::Render() {
     return;
   }
 
-  if (GPUPixelContext::GetInstance()->is_capturing_frame_ &&
-      this == GPUPixelContext::GetInstance()->capture_frame_filter_.get()) {
-    int capture_width = GPUPixelContext::GetInstance()->capture_width_;
-    int capture_height = GPUPixelContext::GetInstance()->capture_height_;
-
-    if (!framebuffer_ || (framebuffer_->GetWidth() != capture_width ||
-                          framebuffer_->GetHeight() != capture_height)) {
-      framebuffer_ = GPUPixelContext::GetInstance()
-                         ->GetFramebufferFactory()
-                         ->CreateFramebuffer(capture_width, capture_height);
-    }
-
-    DoRender(false);
-
-    framebuffer_->Activate();
-    GPUPixelContext::GetInstance()->capture_frame_data_ =
-        new unsigned char[capture_width * capture_height * 4];
-    CHECK_GL(glReadPixels(0, 0, capture_width, capture_height, GL_RGBA,
-                          GL_UNSIGNED_BYTE,
-                          GPUPixelContext::GetInstance()->capture_frame_data_));
-    framebuffer_->Deactivate();
-  } else {
-    std::shared_ptr<GPUPixelFramebuffer> first_input_framebuffer =
-        input_framebuffers_.begin()->second.frame_buffer;
-    RotationMode first_input_rotation =
-        input_framebuffers_.begin()->second.rotation_mode;
-    if (!first_input_framebuffer) {
-      return;
-    }
-
-    int rotated_framebuffer_width = first_input_framebuffer->GetWidth();
-    int rotated_framebuffer_height = first_input_framebuffer->GetHeight();
-    if (rotationSwapsSize(first_input_rotation)) {
-      rotated_framebuffer_width = first_input_framebuffer->GetHeight();
-      rotated_framebuffer_height = first_input_framebuffer->GetWidth();
-    }
-
-    if (framebuffer_scale_ != 1.0) {
-      rotated_framebuffer_width =
-          int(rotated_framebuffer_width * framebuffer_scale_);
-      rotated_framebuffer_height =
-          int(rotated_framebuffer_height * framebuffer_scale_);
-    }
-    if (!framebuffer_ ||
-        (framebuffer_->GetWidth() != rotated_framebuffer_width ||
-         framebuffer_->GetHeight() != rotated_framebuffer_height)) {
-      framebuffer_ = GPUPixelContext::GetInstance()
-                         ->GetFramebufferFactory()
-                         ->CreateFramebuffer(rotated_framebuffer_width,
-                                             rotated_framebuffer_height);
-    }
-    DoRender(true);
+  std::shared_ptr<GPUPixelFramebuffer> first_input_framebuffer =
+      input_framebuffers_.begin()->second.frame_buffer;
+  RotationMode first_input_rotation =
+      input_framebuffers_.begin()->second.rotation_mode;
+  if (!first_input_framebuffer) {
+    return;
   }
+
+  int rotated_framebuffer_width = first_input_framebuffer->GetWidth();
+  int rotated_framebuffer_height = first_input_framebuffer->GetHeight();
+  if (rotationSwapsSize(first_input_rotation)) {
+    rotated_framebuffer_width = first_input_framebuffer->GetHeight();
+    rotated_framebuffer_height = first_input_framebuffer->GetWidth();
+  }
+
+  if (framebuffer_scale_ != 1.0) {
+    rotated_framebuffer_width =
+        int(rotated_framebuffer_width * framebuffer_scale_);
+    rotated_framebuffer_height =
+        int(rotated_framebuffer_height * framebuffer_scale_);
+  }
+  if (!framebuffer_ ||
+      (framebuffer_->GetWidth() != rotated_framebuffer_width ||
+       framebuffer_->GetHeight() != rotated_framebuffer_height)) {
+    framebuffer_ = GPUPixelContext::GetInstance()
+                       ->GetFramebufferFactory()
+                       ->CreateFramebuffer(rotated_framebuffer_width,
+                                           rotated_framebuffer_height);
+  }
+  DoRender(true);
 }
 
 bool Filter::RegisterProperty(

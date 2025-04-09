@@ -32,6 +32,8 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
+import com.pixpark.gpupixel.GPUPixel;
+
 public class Camera2Helper {
     private static final String TAG = "Camera2Helper";
     public static final int CAMERA_FACING =
@@ -294,8 +296,8 @@ public class Camera2Helper {
                         if (image == null) return;
 
                         if (mFrameCallback != null) {
-                            // Use GPUPixelUtil for format conversion
-                            byte[] rgbaData = GPUPixelUtil.YUV_420_888toRGBA(image);
+                            // Use GPUPixel for format conversion
+                            byte[] rgbaData = GPUPixel.YUV_420_888toRGBA(image);
                             mFrameCallback.onFrameAvailable(
                                     rgbaData, image.getWidth(), image.getHeight());
                         }

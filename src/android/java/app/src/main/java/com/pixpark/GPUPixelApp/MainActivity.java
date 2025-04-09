@@ -168,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
         mCamera2Helper = new Camera2Helper(this);
 
         // Create GPUPixel processing chain
-        mSourceRawData = new GPUPixelSourceRawData();
+        mSourceRawData = GPUPixelSourceRawData.Create();
 
         // Create filters
         mBeautyFilter = GPUPixelFilter.Create(GPUPixelFilter.BEAUTY_FACE_FILTER);
@@ -176,10 +176,10 @@ public class MainActivity extends AppCompatActivity {
         mLipstickFilter = GPUPixelFilter.Create(GPUPixelFilter.LIPSTICK_FILTER);
 
         // Create output sink
-        mSinkRawData = new GPUPixelSinkRawData();
+        mSinkRawData = GPUPixelSinkRawData.Create();
 
         // Initialize face detection
-        mFaceDetector = new FaceDetector();
+        mFaceDetector = FaceDetector.Create();
 
         // Set camera frame callback
         mCamera2Helper.setFrameCallback(new Camera2Helper.FrameCallback() {
@@ -189,15 +189,15 @@ public class MainActivity extends AppCompatActivity {
                 int sensorOrientation = mCamera2Helper.getSensorOrientation();
 
                 // Check if front camera
-                boolean isFrontCamera = GPUPixelUtil.isFrontCamera(Camera2Helper.CAMERA_FACING);
+                boolean isFrontCamera = GPUPixel.isFrontCamera(Camera2Helper.CAMERA_FACING);
 
-                // Calculate rotation using GPUPixelUtil
-                int rotation = GPUPixelUtil.calculateRotation(
+                // Calculate rotation using GPUPixel
+                int rotation = GPUPixel.calculateRotation(
                         MainActivity.this, sensorOrientation, isFrontCamera);
 
-                // Rotate RGBA data using GPUPixelUtil
+                // Rotate RGBA data using GPUPixel
                 byte[] rotatedData =
-                        GPUPixelUtil.rotateRgbaImage(rgbaData, width, height, rotation);
+                        GPUPixel.rotateRgbaImage(rgbaData, width, height, rotation);
 
                 // Width and height may be swapped after rotation
                 int outWidth = (rotation == 90 || rotation == 270) ? height : width;

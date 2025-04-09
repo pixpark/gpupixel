@@ -1,13 +1,17 @@
 #include <jni.h>
 #include <list>
 #include <string>
+#include <android/log.h>
 
 #include "filter.h"
-#include "jni_helpers.h"
 #include "sink.h"
 #include "source.h"
+#include "util.h"
 
 using namespace gpupixel;
+
+// Define log tag
+#define LOG_TAG "GPUPixel_Source_JNI"
 
 // Add Source to Sink connection
 extern "C" JNIEXPORT jlong JNICALL
@@ -15,17 +19,67 @@ Java_com_pixpark_gpupixel_GPUPixelSource_nativeAddSink(JNIEnv* env,
                                                        jclass clazz,
                                                        jlong source_id,
                                                        jlong sink_id,
-                                                       jint tex_id,
                                                        jboolean is_filter) {
-  Source* source = (Source*)source_id;
-  std::shared_ptr<Sink> sink = is_filter
-                                   ? std::shared_ptr<Sink>((Filter*)sink_id)
-                                   : std::shared_ptr<Sink>((Sink*)sink_id);
-  if (tex_id >= 0) {
-    return (jlong)(source->AddSink(sink, tex_id)).get();
-  } else {
-    return (jlong)(source->AddSink(sink)).get();
+  if (source_id == 0) {
+    Util::Log(LOG_TAG, "nativeAddSink - Invalid parameter: source_id is 0");
+    return 0;
   }
+  
+  if (sink_id == 0) {
+    Util::Log(LOG_TAG, "nativeAddSink - Invalid parameter: sink_id is 0");
+    return 0;
+  }
+  
+  // Get Source pointer
+  auto* source_ptr = reinterpret_cast<std::shared_ptr<Source>*>(source_id);
+  if (!source_ptr) {
+    Util::Log(LOG_TAG, "nativeAddSink - source_ptr is null, conversion failed");
+    return 0;
+  }
+  
+  if (!*source_ptr) {
+    Util::Log(LOG_TAG, "nativeAddSink - *source_ptr is null, invalid Source object");
+    return 0;
+  }
+  
+  std::shared_ptr<Sink> sink;
+  
+  // Process sink_id based on is_filter parameter
+  if (is_filter) {
+    // If it's a Filter type
+    auto* filter_ptr = reinterpret_cast<std::shared_ptr<Filter>*>(sink_id);
+    if (!filter_ptr) {
+      Util::Log(LOG_TAG, "nativeAddSink - filter_ptr is null, conversion failed");
+      return 0;
+    }
+    
+    if (!*filter_ptr) {
+      Util::Log(LOG_TAG, "nativeAddSink - *filter_ptr is null, invalid Filter object");
+      return 0;
+    }
+    
+    sink = std::static_pointer_cast<Sink>(*filter_ptr);
+  } else {
+    // If it's a regular Sink type
+    auto* sink_ptr = reinterpret_cast<std::shared_ptr<Sink>*>(sink_id);
+    if (!sink_ptr) {
+      Util::Log(LOG_TAG, "nativeAddSink - sink_ptr is null, conversion failed");
+      return 0;
+    }
+    
+    if (!*sink_ptr) {
+      Util::Log(LOG_TAG, "nativeAddSink - *sink_ptr is null, invalid Sink object");
+      return 0;
+    }
+    
+    sink = *sink_ptr;
+  }
+  
+  // Add connection
+  (*source_ptr)->AddSink(sink);
+  
+  // Return the original sink_id
+  return sink_id;
 }
 
 // Remove Sink from Source
@@ -35,10 +89,38 @@ Java_com_pixpark_gpupixel_GPUPixelSource_nativeRemoveSink(JNIEnv* env,
                                                           jlong source_id,
                                                           jlong sink_id,
                                                           jboolean is_filter) {
-  Source* source = (Source*)source_id;
-  Sink* sink =
-      is_filter ? dynamic_cast<Sink*>((Filter*)sink_id) : (Sink*)sink_id;
-  source->RemoveSink(std::shared_ptr<Sink>(sink));
+  // Get Source pointer
+  auto* source_ptr = reinterpret_cast<std::shared_ptr<Source>*>(source_id);
+  if (!source_ptr || !*source_ptr) {
+    Util::Log(LOG_TAG, "nativeRemoveSink - Invalid Source object");
+    return;
+  }
+  
+  std::shared_ptr<Sink> sink;
+  
+  // Process sink_id based on is_filter parameter
+  if (is_filter) {
+    // If it's a Filter type
+    auto* filter_ptr = reinterpret_cast<std::shared_ptr<Filter>*>(sink_id);
+    if (!filter_ptr || !*filter_ptr) {
+      Util::Log(LOG_TAG, "nativeRemoveSink - Invalid Filter object");
+      return;
+    }
+    
+    sink = std::static_pointer_cast<Sink>(*filter_ptr);
+  } else {
+    // If it's a regular Sink type
+    auto* sink_ptr = reinterpret_cast<std::shared_ptr<Sink>*>(sink_id);
+    if (!sink_ptr || !*sink_ptr) {
+      Util::Log(LOG_TAG, "nativeRemoveSink - Invalid Sink object");
+      return;
+    }
+    
+    sink = *sink_ptr;
+  }
+  
+  // Remove connection
+  (*source_ptr)->RemoveSink(sink);
 }
 
 // Remove all Sinks from Source
@@ -46,16 +128,45 @@ extern "C" JNIEXPORT void JNICALL
 Java_com_pixpark_gpupixel_GPUPixelSource_nativeRemoveAllSinks(JNIEnv* env,
                                                               jclass clazz,
                                                               jlong source_id) {
-  ((Source*)source_id)->RemoveAllSinks();
+  auto* source_ptr = reinterpret_cast<std::shared_ptr<Source>*>(source_id);
+  if (source_ptr && *source_ptr) {
+    (*source_ptr)->RemoveAllSinks();
+  }
 }
 
-// Execute rendering
+// Check if Source has Sink
 extern "C" JNIEXPORT jboolean JNICALL
-Java_com_pixpark_gpupixel_GPUPixelSource_nativeProceed(JNIEnv* env,
-                                                       jclass clazz,
-                                                       jlong source_id,
-                                                       jboolean update_sinks) {
-  return ((Source*)source_id)->DoRender(update_sinks);
+Java_com_pixpark_gpupixel_GPUPixelSource_nativeHasSink(JNIEnv* env,
+                                                      jclass clazz,
+                                                      jlong source_id,
+                                                      jlong sink_id,
+                                                      jboolean is_filter) {
+  // Get Source pointer
+  auto* source_ptr = reinterpret_cast<std::shared_ptr<Source>*>(source_id);
+  if (!source_ptr || !*source_ptr) {
+    return false;
+  }
+  
+  // Get Sink pointer
+  auto* sink_ptr = reinterpret_cast<std::shared_ptr<Sink>*>(sink_id);
+  if (!sink_ptr || !*sink_ptr) {
+    return false;
+  }
+  
+  // Check connection
+  return (*source_ptr)->HasSink(*sink_ptr);
+}
+
+// Set framebuffer scale
+extern "C" JNIEXPORT void JNICALL
+Java_com_pixpark_gpupixel_GPUPixelSource_nativeSetFramebufferScale(JNIEnv* env,
+                                                                  jclass clazz,
+                                                                  jlong source_id,
+                                                                  jfloat scale) {
+  auto* source_ptr = reinterpret_cast<std::shared_ptr<Source>*>(source_id);
+  if (source_ptr && *source_ptr) {
+    (*source_ptr)->SetFramebufferScale(scale);
+  }
 }
 
 // Get rotated framebuffer width
@@ -64,7 +175,8 @@ Java_com_pixpark_gpupixel_GPUPixelSource_nativeGetRotatedFramebufferWidth(
     JNIEnv* env,
     jclass clazz,
     jlong source_id) {
-  return ((Source*)source_id)->GetRotatedFramebufferWidth();
+  auto* source_ptr = reinterpret_cast<std::shared_ptr<Source>*>(source_id);
+  return source_ptr && *source_ptr ? (*source_ptr)->GetRotatedFramebufferWidth() : 0;
 }
 
 // Get rotated framebuffer height
@@ -73,33 +185,6 @@ Java_com_pixpark_gpupixel_GPUPixelSource_nativeGetRotatedFramebufferHeight(
     JNIEnv* env,
     jclass clazz,
     jlong source_id) {
-  return ((Source*)source_id)->GetRotatedFramebufferHeight();
-}
-
-// Get processed frame data
-extern "C" JNIEXPORT jbyteArray JNICALL
-Java_com_pixpark_gpupixel_GPUPixelSource_nativeGetProcessedFrameData(
-    JNIEnv* env,
-    jclass clazz,
-    jlong source_id,
-    jlong up_to_filter_id,
-    jint width,
-    jint height) {
-  unsigned char* processed_frame_data =
-      ((Source*)source_id)
-          ->GetProcessedFrameData(
-              std::shared_ptr<Filter>((Filter*)up_to_filter_id), width, height);
-
-  int frame_size = width * height * 4 * sizeof(unsigned char);
-
-  jbyteArray result = NULL;
-  if (processed_frame_data) {
-    jbyte* by = (jbyte*)processed_frame_data;
-    result = env->NewByteArray(frame_size);
-    env->SetByteArrayRegion(result, 0, frame_size, by);
-    delete[] processed_frame_data;
-    processed_frame_data = 0;
-  }
-
-  return result;
+  auto* source_ptr = reinterpret_cast<std::shared_ptr<Source>*>(source_id);
+  return source_ptr && *source_ptr ? (*source_ptr)->GetRotatedFramebufferHeight() : 0;
 }

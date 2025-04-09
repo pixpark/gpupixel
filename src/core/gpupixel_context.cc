@@ -90,10 +90,7 @@ GPUPixelContext* GPUPixelContext::instance_ = 0;
 std::mutex GPUPixelContext::mutex_;
 
 GPUPixelContext::GPUPixelContext()
-    : current_shader_program_(0),
-      is_capturing_frame_(false),
-      capture_frame_filter_(0),
-      capture_frame_data_(0) {
+    : current_shader_program_(0) {
   task_queue_ = std::make_shared<DispatchQueue>();
   framebuffer_factory_ = new FramebufferFactory();
   Init();

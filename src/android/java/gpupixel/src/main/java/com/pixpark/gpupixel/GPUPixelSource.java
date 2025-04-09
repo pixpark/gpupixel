@@ -7,88 +7,97 @@
 
 package com.pixpark.gpupixel;
 
-import android.graphics.Bitmap;
-
-import java.nio.ByteBuffer;
-
+/**
+ * Base source class for GPU image processing pipeline
+ */
 public class GPUPixelSource {
     protected long mNativeClassID = 0;
 
-    public GPUPixelSource() {
-        if (mNativeClassID != 0) return;
-        mNativeClassID = nativeCreate();
+    // Base constructor - subclasses must implement their own constructors and set mNativeClassID
+    protected GPUPixelSource() {
     }
-
-    // Execute rendering
-    public void Render() {
-        nativeRender(mNativeClassID);
-    }
-
-    // Get width
-    public int GetWidth() {
-        return nativeGetWidth(mNativeClassID);
-    }
-
-    // Get height
-    public int GetHeight() {
-        return nativeGetHeight(mNativeClassID);
-    }
-
-    // Set output size
-    public void SetOutputSize(int width, int height) {
-        nativeSetOutputSize(mNativeClassID, width, height);
-    }
-
-    // Set rotation
-    public void SetRotation(int rotation) {
-        nativeSetRotation(mNativeClassID, rotation);
-    }
-
-    // Set flip
-    public void SetFlip(boolean flipHorizontal, boolean flipVertical) {
-        nativeSetFlip(mNativeClassID, flipHorizontal, flipVertical);
-    }
-
-    // Set scale type
-    public void SetScaleType(int scaleType) {
-        nativeSetScaleType(mNativeClassID, scaleType);
-    }
-
-    // Set background color
-    public void SetBackgroundColor(float r, float g, float b, float a) {
-        nativeSetBackgroundColor(mNativeClassID, r, g, b, a);
-    }
-
-    // Set output
-    public void SetOutput(GPUPixelSink sink) {
-        nativeSetOutput(mNativeClassID, sink.getNativeClassID());
-    }
-
-    // Remove output
-    public void RemoveOutput(GPUPixelSink sink) {
-        nativeRemoveOutput(mNativeClassID, sink.getNativeClassID());
-    }
-
-    // Remove all outputs
-    public void RemoveAllOutput() {
-        nativeRemoveAllOutput(mNativeClassID);
-    }
-
-    // Destroy
+  
+    /**
+     * Destroys the source and releases resources
+     */
     public void Destroy() {
-        Destroy(true);
-    }
-
-    // Destroy with option to specify if on GL thread
-    public void Destroy(boolean onGLThread) {
         if (mNativeClassID != 0) {
-            nativeDestroy(mNativeClassID);
+            // Just reset ID as there's no nativeDestroy implementation
             mNativeClassID = 0;
         }
     }
 
-    // Get native class ID
-    public long getNativeClassID() {
+    /**
+     * Adds a sink to this source
+     * @param sink The sink object to add
+     */
+    public final void AddSink(final GPUPixelSink sink) {
+        if (mNativeClassID != 0) {
+            nativeAddSink(
+                    mNativeClassID, sink.getNativeClassID(), sink instanceof GPUPixelFilter);
+        }
+    }
+
+    /**
+     * Removes a sink from this source
+     * @param sink The sink to remove
+     */
+    public final void RemoveSink(final GPUPixelSink sink) {
+        if (mNativeClassID != 0 && sink.getNativeClassID() != 0)
+            nativeRemoveSink(
+                    mNativeClassID, sink.getNativeClassID(), sink instanceof GPUPixelFilter);
+    }
+
+    /**
+     * Removes all sinks from this source
+     */
+    public final void RemoveAllSinks() {
+        if (mNativeClassID != 0) nativeRemoveAllSinks(mNativeClassID);
+    }
+
+    /**
+     * Checks if this source contains the specified sink
+     * @param sink The sink to check
+     * @return true if this source contains the sink
+     */
+    public final boolean HasSink(final GPUPixelSink sink) {
+        if (mNativeClassID != 0 && sink.getNativeClassID() != 0)
+            return nativeHasSink(
+                    mNativeClassID, sink.getNativeClassID(), sink instanceof GPUPixelFilter);
+        return false;
+    }
+
+    /**
+     * Sets the framebuffer scale
+     * @param scale The scale factor
+     */
+    public final void SetFramebufferScale(float scale) {
+        if (mNativeClassID != 0) nativeSetFramebufferScale(mNativeClassID, scale);
+    }
+
+    /**
+     * Gets the width of the rotated framebuffer
+     * @return The width in pixels
+     */
+    public int GetRotatedFramebufferWidth() {
+        if (mNativeClassID != 0) return nativeGetRotatedFramebufferWidth(mNativeClassID);
+        return 0;
+    }
+
+    /**
+     * Gets the height of the rotated framebuffer
+     * @return The height in pixels
+     */
+    public int GetRotatedFramebufferHeight() {
+        if (mNativeClassID != 0) return nativeGetRotatedFramebufferHeight(mNativeClassID);
+        return 0;
+    }
+
+    /**
+     * Gets the native class ID for JNI operations
+     * @return The native class ID
+     */
+    public long getSourceNativeClassID() {
         return mNativeClassID;
     }
 
@@ -96,7 +105,8 @@ public class GPUPixelSource {
     protected void finalize() throws Throwable {
         try {
             if (mNativeClassID != 0) {
-                nativeFinalize(mNativeClassID);
+                // Clean up resources by removing all sinks
+                RemoveAllSinks();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -105,95 +115,13 @@ public class GPUPixelSource {
         }
     }
 
-    public GPUPixelSource AddSink(GPUPixelSink sink) {
-        return AddSink(sink, -1);
-    }
-
-    public final GPUPixelSource AddSink(final GPUPixelSink sink, final int texID) {
-        if (mNativeClassID != 0)
-            nativeAddSink(
-                    mNativeClassID, sink.getNativeClassID(), texID, sink instanceof GPUPixelFilter);
-        if (sink instanceof GPUPixelSource)
-            return (GPUPixelSource) sink;
-        else
-            return null;
-    }
-
-    public final void RemoveSink(final GPUPixelSink sink) {
-        if (mNativeClassID != 0 && sink.getNativeClassID() != 0)
-            nativeRemoveSink(
-                    mNativeClassID, sink.getNativeClassID(), sink instanceof GPUPixelFilter);
-    }
-
-    public final void RemoveAllSinks() {
-        if (mNativeClassID != 0) nativeRemoveAllSinks(mNativeClassID);
-    }
-
-    public void DoRender() {
-        DoRender(true, true);
-    }
-
-    public void DoRender(final boolean updateSinks, final boolean bRequestRender) {
-        if (mNativeClassID != 0) nativeProceed(mNativeClassID, updateSinks);
-        if (bRequestRender) {
-        }
-    }
-
-    public int GetRotatedFramebufferWidth() {
-        return nativeGetRotatedFramebufferWidth(mNativeClassID);
-    }
-
-    public int GetRotatedFramebufferHeight() {
-        return nativeGetRotatedFramebufferHeight(mNativeClassID);
-    }
-
-    public void GetProcessedFrameData(
-            final GPUPixelFilter upToFilter, final ProcessedFrameDataCallback proceedResult) {
-        GetProcessedFrameData(upToFilter, GetRotatedFramebufferWidth(),
-                GetRotatedFramebufferHeight(), proceedResult);
-    }
-
-    public void GetProcessedFrameData(final GPUPixelFilter upToFilter, final int width,
-            final int height, final ProcessedFrameDataCallback proceedResult) {
-        if (mNativeClassID != 0) {
-            byte[] resultData = nativeGetProcessedFrameData(
-                    mNativeClassID, upToFilter.getNativeClassID(), width, height);
-            if (resultData != null) {
-                Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-                bmp.copyPixelsFromBuffer(ByteBuffer.wrap(resultData));
-                proceedResult.onResult(bmp);
-            }
-        }
-    }
-
-    public interface ProcessedFrameDataCallback {
-        void onResult(Bitmap result);
-    }
-
-    // JNI Native methods
-    private static native long nativeCreate();
-    private static native void nativeDestroy(long nativeObj);
-    private static native void nativeFinalize(long nativeObj);
-    private static native void nativeRender(long nativeObj);
-    private static native int nativeGetWidth(long nativeObj);
-    private static native int nativeGetHeight(long nativeObj);
-    private static native void nativeSetOutputSize(long nativeObj, int width, int height);
-    private static native void nativeSetRotation(long nativeObj, int rotation);
-    private static native void nativeSetFlip(
-            long nativeObj, boolean flipHorizontal, boolean flipVertical);
-    private static native void nativeSetScaleType(long nativeObj, int scaleType);
-    private static native void nativeSetBackgroundColor(
-            long nativeObj, float r, float g, float b, float a);
-    private static native void nativeSetOutput(long nativeObj, long sinkNativeObj);
-    private static native void nativeRemoveOutput(long nativeObj, long sinkNativeObj);
-    private static native void nativeRemoveAllOutput(long nativeObj);
+    // JNI native methods
     private static native long nativeAddSink(
-            long sourceId, long sinkId, int texId, boolean isFilter);
+            long sourceId, long sinkId, boolean isFilter);
     private static native void nativeRemoveSink(long sourceId, long sinkId, boolean isFilter);
     private static native void nativeRemoveAllSinks(long sourceId);
-    private static native boolean nativeProceed(long sourceId, boolean updateSinks);
+    private static native boolean nativeHasSink(long sourceId, long sinkId, boolean isFilter);
+    private static native void nativeSetFramebufferScale(long sourceId, float scale);
     private static native int nativeGetRotatedFramebufferWidth(long sourceId);
     private static native int nativeGetRotatedFramebufferHeight(long sourceId);
-    private static native byte[] nativeGetProcessedFrameData(
-            long sourceId, long upToFilterId, int width, int height);
 }
