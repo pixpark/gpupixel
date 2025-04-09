@@ -17,9 +17,15 @@
 
 #if defined(GPUPIXEL_IOS)
 @interface GPUPixelView : UIView <GPUPixelSink>
+
+@property(nonatomic) CAEAGLLayer *currentlayer;
+@property(nonatomic) CGRect currentFrame;
+
 #else
 @interface GPUPixelView : NSOpenGLView <GPUPixelSink>
 #endif
 @property(readwrite, nonatomic) gpupixel::SinkRender::FillMode fillMode;
 @property(readonly, nonatomic) CGSize sizeInPixels;
+
+
 @end
