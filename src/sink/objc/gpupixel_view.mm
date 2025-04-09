@@ -35,7 +35,10 @@
 @implementation GPUPixelView
 
 @synthesize sizeInPixels = _sizeInPixels;
-
+#if defined(GPUPIXEL_IOS)
+@synthesize currentlayer;
+@synthesize currentFrame;
+#endif
 - (id)initWithFrame:(CGRect)frame {
   if (!(self = [super initWithFrame:frame])) {
     return nil;
@@ -69,7 +72,9 @@
                                    kEAGLDrawablePropertyRetainedBacking,
                                    kEAGLColorFormatRGBA8,
                                    kEAGLDrawablePropertyColorFormat, nil];
-
+  currentlayer = (CAEAGLLayer *)self.layer;
+  currentlayer.opaque = YES;
+  currentlayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], kEAGLDrawablePropertyRetainedBacking, kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
 #else
   [self setOpenGLContext:gpupixel::GPUPixelContext::GetInstance()
                              ->GetOpenGLContext()];
@@ -106,6 +111,8 @@
   [super layoutSubviews];
   if (!CGSizeEqualToSize(self.bounds.size, lastBoundsSize) &&
       !CGSizeEqualToSize(self.bounds.size, CGSizeZero)) {
+    self.currentFrame = self.bounds;
+      
     [self destroyDisplayFramebuffer];
     [self createDisplayFramebuffer];
   }
@@ -146,8 +153,8 @@
     glBindRenderbuffer(GL_RENDERBUFFER, displayRenderbuffer);
     [gpupixel::GPUPixelContext::GetInstance()->GetEglContext()
         renderbufferStorage:GL_RENDERBUFFER
-               fromDrawable:(CAEAGLLayer*)self.layer];
-    lastBoundsSize = self.bounds.size;
+               fromDrawable:(CAEAGLLayer*)currentlayer];
+    lastBoundsSize = currentFrame.size;
 
     glGenFramebuffers(1, &displayFramebuffer);
     glBindFramebuffer(GL_FRAMEBUFFER, displayFramebuffer);
