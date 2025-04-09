@@ -25,16 +25,16 @@ public class FaceDetector {
     /**
      * Create a face detector instance
      */
-    public FaceDetector() {
+    protected FaceDetector() {
         mNativeClassID = nativeFaceDetectorCreate();
     }
-
+    
     /**
-     * Get native class ID
-     * @return Native class ID
+     * Create a new FaceDetector instance
+     * @return A new FaceDetector instance
      */
-    public long getNativeClassID() {
-        return mNativeClassID;
+    public static FaceDetector Create() {
+        return new FaceDetector();
     }
 
     /**

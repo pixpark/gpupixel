@@ -45,13 +45,6 @@ class GPUPIXEL_API GPUPixelContext {
   GLFWwindow* GetGLContext() const { return gl_context_; };
 #endif
 
-  // used for capturing a processed frame data
-  bool is_capturing_frame_;
-  std::shared_ptr<Filter> capture_frame_filter_;
-  unsigned char* capture_frame_data_;
-  int capture_width_;
-  int capture_height_;
-
  private:
   GPUPixelContext();
   ~GPUPixelContext();

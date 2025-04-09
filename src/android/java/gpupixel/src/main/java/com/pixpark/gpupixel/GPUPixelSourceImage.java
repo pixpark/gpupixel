@@ -9,10 +9,8 @@ package com.pixpark.gpupixel;
 
 import android.graphics.Bitmap;
 
-import java.nio.ByteBuffer;
-
 public class GPUPixelSourceImage extends GPUPixelSource {
-    public GPUPixelSourceImage() {
+    protected GPUPixelSourceImage() {
         // Empty constructor, instance should be created via static methods
     }
 
@@ -57,12 +55,9 @@ public class GPUPixelSourceImage extends GPUPixelSource {
     public void Render() {
         nativeRender(mNativeClassID);
     }
-
+ 
+    @Override
     public void Destroy() {
-        Destroy(true);
-    }
-
-    public void Destroy(boolean onGLThread) {
         if (mNativeClassID != 0) {
             nativeDestroy(mNativeClassID);
             mNativeClassID = 0;

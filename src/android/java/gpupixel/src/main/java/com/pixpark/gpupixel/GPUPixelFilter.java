@@ -52,7 +52,7 @@ public class GPUPixelFilter extends GPUPixelSource implements GPUPixelSink {
     // Other processing filters
     public static final String LUMINANCE_RANGE_FILTER = "LuminanceRangeFilter";
 
-    GPUPixelFilter(final String filterClassName) {
+    protected GPUPixelFilter(final String filterClassName) {
         if (mNativeClassID != 0) return;
         mNativeClassID = nativeFilterCreate(filterClassName);
         this.filterClassName = filterClassName;
@@ -99,17 +99,19 @@ public class GPUPixelFilter extends GPUPixelSource implements GPUPixelSink {
         }
     }
 
-    public final void Destroy() {
-        Destroy(true);
+    @Override
+    public long getNativeClassID() {
+        return mNativeClassID;
     }
 
-    public final void Destroy(boolean onGLThread) {
-        if (mNativeClassID != 0) {
+    @Override
+    public final void Destroy() {
+         if (mNativeClassID != 0) {
             nativeFilterDestroy(mNativeClassID);
             mNativeClassID = 0;
         }
     }
-
+ 
     @Override
     protected void finalize() throws Throwable {
         try {
@@ -133,4 +135,5 @@ public class GPUPixelFilter extends GPUPixelSource implements GPUPixelSink {
             long classId, String property, String value);
     private static native void nativeFilterSetPropertyFloatArray(
             long classId, String property, float[] array);
+
 }

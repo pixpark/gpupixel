@@ -12,22 +12,17 @@ import java.nio.ByteBuffer;
 public class GPUPixelSinkRawData implements GPUPixelSink {
     protected long mNativeClassID = 0;
 
-    // Callback interface for returning processed data
-    public interface DataCallback {
-        void onRgbaData(ByteBuffer rgbaData, int width, int height);
-        void onI420Data(ByteBuffer i420Data, int width, int height);
-    }
-
-    private DataCallback mDataCallback = null;
-
-    public GPUPixelSinkRawData() {
+    protected GPUPixelSinkRawData() {
         if (mNativeClassID != 0) return;
         mNativeClassID = nativeCreate();
     }
-
-    // Execute rendering
-    public void Render() {
-        nativeRender(mNativeClassID);
+    
+    /**
+     * Create a new GPUPixelSinkRawData instance
+     * @return A new GPUPixelSinkRawData instance
+     */
+    public static GPUPixelSinkRawData Create() {
+        return new GPUPixelSinkRawData();
     }
 
     // Get width
@@ -51,16 +46,12 @@ public class GPUPixelSinkRawData implements GPUPixelSink {
     }
 
     public void Destroy() {
-        Destroy(true);
-    }
-
-    public void Destroy(boolean onGLThread) {
         if (mNativeClassID != 0) {
             nativeDestroy(mNativeClassID);
             mNativeClassID = 0;
         }
     }
-
+ 
     @Override
     public long getNativeClassID() {
         return mNativeClassID;
@@ -83,7 +74,6 @@ public class GPUPixelSinkRawData implements GPUPixelSink {
     private static native long nativeCreate();
     private static native void nativeDestroy(long nativeObj);
     private static native void nativeFinalize(long nativeObj);
-    private static native void nativeRender(long nativeObj);
     private static native int nativeGetWidth(long nativeObj);
     private static native int nativeGetHeight(long nativeObj);
     private static native byte[] nativeGetRgbaBuffer(long nativeObj);

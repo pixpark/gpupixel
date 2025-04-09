@@ -15,8 +15,6 @@
 
 using namespace gpupixel;
 
-// Global filter list for managing filter lifecycle
-std::list<std::shared_ptr<Filter>> filter_list_;
 
 // Create filter
 extern "C" jlong Java_com_pixpark_gpupixel_GPUPixelFilter_nativeFilterCreate(
@@ -25,11 +23,16 @@ extern "C" jlong Java_com_pixpark_gpupixel_GPUPixelFilter_nativeFilterCreate(
     jstring jFilterClassName) {
   const char* filterClassName = env->GetStringUTFChars(jFilterClassName, 0);
 
-  auto ft = Filter::Create(filterClassName);
-  filter_list_.push_back(ft);
-  jlong ret = (jlong)ft.get();
+  auto filter = Filter::Create(filterClassName);
   env->ReleaseStringUTFChars(jFilterClassName, filterClassName);
-  return ret;
+  
+  if (!filter) {
+    return 0;
+  }
+  
+  // Create shared_ptr on heap
+  auto* ptr = new std::shared_ptr<Filter>(filter);
+  return reinterpret_cast<jlong>(ptr);
 };
 
 // Destroy filter
@@ -37,11 +40,9 @@ extern "C" void Java_com_pixpark_gpupixel_GPUPixelFilter_nativeFilterDestroy(
     JNIEnv* env,
     jclass obj,
     jlong classId) {
-  for (auto ft : filter_list_) {
-    if (classId == (jlong)ft.get()) {
-      filter_list_.remove(ft);
-    }
-  }
+  // Free the heap-allocated shared_ptr
+  auto* ptr = reinterpret_cast<std::shared_ptr<Filter>*>(classId);
+  delete ptr;
 };
 
 // Release filter resources
@@ -49,7 +50,11 @@ extern "C" void Java_com_pixpark_gpupixel_GPUPixelFilter_nativeFilterFinalize(
     JNIEnv* env,
     jclass obj,
     jlong classId) {
-  ((Filter*)classId)->ReleaseFramebuffer(false);
+  // Get shared_ptr and access the object
+  auto* ptr = reinterpret_cast<std::shared_ptr<Filter>*>(classId);
+  if (ptr && *ptr) {
+    (*ptr)->ReleaseFramebuffer(false);
+  }
 };
 
 // Set float property for filter
@@ -60,8 +65,13 @@ Java_com_pixpark_gpupixel_GPUPixelFilter_nativeFilterSetPropertyFloat(
     jlong classId,
     jstring jProperty,
     jfloat value) {
+  auto* ptr = reinterpret_cast<std::shared_ptr<Filter>*>(classId);
+  if (!ptr || !*ptr) {
+    return;
+  }
+  
   const char* property = env->GetStringUTFChars(jProperty, 0);
-  ((Filter*)classId)->SetProperty(property, value);
+  (*ptr)->SetProperty(property, value);
   env->ReleaseStringUTFChars(jProperty, property);
 };
 
@@ -73,8 +83,13 @@ Java_com_pixpark_gpupixel_GPUPixelFilter_nativeFilterSetPropertyInt(
     jlong classId,
     jstring jProperty,
     jint value) {
+  auto* ptr = reinterpret_cast<std::shared_ptr<Filter>*>(classId);
+  if (!ptr || !*ptr) {
+    return;
+  }
+  
   const char* property = env->GetStringUTFChars(jProperty, 0);
-  ((Filter*)classId)->SetProperty(property, value);
+  (*ptr)->SetProperty(property, value);
   env->ReleaseStringUTFChars(jProperty, property);
 };
 
@@ -86,9 +101,14 @@ Java_com_pixpark_gpupixel_GPUPixelFilter_nativeFilterSetPropertyString(
     jlong classId,
     jstring jProperty,
     jstring jValue) {
+  auto* ptr = reinterpret_cast<std::shared_ptr<Filter>*>(classId);
+  if (!ptr || !*ptr) {
+    return;
+  }
+  
   const char* property = env->GetStringUTFChars(jProperty, 0);
   const char* value = env->GetStringUTFChars(jValue, 0);
-  ((Filter*)classId)->SetProperty(property, value);
+  (*ptr)->SetProperty(property, value);
   env->ReleaseStringUTFChars(jProperty, property);
   env->ReleaseStringUTFChars(jValue, value);
 };
@@ -101,6 +121,11 @@ Java_com_pixpark_gpupixel_GPUPixelFilter_nativeFilterSetPropertyFloatArray(
     jlong class_id,
     jstring jProperty,
     jfloatArray jarray) {
+  auto* ptr = reinterpret_cast<std::shared_ptr<Filter>*>(class_id);
+  if (!ptr || !*ptr) {
+    return;
+  }
+  
   const char* property = env->GetStringUTFChars(jProperty, 0);
   jsize length = env->GetArrayLength(jarray);
 
@@ -110,7 +135,9 @@ Java_com_pixpark_gpupixel_GPUPixelFilter_nativeFilterSetPropertyFloatArray(
   for (int i = 0; i < length; i++) {
     vector.push_back(c_array[i]);
   }
-  ((Filter*)class_id)->SetProperty(property, vector);
+  
+  (*ptr)->SetProperty(property, vector);
+  
   env->ReleaseStringUTFChars(jProperty, property);
   // Release Java array memory
   env->ReleaseFloatArrayElements(jarray, c_array, JNI_ABORT);

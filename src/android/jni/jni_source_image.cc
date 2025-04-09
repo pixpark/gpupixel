@@ -9,9 +9,6 @@
 
 using namespace gpupixel;
 
-// Maintain all created SourceImage objects
-static std::list<std::shared_ptr<SourceImage>> source_image_list_;
-
 // Create new SourceImage instance - from file path
 extern "C" JNIEXPORT jlong JNICALL
 Java_com_pixpark_gpupixel_GPUPixelSourceImage_nativeCreateFromFile(
@@ -25,8 +22,10 @@ Java_com_pixpark_gpupixel_GPUPixelSourceImage_nativeCreateFromFile(
   if (!source_image) {
     return 0;
   }
-  source_image_list_.push_back(source_image);
-  return (jlong)(source_image.get());
+  
+  // Create shared_ptr on heap
+  auto* ptr = new std::shared_ptr<SourceImage>(source_image);
+  return reinterpret_cast<jlong>(ptr);
 }
 
 // Create new SourceImage instance - from buffer
@@ -48,8 +47,10 @@ Java_com_pixpark_gpupixel_GPUPixelSourceImage_nativeCreateFromBuffer(
   if (!source_image) {
     return 0;
   }
-  source_image_list_.push_back(source_image);
-  return (jlong)(source_image.get());
+  
+  // Create shared_ptr on heap
+  auto* ptr = new std::shared_ptr<SourceImage>(source_image);
+  return reinterpret_cast<jlong>(ptr);
 }
 
 // Create new SourceImage instance - from Bitmap
@@ -76,8 +77,10 @@ Java_com_pixpark_gpupixel_GPUPixelSourceImage_nativeCreateFromBitmap(
   if (!source_image) {
     return 0;
   }
-  source_image_list_.push_back(source_image);
-  return (jlong)(source_image.get());
+  
+  // Create shared_ptr on heap
+  auto* ptr = new std::shared_ptr<SourceImage>(source_image);
+  return reinterpret_cast<jlong>(ptr);
 }
 
 // Destroy SourceImage instance
@@ -85,12 +88,9 @@ extern "C" JNIEXPORT void JNICALL
 Java_com_pixpark_gpupixel_GPUPixelSourceImage_nativeDestroy(JNIEnv* env,
                                                             jclass clazz,
                                                             jlong native_obj) {
-  for (auto si : source_image_list_) {
-    if ((jlong)si.get() == native_obj) {
-      source_image_list_.remove(si);
-      break;
-    }
-  }
+  // Free the heap-allocated shared_ptr
+  auto* ptr = reinterpret_cast<std::shared_ptr<SourceImage>*>(native_obj);
+  delete ptr;
 }
 
 // Release SourceImage framebuffer
@@ -98,7 +98,11 @@ extern "C" JNIEXPORT void JNICALL
 Java_com_pixpark_gpupixel_GPUPixelSourceImage_nativeFinalize(JNIEnv* env,
                                                              jclass clazz,
                                                              jlong native_obj) {
-  ((SourceImage*)native_obj)->ReleaseFramebuffer(false);
+  // Get shared_ptr and access the object
+  auto* ptr = reinterpret_cast<std::shared_ptr<SourceImage>*>(native_obj);
+  if (ptr && *ptr) {
+    (*ptr)->ReleaseFramebuffer(false);
+  }
 }
 
 // Get image width
@@ -106,7 +110,8 @@ extern "C" JNIEXPORT jint JNICALL
 Java_com_pixpark_gpupixel_GPUPixelSourceImage_nativeGetWidth(JNIEnv* env,
                                                              jclass clazz,
                                                              jlong native_obj) {
-  return ((SourceImage*)native_obj)->GetWidth();
+  auto* ptr = reinterpret_cast<std::shared_ptr<SourceImage>*>(native_obj);
+  return ptr && *ptr ? (*ptr)->GetWidth() : 0;
 }
 
 // Get image height
@@ -115,7 +120,8 @@ Java_com_pixpark_gpupixel_GPUPixelSourceImage_nativeGetHeight(
     JNIEnv* env,
     jclass clazz,
     jlong native_obj) {
-  return ((SourceImage*)native_obj)->GetHeight();
+  auto* ptr = reinterpret_cast<std::shared_ptr<SourceImage>*>(native_obj);
+  return ptr && *ptr ? (*ptr)->GetHeight() : 0;
 }
 
 // Get RGBA image data
@@ -124,14 +130,18 @@ Java_com_pixpark_gpupixel_GPUPixelSourceImage_nativeGetRgbaImageBuffer(
     JNIEnv* env,
     jclass clazz,
     jlong native_obj) {
-  const unsigned char* buffer =
-      ((SourceImage*)native_obj)->GetRgbaImageBuffer();
+  auto* ptr = reinterpret_cast<std::shared_ptr<SourceImage>*>(native_obj);
+  if (!ptr || !*ptr) {
+    return NULL;
+  }
+  
+  const unsigned char* buffer = (*ptr)->GetRgbaImageBuffer();
   if (!buffer) {
     return NULL;
   }
 
-  int width = ((SourceImage*)native_obj)->GetWidth();
-  int height = ((SourceImage*)native_obj)->GetHeight();
+  int width = (*ptr)->GetWidth();
+  int height = (*ptr)->GetHeight();
   int size = width * height * 4;  // RGBA = 4 bytes per pixel
 
   jbyteArray result = env->NewByteArray(size);
@@ -145,5 +155,8 @@ extern "C" JNIEXPORT void JNICALL
 Java_com_pixpark_gpupixel_GPUPixelSourceImage_nativeRender(JNIEnv* env,
                                                            jclass clazz,
                                                            jlong native_obj) {
-  ((SourceImage*)native_obj)->Render();
+  auto* ptr = reinterpret_cast<std::shared_ptr<SourceImage>*>(native_obj);
+  if (ptr && *ptr) {
+    (*ptr)->Render();
+  }
 }
