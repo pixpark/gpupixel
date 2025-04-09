@@ -106,12 +106,12 @@ public class GPUPixelFilter extends GPUPixelSource implements GPUPixelSink {
 
     @Override
     public final void Destroy() {
-         if (mNativeClassID != 0) {
+        if (mNativeClassID != 0) {
             nativeFilterDestroy(mNativeClassID);
             mNativeClassID = 0;
         }
     }
- 
+
     @Override
     protected void finalize() throws Throwable {
         try {
@@ -135,5 +135,4 @@ public class GPUPixelFilter extends GPUPixelSource implements GPUPixelSink {
             long classId, String property, String value);
     private static native void nativeFilterSetPropertyFloatArray(
             long classId, String property, float[] array);
-
 }

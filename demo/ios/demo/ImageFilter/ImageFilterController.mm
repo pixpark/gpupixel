@@ -47,8 +47,10 @@ using namespace gpupixel;
 #pragma mark - Lazy load
 - (FilterToolbarView*)filterToolbarView {
   if (!_filterToolbarView) {
-    NSArray* filterTitles =
-        @[ @"Sharpen", @"Smooth", @"Whiten", @"Face Slim", @"Eye Enlarge", @"Lipstick", @"Blusher" ];
+    NSArray* filterTitles = @[
+      @"Sharpen", @"Smooth", @"Whiten", @"Face Slim", @"Eye Enlarge",
+      @"Lipstick", @"Blusher"
+    ];
     _filterToolbarView = [[FilterToolbarView alloc] initWithFrame:CGRectZero
                                                      filterTitles:filterTitles];
     _filterToolbarView.delegate = self;
@@ -105,7 +107,7 @@ using namespace gpupixel;
       ->AddSink(_faceReshapeFilter)
       ->AddSink(_beautyFaceFilter)
       ->AddSink(_gpuPixelView);
-  
+
   // Add SinkRawData to get processed data
   _beautyFaceFilter->AddSink(_sinkRawData);
 }
@@ -180,21 +182,22 @@ using namespace gpupixel;
 - (void)saveAction {
   // Render once to update data in SinkRawData
   _gpuSourceImage->Render();
-  
+
   // Get processed RGBA data from SinkRawData
   int width = _sinkRawData->GetWidth();
   int height = _sinkRawData->GetHeight();
   const uint8_t* pixels = _sinkRawData->GetRgbaBuffer();
-  
-  UIImage* resultImage = [ImageConverter imageFromRGBAData:(unsigned char*)pixels
-                                                     width:width
-                                                    height:height];
+
+  UIImage* resultImage =
+      [ImageConverter imageFromRGBAData:(unsigned char*)pixels
+                                  width:width
+                                 height:height];
 
   // Create and show result page
   FilterResultViewController* resultVC =
       [[FilterResultViewController alloc] initWithImage:resultImage];
   [self.navigationController pushViewController:resultVC animated:YES];
-  
+
   // Note: No need to free(pixels), SinkRawData manages the memory
 }
 

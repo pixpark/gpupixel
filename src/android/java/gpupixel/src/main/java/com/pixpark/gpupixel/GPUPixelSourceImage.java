@@ -55,7 +55,7 @@ public class GPUPixelSourceImage extends GPUPixelSource {
     public void Render() {
         nativeRender(mNativeClassID);
     }
- 
+
     @Override
     public void Destroy() {
         if (mNativeClassID != 0) {

@@ -196,8 +196,7 @@ public class MainActivity extends AppCompatActivity {
                         MainActivity.this, sensorOrientation, isFrontCamera);
 
                 // Rotate RGBA data using GPUPixel
-                byte[] rotatedData =
-                        GPUPixel.rotateRgbaImage(rgbaData, width, height, rotation);
+                byte[] rotatedData = GPUPixel.rotateRgbaImage(rgbaData, width, height, rotation);
 
                 // Width and height may be swapped after rotation
                 int outWidth = (rotation == 90 || rotation == 270) ? height : width;

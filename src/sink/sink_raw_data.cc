@@ -41,7 +41,8 @@ const std::string kRGBToI420FragmentShaderString = R"(
 
 std::shared_ptr<SinkRawData> SinkRawData::Create() {
   std::shared_ptr<SinkRawData> ret;
-  SYNC_RUN_WITH_CONTEXT(ret = std::shared_ptr<SinkRawData>(new SinkRawData()););
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext(
+      [&] { ret = std::shared_ptr<SinkRawData>(new SinkRawData()); });
   return ret;
 }
 

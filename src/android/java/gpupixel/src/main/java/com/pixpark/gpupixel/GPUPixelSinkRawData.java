@@ -16,7 +16,7 @@ public class GPUPixelSinkRawData implements GPUPixelSink {
         if (mNativeClassID != 0) return;
         mNativeClassID = nativeCreate();
     }
-    
+
     /**
      * Create a new GPUPixelSinkRawData instance
      * @return A new GPUPixelSinkRawData instance
@@ -51,7 +51,7 @@ public class GPUPixelSinkRawData implements GPUPixelSink {
             mNativeClassID = 0;
         }
     }
- 
+
     @Override
     public long getNativeClassID() {
         return mNativeClassID;

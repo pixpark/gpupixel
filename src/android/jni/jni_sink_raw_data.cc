@@ -16,7 +16,7 @@ Java_com_pixpark_gpupixel_GPUPixelSinkRawData_nativeCreate(JNIEnv* env,
   if (!sink_raw_data) {
     return 0;
   }
-  
+
   // Create shared_ptr on heap
   auto* ptr = new std::shared_ptr<SinkRawData>(sink_raw_data);
   return reinterpret_cast<jlong>(ptr);
@@ -73,7 +73,7 @@ Java_com_pixpark_gpupixel_GPUPixelSinkRawData_nativeGetRgbaBuffer(
   if (!ptr || !*ptr) {
     return NULL;
   }
-  
+
   const uint8_t* buffer = (*ptr)->GetRgbaBuffer();
   if (!buffer) {
     return NULL;
@@ -81,7 +81,7 @@ Java_com_pixpark_gpupixel_GPUPixelSinkRawData_nativeGetRgbaBuffer(
 
   int width = (*ptr)->GetWidth();
   int height = (*ptr)->GetHeight();
-  
+
   // Check if width and height are valid
   if (width <= 0 || height <= 0) {
     return NULL;
@@ -114,7 +114,7 @@ Java_com_pixpark_gpupixel_GPUPixelSinkRawData_nativeGetI420Buffer(
   if (!ptr || !*ptr) {
     return NULL;
   }
-  
+
   const uint8_t* buffer = (*ptr)->GetI420Buffer();
   if (!buffer) {
     return NULL;
@@ -122,7 +122,7 @@ Java_com_pixpark_gpupixel_GPUPixelSinkRawData_nativeGetI420Buffer(
 
   int width = (*ptr)->GetWidth();
   int height = (*ptr)->GetHeight();
-  
+
   // Check if width and height are valid
   if (width <= 0 || height <= 0) {
     return NULL;

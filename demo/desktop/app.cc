@@ -34,19 +34,21 @@ GLFWwindow* main_window_ = nullptr;
 bool CheckShaderErrors(GLuint shader, const char* type) {
   GLint success;
   GLchar infoLog[1024];
-  
+
   if (strcmp(type, "PROGRAM") != 0) {
     glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
     if (!success) {
       glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-      std::cerr << "Shader compilation error: " << type << "\n" << infoLog << std::endl;
+      std::cerr << "Shader compilation error: " << type << "\n"
+                << infoLog << std::endl;
       return false;
     }
   } else {
     glGetProgramiv(shader, GL_LINK_STATUS, &success);
     if (!success) {
       glGetProgramInfoLog(shader, 1024, NULL, infoLog);
-      std::cerr << "Program linking error: " << type << "\n" << infoLog << std::endl;
+      std::cerr << "Program linking error: " << type << "\n"
+                << infoLog << std::endl;
       return false;
     }
   }
@@ -67,7 +69,7 @@ void ErrorCallback(int error, const char* description) {
 bool SetupGlfwWindow() {
   // Set GLFW error callback
   glfwSetErrorCallback(ErrorCallback);
-  
+
   // Initialize GLFW
   if (!glfwInit()) {
     std::cerr << "Failed to initialize GLFW" << std::endl;
@@ -79,7 +81,7 @@ bool SetupGlfwWindow() {
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_ANY_PROFILE);
   glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
-  
+
   main_window_ = glfwCreateWindow(1280, 720, "GPUPixel Demo", NULL, NULL);
   if (main_window_ == NULL) {
     std::cerr << "Failed to create GLFW window" << std::endl;
@@ -89,16 +91,16 @@ bool SetupGlfwWindow() {
 
   // Initialize GLAD and setup window parameters
   glfwMakeContextCurrent(main_window_);
-  
+
   if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
     std::cerr << "Failed to initialize GLAD" << std::endl;
     glfwDestroyWindow(main_window_);
     glfwTerminate();
     return false;
   }
-  
+
   glfwSetFramebufferSizeCallback(main_window_, OnFramebufferResize);
-  
+
   return true;
 }
 
@@ -111,7 +113,7 @@ void SetupImGui() {
 
   ImGui::StyleColorsDark();
   ImGui_ImplGlfw_InitForOpenGL(main_window_, true);
-  
+
   // Use GLSL 1.3 for compatibility
   const char* glsl_version = "#version 130";
   ImGui_ImplOpenGL3_Init(glsl_version);
@@ -140,32 +142,34 @@ void SetupFilterPipeline() {
 
 // Update filter parameters from ImGui controls
 void UpdateFilterParametersFromUI() {
-  ImGui::Begin("Beauty Control Panel", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
-  
+  ImGui::Begin("Beauty Control Panel", nullptr,
+               ImGuiWindowFlags_AlwaysAutoResize);
+
   if (ImGui::SliderFloat("Smoothing", &beauty_strength_, 0.0f, 10.0f)) {
     beauty_filter_->SetBlurAlpha(beauty_strength_ / 10.0f);
   }
-  
+
   if (ImGui::SliderFloat("Whitening", &whitening_strength_, 0.0f, 10.0f)) {
     beauty_filter_->SetWhite(whitening_strength_ / 20.0f);
   }
-  
+
   if (ImGui::SliderFloat("Face Slimming", &face_slim_strength_, 0.0f, 10.0f)) {
     reshape_filter_->SetFaceSlimLevel(face_slim_strength_ / 200.0f);
   }
-  
-  if (ImGui::SliderFloat("Eye Enlarging", &eye_enlarge_strength_, 0.0f, 10.0f)) {
+
+  if (ImGui::SliderFloat("Eye Enlarging", &eye_enlarge_strength_, 0.0f,
+                         10.0f)) {
     reshape_filter_->SetEyeZoomLevel(eye_enlarge_strength_ / 100.0f);
   }
-  
+
   if (ImGui::SliderFloat("Lipstick", &lipstick_strength_, 0.0f, 10.0f)) {
     lipstick_filter_->SetBlendLevel(lipstick_strength_ / 10.0f);
   }
-  
+
   if (ImGui::SliderFloat("Blusher", &blusher_strength_, 0.0f, 10.0f)) {
     blusher_filter_->SetBlendLevel(blusher_strength_ / 10.0f);
   }
-  
+
   ImGui::End();
 }
 
@@ -173,11 +177,11 @@ void UpdateFilterParametersFromUI() {
 void UpdateFilterParameters() {
   beauty_filter_->SetBlurAlpha(beauty_strength_ / 10.0f);
   beauty_filter_->SetWhite(whitening_strength_ / 20.0f);
-  
+
   // Face reshape filter controls
   reshape_filter_->SetFaceSlimLevel(face_slim_strength_ / 200.0f);
   reshape_filter_->SetEyeZoomLevel(eye_enlarge_strength_ / 100.0f);
-  
+
   // Lipstick and blusher filter controls
   lipstick_filter_->SetBlendLevel(lipstick_strength_ / 10.0f);
   blusher_filter_->SetBlendLevel(blusher_strength_ / 10.0f);
@@ -194,15 +198,16 @@ void RenderRGBAToScreen(const uint8_t* rgba_data, int width, int height) {
   glViewport(0, 0, 1280, 720);
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  
+
   // Create a texture from the RGBA data
   GLuint texture;
   glGenTextures(1, &texture);
   glBindTexture(GL_TEXTURE_2D, texture);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, rgba_data);
-  
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
+               GL_UNSIGNED_BYTE, rgba_data);
+
   // Use GLSL 1.2 for maximum compatibility
   const char* vertexShaderSource = R"(
     #version 120
@@ -214,7 +219,7 @@ void RenderRGBAToScreen(const uint8_t* rgba_data, int width, int height) {
       TexCoord = aTexCoord;
     }
   )";
-  
+
   const char* fragmentShaderSource = R"(
     #version 120
     varying vec2 TexCoord;
@@ -223,7 +228,7 @@ void RenderRGBAToScreen(const uint8_t* rgba_data, int width, int height) {
       gl_FragColor = texture2D(texture1, TexCoord);
     }
   )";
-  
+
   // Compile shaders
   GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
   glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
@@ -231,14 +236,14 @@ void RenderRGBAToScreen(const uint8_t* rgba_data, int width, int height) {
   if (!CheckShaderErrors(vertexShader, "VERTEX")) {
     return;
   }
-  
+
   GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
   glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
   glCompileShader(fragmentShader);
   if (!CheckShaderErrors(fragmentShader, "FRAGMENT")) {
     return;
   }
-  
+
   // Create shader program
   GLuint shaderProgram = glCreateProgram();
   glAttachShader(shaderProgram, vertexShader);
@@ -247,17 +252,17 @@ void RenderRGBAToScreen(const uint8_t* rgba_data, int width, int height) {
   if (!CheckShaderErrors(shaderProgram, "PROGRAM")) {
     return;
   }
-  
+
   // Use shader program
   glUseProgram(shaderProgram);
-  
+
   // Calculate aspect ratio and adjust vertices to maintain aspect ratio
   float imageAspectRatio = (float)width / (float)height;
   float windowAspectRatio = 1280.0f / 720.0f;
-  
+
   float scaleX = 1.0f;
   float scaleY = 1.0f;
-  
+
   if (imageAspectRatio > windowAspectRatio) {
     // Image is wider than window
     scaleY = windowAspectRatio / imageAspectRatio;
@@ -265,52 +270,56 @@ void RenderRGBAToScreen(const uint8_t* rgba_data, int width, int height) {
     // Image is taller than window
     scaleX = imageAspectRatio / windowAspectRatio;
   }
-  
+
   // Set up vertex data and buffers with corrected aspect ratio
   float vertices[] = {
-    // positions        // texture coords
-    -scaleX, -scaleY, 0.0f, 0.0f, 1.0f,  // Bottom left (flipped Y texture coord)
-     scaleX, -scaleY, 0.0f, 1.0f, 1.0f,  // Bottom right (flipped Y texture coord)
-     scaleX,  scaleY, 0.0f, 1.0f, 0.0f,  // Top right (flipped Y texture coord)
-    -scaleX,  scaleY, 0.0f, 0.0f, 0.0f   // Top left (flipped Y texture coord)
+      // positions        // texture coords
+      -scaleX, -scaleY, 0.0f,
+      0.0f,    1.0f,  // Bottom left (flipped Y texture coord)
+      scaleX,  -scaleY, 0.0f,
+      1.0f,    1.0f,  // Bottom right (flipped Y texture coord)
+      scaleX,  scaleY,  0.0f,
+      1.0f,    0.0f,  // Top right (flipped Y texture coord)
+      -scaleX, scaleY,  0.0f,
+      0.0f,    0.0f  // Top left (flipped Y texture coord)
   };
-  
-  unsigned int indices[] = {
-    0, 1, 2,
-    2, 3, 0
-  };
-  
+
+  unsigned int indices[] = {0, 1, 2, 2, 3, 0};
+
   GLuint VBO, VAO, EBO;
   glGenVertexArrays(1, &VAO);
   glBindVertexArray(VAO);
-  
+
   glGenBuffers(1, &VBO);
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-  
+
   glGenBuffers(1, &EBO);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-  
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices,
+               GL_STATIC_DRAW);
+
   // Position attribute
   GLint posAttrib = glGetAttribLocation(shaderProgram, "aPos");
   glEnableVertexAttribArray(posAttrib);
-  glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-  
+  glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float),
+                        (void*)0);
+
   // Texture coord attribute
   GLint texAttrib = glGetAttribLocation(shaderProgram, "aTexCoord");
   glEnableVertexAttribArray(texAttrib);
-  glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-  
+  glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float),
+                        (void*)(3 * sizeof(float)));
+
   // Set texture uniform
   GLint texUniform = glGetUniformLocation(shaderProgram, "texture1");
   glUniform1i(texUniform, 0);
-  
+
   // Draw
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, texture);
   glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-  
+
   // Clean up
   glDeleteVertexArrays(1, &VAO);
   glDeleteBuffers(1, &VBO);
@@ -334,7 +343,7 @@ void RenderFrame() {
   int width = source_image_->GetWidth();
   int height = source_image_->GetHeight();
   const unsigned char* buffer = source_image_->GetRgbaImageBuffer();
-  
+
   // Detect face landmarks
   std::vector<float> landmarks = face_detector_->Detect(
       buffer, width, height, width * 4, GPUPIXEL_MODE_FMT_PICTURE,
@@ -348,19 +357,19 @@ void RenderFrame() {
 
   // Process image
   source_image_->Render();
-  
+
   // Get processed RGBA data
   const uint8_t* rgba_data = sink_raw_data_->GetRgbaBuffer();
   width = sink_raw_data_->GetWidth();
   height = sink_raw_data_->GetHeight();
-  
+
   // Render RGBA data to screen using the encapsulated function
   RenderRGBAToScreen(rgba_data, width, height);
-  
+
   // Render ImGui
   ImGui::Render();
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-  
+
   // Swap buffers and poll events
   glfwSwapBuffers(main_window_);
   glfwPollEvents();
@@ -372,7 +381,7 @@ void CleanupResources() {
   ImGui_ImplOpenGL3_Shutdown();
   ImGui_ImplGlfw_Shutdown();
   ImGui::DestroyContext();
-  
+
   // Cleanup GLFW
   if (main_window_) {
     glfwDestroyWindow(main_window_);
@@ -386,7 +395,7 @@ int main() {
   if (!SetupGlfwWindow()) {
     return -1;
   }
-  
+
   // Setup ImGui interface
   SetupImGui();
 
