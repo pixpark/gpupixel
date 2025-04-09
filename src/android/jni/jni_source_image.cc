@@ -22,7 +22,7 @@ Java_com_pixpark_gpupixel_GPUPixelSourceImage_nativeCreateFromFile(
   if (!source_image) {
     return 0;
   }
-  
+
   // Create shared_ptr on heap
   auto* ptr = new std::shared_ptr<SourceImage>(source_image);
   return reinterpret_cast<jlong>(ptr);
@@ -47,7 +47,7 @@ Java_com_pixpark_gpupixel_GPUPixelSourceImage_nativeCreateFromBuffer(
   if (!source_image) {
     return 0;
   }
-  
+
   // Create shared_ptr on heap
   auto* ptr = new std::shared_ptr<SourceImage>(source_image);
   return reinterpret_cast<jlong>(ptr);
@@ -77,7 +77,7 @@ Java_com_pixpark_gpupixel_GPUPixelSourceImage_nativeCreateFromBitmap(
   if (!source_image) {
     return 0;
   }
-  
+
   // Create shared_ptr on heap
   auto* ptr = new std::shared_ptr<SourceImage>(source_image);
   return reinterpret_cast<jlong>(ptr);
@@ -134,7 +134,7 @@ Java_com_pixpark_gpupixel_GPUPixelSourceImage_nativeGetRgbaImageBuffer(
   if (!ptr || !*ptr) {
     return NULL;
   }
-  
+
   const unsigned char* buffer = (*ptr)->GetRgbaImageBuffer();
   if (!buffer) {
     return NULL;

@@ -14,7 +14,8 @@ namespace gpupixel {
 
 std::shared_ptr<SinkRender> SinkRender::Create() {
   auto ret = std::shared_ptr<SinkRender>(new SinkRender());
-  SYNC_RUN_WITH_CONTEXT(ret->Init(););
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext(
+      [&] { ret->Init(); });
   return ret;
 }
 

@@ -24,6 +24,8 @@ import android.view.Surface;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
+import com.pixpark.gpupixel.GPUPixel;
+
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Collections;
@@ -31,8 +33,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
-
-import com.pixpark.gpupixel.GPUPixel;
 
 public class Camera2Helper {
     private static final String TAG = "Camera2Helper";

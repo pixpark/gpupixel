@@ -37,11 +37,11 @@ class CustomFilter : public Filter {
 ```cpp
 std::shared_ptr<CustomFilter> CustomFilter::Create() {
   auto ret = std::shared_ptr<CustomFilter>(new CustomFilter());
-SYNC_RUN_WITH_CONTEXT(
-  if (ret && !ret->Init()) {
-    ret.reset();
-  }
-);
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (ret && !ret->Init()) {
+      ret.reset();
+    }
+  });
   return ret;
 }
 ```

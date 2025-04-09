@@ -72,9 +72,13 @@
                                    kEAGLDrawablePropertyRetainedBacking,
                                    kEAGLColorFormatRGBA8,
                                    kEAGLDrawablePropertyColorFormat, nil];
-  currentlayer = (CAEAGLLayer *)self.layer;
+  currentlayer = (CAEAGLLayer*)self.layer;
   currentlayer.opaque = YES;
-  currentlayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], kEAGLDrawablePropertyRetainedBacking, kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
+  currentlayer.drawableProperties = [NSDictionary
+      dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO],
+                                   kEAGLDrawablePropertyRetainedBacking,
+                                   kEAGLColorFormatRGBA8,
+                                   kEAGLDrawablePropertyColorFormat, nil];
 #else
   [self setOpenGLContext:gpupixel::GPUPixelContext::GetInstance()
                              ->GetOpenGLContext()];
@@ -112,7 +116,7 @@
   if (!CGSizeEqualToSize(self.bounds.size, lastBoundsSize) &&
       !CGSizeEqualToSize(self.bounds.size, CGSizeZero)) {
     self.currentFrame = self.bounds;
-      
+
     [self destroyDisplayFramebuffer];
     [self createDisplayFramebuffer];
   }

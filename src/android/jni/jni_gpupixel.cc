@@ -46,21 +46,20 @@ extern "C" jint JNI_OnLoad(JavaVM* vm, void* reserved) {
  * Convert YUV420 format to RGBA format
  */
 extern "C" JNIEXPORT void JNICALL
-Java_com_pixpark_gpupixel_GPUPixel_nativeYUV420ToRGBA(
-    JNIEnv* env,
-    jclass clazz,
-    jobject y_buffer,
-    jobject u_buffer,
-    jobject v_buffer,
-    jint width,
-    jint height,
-    jint y_row_stride,
-    jint u_row_stride,
-    jint v_row_stride,
-    jint y_pixel_stride,
-    jint u_pixel_stride,
-    jint v_pixel_stride,
-    jbyteArray rgba_out) {
+Java_com_pixpark_gpupixel_GPUPixel_nativeYUV420ToRGBA(JNIEnv* env,
+                                                      jclass clazz,
+                                                      jobject y_buffer,
+                                                      jobject u_buffer,
+                                                      jobject v_buffer,
+                                                      jint width,
+                                                      jint height,
+                                                      jint y_row_stride,
+                                                      jint u_row_stride,
+                                                      jint v_row_stride,
+                                                      jint y_pixel_stride,
+                                                      jint u_pixel_stride,
+                                                      jint v_pixel_stride,
+                                                      jbyteArray rgba_out) {
   // Get input buffers
   uint8_t* y_data = (uint8_t*)env->GetDirectBufferAddress(y_buffer);
   uint8_t* u_data = (uint8_t*)env->GetDirectBufferAddress(u_buffer);
@@ -177,16 +176,15 @@ Java_com_pixpark_gpupixel_GPUPixel_nativeYUV420ToRGBA(
  * Rotate RGBA format image
  */
 extern "C" JNIEXPORT void JNICALL
-Java_com_pixpark_gpupixel_GPUPixel_nativeRotateRGBA(
-    JNIEnv* env,
-    jclass clazz,
-    jbyteArray rgba_in,
-    jint width,
-    jint height,
-    jbyteArray rgba_out,
-    jint out_width,
-    jint out_height,
-    jint rotation_degrees) {
+Java_com_pixpark_gpupixel_GPUPixel_nativeRotateRGBA(JNIEnv* env,
+                                                    jclass clazz,
+                                                    jbyteArray rgba_in,
+                                                    jint width,
+                                                    jint height,
+                                                    jbyteArray rgba_out,
+                                                    jint out_width,
+                                                    jint out_height,
+                                                    jint rotation_degrees) {
   // Get input and output arrays
   jbyte* rgba_in_data = env->GetByteArrayElements(rgba_in, nullptr);
   jbyte* rgba_out_data = env->GetByteArrayElements(rgba_out, nullptr);

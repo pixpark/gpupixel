@@ -135,7 +135,3 @@ GPUPIXEL_API typedef enum {
 } GPUPIXEL_MODE_FMT;
 
 }  // namespace gpupixel
-
-// 在上下文线程中创建和初始化对象的宏
-#define SYNC_RUN_WITH_CONTEXT(code) \
-  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] { code });

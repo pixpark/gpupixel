@@ -14,9 +14,8 @@ public class GPUPixelSource {
     protected long mNativeClassID = 0;
 
     // Base constructor - subclasses must implement their own constructors and set mNativeClassID
-    protected GPUPixelSource() {
-    }
-  
+    protected GPUPixelSource() {}
+
     /**
      * Destroys the source and releases resources
      */
@@ -33,8 +32,7 @@ public class GPUPixelSource {
      */
     public final void AddSink(final GPUPixelSink sink) {
         if (mNativeClassID != 0) {
-            nativeAddSink(
-                    mNativeClassID, sink.getNativeClassID(), sink instanceof GPUPixelFilter);
+            nativeAddSink(mNativeClassID, sink.getNativeClassID(), sink instanceof GPUPixelFilter);
         }
     }
 
@@ -116,8 +114,7 @@ public class GPUPixelSource {
     }
 
     // JNI native methods
-    private static native long nativeAddSink(
-            long sourceId, long sinkId, boolean isFilter);
+    private static native long nativeAddSink(long sourceId, long sinkId, boolean isFilter);
     private static native void nativeRemoveSink(long sourceId, long sinkId, boolean isFilter);
     private static native void nativeRemoveAllSinks(long sourceId);
     private static native boolean nativeHasSink(long sourceId, long sinkId, boolean isFilter);

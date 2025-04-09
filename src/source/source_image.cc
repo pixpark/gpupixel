@@ -25,8 +25,8 @@ std::shared_ptr<SourceImage> SourceImage::CreateFromBuffer(
     int channel_count,
     const unsigned char* pixels) {
   auto sourceImage = std::shared_ptr<SourceImage>(new SourceImage());
-  SYNC_RUN_WITH_CONTEXT(
-      sourceImage->Init(width, height, channel_count, pixels););
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext(
+      [&] { sourceImage->Init(width, height, channel_count, pixels); });
   return sourceImage;
 }
 
@@ -68,7 +68,8 @@ void SourceImage::Init(int width,
 }
 
 void SourceImage::Render() {
-  SYNC_RUN_WITH_CONTEXT(Source::DoRender(););
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext(
+      [&] { Source::DoRender(); });
 }
 
 const unsigned char* SourceImage::GetRgbaImageBuffer() const {

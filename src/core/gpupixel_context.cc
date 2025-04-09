@@ -89,8 +89,7 @@ const unsigned int VIEW_HEIGHT = 720;
 GPUPixelContext* GPUPixelContext::instance_ = 0;
 std::mutex GPUPixelContext::mutex_;
 
-GPUPixelContext::GPUPixelContext()
-    : current_shader_program_(0) {
+GPUPixelContext::GPUPixelContext() : current_shader_program_(0) {
   task_queue_ = std::make_shared<DispatchQueue>();
   framebuffer_factory_ = new FramebufferFactory();
   Init();

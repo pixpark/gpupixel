@@ -28,7 +28,7 @@ public class FaceDetector {
     protected FaceDetector() {
         mNativeClassID = nativeFaceDetectorCreate();
     }
-    
+
     /**
      * Create a new FaceDetector instance
      * @return A new FaceDetector instance

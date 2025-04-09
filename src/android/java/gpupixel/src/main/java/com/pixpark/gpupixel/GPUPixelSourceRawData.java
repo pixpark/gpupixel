@@ -13,8 +13,7 @@ public class GPUPixelSourceRawData extends GPUPixelSource {
     public static final int FRAME_TYPE_RGBA = 1;
     public static final int FRAME_TYPE_BGRA = 2;
 
-    protected GPUPixelSourceRawData() {
-    }
+    protected GPUPixelSourceRawData() {}
 
     public static GPUPixelSourceRawData Create() {
         final GPUPixelSourceRawData source = new GPUPixelSourceRawData();
@@ -33,7 +32,7 @@ public class GPUPixelSourceRawData extends GPUPixelSource {
     public void ProcessData(byte[] data, int width, int height, int stride, int frameType) {
         nativeProcessData(mNativeClassID, data, width, height, stride, frameType);
     }
- 
+
     @Override
     public void Destroy() {
         if (mNativeClassID != 0) {
