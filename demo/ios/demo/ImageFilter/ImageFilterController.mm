@@ -165,6 +165,10 @@ using namespace gpupixel;
   [_displayLink invalidate];
   _displayLink = nil;
 
+  [self destroyGPUPixel];
+  [self.navigationController popViewControllerAnimated:true];
+}
+- (void)destroyGPUPixel {
   _beautyFaceFilter = nil;
   _faceReshapeFilter = nil;
   _lipstickFilter = nil;
@@ -174,12 +178,13 @@ using namespace gpupixel;
   _gpuSourceImage = nil;
   _faceDetector = nullptr;
   gpupixel::GPUPixelContext::GetInstance()->Destroy();
-
-  [self.navigationController popViewControllerAnimated:true];
 }
 
 /// Save processed image and display result
 - (void)saveAction {
+  [_displayLink invalidate];
+  _displayLink = nil;
+	
   // Render once to update data in SinkRawData
   _gpuSourceImage->Render();
 
@@ -188,16 +193,11 @@ using namespace gpupixel;
   int height = _sinkRawData->GetHeight();
   const uint8_t* pixels = _sinkRawData->GetRgbaBuffer();
 
-  UIImage* resultImage =
-      [ImageConverter imageFromRGBAData:(unsigned char*)pixels
-                                  width:width
-                                 height:height];
-
+  UIImage* resultImage = [ImageConverter imageFromRGBAData:(unsigned char*)pixels width:width height:height];
   // Create and show result page
-  FilterResultViewController* resultVC =
-      [[FilterResultViewController alloc] initWithImage:resultImage];
+  FilterResultViewController* resultVC = [[FilterResultViewController alloc] initWithImage:resultImage];
   [self.navigationController pushViewController:resultVC animated:YES];
-
+  [self destroyGPUPixel];
   // Note: No need to free(pixels), SinkRawData manages the memory
 }
 
