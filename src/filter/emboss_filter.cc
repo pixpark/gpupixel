@@ -5,8 +5,8 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "emboss_filter.h"
-#include "gpupixel_context.h"
+#include "gpupixel/filter/emboss_filter.h"
+#include "core/gpupixel_context.h"
 namespace gpupixel {
 
 //

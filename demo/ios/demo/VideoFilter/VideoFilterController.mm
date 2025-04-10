@@ -6,7 +6,6 @@
  */
 
 #import "VideoFilterController.h"
-#import <gpupixel/face_detector.h>
 #import <gpupixel/gpupixel.h>
 #import "FilterResultViewController.h"
 #import "FilterToolbarView.h"

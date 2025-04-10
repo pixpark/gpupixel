@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		840CD3D12B8843CD00EEF7B0 /* gpupixel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 840CD3CF2B88431900EEF7B0 /* gpupixel.framework */; };
-		840CD3D22B8843CD00EEF7B0 /* gpupixel.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 840CD3CF2B88431900EEF7B0 /* gpupixel.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		842D43DA2DB0ECCF00FFE7F6 /* gpupixel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 842D43D92DB0ECCF00FFE7F6 /* gpupixel.framework */; };
+		842D43DB2DB0ECCF00FFE7F6 /* gpupixel.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 842D43D92DB0ECCF00FFE7F6 /* gpupixel.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		84AE136B26FCBCAA00E215AE /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84AE136A26FCBCAA00E215AE /* AVFoundation.framework */; };
 		84AE137526FCBCDA00E215AE /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84AE137426FCBCDA00E215AE /* CoreMedia.framework */; };
 		84AE137A26FCBCFA00E215AE /* VideoCameraManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84AE137926FCBCFA00E215AE /* VideoCameraManager.mm */; };
@@ -20,13 +20,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		84DDB516282E5236002D5327 /* Embed Frameworks */ = {
+		842D43CB2DA9592C00FFE7F6 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				840CD3D22B8843CD00EEF7B0 /* gpupixel.framework in Embed Frameworks */,
+				842D43DB2DB0ECCF00FFE7F6 /* gpupixel.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -35,11 +35,7 @@
 
 /* Begin PBXFileReference section */
 		840303632B5C2737001A8B3C /* VideoCameraManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoCameraManager.h; sourceTree = "<group>"; };
-		840CD3CF2B88431900EEF7B0 /* gpupixel.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = gpupixel.framework; path = ../../output/library/macos/gpupixel.framework; sourceTree = "<group>"; };
-		840FD5BA2B7E523D00781FA6 /* vnn_face_osx.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = vnn_face_osx.framework; path = ../../src/third_party/vnn/libs/macos/vnn_face_osx.framework; sourceTree = "<group>"; };
-		840FD5BB2B7E523D00781FA6 /* vnn_core_osx.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = vnn_core_osx.framework; path = ../../src/third_party/vnn/libs/macos/vnn_core_osx.framework; sourceTree = "<group>"; };
-		840FD5BC2B7E523D00781FA6 /* vnn_kit_osx.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = vnn_kit_osx.framework; path = ../../src/third_party/vnn/libs/macos/vnn_kit_osx.framework; sourceTree = "<group>"; };
-		8453D7032B67BE5B009C0532 /* gpupixel.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = gpupixel.framework; path = ../../output/library/macos/Debug/gpupixel.framework; sourceTree = "<group>"; };
+		842D43D92DB0ECCF00FFE7F6 /* gpupixel.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = gpupixel.framework; path = ../../output/lib/gpupixel.framework; sourceTree = "<group>"; };
 		84AE136A26FCBCAA00E215AE /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		84AE136F26FCBCBB00E215AE /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		84AE137426FCBCDA00E215AE /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
@@ -61,9 +57,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				840CD3D12B8843CD00EEF7B0 /* gpupixel.framework in Frameworks */,
 				84AE137526FCBCDA00E215AE /* CoreMedia.framework in Frameworks */,
 				84AE136B26FCBCAA00E215AE /* AVFoundation.framework in Frameworks */,
+				842D43DA2DB0ECCF00FFE7F6 /* gpupixel.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -73,11 +69,7 @@
 		84AE136526FCBC9B00E215AE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				840CD3CF2B88431900EEF7B0 /* gpupixel.framework */,
-				840FD5BB2B7E523D00781FA6 /* vnn_core_osx.framework */,
-				840FD5BA2B7E523D00781FA6 /* vnn_face_osx.framework */,
-				840FD5BC2B7E523D00781FA6 /* vnn_kit_osx.framework */,
-				8453D7032B67BE5B009C0532 /* gpupixel.framework */,
+				842D43D92DB0ECCF00FFE7F6 /* gpupixel.framework */,
 				84AE137426FCBCDA00E215AE /* CoreMedia.framework */,
 				84AE136F26FCBCBB00E215AE /* CoreImage.framework */,
 				84AE136A26FCBCAA00E215AE /* AVFoundation.framework */,
@@ -130,7 +122,7 @@
 				84C0F7A526FCBA8C004E1FD6 /* Sources */,
 				84C0F7A626FCBA8C004E1FD6 /* Frameworks */,
 				84C0F7A726FCBA8C004E1FD6 /* Resources */,
-				84DDB516282E5236002D5327 /* Embed Frameworks */,
+				842D43CB2DA9592C00FFE7F6 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -334,9 +326,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/demo",
-					"$(PROJECT_DIR)/../../output/library/macos",
-					"$(PROJECT_DIR)/../../src/third_party/vnn/libs/macos",
+					"$(PROJECT_DIR)/../../output/lib",
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -370,8 +360,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/demo",
-					"$(PROJECT_DIR)/../../output/library/macos",
+					"$(PROJECT_DIR)/../../output/lib",
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = "";
 				INFOPLIST_FILE = demo/Info.plist;

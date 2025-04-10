@@ -5,10 +5,10 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "single_component_gaussian_blur_filter.h"
+#include "gpupixel/filter/single_component_gaussian_blur_filter.h"
 #include <cmath>
-#include "gpupixel_context.h"
-#include "util.h"
+#include "core/gpupixel_context.h"
+#include "utils/util.h"
 namespace gpupixel {
 
 SingleComponentGaussianBlurFilter::SingleComponentGaussianBlurFilter()

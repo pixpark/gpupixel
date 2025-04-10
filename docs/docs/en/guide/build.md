@@ -11,94 +11,38 @@ description: This article will introduce the compilation methods for the GPUPixe
 This chapter will introduce the compilation methods for the GPUPixel library on various system platforms.
 
 ::: tip
-Starting from version [v1.1.0](https://github.com/pixpark/gpupixel/releases/tag/v1.1.1), the source code is compiled using CMake. The latest precompiled libraries for various platforms can be found [here](https://github.com/pixpark/gpupixel/releases/latest).
+Starting from [v1.3.0-beta](https://github.com/pixpark/gpupixel/releases/tag/v1.3.0-beta) version, the Vnn-related dependency libraries have been removed. The latest compiled libraries for various platforms can be found [here](https://github.com/pixpark/gpupixel/releases/latest).
 :::
 
 ## iOS
-Execute the following commands at the root directory of the project.
+Execute the script file at the root directory of the project:
 
-**Generate Project**
-::: code-group
-```bash [Arm64]
-cmake -G Xcode -B build -S src -DCMAKE_TOOLCHAIN_FILE=../toolchain/ios.toolchain.cmake -DPLATFORM=OS64
+```bash
+./script/build_ios.sh
 ```
-:::
-
-**Compile**
-::: code-group
-
-```bash [Release]
-cmake --build build --config Release
-```
-
-```bash [Debug]
-cmake --build build --config Debug
-```
-:::
 
 **Output**
 
-The compilation output is located in the `output` path under the root directory of the project, containing the following:
+The compilation output is located in the `output` path under the root directory of the project.
+
+## Mac
+Execute the script file at the root directory of the project:
+
 ```bash
-output
-├── include   # Header files
-├── library   # Library files
-├── models    # Models files
-└── res # Resource files
+./script/build_macos.sh
 ```
-For iOS, you only need to use the `.framework` library under `library`, which already contains header files and resource files.
-
-## MacOS
-Execute the following commands at the root directory of the project.
-
-**Generate Project**
-::: code-group
-```bash [Apple Silicon]
-cmake -G Xcode -B build -S src -DCMAKE_TOOLCHAIN_FILE=../toolchain/ios.toolchain.cmake -DPLATFORM=MAC_ARM64 
-```
-```bash [Intel]
-cmake -G Xcode -B build -S src -DCMAKE_TOOLCHAIN_FILE=../toolchain/ios.toolchain.cmake -DPLATFORM=MAC -DCMAKE_BUILD_TYPE=Release
-```
-:::
-
-**Compile**
-::: code-group
-
-```bash [Release]
-cmake --build build --config Release
-```
-
-```bash [Debug]
-cmake --build build --config Debug
-```
-:::
 
 **Output**
 
-The compilation output is located in the `output` path under the root directory of the project, containing the following:
-```bash
-output
-├── include   # Header files
-├── library   # Library files
-├── models    # Models files
-└── res # Resource files
-```
-For macOS, you only need to use the `.framework` library under `library`, which already contains header files and resource files.
+The compilation output is located in the `output` path under the root directory of the project.
 
 ## Android
-
-Open the directory `src/android/java` with Android Studio, which will automatically start downloading dependencies such as Gradle.
-
-**Project Structure**
- 
-**Gradle Command Compile**
-
-If the Gradle command environment has been configured, you can also use `gradlew` to compile.
+Execute the script file at the root directory of the project:
 
 ```bash
-./gradlew :gpupixel:assembleRelease
+./script/build_android.sh
 ```
-
+ 
 The output is located at: `src/android/java/gpupixel/build/outputs/aar`
 
 ## Windows
@@ -121,68 +65,36 @@ If not using Windows Terminal, you can configure as follows:
 Only supports generating x86_64 Release version, x86_32 is not supported currently
 :::
 
-**Generate Project**
-
-```bash
-cmake -G "NMake Makefiles" -B build -S src -DCMAKE_BUILD_TYPE=Release
-```
-
 **Compile**
+
+After configuring the environment, execute the batch file at the root directory of the project:
+
 ```bash
-cd build 
-nmake
+.\script\build_windows.bat
 ```
 
 **Output**
 
-The compilation output is located in the `output` path under the root directory of the project, containing the following:
-```bash
-output
-├── include   # Header files
-├── library   # Library files
-├── models    # Models files
-└── res # Resource files
-```
+The compilation output is located in the `output` path under the root directory of the project.
 
 ## Linux (Debian or Ubuntu)
 
 **Environment Configuration**
 
+You can use the environment configuration script to install dependencies:
+
 ```bash
-# Install cmake
-sudo apt-get install cmake pkg-config
-# Install dependent libraries
-sudo apt-get install mesa-utils libglu1-mesa-dev freeglut3-dev mesa-common-dev libglfw3-dev
+./script/setup_env_linux.sh
 ```
-
-**Generate Project**
-```bash [Release]
-cmake -B build -S src -DCMAKE_BUILD_TYPE=Release
-```
-
-```bash [Debug]
-cmake -B build -S src -DCMAKE_BUILD_TYPE=Debug
-```
-:::
 
 **Compile**
-::: code-group
-```bash [Release]
-cmake --build build --config Release
-```
 
-```bash [Debug]
-cmake --build build --config Debug
+Execute the script file at the root directory of the project:
+
+```bash
+./script/build_linux.sh
 ```
-:::
 
 **Output**
 
-The compilation output is located in the `output` path under the root directory of the project, containing the following:
-```bash
-output
-├── include   # Header files
-├── library   # Library files
-├── models    # Models files
-└── res # Resource files
-```
+The compilation output is located in the `output` path under the root directory of the project.

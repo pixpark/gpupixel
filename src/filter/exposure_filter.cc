@@ -5,8 +5,8 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "exposure_filter.h"
-#include "gpupixel_context.h"
+#include "gpupixel/filter/exposure_filter.h"
+#include "core/gpupixel_context.h"
 namespace gpupixel {
 
 const std::string kExposureFragmentShaderString = R"(

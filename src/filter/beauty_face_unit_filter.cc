@@ -5,9 +5,10 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "beauty_face_unit_filter.h"
-#include "gpupixel_context.h"
-#include "source_image.h"
+#include "gpupixel/filter/beauty_face_unit_filter.h"
+#include "core/gpupixel_context.h"
+#include "gpupixel/source/source_image.h"
+#include "utils/util.h"
 
 namespace gpupixel {
 const std::string kGPUImageBaseBeautyFaceVertexShaderString = R"(
@@ -306,18 +307,18 @@ bool BeautyFaceUnitFilter::Init() {
   }
 
   gray_image_ =
-      SourceImage::Create(Util::getResourcePath("res/lookup_gray.png"));
+      SourceImage::Create(Util::GetResourcePath("res/lookup_gray.png"));
   original_image_ =
-      SourceImage::Create(Util::getResourcePath("res/lookup_origin.png"));
+      SourceImage::Create(Util::GetResourcePath("res/lookup_origin.png"));
   skin_image_ =
-      SourceImage::Create(Util::getResourcePath("res/lookup_skin.png"));
+      SourceImage::Create(Util::GetResourcePath("res/lookup_skin.png"));
   custom_image_ =
-      SourceImage::Create(Util::getResourcePath("res/lookup_light.png"));
+      SourceImage::Create(Util::GetResourcePath("res/lookup_light.png"));
   return true;
 }
 
 bool BeautyFaceUnitFilter::DoRender(bool updateSinks) {
-  static const GLfloat imageVertices[] = {
+  static const float imageVertices[] = {
       -1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f,
   };
 
@@ -343,7 +344,7 @@ bool BeautyFaceUnitFilter::DoRender(bool updateSinks) {
   filter_program_->SetUniformValue("inputImageTexture3", 4);
 
   // texcoord attribute
-  GLuint filter_tex_coord_attribute =
+  uint32_t filter_tex_coord_attribute =
       filter_program_->GetAttribLocation("inputTextureCoordinate");
   CHECK_GL(glEnableVertexAttribArray(filter_tex_coord_attribute));
   CHECK_GL(glVertexAttribPointer(

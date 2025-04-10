@@ -43,7 +43,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Configure
-        run: cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/toolchain/ios.toolchain.cmake -DPLATFORM=MAC_UNIVERSAL -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -S ${{ github.workspace }}/src
+        run: cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/cmake/ios.toolchain.cmake -DPLATFORM=MAC_UNIVERSAL -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -S ${{ github.workspace }}/src
 
       - name: Build
         run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
@@ -70,7 +70,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Configure
-        run: cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/toolchain/ios.toolchain.cmake -DPLATFORM=OS64 -B ${{github.workspace}}/build -S ${{github.workspace}}/src -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+        run: cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/cmake/ios.toolchain.cmake -DPLATFORM=OS64 -B ${{github.workspace}}/build -S ${{github.workspace}}/src -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
       - name: Build
         run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
@@ -142,7 +142,7 @@ jobs:
       - name: Create zip
         working-directory: ${{github.workspace}}/output
         run: | 
-          cp -r ${{github.workspace}}/src/android/java/gpupixel/build/outputs/aar ${{github.workspace}}/output/library/android
+          cp -r ${{github.workspace}}/src/android/java/gpupixel/build/outputs/aar ${{github.workspace}}/output/libs/android
           zip -r gpupixel_android.zip .
 
       - name: Upload Android Artifact

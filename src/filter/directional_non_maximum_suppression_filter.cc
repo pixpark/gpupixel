@@ -5,8 +5,9 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "directional_non_maximum_suppression_filter.h"
-#include "gpupixel_context.h"
+#include "gpupixel/filter/directional_non_maximum_suppression_filter.h"
+#include "core/gpupixel_context.h"
+#include "utils/util.h"
 namespace gpupixel {
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)

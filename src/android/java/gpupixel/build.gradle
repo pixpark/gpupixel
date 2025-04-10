@@ -12,13 +12,24 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
 
-        ndkVersion '21.4.7075529'
+        ndkVersion '23.2.8568313'
         externalNativeBuild {
             cmake {
                 cppFlags '-std=c++11'
-                abiFilters 'arm64-v8a'
+                abiFilters "armeabi-v7a", 'arm64-v8a'
             }
         }
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['../../../../third_party/mars-face-kit/libs/android']
+            assets.srcDirs = ['src/main/assets', '../../../../third_party/mars-face-kit/models', '../../../res']
+        }
+    }
+
+    packagingOptions {
+        exclude 'lib/*/libyuv.so'
     }
 
     buildTypes {
@@ -33,7 +44,7 @@ android {
     }
     externalNativeBuild {
         cmake {
-            path file('../../../CMakeLists.txt')
+            path file('../../../../CMakeLists.txt')
             version '3.18.1'
         }
     }

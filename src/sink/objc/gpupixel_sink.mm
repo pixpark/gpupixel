@@ -7,6 +7,6 @@
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
 
-#import "gpupixel_sink.h"
+#import "sink/objc/gpupixel_sink.h"
 
 #endif

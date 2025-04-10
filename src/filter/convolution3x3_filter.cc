@@ -5,8 +5,8 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "convolution3x3_filter.h"
-#include "gpupixel_context.h"
+#include "gpupixel/filter/convolution3x3_filter.h"
+#include "core/gpupixel_context.h"
 namespace gpupixel {
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)

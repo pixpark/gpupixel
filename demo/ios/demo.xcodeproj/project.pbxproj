@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		840CD3D42B88448900EEF7B0 /* gpupixel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 840CD3D32B88448900EEF7B0 /* gpupixel.framework */; };
-		840CD3D52B88448900EEF7B0 /* gpupixel.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 840CD3D32B88448900EEF7B0 /* gpupixel.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8417C43A267F5AF10074DDEF /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8417C437267F5AF10074DDEF /* AVFoundation.framework */; };
 		8417C43C267F5B470074DDEF /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8417C43B267F5B470074DDEF /* CoreMedia.framework */; };
 		84307E91261F2CD9003EAC98 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 84307E90261F2CD9003EAC98 /* AppDelegate.m */; };
@@ -21,6 +19,8 @@
 		843580EE276352260053E16A /* ImageFilterController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 843580EC276352260053E16A /* ImageFilterController.mm */; };
 		844F8D472D967B9F00B0629A /* ToobarCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 844F8D452D967B9F00B0629A /* ToobarCollectionViewCell.m */; };
 		847244A22A6034BF009D1488 /* VideoCapturer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8472449E2A603368009D1488 /* VideoCapturer.m */; };
+		848A72462DB22DB70079993A /* gpupixel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 848A72452DB22DB70079993A /* gpupixel.framework */; };
+		848A72472DB22DB70079993A /* gpupixel.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 848A72452DB22DB70079993A /* gpupixel.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		849F0E832D943A8200466E70 /* sample_face.png in Resources */ = {isa = PBXBuildFile; fileRef = 849F0E822D943A8200466E70 /* sample_face.png */; };
 		84C1D161266F5D69006D1AB4 /* VideoFilterController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84C1D15F266F5D69006D1AB4 /* VideoFilterController.mm */; };
 		84E4FE442D969A520074AF4C /* FilterToolbarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E4FE432D969A520074AF4C /* FilterToolbarView.m */; };
@@ -29,13 +29,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		84BEC43A28F7F3CA005F1A3B /* Embed Frameworks */ = {
+		848A72482DB22DB70079993A /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				840CD3D52B88448900EEF7B0 /* gpupixel.framework in Embed Frameworks */,
+				848A72472DB22DB70079993A /* gpupixel.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -43,12 +43,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		840CD3D32B88448900EEF7B0 /* gpupixel.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = gpupixel.framework; path = ../../output/library/ios/gpupixel.framework; sourceTree = "<group>"; };
-		840FD5CC2B82455100781FA6 /* vnn_kit_ios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = vnn_kit_ios.framework; path = ../../src/third_party/vnn/libs/ios/vnn_kit_ios.framework; sourceTree = "<group>"; };
-		840FD5CD2B82455100781FA6 /* vnn_face_ios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = vnn_face_ios.framework; path = ../../src/third_party/vnn/libs/ios/vnn_face_ios.framework; sourceTree = "<group>"; };
-		840FD5CE2B82455100781FA6 /* vnn_core_ios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = vnn_core_ios.framework; path = ../../src/third_party/vnn/libs/ios/vnn_core_ios.framework; sourceTree = "<group>"; };
 		8417C437267F5AF10074DDEF /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		8417C43B267F5B470074DDEF /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		842D43CC2DA95C0E00FFE7F6 /* gpupixel.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = gpupixel.framework; path = ../../output/libs/ios/gpupixel.framework; sourceTree = "<group>"; };
 		84307E8C261F2CD9003EAC98 /* demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84307E8F261F2CD9003EAC98 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		84307E90261F2CD9003EAC98 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -65,11 +62,9 @@
 		843580EC276352260053E16A /* ImageFilterController.mm */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ImageFilterController.mm; sourceTree = "<group>"; tabWidth = 4; usesTabs = 1; };
 		844F8D442D967B9F00B0629A /* ToobarCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ToobarCollectionViewCell.h; sourceTree = "<group>"; };
 		844F8D452D967B9F00B0629A /* ToobarCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ToobarCollectionViewCell.m; sourceTree = "<group>"; };
-		8453D7082B67C42A009C0532 /* gpupixel.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = gpupixel.framework; path = ../../output/library/ios/debug/gpupixel.framework; sourceTree = "<group>"; };
 		8472449D2A603368009D1488 /* VideoCapturer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoCapturer.h; sourceTree = "<group>"; };
 		8472449E2A603368009D1488 /* VideoCapturer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VideoCapturer.m; sourceTree = "<group>"; };
-		847C1DB92914FBAA009D6198 /* libMGLicMgrSDK-0.3.1.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libMGLicMgrSDK-0.3.1.a"; path = "PixDemo/Face++/MegviiLicMgr-iOS-SDK/libMGLicMgrSDK-0.3.1.a"; sourceTree = "<group>"; };
-		847C1DBB2914FBB0009D6198 /* libMGFacepp-0.5.2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libMGFacepp-0.5.2.a"; path = "PixDemo/Face++/MGFaceppSDK/libMGFacepp-0.5.2.a"; sourceTree = "<group>"; };
+		848A72452DB22DB70079993A /* gpupixel.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = gpupixel.framework; path = ../../output/lib/gpupixel.framework; sourceTree = "<group>"; };
 		849F0E822D943A8200466E70 /* sample_face.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = sample_face.png; path = demo/sample_face.png; sourceTree = "<group>"; };
 		84C1D15E266F5D69006D1AB4 /* VideoFilterController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoFilterController.h; sourceTree = "<group>"; };
 		84C1D15F266F5D69006D1AB4 /* VideoFilterController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = VideoFilterController.mm; sourceTree = "<group>"; };
@@ -86,9 +81,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				840CD3D42B88448900EEF7B0 /* gpupixel.framework in Frameworks */,
 				8417C43C267F5B470074DDEF /* CoreMedia.framework in Frameworks */,
 				8417C43A267F5AF10074DDEF /* AVFoundation.framework in Frameworks */,
+				848A72462DB22DB70079993A /* gpupixel.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -188,13 +183,8 @@
 		84EEBF41261F2DC5000AD4AE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				840CD3D32B88448900EEF7B0 /* gpupixel.framework */,
-				840FD5CE2B82455100781FA6 /* vnn_core_ios.framework */,
-				840FD5CD2B82455100781FA6 /* vnn_face_ios.framework */,
-				840FD5CC2B82455100781FA6 /* vnn_kit_ios.framework */,
-				8453D7082B67C42A009C0532 /* gpupixel.framework */,
-				847C1DBB2914FBB0009D6198 /* libMGFacepp-0.5.2.a */,
-				847C1DB92914FBAA009D6198 /* libMGLicMgrSDK-0.3.1.a */,
+				842D43CC2DA95C0E00FFE7F6 /* gpupixel.framework */,
+				848A72452DB22DB70079993A /* gpupixel.framework */,
 				8417C43B267F5B470074DDEF /* CoreMedia.framework */,
 				8417C437267F5AF10074DDEF /* AVFoundation.framework */,
 			);
@@ -211,7 +201,7 @@
 				84307E88261F2CD9003EAC98 /* Sources */,
 				84307E89261F2CD9003EAC98 /* Frameworks */,
 				84307E8A261F2CD9003EAC98 /* Resources */,
-				84BEC43A28F7F3CA005F1A3B /* Embed Frameworks */,
+				848A72482DB22DB70079993A /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -433,10 +423,7 @@
 				COMPRESS_PNG_FILES = NO;
 				DEVELOPMENT_TEAM = QFCE3TAQXQ;
 				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SRCROOT)/../../output/library/ios",
-					"$(SRCROOT)/../../src/third_party/vnn/libs/ios",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../../output/lib";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -473,10 +460,7 @@
 				COMPRESS_PNG_FILES = NO;
 				DEVELOPMENT_TEAM = QFCE3TAQXQ;
 				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SRCROOT)/../..//output/library/ios",
-					"$(SRCROOT)/../../src/third_party/vnn/libs/ios",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../../output/lib";
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = demo/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = demo;

@@ -5,9 +5,10 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "box_mono_blur_filter.h"
+#include "gpupixel/filter/box_mono_blur_filter.h"
 #include <cmath>
-#include "gpupixel_context.h"
+#include "core/gpupixel_context.h"
+#include "utils/util.h"
 namespace gpupixel {
 
 BoxMonoBlurFilter::BoxMonoBlurFilter(Type type)
@@ -64,7 +65,7 @@ std::string BoxMonoBlurFilter::GenerateOptimizedVertexShaderString(
 
   std::string shaderStr =
       // Header
-      Util::str_format(
+      Util::StringFormat(
           "\
      attribute vec4 position;\n\
      attribute vec4 inputTextureCoordinate;\n\
@@ -86,9 +87,9 @@ std::string BoxMonoBlurFilter::GenerateOptimizedVertexShaderString(
   for (uint32_t currentOptimizedOffset = 0;
        currentOptimizedOffset < numberOfOptimizedOffsets;
        currentOptimizedOffset++) {
-    GLfloat optimizedOffset = (GLfloat)(currentOptimizedOffset * 2) + 1.5;
+    float optimizedOffset = (float)(currentOptimizedOffset * 2) + 1.5;
 
-    shaderStr += Util::str_format(
+    shaderStr += Util::StringFormat(
         "\
          blurCoordinates[%lu] = inputTextureCoordinate.xy + singleStepOffset * %f;\n\
          blurCoordinates[%lu] = inputTextureCoordinate.xy - singleStepOffset * %f;\n",
@@ -116,7 +117,7 @@ std::string BoxMonoBlurFilter::GenerateOptimizedFragmentShaderString(
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
   std::string shaderStr =
       // Header
-      Util::str_format(
+      Util::StringFormat(
           "\
      uniform sampler2D inputImageTexture;\n\
      uniform highp float texelWidthOffset;\n\
@@ -131,7 +132,7 @@ std::string BoxMonoBlurFilter::GenerateOptimizedFragmentShaderString(
 #else
   std::string shaderStr =
       // Header
-      Util::str_format(
+      Util::StringFormat(
           "\
      uniform sampler2D inputImageTexture;\n\
      uniform float texelWidthOffset;\n\
@@ -145,20 +146,20 @@ std::string BoxMonoBlurFilter::GenerateOptimizedFragmentShaderString(
           1 + (numberOfOptimizedOffsets * 2));
 #endif
 
-  GLfloat boxWeight = 1.0 / (GLfloat)((radius * 2) + 1);
+  float boxWeight = 1.0 / (float)((radius * 2) + 1);
 
   // Inner texture loop
-  shaderStr += Util::str_format(
+  shaderStr += Util::StringFormat(
       "sum += texture2D(inputImageTexture, blurCoordinates[0]) * %f;\n",
       boxWeight);
 
   for (uint32_t currentBlurCoordinateIndex = 0;
        currentBlurCoordinateIndex < numberOfOptimizedOffsets;
        currentBlurCoordinateIndex++) {
-    shaderStr += Util::str_format(
+    shaderStr += Util::StringFormat(
         "sum += texture2D(inputImageTexture, blurCoordinates[%lu]) * %f;\n",
         (unsigned long)((currentBlurCoordinateIndex * 2) + 1), boxWeight * 2.0);
-    shaderStr += Util::str_format(
+    shaderStr += Util::StringFormat(
         "sum += texture2D(inputImageTexture, blurCoordinates[%lu]) * %f;\n",
         (unsigned long)((currentBlurCoordinateIndex * 2) + 2), boxWeight * 2.0);
   }
@@ -167,11 +168,11 @@ std::string BoxMonoBlurFilter::GenerateOptimizedFragmentShaderString(
   // varyings, we have to do dependent texture reads in the fragment shader
   if (trueNumberOfOptimizedOffsets > numberOfOptimizedOffsets) {
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
-    shaderStr += Util::str_format(
+    shaderStr += Util::StringFormat(
         "highp vec2 singleStepOffset = vec2(texelWidthOffset, "
         "texelHeightOffset);\n");
 #else
-    shaderStr += Util::str_format(
+    shaderStr += Util::StringFormat(
         "vec2 singleStepOffset = vec2(texelWidthOffset, "
         "texelHeightOffset);\n");
 #endif
@@ -179,13 +180,13 @@ std::string BoxMonoBlurFilter::GenerateOptimizedFragmentShaderString(
     for (uint32_t currentOverlowTextureRead = numberOfOptimizedOffsets;
          currentOverlowTextureRead < trueNumberOfOptimizedOffsets;
          currentOverlowTextureRead++) {
-      GLfloat optimizedOffset = (GLfloat)(currentOverlowTextureRead * 2) + 1.5;
+      float optimizedOffset = (float)(currentOverlowTextureRead * 2) + 1.5;
 
-      shaderStr += Util::str_format(
+      shaderStr += Util::StringFormat(
           "sum += texture2D(inputImageTexture, blurCoordinates[0] + "
           "singleStepOffset * %f) * %f;\n",
           optimizedOffset, boxWeight * 2.0);
-      shaderStr += Util::str_format(
+      shaderStr += Util::StringFormat(
           "sum += texture2D(inputImageTexture, blurCoordinates[0] - "
           "singleStepOffset * %f) * %f;\n",
           optimizedOffset, boxWeight * 2.0);

@@ -52,19 +52,93 @@ public class GPUPixel {
     /**
      * Copies required resources from assets to external storage
      * @param context Application context
+     * @return Path to external storage
      */
-    public static void copyResource(Context context) {
+    public static String copyResource(Context context) {
         if (context == null) {
             Log.e(TAG, "Context is null in copyResource");
-            return;
+            return "";
         }
 
+        String exPath = "";
         try {
-            String exPath = context.getExternalFilesDir(null).getAbsolutePath();
-            copyAssetsToFiles(context, "resource", exPath + "/resource");
-            resource_path = exPath + "/resource";
+            exPath = context.getExternalFilesDir(null).getAbsolutePath();
+
+            // 创建目标目录
+            File resDir = new File(exPath + "/gpupixel/res");
+            if (!resDir.exists()) {
+                resDir.mkdirs();
+            }
+
+            File modelsDir = new File(exPath + "/gpupixel/models");
+            if (!modelsDir.exists()) {
+                modelsDir.mkdirs();
+            }
+
+            // 获取assets下的所有文件
+            processAssetsDirectory(context, "", exPath);
+
+            // 设置资源路径
+            resource_path = exPath + "/gpupixel";
         } catch (Exception e) {
             Log.e(TAG, "Error in copyResource: " + e.getMessage());
+        }
+
+        return exPath;
+    }
+
+    /**
+     * 递归处理assets目录中的文件
+     * @param context Application context
+     * @param assetPath 当前assets中的路径
+     * @param exPath 外部存储路径
+     */
+    private static void processAssetsDirectory(Context context, String assetPath, String exPath) {
+        try {
+            String[] fileList = context.getAssets().list(assetPath);
+
+            if (fileList != null && fileList.length > 0) {
+                // 如果是目录，递归处理
+                for (String fileName : fileList) {
+                    String subPath = assetPath.isEmpty() ? fileName : assetPath + "/" + fileName;
+                    processAssetsDirectory(context, subPath, exPath);
+                }
+            } else {
+                // 是文件，根据类型复制到不同目录
+                String targetPath;
+
+                if (assetPath.toLowerCase().endsWith(".jpg")
+                        || assetPath.toLowerCase().endsWith(".jpeg")
+                        || assetPath.toLowerCase().endsWith(".png")
+                        || assetPath.toLowerCase().endsWith(".gif")) {
+                    // 图片文件复制到res目录
+                    targetPath = exPath + "/gpupixel/res/" + new File(assetPath).getName();
+                } else if (assetPath.toLowerCase().endsWith(".mars_model")) {
+                    // .mars_model文件复制到models目录
+                    targetPath = exPath + "/gpupixel/models/" + new File(assetPath).getName();
+                } else {
+                    // 其他文件不处理
+                    return;
+                }
+
+                // 复制文件
+                File targetFile = new File(targetPath);
+                if (!targetFile.exists()) {
+                    InputStream is = context.getAssets().open(assetPath);
+                    FileOutputStream fos = new FileOutputStream(targetFile);
+                    byte[] buffer = new byte[1024];
+                    int byteCount;
+                    while ((byteCount = is.read(buffer)) != -1) {
+                        fos.write(buffer, 0, byteCount);
+                    }
+                    fos.flush();
+                    is.close();
+                    fos.close();
+                    Log.d(TAG, "Copied asset file: " + assetPath + " to " + targetPath);
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error processing asset: " + assetPath + ", " + e.getMessage());
         }
     }
 
@@ -78,48 +152,6 @@ public class GPUPixel {
             return "/sdcard/Android/data/com.pixpark.gpupixel/files/resource";
         }
         return resource_path;
-    }
-
-    /**
-     * Copies files from assets to external storage
-     * @param context Application context
-     * @param oldPath Source path in assets
-     * @param newPath Destination path in external storage
-     */
-    public static void copyAssetsToFiles(Context context, String oldPath, String newPath) {
-        try {
-            String fileNames[] = context.getAssets().list(oldPath);
-            if (fileNames.length > 0) { // If it's a directory
-                File file = new File(newPath);
-                if (!file.exists()) {
-                    file.mkdirs(); // Create directories recursively if the folder doesn't exist
-                }
-                for (String fileName : fileNames) {
-                    String srcPath = oldPath + "/" + fileName;
-                    String dstPath = newPath + "/" + fileName;
-                    File f = new File(dstPath);
-                    if (f.exists()) continue;
-                    copyAssetsToFiles(context, srcPath, dstPath);
-                }
-
-            } else { // If it's a file
-                File file = new File(newPath);
-                if (!file.exists()) {
-                    InputStream is = context.getAssets().open(oldPath);
-                    FileOutputStream fos = new FileOutputStream(file);
-                    byte[] buffer = new byte[1024];
-                    int byteCount = 0;
-                    while ((byteCount = is.read(buffer)) != -1) {
-                        fos.write(buffer, 0, byteCount);
-                    }
-                    fos.flush();
-                    is.close();
-                    fos.close();
-                }
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "Error in copyAssetsToFiles: " + e.getMessage());
-        }
     }
 
     /**

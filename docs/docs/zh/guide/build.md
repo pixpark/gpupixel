@@ -13,86 +13,33 @@ description: 本篇将介绍各个系统平台GPUPixel库的编译方法
 :::
 
 ## iOS
-工程根目录下执行如下命令
+工程根目录下执行脚本文件：
 
-**生成工程**
-::: code-group
-```bash [Arm64]
-cmake -G Xcode -B build -S src -DCMAKE_TOOLCHAIN_FILE=../toolchain/ios.toolchain.cmake -DPLATFORM=OS64 -DCMAKE_BUILD_TYPE=Release
+```bash
+./script/build_ios.sh
 ```
-:::
-
-**编译**
-::: code-group
-
-```bash [Release]
-cmake --build build --config Release
-```
-
-```bash [Debug]
-cmake --build build --config Debug
-```
-:::
 
 **输出**
 
-编译输出位于项目根目录下的 `output` 路径，包含内容如下
-```bash
-output
-├── include   #头文件
-├── library   #库文件
-├── models    #模型文件
-└── res       #资源文件
-```
-对于iOS只需要使用 `library` 下的 `.framework` 库即可，里面已经包含头文件和资源文件
+编译输出位于项目根目录下的 `output` 路径
 
 ## Mac
-工程根目录下执行如下命令
+工程根目录下执行脚本文件：
 
-**生成工程**
-::: code-group
-```bash [Apple Silicon]
-cmake -G Xcode -B build -S src -DCMAKE_TOOLCHAIN_FILE=../toolchain/ios.toolchain.cmake -DPLATFORM=MAC_ARM64 -DCMAKE_BUILD_TYPE=Release
+```bash
+./script/build_macos.sh
 ```
-```bash [Intel]
-cmake -G Xcode -B build -S src -DCMAKE_TOOLCHAIN_FILE=../toolchain/ios.toolchain.cmake -DPLATFORM=MAC -DCMAKE_BUILD_TYPE=Debug
-```
-:::
- 
-**编译**
-::: code-group
-
-```bash [Release]
-cmake --build build --config Release
-```
-
-```bash [Debug]
-cmake --build build --config Debug
-```
-:::
 
 **输出**
 
-编译输出位于项目根目录下的 `output` 路径，包含内容如下
-```bash
-output
-├── include   #头文件
-├── library   #库文件
-├── models    #模型文件
-└── res       #资源文件
-```
-对于MacOS只需要使用 `library` 下的 `.framework` 库即可，里面已经包含头文件和资源文件
-
+编译输出位于项目根目录下的 `output` 路径
+ 
 ## Android
-
-**Gradle 命令编译**
-
-如果已经配置号 gradle 命令环境，也可以使用 `gradlew` 编译
+工程根目录下执行脚本文件：
 
 ```bash
-./gradlew :gpupixel:assembleRelease
+./script/build_android.sh
 ```
-
 输出位于：`src/android/java/gpupixel/build/outputs/aar`
 
 ## Windows
@@ -110,78 +57,41 @@ Windows编译需要安装以下环境：
 如不使用Windows Terminal，可按如下方式配置：
 
 - **64位编译**：在设置中找到`vcvars64.bat`（适用于 VS 2017 的 x64 本机工具命令提示）并单击，打开VS编译x64架构程序的虚拟环境
- 
+
 ::: warning
 仅支持生成 x86_64 Release 版本，暂不支持 x86_32
 :::
 
-**生成工程**
-
-```bash
-cmake -G "NMake Makefiles" -B build -S src -DCMAKE_BUILD_TYPE=Release
-```
-
 **编译**
 
+在配置好环境后，工程根目录下执行批处理文件：
+
 ```bash
-cmake --build build --config Release
+.\script\build_windows.bat
 ```
 
 **输出**
 
-编译输出位于项目根目录下的 `output` 路径，包含内容如下
-```bash
-output
-├── include   #头文件
-├── library   #库文件
-├── models    #模型文件
-└── res       #资源文件
-```
+编译输出位于项目根目录下的 `output` 路径
 
 ## Linux (Debian or Ubuntu)
 
 **环境配置**
 
+可以使用环境配置脚本安装依赖：
+
 ```bash
-# install cmake 
-sudo apt-get install cmake pkg-config
-# install dependent lib
-sudo apt-get install mesa-utils libglu1-mesa-dev freeglut3-dev mesa-common-dev libglfw3-dev
+./script/setup_env_linux.sh
 ```
-
-**生成工程**
-::: code-group
-
-```bash [Release]
-cmake -B build -S src -DCMAKE_BUILD_TYPE=Release
-```
-
-```bash [Debug]
-cmake -B build -S src -DCMAKE_BUILD_TYPE=Debug
-```
-:::
 
 **编译**
 
-::: code-group
+工程根目录下执行脚本文件：
 
-```bash [Release]
-cmake --build build --config Release
+```bash
+./script/build_linux.sh
 ```
-
-```bash [Debug]
-cmake --build build --config Debug
-```
-:::
- 
 
 **输出**
 
-编译输出位于项目根目录下的 `output` 路径，包含内容如下
-```bash
-output
-├── include   #头文件
-├── library   #库文件
-├── models    #模型文件
-└── res       #资源文件
-```
+编译输出位于项目根目录下的 `output` 路径

@@ -5,8 +5,8 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "directional_sobel_edge_detection_filter.h"
-#include "gpupixel_context.h"
+#include "gpupixel/filter/directional_sobel_edge_detection_filter.h"
+#include "core/gpupixel_context.h"
 namespace gpupixel {
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)

@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "gpupixel_define.h"
+#include "core/gpupixel_gl_include.h"
 
 #include <vector>
 
@@ -31,9 +31,9 @@ class GPUPIXEL_API GPUPixelFramebuffer {
       const TextureAttributes texture_attributes = default_texture_attributes);
   ~GPUPixelFramebuffer();
 
-  GLuint GetTexture() const { return texture_; }
+  uint32_t GetTexture() const { return texture_; }
 
-  GLuint GetFramebuffer() const { return framebuffer_; }
+  uint32_t GetFramebuffer() const { return framebuffer_; }
 
   int GetWidth() const { return width_; }
   int GetHeight() const { return height_; }
@@ -52,8 +52,8 @@ class GPUPIXEL_API GPUPixelFramebuffer {
   int height_;
   TextureAttributes texture_attributes_;
   bool has_framebuffer_;
-  GLuint texture_;
-  GLuint framebuffer_;
+  uint32_t texture_;
+  uint32_t framebuffer_;
 
   void GenerateTexture();
   void GenerateFramebuffer();

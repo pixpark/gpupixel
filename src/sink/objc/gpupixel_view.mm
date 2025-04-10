@@ -5,28 +5,28 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#import "gpupixel_view.h"
-#include "filter.h"
-#include "gpupixel_context.h"
-#include "gpupixel_program.h"
-
+#import "gpupixel/sink/objc/gpupixel_view.h"
 #import <AVFoundation/AVFoundation.h>
+#include "core/gpupixel_context.h"
+#include "core/gpupixel_program.h"
+#include "gpupixel/filter/filter.h"
+#include "utils/util.h"
 
 @interface GPUPixelView () {
   std::shared_ptr<gpupixel::GPUPixelFramebuffer> inputFramebuffer;
   gpupixel::RotationMode inputRotation;
-  GLuint displayFramebuffer;
-  GLuint displayRenderbuffer;
+  uint32_t displayFramebuffer;
+  uint32_t displayRenderbuffer;
   gpupixel::GPUPixelGLProgram* displayProgram;
-  GLuint positionAttribLocation;
-  GLuint texCoordAttribLocation;
-  GLuint colorMapUniformLocation;
+  uint32_t positionAttribLocation;
+  uint32_t texCoordAttribLocation;
+  uint32_t colorMapUniformLocation;
 
-  GLfloat displayVertices[8];
+  float displayVertices[8];
   GLint framebufferWidth, framebufferHeight;
   CGSize lastBoundsSize;
 
-  GLfloat backgroundColorRed, backgroundColorGreen, backgroundColorBlue,
+  float backgroundColorRed, backgroundColorGreen, backgroundColorBlue,
       backgroundColorAlpha;
 }
 
@@ -235,10 +235,10 @@
   });
 }
 
-- (void)setBackgroundColorRed:(GLfloat)redComponent
-                        green:(GLfloat)greenComponent
-                         blue:(GLfloat)blueComponent
-                        alpha:(GLfloat)alphaComponent;
+- (void)setBackgroundColorRed:(float)redComponent
+                        green:(float)greenComponent
+                         blue:(float)blueComponent
+                        alpha:(float)alphaComponent;
 {
   backgroundColorRed = redComponent;
   backgroundColorGreen = greenComponent;
@@ -359,38 +359,38 @@
   displayVertices[7] = scaledHeight;
 }
 
-- (const GLfloat*)textureCoordinatesForRotation:
+- (const float*)textureCoordinatesForRotation:
     (gpupixel::RotationMode)rotation_mode;
 {
-  static const GLfloat noRotationTextureCoordinates[] = {
+  static const float noRotationTextureCoordinates[] = {
       0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
   };
 
-  static const GLfloat rotateRightTextureCoordinates[] = {
+  static const float rotateRightTextureCoordinates[] = {
       1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
   };
 
-  static const GLfloat rotateLeftTextureCoordinates[] = {
+  static const float rotateLeftTextureCoordinates[] = {
       0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
   };
 
-  static const GLfloat verticalFlipTextureCoordinates[] = {
+  static const float verticalFlipTextureCoordinates[] = {
       0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
   };
 
-  static const GLfloat horizontalFlipTextureCoordinates[] = {
+  static const float horizontalFlipTextureCoordinates[] = {
       1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f,
   };
 
-  static const GLfloat rotateRightVerticalFlipTextureCoordinates[] = {
+  static const float rotateRightVerticalFlipTextureCoordinates[] = {
       1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
   };
 
-  static const GLfloat rotateRightHorizontalFlipTextureCoordinates[] = {
+  static const float rotateRightHorizontalFlipTextureCoordinates[] = {
       0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f,
   };
 
-  static const GLfloat rotate180TextureCoordinates[] = {
+  static const float rotate180TextureCoordinates[] = {
       1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
   };
 

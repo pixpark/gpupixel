@@ -5,8 +5,8 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "sink.h"
-#include "util.h"
+#include "gpupixel/sink/sink.h"
+#include "utils/util.h"
 
 namespace gpupixel {
 

@@ -5,8 +5,9 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "box_difference_filter.h"
-#include "gpupixel_context.h"
+#include "gpupixel/filter/box_difference_filter.h"
+#include "core/gpupixel_context.h"
+#include "utils/util.h"
 namespace gpupixel {
 
 const std::string kBoxDifferenceVertexShaderString = R"(
@@ -83,7 +84,7 @@ bool BoxDifferenceFilter::Init() {
 }
 
 bool BoxDifferenceFilter::DoRender(bool updateSinks) {
-  static const GLfloat imageVertices[] = {
+  static const float imageVertices[] = {
       -1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f,
   };
 

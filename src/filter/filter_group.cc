@@ -5,10 +5,10 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "filter_group.h"
+#include "gpupixel/filter/filter_group.h"
 #include <assert.h>
 #include <algorithm>
-#include "gpupixel_context.h"
+#include "core/gpupixel_context.h"
 
 namespace gpupixel {
 

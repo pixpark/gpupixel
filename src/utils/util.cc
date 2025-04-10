@@ -5,12 +5,12 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "util.h"
+#include "utils/util.h"
 #include <cstdarg>
-#include "../core/gpupixel_context.h"
+#include "core/gpupixel_context.h"
 #if defined(GPUPIXEL_ANDROID)
 #include <android/log.h>
-#include "../android/jni/jni_helpers.h"
+#include "android/jni/jni_helpers.h"
 #elif defined(GPUPIXEL_IOS)
 #import <Foundation/foundation.h>
 #import <UIKit/UIKit.h>
@@ -22,7 +22,7 @@
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
 @interface GPXObjcHelper : NSObject
-+ (NSString*)getResourcePath:(NSString*)name;
++ (NSString*)GetResourcePath:(NSString*)name;
 + (NSString*)getBundleResourceWithName:(NSString*)bundleName
                               fileName:(NSString*)fileName
                                   type:(NSString*)fileType;
@@ -30,7 +30,7 @@
 
 @implementation GPXObjcHelper
 
-+ (NSString*)getResourcePath:(NSString*)name {
++ (NSString*)GetResourcePath:(NSString*)name {
   NSString* path = [[[NSBundle bundleForClass:self.class] resourcePath]
       stringByAppendingPathComponent:name];
   return path;
@@ -59,26 +59,27 @@
 
 namespace gpupixel {
 
-std::string Util::resourceRoot = "";
+std::string Util::resource_root_path_ = "";
 
-std::string Util::getResourcePath(std::string name) {
+std::string Util::GetResourcePath(std::string name) {
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
   NSString* oc_path = [GPXObjcHelper
-      getResourcePath:[[NSString alloc] initWithUTF8String:name.c_str()]];
+      GetResourcePath:[[NSString alloc] initWithUTF8String:name.c_str()]];
   std::string path = [oc_path UTF8String];
 #elif defined(GPUPIXEL_ANDROID)
-  std::string path = getResourcePathJni(name);
+  std::string path = GetResourcePathJni(name);
 #else
-  std::string path = resourceRoot.empty() ? name : (resourceRoot + "/" + name);
+  std::string path =
+      resource_root_path_.empty() ? name : (resource_root_path_ + "/" + name);
 #endif
   return path;
 }
 
-void Util::setResourceRoot(std::string root) {
-  resourceRoot = root;
+void Util::SetResourceRoot(std::string root) {
+  resource_root_path_ = root;
 }
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
-std::string Util::getResourcePath(std::string bundle_name,
+std::string Util::GetResourcePath(std::string bundle_name,
                                   std::string file_name,
                                   std::string type) {
   NSString* oc_path = [GPXObjcHelper
@@ -117,20 +118,20 @@ int vasprintf(char** strp, const char* fmt, va_list ap) {
 #endif
 
 #if defined(GPUPIXEL_ANDROID)
-std::string Util::getResourcePathJni(std::string name) {
+std::string Util::GetResourcePathJni(std::string name) {
   // Get JVM and environment
   JavaVM* jvm = GetJVM();
   if (!jvm) {
-    Log("GPUPixel", "GetJVM() returned null in getResourcePathJni");
-    return getDefaultResourcePath(name);
+    Log("GPUPixel", "GetJVM() returned null in GetResourcePathJni");
+    return GetDefaultResourcePathJni(name);
   }
 
   // Create JNI attach scope to ensure thread is attached to JVM
   AttachThreadScoped ats(jvm);
   JNIEnv* env = ats.env();
   if (!env) {
-    Log("GPUPixel", "Failed to get JNIEnv in getResourcePathJni");
-    return getDefaultResourcePath(name);
+    Log("GPUPixel", "Failed to get JNIEnv in GetResourcePathJni");
+    return GetDefaultResourcePathJni(name);
   }
 
   std::string result = "";
@@ -158,7 +159,7 @@ std::string Util::getResourcePathJni(std::string name) {
   if (!gpuPixelClass) {
     Log("GPUPixel",
         "Failed to find GPUPixel class after trying all alternatives");
-    return getDefaultResourcePath(name);
+    return GetDefaultResourcePathJni(name);
   }
 
   // Get init static method to ensure initialization has been called
@@ -179,7 +180,7 @@ std::string Util::getResourcePathJni(std::string name) {
     }
     Log("GPUPixel", "Failed to find getResource_path method");
     env->DeleteLocalRef(gpuPixelClass);
-    return getDefaultResourcePath(name);
+    return GetDefaultResourcePathJni(name);
   }
 
   // Call static method to get resource path
@@ -189,7 +190,7 @@ std::string Util::getResourcePathJni(std::string name) {
     env->ExceptionClear();
     Log("GPUPixel", "Exception occurred when calling getResource_path");
     env->DeleteLocalRef(gpuPixelClass);
-    return getDefaultResourcePath(name);
+    return GetDefaultResourcePathJni(name);
   }
 
   if (jPath != NULL) {
@@ -212,7 +213,7 @@ std::string Util::getResourcePathJni(std::string name) {
     env->DeleteLocalRef(jPath);
   } else {
     Log("GPUPixel", "getResource_path returned null");
-    result = getDefaultResourcePath(name);
+    result = GetDefaultResourcePathJni(name);
   }
 
   env->DeleteLocalRef(gpuPixelClass);
@@ -220,7 +221,7 @@ std::string Util::getResourcePathJni(std::string name) {
 }
 
 // Helper function to provide default resource path
-std::string Util::getDefaultResourcePath(std::string name) {
+std::string Util::GetDefaultResourcePathJni(std::string name) {
   std::string defaultPath =
       "/sdcard/Android/data/com.pixpark.gpupixeldemo/files/resource";
   Log("GPUPixel", "Using default resource path: %s", defaultPath.c_str());
@@ -236,7 +237,7 @@ std::string Util::getDefaultResourcePath(std::string name) {
 }
 #endif
 
-std::string Util::str_format(const char* fmt, ...) {
+std::string Util::StringFormat(const char* fmt, ...) {
   std::string strResult = "";
   if (NULL != fmt) {
     va_list marker;
@@ -262,7 +263,7 @@ std::string Util::str_format(const char* fmt, ...) {
   return strResult;
 }
 
-int64_t Util::nowTimeMs() {
+int64_t Util::NowTimeMs() {
   auto time_now = std::chrono::system_clock::now();
   auto duration_in_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
       time_now.time_since_epoch());

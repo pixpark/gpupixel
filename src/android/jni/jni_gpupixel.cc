@@ -5,7 +5,7 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "jni_helpers.h"
+#include "android/jni/jni_helpers.h"
 
 #include <android/log.h>
 #include <asm/unistd.h>

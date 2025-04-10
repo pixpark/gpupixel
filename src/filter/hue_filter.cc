@@ -5,9 +5,9 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "hue_filter.h"
-#include "gpupixel_context.h"
-#include "math_toolbox.h"
+#include "gpupixel/filter/hue_filter.h"
+#include "core/gpupixel_context.h"
+#include "gpupixel/utils/math_toolbox.h"
 namespace gpupixel {
 
 // Adapted from

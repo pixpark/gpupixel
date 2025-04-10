@@ -7,6 +7,6 @@
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
 
-#include "objc_sink.h"
+#include "gpupixel/sink/objc/objc_sink.h"
 
 #endif

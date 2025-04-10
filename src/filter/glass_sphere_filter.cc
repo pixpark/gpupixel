@@ -5,8 +5,8 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "glass_sphere_filter.h"
-#include "gpupixel_context.h"
+#include "gpupixel/filter/glass_sphere_filter.h"
+#include "core/gpupixel_context.h"
 namespace gpupixel {
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)

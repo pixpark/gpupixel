@@ -5,8 +5,8 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "gpupixel_framebuffer_factory.h"
-#include "util.h"
+#include "core/gpupixel_framebuffer_factory.h"
+#include "utils/util.h"
 
 namespace gpupixel {
 
@@ -37,7 +37,7 @@ std::shared_ptr<GPUPixelFramebuffer> FramebufferFactory::CreateFramebuffer(
     int cur_framebuffer_id = number_of_matching_framebuffers - 1;
     while (!framebuffer_from_cache && cur_framebuffer_id >= 0) {
       std::string framebuffer_hash =
-          Util::str_format("%s-%ld", lookup_hash.c_str(), cur_framebuffer_id);
+          Util::StringFormat("%s-%ld", lookup_hash.c_str(), cur_framebuffer_id);
       if (framebuffers_.find(framebuffer_hash) != framebuffers_.end()) {
         framebuffer_from_cache = framebuffers_[framebuffer_hash];
         framebuffers_.erase(framebuffer_hash);
@@ -65,19 +65,19 @@ std::string FramebufferFactory::GenerateUuid(
     bool only_texture,
     const TextureAttributes texture_attributes) const {
   if (only_texture) {
-    return Util::str_format("%.1dx%.1d-%d:%d:%d:%d:%d:%d:%d-NOFB", width,
-                            height, texture_attributes.minFilter,
-                            texture_attributes.magFilter,
-                            texture_attributes.wrapS, texture_attributes.wrapT,
-                            texture_attributes.internalFormat,
-                            texture_attributes.format, texture_attributes.type);
+    return Util::StringFormat(
+        "%.1dx%.1d-%d:%d:%d:%d:%d:%d:%d-NOFB", width, height,
+        texture_attributes.minFilter, texture_attributes.magFilter,
+        texture_attributes.wrapS, texture_attributes.wrapT,
+        texture_attributes.internalFormat, texture_attributes.format,
+        texture_attributes.type);
   } else {
-    return Util::str_format("%.1dx%.1d-%d:%d:%d:%d:%d:%d:%d", width, height,
-                            texture_attributes.minFilter,
-                            texture_attributes.magFilter,
-                            texture_attributes.wrapS, texture_attributes.wrapT,
-                            texture_attributes.internalFormat,
-                            texture_attributes.format, texture_attributes.type);
+    return Util::StringFormat(
+        "%.1dx%.1d-%d:%d:%d:%d:%d:%d:%d", width, height,
+        texture_attributes.minFilter, texture_attributes.magFilter,
+        texture_attributes.wrapS, texture_attributes.wrapT,
+        texture_attributes.internalFormat, texture_attributes.format,
+        texture_attributes.type);
   }
 }
 

@@ -5,9 +5,10 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "face_makeup_filter.h"
-#include "gpupixel_context.h"
-#include "source_image.h"
+#include "gpupixel/filter/face_makeup_filter.h"
+#include "core/gpupixel_context.h"
+#include "gpupixel/source/source_image.h"
+#include "utils/util.h"
 namespace gpupixel {
 
 const std::string FaceMakeupFilterVertexShaderString = R"(
@@ -221,7 +222,7 @@ void FaceMakeupFilter::SetImageTexture(std::shared_ptr<SourceImage> texture) {
 }
 
 bool FaceMakeupFilter::DoRender(bool updateSinks) {
-  static const GLfloat imageVertices[] = {
+  static const float imageVertices[] = {
       -1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f,
   };
 
@@ -258,7 +259,7 @@ bool FaceMakeupFilter::DoRender(bool updateSinks) {
   }
 
   auto coord = this->FaceTextureCoordinates();
-  std::vector<GLfloat> textureCoordinates(coord.size());
+  std::vector<float> textureCoordinates(coord.size());
   auto point_count = coord.size() / 2;
   for (int i = 0; i < point_count; i++) {
     textureCoordinates[i * 2 + 0] =
@@ -295,8 +296,8 @@ bool FaceMakeupFilter::DoRender(bool updateSinks) {
   return Source::DoRender(updateSinks);
 }
 
-std::vector<GLuint> FaceMakeupFilter::GetFaceIndexs() {
-  static std::vector<GLuint> faceIndexs{
+std::vector<uint32_t> FaceMakeupFilter::GetFaceIndexs() {
+  static std::vector<uint32_t> faceIndexs{
       // Left eyebrow - 10 triangles
       33, 34, 64, 64, 34, 65, 65, 34, 107, 107, 34, 35, 35, 36, 107, 107, 36,
       66, 66, 107, 65, 66, 36, 67, 67, 36, 37, 37, 67, 43,
@@ -348,8 +349,8 @@ std::vector<GLuint> FaceMakeupFilter::GetFaceIndexs() {
   return faceIndexs;
 }
 
-std::vector<GLfloat> FaceMakeupFilter::FaceTextureCoordinates() {
-  static std::vector<GLfloat> arr = {
+std::vector<float> FaceMakeupFilter::FaceTextureCoordinates() {
+  static std::vector<float> arr = {
       0.302451, 0.384169, 0.302986, 0.409377, 0.304336, 0.434977, 0.306984,
       0.460683, 0.311010, 0.486447, 0.316537, 0.511947, 0.323069, 0.536942,
       0.331312, 0.561627, 0.342011, 0.585088, 0.355477, 0.607217, 0.371142,

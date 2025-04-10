@@ -5,8 +5,8 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "pixellation_filter.h"
-#include "gpupixel_context.h"
+#include "gpupixel/filter/pixellation_filter.h"
+#include "core/gpupixel_context.h"
 namespace gpupixel {
 
 const std::string kPixellationFragmentShaderString = R"(

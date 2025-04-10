@@ -5,7 +5,7 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "math_toolbox.h"
+#include "gpupixel/utils/math_toolbox.h"
 #include <assert.h>
 #include <string>
 

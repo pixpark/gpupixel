@@ -5,9 +5,9 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "source_raw_data.h"
-#include "gpupixel_context.h"
-#include "util.h"
+#include "gpupixel/source/source_raw_data.h"
+#include "core/gpupixel_context.h"
+#include "utils/util.h"
 
 namespace gpupixel {
 
@@ -170,7 +170,7 @@ int SourceRawData::GenerateTextureWithI420(int width,
   GPUPixelContext::GetInstance()->SetActiveGlProgram(filter_program_);
   this->GetFramebuffer()->Activate();
 
-  GLfloat imageVertices[]{
+  float imageVertices[]{
       -1.0, -1.0,  // left down
       1.0,  -1.0,  // right down
       -1.0, 1.0,   // left up
@@ -218,7 +218,7 @@ int SourceRawData::GenerateTextureWithPixels(const uint8_t* pixels,
   }
   this->SetFramebuffer(framebuffer_, NoRotation);
 
-  GLuint texture = textures_[3];
+  uint32_t texture = textures_[3];
   CHECK_GL(glBindTexture(GL_TEXTURE_2D, texture));
 
   if (type == GPUPIXEL_FRAME_TYPE_BGRA) {
@@ -234,7 +234,7 @@ int SourceRawData::GenerateTextureWithPixels(const uint8_t* pixels,
   GPUPixelContext::GetInstance()->SetActiveGlProgram(filter_program_);
   this->GetFramebuffer()->Activate();
 
-  GLfloat imageVertices[]{
+  float imageVertices[]{
       -1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f,
   };
 

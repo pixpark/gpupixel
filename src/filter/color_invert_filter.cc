@@ -5,8 +5,8 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "color_invert_filter.h"
-#include "gpupixel_context.h"
+#include "gpupixel/filter/color_invert_filter.h"
+#include "core/gpupixel_context.h"
 namespace gpupixel {
 
 const std::string kColorInvertFragmentShaderString = R"(

@@ -1,12 +1,20 @@
+// clang-format off
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-
+// clang-format on
 #include <iostream>
-#include "face_detector.h"
-#include "gpupixel.h"
-#include "imgui.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
+
+#ifdef _WIN32
+#include <Shlwapi.h>
+#include <delayimp.h>
+#include <windows.h>
+#pragma comment(lib, "Shlwapi.lib")
+#endif
+
+#include "gpupixel/gpupixel.h"
+#include "imgui.h"
 
 using namespace gpupixel;
 
@@ -17,7 +25,9 @@ std::shared_ptr<gpupixel::LipstickFilter> lipstick_filter_;
 std::shared_ptr<gpupixel::BlusherFilter> blusher_filter_;
 std::shared_ptr<SourceImage> source_image_;
 std::shared_ptr<SinkRawData> sink_raw_data_;
+#ifdef GPUPIXEL_ENABLE_FACE_DETECTOR
 std::shared_ptr<FaceDetector> face_detector_;
+#endif
 
 // Filter parameters
 float beauty_strength_ = 0.0f;
@@ -76,10 +86,21 @@ bool SetupGlfwWindow() {
     return false;
   }
 
-  // Create window with compatibility profile for better support
+  // 检测平台并适配OpenGL版本设置
+#ifdef __APPLE__
+  // macOS需要使用Core Profile和较高版本的OpenGL
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+#else
+  // Linux(Ubuntu)平台使用兼容性更好的配置
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_ANY_PROFILE);
+  // 不指定Profile，使用兼容模式
+  // glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_ANY_PROFILE);
+#endif
+
   glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
 
   main_window_ = glfwCreateWindow(1280, 720, "GPUPixel Demo", NULL, NULL);
@@ -114,19 +135,29 @@ void SetupImGui() {
   ImGui::StyleColorsDark();
   ImGui_ImplGlfw_InitForOpenGL(main_window_, true);
 
-  // Use GLSL 1.3 for compatibility
+  // 根据平台选择合适的GLSL版本
+#ifdef __APPLE__
+  // macOS使用GLSL 3.3版本以匹配Core Profile
+  const char* glsl_version = "#version 330 core";
+#else
+  // Linux(Ubuntu)使用兼容性更好的GLSL 1.30版本
   const char* glsl_version = "#version 130";
+#endif
   ImGui_ImplOpenGL3_Init(glsl_version);
 }
 
 // Initialize GPUPixel filters and pipeline
 void SetupFilterPipeline() {
+  GPUPixel::SetResourceRoot("../");
   // Create filters
   lipstick_filter_ = LipstickFilter::Create();
   blusher_filter_ = BlusherFilter::Create();
   reshape_filter_ = FaceReshapeFilter::Create();
   beauty_filter_ = BeautyFaceFilter::Create();
+
+#ifdef GPUPIXEL_ENABLE_FACE_DETECTOR
   face_detector_ = FaceDetector::Create();
+#endif
 
   // Create source image and sink raw data
   source_image_ = SourceImage::Create("demo.png");
@@ -193,11 +224,17 @@ void RenderRGBAToScreen(const uint8_t* rgba_data, int width, int height) {
     return;
   }
 
-  // Render the RGBA data to the screen
+  // 获取当前窗口大小用于视口设置
+  int window_width, window_height;
+  glfwGetFramebufferSize(main_window_, &window_width, &window_height);
+
+  // 渲染RGBA数据到屏幕
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
-  glViewport(0, 0, 1280, 720);
-  glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glViewport(0, 0, window_width, window_height);
+
+  // 注意：不要在这里清除帧缓冲区，否则会覆盖ImGui的渲染
+  // glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+  // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   // Create a texture from the RGBA data
   GLuint texture;
@@ -208,9 +245,33 @@ void RenderRGBAToScreen(const uint8_t* rgba_data, int width, int height) {
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
                GL_UNSIGNED_BYTE, rgba_data);
 
-  // Use GLSL 1.2 for maximum compatibility
+  // 根据平台使用适合的着色器代码
+#ifdef __APPLE__
+  // macOS使用330核心版本
   const char* vertexShaderSource = R"(
-    #version 120
+    #version 330 core
+    layout (location = 0) in vec3 aPos;
+    layout (location = 1) in vec2 aTexCoord;
+    out vec2 TexCoord;
+    void main() {
+      gl_Position = vec4(aPos, 1.0);
+      TexCoord = aTexCoord;
+    }
+  )";
+
+  const char* fragmentShaderSource = R"(
+    #version 330 core
+    in vec2 TexCoord;
+    out vec4 FragColor;
+    uniform sampler2D texture1;
+    void main() {
+      FragColor = texture(texture1, TexCoord);
+    }
+  )";
+#else
+  // Linux(Ubuntu)使用更兼容的130版本
+  const char* vertexShaderSource = R"(
+    #version 130
     attribute vec3 aPos;
     attribute vec2 aTexCoord;
     varying vec2 TexCoord;
@@ -221,13 +282,14 @@ void RenderRGBAToScreen(const uint8_t* rgba_data, int width, int height) {
   )";
 
   const char* fragmentShaderSource = R"(
-    #version 120
+    #version 130
     varying vec2 TexCoord;
     uniform sampler2D texture1;
     void main() {
       gl_FragColor = texture2D(texture1, TexCoord);
     }
   )";
+#endif
 
   // Compile shaders
   GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -286,38 +348,38 @@ void RenderRGBAToScreen(const uint8_t* rgba_data, int width, int height) {
 
   unsigned int indices[] = {0, 1, 2, 2, 3, 0};
 
-  GLuint VBO, VAO, EBO;
+  // Draw
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, texture);
+
+  // Create VAO first (required for Core Profile)
+  GLuint VAO, VBO, EBO;
   glGenVertexArrays(1, &VAO);
+  glGenBuffers(1, &VBO);
+  glGenBuffers(1, &EBO);
+
   glBindVertexArray(VAO);
 
-  glGenBuffers(1, &VBO);
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-  glGenBuffers(1, &EBO);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices,
                GL_STATIC_DRAW);
 
-  // Position attribute
-  GLint posAttrib = glGetAttribLocation(shaderProgram, "aPos");
-  glEnableVertexAttribArray(posAttrib);
-  glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float),
-                        (void*)0);
+  // Position attribute (location = 0)
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+  glEnableVertexAttribArray(0);
 
-  // Texture coord attribute
-  GLint texAttrib = glGetAttribLocation(shaderProgram, "aTexCoord");
-  glEnableVertexAttribArray(texAttrib);
-  glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float),
+  // Texture coord attribute (location = 1)
+  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float),
                         (void*)(3 * sizeof(float)));
+  glEnableVertexAttribArray(1);
 
   // Set texture uniform
   GLint texUniform = glGetUniformLocation(shaderProgram, "texture1");
   glUniform1i(texUniform, 0);
 
-  // Draw
-  glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, texture);
   glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
   // Clean up
@@ -332,19 +394,24 @@ void RenderRGBAToScreen(const uint8_t* rgba_data, int width, int height) {
 
 // Render a single frame
 void RenderFrame() {
-  // Start ImGui frame
+  // 清除帧缓冲区
+  glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+  glClear(GL_COLOR_BUFFER_BIT);
+
+  // 开始ImGui帧
   ImGui_ImplOpenGL3_NewFrame();
   ImGui_ImplGlfw_NewFrame();
   ImGui::NewFrame();
 
-  // Update filter parameters from UI
+  // 更新过滤器参数
   UpdateFilterParametersFromUI();
 
   int width = source_image_->GetWidth();
   int height = source_image_->GetHeight();
   const unsigned char* buffer = source_image_->GetRgbaImageBuffer();
 
-  // Detect face landmarks
+#ifdef GPUPIXEL_ENABLE_FACE_DETECTOR
+  // 检测人脸特征点
   std::vector<float> landmarks = face_detector_->Detect(
       buffer, width, height, width * 4, GPUPIXEL_MODE_FMT_PICTURE,
       GPUPIXEL_FRAME_TYPE_RGBA);
@@ -354,23 +421,24 @@ void RenderFrame() {
     blusher_filter_->SetFaceLandmarks(landmarks);
     reshape_filter_->SetFaceLandmarks(landmarks);
   }
+#endif
 
-  // Process image
+  // 处理图像
   source_image_->Render();
 
-  // Get processed RGBA data
+  // 获取处理后的RGBA数据
   const uint8_t* rgba_data = sink_raw_data_->GetRgbaBuffer();
   width = sink_raw_data_->GetWidth();
   height = sink_raw_data_->GetHeight();
 
-  // Render RGBA data to screen using the encapsulated function
+  // 渲染RGBA数据到屏幕
   RenderRGBAToScreen(rgba_data, width, height);
 
-  // Render ImGui
+  // 渲染ImGui
   ImGui::Render();
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-  // Swap buffers and poll events
+  // 交换缓冲区并轮询事件
   glfwSwapBuffers(main_window_);
   glfwPollEvents();
 }
@@ -391,6 +459,17 @@ void CleanupResources() {
 }
 
 int main() {
+#ifdef _WIN32
+  // 设置DLL搜索路径
+  char exePath[MAX_PATH];
+  GetModuleFileNameA(NULL, exePath, MAX_PATH);
+  PathRemoveFileSpecA(exePath);
+
+  char dllDir[MAX_PATH];
+  sprintf_s(dllDir, MAX_PATH, "%s\\..\\lib", exePath);
+  SetDllDirectoryA(dllDir);
+#endif
+
   // Initialize window and OpenGL context
   if (!SetupGlfwWindow()) {
     return -1;

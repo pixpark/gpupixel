@@ -5,9 +5,10 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "single_component_gaussian_blur_mono_filter.h"
+#include "gpupixel/filter/single_component_gaussian_blur_mono_filter.h"
 #include <cmath>
-#include "gpupixel_context.h"
+#include "core/gpupixel_context.h"
+#include "utils/util.h"
 
 namespace gpupixel {
 
@@ -62,17 +63,17 @@ SingleComponentGaussianBlurMonoFilter::GenerateOptimizedVertexShaderString(
   float* optimizedGaussianOffsets = new float[numberOfOptimizedOffsets];
 
   for (int i = 0; i < numberOfOptimizedOffsets; ++i) {
-    GLfloat firstWeight = standardGaussianWeights[i * 2 + 1];
-    GLfloat secondWeight = standardGaussianWeights[i * 2 + 2];
+    float firstWeight = standardGaussianWeights[i * 2 + 1];
+    float secondWeight = standardGaussianWeights[i * 2 + 2];
 
-    GLfloat optimizedWeight = firstWeight + secondWeight;
+    float optimizedWeight = firstWeight + secondWeight;
 
     optimizedGaussianOffsets[i] =
         (firstWeight * (i * 2 + 1) + secondWeight * (i * 2 + 2)) /
         optimizedWeight;
   }
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
-  std::string shaderStr = Util::str_format(
+  std::string shaderStr = Util::StringFormat(
       "\
                attribute vec4 position;\n\
                attribute vec4 inputTextureCoordinate;\n\
@@ -86,7 +87,7 @@ SingleComponentGaussianBlurMonoFilter::GenerateOptimizedVertexShaderString(
                ",
       numberOfOptimizedOffsets * 2 + 1);
 #elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
-  std::string shaderStr = Util::str_format(
+  std::string shaderStr = Util::StringFormat(
       "\
                attribute vec4 position;\n\
                attribute vec4 inputTextureCoordinate;\n\
@@ -103,11 +104,11 @@ SingleComponentGaussianBlurMonoFilter::GenerateOptimizedVertexShaderString(
 
   shaderStr =
       shaderStr +
-      Util::str_format("blurCoordinates[0] = inputTextureCoordinate.xy;\n");
+      Util::StringFormat("blurCoordinates[0] = inputTextureCoordinate.xy;\n");
   for (int i = 0; i < numberOfOptimizedOffsets; ++i) {
     shaderStr =
         shaderStr +
-        Util::str_format(
+        Util::StringFormat(
             "blurCoordinates[%d] = inputTextureCoordinate.xy + texelSpacing * (%f);\n\
             blurCoordinates[%d] = inputTextureCoordinate.xy - texelSpacing * (%f);",
             i * 2 + 1, optimizedGaussianOffsets[i], i * 2 + 2,
@@ -155,7 +156,7 @@ SingleComponentGaussianBlurMonoFilter::GenerateOptimizedFragmentShaderString(
   int numberOfOptimizedOffsets = fmin(trueNumberOfOptimizedOffsets, 7);
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
-  std::string shaderStr = Util::str_format(
+  std::string shaderStr = Util::StringFormat(
       "\
                uniform sampler2D inputImageTexture;\n\
                uniform highp float texelWidthOffset;\n\
@@ -166,7 +167,7 @@ SingleComponentGaussianBlurMonoFilter::GenerateOptimizedFragmentShaderString(
                lowp float sum = 0.0;\n",
       numberOfOptimizedOffsets * 2 + 1);
 #elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
-  std::string shaderStr = Util::str_format(
+  std::string shaderStr = Util::StringFormat(
       "\
                uniform sampler2D inputImageTexture;\n\
                uniform float texelWidthOffset;\n\
@@ -177,7 +178,7 @@ SingleComponentGaussianBlurMonoFilter::GenerateOptimizedFragmentShaderString(
                float sum = 0.0;\n",
       numberOfOptimizedOffsets * 2 + 1);
 #endif
-  shaderStr += Util::str_format(
+  shaderStr += Util::StringFormat(
       "gl_FragColor += texture2D(inputImageTexture, "
       "blurCoordinates[0]) * %f;\n",
       standardGaussianWeights[0]);
@@ -186,10 +187,10 @@ SingleComponentGaussianBlurMonoFilter::GenerateOptimizedFragmentShaderString(
     float secondWeight = standardGaussianWeights[i * 2 + 2];
     float optimizedWeight = firstWeight + secondWeight;
 
-    shaderStr += Util::str_format(
+    shaderStr += Util::StringFormat(
         "sum += texture2D(inputImageTexture, blurCoordinates[%d]).r * %f;\n",
         i * 2 + 1, optimizedWeight);
-    shaderStr += Util::str_format(
+    shaderStr += Util::StringFormat(
         "sum += texture2D(inputImageTexture, blurCoordinates[%d]).r * %f;\n",
         i * 2 + 2, optimizedWeight);
   }
@@ -197,7 +198,7 @@ SingleComponentGaussianBlurMonoFilter::GenerateOptimizedFragmentShaderString(
   // If the number of required samples exceeds the amount we can pass in via
   // varyings, we have to do dependent texture reads in the fragment shader
   if (trueNumberOfOptimizedOffsets > numberOfOptimizedOffsets) {
-    shaderStr += Util::str_format(
+    shaderStr += Util::StringFormat(
         "highp vec2 texelSpacing = vec2(texelWidthOffset, "
         "texelHeightOffset);\n");
 
@@ -211,12 +212,12 @@ SingleComponentGaussianBlurMonoFilter::GenerateOptimizedFragmentShaderString(
           (firstWeight * (i * 2 + 1) + secondWeight * (i * 2 + 2)) /
           optimizedWeight;
 
-      shaderStr += Util::str_format(
+      shaderStr += Util::StringFormat(
           "sum += texture2D(inputImageTexture, "
           "blurCoordinates[0] + texelSpacing * %f).r * %f;\n",
           optimizedOffset, optimizedWeight);
 
-      shaderStr += Util::str_format(
+      shaderStr += Util::StringFormat(
           "sum += texture2D(inputImageTexture, "
           "blurCoordinates[0] - texelSpacing * %f).r * %f;\n",
           optimizedOffset, optimizedWeight);

@@ -5,9 +5,10 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "filter.h"
-#include "gpupixel.h"
-#include "gpupixel_context.h"
+#include "gpupixel/filter/filter.h"
+#include "core/gpupixel_context.h"
+#include "gpupixel/gpupixel.h"
+#include "utils/util.h"
 namespace gpupixel {
 
 std::map<std::string, std::function<std::shared_ptr<Filter>()>>
@@ -21,40 +22,40 @@ init_filter_factory() {
   factory["BlusherFilter"] = BlusherFilter::Create;
   factory["FaceMakeupFilter"] = FaceMakeupFilter::Create;
 
-  // Basic adjustment filters
-  factory["ContrastFilter"] = ContrastFilter::Create;
-  factory["ExposureFilter"] = ExposureFilter::Create;
-  factory["SaturationFilter"] = SaturationFilter::Create;
-  factory["RGBFilter"] = RGBFilter::Create;
-  factory["HueFilter"] = HueFilter::Create;
-  factory["HSBFilter"] = HSBFilter::Create;
-  factory["ColorInvertFilter"] = ColorInvertFilter::Create;
-  factory["WhiteBalanceFilter"] = WhiteBalanceFilter::Create;
-  factory["ColorMatrixFilter"] = ColorMatrixFilter::Create;
+  // // Basic adjustment filters
+  // factory["ContrastFilter"] = ContrastFilter::Create;
+  // factory["ExposureFilter"] = ExposureFilter::Create;
+  // factory["SaturationFilter"] = SaturationFilter::Create;
+  // factory["RGBFilter"] = RGBFilter::Create;
+  // factory["HueFilter"] = HueFilter::Create;
+  // factory["HSBFilter"] = HSBFilter::Create;
+  // factory["ColorInvertFilter"] = ColorInvertFilter::Create;
+  // factory["WhiteBalanceFilter"] = WhiteBalanceFilter::Create;
+  // factory["ColorMatrixFilter"] = ColorMatrixFilter::Create;
 
-  // Blur filters
-  factory["IOSBlurFilter"] = IOSBlurFilter::Create;
-  factory["BilateralFilter"] = BilateralFilter::Create;
+  // // Blur filters
+  // factory["IOSBlurFilter"] = IOSBlurFilter::Create;
+  // factory["BilateralFilter"] = BilateralFilter::Create;
 
-  // Edge detection filters
-  factory["SobelEdgeDetectionFilter"] = SobelEdgeDetectionFilter::Create;
-  factory["CannyEdgeDetectionFilter"] = CannyEdgeDetectionFilter::Create;
-  factory["DirectionalNonMaximumSuppressionFilter"] =
-      DirectionalNonMaximumSuppressionFilter::Create;
-  factory["WeakPixelInclusionFilter"] = WeakPixelInclusionFilter::Create;
+  // // Edge detection filters
+  // factory["SobelEdgeDetectionFilter"] = SobelEdgeDetectionFilter::Create;
+  // factory["CannyEdgeDetectionFilter"] = CannyEdgeDetectionFilter::Create;
+  // factory["DirectionalNonMaximumSuppressionFilter"] =
+  //     DirectionalNonMaximumSuppressionFilter::Create;
+  // factory["WeakPixelInclusionFilter"] = WeakPixelInclusionFilter::Create;
 
-  // Special effect filters
-  factory["ToonFilter"] = ToonFilter::Create;
-  factory["SmoothToonFilter"] = SmoothToonFilter::Create;
-  factory["PosterizeFilter"] = PosterizeFilter::Create;
-  factory["PixellationFilter"] = PixellationFilter::Create;
-  factory["SketchFilter"] = SketchFilter::Create;
-  factory["GlassSphereFilter"] = GlassSphereFilter::Create;
-  factory["SphereRefractionFilter"] = SphereRefractionFilter::Create;
-  factory["EmbossFilter"] = EmbossFilter::Create;
+  // // Special effect filters
+  // factory["ToonFilter"] = ToonFilter::Create;
+  // factory["SmoothToonFilter"] = SmoothToonFilter::Create;
+  // factory["PosterizeFilter"] = PosterizeFilter::Create;
+  // factory["PixellationFilter"] = PixellationFilter::Create;
+  // factory["SketchFilter"] = SketchFilter::Create;
+  // factory["GlassSphereFilter"] = GlassSphereFilter::Create;
+  // factory["SphereRefractionFilter"] = SphereRefractionFilter::Create;
+  // factory["EmbossFilter"] = EmbossFilter::Create;
 
-  // Image processing filters
-  factory["LuminanceRangeFilter"] = LuminanceRangeFilter::Create;
+  // // Image processing filters
+  // factory["LuminanceRangeFilter"] = LuminanceRangeFilter::Create;
 
   return factory;
 }
@@ -133,7 +134,7 @@ std::string Filter::GetVertexShaderString(int input_number) const {
                 varying vec2 textureCoordinate;\n\
                 ";
   for (int i = 1; i < input_number; ++i) {
-    shader_str += Util::str_format(
+    shader_str += Util::StringFormat(
         "\
                 attribute vec4 inputTextureCoordinate%d;\n\
                 varying vec2 textureCoordinate%d;\n\
@@ -148,7 +149,7 @@ std::string Filter::GetVertexShaderString(int input_number) const {
                     textureCoordinate = inputTextureCoordinate.xy;\n\
         ";
   for (int i = 1; i < input_number; ++i) {
-    shader_str += Util::str_format(
+    shader_str += Util::StringFormat(
         "textureCoordinate%d = inputTextureCoordinate%d.xy;\n", i, i);
   }
   shader_str += "}\n";
@@ -157,7 +158,7 @@ std::string Filter::GetVertexShaderString(int input_number) const {
 }
 
 bool Filter::DoRender(bool update_sinks) {
-  static const GLfloat image_vertices[] = {
+  static const float image_vertices[] = {
       -1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f,
   };
 
@@ -175,12 +176,12 @@ bool Filter::DoRender(bool update_sinks) {
     CHECK_GL(glBindTexture(GL_TEXTURE_2D, fb->GetTexture()));
     filter_program_->SetUniformValue(
         tex_idx == 0 ? "inputImageTexture"
-                     : Util::str_format("inputImageTexture%d", tex_idx),
+                     : Util::StringFormat("inputImageTexture%d", tex_idx),
         tex_idx);
     // texcoord attribute
-    GLuint filter_tex_coord_attribute = filter_program_->GetAttribLocation(
+    uint32_t filter_tex_coord_attribute = filter_program_->GetAttribLocation(
         tex_idx == 0 ? "inputTextureCoordinate"
-                     : Util::str_format("inputTextureCoordinate%d", tex_idx));
+                     : Util::StringFormat("inputTextureCoordinate%d", tex_idx));
     CHECK_GL(glEnableVertexAttribArray(filter_tex_coord_attribute));
     CHECK_GL(
         glVertexAttribPointer(filter_tex_coord_attribute, 2, GL_FLOAT, 0, 0,
@@ -195,37 +196,37 @@ bool Filter::DoRender(bool update_sinks) {
   return Source::DoRender(update_sinks);
 }
 
-const GLfloat* Filter::GetTextureCoordinate(
+const float* Filter::GetTextureCoordinate(
     const RotationMode& rotation_mode) const {
-  static const GLfloat no_rotation_texture_coordinates[] = {
+  static const float no_rotation_texture_coordinates[] = {
       0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
   };
 
-  static const GLfloat rotate_left_texture_coordinates[] = {
+  static const float rotate_left_texture_coordinates[] = {
       1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
   };
 
-  static const GLfloat rotate_right_texture_coordinates[] = {
+  static const float rotate_right_texture_coordinates[] = {
       0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f,
   };
 
-  static const GLfloat vertical_flip_texture_coordinates[] = {
+  static const float vertical_flip_texture_coordinates[] = {
       0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
   };
 
-  static const GLfloat horizontal_flip_texture_coordinates[] = {
+  static const float horizontal_flip_texture_coordinates[] = {
       1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
   };
 
-  static const GLfloat rotate_right_vertical_flip_texture_coordinates[] = {
+  static const float rotate_right_vertical_flip_texture_coordinates[] = {
       0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
   };
 
-  static const GLfloat rotate_right_horizontal_flip_texture_coordinates[] = {
+  static const float rotate_right_horizontal_flip_texture_coordinates[] = {
       1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
   };
 
-  static const GLfloat rotate_180_texture_coordinates[] = {
+  static const float rotate_180_texture_coordinates[] = {
       1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f,
   };
 

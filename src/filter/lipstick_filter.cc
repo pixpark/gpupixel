@@ -5,10 +5,14 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "lipstick_filter.h"
-#include "gpupixel_context.h"
-#include "source_image.h"
+#include "gpupixel/filter/lipstick_filter.h"
+#include "core/gpupixel_context.h"
+#include "gpupixel/source/source_image.h"
+#include "utils/util.h"
 namespace gpupixel {
+
+LipstickFilter::LipstickFilter() {}
+
 std::shared_ptr<LipstickFilter> LipstickFilter::Create() {
   auto ret = std::shared_ptr<LipstickFilter>(new LipstickFilter());
   gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
@@ -20,7 +24,7 @@ std::shared_ptr<LipstickFilter> LipstickFilter::Create() {
 }
 
 bool LipstickFilter::Init() {
-  auto mouth = SourceImage::Create(Util::getResourcePath("res/mouth.png"));
+  auto mouth = SourceImage::Create(Util::GetResourcePath("res/mouth.png"));
   SetImageTexture(mouth);
   SetTextureBounds(FrameBounds{502.5, 710, 262.5, 167.5});
   return FaceMakeupFilter::Init();

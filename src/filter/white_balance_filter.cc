@@ -5,8 +5,8 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "white_balance_filter.h"
-#include "gpupixel_context.h"
+#include "gpupixel/filter/white_balance_filter.h"
+#include "core/gpupixel_context.h"
 namespace gpupixel {
 
 const std::string kWhiteBalanceFragmentShaderString = R"(

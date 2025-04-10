@@ -5,8 +5,8 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "canny_edge_detection_filter.h"
-#include "gpupixel_context.h"
+#include "gpupixel/filter/canny_edge_detection_filter.h"
+#include "core/gpupixel_context.h"
 namespace gpupixel {
 
 CannyEdgeDetectionFilter::CannyEdgeDetectionFilter()

@@ -5,8 +5,8 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "ios_blur_filter.h"
-#include "gpupixel_context.h"
+#include "gpupixel/filter/ios_blur_filter.h"
+#include "core/gpupixel_context.h"
 namespace gpupixel {
 
 IOSBlurFilter::IOSBlurFilter()

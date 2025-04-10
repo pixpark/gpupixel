@@ -6,9 +6,10 @@
 //  Copyright © 2021 PixPark. All rights reserved.
 //
 
-#include "sink_raw_data.h"
+#include "gpupixel/sink/sink_raw_data.h"
 #include <cstring>
-#include "gpupixel_context.h"
+#include "core/gpupixel_context.h"
+#include "utils/util.h"
 #include "libyuv.h"
 
 namespace gpupixel {
@@ -87,14 +88,14 @@ void SinkRawData::Render() {
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  GLfloat image_vertices[] = {
+  float image_vertices[] = {
       -1.0, -1.0,  // Bottom left
       1.0,  -1.0,  // Bottom right
       -1.0, 1.0,   // Top left
       1.0,  1.0    // Top right
   };
 
-  GLfloat texture_vertices[] = {
+  float texture_vertices[] = {
       0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
   };
 

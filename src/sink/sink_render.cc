@@ -5,10 +5,10 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "sink_render.h"
-#include "filter.h"
-#include "gpupixel_context.h"
-#include "util.h"
+#include "gpupixel/sink/sink_render.h"
+#include "core/gpupixel_context.h"
+#include "gpupixel/filter/filter.h"
+#include "utils/util.h"
 
 namespace gpupixel {
 
@@ -170,36 +170,36 @@ void SinkRender::UpdateDisplayVertices() {
   display_vertices_[7] = scaled_height;
 }
 
-const GLfloat* SinkRender::GetTextureCoordinate(RotationMode rotation_mode) {
-  static const GLfloat no_rotation_texture_coordinates[] = {
+const float* SinkRender::GetTextureCoordinate(RotationMode rotation_mode) {
+  static const float no_rotation_texture_coordinates[] = {
       0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
   };
 
-  static const GLfloat rotate_right_texture_coordinates[] = {
+  static const float rotate_right_texture_coordinates[] = {
       1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
   };
 
-  static const GLfloat rotate_left_texture_coordinates[] = {
+  static const float rotate_left_texture_coordinates[] = {
       0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
   };
 
-  static const GLfloat vertical_flip_texture_coordinates[] = {
+  static const float vertical_flip_texture_coordinates[] = {
       0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
   };
 
-  static const GLfloat horizontal_flip_texture_coordinates[] = {
+  static const float horizontal_flip_texture_coordinates[] = {
       1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f,
   };
 
-  static const GLfloat rotate_right_vertical_flip_texture_coordinates[] = {
+  static const float rotate_right_vertical_flip_texture_coordinates[] = {
       1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
   };
 
-  static const GLfloat rotate_right_horizontal_flip_texture_coordinates[] = {
+  static const float rotate_right_horizontal_flip_texture_coordinates[] = {
       0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f,
   };
 
-  static const GLfloat rotate_180_texture_coordinates[] = {
+  static const float rotate_180_texture_coordinates[] = {
       1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
   };
 

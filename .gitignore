@@ -642,3 +642,4 @@ android/gpupixel/.cxx
 output
 src/android/java/gpupixel/.cxx
 demo/android/app/libs
+gpupixel/android/java/gpupixel/.cxx

@@ -9,7 +9,7 @@
 
 #include <stdlib.h>
 #include <string>
-#include "gpupixel_define.h"
+#include "gpupixel/gpupixel_define.h"
 
 namespace gpupixel {
 #define rotationSwapsSize(rotation)                   \
@@ -20,23 +20,23 @@ namespace gpupixel {
 
 class GPUPIXEL_API Util {
  public:
-  static std::string str_format(const char* fmt, ...);
+  static std::string StringFormat(const char* fmt, ...);
   static void Log(const std::string& tag, std::string format, ...);
-  static int64_t nowTimeMs();
+  static int64_t NowTimeMs();
 
-  static std::string getResourcePath(std::string name = "");
-  static void setResourceRoot(std::string root);
+  static std::string GetResourcePath(std::string name = "");
+  static void SetResourceRoot(std::string root);
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
-  static std::string getResourcePath(std::string bundle_name,
+  static std::string GetResourcePath(std::string bundle_name,
                                      std::string file_name,
                                      std::string type);
 #endif
 #if defined(GPUPIXEL_ANDROID)
-  static std::string getResourcePathJni(std::string name);
-  static std::string getDefaultResourcePath(std::string name);
+  static std::string GetResourcePathJni(std::string name);
+  static std::string GetDefaultResourcePathJni(std::string name);
 #endif
 
  private:
-  static std::string resourceRoot;
+  static std::string resource_root_path_;
 };
 }  // namespace gpupixel

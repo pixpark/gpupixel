@@ -5,10 +5,10 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "gpupixel_program.h"
+#include "core/gpupixel_program.h"
 #include <algorithm>
-#include "gpupixel_context.h"
-#include "util.h"
+#include "core/gpupixel_context.h"
+#include "utils/util.h"
 
 namespace gpupixel {
 
@@ -67,7 +67,7 @@ bool GPUPixelGLProgram::InitWithShaderString(
   }
   CHECK_GL(program_ = glCreateProgram());
 
-  CHECK_GL(GLuint vert_shader = glCreateShader(GL_VERTEX_SHADER));
+  CHECK_GL(uint32_t vert_shader = glCreateShader(GL_VERTEX_SHADER));
   const char* vertex_shader_source_str = vertex_shader_source.c_str();
   CHECK_GL(glShaderSource(vert_shader, 1, &vertex_shader_source_str, NULL));
   CHECK_GL(glCompileShader(vert_shader));
@@ -91,7 +91,7 @@ bool GPUPixelGLProgram::InitWithShaderString(
     return -1;
   }
 
-  CHECK_GL(GLuint frag_shader = glCreateShader(GL_FRAGMENT_SHADER));
+  CHECK_GL(uint32_t frag_shader = glCreateShader(GL_FRAGMENT_SHADER));
   const char* fragment_shader_source_str = fragment_shader_source.c_str();
   CHECK_GL(glShaderSource(frag_shader, 1, &fragment_shader_source_str, NULL));
   CHECK_GL(glCompileShader(frag_shader));
@@ -128,11 +128,12 @@ void GPUPixelGLProgram::UseProgram() {
   CHECK_GL(glUseProgram(program_));
 }
 
-GLuint GPUPixelGLProgram::GetAttribLocation(const std::string& attribute) {
+uint32_t GPUPixelGLProgram::GetAttribLocation(const std::string& attribute) {
   return glGetAttribLocation(program_, attribute.c_str());
 }
 
-GLuint GPUPixelGLProgram::GetUniformLocation(const std::string& uniform_name) {
+uint32_t GPUPixelGLProgram::GetUniformLocation(
+    const std::string& uniform_name) {
   return glGetUniformLocation(program_, uniform_name.c_str());
 }
 
@@ -185,7 +186,7 @@ void GPUPixelGLProgram::SetUniformValue(int uniform_location, float value) {
 
 void GPUPixelGLProgram::SetUniformValue(int uniform_location, Matrix4 value) {
   GPUPixelContext::GetInstance()->SetActiveGlProgram(this);
-  CHECK_GL(glUniformMatrix4fv(uniform_location, 1, GL_FALSE, (GLfloat*)&value));
+  CHECK_GL(glUniformMatrix4fv(uniform_location, 1, GL_FALSE, (float*)&value));
 }
 
 void GPUPixelGLProgram::SetUniformValue(int uniform_location, Vector2 value) {
@@ -195,14 +196,14 @@ void GPUPixelGLProgram::SetUniformValue(int uniform_location, Vector2 value) {
 
 void GPUPixelGLProgram::SetUniformValue(int uniform_location, Matrix3 value) {
   GPUPixelContext::GetInstance()->SetActiveGlProgram(this);
-  CHECK_GL(glUniformMatrix3fv(uniform_location, 1, GL_FALSE, (GLfloat*)&value));
+  CHECK_GL(glUniformMatrix3fv(uniform_location, 1, GL_FALSE, (float*)&value));
 }
 
 void GPUPixelGLProgram::SetUniformValue(int uniform_location,
                                         const void* value,
                                         int length) {
   GPUPixelContext::GetInstance()->SetActiveGlProgram(this);
-  CHECK_GL(glUniform1fv(uniform_location, length, (GLfloat*)value));
+  CHECK_GL(glUniform1fv(uniform_location, length, (float*)value));
 }
 
 }  // namespace gpupixel

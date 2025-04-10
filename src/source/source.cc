@@ -5,12 +5,12 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "source.h"
-#include "gpupixel_context.h"
-#include "util.h"
+#include "gpupixel/source/source.h"
+#include "core/gpupixel_context.h"
+#include "utils/util.h"
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
-#include "objc_sink.h"
+#include "gpupixel/sink/objc/objc_sink.h"
 #endif
 
 namespace gpupixel {

@@ -8,11 +8,11 @@
 #pragma once
 
 #include <mutex>
-#include "gpupixel_define.h"
-#include "gpupixel_framebuffer_factory.h"
+#include "core/gpupixel_framebuffer_factory.h"
+#include "gpupixel/gpupixel_define.h"
 
-#include "filter.h"
-#include "gpupixel_program.h"
+#include "core/gpupixel_program.h"
+#include "gpupixel/filter/filter.h"
 
 class DispatchQueue;
 

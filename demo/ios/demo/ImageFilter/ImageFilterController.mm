@@ -10,7 +10,6 @@
 #import "FilterToolbarView.h"
 #import "ImageConverter.h"
 
-#import <gpupixel/face_detector.h>
 #import <gpupixel/gpupixel.h>
 
 using namespace gpupixel;

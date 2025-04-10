@@ -5,8 +5,8 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "face_reshape_filter.h"
-#include "gpupixel_context.h"
+#include "gpupixel/filter/face_reshape_filter.h"
+#include "core/gpupixel_context.h"
 namespace gpupixel {
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
@@ -206,6 +206,7 @@ const std::string kGPUPixelThinFaceFragmentShaderString = R"(
  }
  )";
 #endif
+
 FaceReshapeFilter::FaceReshapeFilter() {}
 
 FaceReshapeFilter::~FaceReshapeFilter() {}

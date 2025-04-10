@@ -5,8 +5,8 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#include "non_maximum_suppression_filter.h"
-#include "gpupixel_context.h"
+#include "gpupixel/filter/non_maximum_suppression_filter.h"
+#include "core/gpupixel_context.h"
 namespace gpupixel {
 
 const std::string kNonMaximumSuppressionShaderString = R"(
