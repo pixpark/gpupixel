@@ -62,11 +62,11 @@ For custom Xcode projects, disable `Build Settings -> Compress PNG Files` to pre
 :::
 ## Android
 
-Open the directory `src/android/java` with Android Studio, which will automatically download dependencies such as Gradle.
+Copy the generated `gpupixel-release.aar` to the `demo/android/app/libs` directory, then open the `demo/android` directory with Android Studio.
 
 **Project Structure**
 
-It includes the demo and the gpupixel module. The invocation logic is in `MainActivity`. Choose the app target and connect your phone to run it.
+The invocation logic is in `MainActivity`. Select the app target and connect your phone to run it.
  
 ## Desktop
 

@@ -56,11 +56,11 @@ demo
 :::
 ## Android
 
-使用Android Studio打开目录 `src/android/java`, 开始自动下载 gradle 等依赖
+将生成的 `gpupixel-release.aar` 拷贝到 `demo/android/app/libs`目录下， 使用Android Studio打开目录 `demo/android`
 
 **工程结构**
 
-包含demo和 gpupixel module, 调用逻辑在 `MainActivity` 中选择 app target 连上手机运行即可
+调用逻辑在 `MainActivity` 中选择 app target 连上手机运行即可
 
 ## Desktop
 
