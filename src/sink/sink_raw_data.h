@@ -31,8 +31,8 @@ class GPUPIXEL_API SinkRawData : public Sink {
   static std::shared_ptr<SinkRawData> Create();
   void Render() override;
 
-  const uint8_t* GetRgbaBuffer() const;
-  const uint8_t* GetI420Buffer() const;
+  const uint8_t* GetRgbaBuffer();
+  const uint8_t* GetI420Buffer();
   int GetWidth() const { return width_; }
   int GetHeight() const { return height_; }
 

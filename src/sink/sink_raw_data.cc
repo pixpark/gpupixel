@@ -79,23 +79,6 @@ void SinkRawData::Render() {
     InitOutputBuffer(width, height);
   }
 
-  RenderToOutput();
-}
-
-bool SinkRawData::InitWithShaderString(
-    const std::string& vertex_shader_source,
-    const std::string& fragment_shader_source) {
-  shader_program_ = GPUPixelGLProgram::CreateWithShaderString(
-      vertex_shader_source, fragment_shader_source);
-  GPUPixelContext::GetInstance()->SetActiveGlProgram(shader_program_);
-  position_attribute_ = shader_program_->GetAttribLocation("position");
-  tex_coord_attribute_ =
-      shader_program_->GetAttribLocation("inputTextureCoordinate");
-
-  return true;
-}
-
-int SinkRawData::RenderToOutput() {
   GPUPixelContext::GetInstance()->SetActiveGlProgram(shader_program_);
   framebuffer_->Activate();
 
@@ -131,6 +114,25 @@ int SinkRawData::RenderToOutput() {
   // Draw frame buffer
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
+  framebuffer_->Deactivate();
+}
+
+bool SinkRawData::InitWithShaderString(
+    const std::string& vertex_shader_source,
+    const std::string& fragment_shader_source) {
+  shader_program_ = GPUPixelGLProgram::CreateWithShaderString(
+      vertex_shader_source, fragment_shader_source);
+  GPUPixelContext::GetInstance()->SetActiveGlProgram(shader_program_);
+  position_attribute_ = shader_program_->GetAttribLocation("position");
+  tex_coord_attribute_ =
+      shader_program_->GetAttribLocation("inputTextureCoordinate");
+
+  return true;
+}
+
+int SinkRawData::RenderToOutput() {
+  framebuffer_->Activate();
+
   // Read pixel data directly using glReadPixels
   CHECK_GL(glReadPixels(0, 0, width_, height_, GL_RGBA, GL_UNSIGNED_BYTE,
                         rgba_buffer_));
@@ -139,11 +141,16 @@ int SinkRawData::RenderToOutput() {
   return 0;
 }
 
-const uint8_t* SinkRawData::GetRgbaBuffer() const {
+const uint8_t* SinkRawData::GetRgbaBuffer() {
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext(
+      [&] { RenderToOutput(); });
   return rgba_buffer_;
 }
 
-const uint8_t* SinkRawData::GetI420Buffer() const {
+const uint8_t* SinkRawData::GetI420Buffer() {
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext(
+      [=] { RenderToOutput(); });
+
   // Convert RGBA to I420 format
   libyuv::ARGBToI420(rgba_buffer_, width_ * 4, yuv_buffer_, width_,
                      yuv_buffer_ + width_ * height_, width_ / 2,
