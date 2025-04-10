@@ -18,8 +18,7 @@
 @implementation FilterResultViewController
 
 #pragma mark - Initialization
-- (instancetype)initWithImage:(UIImage *)image
-{
+- (instancetype)initWithImage:(UIImage *)image {
     self = [super init];
     if (self) {
         self.resultImage = image;
@@ -28,19 +27,19 @@
 }
 
 #pragma mark - Life cycle
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     
     self.view.backgroundColor = UIColor.whiteColor;
     self.title = @"滤镜结果";
+    UIBarButtonItem* backItem = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStylePlain target:self action:@selector(backToHomePage)];
+    self.navigationItem.leftBarButtonItem = backItem;
     
     [self setupUI];
 }
 
 #pragma mark - Setup
-- (void)setupUI
-{
+- (void)setupUI {
     // 添加图片视图
     self.resultImageView = [[UIImageView alloc] initWithImage:self.resultImage];
     self.resultImageView.contentMode = UIViewContentModeScaleAspectFit;
@@ -82,8 +81,11 @@
 }
 
 #pragma mark - Actions
-- (void)saveButtonTapped
-{
+- (void)backToHomePage {
+    [self.navigationController popToRootViewControllerAnimated:YES];
+}
+
+- (void)saveButtonTapped {
     if (self.resultImage) {
         UIImageWriteToSavedPhotosAlbum(self.resultImage, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
     } else {
@@ -92,8 +94,7 @@
 }
 
 #pragma mark - Callbacks
-- (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo
-{
+- (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo {
     NSString *message = nil;
     if (error) {
         message = [NSString stringWithFormat:@"保存图片失败: %@", error.localizedDescription];
@@ -104,8 +105,7 @@
     [self showAlertWithMessage:message];
 }
 
-- (void)showAlertWithMessage:(NSString *)message
-{
+- (void)showAlertWithMessage:(NSString *)message {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil
                                                                 message:message
                                                          preferredStyle:UIAlertControllerStyleAlert];

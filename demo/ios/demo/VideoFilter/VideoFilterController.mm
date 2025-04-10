@@ -193,6 +193,10 @@ using namespace gpupixel;
   [self.videoCapturer stopCapture];
   self.videoCapturer = nil;
 
+  [self destroyGPUPixel];
+  [self.navigationController popViewControllerAnimated:true];
+}
+- (void)destroyGPUPixel {
   _beautyFaceFilter = nil;
   _faceReshapeFilter = nil;
   _lipstickFilter = nil;
@@ -202,8 +206,6 @@ using namespace gpupixel;
   _sinkRawData = nil;
   _sourceRawData = nil;
   gpupixel::GPUPixelContext::GetInstance()->Destroy();
-
-  [self.navigationController popViewControllerAnimated:true];
 }
 
 /// 保存当前处理后的图像并显示结果页面
@@ -309,19 +311,21 @@ using namespace gpupixel;
                               GPUPIXEL_FRAME_TYPE_BGRA);
 
   if (self.isSave) {
-    const uint8_t* data = _sinkRawData->GetRgbaBuffer();
-    const int w = _sinkRawData->GetWidth();
-    const int h = _sinkRawData->GetHeight();
-
-    UIImage* resultImage = [ImageConverter imageFromRGBAData:data
-                                                       width:w
-                                                      height:h];
     dispatch_async(dispatch_get_main_queue(), ^{
+      self.videoCapturer.delegate = nil;
+      [self.videoCapturer stopCapture];
+      self.videoCapturer = nil;
+      
+      const uint8_t* data = _sinkRawData->GetRgbaBuffer();
+      const int w = _sinkRawData->GetWidth();
+      const int h = _sinkRawData->GetHeight();
+      UIImage* resultImage = [ImageConverter imageFromRGBAData:data width:w height:h];
+
       // 创建并显示结果页面
-      FilterResultViewController* resultVC =
-          [[FilterResultViewController alloc] initWithImage:resultImage];
+      FilterResultViewController* resultVC = [[FilterResultViewController alloc] initWithImage:resultImage];
       [self.navigationController pushViewController:resultVC animated:YES];
       self.isSave = NO;
+      [self destroyGPUPixel];
     });
   }
 
