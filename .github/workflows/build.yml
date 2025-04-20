@@ -21,7 +21,15 @@ jobs:
  
             # 使用Docker运行Linux构建脚本
             - name: Build with Linux script
-              run: mkdir -p output build && docker run --rm -v $(pwd)/output:/workspace/output -v $(pwd)/build:/workspace/build -v $(pwd)/script:/workspace/script gpupixel_img bash /workspace/script/build_linux.sh
+              run: |
+                mkdir -p output build
+                docker run --rm \
+                  -v $(pwd)/output:/workspace/output \
+                  -v $(pwd)/build:/workspace/build \
+                  -v $(pwd)/script:/workspace/script \
+                  -v $(pwd):/workspace \
+                  gpupixel_img \
+                  bash -c "cd /workspace && ./script/build_linux.sh"
 
     build-macos-clang:
         name: macOS (Universal)

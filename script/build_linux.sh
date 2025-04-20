@@ -11,6 +11,6 @@ cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DGPUPIXEL_BUILD_DESKTOP_DEMO=ON 
 cmake --build build --config Release --parallel $(nproc)
 
 # 安装到output目录
-cmake --install build --config Release
+cmake --install build
 
 echo "Linux构建完成，安装目录为output" 

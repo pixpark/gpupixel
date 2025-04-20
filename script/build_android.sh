@@ -4,8 +4,8 @@
 echo "===== 开始构建Android项目 ====="
 
 # 进入Android项目目录
-cd ../src/android/java || {
-  echo "错误：找不到Android项目目录 ../src/android/java"
+cd src/android/java || {
+  echo "错误：找不到Android项目目录 src/android/java"
   exit 1
 }
 

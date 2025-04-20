@@ -20,7 +20,18 @@ jobs:
         run: docker build -t gpupixel_img .
  
       - name: Build with Linux script
-        run: mkdir -p build output && docker run --rm -u $(id -u):$(id -g) -v $(pwd)/output:/workspace/output -v $(pwd)/build:/workspace/build -v $(pwd)/script:/workspace/script -v /etc/passwd:/etc/passwd:ro -v /etc/group:/etc/group:ro gpupixel_img bash /workspace/script/build_linux.sh
+        run: |
+          mkdir -p build output
+          docker run --rm \
+            -u $(id -u):$(id -g) \
+            -v $(pwd)/output:/workspace/output \
+            -v $(pwd)/build:/workspace/build \
+            -v $(pwd)/script:/workspace/script \
+            -v $(pwd):/workspace \
+            -v /etc/passwd:/etc/passwd:ro \
+            -v /etc/group:/etc/group:ro \
+            gpupixel_img \
+            bash -c "cd /workspace && ./script/build_linux.sh"
 
       - name: Create zip
         working-directory: output
@@ -144,6 +155,7 @@ jobs:
       - name: Create zip
         working-directory: ${{github.workspace}}/output
         run: | 
+          mkdir -p ${{github.workspace}}/output/lib
           cp -r ${{github.workspace}}/src/android/java/gpupixel/build/outputs/aar ${{github.workspace}}/output/lib
           zip -r gpupixel_android.zip .
 

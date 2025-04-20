@@ -5,8 +5,10 @@ FROM debian:buster
 RUN apt-get update && \
     apt-get install -y \
     build-essential \
-    libglfw3-dev \
     cmake \
+    libx11-dev libxrandr-dev libxinerama-dev \
+    libxcursor-dev libxi-dev \
+    libglu1-mesa-dev freeglut3-dev mesa-common-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # 设置工作目录
