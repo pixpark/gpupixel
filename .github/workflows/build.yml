@@ -28,8 +28,7 @@ jobs:
                   -v $(pwd)/build:/workspace/build \
                   -v $(pwd)/script:/workspace/script \
                   -v $(pwd):/workspace \
-                  gpupixel_img \
-                  bash -c "cd /workspace && ./script/build_linux.sh"
+                  gpupixel_img
 
     build-macos-clang:
         name: macOS (Universal)

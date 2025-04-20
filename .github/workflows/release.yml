@@ -21,7 +21,7 @@ jobs:
  
       - name: Build with Linux script
         run: |
-          mkdir -p build output
+          mkdir -p build output && 
           docker run --rm \
             -u $(id -u):$(id -g) \
             -v $(pwd)/output:/workspace/output \
@@ -30,8 +30,7 @@ jobs:
             -v $(pwd):/workspace \
             -v /etc/passwd:/etc/passwd:ro \
             -v /etc/group:/etc/group:ro \
-            gpupixel_img \
-            bash -c "cd /workspace && ./script/build_linux.sh"
+            gpupixel_img
 
       - name: Create zip
         working-directory: output
@@ -153,17 +152,16 @@ jobs:
         run: ${{github.workspace}}/script/build_android.sh
 
       - name: Create zip
-        working-directory: ${{github.workspace}}/output
+        working-directory: ${{github.workspace}}
         run: | 
-          mkdir -p ${{github.workspace}}/output/lib
-          cp -r ${{github.workspace}}/src/android/java/gpupixel/build/outputs/aar ${{github.workspace}}/output/lib
-          zip -r gpupixel_android.zip .
+          cd src/android/java/gpupixel/build/outputs
+          zip -r gpupixel_android.zip aar
 
       - name: Upload Android Artifact
         uses: actions/upload-artifact@v4
         with:
           name: gpupixel_android
-          path: ${{github.workspace}}/output/gpupixel_android.zip
+          path: ${{github.workspace}}/src/android/java/gpupixel/build/outputs/gpupixel_android.zip
 
   # Deployment job
   deploy:

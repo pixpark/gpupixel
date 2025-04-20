@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.16)
 
 # ---- Project ----
 # GPUPixel is a GPU-accelerated image processing library 
@@ -72,6 +72,7 @@ message(STATUS "GPUPIXEL_BUILD_DESKTOP_DEMO: ${GPUPIXEL_BUILD_DESKTOP_DEMO}")
 message(STATUS "========================================")
 message(STATUS "           SYSTEM INFORMATION           ")
 message(STATUS "========================================")
+message(STATUS "CMake Version: ${CMAKE_VERSION}")
 message(STATUS "Operating System: ${CMAKE_SYSTEM_NAME}")
 message(STATUS "Processor Architecture: ${CMAKE_SYSTEM_PROCESSOR}")
 message(STATUS "C Compiler: ${CMAKE_C_COMPILER_ID} ${CMAKE_C_COMPILER_VERSION}")
