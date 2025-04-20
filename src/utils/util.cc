@@ -23,9 +23,6 @@
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
 @interface GPXObjcHelper : NSObject
 + (NSString*)GetResourcePath:(NSString*)name;
-+ (NSString*)getBundleResourceWithName:(NSString*)bundleName
-                              fileName:(NSString*)fileName
-                                  type:(NSString*)fileType;
 @end
 
 @implementation GPXObjcHelper
@@ -35,24 +32,6 @@
       stringByAppendingPathComponent:name];
   return path;
 }
-
-+ (NSString*)getModelsPath {
-  NSString* path = [[NSBundle bundleForClass:self.class] resourcePath];
-  return path;
-}
-
-+ (NSString*)getBundleResourceWithName:(NSString*)bundleName
-                              fileName:(NSString*)fileName
-                                  type:(NSString*)fileType {
-  NSBundle* sdkMainBundle = [NSBundle bundleForClass:[self class]];
-  NSString* resourceBundlePath =
-      [sdkMainBundle pathForResource:bundleName ofType:@"bundle"];
-  NSBundle* resourceBundle = [NSBundle bundleWithPath:resourceBundlePath];
-  NSString* filePath =
-      [resourceBundle pathForResource:fileName ofType:fileType];
-  return filePath;
-}
-
 @end
 
 #endif
@@ -66,8 +45,6 @@ std::string Util::GetResourcePath(std::string name) {
   NSString* oc_path = [GPXObjcHelper
       GetResourcePath:[[NSString alloc] initWithUTF8String:name.c_str()]];
   std::string path = [oc_path UTF8String];
-#elif defined(GPUPIXEL_ANDROID)
-  std::string path = GetResourcePathJni(name);
 #else
   std::string path =
       resource_root_path_.empty() ? name : (resource_root_path_ + "/" + name);
@@ -78,22 +55,6 @@ std::string Util::GetResourcePath(std::string name) {
 void Util::SetResourceRoot(std::string root) {
   resource_root_path_ = root;
 }
-#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
-std::string Util::GetResourcePath(std::string bundle_name,
-                                  std::string file_name,
-                                  std::string type) {
-  NSString* oc_path = [GPXObjcHelper
-      getBundleResourceWithName:[[NSString alloc]
-                                    initWithUTF8String:bundle_name.c_str()]
-                       fileName:[[NSString alloc]
-                                    initWithUTF8String:file_name.c_str()]
-                           type:[[NSString alloc]
-                                    initWithUTF8String:type.c_str()]];
-  std::string path = [oc_path UTF8String];
-  return path;
-}
-
-#endif
 
 #ifdef GPUPIXEL_WIN
 int vasprintf(char** strp, const char* fmt, va_list ap) {
@@ -116,127 +77,7 @@ int vasprintf(char** strp, const char* fmt, va_list ap) {
   return r;
 }
 #endif
-
-#if defined(GPUPIXEL_ANDROID)
-std::string Util::GetResourcePathJni(std::string name) {
-  // Get JVM and environment
-  JavaVM* jvm = GetJVM();
-  if (!jvm) {
-    Log("GPUPixel", "GetJVM() returned null in GetResourcePathJni");
-    return GetDefaultResourcePathJni(name);
-  }
-
-  // Create JNI attach scope to ensure thread is attached to JVM
-  AttachThreadScoped ats(jvm);
-  JNIEnv* env = ats.env();
-  if (!env) {
-    Log("GPUPixel", "Failed to get JNIEnv in GetResourcePathJni");
-    return GetDefaultResourcePathJni(name);
-  }
-
-  std::string result = "";
-
-  // Find GPUPixel class - use fully qualified name
-  jclass gpuPixelClass = nullptr;
-
-  // Try different class paths
-  const char* classNames[] = {
-      "com/pixpark/gpupixel/GPUPixel",
-  };
-
-  for (const auto& className : classNames) {
-    Log("GPUPixel", "Trying to find class: %s", className);
-    gpuPixelClass = env->FindClass(className);
-    if (gpuPixelClass) {
-      Log("GPUPixel", "Found GPUPixel class: %s", className);
-      break;
-    }
-    if (env->ExceptionCheck()) {
-      env->ExceptionClear();
-    }
-  }
-
-  if (!gpuPixelClass) {
-    Log("GPUPixel",
-        "Failed to find GPUPixel class after trying all alternatives");
-    return GetDefaultResourcePathJni(name);
-  }
-
-  // Get init static method to ensure initialization has been called
-  jmethodID initMethod = env->GetStaticMethodID(gpuPixelClass, "Init",
-                                                "(Landroid/content/Context;)V");
-  if (initMethod) {
-    Log("GPUPixel",
-        "Found Init method, but we're not calling it because we don't have "
-        "Context object");
-  }
-
-  // Get getResource_path static method
-  jmethodID getResourcePathMethod = env->GetStaticMethodID(
-      gpuPixelClass, "getResource_path", "()Ljava/lang/String;");
-  if (!getResourcePathMethod) {
-    if (env->ExceptionCheck()) {
-      env->ExceptionClear();
-    }
-    Log("GPUPixel", "Failed to find getResource_path method");
-    env->DeleteLocalRef(gpuPixelClass);
-    return GetDefaultResourcePathJni(name);
-  }
-
-  // Call static method to get resource path
-  jstring jPath = (jstring)env->CallStaticObjectMethod(gpuPixelClass,
-                                                       getResourcePathMethod);
-  if (env->ExceptionCheck()) {
-    env->ExceptionClear();
-    Log("GPUPixel", "Exception occurred when calling getResource_path");
-    env->DeleteLocalRef(gpuPixelClass);
-    return GetDefaultResourcePathJni(name);
-  }
-
-  if (jPath != NULL) {
-    // Convert Java string to C++ string
-    const char* pathChars = env->GetStringUTFChars(jPath, NULL);
-    if (pathChars) {
-      result = pathChars;
-      env->ReleaseStringUTFChars(jPath, pathChars);
-
-      Log("GPUPixel", "Got resource path: %s", result.c_str());
-
-      // If given name is not empty, append to path
-      if (!name.empty() && !result.empty()) {
-        if (result[result.length() - 1] != '/') {
-          result += "/";
-        }
-        result += name;
-      }
-    }
-    env->DeleteLocalRef(jPath);
-  } else {
-    Log("GPUPixel", "getResource_path returned null");
-    result = GetDefaultResourcePathJni(name);
-  }
-
-  env->DeleteLocalRef(gpuPixelClass);
-  return result;
-}
-
-// Helper function to provide default resource path
-std::string Util::GetDefaultResourcePathJni(std::string name) {
-  std::string defaultPath =
-      "/sdcard/Android/data/com.pixpark.gpupixeldemo/files/resource";
-  Log("GPUPixel", "Using default resource path: %s", defaultPath.c_str());
-
-  if (!name.empty()) {
-    if (defaultPath[defaultPath.length() - 1] != '/') {
-      defaultPath += "/";
-    }
-    defaultPath += name;
-  }
-
-  return defaultPath;
-}
-#endif
-
+ 
 std::string Util::StringFormat(const char* fmt, ...) {
   std::string strResult = "";
   if (NULL != fmt) {

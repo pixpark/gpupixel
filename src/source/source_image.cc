@@ -8,6 +8,7 @@
 #include "gpupixel/source/source_image.h"
 #include "core/gpupixel_context.h"
 #include "utils/util.h"
+#include <cassert>
 
 #if defined(GPUPIXEL_ANDROID)
 #include <android/bitmap.h>
@@ -38,6 +39,7 @@ std::shared_ptr<SourceImage> SourceImage::Create(const std::string name) {
   if (data == nullptr) {
     Util::Log("SourceImage", "SourceImage: input data in null! file name: %s",
               name.c_str());
+    assert(data != nullptr && "SourceImage: input data is null!");
     return nullptr;
   }
   auto image =

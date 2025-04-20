@@ -47,7 +47,6 @@ public class GPUPixel {
 
     public void Destroy() {}
 
-    private static String resource_path = "";
 
     /**
      * Copies required resources from assets to external storage
@@ -79,7 +78,9 @@ public class GPUPixel {
             processAssetsDirectory(context, "", exPath);
 
             // 设置资源路径
-            resource_path = exPath + "/gpupixel";
+            String path = exPath + "/gpupixel";
+            nativeSetResourcePath(path);
+            Log.i(TAG, "nativeSetResourcePath: " + path);
         } catch (Exception e) {
             Log.e(TAG, "Error in copyResource: " + e.getMessage());
         }
@@ -140,18 +141,6 @@ public class GPUPixel {
         } catch (Exception e) {
             Log.e(TAG, "Error processing asset: " + assetPath + ", " + e.getMessage());
         }
-    }
-
-    /**
-     * Gets the resource path
-     * @return Path to resources
-     */
-    public static String getResource_path() {
-        if (resource_path.isEmpty()) {
-            // Return a default path to avoid crashes from empty string
-            return "/sdcard/Android/data/com.pixpark.gpupixel/files/resource";
-        }
-        return resource_path;
     }
 
     /**
@@ -270,4 +259,6 @@ public class GPUPixel {
 
     private static native void nativeRotateRGBA(byte[] rgbaIn, int width, int height,
             byte[] rgbaOut, int outWidth, int outHeight, int rotationDegrees);
+
+    private static native void nativeSetResourcePath(String path);
 }

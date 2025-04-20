@@ -18,6 +18,7 @@
 #include "libyuv/convert_argb.h"
 #include "libyuv/planar_functions.h"
 #include "libyuv/rotate.h"
+#include "utils/util.h"
 
 #define LOG_TAG "JNI_GPUPixel"
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
@@ -281,4 +282,32 @@ Java_com_pixpark_gpupixel_GPUPixel_nativeRotateRGBA(JNIEnv* env,
   // Release Java arrays
   env->ReleaseByteArrayElements(rgba_in, rgba_in_data, JNI_ABORT);
   env->ReleaseByteArrayElements(rgba_out, rgba_out_data, 0);
+}
+
+/**
+ * Set resource path in native code
+ */
+extern "C" JNIEXPORT void JNICALL
+Java_com_pixpark_gpupixel_GPUPixel_nativeSetResourcePath(JNIEnv* env,
+                                                        jclass clazz,
+                                                        jstring path) {
+  if (path == nullptr) {
+    LOGE("Resource path is null");
+    return;
+  }
+
+  // Convert Java string to C++ string
+  const char* c_path = env->GetStringUTFChars(path, nullptr);
+  if (c_path == nullptr) {
+    LOGE("Failed to get string characters");
+    return;
+  }
+
+  // Call C++ method to set resource root
+  gpupixel::Util::SetResourceRoot(std::string(c_path));
+
+  // Release the string
+  env->ReleaseStringUTFChars(path, c_path);
+  
+  LOGI("Set resource path to: %s", c_path);
 }

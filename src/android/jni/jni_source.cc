@@ -19,7 +19,8 @@ Java_com_pixpark_gpupixel_GPUPixelSource_nativeAddSink(JNIEnv* env,
                                                        jclass clazz,
                                                        jlong source_id,
                                                        jlong sink_id,
-                                                       jboolean is_filter) {
+                                                       jboolean is_sink_filter,
+                                                       jboolean is_source_filter) {
   if (source_id == 0) {
     Util::Log(LOG_TAG, "nativeAddSink - Invalid parameter: source_id is 0");
     return 0;
@@ -30,34 +31,55 @@ Java_com_pixpark_gpupixel_GPUPixelSource_nativeAddSink(JNIEnv* env,
     return 0;
   }
 
-  // Get Source pointer
-  auto* source_ptr = reinterpret_cast<std::shared_ptr<Source>*>(source_id);
-  if (!source_ptr) {
-    Util::Log(LOG_TAG, "nativeAddSink - source_ptr is null, conversion failed");
-    return 0;
-  }
+  // Get Source pointer based on is_source_filter parameter
+  std::shared_ptr<Source> source;
+  
+  if (is_source_filter) {
+    // If source is a Filter type
+    auto* filter_ptr = reinterpret_cast<std::shared_ptr<Filter>*>(source_id);
+    if (!filter_ptr) {
+      Util::Log(LOG_TAG, "nativeAddSink - source filter_ptr is null, conversion failed");
+      return 0;
+    }
 
-  if (!*source_ptr) {
-    Util::Log(LOG_TAG,
-              "nativeAddSink - *source_ptr is null, invalid Source object");
-    return 0;
+    if (!*filter_ptr) {
+      Util::Log(LOG_TAG, "nativeAddSink - *source filter_ptr is null, invalid Filter object");
+      return 0;
+    }
+
+    source = std::static_pointer_cast<Source>(*filter_ptr);
+  } else {
+    // If it's a regular Source type
+    auto* source_ptr = reinterpret_cast<std::shared_ptr<Source>*>(source_id);
+    if (!source_ptr) {
+      Util::Log(LOG_TAG, "nativeAddSink - source_ptr is null, conversion failed");
+      return 0;
+    }
+
+    if (!*source_ptr) {
+      Util::Log(LOG_TAG,
+                "nativeAddSink - *source_ptr is null, invalid Source object");
+      return 0;
+    }
+    
+    source = *source_ptr;
   }
 
   std::shared_ptr<Sink> sink;
 
-  // Process sink_id based on is_filter parameter
-  if (is_filter) {
+  // Process sink_id based on is_sink_filter parameter
+  if (is_sink_filter) {
     // If it's a Filter type
     auto* filter_ptr = reinterpret_cast<std::shared_ptr<Filter>*>(sink_id);
     if (!filter_ptr) {
       Util::Log(LOG_TAG,
-                "nativeAddSink - filter_ptr is null, conversion failed");
+                "nativeAddSink - sink filter_ptr is null, conversion failed");
       return 0;
     }
 
     if (!*filter_ptr) {
       Util::Log(LOG_TAG,
-                "nativeAddSink - *filter_ptr is null, invalid Filter object");
+                "nativeAddSink - *sink filter_ptr is null, invalid Filter object");
       return 0;
     }
 
@@ -80,7 +102,7 @@ Java_com_pixpark_gpupixel_GPUPixelSource_nativeAddSink(JNIEnv* env,
   }
 
   // Add connection
-  (*source_ptr)->AddSink(sink);
+  source->AddSink(sink);
 
   // Return the original sink_id
   return sink_id;
@@ -92,18 +114,33 @@ Java_com_pixpark_gpupixel_GPUPixelSource_nativeRemoveSink(JNIEnv* env,
                                                           jclass clazz,
                                                           jlong source_id,
                                                           jlong sink_id,
-                                                          jboolean is_filter) {
-  // Get Source pointer
-  auto* source_ptr = reinterpret_cast<std::shared_ptr<Source>*>(source_id);
-  if (!source_ptr || !*source_ptr) {
-    Util::Log(LOG_TAG, "nativeRemoveSink - Invalid Source object");
-    return;
+                                                          jboolean is_sink_filter,
+                                                          jboolean is_source_filter) {
+  // Get Source pointer based on is_source_filter parameter
+  std::shared_ptr<Source> source;
+  
+  if (is_source_filter) {
+    // If source is a Filter type
+    auto* filter_ptr = reinterpret_cast<std::shared_ptr<Filter>*>(source_id);
+    if (!filter_ptr || !*filter_ptr) {
+      Util::Log(LOG_TAG, "nativeRemoveSink - Invalid Source Filter object");
+      return;
+    }
+    source = std::static_pointer_cast<Source>(*filter_ptr);
+  } else {
+    // If it's a regular Source type
+    auto* source_ptr = reinterpret_cast<std::shared_ptr<Source>*>(source_id);
+    if (!source_ptr || !*source_ptr) {
+      Util::Log(LOG_TAG, "nativeRemoveSink - Invalid Source object");
+      return;
+    }
+    source = *source_ptr;
   }
 
   std::shared_ptr<Sink> sink;
 
-  // Process sink_id based on is_filter parameter
-  if (is_filter) {
+  // Process sink_id based on is_sink_filter parameter
+  if (is_sink_filter) {
     // If it's a Filter type
     auto* filter_ptr = reinterpret_cast<std::shared_ptr<Filter>*>(sink_id);
     if (!filter_ptr || !*filter_ptr) {
@@ -124,7 +161,7 @@ Java_com_pixpark_gpupixel_GPUPixelSource_nativeRemoveSink(JNIEnv* env,
   }
 
   // Remove connection
-  (*source_ptr)->RemoveSink(sink);
+  source->RemoveSink(sink);
 }
 
 // Remove all Sinks from Source
@@ -144,21 +181,48 @@ Java_com_pixpark_gpupixel_GPUPixelSource_nativeHasSink(JNIEnv* env,
                                                        jclass clazz,
                                                        jlong source_id,
                                                        jlong sink_id,
-                                                       jboolean is_filter) {
-  // Get Source pointer
-  auto* source_ptr = reinterpret_cast<std::shared_ptr<Source>*>(source_id);
-  if (!source_ptr || !*source_ptr) {
-    return false;
+                                                       jboolean is_sink_filter,
+                                                       jboolean is_source_filter) {
+  // Get Source pointer based on is_source_filter parameter
+  std::shared_ptr<Source> source;
+  
+  if (is_source_filter) {
+    // If source is a Filter type
+    auto* filter_ptr = reinterpret_cast<std::shared_ptr<Filter>*>(source_id);
+    if (!filter_ptr || !*filter_ptr) {
+      return false;
+    }
+    source = std::static_pointer_cast<Source>(*filter_ptr);
+  } else {
+    // If it's a regular Source type
+    auto* source_ptr = reinterpret_cast<std::shared_ptr<Source>*>(source_id);
+    if (!source_ptr || !*source_ptr) {
+      return false;
+    }
+    source = *source_ptr;
   }
 
-  // Get Sink pointer
-  auto* sink_ptr = reinterpret_cast<std::shared_ptr<Sink>*>(sink_id);
-  if (!sink_ptr || !*sink_ptr) {
-    return false;
+  // Get Sink pointer based on is_sink_filter parameter
+  std::shared_ptr<Sink> sink;
+  
+  if (is_sink_filter) {
+    // If it's a Filter type
+    auto* filter_ptr = reinterpret_cast<std::shared_ptr<Filter>*>(sink_id);
+    if (!filter_ptr || !*filter_ptr) {
+      return false;
+    }
+    sink = std::static_pointer_cast<Sink>(*filter_ptr);
+  } else {
+    // If it's a regular Sink type
+    auto* sink_ptr = reinterpret_cast<std::shared_ptr<Sink>*>(sink_id);
+    if (!sink_ptr || !*sink_ptr) {
+      return false;
+    }
+    sink = *sink_ptr;
   }
 
   // Check connection
-  return (*source_ptr)->HasSink(*sink_ptr);
+  return source->HasSink(sink);
 }
 
 // Set framebuffer scale
