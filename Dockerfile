@@ -16,7 +16,7 @@ WORKDIR /workspace
 COPY . .
 
 # 设置默认命令为进入 build 目录并运行 cmake 和 make
-CMD ["/bin/bash", "-c", "cmake -B build -S src -DCMAKE_BUILD_TYPE=Release && cd build &&  make -j4"]
+# CMD ["/bin/bash", "-c", "cmake -B build -S src -DCMAKE_BUILD_TYPE=Release && cd build &&  make -j4"]
 
 # 构建镜像
 # docker build -t gpupixel .
