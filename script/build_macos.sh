@@ -1,27 +1,49 @@
 #!/bin/bash
-# macOS构建脚本
+# macOS Build Script
+set -e  # Exit immediately if a command exits with a non-zero status
 
-# 创建构建目录
-mkdir -p build
+echo "===== Starting macOS Build ====="
 
-# 检测处理器架构
+# Create build directory
+mkdir -p build || {
+  echo "Error: Cannot create build directory"
+  exit 1
+}
+
+# Detect processor architecture
 ARCH=$(uname -m)
 
-# 根据处理器架构选择不同的配置
+# Choose different configuration based on processor architecture
+echo "Configuring macOS project..."
 if [ "$ARCH" = "x86_64" ]; then
-    echo "检测到Intel处理器(x86_64)"
-    # Intel处理器配置
-    cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=../cmake/ios.toolchain.cmake -DPLATFORM=MAC -DCMAKE_BUILD_TYPE=Release -DGPUPIXEL_BUILD_DESKTOP_DEMO=ON -DCMAKE_INSTALL_PREFIX=output
+    echo "Detected Intel processor (x86_64)"
+    # Intel processor configuration
+    cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=../cmake/ios.toolchain.cmake -DPLATFORM=MAC -DCMAKE_BUILD_TYPE=Release -DGPUPIXEL_BUILD_DESKTOP_DEMO=ON -DCMAKE_INSTALL_PREFIX=output || {
+        echo "Error: Intel platform project configuration failed"
+        exit 2
+    }
 else
-    echo "检测到ARM处理器(arm64)"
-    # ARM处理器配置
-    cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=../cmake/ios.toolchain.cmake -DPLATFORM=MAC_ARM64 -DCMAKE_BUILD_TYPE=Release -DGPUPIXEL_BUILD_DESKTOP_DEMO=ON -DCMAKE_INSTALL_PREFIX=output
+    echo "Detected ARM processor (arm64)"
+    # ARM processor configuration
+    cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=../cmake/ios.toolchain.cmake -DPLATFORM=MAC_ARM64 -DCMAKE_BUILD_TYPE=Release -DGPUPIXEL_BUILD_DESKTOP_DEMO=ON -DCMAKE_INSTALL_PREFIX=output || {
+        echo "Error: ARM platform project configuration failed"
+        exit 2
+    }
 fi
 
-# 编译项目 - 使用多线程编译
-cmake --build build --config Release --parallel $(sysctl -n hw.ncpu)
+# Build project - Using multi-threaded compilation
+echo "Building macOS project..."
+cmake --build build --config Release --parallel $(sysctl -n hw.ncpu) || {
+    echo "Error: Project build failed"
+    exit 3
+}
 
-# 安装到output目录
-cmake --install build --config Release
+# Install to output directory
+echo "Installing to output directory..."
+cmake --install build --config Release || {
+    echo "Error: Project installation failed"
+    exit 4
+}
 
-echo "macOS构建完成，安装目录为output" 
+echo "===== macOS Build Complete, Installation Directory: output ====="
+exit 0  # Exit normally with return code 0 

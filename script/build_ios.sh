@@ -1,16 +1,35 @@
 #!/bin/bash
-# iOS构建脚本
+# iOS Build Script
+set -e  # Exit immediately if a command exits with a non-zero status
 
-# 创建构建目录
-mkdir -p build
+echo "===== Starting iOS Build ====="
 
-# 配置项目 - 使用iOS工具链
-cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=../cmake/ios.toolchain.cmake -DPLATFORM=OS64 -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=output
+# Create build directory
+mkdir -p build || {
+  echo "Error: Cannot create build directory"
+  exit 1
+}
 
-# 编译项目 - 使用多线程编译
-cmake --build build --config Release --parallel $(sysctl -n hw.ncpu)
+# Configure project - Using iOS toolchain
+echo "Configuring iOS project..."
+cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=../cmake/ios.toolchain.cmake -DPLATFORM=OS64 -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=output || {
+  echo "Error: Project configuration failed"
+  exit 2
+}
 
-# 安装到output目录
-cmake --install build --config Release
+# Build project - Using multi-threaded compilation
+echo "Building iOS project..."
+cmake --build build --config Release --parallel $(sysctl -n hw.ncpu) || {
+  echo "Error: Project build failed"
+  exit 3
+}
 
-echo "iOS构建完成, 安装目录为output" 
+# Install to output directory
+echo "Installing to output directory..."
+cmake --install build --config Release || {
+  echo "Error: Project installation failed"
+  exit 4
+}
+
+echo "===== iOS Build Complete, Installation Directory: output ====="
+exit 0  # Exit normally with return code 0 
