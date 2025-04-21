@@ -18,7 +18,7 @@ using namespace gpupixel;
                                      FilterToolbarViewDelegate> {
   std::shared_ptr<SourceRawData> _sourceRawData;
   std::shared_ptr<SinkRawData> _sinkRawData;
-  GPUPixelView* _gpuPixelView;
+  std::shared_ptr<SinkView> _gpuPixelView;
   std::shared_ptr<BeautyFaceFilter> _beautyFaceFilter;
   std::shared_ptr<FaceReshapeFilter> _faceReshapeFilter;
   std::shared_ptr<gpupixel::LipstickFilter> _lipstickFilter;
@@ -119,12 +119,7 @@ using namespace gpupixel;
 
 #pragma mark - Setup
 - (void)setupGPUPixel {
-  _gpuPixelView = [[GPUPixelView alloc] initWithFrame:self.view.frame];
-  _gpuPixelView.backgroundColor = UIColor.grayColor;
-  [self.view addSubview:_gpuPixelView];
-  [_gpuPixelView
-      setFillMode:(gpupixel::SinkRender::PreserveAspectRatioAndFill)];
-
+  _gpuPixelView = SinkView::Create((__bridge void*)self.view);
   _sourceRawData = SourceRawData::Create();
 
   _beautyFaceFilter = BeautyFaceFilter::Create();
@@ -200,7 +195,6 @@ using namespace gpupixel;
   _faceReshapeFilter = nil;
   _lipstickFilter = nil;
   _blusherFilter = nil;
-  [_gpuPixelView removeFromSuperview];
   _gpuPixelView = nil;
   _sinkRawData = nil;
   _sourceRawData = nil;

@@ -8,11 +8,7 @@
 #include "gpupixel/source/source.h"
 #include "core/gpupixel_context.h"
 #include "utils/util.h"
-
-#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
-#include "gpupixel/sink/objc/objc_sink.h"
-#endif
-
+ 
 namespace gpupixel {
 
 Source::Source()
@@ -37,14 +33,6 @@ std::shared_ptr<Source> Source::AddSink(std::shared_ptr<Sink> sink,
   }
   return std::dynamic_pointer_cast<Source>(sink);
 }
-
-#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
-std::shared_ptr<Source> Source::AddSink(id<GPUPixelSink> sink) {
-  auto ios_sink = std::shared_ptr<Sink>(new ObjcSink(sink));
-  AddSink(ios_sink);
-  return 0;
-}
-#endif
 
 bool Source::HasSink(const std::shared_ptr<Sink> sink) const {
   if (sinks_.find(sink) != sinks_.end()) {

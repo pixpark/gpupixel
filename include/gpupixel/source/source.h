@@ -11,10 +11,7 @@
 #include <map>
 #include "gpupixel/gpupixel_define.h"
 #include "gpupixel/sink/sink.h"
-#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
-#import "gpupixel/sink/objc/gpupixel_sink.h"
-#endif
-
+ 
 namespace gpupixel {
 class GPUPIXEL_API Source {
  public:
@@ -23,9 +20,6 @@ class GPUPIXEL_API Source {
   virtual std::shared_ptr<Source> AddSink(std::shared_ptr<Sink> sink);
   virtual std::shared_ptr<Source> AddSink(std::shared_ptr<Sink> sink,
                                           int texIdx);
-#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
-  virtual std::shared_ptr<Source> AddSink(id<GPUPixelSink> sink);
-#endif
   virtual void RemoveSink(std::shared_ptr<Sink> sink);
   virtual void RemoveAllSinks();
   virtual bool HasSink(const std::shared_ptr<Sink> sink) const;

@@ -12,7 +12,7 @@
 using namespace gpupixel;
 @interface ViewController () <GPUImageVideoCameraDelegate> {
   std::shared_ptr<SourceRawData> sourceRawData;
-  GPUPixelView* gpuPixelView;
+  std::shared_ptr<SinkView> gpuPixelView;
   std::shared_ptr<BeautyFaceFilter> beautyFaceFilter;
   std::shared_ptr<FaceReshapeFilter> faceReshapeFilter;
   std::shared_ptr<gpupixel::LipstickFilter> lipstickFilter;
@@ -89,11 +89,8 @@ using namespace gpupixel;
   }
 }
 
-- (void)initVideoFilter {
-  gpuPixelView = [[GPUPixelView alloc] initWithFrame:self.view.frame];
-  [self.view addSubview:gpuPixelView positioned:NSWindowBelow relativeTo:nil];
-  [gpuPixelView setFillMode:(gpupixel::SinkRender::PreserveAspectRatioAndFill)];
-
+- (void)initVideoFilter {  
+  gpuPixelView = SinkView::Create((__bridge void*)self.view);
   sourceRawData = SourceRawData::Create();
 
   // create filter

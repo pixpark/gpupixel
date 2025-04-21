@@ -73,9 +73,8 @@ if(GPUPIXEL_ENABLE_FACE_DETECTOR)
 endif()
 
 set(objc_source_files
-    ${CMAKE_CURRENT_SOURCE_DIR}/sink/objc/objc_sink.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/sink/objc/gpupixel_view.mm
-    ${CMAKE_CURRENT_SOURCE_DIR}/sink/objc/gpupixel_sink.mm)
+    ${CMAKE_CURRENT_SOURCE_DIR}/sink/sink_view.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/sink/objc_view.mm)
 
 set(jni_source_files
     ${CMAKE_CURRENT_SOURCE_DIR}/android/jni/jni_gpupixel.cc
@@ -121,9 +120,7 @@ set(public_sink_header_files
     ${PROJECT_SOURCE_DIR}/include/gpupixel/sink/sink_render.h)
 
 set(public_objc_sink_header_files
-    ${PROJECT_SOURCE_DIR}/include/gpupixel/sink/objc/objc_sink.h
-    ${PROJECT_SOURCE_DIR}/include/gpupixel/sink/objc/gpupixel_view.h
-    ${PROJECT_SOURCE_DIR}/include/gpupixel/sink/objc/gpupixel_sink.h)
+    ${PROJECT_SOURCE_DIR}/include/gpupixel/sink/sink_view.h)
 
 set(public_utils_header_files
     ${PROJECT_SOURCE_DIR}/include/gpupixel/utils/math_toolbox.h)
@@ -185,6 +182,10 @@ set(internal_core_header_files
     ${CMAKE_CURRENT_SOURCE_DIR}/core/gpupixel_framebuffer.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/gpupixel_gl_include.h)
 
+set(internal_objc_sink_header_files
+    ${PROJECT_SOURCE_DIR}/src/sink/objc_view.h)
+
+
 set(internal_utils_header_files
     ${CMAKE_CURRENT_SOURCE_DIR}/utils/dispatch_queue.h
     ${CMAKE_CURRENT_SOURCE_DIR}/utils/util.h)
@@ -200,6 +201,7 @@ set(lib_header_code_files
     ${public_filter_header_files}
     ${public_utils_header_files}
     ${internal_core_header_files}
+    ${internal_objc_sink_header_files}
     ${internal_utils_header_files})
 
 if(${CURRENT_PLAT} STREQUAL ${PLAT_ANDROID})
@@ -245,7 +247,7 @@ if(GPUPIXEL_AAPL_FMWK)
 
   foreach(hdr ${public_objc_sink_header_files})
     set_source_files_properties(${hdr} PROPERTIES MACOSX_PACKAGE_LOCATION
-                                                  Headers/sink/objc)
+                                                  Headers/sink)
   endforeach()
 
   foreach(hdr ${public_filter_header_files})

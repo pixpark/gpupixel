@@ -5,14 +5,14 @@
  * Copyright © 2021 PixPark. All rights reserved.
  */
 
-#import "gpupixel/sink/objc/gpupixel_view.h"
+#import "sink/objc_view.h"
 #import <AVFoundation/AVFoundation.h>
 #include "core/gpupixel_context.h"
 #include "core/gpupixel_program.h"
 #include "gpupixel/filter/filter.h"
 #include "utils/util.h"
 
-@interface GPUPixelView () {
+@interface ObjcView () {
   std::shared_ptr<gpupixel::GPUPixelFramebuffer> inputFramebuffer;
   gpupixel::RotationMode inputRotation;
   uint32_t displayFramebuffer;
@@ -32,7 +32,7 @@
 
 @end
 
-@implementation GPUPixelView
+@implementation ObjcView
 
 @synthesize sizeInPixels = _sizeInPixels;
 #if defined(GPUPIXEL_IOS)

@@ -13,4 +13,4 @@ cmake --build build --config Release --parallel $(sysctl -n hw.ncpu)
 # 安装到output目录
 cmake --install build --config Release
 
-echo "iOS构建完成，安装目录为output" 
+echo "iOS构建完成, 安装目录为output" 

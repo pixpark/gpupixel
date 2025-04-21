@@ -12,8 +12,10 @@
 #if defined(GPUPIXEL_IOS)
 #import <OpenGLES/ES3/gl.h>
 #import <OpenGLES/ES3/glext.h>
+#import <UIKit/UIKit.h>
 #elif defined(GPUPIXEL_MAC)
 #import <OpenGL/gl.h>
+#import <AppKit/AppKit.h>
 #elif defined(GPUPIXEL_ANDROID)
 #include <EGL/egl.h>
 #include <GLES/gl.h>

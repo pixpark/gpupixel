@@ -109,16 +109,6 @@ std::shared_ptr<Source> FilterGroup::AddSink(std::shared_ptr<Sink> sink,
   }
 }
 
-#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
-std::shared_ptr<Source> FilterGroup::AddSink(id<GPUPixelSink> sink) {
-  if (terminal_filter_) {
-    return terminal_filter_->AddSink(sink);
-  } else {
-    return 0;
-  }
-}
-#endif
-
 void FilterGroup::RemoveSink(std::shared_ptr<Sink> sink) {
   if (terminal_filter_) {
     terminal_filter_->RemoveSink(sink);

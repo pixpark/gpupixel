@@ -12,21 +12,28 @@
 #import <AppKit/NSOpenGLView.h>
 #endif
 
-#import "gpupixel/sink/objc/gpupixel_sink.h"
 #include "gpupixel/sink/sink_render.h"
 
 #if defined(GPUPIXEL_IOS)
 GPUPIXEL_API
-@interface GPUPixelView : UIView <GPUPixelSink>
+@interface ObjcView : UIView
 
 @property(nonatomic) CAEAGLLayer* currentlayer;
 @property(nonatomic) CGRect currentFrame;
 
 #else
 GPUPIXEL_API
-@interface GPUPixelView : NSOpenGLView <GPUPixelSink>
+@interface ObjcView : NSOpenGLView
 #endif
 @property(readwrite, nonatomic) gpupixel::SinkRender::FillMode fillMode;
 @property(readonly, nonatomic) CGSize sizeInPixels;
+
+// 直接实现方法而不是通过协议
+- (void)DoRender;
+- (void)SetInputFramebuffer:(std::shared_ptr<gpupixel::GPUPixelFramebuffer>)framebuffer 
+               withRotation:(gpupixel::RotationMode)rotationMode 
+                    atIndex:(int)textureIndex;
+- (BOOL)IsReady;
+- (void)unPrepared;
 
 @end

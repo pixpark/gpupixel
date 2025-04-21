@@ -39,9 +39,6 @@ class GPUPIXEL_API FilterGroup : public Filter {
   virtual std::shared_ptr<Source> AddSink(std::shared_ptr<Sink> sink) override;
   virtual std::shared_ptr<Source> AddSink(std::shared_ptr<Sink> sink,
                                           int inputNumber) override;
-#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
-  virtual std::shared_ptr<Source> AddSink(id<GPUPixelSink> sink) override;
-#endif
   virtual void RemoveSink(std::shared_ptr<Sink> sink) override;
   virtual void RemoveAllSinks() override;
   virtual bool HasSink(const std::shared_ptr<Sink> sink) const override;

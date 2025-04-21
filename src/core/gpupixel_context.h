@@ -10,9 +10,10 @@
 #include <mutex>
 #include "core/gpupixel_framebuffer_factory.h"
 #include "gpupixel/gpupixel_define.h"
-
-#include "core/gpupixel_program.h"
 #include "gpupixel/filter/filter.h"
+
+#include "core/gpupixel_gl_include.h"
+#include "core/gpupixel_program.h"
 
 class DispatchQueue;
 

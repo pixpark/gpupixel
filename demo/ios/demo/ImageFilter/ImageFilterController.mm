@@ -15,7 +15,7 @@
 using namespace gpupixel;
 
 @interface ImageFilterController () <FilterToolbarViewDelegate> {
-  GPUPixelView* _gpuPixelView;
+  std::shared_ptr<SinkView> _gpuPixelView;
   std::shared_ptr<BeautyFaceFilter> _beautyFaceFilter;
   std::shared_ptr<FaceReshapeFilter> _faceReshapeFilter;
   std::shared_ptr<gpupixel::FaceMakeupFilter> _lipstickFilter;
@@ -83,12 +83,7 @@ using namespace gpupixel;
 
 #pragma mark - Setup
 - (void)setupFilter {
-  _gpuPixelView = [[GPUPixelView alloc] initWithFrame:self.view.frame];
-  _gpuPixelView.backgroundColor = UIColor.grayColor;
-  [self.view addSubview:_gpuPixelView];
-  [_gpuPixelView
-      setFillMode:(gpupixel::SinkRender::PreserveAspectRatioAndFill)];
-
+  _gpuPixelView = SinkView::Create((__bridge void*)self.view);
   _lipstickFilter = LipstickFilter::Create();
   _blusherFilter = BlusherFilter::Create();
   _beautyFaceFilter = BeautyFaceFilter::Create();
@@ -172,8 +167,7 @@ using namespace gpupixel;
   _faceReshapeFilter = nil;
   _lipstickFilter = nil;
   _blusherFilter = nil;
-  [_gpuPixelView removeFromSuperview];
-  _gpuPixelView = nil;
+	_gpuPixelView = nil;
   _gpuSourceImage = nil;
   _faceDetector = nullptr;
   gpupixel::GPUPixelContext::GetInstance()->Destroy();
