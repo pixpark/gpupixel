@@ -198,7 +198,6 @@ using namespace gpupixel;
   _gpuPixelView = nil;
   _sinkRawData = nil;
   _sourceRawData = nil;
-  gpupixel::GPUPixelContext::GetInstance()->Destroy();
 }
 
 /// 保存当前处理后的图像并显示结果页面

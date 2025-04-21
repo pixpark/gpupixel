@@ -170,7 +170,6 @@ using namespace gpupixel;
   _gpuPixelView = nil;
   _gpuSourceImage = nil;
   _faceDetector = nullptr;
-  gpupixel::GPUPixelContext::GetInstance()->Destroy();
 }
 
 /// Save processed image and display result
