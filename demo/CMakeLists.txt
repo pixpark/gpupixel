@@ -6,8 +6,7 @@ set(GPL_APP_NAME "app")
 # add desktop application source files
 set(APP_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/desktop/app.cc")
 
-# add ImGui source files
-# ImGui provides the GUI components for the desktop demo
+# add ImGui source files ImGui provides the GUI components for the desktop demo
 file(GLOB IMGUI_SOURCE_FILES "${PROJECT_SOURCE_DIR}/third_party/imgui/*.cpp"
      "${PROJECT_SOURCE_DIR}/third_party/imgui/backends/imgui_impl_glfw.cpp"
      "${PROJECT_SOURCE_DIR}/third_party/imgui/backends/imgui_impl_opengl3.cpp")
@@ -24,8 +23,8 @@ target_include_directories(${GPL_APP_NAME}
 # ---- Platform-specific configuration ----
 # Each platform requires different compiler flags and linked libraries
 if(APPLE)
-  # macOS specific configuration
-  # Objective-C++ compilation and proper runtime library paths
+  # macOS specific configuration Objective-C++ compilation and proper runtime
+  # library paths
   set_target_properties(
     ${GPL_APP_NAME}
     PROPERTIES COMPILE_FLAGS "-x objective-c++"
@@ -36,8 +35,8 @@ if(APPLE)
   target_link_libraries(${GPL_APP_NAME} PRIVATE "-framework OpenGL" glad glfw
                                                 dl marsface gpupixel)
 elseif(WIN32)
-  # Windows specific configuration
-  # Support delayed loading of DLLs for better startup performance
+  # Windows specific configuration Support delayed loading of DLLs for better
+  # startup performance
   target_compile_definitions(${GPL_APP_NAME} PRIVATE WINDOWS_DLL_DELAY_LOAD)
 
   target_link_libraries(${GPL_APP_NAME} PRIVATE glad glfw opengl32 marsface
@@ -52,8 +51,8 @@ elseif(WIN32)
   endif()
 
 else()
-  # Linux specific configuration
-  # Set runtime path to find shared libraries in the lib subdirectory
+  # Linux specific configuration Set runtime path to find shared libraries in
+  # the lib subdirectory
   set_target_properties(
     ${GPL_APP_NAME} PROPERTIES INSTALL_RPATH "$ORIGIN/../lib"
                                BUILD_WITH_INSTALL_RPATH TRUE)

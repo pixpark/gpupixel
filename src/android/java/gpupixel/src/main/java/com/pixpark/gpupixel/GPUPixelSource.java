@@ -32,8 +32,8 @@ public class GPUPixelSource {
      */
     public final void AddSink(final GPUPixelSink sink) {
         if (mNativeClassID != 0) {
-            nativeAddSink(mNativeClassID, sink.getNativeClassID(), 
-                    sink instanceof GPUPixelFilter, this instanceof GPUPixelFilter);
+            nativeAddSink(mNativeClassID, sink.getNativeClassID(), sink instanceof GPUPixelFilter,
+                    this instanceof GPUPixelFilter);
         }
     }
 
@@ -43,8 +43,7 @@ public class GPUPixelSource {
      */
     public final void RemoveSink(final GPUPixelSink sink) {
         if (mNativeClassID != 0 && sink.getNativeClassID() != 0)
-            nativeRemoveSink(
-                    mNativeClassID, sink.getNativeClassID(), 
+            nativeRemoveSink(mNativeClassID, sink.getNativeClassID(),
                     sink instanceof GPUPixelFilter, this instanceof GPUPixelFilter);
     }
 
@@ -62,8 +61,7 @@ public class GPUPixelSource {
      */
     public final boolean HasSink(final GPUPixelSink sink) {
         if (mNativeClassID != 0 && sink.getNativeClassID() != 0)
-            return nativeHasSink(
-                    mNativeClassID, sink.getNativeClassID(), 
+            return nativeHasSink(mNativeClassID, sink.getNativeClassID(),
                     sink instanceof GPUPixelFilter, this instanceof GPUPixelFilter);
         return false;
     }
@@ -117,10 +115,13 @@ public class GPUPixelSource {
     }
 
     // JNI native methods
-    private static native long nativeAddSink(long sourceId, long sinkId, boolean isSinkFilter, boolean isSourceFilter);
-    private static native void nativeRemoveSink(long sourceId, long sinkId, boolean isSinkFilter, boolean isSourceFilter);
+    private static native long nativeAddSink(
+            long sourceId, long sinkId, boolean isSinkFilter, boolean isSourceFilter);
+    private static native void nativeRemoveSink(
+            long sourceId, long sinkId, boolean isSinkFilter, boolean isSourceFilter);
     private static native void nativeRemoveAllSinks(long sourceId);
-    private static native boolean nativeHasSink(long sourceId, long sinkId, boolean isSinkFilter, boolean isSourceFilter);
+    private static native boolean nativeHasSink(
+            long sourceId, long sinkId, boolean isSinkFilter, boolean isSourceFilter);
     private static native void nativeSetFramebufferScale(long sourceId, float scale);
     private static native int nativeGetRotatedFramebufferWidth(long sourceId);
     private static native int nativeGetRotatedFramebufferHeight(long sourceId);

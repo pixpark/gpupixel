@@ -89,7 +89,7 @@ using namespace gpupixel;
   }
 }
 
-- (void)initVideoFilter {  
+- (void)initVideoFilter {
   gpuPixelView = SinkView::Create((__bridge void*)self.view);
   sourceRawData = SourceRawData::Create();
 

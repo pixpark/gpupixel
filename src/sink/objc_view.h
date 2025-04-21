@@ -30,8 +30,9 @@ GPUPIXEL_API
 
 // 直接实现方法而不是通过协议
 - (void)DoRender;
-- (void)SetInputFramebuffer:(std::shared_ptr<gpupixel::GPUPixelFramebuffer>)framebuffer 
-               withRotation:(gpupixel::RotationMode)rotationMode 
+- (void)SetInputFramebuffer:
+            (std::shared_ptr<gpupixel::GPUPixelFramebuffer>)framebuffer
+               withRotation:(gpupixel::RotationMode)rotationMode
                     atIndex:(int)textureIndex;
 - (BOOL)IsReady;
 - (void)unPrepared;

@@ -77,7 +77,7 @@ int vasprintf(char** strp, const char* fmt, va_list ap) {
   return r;
 }
 #endif
- 
+
 std::string Util::StringFormat(const char* fmt, ...) {
   std::string strResult = "";
   if (NULL != fmt) {

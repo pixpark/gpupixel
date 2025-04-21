@@ -8,7 +8,7 @@
 #include "gpupixel/source/source.h"
 #include "core/gpupixel_context.h"
 #include "utils/util.h"
- 
+
 namespace gpupixel {
 
 Source::Source()

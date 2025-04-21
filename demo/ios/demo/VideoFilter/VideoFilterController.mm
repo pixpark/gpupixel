@@ -308,14 +308,17 @@ using namespace gpupixel;
       self.videoCapturer.delegate = nil;
       [self.videoCapturer stopCapture];
       self.videoCapturer = nil;
-      
+
       const uint8_t* data = _sinkRawData->GetRgbaBuffer();
       const int w = _sinkRawData->GetWidth();
       const int h = _sinkRawData->GetHeight();
-      UIImage* resultImage = [ImageConverter imageFromRGBAData:data width:w height:h];
+      UIImage* resultImage = [ImageConverter imageFromRGBAData:data
+                                                         width:w
+                                                        height:h];
 
       // 创建并显示结果页面
-      FilterResultViewController* resultVC = [[FilterResultViewController alloc] initWithImage:resultImage];
+      FilterResultViewController* resultVC =
+          [[FilterResultViewController alloc] initWithImage:resultImage];
       [self.navigationController pushViewController:resultVC animated:YES];
       self.isSave = NO;
       [self destroyGPUPixel];

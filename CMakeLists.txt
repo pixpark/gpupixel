@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.16)
 
 # ---- Project ----
-# GPUPixel is a GPU-accelerated image processing library 
-# Supporting multiple platforms including desktop and mobile devices
+# GPUPixel is a GPU-accelerated image processing library Supporting multiple
+# platforms including desktop and mobile devices
 
 # Note: update this to your new project's name and version
 project(
@@ -76,7 +76,8 @@ message(STATUS "CMake Version: ${CMAKE_VERSION}")
 message(STATUS "Operating System: ${CMAKE_SYSTEM_NAME}")
 message(STATUS "Processor Architecture: ${CMAKE_SYSTEM_PROCESSOR}")
 message(STATUS "C Compiler: ${CMAKE_C_COMPILER_ID} ${CMAKE_C_COMPILER_VERSION}")
-message(STATUS "C++ Compiler: ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")
+message(
+  STATUS "C++ Compiler: ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")
 
 # ---- Build configuration ----
 message(STATUS "========================================")
@@ -99,11 +100,11 @@ if(PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
 endif()
 
 # ---- Add dependencies via CPM ----
-# see https://github.com/TheLartians/CPM.cmake for more info
-# CPM is a CMake package manager that simplifies adding dependencies
+# see https://github.com/TheLartians/CPM.cmake for more info CPM is a CMake
+# package manager that simplifies adding dependencies
 
 # include(cmake/CPM.cmake)
- 
+
 # ---- Add source files ----
 # External dependencies first
 add_subdirectory(third_party)

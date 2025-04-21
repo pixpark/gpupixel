@@ -72,9 +72,8 @@ if(GPUPIXEL_ENABLE_FACE_DETECTOR)
        ${CMAKE_CURRENT_SOURCE_DIR}/face_detector/face_detector.cc)
 endif()
 
-set(objc_source_files
-    ${CMAKE_CURRENT_SOURCE_DIR}/sink/sink_view.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/sink/objc_view.mm)
+set(objc_source_files ${CMAKE_CURRENT_SOURCE_DIR}/sink/sink_view.cc
+                      ${CMAKE_CURRENT_SOURCE_DIR}/sink/objc_view.mm)
 
 set(jni_source_files
     ${CMAKE_CURRENT_SOURCE_DIR}/android/jni/jni_gpupixel.cc
@@ -182,9 +181,7 @@ set(internal_core_header_files
     ${CMAKE_CURRENT_SOURCE_DIR}/core/gpupixel_framebuffer.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/gpupixel_gl_include.h)
 
-set(internal_objc_sink_header_files
-    ${PROJECT_SOURCE_DIR}/src/sink/objc_view.h)
-
+set(internal_objc_sink_header_files ${PROJECT_SOURCE_DIR}/src/sink/objc_view.h)
 
 set(internal_utils_header_files
     ${CMAKE_CURRENT_SOURCE_DIR}/utils/dispatch_queue.h

@@ -289,8 +289,8 @@ Java_com_pixpark_gpupixel_GPUPixel_nativeRotateRGBA(JNIEnv* env,
  */
 extern "C" JNIEXPORT void JNICALL
 Java_com_pixpark_gpupixel_GPUPixel_nativeSetResourcePath(JNIEnv* env,
-                                                        jclass clazz,
-                                                        jstring path) {
+                                                         jclass clazz,
+                                                         jstring path) {
   if (path == nullptr) {
     LOGE("Resource path is null");
     return;
@@ -308,6 +308,6 @@ Java_com_pixpark_gpupixel_GPUPixel_nativeSetResourcePath(JNIEnv* env,
 
   // Release the string
   env->ReleaseStringUTFChars(path, c_path);
-  
+
   LOGI("Set resource path to: %s", c_path);
 }

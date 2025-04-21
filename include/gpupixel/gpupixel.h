@@ -21,8 +21,9 @@
 #include "gpupixel/sink/sink.h"
 #include "gpupixel/sink/sink_raw_data.h"
 #include "gpupixel/sink/sink_render.h"
+#if defined(GPUPIXEL_MAC) || defined(GPUPIXEL_IOS)
 #include "gpupixel/sink/sink_view.h"
-
+#endif
 // face detect
 #include "gpupixel/face_detector/face_detector.h"
 

@@ -9,8 +9,8 @@
 #include "gpupixel/sink/sink_raw_data.h"
 #include <cstring>
 #include "core/gpupixel_context.h"
-#include "utils/util.h"
 #include "libyuv.h"
+#include "utils/util.h"
 
 namespace gpupixel {
 

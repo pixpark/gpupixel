@@ -6,8 +6,8 @@
  */
 
 #include "core/gpupixel_context.h"
-#include "utils/util.h"
 #include "utils/dispatch_queue.h"
+#include "utils/util.h"
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
 
 // Helper class to manage iOS application state

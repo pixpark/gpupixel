@@ -14,8 +14,8 @@
 #import <OpenGLES/ES3/glext.h>
 #import <UIKit/UIKit.h>
 #elif defined(GPUPIXEL_MAC)
-#import <OpenGL/gl.h>
 #import <AppKit/AppKit.h>
+#import <OpenGL/gl.h>
 #elif defined(GPUPIXEL_ANDROID)
 #include <EGL/egl.h>
 #include <GLES/gl.h>

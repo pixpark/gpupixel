@@ -6,8 +6,8 @@
  */
 
 #include "gpupixel/face_detector/face_detector.h"
-#include "utils/util.h"
 #include "mars_face_detector.h"
+#include "utils/util.h"
 
 namespace gpupixel {
 

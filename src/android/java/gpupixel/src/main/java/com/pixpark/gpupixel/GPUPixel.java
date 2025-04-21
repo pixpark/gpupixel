@@ -47,7 +47,6 @@ public class GPUPixel {
 
     public void Destroy() {}
 
-
     /**
      * Copies required resources from assets to external storage
      * @param context Application context

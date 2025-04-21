@@ -15,12 +15,13 @@ using namespace gpupixel;
 
 // Add Source to Sink connection
 extern "C" JNIEXPORT jlong JNICALL
-Java_com_pixpark_gpupixel_GPUPixelSource_nativeAddSink(JNIEnv* env,
-                                                       jclass clazz,
-                                                       jlong source_id,
-                                                       jlong sink_id,
-                                                       jboolean is_sink_filter,
-                                                       jboolean is_source_filter) {
+Java_com_pixpark_gpupixel_GPUPixelSource_nativeAddSink(
+    JNIEnv* env,
+    jclass clazz,
+    jlong source_id,
+    jlong sink_id,
+    jboolean is_sink_filter,
+    jboolean is_source_filter) {
   if (source_id == 0) {
     Util::Log(LOG_TAG, "nativeAddSink - Invalid parameter: source_id is 0");
     return 0;
@@ -33,17 +34,20 @@ Java_com_pixpark_gpupixel_GPUPixelSource_nativeAddSink(JNIEnv* env,
 
   // Get Source pointer based on is_source_filter parameter
   std::shared_ptr<Source> source;
-  
+
   if (is_source_filter) {
     // If source is a Filter type
     auto* filter_ptr = reinterpret_cast<std::shared_ptr<Filter>*>(source_id);
     if (!filter_ptr) {
-      Util::Log(LOG_TAG, "nativeAddSink - source filter_ptr is null, conversion failed");
+      Util::Log(LOG_TAG,
+                "nativeAddSink - source filter_ptr is null, conversion failed");
       return 0;
     }
 
     if (!*filter_ptr) {
-      Util::Log(LOG_TAG, "nativeAddSink - *source filter_ptr is null, invalid Filter object");
+      Util::Log(
+          LOG_TAG,
+          "nativeAddSink - *source filter_ptr is null, invalid Filter object");
       return 0;
     }
 
@@ -52,7 +56,8 @@ Java_com_pixpark_gpupixel_GPUPixelSource_nativeAddSink(JNIEnv* env,
     // If it's a regular Source type
     auto* source_ptr = reinterpret_cast<std::shared_ptr<Source>*>(source_id);
     if (!source_ptr) {
-      Util::Log(LOG_TAG, "nativeAddSink - source_ptr is null, conversion failed");
+      Util::Log(LOG_TAG,
+                "nativeAddSink - source_ptr is null, conversion failed");
       return 0;
     }
 
@@ -61,7 +66,7 @@ Java_com_pixpark_gpupixel_GPUPixelSource_nativeAddSink(JNIEnv* env,
                 "nativeAddSink - *source_ptr is null, invalid Source object");
       return 0;
     }
-    
+
     source = *source_ptr;
   }
 
@@ -78,8 +83,9 @@ Java_com_pixpark_gpupixel_GPUPixelSource_nativeAddSink(JNIEnv* env,
     }
 
     if (!*filter_ptr) {
-      Util::Log(LOG_TAG,
-                "nativeAddSink - *sink filter_ptr is null, invalid Filter object");
+      Util::Log(
+          LOG_TAG,
+          "nativeAddSink - *sink filter_ptr is null, invalid Filter object");
       return 0;
     }
 
@@ -110,15 +116,16 @@ Java_com_pixpark_gpupixel_GPUPixelSource_nativeAddSink(JNIEnv* env,
 
 // Remove Sink from Source
 extern "C" JNIEXPORT void JNICALL
-Java_com_pixpark_gpupixel_GPUPixelSource_nativeRemoveSink(JNIEnv* env,
-                                                          jclass clazz,
-                                                          jlong source_id,
-                                                          jlong sink_id,
-                                                          jboolean is_sink_filter,
-                                                          jboolean is_source_filter) {
+Java_com_pixpark_gpupixel_GPUPixelSource_nativeRemoveSink(
+    JNIEnv* env,
+    jclass clazz,
+    jlong source_id,
+    jlong sink_id,
+    jboolean is_sink_filter,
+    jboolean is_source_filter) {
   // Get Source pointer based on is_source_filter parameter
   std::shared_ptr<Source> source;
-  
+
   if (is_source_filter) {
     // If source is a Filter type
     auto* filter_ptr = reinterpret_cast<std::shared_ptr<Filter>*>(source_id);
@@ -177,15 +184,16 @@ Java_com_pixpark_gpupixel_GPUPixelSource_nativeRemoveAllSinks(JNIEnv* env,
 
 // Check if Source has Sink
 extern "C" JNIEXPORT jboolean JNICALL
-Java_com_pixpark_gpupixel_GPUPixelSource_nativeHasSink(JNIEnv* env,
-                                                       jclass clazz,
-                                                       jlong source_id,
-                                                       jlong sink_id,
-                                                       jboolean is_sink_filter,
-                                                       jboolean is_source_filter) {
+Java_com_pixpark_gpupixel_GPUPixelSource_nativeHasSink(
+    JNIEnv* env,
+    jclass clazz,
+    jlong source_id,
+    jlong sink_id,
+    jboolean is_sink_filter,
+    jboolean is_source_filter) {
   // Get Source pointer based on is_source_filter parameter
   std::shared_ptr<Source> source;
-  
+
   if (is_source_filter) {
     // If source is a Filter type
     auto* filter_ptr = reinterpret_cast<std::shared_ptr<Filter>*>(source_id);
@@ -204,7 +212,7 @@ Java_com_pixpark_gpupixel_GPUPixelSource_nativeHasSink(JNIEnv* env,
 
   // Get Sink pointer based on is_sink_filter parameter
   std::shared_ptr<Sink> sink;
-  
+
   if (is_sink_filter) {
     // If it's a Filter type
     auto* filter_ptr = reinterpret_cast<std::shared_ptr<Filter>*>(sink_id);

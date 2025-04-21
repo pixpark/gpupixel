@@ -39,7 +39,8 @@ set(mars_face_header ${CMAKE_CURRENT_SOURCE_DIR}/mars-face-kit/include)
 # ---- Library import properties ----
 # Configure how imported libraries are found and used
 if(${CURRENT_PLAT} STREQUAL ${PLAT_WIN})
-  # Windows special handling: specify both .lib (IMPORTED_IMPLIB) and .dll (IMPORTED_LOCATION)
+  # Windows special handling: specify both .lib (IMPORTED_IMPLIB) and .dll
+  # (IMPORTED_LOCATION)
   set_target_properties(
     marsface
     PROPERTIES IMPORTED_IMPLIB ${mars_import_lib_path} # .lib file for linking

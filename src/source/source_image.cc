@@ -6,9 +6,9 @@
  */
 
 #include "gpupixel/source/source_image.h"
+#include <cassert>
 #include "core/gpupixel_context.h"
 #include "utils/util.h"
-#include <cassert>
 
 #if defined(GPUPIXEL_ANDROID)
 #include <android/bitmap.h>
