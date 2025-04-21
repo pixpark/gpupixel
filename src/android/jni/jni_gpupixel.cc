@@ -26,7 +26,7 @@
 
 // Called when the SO library is loaded
 // Gets the JavaVM pointer and sets it in jni_helpers.h
-extern "C" jint JNI_OnLoad(JavaVM* vm, void* reserved) {
+extern "C" JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved) {
   JNIEnv* env = nullptr;
 
   // Get JNIEnv
