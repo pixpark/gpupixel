@@ -1,11 +1,12 @@
 # CMakeLists for libyuv
 # Originally created for "roxlu build system" to compile libyuv on windows
 # Run with -DUNIT_TEST=ON to build unit tests
+cmake_minimum_required( VERSION 3.5 )
 
 include(CheckCSourceCompiles)
 
 project ( YUV C CXX )	# "C" is required even for C++ projects
-cmake_minimum_required( VERSION 3.5 )
+
 option( UNIT_TEST "Built unit tests" OFF )
 
 set ( ly_base_dir	${PROJECT_SOURCE_DIR} )
@@ -77,10 +78,7 @@ endif()
 # Need to set PIC to allow creating shared libraries from object file libraries.
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-# Build the set of objects that do not need to be compiled with flags to enable
-# particular architecture features.
-add_library( ${ly_lib_name}_common_objects OBJECT ${ly_common_source_files} )
-set(ly_lib_parts $<TARGET_OBJECTS:${ly_lib_name}_common_objects>)
+set(ly_lib_parts ${ly_common_source_files})
 
 string(TOLOWER "${CMAKE_SYSTEM_PROCESSOR}" SYSPROC)
 set(LOONGARCH64_ALIASES loongarch64)
@@ -96,30 +94,29 @@ if(NOT MSVC)
   if(arch_lowercase MATCHES "^arm" AND NOT arch_lowercase STREQUAL "arm64")
     # Enable Arm Neon kernels.
     add_definitions(-DLIBYUV_NEON=1)
-    add_library(${ly_lib_name}_neon OBJECT
+    set(ly_neon_source_files
       ${ly_src_dir}/compare_neon.cc
       ${ly_src_dir}/rotate_neon.cc
       ${ly_src_dir}/row_neon.cc
       ${ly_src_dir}/scale_neon.cc)
-    target_compile_options(${ly_lib_name}_neon PRIVATE -mfpu=neon)
-    list(APPEND ly_lib_parts $<TARGET_OBJECTS:${ly_lib_name}_neon>)
+    set_source_files_properties(${ly_neon_source_files} PROPERTIES COMPILE_FLAGS "-mfpu=neon")
+    list(APPEND ly_lib_parts ${ly_neon_source_files})
   endif()
 
   if(arch_lowercase STREQUAL "aarch64" OR arch_lowercase STREQUAL "arm64")
     # Enable AArch64 Neon dot-product and i8mm kernels.
-    add_library(${ly_lib_name}_neon64 OBJECT
+    set(ly_neon64_source_files
       ${ly_src_dir}/compare_neon64.cc
       ${ly_src_dir}/rotate_neon64.cc
       ${ly_src_dir}/row_neon64.cc
       ${ly_src_dir}/scale_neon64.cc)
-    target_compile_options(${ly_lib_name}_neon64 PRIVATE -march=armv8.2-a+dotprod+i8mm)
-    list(APPEND ly_lib_parts $<TARGET_OBJECTS:${ly_lib_name}_neon64>)
+    set_source_files_properties(${ly_neon64_source_files} PROPERTIES COMPILE_FLAGS "-march=armv8.2-a+dotprod+i8mm")
+    list(APPEND ly_lib_parts ${ly_neon64_source_files})
 
     # Enable AArch64 SVE kernels.
-    add_library(${ly_lib_name}_sve OBJECT
-      ${ly_src_dir}/row_sve.cc)
-    target_compile_options(${ly_lib_name}_sve PRIVATE -march=armv8.5-a+i8mm+sve2)
-    list(APPEND ly_lib_parts $<TARGET_OBJECTS:${ly_lib_name}_sve>)
+    set(ly_sve_source_files ${ly_src_dir}/row_sve.cc)
+    set_source_files_properties(${ly_sve_source_files} PROPERTIES COMPILE_FLAGS "-march=armv8.5-a+i8mm+sve2")
+    list(APPEND ly_lib_parts ${ly_sve_source_files})
 
     set(OLD_CMAKE_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
     set(OLD_CMAKE_TRY_COMPILE_TARGET_TYPE ${CMAKE_TRY_COMPILE_TARGET_TYPE})
@@ -136,12 +133,12 @@ int main(void) { return 0; }
 
     if (CAN_COMPILE_SME)
       # Enable AArch64 SME kernels.
-      add_library(${ly_lib_name}_sme OBJECT
+      set(ly_sme_source_files
         ${ly_src_dir}/rotate_sme.cc
         ${ly_src_dir}/row_sme.cc
         ${ly_src_dir}/scale_sme.cc)
-      target_compile_options(${ly_lib_name}_sme PRIVATE -march=armv9-a+sme)
-      list(APPEND ly_lib_parts $<TARGET_OBJECTS:${ly_lib_name}_sme>)
+      set_source_files_properties(${ly_sme_source_files} PROPERTIES COMPILE_FLAGS "-march=armv9-a+sme")
+      list(APPEND ly_lib_parts ${ly_sme_source_files})
     else()
       add_definitions(-DLIBYUV_DISABLE_SME)
     endif()
