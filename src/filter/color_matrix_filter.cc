@@ -9,7 +9,7 @@
 #include "core/gpupixel_context.h"
 namespace gpupixel {
 
-#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
+#if defined(GPUPIXEL_GLES_SHADER)
 const std::string kColorMatrixFragmentShaderString = R"(
     uniform sampler2D inputImageTexture; uniform lowp mat4 colorMatrix;
     uniform lowp float intensity;
@@ -23,7 +23,7 @@ const std::string kColorMatrixFragmentShaderString = R"(
       gl_FragColor =
           (intensity * outputColor) + ((1.0 - intensity) * textureColor);
     })";
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
+#elif defined(GPUPIXEL_GL_SHADER)
 const std::string kColorMatrixFragmentShaderString = R"(
     uniform sampler2D inputImageTexture; uniform mat4 colorMatrix;
     uniform float intensity;

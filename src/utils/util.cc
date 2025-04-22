@@ -130,6 +130,8 @@ void Util::Log(const std::string& tag, std::string format, ...) {
   NSLog(@"%s", buffer);
 #elif defined(GPUPIXEL_LINUX)
   printf("%s\n", buffer);
+#elif defined(GPUPIXEL_WASM)
+  std::cout << "[Wasm] " << buffer << std::endl;
 #endif
 }
 

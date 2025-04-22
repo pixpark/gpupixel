@@ -9,7 +9,7 @@
 #include "core/gpupixel_context.h"
 namespace gpupixel {
 
-#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
+#if defined(GPUPIXEL_GLES_SHADER)
 const std::string kHalftoneFragmentShaderString = R"(
     uniform highp float pixelSize; uniform highp float aspectRatio;
 
@@ -39,7 +39,7 @@ const std::string kHalftoneFragmentShaderString = R"(
 
       gl_FragColor = vec4(vec3(checkForPresenceWithinDot), 1.0);
     })";
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
+#elif defined(GPUPIXEL_GL_SHADER)
 const std::string kHalftoneFragmentShaderString = R"(
     uniform float pixelSize; uniform float aspectRatio;
 

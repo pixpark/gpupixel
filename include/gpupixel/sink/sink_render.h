@@ -19,7 +19,7 @@ class GPUPIXEL_API SinkRender : public Sink {
     PreserveAspectRatioAndFill =
         2  // preserve the aspect ratio, and zoom in to fill the view
   };
-  std::shared_ptr<SinkRender> Create();
+  static std::shared_ptr<SinkRender> Create();
 
   ~SinkRender() override;
 
@@ -34,8 +34,8 @@ class GPUPIXEL_API SinkRender : public Sink {
 
  private:
   SinkRender();
-  int view_width_;
-  int view_height_;
+  int view_width_ = 0;
+  int view_height_ = 0;
   FillMode fill_mode_;
   bool mirror_ = false;
   GPUPixelGLProgram* display_program_;

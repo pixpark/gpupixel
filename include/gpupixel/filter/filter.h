@@ -26,14 +26,14 @@ const std::string kDefaultVertexShader = R"(
       textureCoordinate = inputTextureCoordinate.xy;
     })";
 
-#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
+#if defined(GPUPIXEL_GLES_SHADER)
 GPUPIXEL_API const std::string kDefaultFragmentShader = R"(
     varying highp vec2 textureCoordinate; uniform sampler2D inputImageTexture;
 
     void main() {
       gl_FragColor = texture2D(inputImageTexture, textureCoordinate);
     })";
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
+#elif defined(GPUPIXEL_GL_SHADER)
 const std::string kDefaultFragmentShader = R"(
     varying vec2 textureCoordinate; uniform sampler2D inputImageTexture;
 

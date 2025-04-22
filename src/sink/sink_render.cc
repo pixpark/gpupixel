@@ -100,6 +100,10 @@ void SinkRender::SetRenderSize(int width, int height) {
 void SinkRender::Render() {
   CHECK_GL(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 
+  if (view_width_ == 0 || view_height_ == 0) {
+    Util::Log("SinkRender", "view_width_ or view_height_ is 0");
+    return;
+  }
   CHECK_GL(glViewport(0, 0, view_width_, view_height_));
   CHECK_GL(glClearColor(background_color_.r, background_color_.g,
                         background_color_.b, background_color_.a));
@@ -114,6 +118,7 @@ void SinkRender::Render() {
   CHECK_GL(glVertexAttribPointer(
       tex_coord_attribute_location_, 2, GL_FLOAT, 0, 0,
       GetTextureCoordinate(input_framebuffers_[0].rotation_mode)));
+
   CHECK_GL(glDrawArrays(GL_TRIANGLE_STRIP, 0, 4));
 }
 

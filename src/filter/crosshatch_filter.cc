@@ -9,7 +9,7 @@
 #include "core/gpupixel_context.h"
 namespace gpupixel {
 
-#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
+#if defined(GPUPIXEL_GLES_SHADER)
 const std::string kCrosshatchFragmentShaderString = R"(
     uniform sampler2D inputImageTexture; varying highp vec2 textureCoordinate;
     uniform highp float crossHatchSpacing;
@@ -51,7 +51,7 @@ const std::string kCrosshatchFragmentShaderString = R"(
 
       gl_FragColor = colorToDisplay;
     })";
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
+#elif defined(GPUPIXEL_GL_SHADER)
 const std::string kCrosshatchFragmentShaderString = R"(
     uniform sampler2D inputImageTexture; varying vec2 textureCoordinate;
     uniform float crossHatchSpacing;

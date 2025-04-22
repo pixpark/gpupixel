@@ -10,7 +10,7 @@
 #include "utils/util.h"
 namespace gpupixel {
 
-#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
+#if defined(GPUPIXEL_GLES_SHADER)
 const std::string kDirectionalNonmaximumSuppressionFragmentShaderString =
     R"(
         precision mediump float;
@@ -50,7 +50,7 @@ const std::string kDirectionalNonmaximumSuppressionFragmentShaderString =
 
           gl_FragColor = vec4(multiplier, multiplier, multiplier, 1.0);
         })";
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
+#elif defined(GPUPIXEL_GL_SHADER)
 const std::string kDirectionalNonmaximumSuppressionFragmentShaderString =
     R"(
         uniform sampler2D inputImageTexture; uniform float texelWidth;

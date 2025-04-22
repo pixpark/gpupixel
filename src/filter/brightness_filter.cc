@@ -9,7 +9,7 @@
 #include "core/gpupixel_context.h"
 namespace gpupixel {
 
-#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID) || defined(GPUPIXEL_MAC)
+#if defined(GPUPIXEL_GLES_SHADER) || defined(GPUPIXEL_MAC)
 const std::string kBrightnessFragmentShaderString = R"(
     uniform sampler2D inputImageTexture; uniform lowp float brightness_factor;
     varying highp vec2 textureCoordinate;

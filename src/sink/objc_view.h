@@ -28,7 +28,7 @@ GPUPIXEL_API
 @property(readwrite, nonatomic) gpupixel::SinkRender::FillMode fillMode;
 @property(readonly, nonatomic) CGSize sizeInPixels;
 
-// 直接实现方法而不是通过协议
+// Implementation of methods directly instead of through protocol
 - (void)DoRender;
 - (void)SetInputFramebuffer:
             (std::shared_ptr<gpupixel::GPUPixelFramebuffer>)framebuffer

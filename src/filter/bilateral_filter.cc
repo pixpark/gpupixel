@@ -30,7 +30,7 @@ const std::string kBilateralBlurVertexShaderString = R"(
       }
     })";
 
-#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
+#if defined(GPUPIXEL_GLES_SHADER)
 const std::string kBilateralBlurFragmentShaderString = R"(
     uniform sampler2D inputImageTexture;
 
@@ -118,7 +118,7 @@ const std::string kBilateralBlurFragmentShaderString = R"(
 
       gl_FragColor = sum / gaussianWeightTotal;
     })";
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
+#elif defined(GPUPIXEL_GL_SHADER)
 const std::string kBilateralBlurFragmentShaderString = R"(
     uniform sampler2D inputImageTexture;
 

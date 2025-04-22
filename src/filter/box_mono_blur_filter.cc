@@ -114,7 +114,7 @@ std::string BoxMonoBlurFilter::GenerateOptimizedFragmentShaderString(
   uint32_t trueNumberOfOptimizedOffsets = radius / 2 + (radius % 2);
 
   // Header
-#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
+#if defined(GPUPIXEL_GLES_SHADER)
   std::string shaderStr =
       // Header
       Util::StringFormat(
@@ -167,7 +167,7 @@ std::string BoxMonoBlurFilter::GenerateOptimizedFragmentShaderString(
   // If the number of required samples exceeds the amount we can pass in via
   // varyings, we have to do dependent texture reads in the fragment shader
   if (trueNumberOfOptimizedOffsets > numberOfOptimizedOffsets) {
-#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
+#if defined(GPUPIXEL_GLES_SHADER)
     shaderStr += Util::StringFormat(
         "highp vec2 singleStepOffset = vec2(texelWidthOffset, "
         "texelHeightOffset);\n");

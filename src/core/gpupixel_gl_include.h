@@ -28,6 +28,10 @@
 #include <glad/glad.h>
 #define GLEW_STATIC
 #include <GLFW/glfw3.h>
+#elif defined(GPUPIXEL_WASM)
+#include <GLES3/gl3.h>
+#include <emscripten.h>
+#include <emscripten/html5.h>
 #endif
 
 //------------- ENABLE_GL_CHECK Begin ------------ //

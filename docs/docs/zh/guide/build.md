@@ -95,3 +95,37 @@ Windows编译需要安装以下环境：
 **输出**
 
 编译输出位于项目根目录下的 `output` 路径
+
+## WebAssembly (WASM)
+
+WebAssembly编译需要安装以下环境：
+
+**环境要求**
+- Emscripten SDK >= 3.0
+- cmake >= 3.10
+
+**编译环境配置**
+
+首先需要安装Emscripten SDK。安装方式有两种：
+
+- **方式一**：安装并激活[emsdk](https://emscripten.org/docs/getting_started/downloads.html)
+- **方式二**：通过Homebrew安装（macOS）：
+  ```bash
+  brew install emscripten
+  ```
+
+**编译**
+
+工程根目录下执行脚本文件：
+
+```bash
+./script/build_wasm.sh
+```
+
+**输出**
+
+编译输出位于项目根目录下的 `output` 路径
+
+::: warning
+WASM版本不支持人脸关键点检测，依赖人脸检测的滤镜都不可用，如瘦脸，大眼等
+:::

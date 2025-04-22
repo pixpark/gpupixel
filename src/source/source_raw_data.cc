@@ -21,7 +21,7 @@ const std::string kI420VertexShaderString = R"(
       gl_Position = position;
     })";
 
-#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
+#if defined(GPUPIXEL_GLES_SHADER)
 const std::string kI420FragmentShaderString = R"(
     varying mediump vec2 textureCoordinate; uniform sampler2D yTexture;
     uniform sampler2D uTexture;
@@ -45,7 +45,7 @@ const std::string kI420FragmentShaderString = R"(
         gl_FragColor = texture2D(inputImageTexture, textureCoordinate);
       }
     })";
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
+#elif defined(GPUPIXEL_GL_SHADER)
 const std::string kI420FragmentShaderString = R"(
     varying vec2 textureCoordinate; uniform sampler2D yTexture;
     uniform sampler2D uTexture;
@@ -96,10 +96,6 @@ bool SourceRawData::Init() {
   filter_position_attribute_ = filter_program_->GetAttribLocation("position");
   filter_tex_coord_attribute_ =
       filter_program_->GetAttribLocation("inputTextureCoordinate");
-
-  filter_program_->SetUniformValue("yTexture", 0);
-  filter_program_->SetUniformValue("uTexture", 1);
-  filter_program_->SetUniformValue("vTexture", 2);
 
   if (0 == textures_[0]) {
     glGenTextures(4, textures_);
@@ -185,6 +181,10 @@ int SourceRawData::GenerateTextureWithI420(int width,
   CHECK_GL(glVertexAttribPointer(filter_tex_coord_attribute_, 2, GL_FLOAT, 0, 0,
                                  GetTextureCoordinate(rotation_)));
 
+  filter_program_->SetUniformValue("yTexture", 0);
+  filter_program_->SetUniformValue("uTexture", 1);
+  filter_program_->SetUniformValue("vTexture", 2);
+
   const uint8_t* pixels[3] = {dataY, dataU, dataV};
   const int widths[3] = {width, width / 2, width / 2};
   const int heights[3] = {height, height / 2, height / 2};
@@ -219,6 +219,7 @@ int SourceRawData::GenerateTextureWithPixels(const uint8_t* pixels,
   this->SetFramebuffer(framebuffer_, NoRotation);
 
   uint32_t texture = textures_[3];
+
   CHECK_GL(glBindTexture(GL_TEXTURE_2D, texture));
 
   if (type == GPUPIXEL_FRAME_TYPE_BGRA) {

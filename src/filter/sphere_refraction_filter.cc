@@ -9,7 +9,7 @@
 #include "core/gpupixel_context.h"
 namespace gpupixel {
 
-#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
+#if defined(GPUPIXEL_GLES_SHADER)
 const std::string kSphereRefractionShaderString = R"(
 
     uniform sampler2D inputImageTexture; uniform highp vec2 center;
@@ -43,7 +43,7 @@ const std::string kSphereRefractionShaderString = R"(
     }
 
 )";
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
+#elif defined(GPUPIXEL_GL_SHADER)
 const std::string kSphereRefractionShaderString = R"(
 
     uniform sampler2D inputImageTexture; uniform vec2 center;

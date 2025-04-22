@@ -98,3 +98,37 @@ Execute the script file at the root directory of the project:
 **Output**
 
 The compilation output is located in the `output` path under the root directory of the project.
+
+## WebAssembly (WASM)
+
+WebAssembly compilation requires the following environment:
+
+**Environment Requirements**
+- Emscripten SDK >= 3.0
+- cmake >= 3.10
+
+**Build Environment Setup**
+
+You need to install Emscripten SDK first. There are two ways to install:
+
+- **Option 1**: Install and activate [emsdk](https://emscripten.org/docs/getting_started/downloads.html)
+- **Option 2**: Install via Homebrew (macOS):
+  ```bash
+  brew install emscripten
+  ```
+
+**Compile**
+
+Execute the script file at the root directory of the project:
+
+```bash
+./script/build_wasm.sh
+```
+
+**Output**
+
+The compilation output is located in the `output` path under the root directory of the project.
+
+::: warning
+The WASM version does not support facial keypoint detection. Filters that rely on face detection, such as face-slimming and big eyes, are unavailable.
+:::

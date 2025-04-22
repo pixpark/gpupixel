@@ -9,7 +9,7 @@
 #include "core/gpupixel_context.h"
 namespace gpupixel {
 
-#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
+#if defined(GPUPIXEL_GLES_SHADER)
 const std::string kLuminanceRangeFragmentShaderString = R"(
     uniform sampler2D inputImageTexture;
     uniform lowp float rangeReductionFactor;
@@ -25,7 +25,7 @@ const std::string kLuminanceRangeFragmentShaderString = R"(
       mediump float luminanceRatio = ((0.5 - luminance) * rangeReductionFactor);
       gl_FragColor = vec4((color.rgb) + (luminanceRatio), color.a);
     })";
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
+#elif defined(GPUPIXEL_GL_SHADER)
 const std::string kLuminanceRangeFragmentShaderString = R"(
     uniform sampler2D inputImageTexture; uniform float rangeReductionFactor;
     varying vec2 textureCoordinate;

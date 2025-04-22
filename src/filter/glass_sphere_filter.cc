@@ -9,7 +9,7 @@
 #include "core/gpupixel_context.h"
 namespace gpupixel {
 
-#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
+#if defined(GPUPIXEL_GLES_SHADER)
 const std::string kGlassSphereFragmentShaderString = R"(
 
     uniform sampler2D inputImageTexture; varying highp vec2 textureCoordinate;
@@ -61,7 +61,7 @@ const std::string kGlassSphereFragmentShaderString = R"(
 
       gl_FragColor = vec4(finalSphereColor, 1.0) * checkForPresenceWithinSphere;
     })";
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
+#elif defined(GPUPIXEL_GL_SHADER)
 const std::string kGlassSphereFragmentShaderString = R"(
 
     uniform sampler2D inputImageTexture; varying vec2 textureCoordinate;

@@ -72,7 +72,7 @@ SingleComponentGaussianBlurMonoFilter::GenerateOptimizedVertexShaderString(
         (firstWeight * (i * 2 + 1) + secondWeight * (i * 2 + 2)) /
         optimizedWeight;
   }
-#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
+#if defined(GPUPIXEL_GLES_SHADER)
   std::string shaderStr = Util::StringFormat(
       "\
                attribute vec4 position;\n\
@@ -86,7 +86,7 @@ SingleComponentGaussianBlurMonoFilter::GenerateOptimizedVertexShaderString(
                vec2 texelSpacing = vec2(texelWidthOffset, texelHeightOffset);\n\
                ",
       numberOfOptimizedOffsets * 2 + 1);
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
+#elif defined(GPUPIXEL_GL_SHADER)
   std::string shaderStr = Util::StringFormat(
       "\
                attribute vec4 position;\n\
@@ -155,7 +155,7 @@ SingleComponentGaussianBlurMonoFilter::GenerateOptimizedFragmentShaderString(
   int trueNumberOfOptimizedOffsets = radius / 2 + (radius % 2);
   int numberOfOptimizedOffsets = fmin(trueNumberOfOptimizedOffsets, 7);
 
-#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
+#if defined(GPUPIXEL_GLES_SHADER)
   std::string shaderStr = Util::StringFormat(
       "\
                uniform sampler2D inputImageTexture;\n\
@@ -166,7 +166,7 @@ SingleComponentGaussianBlurMonoFilter::GenerateOptimizedFragmentShaderString(
                {\n\
                lowp float sum = 0.0;\n",
       numberOfOptimizedOffsets * 2 + 1);
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
+#elif defined(GPUPIXEL_GL_SHADER)
   std::string shaderStr = Util::StringFormat(
       "\
                uniform sampler2D inputImageTexture;\n\

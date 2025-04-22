@@ -36,7 +36,7 @@ const std::string kGPUImageBaseBeautyFaceVertexShaderString = R"(
           vec4(inputTextureCoordinate + vec2(-widthOffset, heightOffset),
                inputTextureCoordinate + vec2(widthOffset, -heightOffset));
     })";
-#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
+#if defined(GPUPIXEL_GLES_SHADER)
 const std::string kGPUImageBaseBeautyFaceFragmentShaderString = R"(
     precision highp float; 
     varying highp vec2 textureCoordinate;
@@ -159,7 +159,7 @@ const std::string kGPUImageBaseBeautyFaceFragmentShaderString = R"(
 
       gl_FragColor = vec4(color, 1.0);
     })";
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
+#elif defined(GPUPIXEL_GL_SHADER)
 const std::string kGPUImageBaseBeautyFaceFragmentShaderString = R"(
     float; varying vec2 textureCoordinate; varying vec4 textureShift_1;
     varying vec4 textureShift_2;

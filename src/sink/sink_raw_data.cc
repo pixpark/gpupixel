@@ -24,14 +24,14 @@ const std::string kRGBToI420VertexShaderString = R"(
       textureCoordinate = inputTextureCoordinate.xy;
     })";
 
-#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
+#if defined(GPUPIXEL_GLES_SHADER)
 const std::string kRGBToI420FragmentShaderString = R"(
     varying mediump vec2 textureCoordinate;
     uniform sampler2D sTexture;
     void main() {
       gl_FragColor = texture2D(sTexture, textureCoordinate);
     })";
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
+#elif defined(GPUPIXEL_GL_SHADER)
 const std::string kRGBToI420FragmentShaderString = R"(
     varying vec2 textureCoordinate;
     uniform sampler2D sTexture;

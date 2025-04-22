@@ -46,7 +46,7 @@ if(${CURRENT_PLAT} STREQUAL ${PLAT_WIN})
     PROPERTIES IMPORTED_IMPLIB ${mars_import_lib_path} # .lib file for linking
                IMPORTED_LOCATION ${mars_shared_lib_path} # .dll file for runtime
                INTERFACE_INCLUDE_DIRECTORIES ${mars_face_header})
-else()
+elseif(NOT ${CURRENT_PLAT} STREQUAL ${PLAT_WASM})
   set_target_properties(
     marsface PROPERTIES IMPORTED_LOCATION ${mars_shared_lib_path}
                         INTERFACE_INCLUDE_DIRECTORIES ${mars_face_header})
@@ -85,6 +85,13 @@ add_subdirectory(libyuv EXCLUDE_FROM_ALL) # EXCLUDE_FROM_ALL means don't install
 
 target_include_directories(
   yuv PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/libyuv/include>)
+
+if(${CURRENT_PLAT} STREQUAL ${PLAT_WASM})
+  install(
+    TARGETS yuv
+    ARCHIVE DESTINATION lib
+    LIBRARY DESTINATION lib)
+endif()
 
 # ---- Desktop platform dependencies ----
 # Libraries specific to desktop platforms (macOS, Windows, Linux)

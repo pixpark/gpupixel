@@ -75,6 +75,11 @@
 
 #endif
 
+#if defined(GPUPIXEL_WASM)
+#include <emscripten.h>
+#include <emscripten/html5.h>
+#endif
+
 namespace gpupixel {
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
@@ -90,7 +95,9 @@ GPUPixelContext* GPUPixelContext::instance_ = 0;
 std::mutex GPUPixelContext::mutex_;
 
 GPUPixelContext::GPUPixelContext() : current_shader_program_(0) {
+#if !defined(GPUPIXEL_WASM)
   task_queue_ = std::make_shared<DispatchQueue>();
+#endif
   framebuffer_factory_ = new FramebufferFactory();
   Init();
 }
@@ -259,6 +266,13 @@ void GPUPixelContext::CreateContext() {
   glfwMakeContextCurrent(gl_context_);
 
   gladLoadGL();
+#elif defined(GPUPIXEL_WASM)
+  EmscriptenWebGLContextAttributes attrs;
+  emscripten_webgl_init_context_attributes(&attrs);
+  attrs.majorVersion = 2;  // Use WebGL 2.0
+  attrs.minorVersion = 0;
+  wasm_context_ = emscripten_webgl_create_context("#gpupixel_canvas", &attrs);
+  emscripten_webgl_make_context_current(wasm_context_);
 #endif
 }
 
@@ -279,6 +293,8 @@ void GPUPixelContext::UseAsCurrent() {
   if (glfwGetCurrentContext() != gl_context_) {
     glfwMakeContextCurrent(gl_context_);
   }
+#elif defined(GPUPIXEL_WASM)
+  emscripten_webgl_make_context_current(wasm_context_);
 #endif
 }
 
@@ -318,14 +334,21 @@ void GPUPixelContext::ReleaseContext() {
     glfwDestroyWindow(gl_context_);
   }
   glfwTerminate();
+#elif defined(GPUPIXEL_WASM)
+  emscripten_webgl_destroy_context(wasm_context_);
 #endif
 }
 
 void GPUPixelContext::SyncRunWithContext(std::function<void(void)> task) {
+#if defined(GPUPIXEL_WASM)
+  UseAsCurrent();
+  task();
+#else
   task_queue_->runTask([=]() {
     UseAsCurrent();
     task();
   });
+#endif
 }
 
 }  // namespace gpupixel

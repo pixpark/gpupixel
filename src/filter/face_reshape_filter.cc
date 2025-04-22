@@ -9,7 +9,7 @@
 #include "core/gpupixel_context.h"
 namespace gpupixel {
 
-#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
+#if defined(GPUPIXEL_GLES_SHADER)
 const std::string kGPUPixelThinFaceFragmentShaderString = R"(
  precision highp float;
  varying highp vec2 textureCoordinate;
@@ -108,7 +108,7 @@ const std::string kGPUPixelThinFaceFragmentShaderString = R"(
 
  }
  )";
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
+#elif defined(GPUPIXEL_GL_SHADER)
 const std::string kGPUPixelThinFaceFragmentShaderString = R"(
  varying vec2 textureCoordinate;
  uniform sampler2D inputImageTexture;

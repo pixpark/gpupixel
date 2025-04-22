@@ -22,7 +22,7 @@ const std::string kBoxDifferenceVertexShaderString = R"(
       textureCoordinate = inputTextureCoordinate.xy;
       textureCoordinate2 = inputTextureCoordinate2.xy;
     })";
-#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
+#if defined(GPUPIXEL_GLES_SHADER)
 const std::string kBoxDifferenceFragmentShaderString = R"(
     varying highp vec2 textureCoordinate; varying highp vec2 textureCoordinate2;
     uniform sampler2D inputImageTexture;
@@ -37,7 +37,7 @@ const std::string kBoxDifferenceFragmentShaderString = R"(
       diffColor = min(diffColor * diffColor, 1.0);
       gl_FragColor = vec4(diffColor, 1.0);
     })";
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
+#elif defined(GPUPIXEL_GL_SHADER)
 const std::string kBoxDifferenceFragmentShaderString = R"(
     varying vec2 textureCoordinate; varying vec2 textureCoordinate2;
     uniform sampler2D inputImageTexture;

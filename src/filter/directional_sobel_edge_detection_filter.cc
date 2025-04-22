@@ -9,7 +9,7 @@
 #include "core/gpupixel_context.h"
 namespace gpupixel {
 
-#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
+#if defined(GPUPIXEL_GLES_SHADER)
 const std::string kDirectionalSobelEdgeDetectionFragmentShaderString =
     R"(
         precision mediump float; uniform sampler2D inputImageTexture;
@@ -62,7 +62,7 @@ const std::string kDirectionalSobelEdgeDetectionFragmentShaderString =
           gl_FragColor = vec4(gradientMagnitude, normalizedDirection.x,
                               normalizedDirection.y, 1.0);
         })";
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
+#elif defined(GPUPIXEL_GL_SHADER)
 const std::string kDirectionalSobelEdgeDetectionFragmentShaderString =
     R"(
         uniform sampler2D inputImageTexture;

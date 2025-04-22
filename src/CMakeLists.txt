@@ -1,4 +1,4 @@
-# 定义项目名称并初始化项目
+# Define project name and initialize project
 set(gpupixel_libs_name "gpupixel")
 
 # index file
@@ -66,7 +66,7 @@ set(common_source_files
     ${CMAKE_CURRENT_SOURCE_DIR}/filter/white_balance_filter.cc
     ${CMAKE_CURRENT_SOURCE_DIR}/filter/smooth_toon_filter.cc)
 
-# 根据选项添加人脸检测源文件
+# Add face detection source files based on options
 if(GPUPIXEL_ENABLE_FACE_DETECTOR)
   list(APPEND common_source_files
        ${CMAKE_CURRENT_SOURCE_DIR}/face_detector/face_detector.cc)
@@ -100,7 +100,7 @@ set(public_common_header_files
     ${PROJECT_SOURCE_DIR}/include/gpupixel/gpupixel.h
     ${PROJECT_SOURCE_DIR}/include/gpupixel/gpupixel_define.h)
 
-# 根据选项添加人脸检测头文件
+# Add face detection header files based on options
 if(GPUPIXEL_ENABLE_FACE_DETECTOR)
   set(public_face_detector_header_files
       ${PROJECT_SOURCE_DIR}/include/gpupixel/face_detector/face_detector.h)
@@ -268,7 +268,7 @@ if(GPUPIXEL_AAPL_FMWK)
   endforeach()
 endif()
 
-# 库配置
+# Library configuration
 # ##############################################################################
 
 if(GPUPIXEL_BUILD_SHARED_LIBS)
@@ -288,31 +288,31 @@ target_include_directories(
                                ${CMAKE_CURRENT_SOURCE_DIR})
 
 if(WIN32 AND GPUPIXEL_BUILD_SHARED_LIBS)
-  # Windows动态库导出宏定义
+  # Windows DLL export macro definition
   target_compile_definitions(${gpupixel_libs_name}
                              PRIVATE -DBUILDING_GPUPIXEL_DLL)
 
 elseif(NOT WIN32)
-  # 非Windows平台使用编译器可见性属性
+  # Non-Windows platforms use compiler visibility attributes
   set(CMAKE_C_VISIBILITY_PRESET hidden)
   set(CMAKE_CXX_VISIBILITY_PRESET hidden)
   set(CMAKE_VISIBILITY_INLINES_HIDDEN ON)
 
-  # Release模式强制隐藏符号
+  # Force symbol hiding in Release mode
   if(NOT CMAKE_BUILD_TYPE MATCHES Debug)
     target_compile_options(
       ${gpupixel_libs_name} PRIVATE -fvisibility=hidden
                                     -fvisibility-inlines-hidden)
   endif()
 
-  # 保留Objective-C符号可见性
+  # Preserve Objective-C symbol visibility
   set_target_properties(
     ${gpupixel_libs_name} PROPERTIES OBJCXX_VISIBILITY_PRESET default
                                      OBJC_VISIBILITY_PRESET default)
 endif()
 
 if(WIN32)
-  # Windows字符集配置
+  # Windows character set configuration
   add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
   add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
   set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL$<$<CONFIG:Debug>:Debug>")
@@ -360,14 +360,12 @@ if(APPLE)
   endif()
 endif()
 
-# 链接库依赖
-# ##############################################################################
-# Linux平台依赖
+# Library dependencies Linux platform dependencies
 if(${CURRENT_PLAT} STREQUAL ${PLAT_LINUX})
   target_link_libraries(${gpupixel_libs_name} PRIVATE GL marsface yuv glad glfw
                                                       stb)
 
-  # Windows平台依赖
+  # Windows platform dependencies
 elseif(${CURRENT_PLAT} STREQUAL ${PLAT_WIN})
   target_link_libraries(
     ${gpupixel_libs_name}
@@ -379,7 +377,7 @@ elseif(${CURRENT_PLAT} STREQUAL ${PLAT_WIN})
             glfw
             stb)
 
-  # macOS平台依赖
+  # macOS platform dependencies
 elseif(${CURRENT_PLAT} STREQUAL ${PLAT_MAC})
   target_link_libraries(
     ${gpupixel_libs_name}
@@ -396,7 +394,7 @@ elseif(${CURRENT_PLAT} STREQUAL ${PLAT_MAC})
             yuv
             stb)
 
-  # iOS平台依赖
+  # iOS platform dependencies
 elseif(${CURRENT_PLAT} STREQUAL ${PLAT_IOS})
   target_link_libraries(
     ${gpupixel_libs_name}
@@ -415,7 +413,7 @@ elseif(${CURRENT_PLAT} STREQUAL ${PLAT_IOS})
             yuv
             stb)
 
-  # Android平台依赖
+  # Android platform dependencies
 elseif(${CURRENT_PLAT} STREQUAL ${PLAT_ANDROID})
   target_link_libraries(
     ${gpupixel_libs_name}
@@ -427,6 +425,16 @@ elseif(${CURRENT_PLAT} STREQUAL ${PLAT_ANDROID})
             marsface
             yuv
             stb)
+elseif(${CURRENT_PLAT} STREQUAL ${PLAT_WASM})
+  target_link_libraries(${gpupixel_libs_name} PRIVATE yuv stb)
+
+  # WebAssembly additional link options
+  set_target_properties(
+    ${gpupixel_libs_name}
+    PROPERTIES
+      LINK_FLAGS
+      "-s WASM=1 -s EXPORTED_RUNTIME_METHODS=['ccall','cwrap'] -s EXPORTED_FUNCTIONS=['_GPUPixel_Initialize','_GPUPixel_CreatePipeline','_GPUPixel_AddFilter','_GPUPixel_SetFilterParameter','_GPUPixel_ProcessImage','_GPUPixel_Destroy','_malloc','_free'] -s ALLOW_MEMORY_GROWTH=1"
+  )
 endif()
 
 # install header

@@ -21,7 +21,7 @@ const std::string FaceMakeupFilterVertexShaderString = R"(
       textureCoordinate = inputTextureCoordinate;
       textureCoordinate2 = position.xy * 0.5 + 0.5;  // landmark
     })";
-#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
+#if defined(GPUPIXEL_GLES_SHADER)
 const std::string FaceMakeupFilterFragmentShaderString = R"(
     precision mediump float; 
     varying highp vec2 textureCoordinate;
@@ -91,7 +91,7 @@ const std::string FaceMakeupFilterFragmentShaderString = R"(
       gl_FragColor =
           vec4(bgColor.rgb * (1.0 - fgColor.a) + color.rgb * fgColor.a, 1.0);
     })";
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
+#elif defined(GPUPIXEL_GL_SHADER)
 const std::string FaceMakeupFilterFragmentShaderString = R"(
     varying vec2 textureCoordinate;
     varying vec2 textureCoordinate2;

@@ -9,7 +9,7 @@
 #include "core/gpupixel_context.h"
 namespace gpupixel {
 
-#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
+#if defined(GPUPIXEL_GLES_SHADER)
 const std::string kConvolution3x3FragmentShaderString = R"(
     precision highp float; uniform sampler2D inputImageTexture;
     uniform mediump mat3 convolutionMatrix;
@@ -54,7 +54,7 @@ const std::string kConvolution3x3FragmentShaderString = R"(
 
       gl_FragColor = vec4(resultColor, centerColor.a);
     })";
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
+#elif defined(GPUPIXEL_GL_SHADER)
 const std::string kConvolution3x3FragmentShaderString = R"(
     precision float; uniform sampler2D inputImageTexture;
     uniform mat3 convolutionMatrix;

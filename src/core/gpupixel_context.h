@@ -65,15 +65,17 @@ class GPUPIXEL_API GPUPixelContext {
 #if defined(GPUPIXEL_IOS)
   EAGLContext* egl_context_;
 #elif defined(GPUPIXEL_MAC)
-  NSOpenGLContext* image_processing_context_;
   NSOpenGLPixelFormat* pixel_format_;
+  NSOpenGLContext* image_processing_context_;
 #elif defined(GPUPIXEL_ANDROID)
-  EGLContext egl_context_;
   EGLDisplay egl_display_;
-  EGLSurface egl_surface_;
   EGLConfig egl_config_;
+  EGLSurface egl_surface_;
+  EGLContext egl_context_;
 #elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
-  GLFWwindow* gl_context_ = nullptr;
+  GLFWwindow* gl_context_;
+#elif defined(GPUPIXEL_WASM)
+  EMSCRIPTEN_WEBGL_CONTEXT_HANDLE wasm_context_;
 #endif
 };
 

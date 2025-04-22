@@ -15,7 +15,6 @@ set ( ly_inc_dir	${ly_base_dir}/include )
 set ( ly_tst_dir	${ly_base_dir}/unit_test )
 set ( ly_lib_name	yuv )
 set ( ly_lib_static	${ly_lib_name} )
-set ( ly_lib_shared	${ly_lib_name}_shared )
 
 # We cannot use GLOB here since we want to be able to separate out files that
 # need particular flags to enable architecture extensions like AArch64's SVE.
@@ -75,8 +74,6 @@ if(MSVC)
   add_definitions ( -D_CRT_SECURE_NO_WARNINGS )
 endif()
 
-# Need to set PIC to allow creating shared libraries from object file libraries.
-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 set(ly_lib_parts ${ly_common_source_files})
 
@@ -173,14 +170,6 @@ endif()
 # this creates the static library (.a)
 add_library( ${ly_lib_static} STATIC ${ly_lib_parts})
 
-# this creates the shared library (.so)
-add_library( ${ly_lib_shared} SHARED ${ly_lib_parts})
-set_target_properties( ${ly_lib_shared} PROPERTIES OUTPUT_NAME "${ly_lib_name}" )
-set_target_properties( ${ly_lib_shared} PROPERTIES PREFIX "lib" )
-if(WIN32)
-  set_target_properties( ${ly_lib_shared} PROPERTIES IMPORT_PREFIX "lib" )
-endif()
-
 # this creates the cpuid tool
 add_executable      ( cpuid ${ly_base_dir}/util/cpuid.c )
 target_link_libraries  ( cpuid ${ly_lib_static} )
@@ -245,7 +234,6 @@ endif()
 # install the conversion tool, .so, .a, and all the header files
 install ( TARGETS yuvconvert DESTINATION bin )
 install ( TARGETS ${ly_lib_static}						DESTINATION lib )
-install ( TARGETS ${ly_lib_shared} LIBRARY DESTINATION lib RUNTIME DESTINATION bin ARCHIVE DESTINATION lib )
 install ( DIRECTORY ${PROJECT_SOURCE_DIR}/include/		DESTINATION include )
 
 # create the .deb and .rpm packages using cpack

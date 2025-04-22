@@ -9,7 +9,7 @@
 #include "core/gpupixel_context.h"
 namespace gpupixel {
 
-#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
+#if defined(GPUPIXEL_GLES_SHADER)
 const std::string kPosterizeFragmentShaderString = R"(
     uniform sampler2D inputImageTexture; uniform highp float colorLevels;
     varying highp vec2 textureCoordinate;
@@ -19,7 +19,7 @@ const std::string kPosterizeFragmentShaderString = R"(
 
       gl_FragColor = floor((color * colorLevels) + vec4(0.5)) / colorLevels;
     })";
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
+#elif defined(GPUPIXEL_GL_SHADER)
 const std::string kPosterizeFragmentShaderString = R"(
     uniform sampler2D inputImageTexture; uniform float colorLevels;
     varying vec2 textureCoordinate;

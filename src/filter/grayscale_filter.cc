@@ -9,7 +9,7 @@
 #include "core/gpupixel_context.h"
 namespace gpupixel {
 
-#if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID)
+#if defined(GPUPIXEL_GLES_SHADER)
 const std::string kGrayscaleFragmentShaderString = R"(
     precision highp float; uniform sampler2D inputImageTexture;
     varying highp vec2 textureCoordinate;
@@ -21,7 +21,7 @@ const std::string kGrayscaleFragmentShaderString = R"(
       float luminance = dot(color.rgb, vec3(0.2125, 0.7154, 0.0721));
       gl_FragColor = vec4(vec3(luminance), color.a);
     })";
-#elif defined(GPUPIXEL_MAC) || defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
+#elif defined(GPUPIXEL_GL_SHADER)
 const std::string kGrayscaleFragmentShaderString = R"(
     uniform sampler2D inputImageTexture; varying vec2 textureCoordinate;
 

@@ -26,16 +26,16 @@ SinkView::SinkView(void* parent_view) {
 #if defined(GPUPIXEL_IOS)
   UIView* parentUIView = (__bridge UIView*)parent_view;
 
-  // 创建 ObjcView 实例
+  // Create ObjcView instance
   ObjcView* gpuPixelView = [[ObjcView alloc] initWithFrame:parentUIView.bounds];
   gpuPixelView.autoresizingMask =
       UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 
   [gpuPixelView setFillMode:(gpupixel::SinkRender::PreserveAspectRatio)];
-  // 添加到父视图
+  // Add to parent view
   [parentUIView addSubview:gpuPixelView];
 
-  // 保存 ObjcView 实例的引用
+  // Save ObjcView instance reference
   render_view_ = (__bridge_retained void*)gpuPixelView;
 #else
   NSView* parentNSView = (__bridge NSView*)parent_view;
@@ -49,7 +49,7 @@ SinkView::SinkView(void* parent_view) {
                 positioned:NSWindowBelow
                 relativeTo:nil];
 
-  // 保存 ObjcView 实例的引用
+  // Save ObjcView instance reference
   render_view_ = (__bridge_retained void*)gpuPixelView;
 #endif
 }
