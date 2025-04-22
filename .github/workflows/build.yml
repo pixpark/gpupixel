@@ -15,11 +15,11 @@ jobs:
         steps:
             - uses: actions/checkout@v4
            
-            # 构建 Docker 镜像
+            # Build Docker image
             - name: Build Docker image
               run: docker build -t gpupixel_img .
  
-            # 使用Docker运行Linux构建脚本
+            # Run Linux build script with Docker
             - name: Build with Linux script
               run: |
                 mkdir -p output build
@@ -40,11 +40,11 @@ jobs:
         steps:
             - uses: actions/checkout@v4
             
-            # 授予脚本执行权限
+            # Grant script execution permissions
             - name: Grant execute permission for scripts
               run: chmod +x ${{github.workspace}}/script/*.sh
               
-            # 使用macOS构建脚本
+            # Use macOS build script
             - name: Build with macOS script
               run: ${{github.workspace}}/script/build_macos.sh
     
@@ -57,11 +57,11 @@ jobs:
         steps:
             - uses: actions/checkout@v4
             
-            # 授予脚本执行权限
+            # Grant script execution permissions
             - name: Grant execute permission for scripts
               run: chmod +x ${{github.workspace}}/script/*.sh
               
-            # 使用iOS构建脚本
+            # Use iOS build script
             - name: Build with iOS script
               run: ${{github.workspace}}/script/build_ios.sh
               
@@ -74,13 +74,13 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
-           # 配置MSVC环境为x64
+           # Configure MSVC environment as x64
             - name: Setup MSVC environment
               uses: ilammy/msvc-dev-cmd@v1
               with:
                 arch: x64
 
-            # 使用Windows构建脚本
+            # Use Windows build script
             - name: Build with Windows script
               run: .\script\build_windows.bat
 
@@ -100,11 +100,11 @@ jobs:
                 distribution: 'temurin'
                 cache: gradle
 
-            # 授予脚本执行权限
+            # Grant script execution permissions
             - name: Grant execute permission for scripts
               run: chmod +x ${{github.workspace}}/script/*.sh
               
-            # 使用Android构建脚本
+            # Use Android build script
             - name: Build with Android script
               run: ${{github.workspace}}/script/build_android.sh
 
