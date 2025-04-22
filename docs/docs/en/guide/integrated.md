@@ -31,6 +31,10 @@ Select `Project -> Targets -> Build Phases -> Link Binary With Libraries`.
 
 Click the `+` button at the bottom left to add the dependencies as shown above. `CoreMedia.framework` and `AVFoundation.framework` are system libraries that provide capabilities such as camera capture.
 
+::: warning
+If you are creating your own Xcode project, remember to turn off the `Build Settings -> Compress PNG Files -> NO` option, otherwise it will cause image color inversion
+:::
+
 **Framework Search Path**
 
 Select `Project -> Targets -> Build Settings -> Search Paths -> Framework Search Paths`, and enter the path where GPUPixel is stored.

@@ -11,7 +11,7 @@ description: 本篇将介绍各个系统平台GPUPixel库的集成调用方法
 
 ## iOS & MacOS
 
-iOS 和 MacOS库的链接形式相同，放到一块来讲
+iOS 和 MacOS库的链接形式相同
 
 ### 添加依赖
 
@@ -38,6 +38,10 @@ iOS 和 MacOS库的链接形式相同，放到一块来讲
 选择`工程 -> Targets -> General -> Frameworks, Libraries, and Embeded Content`
 
 将gpupixel库设置为 `Embed & Sign`, 系统库选择` Do Not Embed `
+
+::: warning
+如果是自己创建的 Xcode工程，记得把工程 `Build Settings -> Compress PNG Files  -> NO` 选项关掉，否则会照成图片反色
+:::
 
 ### Objective-C 调用
 

@@ -50,7 +50,7 @@ Desktop Demo 编译需要安装以下环境：
 - **64位编译**：在设置中找到`vcvars64.bat`（适用于 VS 2017 的 x64 本机工具命令提示）并单击，打开VS编译x64架构程序的虚拟环境
 
 ::: warning
-Windows仅支持生成 x86_64 Release 版本，暂不支持 x86_32
+Windows仅支持生成 x86_64 Release 版本，不支持 x86_32
 :::
  
 **Linux编译环境配置**
