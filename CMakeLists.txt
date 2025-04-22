@@ -54,6 +54,11 @@ else()
   message(FATAL_ERROR "Unsupported operating system: ${CMAKE_SYSTEM_NAME}")
 endif()
 
+# Windows platform only supports Release build mode
+if(${CURRENT_PLAT} STREQUAL ${PLAT_WIN} AND NOT CMAKE_BUILD_TYPE STREQUAL "Release")
+  message(FATAL_ERROR "Windows platform only supports Release build mode, Debug mode is not supported. Please use -DCMAKE_BUILD_TYPE=Release to configure the project.")
+endif()
+
 # ---- C++ standard settings ----
 # Configure the C++ language version and features
 set(CMAKE_CXX_STANDARD 11)
