@@ -108,3 +108,24 @@ jobs:
             - name: Build with Android script
               run: ${{github.workspace}}/script/build_android.sh
 
+    build-wasm-emscripten:
+        name: WebAssembly (Emscripten)
+        runs-on: ubuntu-latest
+        timeout-minutes: 15
+        env:
+            BUILD_TYPE: Release
+        steps:
+            - uses: actions/checkout@v4
+            
+            # Setup Emscripten
+            - name: Setup Emscripten
+              uses: mymindstorm/setup-emsdk@v12
+              
+            # Grant script execution permissions
+            - name: Grant execute permission for scripts
+              run: chmod +x ${{github.workspace}}/script/*.sh
+              
+            # Use WebAssembly build script
+            - name: Build with WebAssembly script
+              run: ${{github.workspace}}/script/build_wasm.sh
+
