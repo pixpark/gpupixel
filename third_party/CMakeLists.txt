@@ -86,6 +86,9 @@ add_subdirectory(libyuv EXCLUDE_FROM_ALL) # EXCLUDE_FROM_ALL means don't install
 target_include_directories(
   yuv PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/libyuv/include>)
 
+# add -fPIC option to solve dynamic library linking issues
+set_target_properties(yuv PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
 if(${CURRENT_PLAT} STREQUAL ${PLAT_WASM})
   install(
     TARGETS yuv
