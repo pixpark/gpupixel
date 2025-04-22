@@ -19,7 +19,8 @@ using namespace gpupixel;
 std::list<std::shared_ptr<FaceDetector>> face_detector_list_;
 
 // Create face detector
-extern "C" JNIEXPORT jlong JNICALL Java_com_pixpark_gpupixel_FaceDetector_nativeFaceDetectorCreate(JNIEnv* env,
+extern "C" JNIEXPORT jlong JNICALL
+Java_com_pixpark_gpupixel_FaceDetector_nativeFaceDetectorCreate(JNIEnv* env,
                                                                 jclass obj) {
   auto detector = FaceDetector::Create();
   face_detector_list_.push_back(detector);
@@ -27,7 +28,8 @@ extern "C" JNIEXPORT jlong JNICALL Java_com_pixpark_gpupixel_FaceDetector_native
 }
 
 // Destroy face detector
-extern "C" JNIEXPORT void JNICALL Java_com_pixpark_gpupixel_FaceDetector_nativeFaceDetectorDestroy(
+extern "C" JNIEXPORT void JNICALL
+Java_com_pixpark_gpupixel_FaceDetector_nativeFaceDetectorDestroy(
     JNIEnv* env,
     jclass obj,
     jlong classId) {
@@ -40,7 +42,8 @@ extern "C" JNIEXPORT void JNICALL Java_com_pixpark_gpupixel_FaceDetector_nativeF
 }
 
 // Detect face landmarks
-extern "C" JNIEXPORT jfloatArray JNICALL Java_com_pixpark_gpupixel_FaceDetector_nativeFaceDetectorDetect(
+extern "C" JNIEXPORT jfloatArray JNICALL
+Java_com_pixpark_gpupixel_FaceDetector_nativeFaceDetectorDetect(
     JNIEnv* env,
     jclass obj,
     jlong classId,

@@ -62,7 +62,7 @@ public class GPUPixel {
         try {
             exPath = context.getExternalFilesDir(null).getAbsolutePath();
 
-            // 创建目标目录
+            // Create target directories
             File resDir = new File(exPath + "/gpupixel/res");
             if (!resDir.exists()) {
                 resDir.mkdirs();
@@ -73,10 +73,10 @@ public class GPUPixel {
                 modelsDir.mkdirs();
             }
 
-            // 获取assets下的所有文件
+            // Get all files under assets
             processAssetsDirectory(context, "", exPath);
 
-            // 设置资源路径
+            // Set resource path
             String path = exPath + "/gpupixel";
             nativeSetResourcePath(path);
             Log.i(TAG, "nativeSetResourcePath: " + path);
@@ -88,40 +88,40 @@ public class GPUPixel {
     }
 
     /**
-     * 递归处理assets目录中的文件
+     * Process files in assets directory recursively
      * @param context Application context
-     * @param assetPath 当前assets中的路径
-     * @param exPath 外部存储路径
+     * @param assetPath Current path in assets
+     * @param exPath External storage path
      */
     private static void processAssetsDirectory(Context context, String assetPath, String exPath) {
         try {
             String[] fileList = context.getAssets().list(assetPath);
 
             if (fileList != null && fileList.length > 0) {
-                // 如果是目录，递归处理
+                // If it's a directory, process recursively
                 for (String fileName : fileList) {
                     String subPath = assetPath.isEmpty() ? fileName : assetPath + "/" + fileName;
                     processAssetsDirectory(context, subPath, exPath);
                 }
             } else {
-                // 是文件，根据类型复制到不同目录
+                // It's a file, copy based on file type
                 String targetPath;
 
                 if (assetPath.toLowerCase().endsWith(".jpg")
                         || assetPath.toLowerCase().endsWith(".jpeg")
                         || assetPath.toLowerCase().endsWith(".png")
                         || assetPath.toLowerCase().endsWith(".gif")) {
-                    // 图片文件复制到res目录
+                    // Image files to res directory
                     targetPath = exPath + "/gpupixel/res/" + new File(assetPath).getName();
                 } else if (assetPath.toLowerCase().endsWith(".mars_model")) {
-                    // .mars_model文件复制到models目录
+                    // .mars_model files to models directory
                     targetPath = exPath + "/gpupixel/models/" + new File(assetPath).getName();
                 } else {
-                    // 其他文件不处理
+                    // Other files not processed
                     return;
                 }
 
-                // 复制文件
+                // Copy file
                 File targetFile = new File(targetPath);
                 if (!targetFile.exists()) {
                     InputStream is = context.getAssets().open(assetPath);

@@ -18,7 +18,7 @@ Java_com_pixpark_gpupixel_GPUPixelSourceRawData_nativeCreate(JNIEnv* env,
     return 0;
   }
 
-  // 创建堆上的智能指针对象
+  // Create smart pointer object on heap
   auto* ptr = new std::shared_ptr<SourceRawData>(source_raw_data);
   return reinterpret_cast<jlong>(ptr);
 }
@@ -29,7 +29,7 @@ Java_com_pixpark_gpupixel_GPUPixelSourceRawData_nativeDestroy(
     JNIEnv* env,
     jclass clazz,
     jlong native_obj) {
-  // 释放堆上分配的智能指针
+  // Release smart pointer allocated on heap
   auto* ptr = reinterpret_cast<std::shared_ptr<SourceRawData>*>(native_obj);
   delete ptr;
 }
@@ -40,7 +40,7 @@ Java_com_pixpark_gpupixel_GPUPixelSourceRawData_nativeFinalize(
     JNIEnv* env,
     jclass clazz,
     jlong native_obj) {
-  // 获取智能指针然后访问对象
+  // Get smart pointer and access object
   auto* ptr = reinterpret_cast<std::shared_ptr<SourceRawData>*>(native_obj);
   if (ptr && *ptr) {
     (*ptr)->ReleaseFramebuffer(false);
