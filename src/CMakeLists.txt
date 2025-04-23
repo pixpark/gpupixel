@@ -1,6 +1,13 @@
 # Define project name and initialize project
 set(gpupixel_libs_name "gpupixel")
 
+# Add compilation options to suppress OpenGL deprecation warnings
+if(${CURRENT_PLAT} STREQUAL ${PLAT_MAC} OR ${CURRENT_PLAT} STREQUAL ${PLAT_IOS})
+  add_compile_definitions(GL_SILENCE_DEPRECATION)
+  add_compile_definitions(NS_OPENGL_DEPRECATED)
+  add_compile_definitions(NS_OPENGL_ENUM_DEPRECATED)
+endif()
+
 # index file
 set(common_source_files
     ${CMAKE_CURRENT_SOURCE_DIR}/core/gpupixel.cc
@@ -357,6 +364,8 @@ if(APPLE)
         ${gpupixel_libs_name} PROPERTIES MACOSX_DEPLOYMENT_TARGET
                                          ${APPLE_DEPLOYMENT_TARGET})
     endif()
+
+    target_compile_options(${gpupixel_libs_name} PRIVATE "-fobjc-arc")
   endif()
 endif()
 

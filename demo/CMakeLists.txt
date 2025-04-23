@@ -35,6 +35,7 @@ if(NOT ${CURRENT_PLAT} STREQUAL ${PLAT_WASM})
                  INSTALL_RPATH "@executable_path/../lib"
                  BUILD_WITH_INSTALL_RPATH TRUE)
 
+    target_compile_options(${GPL_APP_NAME} PRIVATE "-fno-objc-arc")
     target_link_libraries(${GPL_APP_NAME} PRIVATE "-framework OpenGL" glad glfw
                                                   dl marsface gpupixel)
   elseif(WIN32)

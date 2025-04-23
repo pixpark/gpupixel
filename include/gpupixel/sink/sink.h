@@ -11,7 +11,7 @@
 #include "gpupixel/gpupixel_define.h"
 #include <iostream>
 namespace gpupixel {
-GPUPIXEL_API enum RotationMode {
+enum GPUPIXEL_API RotationMode {
   NoRotation = 0,
   RotateLeft,
   RotateRight,

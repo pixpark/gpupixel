@@ -117,9 +117,7 @@ if(${CURRENT_PLAT} STREQUAL ${PLAT_MAC}
 
   if(APPLE)
     # disable ARC for Objective-C and Objective-C++ files
-    target_compile_options(
-      glfw PRIVATE $<$<COMPILE_LANGUAGE:OBJC>:-fno-objc-arc>
-                   $<$<COMPILE_LANGUAGE:OBJCXX>:-fno-objc-arc>)
+    target_compile_options(glfw PRIVATE "-fno-objc-arc")
   endif()
 endif()
 

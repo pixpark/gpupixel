@@ -12,7 +12,7 @@
 #include <vector>
 
 namespace gpupixel {
-GPUPIXEL_API typedef struct {
+typedef struct GPUPIXEL_API {
   GLenum minFilter;
   GLenum magFilter;
   GLenum wrapS;

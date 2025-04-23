@@ -12,7 +12,7 @@
 namespace gpupixel {
 class SourceImage;
 
-GPUPIXEL_API typedef struct {
+typedef struct GPUPIXEL_API {
   float x;
   float y;
   float width;

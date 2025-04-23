@@ -57,10 +57,10 @@ SinkView::SinkView(void* parent_view) {
 SinkView::~SinkView() {
   if (render_view_) {
 #if defined(GPUPIXEL_IOS)
-    ObjcView* gpuPixelView = (__bridge_transfer ObjcView*)render_view_;
+    ObjcView* gpuPixelView = (__bridge ObjcView*)render_view_;
     [gpuPixelView removeFromSuperview];
 #else
-    ObjcView* gpuPixelView = (__bridge_transfer ObjcView*)render_view_;
+    ObjcView* gpuPixelView = (__bridge ObjcView*)render_view_;
     [gpuPixelView removeFromSuperview];
 #endif
     render_view_ = nullptr;

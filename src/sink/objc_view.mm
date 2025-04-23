@@ -272,20 +272,10 @@
     CHECK_GL(glDrawArrays(GL_TRIANGLE_STRIP, 0, 4));
     [self presentFramebuffer];
 #else
-    BOOL canLockFocus = YES;
-    if ([self respondsToSelector:@selector(lockFocusIfCanDraw)]) {
-      canLockFocus = [self lockFocusIfCanDraw];
-    } else {
-      [self lockFocus];
-    }
-
-    if (canLockFocus) {
-      CHECK_GL(glDrawArrays(GL_TRIANGLE_STRIP, 0, 4));
-
-      [self presentFramebuffer];
-      CHECK_GL(glBindTexture(GL_TEXTURE_2D, 0));
-      [self unlockFocus];
-    }
+    [[self openGLContext] makeCurrentContext];
+    CHECK_GL(glDrawArrays(GL_TRIANGLE_STRIP, 0, 4));
+    [self presentFramebuffer];
+    CHECK_GL(glBindTexture(GL_TEXTURE_2D, 0));
 #endif
   });
 }
@@ -293,7 +283,7 @@
 - (void)SetInputFramebuffer:
             (std::shared_ptr<gpupixel::GPUPixelFramebuffer>)newInputFramebuffer
                withRotation:(gpupixel::RotationMode)rotation
-                    atIndex:(NSInteger)texIdx {
+                    atIndex:(int)texIdx {
   std::shared_ptr<gpupixel::GPUPixelFramebuffer> lastFramebuffer =
       inputFramebuffer;
   gpupixel::RotationMode lastInputRotation = inputRotation;
@@ -412,6 +402,14 @@
     case gpupixel::Rotate180:
       return rotate180TextureCoordinates;
   }
+}
+
+- (BOOL)IsReady {
+  return (inputFramebuffer != nullptr);
+}
+
+- (void)unPrepared {
+  inputFramebuffer = nullptr;
 }
 
 @end
