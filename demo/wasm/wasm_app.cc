@@ -41,6 +41,8 @@ int Init(const char* resource_path) {
   std::cout << "Init: SourceRawData created" << std::endl;
 
   sink_render_canvas_ = SinkRender::Create();
+  sink_render_canvas_->SetFillMode(SinkRender::FillMode::PreserveAspectRatio);
+  sink_render_canvas_->SetMirror(true);
   std::cout << "Init: SinkRender created" << std::endl;
 
   beauty_filter_ = BeautyFaceFilter::Create();

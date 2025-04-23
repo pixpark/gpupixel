@@ -306,7 +306,8 @@
                 videoStream = await navigator.mediaDevices.getUserMedia({
                     video: {
                         width: { ideal: CONFIG.video.width },
-                        height: { ideal: CONFIG.video.height }
+                        height: { ideal: CONFIG.video.height },
+                        frameRate: { ideal: 30, max: 30 }
                     },
                     audio: false
                 });
