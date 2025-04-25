@@ -54,53 +54,53 @@ GPUPixelFramebuffer::~GPUPixelFramebuffer() {
     bool should_delete_framebuffer = (framebuffer_ != -1);
 
     if (should_delete_texture) {
-      CHECK_GL(glDeleteTextures(1, &texture_));
+      GL_CALL(glDeleteTextures(1, &texture_));
       texture_ = -1;
     }
     if (should_delete_framebuffer) {
-      CHECK_GL(glDeleteFramebuffers(1, &framebuffer_));
+      GL_CALL(glDeleteFramebuffers(1, &framebuffer_));
       framebuffer_ = -1;
     }
   });
 }
 
 void GPUPixelFramebuffer::Activate() {
-  CHECK_GL(glBindFramebuffer(GL_FRAMEBUFFER, framebuffer_));
-  CHECK_GL(glViewport(0, 0, width_, height_));
+  GL_CALL(glBindFramebuffer(GL_FRAMEBUFFER, framebuffer_));
+  GL_CALL(glViewport(0, 0, width_, height_));
 }
 
 void GPUPixelFramebuffer::Deactivate() {
-  CHECK_GL(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+  GL_CALL(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 }
 
 void GPUPixelFramebuffer::GenerateTexture() {
-  CHECK_GL(glGenTextures(1, &texture_));
-  CHECK_GL(glBindTexture(GL_TEXTURE_2D, texture_));
-  CHECK_GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
-                           texture_attributes_.minFilter));
-  CHECK_GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
-                           texture_attributes_.magFilter));
-  CHECK_GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
-                           texture_attributes_.wrapS));
-  CHECK_GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,
-                           texture_attributes_.wrapT));
+  GL_CALL(glGenTextures(1, &texture_));
+  GL_CALL(glBindTexture(GL_TEXTURE_2D, texture_));
+  GL_CALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+                          texture_attributes_.minFilter));
+  GL_CALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
+                          texture_attributes_.magFilter));
+  GL_CALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
+                          texture_attributes_.wrapS));
+  GL_CALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,
+                          texture_attributes_.wrapT));
 
   // TODO: Handle mipmaps
-  CHECK_GL(glBindTexture(GL_TEXTURE_2D, 0));
+  GL_CALL(glBindTexture(GL_TEXTURE_2D, 0));
 }
 
 void GPUPixelFramebuffer::GenerateFramebuffer() {
-  CHECK_GL(glGenFramebuffers(1, &framebuffer_));
-  CHECK_GL(glBindFramebuffer(GL_FRAMEBUFFER, framebuffer_));
+  GL_CALL(glGenFramebuffers(1, &framebuffer_));
+  GL_CALL(glBindFramebuffer(GL_FRAMEBUFFER, framebuffer_));
   GenerateTexture();
-  CHECK_GL(glBindTexture(GL_TEXTURE_2D, texture_));
-  CHECK_GL(glTexImage2D(GL_TEXTURE_2D, 0, texture_attributes_.internalFormat,
-                        width_, height_, 0, texture_attributes_.format,
-                        texture_attributes_.type, 0));
-  CHECK_GL(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-                                  GL_TEXTURE_2D, texture_, 0));
-  CHECK_GL(glBindTexture(GL_TEXTURE_2D, 0));
-  CHECK_GL(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+  GL_CALL(glBindTexture(GL_TEXTURE_2D, texture_));
+  GL_CALL(glTexImage2D(GL_TEXTURE_2D, 0, texture_attributes_.internalFormat,
+                       width_, height_, 0, texture_attributes_.format,
+                       texture_attributes_.type, 0));
+  GL_CALL(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                                 GL_TEXTURE_2D, texture_, 0));
+  GL_CALL(glBindTexture(GL_TEXTURE_2D, 0));
+  GL_CALL(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 }
 
 }  // namespace gpupixel

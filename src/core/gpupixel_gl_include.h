@@ -8,7 +8,7 @@
 #pragma once
 
 #include "gpupixel/gpupixel_define.h"
-
+#include "utils/logging.h"
 #if defined(GPUPIXEL_IOS)
 #import <OpenGLES/ES3/gl.h>
 #import <OpenGLES/ES3/glext.h>
@@ -34,36 +34,33 @@
 #include <emscripten/html5.h>
 #endif
 
+// clang-format off
 //------------- ENABLE_GL_CHECK Begin ------------ //
-#define ENABLE_GL_CHECK true
-#if ENABLE_GL_CHECK
-#define CHECK_GL(glFunc)                                                      \
-  glFunc;                                                                     \
-  {                                                                           \
-    int e = glGetError();                                                     \
-    if (e != 0) {                                                             \
-      std::string errorString = "";                                           \
-      switch (e) {                                                            \
-        case GL_INVALID_ENUM:                                                 \
-          errorString = "GL_INVALID_ENUM";                                    \
-          break;                                                              \
-        case GL_INVALID_VALUE:                                                \
-          errorString = "GL_INVALID_VALUE";                                   \
-          break;                                                              \
-        case GL_INVALID_OPERATION:                                            \
-          errorString = "GL_INVALID_OPERATION";                               \
-          break;                                                              \
-        case GL_OUT_OF_MEMORY:                                                \
-          errorString = "GL_OUT_OF_MEMORY";                                   \
-          break;                                                              \
-        default:                                                              \
-          break;                                                              \
-      }                                                                       \
-      gpupixel::Util::Log(                                                    \
-          "ERROR", "GL ERROR 0x%04X %s in func:%s(), in file:%s, at line %i", \
-          e, errorString.c_str(), __FUNCTION__, __FILE__, __LINE__);          \
-    }                                                                         \
-  }
+#if defined(NDEBUG)
+#define GPUPIXEL_OPENGL_DEBUG false
 #else
-#define CHECK_GL(glFunc) glFunc;
+#define GPUPIXEL_OPENGL_DEBUG true
 #endif
+
+#if GPUPIXEL_OPENGL_DEBUG
+#define GL_CALL(_CALL)                                                          \
+  do {                                                                          \
+    _CALL;                                                                      \
+    GLenum e = glGetError();                                                    \
+    if (e != 0) {                                                               \
+      std::string errorString;                                                  \
+      switch (e) {                                                              \
+        case GL_INVALID_ENUM:      errorString = "GL_INVALID_ENUM";      break; \
+        case GL_INVALID_VALUE:     errorString = "GL_INVALID_VALUE";     break; \
+        case GL_INVALID_OPERATION: errorString = "GL_INVALID_OPERATION"; break; \
+        case GL_OUT_OF_MEMORY:    errorString = "GL_OUT_OF_MEMORY";     break;  \
+        default:                  errorString = "Unknown GL Error";     break;  \
+      }                                                                         \
+      LOG_ERROR("[{} {}:{}] GL ERROR: 0x{:04X} MSG: {}", __FILE__,              \
+                __FUNCTION__, __LINE__, e, errorString.c_str());                \
+    }                                                                           \
+  } while (0)
+#else
+#define GL_CALL(_CALL) do { _CALL; } while (0)
+#endif
+// clang-format on

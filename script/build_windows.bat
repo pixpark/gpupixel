@@ -1,28 +1,11 @@
 @echo off
 :: Windows Build Script - Using MSVC Compiler
 
-:: Initialize Pro version flag
-SET PRO_VERSION=OFF
-
-:: Parse command line arguments
-FOR %%a IN (%*) DO (
-    IF "%%a"=="--pro" (
-        SET PRO_VERSION=ON
-        echo Building Professional Version
-    )
-)
-
 echo ===== Starting Windows Build =====
 
 :: Set script variables
-SET SCRIPT_DIR=%~dp0
-SET PROJECT_DIR=%SCRIPT_DIR%..\
-SET BUILD_DIR=%PROJECT_DIR%build\windows
-SET INSTALL_DIR=%PROJECT_DIR%output
-
-:: Clean install directory
-echo Cleaning install directory...
-if exist "%INSTALL_DIR%" rd /s /q "%INSTALL_DIR%"
+SET BUILD_DIR=build\windows
+SET INSTALL_DIR=output
 
 :: Create build directory
 if not exist "%BUILD_DIR%" (
@@ -35,10 +18,9 @@ if not exist "%BUILD_DIR%" (
 
 :: Configure project - Release mode
 echo Configuring Windows project...
-cmake -B "%BUILD_DIR%" -S "%PROJECT_DIR%" ^
+cmake -B "%BUILD_DIR%" -S . ^
   -DCMAKE_BUILD_TYPE=Release ^
   -DGPUPIXEL_BUILD_DESKTOP_DEMO=ON ^
-  -DGPUPIXEL_PRO_VERSION=%PRO_VERSION% ^
   -DCMAKE_INSTALL_PREFIX="%INSTALL_DIR%"
 if errorlevel 1 (
     echo Error: Project configuration failed

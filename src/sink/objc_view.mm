@@ -9,8 +9,9 @@
 #import <AVFoundation/AVFoundation.h>
 #include "core/gpupixel_context.h"
 #include "core/gpupixel_program.h"
-#include "gpupixel/filter/filter.h"
 #include "utils/util.h"
+
+using namespace gpupixel;
 
 @interface ObjcView () {
   std::shared_ptr<gpupixel::GPUPixelFramebuffer> inputFramebuffer;
@@ -256,26 +257,26 @@
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 #if defined(GPUPIXEL_MAC)
     // Re-render onscreen, flipped to a normal orientation
-    CHECK_GL(glBindFramebuffer(GL_FRAMEBUFFER, 0));
-    CHECK_GL(glBindRenderbuffer(GL_RENDERBUFFER, 0));
+    GL_CALL(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+    GL_CALL(glBindRenderbuffer(GL_RENDERBUFFER, 0));
 #endif
-    CHECK_GL(glActiveTexture(GL_TEXTURE0));
-    CHECK_GL(glBindTexture(GL_TEXTURE_2D, inputFramebuffer->GetTexture()));
-    CHECK_GL(glUniform1i(colorMapUniformLocation, 0));
+    GL_CALL(glActiveTexture(GL_TEXTURE0));
+    GL_CALL(glBindTexture(GL_TEXTURE_2D, inputFramebuffer->GetTexture()));
+    GL_CALL(glUniform1i(colorMapUniformLocation, 0));
 
-    CHECK_GL(glVertexAttribPointer(positionAttribLocation, 2, GL_FLOAT, 0, 0,
-                                   displayVertices));
-    CHECK_GL(glVertexAttribPointer(
+    GL_CALL(glVertexAttribPointer(positionAttribLocation, 2, GL_FLOAT, 0, 0,
+                                  displayVertices));
+    GL_CALL(glVertexAttribPointer(
         texCoordAttribLocation, 2, GL_FLOAT, 0, 0,
         [self textureCoordinatesForRotation:inputRotation]));
 #if defined(GPUPIXEL_IOS)
-    CHECK_GL(glDrawArrays(GL_TRIANGLE_STRIP, 0, 4));
+    GL_CALL(glDrawArrays(GL_TRIANGLE_STRIP, 0, 4));
     [self presentFramebuffer];
 #else
     [[self openGLContext] makeCurrentContext];
-    CHECK_GL(glDrawArrays(GL_TRIANGLE_STRIP, 0, 4));
+    GL_CALL(glDrawArrays(GL_TRIANGLE_STRIP, 0, 4));
     [self presentFramebuffer];
-    CHECK_GL(glBindTexture(GL_TEXTURE_2D, 0));
+    GL_CALL(glBindTexture(GL_TEXTURE_2D, 0));
 #endif
   });
 }

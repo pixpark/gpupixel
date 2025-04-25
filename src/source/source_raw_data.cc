@@ -173,13 +173,13 @@ int SourceRawData::GenerateTextureWithI420(int width,
       1.0,  1.0    // right up
   };
 
-  CHECK_GL(glEnableVertexAttribArray(filter_position_attribute_));
-  CHECK_GL(glVertexAttribPointer(filter_position_attribute_, 2, GL_FLOAT, 0, 0,
-                                 imageVertices));
+  GL_CALL(glEnableVertexAttribArray(filter_position_attribute_));
+  GL_CALL(glVertexAttribPointer(filter_position_attribute_, 2, GL_FLOAT, 0, 0,
+                                imageVertices));
 
-  CHECK_GL(glEnableVertexAttribArray(filter_tex_coord_attribute_));
-  CHECK_GL(glVertexAttribPointer(filter_tex_coord_attribute_, 2, GL_FLOAT, 0, 0,
-                                 GetTextureCoordinate(rotation_)));
+  GL_CALL(glEnableVertexAttribArray(filter_tex_coord_attribute_));
+  GL_CALL(glVertexAttribPointer(filter_tex_coord_attribute_, 2, GL_FLOAT, 0, 0,
+                                GetTextureCoordinate(rotation_)));
 
   filter_program_->SetUniformValue("yTexture", 0);
   filter_program_->SetUniformValue("uTexture", 1);
@@ -220,16 +220,16 @@ int SourceRawData::GenerateTextureWithPixels(const uint8_t* pixels,
 
   uint32_t texture = textures_[3];
 
-  CHECK_GL(glBindTexture(GL_TEXTURE_2D, texture));
+  GL_CALL(glBindTexture(GL_TEXTURE_2D, texture));
 
   if (type == GPUPIXEL_FRAME_TYPE_BGRA) {
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
-    CHECK_GL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, stride / 4, height, 0,
-                          GL_BGRA, GL_UNSIGNED_BYTE, pixels));
+    GL_CALL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, stride / 4, height, 0,
+                         GL_BGRA, GL_UNSIGNED_BYTE, pixels));
 #endif
   } else if (type == GPUPIXEL_FRAME_TYPE_RGBA) {
-    CHECK_GL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, stride / 4, height, 0,
-                          GL_RGBA, GL_UNSIGNED_BYTE, pixels));
+    GL_CALL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, stride / 4, height, 0,
+                         GL_RGBA, GL_UNSIGNED_BYTE, pixels));
   }
 
   GPUPixelContext::GetInstance()->SetActiveGlProgram(filter_program_);
@@ -241,16 +241,16 @@ int SourceRawData::GenerateTextureWithPixels(const uint8_t* pixels,
 
   filter_program_->SetUniformValue("texture_type", 1);
 
-  CHECK_GL(glEnableVertexAttribArray(filter_position_attribute_));
-  CHECK_GL(glVertexAttribPointer(filter_position_attribute_, 2, GL_FLOAT, 0, 0,
-                                 imageVertices));
+  GL_CALL(glEnableVertexAttribArray(filter_position_attribute_));
+  GL_CALL(glVertexAttribPointer(filter_position_attribute_, 2, GL_FLOAT, 0, 0,
+                                imageVertices));
 
-  CHECK_GL(glEnableVertexAttribArray(filter_tex_coord_attribute_));
-  CHECK_GL(glVertexAttribPointer(filter_tex_coord_attribute_, 2, GL_FLOAT, 0, 0,
-                                 GetTextureCoordinate(rotation_)));
+  GL_CALL(glEnableVertexAttribArray(filter_tex_coord_attribute_));
+  GL_CALL(glVertexAttribPointer(filter_tex_coord_attribute_, 2, GL_FLOAT, 0, 0,
+                                GetTextureCoordinate(rotation_)));
 
-  CHECK_GL(glActiveTexture(GL_TEXTURE4));
-  CHECK_GL(glBindTexture(GL_TEXTURE_2D, texture));
+  GL_CALL(glActiveTexture(GL_TEXTURE4));
+  GL_CALL(glBindTexture(GL_TEXTURE_2D, texture));
   filter_program_->SetUniformValue("inputImageTexture", 4);
 
   // draw frame buffer

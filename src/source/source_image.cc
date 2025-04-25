@@ -8,6 +8,7 @@
 #include "gpupixel/source/source_image.h"
 #include <cassert>
 #include "core/gpupixel_context.h"
+#include "utils/logging.h"
 #include "utils/util.h"
 
 #if defined(GPUPIXEL_ANDROID)
@@ -16,7 +17,7 @@
 #endif
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#include "stb/stb_image.h"
 
 namespace gpupixel {
 
@@ -31,15 +32,19 @@ std::shared_ptr<SourceImage> SourceImage::CreateFromBuffer(
   return sourceImage;
 }
 
-std::shared_ptr<SourceImage> SourceImage::Create(const std::string name) {
+std::shared_ptr<SourceImage> SourceImage::Create(const std::string path) {
+  if (!fs::exists(path)) {
+    LOG_ERROR("SourceImage: image path not found: {}", path);
+    assert(false && "SourceImage: image path not found");
+    return nullptr;
+  }
   int width, height, channel_count;
   unsigned char* data =
-      stbi_load(name.c_str(), &width, &height, &channel_count, 4);
-  //   todo(logo info)
+      stbi_load(path.c_str(), &width, &height, &channel_count, 4);
+  LOG_INFO("create source image path: {}", path);
   if (data == nullptr) {
-    Util::Log("SourceImage", "SourceImage: input data in null! file name: %s",
-              name.c_str());
-    assert(data != nullptr && "SourceImage: input data is null!");
+    LOG_ERROR("stbi_load create image failed! file path: {}", path);
+    assert(data != nullptr && "stbi_load create image failed");
     return nullptr;
   }
   auto image =
@@ -60,13 +65,13 @@ void SourceImage::Init(int width,
                        ->CreateFramebuffer(width, height, true);
   }
   this->SetFramebuffer(framebuffer_);
-  CHECK_GL(glBindTexture(GL_TEXTURE_2D, this->GetFramebuffer()->GetTexture()));
+  GL_CALL(glBindTexture(GL_TEXTURE_2D, this->GetFramebuffer()->GetTexture()));
 
-  CHECK_GL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
-                        GL_UNSIGNED_BYTE, pixels));
+  GL_CALL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
+                       GL_UNSIGNED_BYTE, pixels));
   image_bytes_.assign(pixels, pixels + width * height * 4);
 
-  CHECK_GL(glBindTexture(GL_TEXTURE_2D, 0));
+  GL_CALL(glBindTexture(GL_TEXTURE_2D, 0));
 }
 
 void SourceImage::Render() {

@@ -4,7 +4,7 @@ set(GPL_APP_NAME "app")
 
 # ---- Source files configuration ----
 # add desktop application source files
-if(NOT ${CURRENT_PLAT} STREQUAL ${PLAT_WASM})
+if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
   set(APP_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/desktop/app.cc")
 
   # add ImGui source files ImGui provides the GUI components for the desktop
@@ -36,15 +36,29 @@ if(NOT ${CURRENT_PLAT} STREQUAL ${PLAT_WASM})
                  BUILD_WITH_INSTALL_RPATH TRUE)
 
     target_compile_options(${GPL_APP_NAME} PRIVATE "-fno-objc-arc")
-    target_link_libraries(${GPL_APP_NAME} PRIVATE "-framework OpenGL" glad glfw
-                                                  dl marsface gpupixel)
+    target_link_libraries(
+      ${GPL_APP_NAME}
+      PRIVATE "-framework OpenGL"
+              dl
+              glad::glad
+              glfw::glfw
+              marsface::marsface
+              gpupixel::gpupixel
+              ghc::filesystem)
   elseif(WIN32)
     # Windows specific configuration Support delayed loading of DLLs for better
     # startup performance
     target_compile_definitions(${GPL_APP_NAME} PRIVATE WINDOWS_DLL_DELAY_LOAD)
 
-    target_link_libraries(${GPL_APP_NAME} PRIVATE glad glfw opengl32 marsface
-                                                  gpupixel delayimp)
+    target_link_libraries(
+      ${GPL_APP_NAME}
+      PRIVATE opengl32
+              delayimp
+              glad::glad
+              glfw::glfw
+              marsface::marsface
+              gpupixel::gpupixel
+              ghc::filesystem)
 
     # set delayed DLL loading
     if(MSVC)
@@ -61,61 +75,72 @@ if(NOT ${CURRENT_PLAT} STREQUAL ${PLAT_WASM})
       ${GPL_APP_NAME} PROPERTIES INSTALL_RPATH "$ORIGIN/../lib"
                                  BUILD_WITH_INSTALL_RPATH TRUE)
 
-    target_link_libraries(${GPL_APP_NAME} PRIVATE glad glfw GL dl marsface
-                                                  gpupixel)
+    target_link_libraries(
+      ${GPL_APP_NAME}
+      PRIVATE GL
+              dl
+              glad::glad
+              glfw::glfw
+              marsface::marsface
+              gpupixel::gpupixel
+              ghc::filesystem
+              stdc++fs)
   endif()
 
   # ---- Installation configuration ----
   # Define where and how files should be installed
-  install(
-    TARGETS ${GPL_APP_NAME}
-    ARCHIVE DESTINATION lib
-    LIBRARY DESTINATION lib
-    RUNTIME DESTINATION bin)
+  if(GPUPIXEL_INSTALL)
+    install(
+      TARGETS ${GPL_APP_NAME}
+      ARCHIVE DESTINATION lib
+      LIBRARY DESTINATION lib
+      RUNTIME DESTINATION bin)
 
-  # Install resource files
-  install(
-    FILES ${CMAKE_CURRENT_SOURCE_DIR}/desktop/demo.png
-    DESTINATION bin
-    COMPONENT resource)
+    # Install resource files
+    install(
+      FILES ${CMAKE_CURRENT_SOURCE_DIR}/desktop/demo.png
+      DESTINATION bin
+      COMPONENT resource)
 
-  file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/desktop/demo.png
-       DESTINATION ${BUILD_OUTPUT_DIR}/bin)
-else()
-
+    file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/desktop/demo.png
+         DESTINATION ${BUILD_OUTPUT_DIR}/bin)
+  endif()
+else() 
+  # WebAssembly specific configuration
   set(APP_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/wasm/wasm_app.cc")
   add_executable(${GPL_APP_NAME} ${APP_SOURCE_FILES})
 
   set_target_properties(${GPL_APP_NAME} PROPERTIES SUFFIX ".js")
 
-  target_link_options(
-    ${GPL_APP_NAME}
-    PRIVATE
-    "SHELL:-s EXPORTED_FUNCTIONS=['_malloc','_free']"
-    "SHELL:-s EXPORTED_RUNTIME_METHODS=['ccall','cwrap']"
-    "SHELL:-s USE_WEBGL2=1"
-    "SHELL:-s FULL_ES3=1"
-    "SHELL:-s ALLOW_MEMORY_GROWTH=1"
-    "SHELL:--preload-file ${PROJECT_SOURCE_DIR}/src/res/@/gpupixel/res")
+  if(GPUPIXEL_INSTALL)
+    target_link_options(
+      ${GPL_APP_NAME}
+      PRIVATE
+      "SHELL:-s EXPORTED_FUNCTIONS=['_malloc','_free']"
+      "SHELL:-s EXPORTED_RUNTIME_METHODS=['ccall','cwrap']"
+      "SHELL:-s USE_WEBGL2=1"
+      "SHELL:-s FULL_ES3=1"
+      "SHELL:-s ALLOW_MEMORY_GROWTH=1"
+      "SHELL:--preload-file ${PROJECT_SOURCE_DIR}/src/res/@/gpupixel/res")
 
-  target_link_libraries(${GPL_APP_NAME} gpupixel yuv)
+    target_link_libraries(${GPL_APP_NAME} gpupixel yuv)
 
-  install(
-    TARGETS ${GPL_APP_NAME}
-    ARCHIVE DESTINATION lib
-    LIBRARY DESTINATION lib
-    RUNTIME DESTINATION bin)
+    install(
+      TARGETS ${GPL_APP_NAME}
+      ARCHIVE DESTINATION lib
+      LIBRARY DESTINATION lib
+      RUNTIME DESTINATION bin)
 
-  # WebAssembly installation configuration
-  install(TARGETS ${GPL_APP_NAME} RUNTIME DESTINATION bin)
+    # WebAssembly installation configuration
+    install(TARGETS ${GPL_APP_NAME} RUNTIME DESTINATION bin)
 
-  # Install all Emscripten generated files
-  install(
-    FILES "${CMAKE_CURRENT_BINARY_DIR}/${GPL_APP_NAME}.wasm"
-          "${CMAKE_CURRENT_BINARY_DIR}/${GPL_APP_NAME}.data"
-          "${CMAKE_CURRENT_BINARY_DIR}/${GPL_APP_NAME}.worker.js"
-    DESTINATION bin
-    OPTIONAL)
+    # Install all Emscripten generated files
+    install(FILES $<TARGET_FILE_DIR:${GPL_APP_NAME}>/${GPL_APP_NAME}.wasm
+                  $<TARGET_FILE_DIR:${GPL_APP_NAME}>/${GPL_APP_NAME}.data
+            DESTINATION bin)
 
-  install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/wasm/index.html" DESTINATION bin)
+    install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/wasm/index.html" DESTINATION bin)
+    file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/wasm/index.html
+         DESTINATION ${BUILD_OUTPUT_DIR}/bin)
+  endif()
 endif()

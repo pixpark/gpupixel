@@ -2,17 +2,6 @@
 # macOS Build Script
 set -e  # Exit immediately if a command exits with a non-zero status
 
-# Initialize Pro version flag
-PRO_VERSION="OFF"
-
-# Parse command line arguments
-for arg in "$@"; do
-  if [ "$arg" = "--pro" ]; then
-    PRO_VERSION="ON"
-    echo "Building Professional Version"
-  fi
-done
-
 echo "===== Starting macOS Build ====="
 
 # Set script variables
@@ -20,10 +9,6 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PROJECT_DIR="$( cd "${SCRIPT_DIR}/.." && pwd )"
 BUILD_DIR="${PROJECT_DIR}/build/macos"
 INSTALL_DIR="${PROJECT_DIR}/output"
-
-# Clean install directory
-echo "Cleaning install directory..."
-rm -rf "${INSTALL_DIR}"
 
 # Create build directory
 mkdir -p "${BUILD_DIR}" || {
@@ -47,7 +32,6 @@ if [ "$ARCH" = "x86_64" ]; then
         -DPLATFORM=MAC \
         -DCMAKE_BUILD_TYPE=Release \
         -DGPUPIXEL_BUILD_DESKTOP_DEMO=ON \
-        -DGPUPIXEL_PRO_VERSION=$PRO_VERSION \
         -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}" || {
         echo "Error: Intel platform project configuration failed"
         exit 2
@@ -60,7 +44,6 @@ else
         -DPLATFORM=MAC_ARM64 \
         -DCMAKE_BUILD_TYPE=Release \
         -DGPUPIXEL_BUILD_DESKTOP_DEMO=ON \
-        -DGPUPIXEL_PRO_VERSION=$PRO_VERSION \
         -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}" || {
         echo "Error: ARM platform project configuration failed"
         exit 2

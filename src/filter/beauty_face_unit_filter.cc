@@ -306,14 +306,11 @@ bool BeautyFaceUnitFilter::Init() {
     return false;
   }
 
-  gray_image_ =
-      SourceImage::Create(Util::GetResourcePath("res/lookup_gray.png"));
-  original_image_ =
-      SourceImage::Create(Util::GetResourcePath("res/lookup_origin.png"));
-  skin_image_ =
-      SourceImage::Create(Util::GetResourcePath("res/lookup_skin.png"));
-  custom_image_ =
-      SourceImage::Create(Util::GetResourcePath("res/lookup_light.png"));
+  auto path = Util::GetResourcePath() / "res";
+  gray_image_ = SourceImage::Create((path / "lookup_gray.png").string());
+  original_image_ = SourceImage::Create((path / "lookup_origin.png").string());
+  skin_image_ = SourceImage::Create((path / "lookup_skin.png").string());
+  custom_image_ = SourceImage::Create((path / "lookup_light.png").string());
   return true;
 }
 
@@ -324,30 +321,30 @@ bool BeautyFaceUnitFilter::DoRender(bool updateSinks) {
 
   GPUPixelContext::GetInstance()->SetActiveGlProgram(filter_program_);
   framebuffer_->Activate();
-  CHECK_GL(glClearColor(background_color_.r, background_color_.g,
-                        background_color_.b, background_color_.a));
-  CHECK_GL(glClear(GL_COLOR_BUFFER_BIT));
+  GL_CALL(glClearColor(background_color_.r, background_color_.g,
+                       background_color_.b, background_color_.a));
+  GL_CALL(glClear(GL_COLOR_BUFFER_BIT));
 
-  CHECK_GL(glActiveTexture(GL_TEXTURE2));
-  CHECK_GL(glBindTexture(GL_TEXTURE_2D,
-                         input_framebuffers_[0].frame_buffer->GetTexture()));
+  GL_CALL(glActiveTexture(GL_TEXTURE2));
+  GL_CALL(glBindTexture(GL_TEXTURE_2D,
+                        input_framebuffers_[0].frame_buffer->GetTexture()));
   filter_program_->SetUniformValue("inputImageTexture", 2);
 
-  CHECK_GL(glActiveTexture(GL_TEXTURE3));
-  CHECK_GL(glBindTexture(GL_TEXTURE_2D,
-                         input_framebuffers_[1].frame_buffer->GetTexture()));
+  GL_CALL(glActiveTexture(GL_TEXTURE3));
+  GL_CALL(glBindTexture(GL_TEXTURE_2D,
+                        input_framebuffers_[1].frame_buffer->GetTexture()));
   filter_program_->SetUniformValue("inputImageTexture2", 3);
 
-  CHECK_GL(glActiveTexture(GL_TEXTURE4));
-  CHECK_GL(glBindTexture(GL_TEXTURE_2D,
-                         input_framebuffers_[2].frame_buffer->GetTexture()));
+  GL_CALL(glActiveTexture(GL_TEXTURE4));
+  GL_CALL(glBindTexture(GL_TEXTURE_2D,
+                        input_framebuffers_[2].frame_buffer->GetTexture()));
   filter_program_->SetUniformValue("inputImageTexture3", 4);
 
   // texcoord attribute
   uint32_t filter_tex_coord_attribute =
       filter_program_->GetAttribLocation("inputTextureCoordinate");
-  CHECK_GL(glEnableVertexAttribArray(filter_tex_coord_attribute));
-  CHECK_GL(glVertexAttribPointer(
+  GL_CALL(glEnableVertexAttribArray(filter_tex_coord_attribute));
+  GL_CALL(glVertexAttribPointer(
       filter_tex_coord_attribute, 2, GL_FLOAT, 0, 0,
       GetTextureCoordinate(input_framebuffers_[0].rotation_mode)));
 
@@ -373,15 +370,15 @@ bool BeautyFaceUnitFilter::DoRender(bool updateSinks) {
   filter_program_->SetUniformValue("heightOffset", height_offset);
 
   // vertex position
-  CHECK_GL(glVertexAttribPointer(filter_position_attribute_, 2, GL_FLOAT, 0, 0,
-                                 imageVertices));
+  GL_CALL(glVertexAttribPointer(filter_position_attribute_, 2, GL_FLOAT, 0, 0,
+                                imageVertices));
 
   filter_program_->SetUniformValue("sharpen", sharpen_factor_);
   filter_program_->SetUniformValue("blurAlpha", blur_alpha_);
   filter_program_->SetUniformValue("whiten", white_balance_);
 
   // draw
-  CHECK_GL(glDrawArrays(GL_TRIANGLE_STRIP, 0, 4));
+  GL_CALL(glDrawArrays(GL_TRIANGLE_STRIP, 0, 4));
 
   framebuffer_->Deactivate();
 

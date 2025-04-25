@@ -6,7 +6,10 @@
  */
 
 #include "gpupixel/face_detector/face_detector.h"
+#include <cassert>
 #include "mars_face_detector.h"
+#include "utils/filesystem.h"
+#include "utils/logging.h"
 #include "utils/util.h"
 
 namespace gpupixel {
@@ -17,7 +20,14 @@ std::shared_ptr<FaceDetector> FaceDetector::Create() {
 
 FaceDetector::FaceDetector() {
   mars_face_detector_ = mars_face_kit::MarsFaceDetector::CreateFaceDetector();
-  mars_face_detector_->Init(Util::GetResourcePath("models"));
+  auto path = Util::GetResourcePath() / "models";
+
+  if (fs::exists(path)) {
+    mars_face_detector_->Init(path.string());
+  } else {
+    LOG_ERROR("FaceDetector: models path not found: {}", path.string());
+    assert(false && "FaceDetector: models path not found");
+  }
 }
 
 std::vector<float> FaceDetector::Detect(const uint8_t* data,

@@ -3,11 +3,7 @@
 
 namespace gpupixel {
 
-std::string GPUPixel::GetResourcePath(const std::string& name) {
-  return Util::GetResourcePath(name);
-}
-
-void GPUPixel::SetResourceRoot(const std::string& root) {
-  Util::SetResourceRoot(root);
+void GPUPixel::SetResourcePath(const std::string& path) {
+  Util::SetResourcePath(fs::path(path));
 }
 }  // namespace gpupixel

@@ -22,38 +22,82 @@
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
 @interface GPXObjcHelper : NSObject
-+ (NSString*)GetResourcePath:(NSString*)name;
++ (NSString*)getResourcePath;
+#if defined(GPUPIXEL_IOS)
++ (bool)isAppActive;
+#endif
 @end
 
-@implementation GPXObjcHelper
-
-+ (NSString*)GetResourcePath:(NSString*)name {
-  NSString* path = [[[NSBundle bundleForClass:self.class] resourcePath]
-      stringByAppendingPathComponent:name];
-  return path;
+@implementation GPXObjcHelper {
 }
+
+#if defined(GPUPIXEL_IOS)
+static bool s_isAppActive = false;
+
++ (void)load {
+  @autoreleasepool {
+    // 注册应用状态通知
+    [[NSNotificationCenter defaultCenter]
+        addObserver:self
+           selector:@selector(applicationStateChanged:)
+               name:UIApplicationWillResignActiveNotification
+             object:nil];
+    [[NSNotificationCenter defaultCenter]
+        addObserver:self
+           selector:@selector(applicationStateChanged:)
+               name:UIApplicationDidBecomeActiveNotification
+             object:nil];
+  }
+}
+
++ (void)applicationStateChanged:(NSNotification*)notification {
+  @synchronized(self) {
+    if ([notification.name
+            isEqualToString:UIApplicationWillResignActiveNotification]) {
+      s_isAppActive = false;
+    } else {
+      s_isAppActive = true;
+    }
+  }
+}
+
++ (bool)isAppActive {
+  @synchronized(self) {
+    return s_isAppActive;
+  }
+}
+
+#endif
++ (NSString*)getResourcePath {
+  return [[NSBundle bundleForClass:self.class] resourcePath];
+}
+
 @end
 
 #endif
 
 namespace gpupixel {
 
-std::string Util::resource_root_path_ = "";
+fs::path Util::resource_root_path_ = "";
 
-std::string Util::GetResourcePath(std::string name) {
+fs::path Util::GetResourcePath() {
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
-  NSString* oc_path = [GPXObjcHelper
-      GetResourcePath:[[NSString alloc] initWithUTF8String:name.c_str()]];
-  std::string path = [oc_path UTF8String];
+  fs::path default_path =
+      fs::path([[GPXObjcHelper getResourcePath] UTF8String]);
 #else
-  std::string path =
-      resource_root_path_.empty() ? name : (resource_root_path_ + "/" + name);
+  fs::path default_path = fs::current_path();
 #endif
-  return path;
+  if (resource_root_path_.empty()) {
+    LOG_INFO("resource_root_path_ is empty, using default path: {}",
+             default_path.string());
+    return default_path;
+  }
+  return resource_root_path_;
 }
 
-void Util::SetResourceRoot(std::string root) {
-  resource_root_path_ = root;
+void Util::SetResourcePath(const fs::path& path) {
+  LOG_INFO("SetResourcePath: {}", path.string());
+  resource_root_path_ = path;
 }
 
 #ifdef GPUPIXEL_WIN
@@ -112,26 +156,11 @@ int64_t Util::NowTimeMs() {
   return ts;
 }
 
-void Util::Log(const std::string& tag, std::string format, ...) {
-  char buffer[10240];
-  va_list args;
-  va_start(args, format);
-#if defined(GPUPIXEL_WIN)
-  // Use vsnprintf_s on Windows
-  vsnprintf_s(buffer, sizeof(buffer), _TRUNCATE, format.c_str(), args);
+bool Util::IsAppleAppActive() {
+#if defined(GPUPIXEL_IOS)
+  return [GPXObjcHelper isAppActive];
 #else
-  // Use vsnprintf on other platforms
-  vsnprintf(buffer, sizeof(buffer), format.c_str(), args);
-#endif
-  va_end(args);
-#if defined(GPUPIXEL_ANDROID)
-  __android_log_print(ANDROID_LOG_INFO, tag.c_str(), "%s", buffer);
-#elif defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
-  NSLog(@"%s", buffer);
-#elif defined(GPUPIXEL_LINUX)
-  printf("%s\n", buffer);
-#elif defined(GPUPIXEL_WASM)
-  std::cout << "[Wasm] " << buffer << std::endl;
+  return true;
 #endif
 }
 

@@ -83,7 +83,7 @@ void SinkRawData::Render() {
   GPUPixelContext::GetInstance()->SetActiveGlProgram(shader_program_);
   framebuffer_->Activate();
 
-  CHECK_GL(glViewport(0, 0, width_, height_));
+  GL_CALL(glViewport(0, 0, width_, height_));
 
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -99,19 +99,19 @@ void SinkRawData::Render() {
       0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
   };
 
-  CHECK_GL(glEnableVertexAttribArray(position_attribute_));
-  CHECK_GL(glVertexAttribPointer(position_attribute_, 2, GL_FLOAT, 0, 0,
-                                 image_vertices));
+  GL_CALL(glEnableVertexAttribArray(position_attribute_));
+  GL_CALL(glVertexAttribPointer(position_attribute_, 2, GL_FLOAT, 0, 0,
+                                image_vertices));
 
-  CHECK_GL(glEnableVertexAttribArray(tex_coord_attribute_));
-  CHECK_GL(glVertexAttribPointer(tex_coord_attribute_, 2, GL_FLOAT, 0, 0,
-                                 texture_vertices));
+  GL_CALL(glEnableVertexAttribArray(tex_coord_attribute_));
+  GL_CALL(glVertexAttribPointer(tex_coord_attribute_, 2, GL_FLOAT, 0, 0,
+                                texture_vertices));
 
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D,
                 input_framebuffers_[0].frame_buffer->GetTexture());
 
-  CHECK_GL(shader_program_->SetUniformValue("sTexture", 0));
+  GL_CALL(shader_program_->SetUniformValue("sTexture", 0));
   // Draw frame buffer
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
@@ -135,8 +135,8 @@ int SinkRawData::RenderToOutput() {
   framebuffer_->Activate();
 
   // Read pixel data directly using glReadPixels
-  CHECK_GL(glReadPixels(0, 0, width_, height_, GL_RGBA, GL_UNSIGNED_BYTE,
-                        rgba_buffer_));
+  GL_CALL(glReadPixels(0, 0, width_, height_, GL_RGBA, GL_UNSIGNED_BYTE,
+                       rgba_buffer_));
 
   framebuffer_->Deactivate();
   return 0;

@@ -24,7 +24,8 @@ std::shared_ptr<LipstickFilter> LipstickFilter::Create() {
 }
 
 bool LipstickFilter::Init() {
-  auto mouth = SourceImage::Create(Util::GetResourcePath("res/mouth.png"));
+  auto path = Util::GetResourcePath() / "res";
+  auto mouth = SourceImage::Create((path / "mouth.png").string());
   SetImageTexture(mouth);
   SetTextureBounds(FrameBounds{502.5, 710, 262.5, 167.5});
   return FaceMakeupFilter::Init();

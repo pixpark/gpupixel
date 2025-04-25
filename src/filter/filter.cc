@@ -8,6 +8,7 @@
 #include "gpupixel/filter/filter.h"
 #include "core/gpupixel_context.h"
 #include "gpupixel/gpupixel.h"
+#include "utils/logging.h"
 #include "utils/util.h"
 namespace gpupixel {
 
@@ -111,7 +112,7 @@ bool Filter::InitWithShaderString(const std::string& vertex_shader_source,
       vertex_shader_source, fragment_shader_source);
   filter_position_attribute_ = filter_program_->GetAttribLocation("position");
   GPUPixelContext::GetInstance()->SetActiveGlProgram(filter_program_);
-  CHECK_GL(glEnableVertexAttribArray(filter_position_attribute_));
+  GL_CALL(glEnableVertexAttribArray(filter_position_attribute_));
   return true;
 }
 
@@ -164,16 +165,16 @@ bool Filter::DoRender(bool update_sinks) {
 
   GPUPixelContext::GetInstance()->SetActiveGlProgram(filter_program_);
   framebuffer_->Activate();
-  CHECK_GL(glClearColor(background_color_.r, background_color_.g,
-                        background_color_.b, background_color_.a));
-  CHECK_GL(glClear(GL_COLOR_BUFFER_BIT));
+  GL_CALL(glClearColor(background_color_.r, background_color_.g,
+                       background_color_.b, background_color_.a));
+  GL_CALL(glClear(GL_COLOR_BUFFER_BIT));
   for (std::map<int, InputFrameBufferInfo>::const_iterator it =
            input_framebuffers_.begin();
        it != input_framebuffers_.end(); ++it) {
     int tex_idx = it->first;
     std::shared_ptr<GPUPixelFramebuffer> fb = it->second.frame_buffer;
-    CHECK_GL(glActiveTexture(GL_TEXTURE0 + tex_idx));
-    CHECK_GL(glBindTexture(GL_TEXTURE_2D, fb->GetTexture()));
+    GL_CALL(glActiveTexture(GL_TEXTURE0 + tex_idx));
+    GL_CALL(glBindTexture(GL_TEXTURE_2D, fb->GetTexture()));
     filter_program_->SetUniformValue(
         tex_idx == 0 ? "inputImageTexture"
                      : Util::StringFormat("inputImageTexture%d", tex_idx),
@@ -182,14 +183,14 @@ bool Filter::DoRender(bool update_sinks) {
     uint32_t filter_tex_coord_attribute = filter_program_->GetAttribLocation(
         tex_idx == 0 ? "inputTextureCoordinate"
                      : Util::StringFormat("inputTextureCoordinate%d", tex_idx));
-    CHECK_GL(glEnableVertexAttribArray(filter_tex_coord_attribute));
-    CHECK_GL(
+    GL_CALL(glEnableVertexAttribArray(filter_tex_coord_attribute));
+    GL_CALL(
         glVertexAttribPointer(filter_tex_coord_attribute, 2, GL_FLOAT, 0, 0,
                               GetTextureCoordinate(it->second.rotation_mode)));
   }
-  CHECK_GL(glVertexAttribPointer(filter_position_attribute_, 2, GL_FLOAT, 0, 0,
-                                 image_vertices));
-  CHECK_GL(glDrawArrays(GL_TRIANGLE_STRIP, 0, 4));
+  GL_CALL(glVertexAttribPointer(filter_position_attribute_, 2, GL_FLOAT, 0, 0,
+                                image_vertices));
+  GL_CALL(glDrawArrays(GL_TRIANGLE_STRIP, 0, 4));
 
   framebuffer_->Deactivate();
 
@@ -368,13 +369,11 @@ bool Filter::RegisterProperty(
 bool Filter::SetProperty(const std::string& name, int value) {
   Property* raw_property = GetProperty(name);
   if (!raw_property) {
-    Util::Log("WARNING", "Filter::setProperty invalid property %s",
-              name.c_str());
+    LOG_WARN("Filter::setProperty invalid property {}", name);
     return false;
   } else if (raw_property->type != "int") {
-    Util::Log("WARNING",
-              "Filter::setProperty The property type is expected to be %s",
-              raw_property->type.c_str());
+    LOG_WARN("Filter::setProperty The property type is expected to be {}",
+             raw_property->type);
     return false;
   }
   IntProperty* property = ((IntProperty*)raw_property);
@@ -388,13 +387,11 @@ bool Filter::SetProperty(const std::string& name, int value) {
 bool Filter::SetProperty(const std::string& name, float value) {
   Property* raw_property = GetProperty(name);
   if (!raw_property) {
-    Util::Log("WARNING", "Filter::setProperty invalid property %s",
-              name.c_str());
+    LOG_WARN("Filter::setProperty invalid property {}", name);
     return false;
   } else if (raw_property->type != "float") {
-    Util::Log("WARNING",
-              "Filter::setProperty The property type is expected to be %s",
-              raw_property->type.c_str());
+    LOG_WARN("Filter::setProperty The property type is expected to be {}",
+             raw_property->type);
     return false;
   }
   FloatProperty* property = ((FloatProperty*)raw_property);
@@ -409,13 +406,11 @@ bool Filter::SetProperty(const std::string& name, float value) {
 bool Filter::SetProperty(const std::string& name, std::vector<float> value) {
   Property* raw_property = GetProperty(name);
   if (!raw_property) {
-    Util::Log("WARNING", "Filter::setProperty invalid property %s",
-              name.c_str());
+    LOG_WARN("Filter::setProperty invalid property {}", name);
     return false;
   } else if (raw_property->type != "vector") {
-    Util::Log("WARNING",
-              "Filter::setProperty The property type is expected to be %s",
-              raw_property->type.c_str());
+    LOG_WARN("Filter::setProperty The property type is expected to be {}",
+             raw_property->type);
     return false;
   }
   VectorProperty* property = ((VectorProperty*)raw_property);
@@ -430,13 +425,11 @@ bool Filter::SetProperty(const std::string& name, std::vector<float> value) {
 bool Filter::SetProperty(const std::string& name, std::string value) {
   Property* raw_property = GetProperty(name);
   if (!raw_property) {
-    Util::Log("WARNING", "Filter::setProperty invalid property %s",
-              name.c_str());
+    LOG_WARN("Filter::setProperty invalid property {}", name);
     return false;
   } else if (raw_property->type != "string") {
-    Util::Log("WARNING",
-              "Filter::setProperty The property type is expected to be %s",
-              raw_property->type.c_str());
+    LOG_WARN("Filter::setProperty The property type is expected to be {}",
+             raw_property->type);
     return false;
   }
   StringProperty* property = ((StringProperty*)raw_property);

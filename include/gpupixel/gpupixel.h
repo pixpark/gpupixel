@@ -86,17 +86,10 @@ namespace gpupixel {
 class GPUPIXEL_API GPUPixel {
 public:
     /**
-     * Get resource path
-     * @param name Resource name
-     * @return Complete resource path
-     */
-    static std::string GetResourcePath(const std::string& name = "");
-
-    /**
      * Set resource root directory
      * @param root Root directory path
      */
-    static void SetResourceRoot(const std::string& root);
+    static void SetResourcePath(const std::string& path);
 };
 
 }  // namespace gpupixel

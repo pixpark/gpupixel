@@ -2,7 +2,7 @@
 set(gpupixel_libs_name "gpupixel")
 
 # Add compilation options to suppress OpenGL deprecation warnings
-if(${CURRENT_PLAT} STREQUAL ${PLAT_MAC} OR ${CURRENT_PLAT} STREQUAL ${PLAT_IOS})
+if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin" OR ${CMAKE_SYSTEM_NAME} MATCHES "iOS")
   add_compile_definitions(GL_SILENCE_DEPRECATION)
   add_compile_definitions(GLES_SILENCE_DEPRECATION)
 endif()
@@ -94,16 +94,11 @@ set(jni_source_files
 
 set(lib_source_code_files ${common_source_files})
 
-if(${CURRENT_PLAT} STREQUAL ${PLAT_ANDROID})
+if(${CMAKE_SYSTEM_NAME} MATCHES "Android")
   list(APPEND lib_source_code_files ${jni_source_files})
-elseif(${CURRENT_PLAT} STREQUAL ${PLAT_MAC} OR ${CURRENT_PLAT} STREQUAL
-                                               ${PLAT_IOS})
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin" OR ${CMAKE_SYSTEM_NAME} MATCHES
+                                                "iOS")
   list(APPEND lib_source_code_files ${objc_source_files})
-endif()
-
-if(GPUPIXEL_PRO_VERSION)
-  set(pro_source_files ${CMAKE_CURRENT_SOURCE_DIR}/pro/base/logging.cc)
-  list(APPEND lib_source_code_files ${pro_source_files})
 endif()
 
 # header files
@@ -212,10 +207,10 @@ set(lib_header_code_files
     ${internal_objc_sink_header_files}
     ${internal_utils_header_files})
 
-if(${CURRENT_PLAT} STREQUAL ${PLAT_ANDROID})
+if(${CMAKE_SYSTEM_NAME} MATCHES "Android")
   list(APPEND lib_header_code_files ${internal_jni_header_files})
-elseif(${CURRENT_PLAT} STREQUAL ${PLAT_MAC} OR ${CURRENT_PLAT} STREQUAL
-                                               ${PLAT_IOS})
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin" OR ${CMAKE_SYSTEM_NAME} MATCHES
+                                                "iOS")
   list(APPEND lib_header_code_files ${public_objc_sink_header_files})
 endif()
 
@@ -294,14 +289,15 @@ else()
     ${lib_image_resource_files} ${lib_models_resource_files})
 endif()
 
+add_library(gpupixel::gpupixel ALIAS ${gpupixel_libs_name})
+
+set_target_properties(
+  ${gpupixel_libs_name} PROPERTIES POSITION_INDEPENDENT_CODE ON
+                                   FOLDER ${gpupixel_libs_name})
+
 target_include_directories(
   ${gpupixel_libs_name} PUBLIC ${PROJECT_SOURCE_DIR}/include
                                ${CMAKE_CURRENT_SOURCE_DIR})
-
-if(GPUPIXEL_PRO_VERSION)
-  target_include_directories(${gpupixel_libs_name}
-                             PUBLIC ${PROJECT_SOURCE_DIR}/pro/include)
-endif()
 
 if(WIN32 AND GPUPIXEL_BUILD_SHARED_LIBS)
   # Windows DLL export macro definition
@@ -374,24 +370,19 @@ if(APPLE)
 endif()
 
 # Library dependencies Linux platform dependencies
-if(${CURRENT_PLAT} STREQUAL ${PLAT_LINUX})
-  target_link_libraries(${gpupixel_libs_name} PRIVATE GL marsface yuv glad glfw
-                                                      stb)
+if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+  target_link_libraries(
+    ${gpupixel_libs_name} PRIVATE GL marsface::marsface libyuv::yuv stb::stb
+                                  glad::glad glfw::glfw)
 
   # Windows platform dependencies
-elseif(${CURRENT_PLAT} STREQUAL ${PLAT_WIN})
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
   target_link_libraries(
-    ${gpupixel_libs_name}
-    PRIVATE opengl32
-            glfw
-            marsface
-            yuv
-            glad
-            glfw
-            stb)
+    ${gpupixel_libs_name} PRIVATE opengl32 glfw::glfw libyuv::yuv glad::glad
+                                  stb::stb ghc::filesystem)
 
   # macOS platform dependencies
-elseif(${CURRENT_PLAT} STREQUAL ${PLAT_MAC})
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
   target_link_libraries(
     ${gpupixel_libs_name}
     PRIVATE "-framework OpenGL"
@@ -402,13 +393,12 @@ elseif(${CURRENT_PLAT} STREQUAL ${PLAT_MAC})
             "-framework AVFoundation"
             "-framework CoreMedia"
             "-framework Metal"
-            mnn
-            marsface
-            yuv
-            stb)
+            libyuv::yuv
+            stb::stb
+            ghc::filesystem)
 
   # iOS platform dependencies
-elseif(${CURRENT_PLAT} STREQUAL ${PLAT_IOS})
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "iOS")
   target_link_libraries(
     ${gpupixel_libs_name}
     PRIVATE "-framework Foundation"
@@ -421,13 +411,12 @@ elseif(${CURRENT_PLAT} STREQUAL ${PLAT_IOS})
             "-framework CoreMedia"
             "-framework Metal"
             "-framework CoreML"
-            mnn
-            marsface
-            yuv
-            stb)
+            libyuv::yuv
+            stb::stb
+            ghc::filesystem)
 
   # Android platform dependencies
-elseif(${CURRENT_PLAT} STREQUAL ${PLAT_ANDROID})
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Android")
   target_link_libraries(
     ${gpupixel_libs_name}
     PRIVATE log
@@ -435,47 +424,52 @@ elseif(${CURRENT_PLAT} STREQUAL ${PLAT_ANDROID})
             GLESv3
             EGL
             jnigraphics
-            marsface
-            yuv
-            stb)
-elseif(${CURRENT_PLAT} STREQUAL ${PLAT_WASM})
-  target_link_libraries(${gpupixel_libs_name} PRIVATE yuv stb)
+            libyuv::yuv
+            stb::stb
+            ghc::filesystem)
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
+  target_link_libraries(${gpupixel_libs_name} PRIVATE libyuv::yuv stb::stb
+                                                      ghc::filesystem)
 endif()
 
-if(GPUPIXEL_PRO_VERSION)
-  target_link_libraries(${gpupixel_libs_name} PRIVATE fmt::fmt spdlog::spdlog)
-  target_compile_definitions(${gpupixel_libs_name} PRIVATE GPUPIXEL_PRO_VERSION)
+if(GPUPIXEL_ENABLE_FACE_DETECTOR)
+  target_link_libraries(${gpupixel_libs_name} PRIVATE marsface::marsface)
+  if(APPLE)
+    target_link_libraries(${gpupixel_libs_name} PRIVATE mnn)
+  endif()
 endif()
 
-# install header
+if(GPUPIXEL_INSTALL)
+  # install header
+  install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION include)
 
-install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION include)
+  # install library
+  install(
+    TARGETS ${gpupixel_libs_name}
+    ARCHIVE DESTINATION lib
+    LIBRARY DESTINATION lib
+    RUNTIME DESTINATION lib # win dll install lib
+    FRAMEWORK DESTINATION lib)
 
-# install library
-install(
-  TARGETS ${gpupixel_libs_name}
-  ARCHIVE DESTINATION lib
-  LIBRARY DESTINATION lib
-  RUNTIME DESTINATION lib # win dll install lib
-  FRAMEWORK DESTINATION lib)
+  # install image resource
+  install(
+    FILES ${lib_image_resource_files}
+    DESTINATION res
+    COMPONENT resource)
 
-# install image resource
-install(
-  FILES ${lib_image_resource_files}
-  DESTINATION res
-  COMPONENT resource)
+  # install model resource
+  install(
+    FILES ${lib_models_resource_files}
+    DESTINATION models
+    COMPONENT resource)
 
-# install model resource
-install(
-  FILES ${lib_models_resource_files}
-  DESTINATION models
-  COMPONENT resource)
+  # install image resource
+  foreach(image ${lib_image_resource_files})
+    file(COPY ${image} DESTINATION ${BUILD_OUTPUT_DIR}/res)
+  endforeach()
 
- 
-foreach(image ${lib_image_resource_files})
-  file(COPY ${image} DESTINATION ${BUILD_OUTPUT_DIR}/res)
-endforeach()
-
-foreach(model ${lib_models_resource_files})
-  file(COPY ${model} DESTINATION ${BUILD_OUTPUT_DIR}/models)
-endforeach()
+  # install model resource
+  foreach(model ${lib_models_resource_files})
+    file(COPY ${model} DESTINATION ${BUILD_OUTPUT_DIR}/models)
+  endforeach()
+endif()

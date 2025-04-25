@@ -19,46 +19,30 @@ if(APPLE)
          "Build gpupixel.framework instead of traditional .a/.dylib" ON)
 endif()
 
-# face detection option
-option(GPUPIXEL_ENABLE_FACE_DETECTOR "Enable face detection functionality" ON)
-
 option(GPUPIXEL_BUILD_DESKTOP_DEMO "Build desktop demo" OFF)
 
+# face detection option
+option(GPUPIXEL_ENABLE_FACE_DETECTOR "Enable face detection functionality" ON)
 if(GPUPIXEL_ENABLE_FACE_DETECTOR)
   add_compile_definitions(GPUPIXEL_ENABLE_FACE_DETECTOR)
 endif()
 
-option(GPUPIXEL_PRO_VERSION "Build pro version" OFF)
+option(GPUPIXEL_INSTALL "Generate the install target" ON)
 
 # ---- Platform detection ----
-# Identify the current operating system and set platform-specific variables
-set(PLAT_LINUX "linux")
-set(PLAT_WIN "windows")
-set(PLAT_MAC "macos")
-set(PLAT_IOS "ios")
-set(PLAT_ANDROID "android")
-set(PLAT_WASM "wasm")
-
-set(CURRENT_PLAT "linux")
-if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-  set(CURRENT_PLAT "linux")
-elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-  set(CURRENT_PLAT "windows")
-elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-  set(CURRENT_PLAT "macos")
-elseif(${CMAKE_SYSTEM_NAME} MATCHES "iOS")
-  set(CURRENT_PLAT "ios")
-elseif(${CMAKE_SYSTEM_NAME} MATCHES "Android")
-  set(CURRENT_PLAT "android")
-elseif(${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
-  set(CURRENT_PLAT "wasm")
-else()
+# Identify the current operating system
+if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Linux"
+   AND NOT ${CMAKE_SYSTEM_NAME} MATCHES "Windows"
+   AND NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin"
+   AND NOT ${CMAKE_SYSTEM_NAME} MATCHES "iOS"
+   AND NOT ${CMAKE_SYSTEM_NAME} MATCHES "Android"
+   AND NOT ${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
   message(FATAL_ERROR "Unsupported operating system: ${CMAKE_SYSTEM_NAME}")
 endif()
 
 # Windows platform only supports Release build mode
-if(${CURRENT_PLAT} STREQUAL ${PLAT_WIN} AND NOT CMAKE_BUILD_TYPE STREQUAL
-                                            "Release")
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows" AND NOT CMAKE_BUILD_TYPE STREQUAL
+                                              "Release")
   message(
     FATAL_ERROR
       "Windows platform only supports Release build mode, Debug mode is not supported. Please use -DCMAKE_BUILD_TYPE=Release to configure the project."
@@ -69,6 +53,7 @@ endif()
 # Configure the C++ language version and features
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 # ---- Build output directory ----
 set(BUILD_OUTPUT_DIR ${CMAKE_BINARY_DIR}/out)
@@ -78,12 +63,9 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${BUILD_OUTPUT_DIR}/bin)
 
 foreach(OUTPUTCONFIG IN ITEMS DEBUG RELEASE RELWITHDEBINFO MINSIZEREL)
   string(TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG)
-  set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG}
-      ${BUILD_OUTPUT_DIR}/lib)
-  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG}
-      ${BUILD_OUTPUT_DIR}/lib)
-  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG}
-      ${BUILD_OUTPUT_DIR}/bin)
+  set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${BUILD_OUTPUT_DIR}/lib)
+  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${BUILD_OUTPUT_DIR}/lib)
+  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${BUILD_OUTPUT_DIR}/bin)
 endforeach()
 
 # ---- Print build options ----
@@ -128,12 +110,6 @@ if(PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
       "In-source builds not allowed. Please make a new directory (called a build directory) and run CMake from there."
   )
 endif()
-
-# ---- Add dependencies via CPM ----
-# see https://github.com/TheLartians/CPM.cmake for more info CPM is a CMake
-# package manager that simplifies adding dependencies
-
-# include(cmake/CPM.cmake)
 
 # ---- Add source files ----
 # External dependencies first

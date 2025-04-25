@@ -5,12 +5,26 @@
 #include <iostream>
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
+#include "ghc/filesystem.hpp"
+
+namespace fs {
+using namespace ghc::filesystem;
+using ifstream = ghc::filesystem::ifstream;
+using ofstream = ghc::filesystem::ofstream;
+using fstream = ghc::filesystem::fstream;
+}  // namespace fs
 
 #ifdef _WIN32
 #include <Shlwapi.h>
 #include <delayimp.h>
 #include <windows.h>
 #pragma comment(lib, "Shlwapi.lib")
+#elif defined(__linux__)
+#include <limits.h>
+#include <unistd.h>
+#elif defined(__APPLE__)
+#include <mach-o/dyld.h>
+#include <stdlib.h>
 #endif
 
 #include "gpupixel/gpupixel.h"
@@ -39,6 +53,47 @@ float blusher_strength_ = 0.0f;
 
 // GLFW window handle
 GLFWwindow* main_window_ = nullptr;
+
+// Get executable path
+std::string GetExecutablePath() {
+  std::string path;
+#ifdef _WIN32
+  // Windows 平台实现
+  char buffer[MAX_PATH];
+  GetModuleFileNameA(NULL, buffer, MAX_PATH);
+  PathRemoveFileSpecA(buffer);
+  path = buffer;
+#elif defined(__APPLE__)
+  // macOS 平台实现
+  char buffer[PATH_MAX];
+  uint32_t size = sizeof(buffer);
+  if (_NSGetExecutablePath(buffer, &size) == 0) {
+    char realPath[PATH_MAX];
+    if (realpath(buffer, realPath)) {
+      path = realPath;
+      // 移除文件名部分，只保留目录
+      size_t pos = path.find_last_of("/\\");
+      if (pos != std::string::npos) {
+        path = path.substr(0, pos);
+      }
+    }
+  }
+#elif defined(__linux__)
+  // Linux 平台实现
+  char buffer[PATH_MAX];
+  ssize_t count = readlink("/proc/self/exe", buffer, PATH_MAX);
+  if (count != -1) {
+    buffer[count] = '\0';
+    path = buffer;
+    // 移除文件名部分，只保留目录
+    size_t pos = path.find_last_of("/\\");
+    if (pos != std::string::npos) {
+      path = path.substr(0, pos);
+    }
+  }
+#endif
+  return path;
+}
 
 // Check shader compilation/linking errors
 bool CheckShaderErrors(GLuint shader, const char* type) {
@@ -146,7 +201,10 @@ void SetupImGui() {
 
 // Initialize GPUPixel filters and pipeline
 void SetupFilterPipeline() {
-  GPUPixel::SetResourceRoot("../");
+  auto resource_path = fs::path(GetExecutablePath()).parent_path();
+  std::cout << "[App] Current resource path: " << resource_path << std::endl;
+  GPUPixel::SetResourcePath(resource_path.string());
+
   // Create filters
   lipstick_filter_ = LipstickFilter::Create();
   blusher_filter_ = BlusherFilter::Create();
@@ -158,7 +216,7 @@ void SetupFilterPipeline() {
 #endif
 
   // Create source image and sink raw data
-  source_image_ = SourceImage::Create("demo.png");
+  source_image_ = SourceImage::Create(GetExecutablePath() + "/demo.png");
   sink_raw_data_ = SinkRawData::Create();
 
   // Build filter pipeline
@@ -459,12 +517,9 @@ void CleanupResources() {
 int main() {
 #ifdef _WIN32
   // Set DLL search path
-  char exePath[MAX_PATH];
-  GetModuleFileNameA(NULL, exePath, MAX_PATH);
-  PathRemoveFileSpecA(exePath);
-
+  std::string exePath = GetExecutablePath();
   char dllDir[MAX_PATH];
-  sprintf_s(dllDir, MAX_PATH, "%s\\..\\lib", exePath);
+  sprintf_s(dllDir, MAX_PATH, "%s\\..\\lib", exePath.c_str());
   SetDllDirectoryA(dllDir);
 #endif
 

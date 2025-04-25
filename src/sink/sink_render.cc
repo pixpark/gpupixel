@@ -50,8 +50,8 @@ void SinkRender::Init() {
   color_map_uniform_location_ =
       display_program_->GetUniformLocation("textureCoordinate");
   GPUPixelContext::GetInstance()->SetActiveGlProgram(display_program_);
-  CHECK_GL(glEnableVertexAttribArray(position_attribute_location_));
-  CHECK_GL(glEnableVertexAttribArray(tex_coord_attribute_location_));
+  GL_CALL(glEnableVertexAttribArray(position_attribute_location_));
+  GL_CALL(glEnableVertexAttribArray(tex_coord_attribute_location_));
 };
 
 void SinkRender::SetInputFramebuffer(
@@ -98,28 +98,28 @@ void SinkRender::SetRenderSize(int width, int height) {
 }
 
 void SinkRender::Render() {
-  CHECK_GL(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+  GL_CALL(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 
   if (view_width_ == 0 || view_height_ == 0) {
-    Util::Log("SinkRender", "view_width_ or view_height_ is 0");
+    LOG_WARN("SinkRender: view_width_ or view_height_ is 0");
     return;
   }
-  CHECK_GL(glViewport(0, 0, view_width_, view_height_));
-  CHECK_GL(glClearColor(background_color_.r, background_color_.g,
-                        background_color_.b, background_color_.a));
-  CHECK_GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+  GL_CALL(glViewport(0, 0, view_width_, view_height_));
+  GL_CALL(glClearColor(background_color_.r, background_color_.g,
+                       background_color_.b, background_color_.a));
+  GL_CALL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
   GPUPixelContext::GetInstance()->SetActiveGlProgram(display_program_);
-  CHECK_GL(glActiveTexture(GL_TEXTURE0));
-  CHECK_GL(glBindTexture(GL_TEXTURE_2D,
-                         input_framebuffers_[0].frame_buffer->GetTexture()));
-  CHECK_GL(glUniform1i(color_map_uniform_location_, 0));
-  CHECK_GL(glVertexAttribPointer(position_attribute_location_, 2, GL_FLOAT, 0,
-                                 0, display_vertices_));
-  CHECK_GL(glVertexAttribPointer(
+  GL_CALL(glActiveTexture(GL_TEXTURE0));
+  GL_CALL(glBindTexture(GL_TEXTURE_2D,
+                        input_framebuffers_[0].frame_buffer->GetTexture()));
+  GL_CALL(glUniform1i(color_map_uniform_location_, 0));
+  GL_CALL(glVertexAttribPointer(position_attribute_location_, 2, GL_FLOAT, 0, 0,
+                                display_vertices_));
+  GL_CALL(glVertexAttribPointer(
       tex_coord_attribute_location_, 2, GL_FLOAT, 0, 0,
       GetTextureCoordinate(input_framebuffers_[0].rotation_mode)));
 
-  CHECK_GL(glDrawArrays(GL_TRIANGLE_STRIP, 0, 4));
+  GL_CALL(glDrawArrays(GL_TRIANGLE_STRIP, 0, 4));
 }
 
 void SinkRender::UpdateDisplayVertices() {

@@ -2,17 +2,6 @@
 # Linux Build Script
 set -e  # Exit immediately if a command exits with a non-zero status
 
-# Initialize Pro version flag
-PRO_VERSION="OFF"
-
-# Parse command line arguments
-for arg in "$@"; do
-  if [ "$arg" = "--pro" ]; then
-    PRO_VERSION="ON"
-    echo "Building Professional Version"
-  fi
-done
-
 echo "===== Starting Linux Build ====="
 
 # Set script variables
@@ -20,10 +9,6 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PROJECT_DIR="$( cd "${SCRIPT_DIR}/.." && pwd )"
 BUILD_DIR="${PROJECT_DIR}/build/linux"
 INSTALL_DIR="${PROJECT_DIR}/output"
-
-# Clean install directory
-echo "Cleaning install directory..."
-rm -rf "${INSTALL_DIR}"
 
 # Create build directory
 mkdir -p "${BUILD_DIR}" || {
@@ -36,7 +21,6 @@ echo "Configuring Linux project..."
 cmake -B "${BUILD_DIR}" -S "${PROJECT_DIR}" \
   -DCMAKE_BUILD_TYPE=Release \
   -DGPUPIXEL_BUILD_DESKTOP_DEMO=ON \
-  -DGPUPIXEL_PRO_VERSION=$PRO_VERSION \
   -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}" || {
   echo "Error: Project configuration failed"
   exit 2

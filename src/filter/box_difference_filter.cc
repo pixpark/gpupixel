@@ -90,41 +90,41 @@ bool BoxDifferenceFilter::DoRender(bool updateSinks) {
 
   GPUPixelContext::GetInstance()->SetActiveGlProgram(filter_program_);
   framebuffer_->Activate();
-  CHECK_GL(glClearColor(background_color_.r, background_color_.g,
-                        background_color_.b, background_color_.a));
-  CHECK_GL(glClear(GL_COLOR_BUFFER_BIT));
+  GL_CALL(glClearColor(background_color_.r, background_color_.g,
+                       background_color_.b, background_color_.a));
+  GL_CALL(glClear(GL_COLOR_BUFFER_BIT));
 
   // Texture 0
-  CHECK_GL(glActiveTexture(GL_TEXTURE0));
-  CHECK_GL(glBindTexture(GL_TEXTURE_2D,
-                         input_framebuffers_[0].frame_buffer->GetTexture()));
+  GL_CALL(glActiveTexture(GL_TEXTURE0));
+  GL_CALL(glBindTexture(GL_TEXTURE_2D,
+                        input_framebuffers_[0].frame_buffer->GetTexture()));
   filter_program_->SetUniformValue("inputImageTexture", 0);
 
   // Texture 1
-  CHECK_GL(glActiveTexture(GL_TEXTURE1));
-  CHECK_GL(glBindTexture(GL_TEXTURE_2D,
-                         input_framebuffers_[1].frame_buffer->GetTexture()));
+  GL_CALL(glActiveTexture(GL_TEXTURE1));
+  GL_CALL(glBindTexture(GL_TEXTURE_2D,
+                        input_framebuffers_[1].frame_buffer->GetTexture()));
   filter_program_->SetUniformValue("inputImageTexture2", 1);
 
-  CHECK_GL(glEnableVertexAttribArray(filter_texture_coordinate_attribute_));
-  CHECK_GL(glVertexAttribPointer(
+  GL_CALL(glEnableVertexAttribArray(filter_texture_coordinate_attribute_));
+  GL_CALL(glVertexAttribPointer(
       filter_texture_coordinate_attribute_, 2, GL_FLOAT, 0, 0,
       GetTextureCoordinate(input_framebuffers_[0].rotation_mode)));
 
-  CHECK_GL(glEnableVertexAttribArray(filter_texture_coordinate_attribute2_));
-  CHECK_GL(glVertexAttribPointer(
+  GL_CALL(glEnableVertexAttribArray(filter_texture_coordinate_attribute2_));
+  GL_CALL(glVertexAttribPointer(
       filter_texture_coordinate_attribute2_, 2, GL_FLOAT, 0, 0,
       GetTextureCoordinate(input_framebuffers_[1].rotation_mode)));
 
   // vertex position
-  CHECK_GL(glVertexAttribPointer(filter_position_attribute_, 2, GL_FLOAT, 0, 0,
-                                 imageVertices));
+  GL_CALL(glVertexAttribPointer(filter_position_attribute_, 2, GL_FLOAT, 0, 0,
+                                imageVertices));
 
   // update uniform
   filter_program_->SetUniformValue("delta", delta_);
 
   // draw
-  CHECK_GL(glDrawArrays(GL_TRIANGLE_STRIP, 0, 4));
+  GL_CALL(glDrawArrays(GL_TRIANGLE_STRIP, 0, 4));
 
   framebuffer_->Deactivate();
 

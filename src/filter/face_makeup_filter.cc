@@ -229,33 +229,33 @@ bool FaceMakeupFilter::DoRender(bool updateSinks) {
   framebuffer_->Activate();
   // render origin frame --- begin -----//
   GPUPixelContext::GetInstance()->SetActiveGlProgram(filter_program2_);
-  CHECK_GL(glClearColor(background_color_.r, background_color_.g,
-                        background_color_.b, background_color_.a));
-  CHECK_GL(glClear(GL_COLOR_BUFFER_BIT));
+  GL_CALL(glClearColor(background_color_.r, background_color_.g,
+                       background_color_.b, background_color_.a));
+  GL_CALL(glClear(GL_COLOR_BUFFER_BIT));
 
-  CHECK_GL(glActiveTexture(GL_TEXTURE4));
-  CHECK_GL(glBindTexture(GL_TEXTURE_2D,
-                         input_framebuffers_[0].frame_buffer->GetTexture()));
+  GL_CALL(glActiveTexture(GL_TEXTURE4));
+  GL_CALL(glBindTexture(GL_TEXTURE_2D,
+                        input_framebuffers_[0].frame_buffer->GetTexture()));
   filter_program2_->SetUniformValue("inputImageTexture", 4);
 
   // vertex
-  CHECK_GL(glEnableVertexAttribArray(filter_position_attribute2_));
-  CHECK_GL(glVertexAttribPointer(filter_position_attribute2_, 2, GL_FLOAT, 0, 0,
-                                 imageVertices));
+  GL_CALL(glEnableVertexAttribArray(filter_position_attribute2_));
+  GL_CALL(glVertexAttribPointer(filter_position_attribute2_, 2, GL_FLOAT, 0, 0,
+                                imageVertices));
 
-  CHECK_GL(glEnableVertexAttribArray(filter_tex_coord_attribute2_));
-  CHECK_GL(glVertexAttribPointer(filter_tex_coord_attribute2_, 2, GL_FLOAT, 0,
-                                 0, GetTextureCoordinate(NoRotation)));
+  GL_CALL(glEnableVertexAttribArray(filter_tex_coord_attribute2_));
+  GL_CALL(glVertexAttribPointer(filter_tex_coord_attribute2_, 2, GL_FLOAT, 0, 0,
+                                GetTextureCoordinate(NoRotation)));
 
-  CHECK_GL(glDrawArrays(GL_TRIANGLE_STRIP, 0, 4));
+  GL_CALL(glDrawArrays(GL_TRIANGLE_STRIP, 0, 4));
 
   // render image --- begin --- //
   GPUPixelContext::GetInstance()->SetActiveGlProgram(filter_program_);
 
-  CHECK_GL(glEnableVertexAttribArray(filter_position_attribute_));
+  GL_CALL(glEnableVertexAttribArray(filter_position_attribute_));
   if (face_landmarks_.size() != 0) {
-    CHECK_GL(glVertexAttribPointer(filter_position_attribute_, 2, GL_FLOAT, 0,
-                                   0, face_landmarks_.data()));
+    GL_CALL(glVertexAttribPointer(filter_position_attribute_, 2, GL_FLOAT, 0, 0,
+                                  face_landmarks_.data()));
   }
 
   auto coord = this->FaceTextureCoordinates();
@@ -268,17 +268,17 @@ bool FaceMakeupFilter::DoRender(bool updateSinks) {
         (coord[i * 2 + 1] * 1280 - texture_bounds_.y) / texture_bounds_.height;
   }
   // texcoord attribute
-  CHECK_GL(glEnableVertexAttribArray(filter_tex_coord_attribute_));
-  CHECK_GL(glVertexAttribPointer(filter_tex_coord_attribute_, 2, GL_FLOAT, 0, 0,
-                                 textureCoordinates.data()));
+  GL_CALL(glEnableVertexAttribArray(filter_tex_coord_attribute_));
+  GL_CALL(glVertexAttribPointer(filter_tex_coord_attribute_, 2, GL_FLOAT, 0, 0,
+                                textureCoordinates.data()));
 
   filter_program_->SetUniformValue("intensity", this->blend_level_);
 
   filter_program_->SetUniformValue("blendMode", 15);
 
   std::shared_ptr<GPUPixelFramebuffer> fb = input_framebuffers_[0].frame_buffer;
-  CHECK_GL(glActiveTexture(GL_TEXTURE0));
-  CHECK_GL(glBindTexture(GL_TEXTURE_2D, fb->GetTexture()));
+  GL_CALL(glActiveTexture(GL_TEXTURE0));
+  GL_CALL(glBindTexture(GL_TEXTURE_2D, fb->GetTexture()));
   filter_program_->SetUniformValue("inputImageTexture", 0);  // origin image
 
   glActiveTexture(GL_TEXTURE3);

@@ -34,7 +34,7 @@ int Init(const char* resource_path) {
     return 1;
   }
 
-  GPUPixel::SetResourceRoot(resource_path);
+  GPUPixel::SetResourcePath(resource_path);
   std::cout << "Init: Resource root directory set" << std::endl;
 
   source_raw_data_ = SourceRawData::Create();
