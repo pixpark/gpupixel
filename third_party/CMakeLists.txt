@@ -113,6 +113,15 @@ if(${CURRENT_PLAT} STREQUAL ${PLAT_MAC}
 
   # ---- glfw configuration ----
   # Cross-platform window and input management
+  set(GLFW_BUILD_EXAMPLES
+      OFF
+      CACHE BOOL "Disable building GLFW examples")
+  set(GLFW_BUILD_TESTS
+      OFF
+      CACHE BOOL "Disable building GLFW tests")
+  set(GLFW_INSTALL
+      OFF
+      CACHE BOOL "Disable GLFW installation")
   add_subdirectory(glfw EXCLUDE_FROM_ALL)
 
   if(APPLE)
@@ -127,3 +136,30 @@ add_library(stb INTERFACE)
 
 target_include_directories(
   stb INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/stb>)
+
+# ---- pro version configuration ----
+if(GPUPIXEL_PRO_VERSION)
+  include(${PROJECT_SOURCE_DIR}/cmake/CPM.cmake)
+
+  # ⚠️ must add fmt before spdlog
+  CPMAddPackage(
+    NAME
+    fmt
+    GIT_TAG
+    11.1.4
+    GITHUB_REPOSITORY
+    fmtlib/fmt
+    OPTIONS
+    "FMT_TEST OFF")
+
+  CPMAddPackage(
+    NAME
+    spdlog
+    GITHUB_REPOSITORY
+    gabime/spdlog
+    VERSION
+    1.15.2
+    OPTIONS
+    "SPDLOG_BUILD_TESTS OFF"
+    "SPDLOG_FMT_EXTERNAL ON")
+endif()

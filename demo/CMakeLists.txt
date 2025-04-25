@@ -78,6 +78,9 @@ if(NOT ${CURRENT_PLAT} STREQUAL ${PLAT_WASM})
     FILES ${CMAKE_CURRENT_SOURCE_DIR}/desktop/demo.png
     DESTINATION bin
     COMPONENT resource)
+
+  file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/desktop/demo.png
+       DESTINATION ${BUILD_OUTPUT_DIR}/bin)
 else()
 
   set(APP_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/wasm/wasm_app.cc")

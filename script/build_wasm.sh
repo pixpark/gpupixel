@@ -9,11 +9,26 @@
 
 set -e
 
+# Initialize Pro version flag
+PRO_VERSION="OFF"
+
+# Parse command line arguments
+for arg in "$@"; do
+  if [ "$arg" = "--pro" ]; then
+    PRO_VERSION="ON"
+    echo "Building Professional Version"
+  fi
+done
+
 # Set script variables
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PROJECT_DIR="$( cd "${SCRIPT_DIR}/.." && pwd )"
 BUILD_DIR="${PROJECT_DIR}/build/wasm"
 INSTALL_DIR="${PROJECT_DIR}/output"
+
+# Clean install directory
+echo "Cleaning install directory..."
+rm -rf "${INSTALL_DIR}"
 
 # Check if Emscripten is installed
 if ! command -v emcc &> /dev/null; then
@@ -56,7 +71,8 @@ emcmake cmake "${PROJECT_DIR}" \
   -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}" \
   -DGPUPIXEL_BUILD_SHARED_LIBS=OFF \
   -DGPUPIXEL_ENABLE_FACE_DETECTOR=OFF \
-  -DGPUPIXEL_BUILD_DESKTOP_DEMO=ON
+  -DGPUPIXEL_BUILD_DESKTOP_DEMO=ON \
+  -DGPUPIXEL_PRO_VERSION=${PRO_VERSION}
 
 # Build
 echo "Building..."

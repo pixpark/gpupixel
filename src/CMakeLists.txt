@@ -4,8 +4,7 @@ set(gpupixel_libs_name "gpupixel")
 # Add compilation options to suppress OpenGL deprecation warnings
 if(${CURRENT_PLAT} STREQUAL ${PLAT_MAC} OR ${CURRENT_PLAT} STREQUAL ${PLAT_IOS})
   add_compile_definitions(GL_SILENCE_DEPRECATION)
-  add_compile_definitions(NS_OPENGL_DEPRECATED)
-  add_compile_definitions(NS_OPENGL_ENUM_DEPRECATED)
+  add_compile_definitions(GLES_SILENCE_DEPRECATION)
 endif()
 
 # index file
@@ -100,6 +99,11 @@ if(${CURRENT_PLAT} STREQUAL ${PLAT_ANDROID})
 elseif(${CURRENT_PLAT} STREQUAL ${PLAT_MAC} OR ${CURRENT_PLAT} STREQUAL
                                                ${PLAT_IOS})
   list(APPEND lib_source_code_files ${objc_source_files})
+endif()
+
+if(GPUPIXEL_PRO_VERSION)
+  set(pro_source_files ${CMAKE_CURRENT_SOURCE_DIR}/pro/base/logging.cc)
+  list(APPEND lib_source_code_files ${pro_source_files})
 endif()
 
 # header files
@@ -294,6 +298,11 @@ target_include_directories(
   ${gpupixel_libs_name} PUBLIC ${PROJECT_SOURCE_DIR}/include
                                ${CMAKE_CURRENT_SOURCE_DIR})
 
+if(GPUPIXEL_PRO_VERSION)
+  target_include_directories(${gpupixel_libs_name}
+                             PUBLIC ${PROJECT_SOURCE_DIR}/pro/include)
+endif()
+
 if(WIN32 AND GPUPIXEL_BUILD_SHARED_LIBS)
   # Windows DLL export macro definition
   target_compile_definitions(${gpupixel_libs_name}
@@ -333,6 +342,7 @@ endif()
 if(APPLE)
   set_target_properties(${gpupixel_libs_name} PROPERTIES COMPILE_FLAGS
                                                          "-x objective-c++")
+  target_compile_options(${gpupixel_libs_name} PRIVATE "-fobjc-arc")
 
   if(GPUPIXEL_AAPL_FMWK)
     set(APPLE_FRAMEWORK_NAME ${gpupixel_libs_name})
@@ -351,21 +361,15 @@ if(APPLE)
                  "${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in"
                  XCODE_ATTRIBUTE_GCC_SYMBOLS_PRIVATE_EXTERN NO)
 
-    if(${CURRENT_PLAT} STREQUAL ${PLAT_IOS})
-      set(APPLE_DEPLOYMENT_TARGET "11.0")
-      set_target_properties(
-        ${gpupixel_libs_name} PROPERTIES IPHONEOS_DEPLOYMENT_TARGET
-                                         ${APPLE_DEPLOYMENT_TARGET})
-    endif()
-
-    if(${CURRENT_PLAT} STREQUAL ${PLAT_MAC})
-      set(APPLE_DEPLOYMENT_TARGET "10.15")
-      set_target_properties(
-        ${gpupixel_libs_name} PROPERTIES MACOSX_DEPLOYMENT_TARGET
-                                         ${APPLE_DEPLOYMENT_TARGET})
-    endif()
-
-    target_compile_options(${gpupixel_libs_name} PRIVATE "-fobjc-arc")
+    # add ad-hoc signing for framework
+    add_custom_command(
+      TARGET ${gpupixel_libs_name}
+      POST_BUILD
+      COMMAND codesign --force --sign -
+              "$<TARGET_FILE_DIR:${gpupixel_libs_name}>"
+      COMMENT
+        "Ad-Hoc signing with deep option completed for ${gpupixel_libs_name}.framework"
+    )
   endif()
 endif()
 
@@ -436,45 +440,16 @@ elseif(${CURRENT_PLAT} STREQUAL ${PLAT_ANDROID})
             stb)
 elseif(${CURRENT_PLAT} STREQUAL ${PLAT_WASM})
   target_link_libraries(${gpupixel_libs_name} PRIVATE yuv stb)
+endif()
 
-  # WebAssembly additional link options
-  set_target_properties(
-    ${gpupixel_libs_name}
-    PROPERTIES
-      LINK_FLAGS
-      "-s WASM=1 -s EXPORTED_RUNTIME_METHODS=['ccall','cwrap'] -s EXPORTED_FUNCTIONS=['_GPUPixel_Initialize','_GPUPixel_CreatePipeline','_GPUPixel_AddFilter','_GPUPixel_SetFilterParameter','_GPUPixel_ProcessImage','_GPUPixel_Destroy','_malloc','_free'] -s ALLOW_MEMORY_GROWTH=1"
-  )
+if(GPUPIXEL_PRO_VERSION)
+  target_link_libraries(${gpupixel_libs_name} PRIVATE fmt::fmt spdlog::spdlog)
+  target_compile_definitions(${gpupixel_libs_name} PRIVATE GPUPIXEL_PRO_VERSION)
 endif()
 
 # install header
 
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION include)
-
-if(GPUPIXEL_AAPL_FMWK)
-  foreach(hdr ${filter_header_files})
-    set_source_files_properties(${hdr} PROPERTIES MACOSX_PACKAGE_LOCATION
-                                                  Headers/filter)
-  endforeach()
-
-  foreach(image ${lib_image_resource_files})
-    set_source_files_properties(${image} PROPERTIES MACOSX_PACKAGE_LOCATION
-                                                    Resources/res)
-  endforeach()
-
-  foreach(model ${lib_models_resource_files})
-    set_source_files_properties(${model} PROPERTIES MACOSX_PACKAGE_LOCATION
-                                                    Resources/models)
-  endforeach()
-
-  # add ad-hoc signing for framework
-  add_custom_command(
-    TARGET ${gpupixel_libs_name}
-    POST_BUILD
-    COMMAND codesign --force --sign - "$<TARGET_FILE_DIR:${gpupixel_libs_name}>"
-    COMMENT
-      "Ad-Hoc signing with deep option completed for ${gpupixel_libs_name}.framework"
-  )
-endif()
 
 # install library
 install(
@@ -495,3 +470,12 @@ install(
   FILES ${lib_models_resource_files}
   DESTINATION models
   COMPONENT resource)
+
+ 
+foreach(image ${lib_image_resource_files})
+  file(COPY ${image} DESTINATION ${BUILD_OUTPUT_DIR}/res)
+endforeach()
+
+foreach(model ${lib_models_resource_files})
+  file(COPY ${model} DESTINATION ${BUILD_OUTPUT_DIR}/models)
+endforeach()

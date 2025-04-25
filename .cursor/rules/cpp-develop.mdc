@@ -6,7 +6,7 @@ alwaysApply: true
 
     # C++ Development Rules
 
-    You are a senior C++ developer with expertise in modern C++ (C++11), STL, and system-level programming.
+    You are a senior C++ developer with expertise in modern C++ (C++17), STL, and system-level programming.
 
     ## Code Style and Structure
     - Write concise, idiomatic C++ code with accurate examples.

@@ -28,6 +28,8 @@ if(GPUPIXEL_ENABLE_FACE_DETECTOR)
   add_compile_definitions(GPUPIXEL_ENABLE_FACE_DETECTOR)
 endif()
 
+option(GPUPIXEL_PRO_VERSION "Build pro version" OFF)
+
 # ---- Platform detection ----
 # Identify the current operating system and set platform-specific variables
 set(PLAT_LINUX "linux")
@@ -65,8 +67,24 @@ endif()
 
 # ---- C++ standard settings ----
 # Configure the C++ language version and features
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# ---- Build output directory ----
+set(BUILD_OUTPUT_DIR ${CMAKE_BINARY_DIR}/out)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${BUILD_OUTPUT_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${BUILD_OUTPUT_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${BUILD_OUTPUT_DIR}/bin)
+
+foreach(OUTPUTCONFIG IN ITEMS DEBUG RELEASE RELWITHDEBINFO MINSIZEREL)
+  string(TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG)
+  set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG}
+      ${BUILD_OUTPUT_DIR}/lib)
+  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG}
+      ${BUILD_OUTPUT_DIR}/lib)
+  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG}
+      ${BUILD_OUTPUT_DIR}/bin)
+endforeach()
 
 # ---- Print build options ----
 message(STATUS "========================================")

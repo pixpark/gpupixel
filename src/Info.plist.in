@@ -18,7 +18,5 @@
     <string>@APPLE_FMWK_SOVERSION@</string>
     <key>CFBundleVersion</key>
     <string>@APPLE_FMWK_VERSION@</string>
-    <key>MinimumOSVersion</key>
-    <string>@APPLE_DEPLOYMENT_TARGET@</string>
 </dict>
 </plist>

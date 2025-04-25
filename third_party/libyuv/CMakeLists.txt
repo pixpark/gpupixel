@@ -171,16 +171,16 @@ endif()
 add_library( ${ly_lib_static} STATIC ${ly_lib_parts})
 
 # this creates the cpuid tool
-add_executable      ( cpuid ${ly_base_dir}/util/cpuid.c )
-target_link_libraries  ( cpuid ${ly_lib_static} )
+# add_executable      ( cpuid ${ly_base_dir}/util/cpuid.c )
+# target_link_libraries  ( cpuid ${ly_lib_static} )
 
 # this creates the conversion tool
-add_executable			( yuvconvert ${ly_base_dir}/util/yuvconvert.cc )
-target_link_libraries	( yuvconvert ${ly_lib_static} )
+# add_executable			( yuvconvert ${ly_base_dir}/util/yuvconvert.cc )
+# target_link_libraries	( yuvconvert ${ly_lib_static} )
 
 # this creates the yuvconstants tool
-add_executable      ( yuvconstants ${ly_base_dir}/util/yuvconstants.c )
-target_link_libraries  ( yuvconstants ${ly_lib_static} )
+# add_executable      ( yuvconstants ${ly_base_dir}/util/yuvconstants.c )
+# target_link_libraries  ( yuvconstants ${ly_lib_static} )
 
 # find_package ( JPEG )
 # if (JPEG_FOUND)
@@ -232,7 +232,7 @@ endif()
 
 
 # install the conversion tool, .so, .a, and all the header files
-install ( TARGETS yuvconvert DESTINATION bin )
+# install ( TARGETS yuvconvert DESTINATION bin )
 install ( TARGETS ${ly_lib_static}						DESTINATION lib )
 install ( DIRECTORY ${PROJECT_SOURCE_DIR}/include/		DESTINATION include )
 
