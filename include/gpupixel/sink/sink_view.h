@@ -7,15 +7,15 @@
 
 #pragma once
 
-#include "gpupixel/sink/sink.h"
 #include <memory>
+#include "gpupixel/sink/sink.h"
 
 namespace gpupixel {
 
 class GPUPIXEL_API SinkView : public Sink {
  public:
   static std::shared_ptr<SinkView> Create(void* parent_view);
- 
+
   virtual ~SinkView();
 
   virtual void Render() override;
@@ -28,6 +28,7 @@ class GPUPIXEL_API SinkView : public Sink {
   virtual bool IsReady() const override;
 
   virtual void ResetAndClean() override;
+
  private:
   SinkView(void* parent_view);
 

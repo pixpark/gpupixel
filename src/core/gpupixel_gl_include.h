@@ -25,9 +25,11 @@
 #include <android/log.h>
 #include <jni.h>
 #elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
+// clang-format off
 #include <glad/glad.h>
 #define GLEW_STATIC
 #include <GLFW/glfw3.h>
+// clang-format on
 #elif defined(GPUPIXEL_WASM)
 #include <GLES3/gl3.h>
 #include <emscripten.h>

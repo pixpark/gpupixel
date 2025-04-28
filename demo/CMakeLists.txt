@@ -105,7 +105,7 @@ if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
     file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/desktop/demo.png
          DESTINATION ${BUILD_OUTPUT_DIR}/bin)
   endif()
-else() 
+else()
   # WebAssembly specific configuration
   set(APP_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/wasm/wasm_app.cc")
   add_executable(${GPL_APP_NAME} ${APP_SOURCE_FILES})

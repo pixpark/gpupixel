@@ -7,9 +7,9 @@
 
 #pragma once
 
+#include <iostream>
 #include <map>
 #include "gpupixel/gpupixel_define.h"
-#include <iostream>
 namespace gpupixel {
 enum GPUPIXEL_API RotationMode {
   NoRotation = 0,

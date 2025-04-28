@@ -6,8 +6,8 @@
  */
 
 #pragma once
-#include "gpupixel/gpupixel_define.h"
 #include "gpupixel/filter/filter.h"
+#include "gpupixel/gpupixel_define.h"
 #include "gpupixel/utils/math_toolbox.h"
 
 namespace gpupixel {

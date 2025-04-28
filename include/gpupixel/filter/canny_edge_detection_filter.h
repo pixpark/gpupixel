@@ -7,13 +7,13 @@
 
 #pragma once
 
-#include "gpupixel/gpupixel_define.h"
 #include "gpupixel/filter/directional_non_maximum_suppression_filter.h"
 #include "gpupixel/filter/directional_sobel_edge_detection_filter.h"
 #include "gpupixel/filter/filter_group.h"
 #include "gpupixel/filter/grayscale_filter.h"
 #include "gpupixel/filter/single_component_gaussian_blur_filter.h"
 #include "gpupixel/filter/weak_pixel_inclusion_filter.h"
+#include "gpupixel/gpupixel_define.h"
 
 namespace gpupixel {
 class GPUPIXEL_API CannyEdgeDetectionFilter : public FilterGroup {

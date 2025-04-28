@@ -84,12 +84,12 @@ namespace gpupixel {
  * GPUPixel Utility Class: Provides resource path management functionality
  */
 class GPUPIXEL_API GPUPixel {
-public:
-    /**
-     * Set resource root directory
-     * @param root Root directory path
-     */
-    static void SetResourcePath(const std::string& path);
+ public:
+  /**
+   * Set resource root directory
+   * @param root Root directory path
+   */
+  static void SetResourcePath(const std::string& path);
 };
 
 }  // namespace gpupixel

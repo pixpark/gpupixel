@@ -11,7 +11,7 @@
 #include <map>
 #include "gpupixel/gpupixel_define.h"
 #include "gpupixel/sink/sink.h"
- 
+
 namespace gpupixel {
 class GPUPIXEL_API Source {
  public:

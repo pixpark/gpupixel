@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include "gpupixel/gpupixel_define.h"
 #include "gpupixel/filter/pixellation_filter.h"
+#include "gpupixel/gpupixel_define.h"
 
 namespace gpupixel {
 class GPUPIXEL_API HalftoneFilter : public PixellationFilter {

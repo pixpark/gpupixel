@@ -43,7 +43,7 @@
 // linux
 #define GPUPIXEL_LINUX
 #elif __EMSCRIPTEN__
-  #define GPUPIXEL_WASM
+#define GPUPIXEL_WASM
 #elif defined(_POSIX_VERSION)
 // POSIX
 #error "Unknown compiler"
@@ -53,9 +53,9 @@
 #endif
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_ANDROID) || defined(GPUPIXEL_WASM)
-  #define GPUPIXEL_GLES_SHADER
-#else 
-  #define GPUPIXEL_GL_SHADER
+#define GPUPIXEL_GLES_SHADER
+#else
+#define GPUPIXEL_GL_SHADER
 #endif
 
 #ifndef M_PI
@@ -63,14 +63,14 @@
 #endif
 
 #ifdef _WIN32
-#  ifdef BUILDING_GPUPIXEL_DLL
-#    define GPUPIXEL_API __declspec(dllexport)
-#  else 
-#    define GPUPIXEL_API __declspec(dllimport)
-#  endif
+#ifdef BUILDING_GPUPIXEL_DLL
+#define GPUPIXEL_API __declspec(dllexport)
 #else
-#  define GPUPIXEL_API __attribute__((visibility("default")))
-#endif 
+#define GPUPIXEL_API __declspec(dllimport)
+#endif
+#else
+#define GPUPIXEL_API __attribute__((visibility("default")))
+#endif
 
 namespace gpupixel {
 

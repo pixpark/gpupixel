@@ -7,11 +7,11 @@
 
 #pragma once
 
-#include "gpupixel/gpupixel_define.h"
 #include "gpupixel/filter/filter_group.h"
 #include "gpupixel/filter/gaussian_blur_filter.h"
 #include "gpupixel/filter/luminance_range_filter.h"
 #include "gpupixel/filter/saturation_filter.h"
+#include "gpupixel/gpupixel_define.h"
 
 namespace gpupixel {
 class GPUPIXEL_API IOSBlurFilter : public FilterGroup {

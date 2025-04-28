@@ -8,8 +8,8 @@
 #pragma once
 
 #include <vector>
-#include "gpupixel/gpupixel_define.h"
 #include "gpupixel/filter/filter.h"
+#include "gpupixel/gpupixel_define.h"
 #include "gpupixel/sink/sink.h"
 #include "gpupixel/source/source.h"
 
