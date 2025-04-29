@@ -323,6 +323,10 @@ elseif(NOT WIN32)
                                      OBJC_VISIBILITY_PRESET default)
 endif()
 
+if(GPUPIXEL_EXTERNAL_CODE)
+  target_compile_definitions(${gpupixel_libs_name} PRIVATE GPUPIXEL_EXTERNAL_CODE)
+endif()
+
 if(WIN32)
   # Windows character set configuration
   add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
@@ -372,7 +376,7 @@ endif()
 # Library dependencies Linux platform dependencies
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
   target_link_libraries(
-    ${gpupixel_libs_name} PRIVATE GL marsface::marsface libyuv::yuv stb::stb
+    ${gpupixel_libs_name} PRIVATE GL libyuv::yuv stb::stb
                                   glad::glad glfw::glfw)
 
   # Windows platform dependencies

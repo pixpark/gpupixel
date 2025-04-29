@@ -27,7 +27,10 @@ if(GPUPIXEL_ENABLE_FACE_DETECTOR)
   add_compile_definitions(GPUPIXEL_ENABLE_FACE_DETECTOR)
 endif()
 
+option(GPUPIXEL_EXTERNAL_CODE "Build with external code" OFF)
+
 option(GPUPIXEL_INSTALL "Generate the install target" ON)
+
 
 # ---- Platform detection ----
 # Identify the current operating system
