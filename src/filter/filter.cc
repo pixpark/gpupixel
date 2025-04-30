@@ -485,7 +485,7 @@ Filter::Property* Filter::GetProperty(const std::string& name) {
 
 bool Filter::HasProperty(const std::string& name, const std::string type) {
   Property* property = GetProperty(name);
-  return property && property->type == type ? true : false;
+  return property && (type.empty() || property->type == type);
 }
 
 bool Filter::HasProperty(const std::string& name) {

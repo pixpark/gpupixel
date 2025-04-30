@@ -71,32 +71,36 @@ public class GPUPixelFilter extends GPUPixelSource implements GPUPixelSink {
         return filterClassName;
     }
 
-    public final void SetProperty(final String property, final double value) {
-        SetProperty(property, (float) value);
+    public final boolean SetProperty(final String property, final double value) {
+        return SetProperty(property, (float) value);
     }
 
-    public final void SetProperty(final String property, final float value) {
+    public final boolean SetProperty(final String property, final float value) {
         if (mNativeClassID != 0) {
-            nativeFilterSetPropertyFloat(mNativeClassID, property, value);
+            return nativeFilterSetPropertyFloat(mNativeClassID, property, value);
         }
+        return false;
     }
 
-    public final void SetProperty(final String property, final float[] array) {
+    public final boolean SetProperty(final String property, final float[] array) {
         if (mNativeClassID != 0) {
-            nativeFilterSetPropertyFloatArray(mNativeClassID, property, array);
+            return nativeFilterSetPropertyFloatArray(mNativeClassID, property, array);
         }
+        return false;
     }
 
-    public final void SetProperty(final String property, final int value) {
+    public final boolean SetProperty(final String property, final int value) {
         if (mNativeClassID != 0) {
-            nativeFilterSetPropertyInt(mNativeClassID, property, value);
+            return nativeFilterSetPropertyInt(mNativeClassID, property, value);
         }
+        return false;
     }
 
-    public final void SetProperty(final String property, final String value) {
+    public final boolean SetProperty(final String property, final String value) {
         if (mNativeClassID != 0) {
-            nativeFilterSetPropertyString(mNativeClassID, property, value);
+            return nativeFilterSetPropertyString(mNativeClassID, property, value);
         }
+        return false;
     }
 
     @Override
@@ -128,11 +132,42 @@ public class GPUPixelFilter extends GPUPixelSource implements GPUPixelSink {
     private static native long nativeFilterCreate(String filterClassName);
     private static native void nativeFilterDestroy(long classId);
     private static native void nativeFilterFinalize(long classId);
-    private static native void nativeFilterSetPropertyFloat(
+    private static native boolean nativeFilterSetPropertyFloat(
             long classId, String property, float value);
-    private static native void nativeFilterSetPropertyInt(long classId, String property, int value);
-    private static native void nativeFilterSetPropertyString(
+    private static native boolean nativeFilterSetPropertyInt(long classId, String property, int value);
+    private static native boolean nativeFilterSetPropertyString(
             long classId, String property, String value);
-    private static native void nativeFilterSetPropertyFloatArray(
+    private static native boolean nativeFilterSetPropertyFloatArray(
             long classId, String property, float[] array);
+
+    private static native float nativeFilterGetPropertyFloat(long classId, String property);
+    private static native int nativeFilterGetPropertyInt(long classId, String property);
+    private static native String nativeFilterGetPropertyString(long classId, String property);
+
+    private static native boolean nativeFilterHasProperty(long classId, String property, String type);
+    public final boolean HasProperty(final String property, final String type) {
+        if (mNativeClassID != 0) {
+            return nativeFilterHasProperty(mNativeClassID, property, type);
+        }
+        return false;
+    }
+
+    public final int GetPropertyInt(final String property) {
+        if (mNativeClassID == 0) {
+            return 0;
+        }
+        return nativeFilterGetPropertyInt(mNativeClassID, property);
+    }
+    public final float GetPropertyFloat(final String property) {
+        if (mNativeClassID == 0) {
+            return 0;
+        }
+        return nativeFilterGetPropertyFloat(mNativeClassID, property);
+    }
+    public final String GetPropertyString(final String property) {
+        if (mNativeClassID == 0) {
+            return null;
+        }
+        return nativeFilterGetPropertyString(mNativeClassID, property);
+    }
 }
