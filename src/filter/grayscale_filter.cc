@@ -36,9 +36,11 @@ const std::string kGrayscaleFragmentShaderString = R"(
 
 std::shared_ptr<GrayscaleFilter> GrayscaleFilter::Create() {
   auto ret = std::shared_ptr<GrayscaleFilter>(new GrayscaleFilter());
-  if (!ret->Init()) {
-    ret.reset();
-  }
+  gpupixel::GPUPixelContext::GetInstance()->SyncRunWithContext([&] {
+    if (!ret->Init()) {
+      ret.reset();
+    }
+  });
   return ret;
 }
 
