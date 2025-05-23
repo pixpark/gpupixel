@@ -41,6 +41,10 @@ using namespace gpupixel;
 @end
 
 @implementation ImageFilterController
+- (void)viewWillDisappear:(BOOL)animated {
+  _displayLink.paused = YES;
+  [super viewWillDisappear:animated];
+}
 - (void)viewDidLoad {
   [super viewDidLoad];
   [self.view setBackgroundColor:UIColor.whiteColor];
@@ -58,10 +62,7 @@ using namespace gpupixel;
 -(void)initUI {
   NSArray *array = [NSArray arrayWithObjects:@"Smooth", @"White", @"ThinFace", @"BigEye", @"Lipstick", @"Blusher", nil];
   self.segment = [[UISegmentedControl alloc]initWithItems:array];
-  self.segment.frame = CGRectMake(10,
-                                 self.view.frame.size.height - 70,
-                                 self.view.frame.size.width - 20,
-                                 30);
+  self.segment.frame = CGRectMake(10, self.view.frame.size.height - 70, self.view.frame.size.width - 20, 30);
   self.segment.apportionsSegmentWidthsByContent = YES;
   self.segment.selectedSegmentIndex = 0;
   [self.segment addTarget:self action:@selector(onFilterSelectChange:) forControlEvents:UIControlEventValueChanged];
@@ -70,10 +71,7 @@ using namespace gpupixel;
   [self.view addSubview:self.effectSwitch];
   
  
-  self.slider = [[UISlider alloc] initWithFrame:CGRectMake(10,
-                                                                self.view.frame.size.height - 120,
-                                                                self.view.frame.size.width - 20,
-                                                                30)];
+  self.slider = [[UISlider alloc] initWithFrame:CGRectMake(50, self.view.frame.size.height - 120, self.view.frame.size.width - 100, 30)];
 
   // 设置最小值
   self.slider.minimumValue = 0;
@@ -84,25 +82,20 @@ using namespace gpupixel;
   [self.view addSubview:self.slider];
   
   
-  _displayLink =
-      [CADisplayLink displayLinkWithTarget:self
-                                  selector:@selector(displayLinkDidFire:)];
+  _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(displayLinkDidFire:)];
   _displayLink.paused = YES;
 #if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_10_0
   _displayLink.preferredFramesPerSecond = 30;
 #else
   [_displayLink setFrameInterval:2];
 #endif
-  [_displayLink addToRunLoop:[NSRunLoop currentRunLoop]
-                     forMode:NSRunLoopCommonModes];
+  [_displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+  
+  UIBarButtonItem *left1 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(backAction)];
+  self.navigationItem.leftBarButtonItem = left1;
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
-  _displayLink.paused = YES;
-  [super viewWillDisappear:animated];
-}
-
--(void) initVideoFilter {
+-(void)initVideoFilter {
   gpupixel::GPUPixelContext::getInstance()->runSync([&] {
     gpuPixelView = [[GPUPixelView alloc] initWithFrame:self.view.frame];
     [self.view addSubview:gpuPixelView];
@@ -138,8 +131,26 @@ using namespace gpupixel;
   });
 }
 
+- (void)backAction {
+  [_displayLink invalidate];
+  _displayLink = nil;
+  
+//  gpuSourceImage->deleteImageTexture();
+//  lipstick_filter_->clearImageTexture();
+  beauty_face_filter_ = nil;
+  face_reshape_filter_ = nil;
+  lipstick_filter_ = nil;
+  blusher_filter_ = nil;
+  [gpuPixelView removeFromSuperview];
+  gpuPixelView = nil;
+  gpuSourceImage = nil;
+  
+  [self.navigationController popViewControllerAnimated:true];
+  NSLog(@"返回");
+}
 
--(void)sliderValueChanged:(UISlider*) slider {
+
+-(void)sliderValueChanged:(UISlider *)slider {
   if (self.segment.selectedSegmentIndex == 0) {         // 磨皮
     [self setBeautyValue: slider.value];
   } else if (self.segment.selectedSegmentIndex == 1) {  // 美白
@@ -155,7 +166,7 @@ using namespace gpupixel;
   }
 }
 
--(void)onFilterSelectChange:(UISegmentedControl *)sender{
+-(void)onFilterSelectChange:(UISegmentedControl *)sender {
   if (self.segment.selectedSegmentIndex == 0) {         // 磨皮
     self.slider.value = _beautyValue;
   } else if (self.segment.selectedSegmentIndex == 1) {  // 美白
@@ -227,16 +238,13 @@ using namespace gpupixel;
   }
 }
  
--(UISegmentedControl*)effectSwitch {
+-(UISegmentedControl *)effectSwitch {
   if(_effectSwitch == nil) {
     NSArray *array = [NSArray arrayWithObjects:@"ON",@"OFF", nil];
  
     _effectSwitch = [[UISegmentedControl alloc]initWithItems:array];
  
-    _effectSwitch.frame = CGRectMake(self.view.frame.size.width - 90,
-                                     self.view.frame.size.height - 160,
-                                    80,
-                                    30);
+    _effectSwitch.frame = CGRectMake(self.view.frame.size.width - 90, self.view.frame.size.height - 160, 80, 30);
     _effectSwitch.apportionsSegmentWidthsByContent = YES;
     _effectSwitch.selectedSegmentIndex = 0;
  
@@ -246,5 +254,11 @@ using namespace gpupixel;
   return _effectSwitch;
 }
 
+/// 销毁当前对象后的调用方法
+- (void)dealloc {
+  NSLog(@"dealloc : %@", self);
+  /// 销毁GPUPixelContext一定要在控制器销毁之后, 否则GPUPixel会自动又初始化一个GPUPixelContext
+  gpupixel::GPUPixelContext::getInstance()->destroy();
+}
 @end
  
