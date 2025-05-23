@@ -135,8 +135,6 @@ using namespace gpupixel;
   [_displayLink invalidate];
   _displayLink = nil;
   
-//  gpuSourceImage->deleteImageTexture();
-//  lipstick_filter_->clearImageTexture();
   beauty_face_filter_ = nil;
   face_reshape_filter_ = nil;
   lipstick_filter_ = nil;
