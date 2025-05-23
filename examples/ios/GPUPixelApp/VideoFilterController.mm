@@ -40,7 +40,11 @@ using namespace gpupixel;
 @end
 
 @implementation VideoFilterController
-
+- (void)viewWillDisappear:(BOOL)animated {
+  [self.capturer stopCapture];
+  
+  [super viewWillDisappear:animated];
+}
 - (void)viewDidLoad {
   [super viewDidLoad];
   [self.view setBackgroundColor:UIColor.whiteColor];
@@ -61,10 +65,7 @@ using namespace gpupixel;
   //初始化UISegmentedControl
   self.segment = [[UISegmentedControl alloc]initWithItems:array];
   //设置frame
-  self.segment.frame = CGRectMake(10,
-                                 self.view.frame.size.height - 70,
-                                 self.view.frame.size.width - 20,
-                                 30);
+  self.segment.frame = CGRectMake(10, self.view.frame.size.height - 70, self.view.frame.size.width - 20, 30);
   self.segment.apportionsSegmentWidthsByContent = YES;
   self.segment.selectedSegmentIndex = 0;
   //添加事件
@@ -77,10 +78,7 @@ using namespace gpupixel;
   [self.view addSubview:self.cameraSwitchBtn];
   
   // 初始化
-  self.slider = [[UISlider alloc] initWithFrame:CGRectMake(10,
-                                                                self.view.frame.size.height - 120,
-                                                                self.view.frame.size.width - 20,
-                                                                30)];
+  self.slider = [[UISlider alloc] initWithFrame:CGRectMake(50, self.view.frame.size.height - 120, self.view.frame.size.width - 100, 30)];
 
   // 设置最小值
   self.slider.minimumValue = 0;
@@ -91,50 +89,11 @@ using namespace gpupixel;
 
   [self.view addSubview:self.slider];
   
- 
+    UIBarButtonItem *left1 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(backAction)];
+    self.navigationItem.leftBarButtonItem = left1;
 }
 
--(void)sliderValueChanged:(UISlider*) slider {
-  if (self.segment.selectedSegmentIndex == 0) {         // 磨皮
-    [self setBeautyValue: slider.value];
-  } else if (self.segment.selectedSegmentIndex == 1) {  // 美白
-    [self setWhithValue: slider.value];
-  } else if (self.segment.selectedSegmentIndex == 2) {  // 瘦脸
-    [self setThinFaceValue: slider.value];
-  } else if (self.segment.selectedSegmentIndex == 3) {  // 大眼
-    [self setEyeValue: slider.value];
-  } else if (self.segment.selectedSegmentIndex == 4) {  // 口红
-    [self setLipstickValue: slider.value];
-  } else if (self.segment.selectedSegmentIndex == 5) {  // 腮红
-    [self setBlusherValue: slider.value];
-  }
-}
-
-//点击不同分段就会有不同的事件进行相应
--(void)onFilterSelectChange:(UISegmentedControl *)sender{
-  if (self.segment.selectedSegmentIndex == 0) {         // 磨皮
-    self.slider.value = _beautyValue;
-  } else if (self.segment.selectedSegmentIndex == 1) {  // 美白
-    self.slider.value = _whithValue;
-  } else if (self.segment.selectedSegmentIndex == 2) {  // 瘦脸
-    self.slider.value = _thinFaceValue;
-  } else if (self.segment.selectedSegmentIndex == 3) {  // 大眼
-    self.slider.value = _eyeValue;
-  } else if (self.segment.selectedSegmentIndex == 4) {  // 口红
-    self.slider.value = _lipstickValue;
-  } else if (self.segment.selectedSegmentIndex == 5) {  // 腮红
-    self.slider.value = _blusherValue;
-  }
-}
-  
-
-- (void)viewWillDisappear:(BOOL)animated {
-  [self.capturer stopCapture];
-  
-  [super viewWillDisappear:animated];
-}
-
--(void) initVideoFilter {
+-(void)initVideoFilter {
   gpupixel::GPUPixelContext::getInstance()->runSync([&] {
     gpuPixelRawInput = SourceRawDataInput::create();
     gpuPixelView = [[GPUPixelView alloc] initWithFrame:self.view.frame];
@@ -167,6 +126,55 @@ using namespace gpupixel;
   });
 }
  
+- (void)backAction {
+    [self.capturer stopCapture];
+    self.capturer = nil;
+      
+    beauty_face_filter_ = nil;
+    face_reshape_filter_ = nil;
+    lipstick_filter_ = nil;
+    blusher_filter_ = nil;
+    [gpuPixelView removeFromSuperview];
+    gpuPixelView = nil;
+    targetRawOutput_ = nil;
+    gpuPixelRawInput = nil;
+
+    [self.navigationController popViewControllerAnimated:true];
+}
+
+
+-(void)sliderValueChanged:(UISlider *)slider {
+  if (self.segment.selectedSegmentIndex == 0) {         // 磨皮
+    [self setBeautyValue: slider.value];
+  } else if (self.segment.selectedSegmentIndex == 1) {  // 美白
+    [self setWhithValue: slider.value];
+  } else if (self.segment.selectedSegmentIndex == 2) {  // 瘦脸
+    [self setThinFaceValue: slider.value];
+  } else if (self.segment.selectedSegmentIndex == 3) {  // 大眼
+    [self setEyeValue: slider.value];
+  } else if (self.segment.selectedSegmentIndex == 4) {  // 口红
+    [self setLipstickValue: slider.value];
+  } else if (self.segment.selectedSegmentIndex == 5) {  // 腮红
+    [self setBlusherValue: slider.value];
+  }
+}
+
+//点击不同分段就会有不同的事件进行相应
+-(void)onFilterSelectChange:(UISegmentedControl *)sender {
+  if (self.segment.selectedSegmentIndex == 0) {         // 磨皮
+    self.slider.value = _beautyValue;
+  } else if (self.segment.selectedSegmentIndex == 1) {  // 美白
+    self.slider.value = _whithValue;
+  } else if (self.segment.selectedSegmentIndex == 2) {  // 瘦脸
+    self.slider.value = _thinFaceValue;
+  } else if (self.segment.selectedSegmentIndex == 3) {  // 大眼
+    self.slider.value = _eyeValue;
+  } else if (self.segment.selectedSegmentIndex == 4) {  // 口红
+    self.slider.value = _lipstickValue;
+  } else if (self.segment.selectedSegmentIndex == 5) {  // 腮红
+    self.slider.value = _blusherValue;
+  }
+}
 #pragma mark - 属性赋值
 - (void)setBeautyValue:(CGFloat)value {
   _beautyValue = value;
@@ -275,10 +283,7 @@ using namespace gpupixel;
 -(UIButton*)cameraSwitchBtn {
   if(_cameraSwitchBtn == nil) {
     _cameraSwitchBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-    _cameraSwitchBtn.frame = CGRectMake(self.view.bounds.size.width - 35,
-                                        105,
-                                        25,
-                                        20);
+    _cameraSwitchBtn.frame = CGRectMake(self.view.bounds.size.width - 35, 105, 25, 20);
     
     [_cameraSwitchBtn setBackgroundImage:[UIImage imageNamed:@"CameraIcon"] forState:UIControlStateNormal];
     [_cameraSwitchBtn addTarget: self action: @selector(onCameraSwitchBtnUpInside) forControlEvents: UIControlEventTouchUpInside] ;
@@ -290,18 +295,19 @@ using namespace gpupixel;
   if(_effectSwitch == nil) {
     NSArray *array = [NSArray arrayWithObjects:@"ON",@"OFF", nil];
     _effectSwitch = [[UISegmentedControl alloc]initWithItems:array];
-    _effectSwitch.frame = CGRectMake(self.view.frame.size.width - 90,
-                                     self.view.frame.size.height - 160,
-                                    80,
-                                    30);
+    _effectSwitch.frame = CGRectMake(self.view.frame.size.width - 90, self.view.frame.size.height - 160, 80, 30);
     _effectSwitch.apportionsSegmentWidthsByContent = YES;
     _effectSwitch.selectedSegmentIndex = 0;
     
     [_effectSwitch addTarget:self action:@selector(onFilterSwitchChange:) forControlEvents:UIControlEventValueChanged];
- 
   }
   return _effectSwitch;
 }
 
- 
+/// 销毁当前对象后的调用方法
+- (void)dealloc {
+  NSLog(@"dealloc : %@", self);
+  /// 销毁GPUPixelContext一定要在控制器销毁之后, 否则GPUPixel会自动又初始化一个GPUPixelContext
+  gpupixel::GPUPixelContext::getInstance()->destroy();
+}
 @end
