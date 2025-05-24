@@ -16,10 +16,12 @@ using namespace gpupixel;
   std::shared_ptr<SourceRawDataInput> gpuPixelRawInput;
   GPUPixelView *gpuPixelView;
   std::shared_ptr<BeautyFaceFilter> beauty_face_filter_;
-  std::shared_ptr<TargetRawDataOutput> targetRawOutput_;
   std::shared_ptr<FaceReshapeFilter> face_reshape_filter_;
   std::shared_ptr<gpupixel::FaceMakeupFilter> lipstick_filter_;
   std::shared_ptr<gpupixel::FaceMakeupFilter> blusher_filter_;
+    
+  std::shared_ptr<TargetRawDataOutput> targetRawOutput_;
+  RawOutputCallback _rawOutputCallback;
 }
 
 //
@@ -37,6 +39,9 @@ using namespace gpupixel;
 @property (strong, nonatomic) UISegmentedControl* segment;
 @property (strong, nonatomic) UISegmentedControl* effectSwitch;
 @property (strong, nonatomic) UISlider *slider;
+
+@property (assign, nonatomic) BOOL isNeedSaveImage;
+
 @end
 
 @implementation VideoFilterController
@@ -91,6 +96,8 @@ using namespace gpupixel;
   
     UIBarButtonItem *left1 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(backAction)];
     self.navigationItem.leftBarButtonItem = left1;
+    UIBarButtonItem *right1 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(saveImageAction)];
+    self.navigationItem.rightBarButtonItems = @[right1];
 }
 
 -(void)initVideoFilter {
@@ -123,10 +130,43 @@ using namespace gpupixel;
     [gpuPixelView setBackgroundColor:[UIColor grayColor]];
     [gpuPixelView setFillMode:(gpupixel::TargetView::PreserveAspectRatioAndFill)];
   
+    beauty_face_filter_->addTarget(targetRawOutput_);
+    __weak typeof(VideoFilterController*)weakSelf = self;
+    _rawOutputCallback = [weakSelf]( const uint8_t* data, int width, int height, int64_t ts) {
+        if (weakSelf.isNeedSaveImage == YES) {
+            unsigned char *imageData = (unsigned char *)data;
+            size_t bitsPerComponent = 8; //r g b a 每个component bits数目
+            size_t bytesPerRow = width * 4; //一张图片每行字节数目(每个像素点包含r g b a 四个字节)
+            CGColorSpaceRef space = CGColorSpaceCreateDeviceRGB(); //创建rgb颜色空间
+            uint32_t bitmapInfo = kCGImageAlphaPremultipliedFirst | kCGBitmapByteOrder32Little;
+            CGContextRef context = CGBitmapContextCreate(imageData, width, height, bitsPerComponent, bytesPerRow, space, bitmapInfo);
+            CGImageRef cgImage = CGBitmapContextCreateImage(context);
+            CIImage *ciImage = [CIImage imageWithCGImage:cgImage];
+            UIImage *resultImage = [UIImage imageWithCIImage:ciImage];
+            NSLog(@"%@", resultImage);
+                  
+            //Release memory
+            CGContextRelease(context);
+            CGImageRelease(cgImage);
+            weakSelf.isNeedSaveImage = NO;
+        }
+    };
+    targetRawOutput_->setPixelsCallbck(_rawOutputCallback);
+    self.isNeedSaveImage = NO;
+      
   });
 }
  
 - (void)backAction {
+    //销毁GPUPixel相关组件, 防止内存泄漏
+    [self destroyAction];
+
+    [self.navigationController popViewControllerAnimated:true];
+}
+/// 销毁GPUPixel相关组件, 防止内存泄漏
+- (void)destroyAction {
+    _rawOutputCallback = nil;
+
     [self.capturer stopCapture];
     self.capturer = nil;
       
@@ -138,8 +178,10 @@ using namespace gpupixel;
     gpuPixelView = nil;
     targetRawOutput_ = nil;
     gpuPixelRawInput = nil;
+}
 
-    [self.navigationController popViewControllerAnimated:true];
+- (void)saveImageAction {
+    self.isNeedSaveImage = true;
 }
 
 
@@ -307,7 +349,7 @@ using namespace gpupixel;
 /// 销毁当前对象后的调用方法
 - (void)dealloc {
   NSLog(@"dealloc : %@", self);
-  /// 销毁GPUPixelContext一定要在控制器销毁之后, 否则GPUPixel会自动又初始化一个GPUPixelContext
+  // 销毁GPUPixelContext一定要在控制器销毁之后, 否则GPUPixel会自动又初始化一个GPUPixelContext
   gpupixel::GPUPixelContext::getInstance()->destroy();
 }
 @end

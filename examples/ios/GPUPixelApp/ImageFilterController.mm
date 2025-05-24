@@ -93,6 +93,8 @@ using namespace gpupixel;
   
   UIBarButtonItem *left1 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(backAction)];
   self.navigationItem.leftBarButtonItem = left1;
+  UIBarButtonItem *right1 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(saveImageAction)];
+  self.navigationItem.rightBarButtonItems = @[right1];
 }
 
 -(void)initVideoFilter {
@@ -132,6 +134,13 @@ using namespace gpupixel;
 }
 
 - (void)backAction {
+  //销毁GPUPixel相关组件, 防止内存泄漏
+  [self destroyAction];
+  //
+  [self.navigationController popViewControllerAnimated:true];
+}
+// 销毁GPUPixel相关组件, 防止内存泄漏
+- (void)destroyAction {
   [_displayLink invalidate];
   _displayLink = nil;
   
@@ -142,9 +151,27 @@ using namespace gpupixel;
   [gpuPixelView removeFromSuperview];
   gpuPixelView = nil;
   gpuSourceImage = nil;
+}
+
+- (void)saveImageAction {
+    int width = gpuSourceImage->getRotatedFramebufferWidth();
+    int height = gpuSourceImage->getRotatedFramebufferHeight();
+    // "beauty_face_filter_" is last filter in gpuSourceImage
+    unsigned char *pixels = gpuSourceImage->captureAProcessedFrameData(beauty_face_filter_, width, height);
+    size_t bitsPerComponent = 8; //R,G,B,A bits
+    size_t bytesPerRow = width * 4; //per pixel include R,G,B,A
+    CGColorSpaceRef space = CGColorSpaceCreateDeviceRGB(); //Create RGB Color Space
+    uint32_t bitmapInfo = kCGImageAlphaPremultipliedLast | kCGImageByteOrder32Big;
+    CGContextRef context = CGBitmapContextCreate(pixels, width, height, bitsPerComponent, bytesPerRow, space, bitmapInfo);
+    CGImageRef cgImage = CGBitmapContextCreateImage(context);
+    CIImage *ciImage = [CIImage imageWithCGImage:cgImage];
+    UIImage *resultImage = [UIImage imageWithCIImage:ciImage];
+    NSLog(@"%@", resultImage);
   
-  [self.navigationController popViewControllerAnimated:true];
-  NSLog(@"返回");
+    //Release memory
+    free(pixels);
+    CGContextRelease(context);
+    CGImageRelease(cgImage);
 }
 
 
@@ -255,7 +282,7 @@ using namespace gpupixel;
 /// 销毁当前对象后的调用方法
 - (void)dealloc {
   NSLog(@"dealloc : %@", self);
-  /// 销毁GPUPixelContext一定要在控制器销毁之后, 否则GPUPixel会自动又初始化一个GPUPixelContext
+  // 销毁GPUPixelContext一定要在控制器销毁之后, 否则GPUPixel会自动又初始化一个GPUPixelContext
   gpupixel::GPUPixelContext::getInstance()->destroy();
 }
 @end
