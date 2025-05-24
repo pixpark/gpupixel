@@ -96,7 +96,6 @@ using namespace gpupixel;
   
     UIBarButtonItem *left1 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(backAction)];
     self.navigationItem.leftBarButtonItem = left1;
-    
     UIBarButtonItem *right1 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(saveImageAction)];
     self.navigationItem.rightBarButtonItems = @[right1];
 }
@@ -167,6 +166,7 @@ using namespace gpupixel;
 /// 销毁GPUPixel相关组件, 防止内存泄漏
 - (void)destroyAction {
     _rawOutputCallback = nil;
+
     [self.capturer stopCapture];
     self.capturer = nil;
       

@@ -172,9 +172,8 @@ using namespace gpupixel;
     free(pixels);
     CGContextRelease(context);
     CGImageRelease(cgImage);
-  
-  [self destroyAction];
 }
+
 
 -(void)sliderValueChanged:(UISlider *)slider {
   if (self.segment.selectedSegmentIndex == 0) {         // 磨皮
