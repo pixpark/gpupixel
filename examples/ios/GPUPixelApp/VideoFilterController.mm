@@ -21,7 +21,7 @@ using namespace gpupixel;
   std::shared_ptr<gpupixel::FaceMakeupFilter> blusher_filter_;
     
   std::shared_ptr<TargetRawDataOutput> targetRawOutput_;
-  RawOutputCallback _cb;
+  RawOutputCallback _rawOutputCallback;
 }
 
 //
@@ -133,7 +133,7 @@ using namespace gpupixel;
   
     beauty_face_filter_->addTarget(targetRawOutput_);
     __weak typeof(VideoFilterController*)weakSelf = self;
-    _cb = [weakSelf]( const uint8_t* data, int width, int height, int64_t ts) {
+    _rawOutputCallback = [weakSelf]( const uint8_t* data, int width, int height, int64_t ts) {
         if (weakSelf.isNeedSaveImage == YES) {
             unsigned char *imageData = (unsigned char *)data;
             size_t bitsPerComponent = 8; //r g b a 每个component bits数目
@@ -152,13 +152,21 @@ using namespace gpupixel;
             weakSelf.isNeedSaveImage = NO;
         }
     };
-    targetRawOutput_->setPixelsCallbck(_cb);
+    targetRawOutput_->setPixelsCallbck(_rawOutputCallback);
     self.isNeedSaveImage = NO;
       
   });
 }
  
 - (void)backAction {
+    //销毁GPUPixel相关组件, 防止内存泄漏
+    [self destroyAction];
+
+    [self.navigationController popViewControllerAnimated:true];
+}
+/// 销毁GPUPixel相关组件, 防止内存泄漏
+- (void)destroyAction {
+    _rawOutputCallback = nil;
     [self.capturer stopCapture];
     self.capturer = nil;
       
@@ -170,9 +178,8 @@ using namespace gpupixel;
     gpuPixelView = nil;
     targetRawOutput_ = nil;
     gpuPixelRawInput = nil;
-
-    [self.navigationController popViewControllerAnimated:true];
 }
+
 - (void)saveImageAction {
     self.isNeedSaveImage = true;
 }
@@ -342,7 +349,7 @@ using namespace gpupixel;
 /// 销毁当前对象后的调用方法
 - (void)dealloc {
   NSLog(@"dealloc : %@", self);
-  /// 销毁GPUPixelContext一定要在控制器销毁之后, 否则GPUPixel会自动又初始化一个GPUPixelContext
+  // 销毁GPUPixelContext一定要在控制器销毁之后, 否则GPUPixel会自动又初始化一个GPUPixelContext
   gpupixel::GPUPixelContext::getInstance()->destroy();
 }
 @end
