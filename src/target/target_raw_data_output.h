@@ -21,10 +21,11 @@
 #include <mutex>
 NS_GPUPIXEL_BEGIN
 
-typedef std::function<
-    void(const uint8_t* data, int width, int height, int64_t ts)>
-    RawOutputCallback;
-    
+typedef std::function<void(const uint8_t* data, int width, int height, int64_t ts)> RawOutputCallback;
+#if defined(GPUPIXEL_IOS)
+typedef std::function<void(CVPixelBufferRef cvPixelBufferRef)> CVPixelBufferRefCallback;
+#endif
+
 #define PBO_SIZE 2
 
 class TargetRawDataOutput : public Target {
@@ -35,6 +36,7 @@ class TargetRawDataOutput : public Target {
   void update(int64_t frameTime) override;
   void setI420Callbck(RawOutputCallback cb);
   void setPixelsCallbck(RawOutputCallback cb);
+  void setCVPixelBufferRefCallbck(CVPixelBufferRefCallback cb);
  private:
   int renderToOutput();
   bool initWithShaderString(const std::string& vertexShaderSource,
@@ -83,6 +85,7 @@ class TargetRawDataOutput : public Target {
   // callback
   RawOutputCallback i420_callback_ = nullptr;
   RawOutputCallback pixels_callback_ = nullptr;
+  CVPixelBufferRefCallback cvPixelBufferRef_callback_ = nullptr;
 
   bool current_frame_invalid_ = true;
 };

@@ -36,6 +36,7 @@ using namespace gpupixel;
 // UI
 @property (strong, nonatomic) VideoCapturer* capturer;
 @property (strong, nonatomic) UIButton* cameraSwitchBtn;
+@property (strong, nonatomic) UIButton* recordVideoBtn;
 @property (strong, nonatomic) UISegmentedControl* segment;
 @property (strong, nonatomic) UISegmentedControl* effectSwitch;
 @property (strong, nonatomic) UISlider *slider;
@@ -81,6 +82,7 @@ using namespace gpupixel;
   [self.view addSubview:self.effectSwitch];
   
   [self.view addSubview:self.cameraSwitchBtn];
+    [self.view addSubview:self.recordVideoBtn];
   
   // 初始化
   self.slider = [[UISlider alloc] initWithFrame:CGRectMake(50, self.view.frame.size.height - 120, self.view.frame.size.width - 100, 30)];
@@ -160,13 +162,13 @@ using namespace gpupixel;
 - (void)backAction {
     //销毁GPUPixel相关组件, 防止内存泄漏
     [self destroyAction];
-
+    //
     [self.navigationController popViewControllerAnimated:true];
 }
 /// 销毁GPUPixel相关组件, 防止内存泄漏
 - (void)destroyAction {
     _rawOutputCallback = nil;
-
+    //
     [self.capturer stopCapture];
     self.capturer = nil;
       
@@ -182,6 +184,15 @@ using namespace gpupixel;
 
 - (void)saveImageAction {
     self.isNeedSaveImage = true;
+}
+
+- (void)recordVideoBtnAction:(UIButton *)sender {
+    sender.selected = !sender.isSelected;
+    if (sender.isSelected == YES) {
+        
+    } else if (sender.isSelected == NO) {
+        
+    }
 }
 
 
@@ -331,6 +342,16 @@ using namespace gpupixel;
     [_cameraSwitchBtn addTarget: self action: @selector(onCameraSwitchBtnUpInside) forControlEvents: UIControlEventTouchUpInside] ;
   }
   return _cameraSwitchBtn;
+}
+-(UIButton*)recordVideoBtn {
+    if(_recordVideoBtn  == nil) {
+        _recordVideoBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+        _recordVideoBtn.frame = CGRectMake(35, 105, 35, 35);
+        [_recordVideoBtn setImage:[UIImage imageNamed:@"StartRecordVideo"] forState:UIControlStateNormal];
+        [_recordVideoBtn setImage:[UIImage imageNamed:@"StopRecordVideo"] forState:UIControlStateSelected];
+        [_recordVideoBtn addTarget: self action: @selector(recordVideoBtnAction:) forControlEvents: UIControlEventTouchUpInside] ;
+    }
+    return _recordVideoBtn;
 }
 
 -(UISegmentedControl*)effectSwitch {

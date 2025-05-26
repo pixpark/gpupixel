@@ -180,6 +180,11 @@ void TargetRawDataOutput::setPixelsCallbck(RawOutputCallback cb) {
   pixels_callback_ = cb;
 }
 
+void TargetRawDataOutput::setCVPixelBufferRefCallbck(CVPixelBufferRefCallback cb) {
+  std::unique_lock<std::mutex> lck(mtx_);
+  cvPixelBufferRef_callback_ = cb;
+}
+
 void TargetRawDataOutput::initOutputBuffer(int width, int height) {
   uint32_t rgb_size = width * height * 4;
   uint32_t yuv_size = width * height * 3 / 2;
@@ -200,11 +205,13 @@ void TargetRawDataOutput::initOutputBuffer(int width, int height) {
 
 #if defined(GPUPIXEL_IOS)
 void TargetRawDataOutput::readPixelsFromCVPixelBuffer() {
-  if (kCVReturnSuccess ==
-      CVPixelBufferLockBaseAddress(renderTarget, kCVPixelBufferLock_ReadOnly)) {
+  if (kCVReturnSuccess == CVPixelBufferLockBaseAddress(renderTarget, kCVPixelBufferLock_ReadOnly)) {
+      if (cvPixelBufferRef_callback_) {
+          cvPixelBufferRef_callback_(renderTarget);
+      }
+      
     int stride = static_cast<int>(CVPixelBufferGetBytesPerRow(renderTarget));
     uint8_t* pixels = (uint8_t*)CVPixelBufferGetBaseAddress(renderTarget);
-
     // process pixels how you like
     if (pixels && i420_callback_) {
       libyuv::ARGBToI420(pixels, stride, _yuvFrameBuffer, _width,
