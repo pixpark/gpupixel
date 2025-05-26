@@ -22,6 +22,9 @@ using namespace gpupixel;
     
   std::shared_ptr<TargetRawDataOutput> targetRawOutput_;
   RawOutputCallback _rawOutputCallback;
+    
+  CVPixelBufferRefCallback _cvPixelBufferRefCallback;
+  CVPixelBufferRef _currentCVPixelBufferRef;
 }
 
 //
@@ -39,9 +42,24 @@ using namespace gpupixel;
 @property (strong, nonatomic) UIButton* recordVideoBtn;
 @property (strong, nonatomic) UISegmentedControl* segment;
 @property (strong, nonatomic) UISegmentedControl* effectSwitch;
-@property (strong, nonatomic) UISlider *slider;
+@property (strong, nonatomic) UISlider* slider;
 
 @property (assign, nonatomic) BOOL isNeedSaveImage;
+
+
+@property (assign, nonatomic) BOOL isStartRecordVideo;
+/// 媒体资源写入器
+@property (strong, nonatomic) AVAssetWriter* assetWriter;
+/// 媒体资源输入器
+@property (strong, nonatomic) AVAssetWriterInput* writerInput;
+/// 媒体资源适配编码器
+@property (strong, nonatomic) AVAssetWriterInputPixelBufferAdaptor* adaptor;
+///
+@property (assign, nonatomic) CVPixelBufferRef currentCVPixelBufferRef;
+///
+@property (assign, nonatomic) int64_t frameIndex;
+///
+@property (assign, nonatomic) CMTime frameTime;
 
 @end
 
@@ -103,60 +121,70 @@ using namespace gpupixel;
 }
 
 -(void)initVideoFilter {
-  gpupixel::GPUPixelContext::getInstance()->runSync([&] {
-    gpuPixelRawInput = SourceRawDataInput::create();
-    gpuPixelView = [[GPUPixelView alloc] initWithFrame:self.view.frame];
-    [self.view addSubview:gpuPixelView];
- 
-  
-    lipstick_filter_ = LipstickFilter::create();
-    blusher_filter_ = BlusherFilter::create();
- 
-    gpuPixelRawInput->RegLandmarkCallback([=](std::vector<float> landmarks) {
-      lipstick_filter_->SetFaceLandmarks(landmarks);
-      blusher_filter_->SetFaceLandmarks(landmarks);
-      face_reshape_filter_->SetFaceLandmarks(landmarks);
+    gpupixel::GPUPixelContext::getInstance()->runSync([&] {
+        gpuPixelRawInput = SourceRawDataInput::create();
+        gpuPixelView = [[GPUPixelView alloc] initWithFrame:self.view.frame];
+        [self.view addSubview:gpuPixelView];
+        
+        
+        lipstick_filter_ = LipstickFilter::create();
+        blusher_filter_ = BlusherFilter::create();
+        
+        gpuPixelRawInput->RegLandmarkCallback([=](std::vector<float> landmarks) {
+            lipstick_filter_->SetFaceLandmarks(landmarks);
+            blusher_filter_->SetFaceLandmarks(landmarks);
+            face_reshape_filter_->SetFaceLandmarks(landmarks);
+        });
+        
+        // create filter
+        targetRawOutput_ = TargetRawDataOutput::create();
+        beauty_face_filter_ = BeautyFaceFilter::create();
+        face_reshape_filter_ = FaceReshapeFilter::create();
+        
+        // filter pipline
+        gpuPixelRawInput->addTarget(lipstick_filter_)
+        ->addTarget(blusher_filter_)
+        ->addTarget(face_reshape_filter_)
+        ->addTarget(beauty_face_filter_)
+        ->addTarget(gpuPixelView);
+        [gpuPixelView setBackgroundColor:[UIColor grayColor]];
+        [gpuPixelView setFillMode:(gpupixel::TargetView::PreserveAspectRatioAndFill)];
+        
+        beauty_face_filter_->addTarget(targetRawOutput_);
+        __weak typeof(VideoFilterController*)weakSelf = self;
+        _rawOutputCallback = [weakSelf](const uint8_t* data, int width, int height, int64_t ts) {
+            if (weakSelf.isNeedSaveImage == YES) {
+                unsigned char *imageData = (unsigned char *)data;
+                size_t bitsPerComponent = 8; //r g b a 每个component bits数目
+                size_t bytesPerRow = width * 4; //一张图片每行字节数目(每个像素点包含r g b a 四个字节)
+                CGColorSpaceRef space = CGColorSpaceCreateDeviceRGB(); //创建rgb颜色空间
+                uint32_t bitmapInfo = kCGImageAlphaPremultipliedFirst | kCGBitmapByteOrder32Little;
+                CGContextRef context = CGBitmapContextCreate(imageData, width, height, bitsPerComponent, bytesPerRow, space, bitmapInfo);
+                CGImageRef cgImage = CGBitmapContextCreateImage(context);
+                CIImage *ciImage = [CIImage imageWithCGImage:cgImage];
+                UIImage *resultImage = [UIImage imageWithCIImage:ciImage];
+                NSLog(@"%@", resultImage);
+                
+                //Release memory
+                CGContextRelease(context);
+                CGImageRelease(cgImage);
+                weakSelf.isNeedSaveImage = NO;
+            }
+        };
+        targetRawOutput_->setPixelsCallbck(_rawOutputCallback);
+        self.isNeedSaveImage = NO;
+        
+        _cvPixelBufferRefCallback = [weakSelf](CVPixelBufferRef cvPixelBufferRef) {
+            if (weakSelf.isStartRecordVideo == true) {
+                weakSelf.currentCVPixelBufferRef = cvPixelBufferRef;
+                weakSelf.frameIndex = weakSelf.frameIndex + 1;
+            } else {
+                weakSelf.currentCVPixelBufferRef = nil;
+            }
+        };
+        targetRawOutput_->setCVPixelBufferRefCallbck(_cvPixelBufferRefCallback);
+        
     });
-  
-    // create filter
-    targetRawOutput_ = TargetRawDataOutput::create();
-    beauty_face_filter_ = BeautyFaceFilter::create();
-    face_reshape_filter_ = FaceReshapeFilter::create();
-    
-    // filter pipline
-    gpuPixelRawInput->addTarget(lipstick_filter_)
-                    ->addTarget(blusher_filter_)
-                    ->addTarget(face_reshape_filter_)
-                    ->addTarget(beauty_face_filter_)
-                    ->addTarget(gpuPixelView);
-    [gpuPixelView setBackgroundColor:[UIColor grayColor]];
-    [gpuPixelView setFillMode:(gpupixel::TargetView::PreserveAspectRatioAndFill)];
-  
-    beauty_face_filter_->addTarget(targetRawOutput_);
-    __weak typeof(VideoFilterController*)weakSelf = self;
-    _rawOutputCallback = [weakSelf]( const uint8_t* data, int width, int height, int64_t ts) {
-        if (weakSelf.isNeedSaveImage == YES) {
-            unsigned char *imageData = (unsigned char *)data;
-            size_t bitsPerComponent = 8; //r g b a 每个component bits数目
-            size_t bytesPerRow = width * 4; //一张图片每行字节数目(每个像素点包含r g b a 四个字节)
-            CGColorSpaceRef space = CGColorSpaceCreateDeviceRGB(); //创建rgb颜色空间
-            uint32_t bitmapInfo = kCGImageAlphaPremultipliedFirst | kCGBitmapByteOrder32Little;
-            CGContextRef context = CGBitmapContextCreate(imageData, width, height, bitsPerComponent, bytesPerRow, space, bitmapInfo);
-            CGImageRef cgImage = CGBitmapContextCreateImage(context);
-            CIImage *ciImage = [CIImage imageWithCGImage:cgImage];
-            UIImage *resultImage = [UIImage imageWithCIImage:ciImage];
-            NSLog(@"%@", resultImage);
-                  
-            //Release memory
-            CGContextRelease(context);
-            CGImageRelease(cgImage);
-            weakSelf.isNeedSaveImage = NO;
-        }
-    };
-    targetRawOutput_->setPixelsCallbck(_rawOutputCallback);
-    self.isNeedSaveImage = NO;
-      
-  });
 }
  
 - (void)backAction {
@@ -168,6 +196,8 @@ using namespace gpupixel;
 /// 销毁GPUPixel相关组件, 防止内存泄漏
 - (void)destroyAction {
     _rawOutputCallback = nil;
+    _cvPixelBufferRefCallback = nil;
+    _currentCVPixelBufferRef = nil;
     //
     [self.capturer stopCapture];
     self.capturer = nil;
@@ -189,9 +219,55 @@ using namespace gpupixel;
 - (void)recordVideoBtnAction:(UIButton *)sender {
     sender.selected = !sender.isSelected;
     if (sender.isSelected == YES) {
+        self.isStartRecordVideo = YES;
+        if (AVAssetWriterStatusUnknown == self.assetWriter.status) {
+            if (self.adaptor == nil) {
+                NSDictionary *attributes = @{
+                    (NSString *)kCVPixelBufferPixelFormatTypeKey: @(kCVPixelFormatType_32BGRA),
+                    (NSString *)kCVPixelBufferWidthKey: @(720),
+                    (NSString *)kCVPixelBufferHeightKey: @(1280),
+                    (NSString *)kCVPixelFormatOpenGLESCompatibility: @(YES)
+                };
+                self.adaptor = [[AVAssetWriterInputPixelBufferAdaptor alloc] initWithAssetWriterInput:self.writerInput sourcePixelBufferAttributes:attributes];
+            }
+
+            
+            if ([self.assetWriter canAddInput:self.writerInput]) {
+                [self.assetWriter addInput:self.writerInput];
+            }
+            [self.assetWriter startWriting];
+            [self.assetWriter startSessionAtSourceTime:kCMTimeZero];
+            self.frameIndex = 0;
+        }
         
+        dispatch_queue_t mediaInputQueue = dispatch_queue_create("mediaInputQueue", NULL);
+        [self.writerInput requestMediaDataWhenReadyOnQueue:mediaInputQueue usingBlock:^{
+            while ([self.writerInput isReadyForMoreMediaData] && self.isStartRecordVideo == YES) {
+                CMTime frameTime = CMTimeMake(self.frameIndex, 30); // 30 FPS
+                if (CMTimeGetSeconds(self.frameTime) == CMTimeGetSeconds(frameTime)) {
+                    continue;
+                }
+                self.frameTime = frameTime;
+                CMTimeShow(frameTime);
+                if (self.currentCVPixelBufferRef == nil) {
+                    continue;
+                }
+                
+                CVPixelBufferRef buffer = self.currentCVPixelBufferRef;
+                BOOL result = [self.adaptor appendPixelBuffer:buffer withPresentationTime:frameTime];
+                if (result == NO) {
+                    NSLog(@"Failed to append pixel buffer");
+                }
+            }
+        }];
     } else if (sender.isSelected == NO) {
-        
+        self.isStartRecordVideo = NO;
+        self.frameIndex = 0;
+        [self.writerInput markAsFinished];
+        [self.assetWriter finishWritingWithCompletionHandler:^{
+            self.assetWriter = nil;
+            self.writerInput = nil;
+        }];
     }
 }
 
@@ -354,6 +430,34 @@ using namespace gpupixel;
         [_recordVideoBtn addTarget: self action: @selector(recordVideoBtnAction:) forControlEvents: UIControlEventTouchUpInside] ;
     }
     return _recordVideoBtn;
+}
+/// 媒体资源写入器
+- (AVAssetWriter *)assetWriter {
+    if (!_assetWriter) {
+        NSError *error = nil;
+        NSString *outputFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"output.mp4"];
+        NSFileHandle *hand = [NSFileHandle fileHandleForWritingAtPath:outputFilePath];
+        if (hand != nil) {//如果存在,删除以前文件
+            [[NSFileManager defaultManager] removeItemAtPath:outputFilePath error:nil];
+        }
+        
+        NSURL *outputURL = [NSURL fileURLWithPath:outputFilePath];
+        _assetWriter = [[AVAssetWriter alloc] initWithURL:outputURL fileType:AVFileTypeMPEG4 error:&error];
+    }
+    return _assetWriter;
+}
+/// 媒体资源输入器
+- (AVAssetWriterInput *)writerInput {
+    if (!_writerInput) {
+        NSDictionary *videoSettings = @{
+            AVVideoCodecKey: AVVideoCodecTypeH264,
+            AVVideoWidthKey: @(720),
+            AVVideoHeightKey: @(1280),
+        };
+        _writerInput = [AVAssetWriterInput assetWriterInputWithMediaType:AVMediaTypeVideo outputSettings:videoSettings];
+        _writerInput.expectsMediaDataInRealTime = YES;
+    }
+    return _writerInput;
 }
 
 -(UISegmentedControl*)effectSwitch {
