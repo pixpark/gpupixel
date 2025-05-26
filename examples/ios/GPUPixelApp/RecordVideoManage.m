@@ -15,12 +15,12 @@
 /// 媒体资源适配编码器
 @property (strong, nonatomic) AVAssetWriterInputPixelBufferAdaptor* adaptor;
 
-/// 是否是视频首帧
-@property (assign, nonatomic) BOOL isFirstFrame;
 /// 当前帧Index下标
 @property (assign, nonatomic) int64_t frameIndex;
-/// 当前帧CVPixelBufferRef像素帧流
-@property (assign, nonatomic) CVPixelBufferRef currentCVPixelBufferRef;
+/// 是否是视频首帧
+@property (assign, nonatomic) BOOL isLockThread;
+/// 视频帧率
+@property (assign, nonatomic) int32_t fps;
 
 @end
 @implementation RecordVideoManage
@@ -43,7 +43,6 @@ static dispatch_once_t onceToken;
     singleton.assetWriter = nil;
     singleton.writerInput = nil;
     singleton.adaptor = nil;
-    singleton.currentCVPixelBufferRef = nil;
     
     singleton = nil;
     onceToken = 0L;
@@ -52,9 +51,14 @@ static dispatch_once_t onceToken;
 #define kOutputRecordVideoPath [NSTemporaryDirectory() stringByAppendingPathComponent:@"output.mp4"]
 /// 开始录制视频
 /// - Parameters:
-///   - videoSize: 视频长宽(务必和CVPixelBufferRef长宽一致, 否则录制视频将会失败)
+///   - frameSize: 视频帧长宽(务必和CVPixelBufferRef长宽一致, 否则录制视频将会失败)
 ///   - fps: 视频帧率
-- (void)startRecordVideo:(CGSize)videoSize fps:(int32_t)fps {
+- (void)startRecordVideo:(CGSize)frameSize fps:(int32_t)fps {
+    if (fps < 1) {
+        fps = 1;
+    }
+    self.fps = fps;
+    
     if (self.assetWriter != nil) {
         self.assetWriter = nil;
     }
@@ -73,8 +77,8 @@ static dispatch_once_t onceToken;
     }
     NSDictionary *videoSettings = @{
         AVVideoCodecKey: AVVideoCodecTypeH264,
-        AVVideoWidthKey: @(videoSize.width),
-        AVVideoHeightKey: @(videoSize.height),
+        AVVideoWidthKey: @(frameSize.width),
+        AVVideoHeightKey: @(frameSize.height),
     };
     self.writerInput = [AVAssetWriterInput assetWriterInputWithMediaType:AVMediaTypeVideo outputSettings:videoSettings];
     self.writerInput.expectsMediaDataInRealTime = YES;
@@ -84,8 +88,8 @@ static dispatch_once_t onceToken;
     }
     NSDictionary *attributes = @{
         (NSString *)kCVPixelBufferPixelFormatTypeKey: @(kCVPixelFormatType_32BGRA),
-        (NSString *)kCVPixelBufferWidthKey: @(videoSize.width),
-        (NSString *)kCVPixelBufferHeightKey: @(videoSize.height),
+        (NSString *)kCVPixelBufferWidthKey: @(frameSize.width),
+        (NSString *)kCVPixelBufferHeightKey: @(frameSize.height),
         (NSString *)kCVPixelFormatOpenGLESCompatibility: @(YES)
     };
     self.adaptor = [[AVAssetWriterInputPixelBufferAdaptor alloc] initWithAssetWriterInput:self.writerInput sourcePixelBufferAttributes:attributes];
@@ -96,41 +100,30 @@ static dispatch_once_t onceToken;
     [self.assetWriter startWriting];
     [self.assetWriter startSessionAtSourceTime:kCMTimeZero];
     self.frameIndex = 0;
-    self.currentCVPixelBufferRef = nil;
-    
-    dispatch_queue_t writerInputQueue = dispatch_queue_create(NSStringFromClass(self.class).UTF8String, NULL);
-    [self.writerInput requestMediaDataWhenReadyOnQueue:writerInputQueue usingBlock:^{
-        int64_t frameIndex = self.frameIndex;
-        while ([self.writerInput isReadyForMoreMediaData]) {
-            if (self.isFirstFrame != YES && frameIndex == self.frameIndex) {
-                continue;
-            }
-            
-            frameIndex = self.frameIndex;
-            CMTime frameTime = CMTimeMake(frameIndex, fps);
-            if (self.currentCVPixelBufferRef == nil) {
-                continue;
-            }
-            CVPixelBufferRef buffer = self.currentCVPixelBufferRef;
-            BOOL result = [self.adaptor appendPixelBuffer:buffer withPresentationTime:frameTime];
-            if (result == NO) {
-                NSLog(@"Failed to append pixel buffer");
-                continue;
-            }
-            if (self.isFirstFrame == true) {
-                self.frameIndex = self.frameIndex + 1;
-            }
-        }
-    }];
 }
 
 /// 添加插入 CVPixelBufferRef像素帧流
 /// - Parameter pixelBuffer: CVPixelBufferRef像素帧流
 - (void)addPixelBuffer:(CVPixelBufferRef)pixelBuffer {
-    self.currentCVPixelBufferRef = pixelBuffer;
-    if (self.frameIndex != 0) {
-        self.frameIndex = self.frameIndex + 1;
+    if (pixelBuffer == nil) {
+        return;
     }
+    
+    if (self.isLockThread == YES) {
+        return;
+    }
+    self.isLockThread = YES;
+    //创建子线程队列
+    dispatch_async(dispatch_queue_create(NSStringFromClass(self.class).UTF8String, DISPATCH_QUEUE_SERIAL), ^{
+        CMTime frameTime = CMTimeMake(self.frameIndex, self.fps);
+        BOOL result = [self.adaptor appendPixelBuffer:pixelBuffer withPresentationTime:frameTime];
+        if (result == true) {
+            self.frameIndex = self.frameIndex + 1;
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.isLockThread = NO;
+        });
+    });
 }
 
 /// 停止录制, 并封装成MP4等视频格式
@@ -144,17 +137,6 @@ static dispatch_once_t onceToken;
         }];
         self.frameIndex = 0;
     }
-}
-
-/// 是否为首帧
-- (BOOL)isFirstFrame {
-    BOOL isFirstFrame = NO;
-    //当前帧下标为0, 且当前帧非空, 即当前帧为首帧
-    if (self.frameIndex == 0 && self.currentCVPixelBufferRef != nil) {
-        isFirstFrame = true;
-    }
-    
-    return isFirstFrame;
 }
 
 @end

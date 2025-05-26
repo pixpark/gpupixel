@@ -22,9 +22,9 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark ================== 初始化单例 end ==================
 /// 开始录制视频
 /// - Parameters:
-///   - videoSize: 视频长宽(务必和CVPixelBufferRef长宽一致, 否则录制视频将会失败)
+///   - frameSize: 视频帧长宽(务必和CVPixelBufferRef长宽一致, 否则录制视频将会失败)
 ///   - fps: 视频帧率
-- (void)startRecordVideo:(CGSize)videoSize fps:(int32_t)fps;
+- (void)startRecordVideo:(CGSize)frameSize fps:(int32_t)fps;
 /// 添加插入 CVPixelBufferRef像素帧流
 /// - Parameter pixelBuffer: CVPixelBufferRef像素帧流
 - (void)addPixelBuffer:(CVPixelBufferRef)pixelBuffer;
