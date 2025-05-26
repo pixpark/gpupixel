@@ -336,7 +336,7 @@ using namespace gpupixel;
 -(UIButton*)cameraSwitchBtn {
   if(_cameraSwitchBtn == nil) {
     _cameraSwitchBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-    _cameraSwitchBtn.frame = CGRectMake(self.view.bounds.size.width - 35, 105, 25, 20);
+    _cameraSwitchBtn.frame = CGRectMake(self.view.bounds.size.width - 35 - 10, 105, 25, 20);
     
     [_cameraSwitchBtn setBackgroundImage:[UIImage imageNamed:@"CameraIcon"] forState:UIControlStateNormal];
     [_cameraSwitchBtn addTarget: self action: @selector(onCameraSwitchBtnUpInside) forControlEvents: UIControlEventTouchUpInside] ;
@@ -346,9 +346,11 @@ using namespace gpupixel;
 -(UIButton*)recordVideoBtn {
     if(_recordVideoBtn  == nil) {
         _recordVideoBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-        _recordVideoBtn.frame = CGRectMake(35, 105, 35, 35);
-        [_recordVideoBtn setImage:[UIImage imageNamed:@"StartRecordVideo"] forState:UIControlStateNormal];
-        [_recordVideoBtn setImage:[UIImage imageNamed:@"StopRecordVideo"] forState:UIControlStateSelected];
+        _recordVideoBtn.frame = CGRectMake(20, 105, 35, 35);
+        [_recordVideoBtn setImage:[[UIImage imageNamed:@"StartRecordVideo"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+        [_recordVideoBtn setImage:[[UIImage imageNamed:@"StopRecordVideo"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateSelected];
+        _recordVideoBtn.tintColor = UIColor.clearColor;
+        
         [_recordVideoBtn addTarget: self action: @selector(recordVideoBtnAction:) forControlEvents: UIControlEventTouchUpInside] ;
     }
     return _recordVideoBtn;
