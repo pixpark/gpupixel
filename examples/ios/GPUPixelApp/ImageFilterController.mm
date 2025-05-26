@@ -166,7 +166,7 @@ using namespace gpupixel;
     CGImageRef cgImage = CGBitmapContextCreateImage(context);
     CIImage *ciImage = [CIImage imageWithCGImage:cgImage];
     UIImage *resultImage = [UIImage imageWithCIImage:ciImage];
-    NSLog(@"%@", resultImage);
+    NSLog(@"打印UIImage图像对象 : %@", resultImage);
   
     //Release memory
     free(pixels);

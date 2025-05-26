@@ -7,6 +7,7 @@
 
 #import "VideoFilterController.h"
 #import "VideoCapturer.h"
+#import "RecordVideoManage.h"
 #import <gpupixel/gpupixel.h>
 
 using namespace gpupixel;
@@ -22,6 +23,7 @@ using namespace gpupixel;
     
   std::shared_ptr<TargetRawDataOutput> targetRawOutput_;
   RawOutputCallback _rawOutputCallback;
+  CVPixelBufferRefCallback _cvPixelBufferRefCallback;
 }
 
 //
@@ -36,11 +38,14 @@ using namespace gpupixel;
 // UI
 @property (strong, nonatomic) VideoCapturer* capturer;
 @property (strong, nonatomic) UIButton* cameraSwitchBtn;
+@property (strong, nonatomic) UIButton* recordVideoBtn;
 @property (strong, nonatomic) UISegmentedControl* segment;
 @property (strong, nonatomic) UISegmentedControl* effectSwitch;
-@property (strong, nonatomic) UISlider *slider;
-
+@property (strong, nonatomic) UISlider* slider;
+/// 是否需要保存图像
 @property (assign, nonatomic) BOOL isNeedSaveImage;
+/// 是否开始录制视频
+@property (assign, nonatomic) BOOL isStartRecordVideo;
 
 @end
 
@@ -81,6 +86,7 @@ using namespace gpupixel;
   [self.view addSubview:self.effectSwitch];
   
   [self.view addSubview:self.cameraSwitchBtn];
+    [self.view addSubview:self.recordVideoBtn];
   
   // 初始化
   self.slider = [[UISlider alloc] initWithFrame:CGRectMake(50, self.view.frame.size.height - 120, self.view.frame.size.width - 100, 30)];
@@ -101,72 +107,84 @@ using namespace gpupixel;
 }
 
 -(void)initVideoFilter {
-  gpupixel::GPUPixelContext::getInstance()->runSync([&] {
-    gpuPixelRawInput = SourceRawDataInput::create();
-    gpuPixelView = [[GPUPixelView alloc] initWithFrame:self.view.frame];
-    [self.view addSubview:gpuPixelView];
- 
-  
-    lipstick_filter_ = LipstickFilter::create();
-    blusher_filter_ = BlusherFilter::create();
- 
-    gpuPixelRawInput->RegLandmarkCallback([=](std::vector<float> landmarks) {
-      lipstick_filter_->SetFaceLandmarks(landmarks);
-      blusher_filter_->SetFaceLandmarks(landmarks);
-      face_reshape_filter_->SetFaceLandmarks(landmarks);
+    gpupixel::GPUPixelContext::getInstance()->runSync([&] {
+        gpuPixelRawInput = SourceRawDataInput::create();
+        gpuPixelView = [[GPUPixelView alloc] initWithFrame:self.view.frame];
+        [self.view addSubview:gpuPixelView];
+        
+        
+        lipstick_filter_ = LipstickFilter::create();
+        blusher_filter_ = BlusherFilter::create();
+        
+        gpuPixelRawInput->RegLandmarkCallback([=](std::vector<float> landmarks) {
+            lipstick_filter_->SetFaceLandmarks(landmarks);
+            blusher_filter_->SetFaceLandmarks(landmarks);
+            face_reshape_filter_->SetFaceLandmarks(landmarks);
+        });
+        
+        // create filter
+        targetRawOutput_ = TargetRawDataOutput::create();
+        beauty_face_filter_ = BeautyFaceFilter::create();
+        face_reshape_filter_ = FaceReshapeFilter::create();
+        
+        // filter pipline
+        gpuPixelRawInput->addTarget(lipstick_filter_)
+        ->addTarget(blusher_filter_)
+        ->addTarget(face_reshape_filter_)
+        ->addTarget(beauty_face_filter_)
+        ->addTarget(gpuPixelView);
+        [gpuPixelView setBackgroundColor:[UIColor grayColor]];
+        [gpuPixelView setFillMode:(gpupixel::TargetView::PreserveAspectRatioAndFill)];
+        
+        beauty_face_filter_->addTarget(targetRawOutput_);
+        __weak typeof(VideoFilterController*)weakSelf = self;
+        _rawOutputCallback = [weakSelf](const uint8_t* data, int width, int height, int64_t ts) {
+            if (weakSelf.isNeedSaveImage == YES) {
+                unsigned char *imageData = (unsigned char *)data;
+                size_t bitsPerComponent = 8; //r g b a 每个component bits数目
+                size_t bytesPerRow = width * 4; //一张图片每行字节数目(每个像素点包含r g b a 四个字节)
+                CGColorSpaceRef space = CGColorSpaceCreateDeviceRGB(); //创建rgb颜色空间
+                uint32_t bitmapInfo = kCGImageAlphaPremultipliedFirst | kCGBitmapByteOrder32Little;
+                CGContextRef context = CGBitmapContextCreate(imageData, width, height, bitsPerComponent, bytesPerRow, space, bitmapInfo);
+                CGImageRef cgImage = CGBitmapContextCreateImage(context);
+                CIImage *ciImage = [CIImage imageWithCGImage:cgImage];
+                UIImage *resultImage = [UIImage imageWithCIImage:ciImage];
+                NSLog(@"打印UIImage图像对象 : %@", resultImage);
+                
+                //Release memory
+                CGContextRelease(context);
+                CGImageRelease(cgImage);
+                weakSelf.isNeedSaveImage = NO;
+            }
+        };
+        targetRawOutput_->setPixelsCallbck(_rawOutputCallback);
+        self.isNeedSaveImage = NO;
+        
+        _cvPixelBufferRefCallback = [weakSelf](CVPixelBufferRef cvPixelBufferRef) {
+            if (weakSelf.isStartRecordVideo == true) {
+                [[RecordVideoManage share] addPixelBuffer:cvPixelBufferRef];
+            }
+        };
+        targetRawOutput_->setCVPixelBufferRefCallbck(_cvPixelBufferRefCallback);
+        
     });
-  
-    // create filter
-    targetRawOutput_ = TargetRawDataOutput::create();
-    beauty_face_filter_ = BeautyFaceFilter::create();
-    face_reshape_filter_ = FaceReshapeFilter::create();
-    
-    // filter pipline
-    gpuPixelRawInput->addTarget(lipstick_filter_)
-                    ->addTarget(blusher_filter_)
-                    ->addTarget(face_reshape_filter_)
-                    ->addTarget(beauty_face_filter_)
-                    ->addTarget(gpuPixelView);
-    [gpuPixelView setBackgroundColor:[UIColor grayColor]];
-    [gpuPixelView setFillMode:(gpupixel::TargetView::PreserveAspectRatioAndFill)];
-  
-    beauty_face_filter_->addTarget(targetRawOutput_);
-    __weak typeof(VideoFilterController*)weakSelf = self;
-    _rawOutputCallback = [weakSelf]( const uint8_t* data, int width, int height, int64_t ts) {
-        if (weakSelf.isNeedSaveImage == YES) {
-            unsigned char *imageData = (unsigned char *)data;
-            size_t bitsPerComponent = 8; //r g b a 每个component bits数目
-            size_t bytesPerRow = width * 4; //一张图片每行字节数目(每个像素点包含r g b a 四个字节)
-            CGColorSpaceRef space = CGColorSpaceCreateDeviceRGB(); //创建rgb颜色空间
-            uint32_t bitmapInfo = kCGImageAlphaPremultipliedFirst | kCGBitmapByteOrder32Little;
-            CGContextRef context = CGBitmapContextCreate(imageData, width, height, bitsPerComponent, bytesPerRow, space, bitmapInfo);
-            CGImageRef cgImage = CGBitmapContextCreateImage(context);
-            CIImage *ciImage = [CIImage imageWithCGImage:cgImage];
-            UIImage *resultImage = [UIImage imageWithCIImage:ciImage];
-            NSLog(@"%@", resultImage);
-                  
-            //Release memory
-            CGContextRelease(context);
-            CGImageRelease(cgImage);
-            weakSelf.isNeedSaveImage = NO;
-        }
-    };
-    targetRawOutput_->setPixelsCallbck(_rawOutputCallback);
-    self.isNeedSaveImage = NO;
-      
-  });
 }
- 
+
+/// [返回]按钮的点击事件
 - (void)backAction {
     //销毁GPUPixel相关组件, 防止内存泄漏
     [self destroyAction];
-
+    //
     [self.navigationController popViewControllerAnimated:true];
 }
 /// 销毁GPUPixel相关组件, 防止内存泄漏
 - (void)destroyAction {
     _rawOutputCallback = nil;
-
+    _cvPixelBufferRefCallback = nil;
+    // 销毁RecordVideoManage管理类
+    [RecordVideoManage destroySingleton];
+    
+    //关闭摄像头摄像功能
     [self.capturer stopCapture];
     self.capturer = nil;
       
@@ -182,6 +200,19 @@ using namespace gpupixel;
 
 - (void)saveImageAction {
     self.isNeedSaveImage = true;
+}
+
+- (void)recordVideoBtnAction:(UIButton *)sender {
+    sender.selected = !sender.isSelected;
+    if (sender.isSelected == YES) {
+        //开始录制视频
+        [[RecordVideoManage share] startRecordVideo:CGSizeMake(720, 1280) fps:30];
+        self.isStartRecordVideo = YES;
+    } else if (sender.isSelected == NO) {
+        self.isStartRecordVideo = NO;
+        //停止录制, 并封装成MP4等视频格式
+        [[RecordVideoManage share] stopRecordVideo];
+    }
 }
 
 
@@ -325,12 +356,24 @@ using namespace gpupixel;
 -(UIButton*)cameraSwitchBtn {
   if(_cameraSwitchBtn == nil) {
     _cameraSwitchBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-    _cameraSwitchBtn.frame = CGRectMake(self.view.bounds.size.width - 35, 105, 25, 20);
+    _cameraSwitchBtn.frame = CGRectMake(self.view.bounds.size.width - 35 - 10, 105, 25, 20);
     
     [_cameraSwitchBtn setBackgroundImage:[UIImage imageNamed:@"CameraIcon"] forState:UIControlStateNormal];
     [_cameraSwitchBtn addTarget: self action: @selector(onCameraSwitchBtnUpInside) forControlEvents: UIControlEventTouchUpInside] ;
   }
   return _cameraSwitchBtn;
+}
+-(UIButton*)recordVideoBtn {
+    if(_recordVideoBtn  == nil) {
+        _recordVideoBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+        _recordVideoBtn.frame = CGRectMake(20, 105, 35, 35);
+        [_recordVideoBtn setImage:[[UIImage imageNamed:@"StartRecordVideo"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+        [_recordVideoBtn setImage:[[UIImage imageNamed:@"StopRecordVideo"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateSelected];
+        _recordVideoBtn.tintColor = UIColor.clearColor;
+        
+        [_recordVideoBtn addTarget: self action: @selector(recordVideoBtnAction:) forControlEvents: UIControlEventTouchUpInside] ;
+    }
+    return _recordVideoBtn;
 }
 
 -(UISegmentedControl*)effectSwitch {
