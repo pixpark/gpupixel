@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0C6F57392DE4D02C001165DC /* RecordVideoManage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C6F57372DE4D02C001165DC /* RecordVideoManage.m */; };
 		840CD3D42B88448900EEF7B0 /* gpupixel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 840CD3D32B88448900EEF7B0 /* gpupixel.framework */; };
 		840CD3D52B88448900EEF7B0 /* gpupixel.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 840CD3D32B88448900EEF7B0 /* gpupixel.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		840FD5CF2B82455100781FA6 /* vnn_kit_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 840FD5CC2B82455100781FA6 /* vnn_kit_ios.framework */; };
@@ -48,6 +49,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0C6F57372DE4D02C001165DC /* RecordVideoManage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordVideoManage.m; sourceTree = "<group>"; };
+		0C6F57382DE4D02C001165DC /* RecordVideoManage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordVideoManage.h; sourceTree = "<group>"; };
 		840CD3D32B88448900EEF7B0 /* gpupixel.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = gpupixel.framework; path = ../../output/library/ios/gpupixel.framework; sourceTree = "<group>"; };
 		840FD5CC2B82455100781FA6 /* vnn_kit_ios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = vnn_kit_ios.framework; path = ../../src/third_party/vnn/libs/ios/vnn_kit_ios.framework; sourceTree = "<group>"; };
 		840FD5CD2B82455100781FA6 /* vnn_face_ios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = vnn_face_ios.framework; path = ../../src/third_party/vnn/libs/ios/vnn_face_ios.framework; sourceTree = "<group>"; };
@@ -118,6 +121,8 @@
 			children = (
 				8472449D2A603368009D1488 /* VideoCapturer.h */,
 				8472449E2A603368009D1488 /* VideoCapturer.m */,
+				0C6F57382DE4D02C001165DC /* RecordVideoManage.h */,
+				0C6F57372DE4D02C001165DC /* RecordVideoManage.m */,
 				843580EB276352260053E16A /* ImageFilterController.h */,
 				843580EC276352260053E16A /* ImageFilterController.mm */,
 				84C1D15E266F5D69006D1AB4 /* VideoFilterController.h */,
@@ -229,6 +234,7 @@
 				84307EA2261F2CDC003EAC98 /* main.m in Sources */,
 				84307E94261F2CD9003EAC98 /* SceneDelegate.m in Sources */,
 				843580EE276352260053E16A /* ImageFilterController.mm in Sources */,
+				0C6F57392DE4D02C001165DC /* RecordVideoManage.m in Sources */,
 				84C1D161266F5D69006D1AB4 /* VideoFilterController.mm in Sources */,
 				847244A22A6034BF009D1488 /* VideoCapturer.m in Sources */,
 			);

@@ -7,6 +7,7 @@
 
 #import "VideoFilterController.h"
 #import "VideoCapturer.h"
+#import "RecordVideoManage.h"
 #import <gpupixel/gpupixel.h>
 
 using namespace gpupixel;
@@ -22,9 +23,7 @@ using namespace gpupixel;
     
   std::shared_ptr<TargetRawDataOutput> targetRawOutput_;
   RawOutputCallback _rawOutputCallback;
-    
   CVPixelBufferRefCallback _cvPixelBufferRefCallback;
-  CVPixelBufferRef _currentCVPixelBufferRef;
 }
 
 //
@@ -43,23 +42,10 @@ using namespace gpupixel;
 @property (strong, nonatomic) UISegmentedControl* segment;
 @property (strong, nonatomic) UISegmentedControl* effectSwitch;
 @property (strong, nonatomic) UISlider* slider;
-
+/// 是否需要保存图像
 @property (assign, nonatomic) BOOL isNeedSaveImage;
-
-
+/// 是否开始录制视频
 @property (assign, nonatomic) BOOL isStartRecordVideo;
-/// 媒体资源写入器
-@property (strong, nonatomic) AVAssetWriter* assetWriter;
-/// 媒体资源输入器
-@property (strong, nonatomic) AVAssetWriterInput* writerInput;
-/// 媒体资源适配编码器
-@property (strong, nonatomic) AVAssetWriterInputPixelBufferAdaptor* adaptor;
-///
-@property (assign, nonatomic) CVPixelBufferRef currentCVPixelBufferRef;
-///
-@property (assign, nonatomic) int64_t frameIndex;
-///
-@property (assign, nonatomic) CMTime frameTime;
 
 @end
 
@@ -163,7 +149,7 @@ using namespace gpupixel;
                 CGImageRef cgImage = CGBitmapContextCreateImage(context);
                 CIImage *ciImage = [CIImage imageWithCGImage:cgImage];
                 UIImage *resultImage = [UIImage imageWithCIImage:ciImage];
-                NSLog(@"%@", resultImage);
+                NSLog(@"打印UIImage图像对象 : %@", resultImage);
                 
                 //Release memory
                 CGContextRelease(context);
@@ -176,17 +162,15 @@ using namespace gpupixel;
         
         _cvPixelBufferRefCallback = [weakSelf](CVPixelBufferRef cvPixelBufferRef) {
             if (weakSelf.isStartRecordVideo == true) {
-                weakSelf.currentCVPixelBufferRef = cvPixelBufferRef;
-                weakSelf.frameIndex = weakSelf.frameIndex + 1;
-            } else {
-                weakSelf.currentCVPixelBufferRef = nil;
+                [[RecordVideoManage share] addPixelBuffer:cvPixelBufferRef];
             }
         };
         targetRawOutput_->setCVPixelBufferRefCallbck(_cvPixelBufferRefCallback);
         
     });
 }
- 
+
+/// [返回]按钮的点击事件
 - (void)backAction {
     //销毁GPUPixel相关组件, 防止内存泄漏
     [self destroyAction];
@@ -197,8 +181,10 @@ using namespace gpupixel;
 - (void)destroyAction {
     _rawOutputCallback = nil;
     _cvPixelBufferRefCallback = nil;
-    _currentCVPixelBufferRef = nil;
-    //
+    // 销毁RecordVideoManage管理类
+    [RecordVideoManage destroySingleton];
+    
+    //关闭摄像头摄像功能
     [self.capturer stopCapture];
     self.capturer = nil;
       
@@ -219,55 +205,13 @@ using namespace gpupixel;
 - (void)recordVideoBtnAction:(UIButton *)sender {
     sender.selected = !sender.isSelected;
     if (sender.isSelected == YES) {
+        //开始录制视频
+        [[RecordVideoManage share] startRecordVideo:CGSizeMake(720, 1280) fps:30];
         self.isStartRecordVideo = YES;
-        if (AVAssetWriterStatusUnknown == self.assetWriter.status) {
-            if (self.adaptor == nil) {
-                NSDictionary *attributes = @{
-                    (NSString *)kCVPixelBufferPixelFormatTypeKey: @(kCVPixelFormatType_32BGRA),
-                    (NSString *)kCVPixelBufferWidthKey: @(720),
-                    (NSString *)kCVPixelBufferHeightKey: @(1280),
-                    (NSString *)kCVPixelFormatOpenGLESCompatibility: @(YES)
-                };
-                self.adaptor = [[AVAssetWriterInputPixelBufferAdaptor alloc] initWithAssetWriterInput:self.writerInput sourcePixelBufferAttributes:attributes];
-            }
-
-            
-            if ([self.assetWriter canAddInput:self.writerInput]) {
-                [self.assetWriter addInput:self.writerInput];
-            }
-            [self.assetWriter startWriting];
-            [self.assetWriter startSessionAtSourceTime:kCMTimeZero];
-            self.frameIndex = 0;
-        }
-        
-        dispatch_queue_t mediaInputQueue = dispatch_queue_create("mediaInputQueue", NULL);
-        [self.writerInput requestMediaDataWhenReadyOnQueue:mediaInputQueue usingBlock:^{
-            while ([self.writerInput isReadyForMoreMediaData] && self.isStartRecordVideo == YES) {
-                CMTime frameTime = CMTimeMake(self.frameIndex, 30); // 30 FPS
-                if (CMTimeGetSeconds(self.frameTime) == CMTimeGetSeconds(frameTime)) {
-                    continue;
-                }
-                self.frameTime = frameTime;
-                CMTimeShow(frameTime);
-                if (self.currentCVPixelBufferRef == nil) {
-                    continue;
-                }
-                
-                CVPixelBufferRef buffer = self.currentCVPixelBufferRef;
-                BOOL result = [self.adaptor appendPixelBuffer:buffer withPresentationTime:frameTime];
-                if (result == NO) {
-                    NSLog(@"Failed to append pixel buffer");
-                }
-            }
-        }];
     } else if (sender.isSelected == NO) {
         self.isStartRecordVideo = NO;
-        self.frameIndex = 0;
-        [self.writerInput markAsFinished];
-        [self.assetWriter finishWritingWithCompletionHandler:^{
-            self.assetWriter = nil;
-            self.writerInput = nil;
-        }];
+        //停止录制, 并封装成MP4等视频格式
+        [[RecordVideoManage share] stopRecordVideo];
     }
 }
 
@@ -430,34 +374,6 @@ using namespace gpupixel;
         [_recordVideoBtn addTarget: self action: @selector(recordVideoBtnAction:) forControlEvents: UIControlEventTouchUpInside] ;
     }
     return _recordVideoBtn;
-}
-/// 媒体资源写入器
-- (AVAssetWriter *)assetWriter {
-    if (!_assetWriter) {
-        NSError *error = nil;
-        NSString *outputFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"output.mp4"];
-        NSFileHandle *hand = [NSFileHandle fileHandleForWritingAtPath:outputFilePath];
-        if (hand != nil) {//如果存在,删除以前文件
-            [[NSFileManager defaultManager] removeItemAtPath:outputFilePath error:nil];
-        }
-        
-        NSURL *outputURL = [NSURL fileURLWithPath:outputFilePath];
-        _assetWriter = [[AVAssetWriter alloc] initWithURL:outputURL fileType:AVFileTypeMPEG4 error:&error];
-    }
-    return _assetWriter;
-}
-/// 媒体资源输入器
-- (AVAssetWriterInput *)writerInput {
-    if (!_writerInput) {
-        NSDictionary *videoSettings = @{
-            AVVideoCodecKey: AVVideoCodecTypeH264,
-            AVVideoWidthKey: @(720),
-            AVVideoHeightKey: @(1280),
-        };
-        _writerInput = [AVAssetWriterInput assetWriterInputWithMediaType:AVMediaTypeVideo outputSettings:videoSettings];
-        _writerInput.expectsMediaDataInRealTime = YES;
-    }
-    return _writerInput;
 }
 
 -(UISegmentedControl*)effectSwitch {
