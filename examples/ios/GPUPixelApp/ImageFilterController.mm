@@ -109,11 +109,9 @@ using namespace gpupixel;
    
     beauty_face_filter_ = BeautyFaceFilter::create();
     face_reshape_filter_ = FaceReshapeFilter::create();
-    
-    NSString *imagePath = [[NSBundle mainBundle] pathForResource:@"sample_face" ofType:@"png"];
-
-    gpuSourceImage = SourceImage::create([imagePath UTF8String]);
-    
+    // 将图像资源加载到GPUPixel图形引擎
+    [self loadImageSourceToGPUPixel];
+    // 对图像进行人脸识别, 并赋值到需要人脸识别的滤镜中
     gpuSourceImage->RegLandmarkCallback([=](std::vector<float> landmarks) {
       lipstick_filter_->SetFaceLandmarks(landmarks);
       blusher_filter_->SetFaceLandmarks(landmarks);
@@ -277,6 +275,25 @@ using namespace gpupixel;
  
   }
   return _effectSwitch;
+}
+
+/// 将图像资源加载到GPUPixel图形引擎
+- (void)loadImageSourceToGPUPixel {
+  NSString *sourcePath = [[NSBundle mainBundle] pathForResource:@"sample_face.png" ofType:@""];
+  UIImage *inputImage = [UIImage imageWithContentsOfFile:sourcePath];
+  CGImageRef cgImage = inputImage.CGImage;
+  size_t width = CGImageGetWidth(cgImage);//图片宽度
+  size_t height = CGImageGetHeight(cgImage);//图片高度
+  void *data = calloc(width * height * 4, sizeof(unsigned char));//取图片首地址
+  size_t bitsPerComponent = 8;//r g b a 每个component bits数目
+  size_t bytesPerRow = width * 4;//一张图片每行字节数目(每个像素点包含r g b a 四个字节)
+  CGColorSpaceRef space = CGColorSpaceCreateDeviceRGB();//创建rgb颜色空间
+  uint32_t bitmapInfo = kCGImageAlphaPremultipliedLast | kCGImageByteOrder32Big;
+  CGContextRef context = CGBitmapContextCreate(data, width, height, bitsPerComponent, bytesPerRow, space, bitmapInfo);
+  CGContextDrawImage(context, CGRectMake(0, 0, (int)width, (int)height), cgImage);
+  gpuSourceImage = SourceImage::create_from_memory((int)width, (int)height, 4, (const unsigned char*)data);
+  free(data);
+  CGContextRelease(context);
 }
 
 /// 销毁当前对象后的调用方法
