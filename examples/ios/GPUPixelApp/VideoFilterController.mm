@@ -36,12 +36,12 @@ using namespace gpupixel;
 @property(nonatomic, assign) CGFloat blusherValue;
 
 // UI
-@property (strong, nonatomic) VideoCapturer* capturer;
-@property (strong, nonatomic) UIButton* cameraSwitchBtn;
-@property (strong, nonatomic) UIButton* recordVideoBtn;
-@property (strong, nonatomic) UISegmentedControl* segment;
-@property (strong, nonatomic) UISegmentedControl* effectSwitch;
-@property (strong, nonatomic) UISlider* slider;
+@property (strong, nonatomic) VideoCapturer *capturer;
+@property (strong, nonatomic) UIButton *cameraSwitchBtn;
+@property (strong, nonatomic) UIButton *recordVideoBtn;
+@property (strong, nonatomic) UISegmentedControl *segment;
+@property (strong, nonatomic) UISegmentedControl *effectSwitch;
+@property (strong, nonatomic) UISlider *slider;
 /// 是否需要保存图像
 @property (assign, nonatomic) BOOL isNeedSaveImage;
 /// 是否开始录制视频

@@ -10,6 +10,7 @@
 
 #import "VideoFilterController.h"
 #import "VideoCapturer.h"
+#import "UIImage+ImageEditTool.h"
 #import <gpupixel/gpupixel.h>
 
 using namespace gpupixel;
@@ -34,8 +35,8 @@ using namespace gpupixel;
 @property(nonatomic, assign) CGFloat blusherValue;
 
 //
-@property (strong, nonatomic) UISegmentedControl* segment;
-@property (strong, nonatomic) UISegmentedControl* effectSwitch;
+@property (strong, nonatomic) UISegmentedControl *segment;
+@property (strong, nonatomic) UISegmentedControl *effectSwitch;
 @property (strong, nonatomic) UISlider *slider;
 
 @end
@@ -281,6 +282,8 @@ using namespace gpupixel;
 - (void)loadImageSourceToGPUPixel {
   NSString *sourcePath = [[NSBundle mainBundle] pathForResource:@"sample_face.png" ofType:@""];
   UIImage *inputImage = [UIImage imageWithContentsOfFile:sourcePath];
+  //将后置摄像头的照片进行UP方向矫正
+  inputImage = [inputImage upOrientation];
   CGImageRef cgImage = inputImage.CGImage;
   size_t width = CGImageGetWidth(cgImage);//图片宽度
   size_t height = CGImageGetHeight(cgImage);//图片高度

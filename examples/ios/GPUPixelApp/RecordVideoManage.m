@@ -9,11 +9,11 @@
 
 @interface RecordVideoManage ()
 /// 媒体资源写入器
-@property (strong, nonatomic) AVAssetWriter* assetWriter;
+@property (strong, nonatomic) AVAssetWriter *assetWriter;
 /// 媒体资源输入器
-@property (strong, nonatomic) AVAssetWriterInput* writerInput;
+@property (strong, nonatomic) AVAssetWriterInput *writerInput;
 /// 媒体资源适配编码器
-@property (strong, nonatomic) AVAssetWriterInputPixelBufferAdaptor* adaptor;
+@property (strong, nonatomic) AVAssetWriterInputPixelBufferAdaptor *adaptor;
 
 /// 当前帧Index下标
 @property (assign, nonatomic) int64_t frameIndex;

@@ -29,6 +29,7 @@
 		847244A22A6034BF009D1488 /* VideoCapturer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8472449E2A603368009D1488 /* VideoCapturer.m */; };
 		84A0D77A2B7DAB49007A86EF /* sample_face.png in Resources */ = {isa = PBXBuildFile; fileRef = 84A0D7792B7DAB49007A86EF /* sample_face.png */; };
 		84C1D161266F5D69006D1AB4 /* VideoFilterController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84C1D15F266F5D69006D1AB4 /* VideoFilterController.mm */; };
+		84FDE3D42DEDCECE0009B7A6 /* UIImage+ImageEditTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FDE3D22DEDCECE0009B7A6 /* UIImage+ImageEditTool.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -79,6 +80,8 @@
 		84A0D7792B7DAB49007A86EF /* sample_face.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = sample_face.png; path = GPUPixelApp/sample_face.png; sourceTree = "<group>"; };
 		84C1D15E266F5D69006D1AB4 /* VideoFilterController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoFilterController.h; sourceTree = "<group>"; };
 		84C1D15F266F5D69006D1AB4 /* VideoFilterController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = VideoFilterController.mm; sourceTree = "<group>"; };
+		84FDE3D12DEDCECE0009B7A6 /* UIImage+ImageEditTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEditTool.h"; sourceTree = "<group>"; };
+		84FDE3D22DEDCECE0009B7A6 /* UIImage+ImageEditTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEditTool.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +122,7 @@
 		84307E8E261F2CD9003EAC98 /* GPUPixelApp */ = {
 			isa = PBXGroup;
 			children = (
+				84FDE3D32DEDCECE0009B7A6 /* Extension */,
 				8472449D2A603368009D1488 /* VideoCapturer.h */,
 				8472449E2A603368009D1488 /* VideoCapturer.m */,
 				0C6F57382DE4D02C001165DC /* RecordVideoManage.h */,
@@ -156,6 +160,15 @@
 				8417C437267F5AF10074DDEF /* AVFoundation.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		84FDE3D32DEDCECE0009B7A6 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				84FDE3D12DEDCECE0009B7A6 /* UIImage+ImageEditTool.h */,
+				84FDE3D22DEDCECE0009B7A6 /* UIImage+ImageEditTool.m */,
+			);
+			path = Extension;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -236,6 +249,7 @@
 				843580EE276352260053E16A /* ImageFilterController.mm in Sources */,
 				0C6F57392DE4D02C001165DC /* RecordVideoManage.m in Sources */,
 				84C1D161266F5D69006D1AB4 /* VideoFilterController.mm in Sources */,
+				84FDE3D42DEDCECE0009B7A6 /* UIImage+ImageEditTool.m in Sources */,
 				847244A22A6034BF009D1488 /* VideoCapturer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
