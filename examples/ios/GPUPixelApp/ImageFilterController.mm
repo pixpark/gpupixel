@@ -135,7 +135,7 @@ using namespace gpupixel;
 - (void)backAction {
   //销毁GPUPixel相关组件, 防止内存泄漏
   [self destroyAction];
-  //
+  // 返回HomePage首页
   [self.navigationController popViewControllerAnimated:true];
 }
 // 销毁GPUPixel相关组件, 防止内存泄漏
@@ -150,6 +150,8 @@ using namespace gpupixel;
   [gpuPixelView removeFromSuperview];
   gpuPixelView = nil;
   gpuSourceImage = nil;
+  // 销毁GPUPixelContext一定要在控制器销毁之前, 否则会有一段GPUPixelContext内存被缓存无法释放
+  gpupixel::GPUPixelContext::destroy();
 }
 
 - (void)saveImageAction {
@@ -302,8 +304,6 @@ using namespace gpupixel;
 /// 销毁当前对象后的调用方法
 - (void)dealloc {
   NSLog(@"dealloc : %@", self);
-  // 销毁GPUPixelContext一定要在控制器销毁之后, 否则GPUPixel会自动又初始化一个GPUPixelContext
-  gpupixel::GPUPixelContext::getInstance()->destroy();
 }
 @end
  
