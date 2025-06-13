@@ -179,12 +179,12 @@ void TargetRawDataOutput::setPixelsCallbck(RawOutputCallback cb) {
   std::unique_lock<std::mutex> lck(mtx_);
   pixels_callback_ = cb;
 }
-
+#if defined(GPUPIXEL_IOS)
 void TargetRawDataOutput::setCVPixelBufferRefCallbck(CVPixelBufferRefCallback cb) {
   std::unique_lock<std::mutex> lck(mtx_);
   cvPixelBufferRef_callback_ = cb;
 }
-
+#endif
 void TargetRawDataOutput::initOutputBuffer(int width, int height) {
   uint32_t rgb_size = width * height * 4;
   uint32_t yuv_size = width * height * 3 / 2;
