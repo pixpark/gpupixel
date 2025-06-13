@@ -66,7 +66,7 @@ const std::string kGPUImageBaseBeautyFaceFragmentShaderString = R"(
       vec4 varColor = texture2D(inputImageTexture3, textureCoordinate);
 
       vec3 color = iColor.rgb;
-      if (blurAlpha > 0.0) {
+      if (blurAlpha >= 0.0) {
         float theta = 0.1;
         float p =
             clamp((min(iColor.r, meanColor.r - 0.1) - 0.2) * 4.0, 0.0, 1.0);
@@ -364,6 +364,11 @@ bool BeautyFaceUnitFilter::proceed(bool bUpdateTargets, int64_t frameTime) {
   CHECK_GL(glVertexAttribPointer(_filterPositionAttribute, 2, GL_FLOAT, 0, 0,
                                  imageVertices));
 
+  float widthOffset = 1.0/this->getRotatedFramebufferWidth();
+  float heightOffset = 1.0/this->getRotatedFramebufferHeight();
+  _filterProgram->setUniformValue("widthOffset", widthOffset);
+  _filterProgram->setUniformValue("heightOffset", heightOffset);
+    
   _filterProgram->setUniformValue("sharpen", sharpen_);
   _filterProgram->setUniformValue("blurAlpha", blurAlpha_);
   _filterProgram->setUniformValue("whiten", white_);
