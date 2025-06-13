@@ -36,7 +36,9 @@ class TargetRawDataOutput : public Target {
   void update(int64_t frameTime) override;
   void setI420Callbck(RawOutputCallback cb);
   void setPixelsCallbck(RawOutputCallback cb);
+#if defined(GPUPIXEL_IOS)
   void setCVPixelBufferRefCallbck(CVPixelBufferRefCallback cb);
+#endif
  private:
   int renderToOutput();
   bool initWithShaderString(const std::string& vertexShaderSource,
@@ -85,8 +87,9 @@ class TargetRawDataOutput : public Target {
   // callback
   RawOutputCallback i420_callback_ = nullptr;
   RawOutputCallback pixels_callback_ = nullptr;
+#if defined(GPUPIXEL_IOS)
   CVPixelBufferRefCallback cvPixelBufferRef_callback_ = nullptr;
-
+#endif
   bool current_frame_invalid_ = true;
 };
 
