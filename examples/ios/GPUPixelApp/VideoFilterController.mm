@@ -45,9 +45,11 @@ using namespace gpupixel;
 @property (strong, nonatomic) UISlider *slider;
 /// 是否需要保存图像
 @property (assign, nonatomic) BOOL isNeedSaveImage;
+
 /// 是否开始录制视频
 @property (assign, nonatomic) BOOL isStartRecordVideo;
-
+/// 摄像画面尺寸
+@property (assign, nonatomic) CGSize capturerSize;
 @end
 
 @implementation VideoFilterController
@@ -209,7 +211,7 @@ using namespace gpupixel;
     sender.selected = !sender.isSelected;
     if (sender.isSelected == YES) {
         //开始录制视频
-        [[RecordVideoManage share] startRecordVideo:CGSizeMake(720, 1280) fps:30];
+        [[RecordVideoManage share] startRecordVideo:CGSizeMake(self.capturerSize.width, self.capturerSize.height) fps:30];
         self.isStartRecordVideo = YES;
     } else if (sender.isSelected == NO) {
         self.isStartRecordVideo = NO;
@@ -262,7 +264,7 @@ using namespace gpupixel;
 }
 - (void)setSharpenValue:(CGFloat)value {
   _sharpenValue = value;
-  beauty_face_filter_->setSharpen(value/2.5);
+  beauty_face_filter_->setSharpen(value/5.0);
 }
 - (void)setWhithValue:(CGFloat)value{
   _whithValue = value;
@@ -294,28 +296,30 @@ using namespace gpupixel;
  
 // camera frame callback
 - (void)videoCaptureOutputDataCallback:(CMSampleBufferRef)sampleBuffer {
-  if(captureYuvFrame) {
-      CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
-      CVPixelBufferLockBaseAddress(imageBuffer, 0);
-      const uint8_t* dataY = (const uint8_t*)CVPixelBufferGetBaseAddressOfPlane(imageBuffer, 0);//YYYYYYYY
-      size_t strideY = CVPixelBufferGetBytesPerRowOfPlane(imageBuffer, 0);
-      const uint8_t* dataUV = (const uint8_t*)CVPixelBufferGetBaseAddressOfPlane(imageBuffer, 1);//UVUVUVUV
-      size_t strideUV = CVPixelBufferGetBytesPerRowOfPlane(imageBuffer, 1);
-      size_t width = CVPixelBufferGetWidth(imageBuffer);
-      size_t height = CVPixelBufferGetHeight(imageBuffer);
-
-      // todo render nv12
-      CVPixelBufferUnlockBaseAddress(imageBuffer, 0);
+    if(captureYuvFrame) {
+        CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
+        CVPixelBufferLockBaseAddress(imageBuffer, 0);
+        const uint8_t* dataY = (const uint8_t*)CVPixelBufferGetBaseAddressOfPlane(imageBuffer, 0);//YYYYYYYY
+        size_t strideY = CVPixelBufferGetBytesPerRowOfPlane(imageBuffer, 0);
+        const uint8_t* dataUV = (const uint8_t*)CVPixelBufferGetBaseAddressOfPlane(imageBuffer, 1);//UVUVUVUV
+        size_t strideUV = CVPixelBufferGetBytesPerRowOfPlane(imageBuffer, 1);
+        size_t width = CVPixelBufferGetWidth(imageBuffer);
+        size_t height = CVPixelBufferGetHeight(imageBuffer);
+        
+        // todo render nv12
+        CVPixelBufferUnlockBaseAddress(imageBuffer, 0);
+        self.capturerSize = CGSizeMake(width, height);
     } else {
-      //
-      CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
-      CVPixelBufferLockBaseAddress(imageBuffer, 0);
-      auto width = CVPixelBufferGetWidth(imageBuffer);
-      auto height = CVPixelBufferGetHeight(imageBuffer);
-      auto stride = CVPixelBufferGetBytesPerRow(imageBuffer)/4;
-      auto pixels = (const uint8_t *)CVPixelBufferGetBaseAddress(imageBuffer);
-      gpuPixelRawInput->uploadBytes(pixels, width, height, stride);
-      CVPixelBufferUnlockBaseAddress(imageBuffer, 0);
+        //
+        CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
+        CVPixelBufferLockBaseAddress(imageBuffer, 0);
+        auto width = CVPixelBufferGetWidth(imageBuffer);
+        auto height = CVPixelBufferGetHeight(imageBuffer);
+        auto stride = CVPixelBufferGetBytesPerRow(imageBuffer)/4;
+        auto pixels = (const uint8_t *)CVPixelBufferGetBaseAddress(imageBuffer);
+        gpuPixelRawInput->uploadBytes(pixels, stride, height, stride);
+        CVPixelBufferUnlockBaseAddress(imageBuffer, 0);
+        self.capturerSize = CGSizeMake(width, height);
     }
 }
 
@@ -350,7 +354,7 @@ using namespace gpupixel;
     VCVideoCapturerParam *param = [[VCVideoCapturerParam alloc] init];
     param.frameRate = 30;
     
-    param.sessionPreset = AVCaptureSessionPreset1280x720;
+    param.sessionPreset = AVCaptureSessionPresetHigh;
     if(captureYuvFrame) {
       param.pixelsFormatType = kCVPixelFormatType_420YpCbCr8BiPlanarFullRange;
     } else {
