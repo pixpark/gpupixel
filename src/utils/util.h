@@ -25,6 +25,14 @@ class Util {
   static int64_t nowTimeMs();
 
   static std::string getResourcePath(std::string name);
+    
+  /// 将视频图像帧流数据转成RGBA图像数据
+  /// - Parameters:
+  ///   - inputData: 输入数据
+  ///   - width: 图像的宽度
+  ///   - height: 图像的高度
+  ///   - stride: 视频图像帧流数据的步长
+  static uint8_t* createImageBuffer(const uint8_t* inputData, int width, int height, int stride);
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
   static std::string getResourcePath(std::string bundle_name,
                                      std::string file_name,

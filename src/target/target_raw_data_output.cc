@@ -205,28 +205,31 @@ void TargetRawDataOutput::initOutputBuffer(int width, int height) {
 
 #if defined(GPUPIXEL_IOS)
 void TargetRawDataOutput::readPixelsFromCVPixelBuffer() {
-  if (kCVReturnSuccess == CVPixelBufferLockBaseAddress(renderTarget, kCVPixelBufferLock_ReadOnly)) {
-      if (cvPixelBufferRef_callback_) {
-          cvPixelBufferRef_callback_(renderTarget);
-      }
-      
-    int stride = static_cast<int>(CVPixelBufferGetBytesPerRow(renderTarget));
-    uint8_t* pixels = (uint8_t*)CVPixelBufferGetBaseAddress(renderTarget);
-    // process pixels how you like
-    if (pixels && i420_callback_) {
-      libyuv::ARGBToI420(pixels, stride, _yuvFrameBuffer, _width,
-                        _yuvFrameBuffer + _width * _height, _width
-                        / 2, _yuvFrameBuffer + _width * _height * 5
-                        / 4, _width / 2, _width, _height);
-      i420_callback_(_yuvFrameBuffer, _width, _height, _frame_ts);
+    if (kCVReturnSuccess == CVPixelBufferLockBaseAddress(renderTarget, kCVPixelBufferLock_ReadOnly)) {
+        if (cvPixelBufferRef_callback_) {
+            cvPixelBufferRef_callback_(renderTarget);
+        }
+        
+        int bytesPerRow = static_cast<int>(CVPixelBufferGetBytesPerRow(renderTarget));
+        int stride = bytesPerRow/4;
+        uint8_t* pixels = (uint8_t*)CVPixelBufferGetBaseAddress(renderTarget);
+        // process pixels how you like
+        if (pixels && i420_callback_) {
+            libyuv::ARGBToI420(pixels, stride, _yuvFrameBuffer, _width,
+                               _yuvFrameBuffer + _width * _height, _width
+                               / 2, _yuvFrameBuffer + _width * _height * 5
+                               / 4, _width / 2, _width, _height);
+            i420_callback_(_yuvFrameBuffer, _width, _height, _frame_ts);
+        }
+        
+        if(pixels && pixels_callback_) {
+            uint8_t* imageBuffer = Util::createImageBuffer(pixels, _width, _height, stride);
+            pixels_callback_(imageBuffer, _width, _height, _frame_ts);
+            free(imageBuffer);
+        }
+        
+        CVPixelBufferUnlockBaseAddress(renderTarget, kCVPixelBufferLock_ReadOnly);
     }
-
-    if(pixels_callback_) {
-      pixels_callback_(pixels, _width, _height, _frame_ts);
-    }
-
-    CVPixelBufferUnlockBaseAddress(renderTarget, kCVPixelBufferLock_ReadOnly);
-  } 
 }
 
 void TargetRawDataOutput::initTextureCache(int width, int height) {

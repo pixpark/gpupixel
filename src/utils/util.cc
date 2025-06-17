@@ -197,4 +197,38 @@ void Util::Log(const std::string& tag, const std::string& format, ...) {
 #endif
 }
 
+/// 将视频图像帧流数据转成RGBA图像数据
+/// - Parameters:
+///   - inputData: 输入数据
+///   - width: 图像的宽度
+///   - height: 图像的高度
+///   - stride: 视频图像帧流数据的步长
+uint8_t* Util::createImageBuffer(const uint8_t* inputData, int width, int height, int stride) {
+    uint8_t *buffer;
+    size_t current_bytes = height * width * 4;
+    if (inputData == nullptr) {
+        return buffer;
+    }
+    
+    
+    int bytesPerRow = stride * 4;
+    if (bytesPerRow == width * 4) {
+        buffer = (uint8_t *)malloc(current_bytes);
+        memcpy(buffer, inputData, current_bytes);
+        return buffer;
+    }
+    
+    buffer = (uint8_t *)malloc(current_bytes);
+    /** ======= 重点注意 : 这里需要用temp缓存赋值, 否则buffer指针不是自从下标0开始 start ======= **/
+    uint8_t *ptr_indata_temp = buffer;
+    uint8_t *ptr_pixbuf_temp = (uint8_t*)inputData;
+    /** ======= 重点注意 : 这里需要用temp缓存赋值, 否则buffer指针不是自从下标0开始 end ======= **/
+    for (int row = 0; row < height; row++) {
+        memcpy(ptr_indata_temp, ptr_pixbuf_temp, width * 4);
+        ptr_indata_temp = ptr_indata_temp + width * 4;
+        ptr_pixbuf_temp = ptr_pixbuf_temp + bytesPerRow;
+    }
+    
+    return buffer;
+}
 NS_GPUPIXEL_END

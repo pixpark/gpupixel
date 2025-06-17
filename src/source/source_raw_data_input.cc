@@ -123,10 +123,13 @@ void SourceRawDataInput::uploadBytes(const uint8_t* pixels,
                                      int stride,
                                      int64_t ts) {
   GPUPixelContext::getInstance()->runSync([=] {
+    uint8_t* imageBuffer = Util::createImageBuffer(pixels, width, height, stride);
     if(_face_detector) {
-      _face_detector->Detect(pixels, width, height, GPUPIXEL_MODE_FMT_VIDEO,GPUPIXEL_FRAME_TYPE_RGBA8888);
+      _face_detector->Detect(imageBuffer, width, height, GPUPIXEL_MODE_FMT_VIDEO,GPUPIXEL_FRAME_TYPE_RGBA8888);
     }
-    genTextureWithRGBA(pixels, width, height, stride, ts); 
+    genTextureWithRGBA(imageBuffer, width, height, stride, ts);
+      
+    free(imageBuffer);
   });
 }
 
@@ -214,11 +217,9 @@ int SourceRawDataInput::genTextureWithRGBA(const uint8_t* pixels,
                                            int height,
                                            int stride,
                                            int64_t ts) {
-  if (!_framebuffer || (_framebuffer->getWidth() != stride ||
+  if (!_framebuffer || (_framebuffer->getWidth() != width ||
                         _framebuffer->getHeight() != height)) {
-    _framebuffer =
-        GPUPixelContext::getInstance()->getFramebufferCache()->fetchFramebuffer(
-            stride, height);
+    _framebuffer = GPUPixelContext::getInstance()->getFramebufferCache()->fetchFramebuffer(width, height);
   }
   this->setFramebuffer(_framebuffer, NoRotation);
 
@@ -226,10 +227,10 @@ int SourceRawDataInput::genTextureWithRGBA(const uint8_t* pixels,
   CHECK_GL(glBindTexture(GL_TEXTURE_2D, texture));
 
 #if defined(GPUPIXEL_IOS) || defined(GPUPIXEL_MAC)
-  CHECK_GL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, stride, height, 0, GL_BGRA,
+  CHECK_GL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_BGRA,
                         GL_UNSIGNED_BYTE, pixels));
 #else
-  CHECK_GL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, stride, height, 0, GL_RGBA,
+  CHECK_GL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
                         GL_UNSIGNED_BYTE, pixels));
 #endif
 
