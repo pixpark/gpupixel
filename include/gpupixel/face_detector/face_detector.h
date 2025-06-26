@@ -10,8 +10,8 @@
 #include <vector>
 #include "gpupixel/gpupixel_define.h"
 
-namespace mars_face_kit {
-class MarsFaceDetector;
+namespace mars_vision {
+class MarsFaceLandmarker;
 }
 
 namespace gpupixel {
@@ -28,6 +28,6 @@ class GPUPIXEL_API FaceDetector {
 
  private:
   FaceDetector();
-  std::shared_ptr<mars_face_kit::MarsFaceDetector> mars_face_detector_;
+  std::shared_ptr<mars_vision::MarsFaceLandmarker> mars_face_detector_;
 };
 }  // namespace gpupixel

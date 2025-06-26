@@ -430,7 +430,9 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Android")
             jnigraphics
             libyuv::yuv
             stb::stb
-            ghc::filesystem)
+            ghc::filesystem
+ 			"-Wl,-z,max-page-size=16384"
+            "-Wl,-z,common-page-size=16384")
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
   target_link_libraries(${gpupixel_libs_name} PRIVATE libyuv::yuv stb::stb
                                                       ghc::filesystem)

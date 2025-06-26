@@ -7,7 +7,8 @@
 
 #include "gpupixel/face_detector/face_detector.h"
 #include <cassert>
-#include "mars_face_detector.h"
+#include "mars_vision/mars_defines.h"
+#include "mars_vision/mars_face_landmarker.h"
 #include "utils/filesystem.h"
 #include "utils/logging.h"
 #include "utils/util.h"
@@ -19,11 +20,16 @@ std::shared_ptr<FaceDetector> FaceDetector::Create() {
 }
 
 FaceDetector::FaceDetector() {
-  mars_face_detector_ = mars_face_kit::MarsFaceDetector::CreateFaceDetector();
   auto path = Util::GetResourcePath() / "models";
 
   if (fs::exists(path)) {
-    mars_face_detector_->Init(path.string());
+    mars_face_detector_ = mars_vision::MarsFaceLandmarker::Create();
+
+    mars_vision::FaceLandmarkerOptions landmarkerOptions;
+    landmarkerOptions.model_path = path.string();
+    landmarkerOptions.running_mode = mars_vision::RunningMode::VIDEO;
+
+    mars_face_detector_->Init(landmarkerOptions);
   } else {
     LOG_ERROR("FaceDetector: models path not found: {}", path.string());
     assert(false && "FaceDetector: models path not found");
@@ -36,78 +42,29 @@ std::vector<float> FaceDetector::Detect(const uint8_t* data,
                                         int stride,
                                         GPUPIXEL_MODE_FMT fmt,
                                         GPUPIXEL_FRAME_TYPE type) {
-  mars_face_kit::MarsImage image;
+  mars_vision::MarsImage image;
   image.data = (uint8_t*)data;
   image.width = width == stride / 4 ? width : stride / 4;
   image.height = height;
   if (type == GPUPIXEL_FRAME_TYPE_RGBA) {
-    image.pixel_format = mars_face_kit::PixelFormat::RGBA;
+    image.format = mars_vision::MarsImageFormat::RGBA;
   } else if (type == GPUPIXEL_FRAME_TYPE_BGRA) {
-    image.pixel_format = mars_face_kit::PixelFormat::BGRA;
+    image.format = mars_vision::MarsImageFormat::BGRA;
   }
-  image.width_step = width;
-  image.rotate_type = mars_face_kit::CLOCKWISE_ROTATE_0;
+  image.stride = stride;
+  image.rotate_type = mars_vision::RotateType::CLOCKWISE_0;
+  image.timestamp = 0;
 
-  std::vector<mars_face_kit::FaceDetectionInfo> face_info;
+  std::vector<mars_vision::FaceLandmarkerResult> face_results;
   std::vector<float> landmarks;
 
-  mars_face_detector_->Detect(image, face_info);
-  if (face_info.size() > 0) {
-    for (int i = 0; i < face_info[0].landmarks.size(); i++) {
-      landmarks.push_back(face_info[0].landmarks[i].x / width);
-      landmarks.push_back(face_info[0].landmarks[i].y / height);
+  mars_face_detector_->Detect(image, face_results);
+  // only support one face
+  for (auto& result : face_results) {
+    for (auto& point : result.key_points) {
+      landmarks.push_back(point.x / width);
+      landmarks.push_back(point.y / height);
     }
-
-    // Calculate additional facial landmarks
-    // Landmark 106: Center point between points 102 and 98
-    auto point_x = (face_info[0].landmarks[102].x / width +
-                    face_info[0].landmarks[98].x / width) /
-                   2;
-    auto point_y = (face_info[0].landmarks[102].y / height +
-                    face_info[0].landmarks[98].y / height) /
-                   2;
-    landmarks.push_back(point_x);
-    landmarks.push_back(point_y);
-
-    // Landmark 107: Center point between points 35 and 65
-    point_x = (face_info[0].landmarks[35].x / width +
-               face_info[0].landmarks[65].x / width) /
-              2;
-    point_y = (face_info[0].landmarks[35].y / height +
-               face_info[0].landmarks[65].y / height) /
-              2;
-    landmarks.push_back(point_x);
-    landmarks.push_back(point_y);
-
-    // Landmark 108: Center point between points 70 and 40
-    point_x = (face_info[0].landmarks[70].x / width +
-               face_info[0].landmarks[40].x / width) /
-              2;
-    point_y = (face_info[0].landmarks[70].y / height +
-               face_info[0].landmarks[40].y / height) /
-              2;
-    landmarks.push_back(point_x);
-    landmarks.push_back(point_y);
-
-    // Landmark 109: Center point between points 5 and 80
-    point_x = (face_info[0].landmarks[5].x / width +
-               face_info[0].landmarks[80].x / width) /
-              2;
-    point_y = (face_info[0].landmarks[5].y / height +
-               face_info[0].landmarks[80].y / height) /
-              2;
-    landmarks.push_back(point_x);
-    landmarks.push_back(point_y);
-
-    // Landmark 110: Center point between points 81 and 27
-    point_x = (face_info[0].landmarks[81].x / width +
-               face_info[0].landmarks[27].x / width) /
-              2;
-    point_y = (face_info[0].landmarks[81].y / height +
-               face_info[0].landmarks[27].y / height) /
-              2;
-    landmarks.push_back(point_x);
-    landmarks.push_back(point_y);
   }
 
   return landmarks;
