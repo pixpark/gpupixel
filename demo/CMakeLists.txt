@@ -51,14 +51,8 @@ if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
     target_compile_definitions(${GPL_APP_NAME} PRIVATE WINDOWS_DLL_DELAY_LOAD)
 
     target_link_libraries(
-      ${GPL_APP_NAME}
-      PRIVATE opengl32
-              delayimp
-              glad::glad
-              glfw::glfw
-              marsface::marsface
-              gpupixel::gpupixel
-              ghc::filesystem)
+      ${GPL_APP_NAME} PRIVATE opengl32 delayimp glad::glad glfw::glfw
+                              gpupixel::gpupixel ghc::filesystem)
 
     # set delayed DLL loading
     if(MSVC)
@@ -81,7 +75,6 @@ if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
               dl
               glad::glad
               glfw::glfw
-              marsface::marsface
               gpupixel::gpupixel
               ghc::filesystem
               stdc++fs)
