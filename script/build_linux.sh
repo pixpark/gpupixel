@@ -21,6 +21,7 @@ echo "Configuring Linux project..."
 cmake -B "${BUILD_DIR}" -S "${PROJECT_DIR}" \
   -DCMAKE_BUILD_TYPE=Release \
   -DGPUPIXEL_BUILD_DESKTOP_DEMO=ON \
+  -DGPUPIXEL_ENABLE_FACE_DETECTOR=OFF \
   -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}" || {
   echo "Error: Project configuration failed"
   exit 2
