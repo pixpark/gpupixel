@@ -131,6 +131,11 @@ Consider sharing GPUPixel on social media and at events.
     <img src="https://github.com/weiyu666.png" width="50" height="50" style="border-radius: 50%;" alt="@weiyu666">
   </picture>
 </a>
+<a href="https://github.com/lambiengcode">
+  <picture>
+    <img src="https://github.com/lambiengcode.png" width="50" height="50" style="border-radius: 50%;" alt="@lambiengcode">
+  </picture>
+</a>
 
 ## Contact & Support
 - 📚 [Docs](https://gpupixel.pixpark.net/): Documentation
