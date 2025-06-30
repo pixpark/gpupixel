@@ -76,39 +76,3 @@ Windows仅支持生成 x86_64 Release 版本，不支持 x86_32
 ```
 
 demo在 `output/bin` 目录
-
-## WebAssembly
-
-### 环境要求
-- 支持WebAssembly的现代浏览器（Chrome、Firefox、Safari、Edge）
-- NodeJS（用于本地开发）
-
-### 编译
-
-确保WebAssembly库已编译好（[参考](build#webassembly-wasm)）
-
-### 运行
-
-编译完成后，WASM Demo文件位于 `output/bin` 目录。运行Demo步骤如下：
-
-1. 导航到输出目录：
-   ```bash
-   cd output/bin
-   ```
-
-2. 启动本地Web服务器：
-   ```bash
-   # 使用Python
-   python -m http.server
-   
-   # 或使用Node.js
-   npx serve
-   ```
-
-3. 打开浏览器并访问 `http://localhost:8000`（或Web服务器指示的端口）
-
-4. Demo界面允许您与桌面版相同的美颜效果进行交互
-
-::: warning
-WASM版本不支持人脸关键点检测，依赖人脸检测的滤镜都不可用，如瘦脸，大眼等
-:::

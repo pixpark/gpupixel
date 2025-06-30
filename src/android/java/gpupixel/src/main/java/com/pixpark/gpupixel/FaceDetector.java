@@ -18,9 +18,8 @@ public class FaceDetector {
     public static final int GPUPIXEL_MODE_FMT_PICTURE = 1;
 
     // Frame type constants
-    public static final int GPUPIXEL_FRAME_TYPE_YUVI420 = 0;
-    public static final int GPUPIXEL_FRAME_TYPE_RGBA = 1;
-    public static final int GPUPIXEL_FRAME_TYPE_BGRA = 2;
+    public static final int GPUPIXEL_FRAME_TYPE_RGBA = 0;
+    public static final int GPUPIXEL_FRAME_TYPE_BGRA = 1;
 
     /**
      * Create a face detector instance
@@ -43,8 +42,7 @@ public class FaceDetector {
      * @param width Image width
      * @param height Image height
      * @param format Image format (GPUPIXEL_MODE_FMT_VIDEO or GPUPIXEL_MODE_FMT_PICTURE)
-     * @param frameType Frame type (GPUPIXEL_FRAME_TYPE_YUVI420, GPUPIXEL_FRAME_TYPE_RGBA or
-     *         GPUPIXEL_FRAME_TYPE_BGRA)
+     * @param frameType Frame type (GPUPIXEL_FRAME_TYPE_RGBA or GPUPIXEL_FRAME_TYPE_BGRA)
      * @return Array of facial landmark coordinates, each landmark consists of x,y values
      */
     public float[] detect(final byte[] data, final int width, final int height, final int stide,

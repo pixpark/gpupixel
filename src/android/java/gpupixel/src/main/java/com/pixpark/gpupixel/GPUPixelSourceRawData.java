@@ -9,9 +9,8 @@ package com.pixpark.gpupixel;
 
 public class GPUPixelSourceRawData extends GPUPixelSource {
     // Frame data format types
-    public static final int FRAME_TYPE_YUVI420 = 0;
-    public static final int FRAME_TYPE_RGBA = 1;
-    public static final int FRAME_TYPE_BGRA = 2;
+    public static final int FRAME_TYPE_RGBA = 0;
+    public static final int FRAME_TYPE_BGRA = 1;
 
     protected GPUPixelSourceRawData() {}
 

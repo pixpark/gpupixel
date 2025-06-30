@@ -76,39 +76,3 @@ After configuring the environment, execute the batch file at the root directory 
 ```
 
 The demo is in the `output/bin` directory
-
-## WebAssembly
-
-### Environment Requirements
-- Modern web browser with WebAssembly support (Chrome, Firefox, Safari, Edge)
-- NodeJS (for local development)
-
-### Compilation
-
-Make sure the WebAssembly library has been compiled ([reference](build#webassembly-wasm))
-
-### Running
-
-After compilation, the WASM demo files can be found in the `output/bin` directory. To run the demo:
-
-1. Navigate to the output directory:
-   ```bash
-   cd output/bin
-   ```
-
-2. Start a local web server:
-   ```bash
-   # Using Python
-   python -m http.server
-   
-   # Or using Node.js
-   npx serve
-   ```
-
-3. Open your browser and navigate to `http://localhost:8000` (or the port indicated by your web server)
-
-4. The demo interface allows you to interact with the same beauty effects as the desktop version
-
-::: warning
-The WASM version does not support facial keypoint detection. Filters that rely on face detection, such as face-slimming and big eyes, are unavailable.
-:::

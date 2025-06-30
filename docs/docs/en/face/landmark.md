@@ -72,7 +72,6 @@ The detector supports various input formats:
 - `GPUPIXEL_MODE_FMT_PICTURE`: For still images
 
 **Frame Type Parameter (GPUPIXEL_FRAME_TYPE)**:
-- `GPUPIXEL_FRAME_TYPE_YUVI420`: YUV I420 format
 - `GPUPIXEL_FRAME_TYPE_RGBA`: RGBA format
 - `GPUPIXEL_FRAME_TYPE_BGRA`: BGRA format
 

@@ -32,14 +32,6 @@ class GPUPIXEL_API SourceRawData : public Filter {
 
  private:
   SourceRawData();
-  int GenerateTextureWithI420(int width,
-                              int height,
-                              const uint8_t* dataY,
-                              int strideY,
-                              const uint8_t* dataU,
-                              int strideU,
-                              const uint8_t* dataV,
-                              int strideV);
 
   int GenerateTextureWithPixels(const uint8_t* pixels,
                                 int width,
@@ -52,7 +44,7 @@ class GPUPIXEL_API SourceRawData : public Filter {
   uint32_t filter_position_attribute_;
   uint32_t filter_tex_coord_attribute_;
 
-  uint32_t textures_[4] = {0};
+  uint32_t texture_ = 0;
   RotationMode rotation_ = NoRotation;
   std::shared_ptr<GPUPixelFramebuffer> framebuffer_;
 };

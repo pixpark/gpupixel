@@ -163,37 +163,6 @@ jobs:
           name: gpupixel_android
           path: ${{github.workspace}}/src/android/java/gpupixel/build/outputs/gpupixel_android.zip
 
-  build-wasm-emscripten:
-    name: WebAssembly (Emscripten)
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    env:
-      BUILD_TYPE: Release
-    steps:
-      - uses: actions/checkout@v4
-      
-      # Setup Emscripten
-      - name: Setup Emscripten
-        uses: mymindstorm/setup-emsdk@v12
-        
-      # Grant script execution permissions
-      - name: Grant execute permission for scripts
-        run: chmod +x ${{github.workspace}}/script/*.sh
-        
-      # Use WebAssembly build script
-      - name: Build with WebAssembly script
-        run: ${{github.workspace}}/script/build_wasm.sh
-
-      - name: Create zip
-        working-directory: ${{github.workspace}}/output
-        run: zip -r gpupixel_wasm.zip .
-
-      - name: Upload WASM Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: gpupixel_wasm
-          path: ${{github.workspace}}/output/gpupixel_wasm.zip
-
   # Deployment job
   deploy:
     needs:
@@ -203,7 +172,6 @@ jobs:
         build-ios-clang,
         build-windows-cl,
         build-android-gradle,
-        build-wasm-emscripten,
       ]
     runs-on: ubuntu-latest
     name: Deploy
@@ -238,12 +206,6 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: gpupixel_android
-          path: ./
-
-      - name: Download WASM Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: gpupixel_wasm
           path: ./
 
       - name: Create Release
@@ -306,14 +268,4 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./gpupixel_android.zip
           asset_name: gpupixel_android.zip
-          asset_content_type: application/gzip
-
-      - name: Upload WASM library
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./gpupixel_wasm.zip
-          asset_name: gpupixel_wasm.zip
           asset_content_type: application/gzip
