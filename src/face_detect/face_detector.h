@@ -14,6 +14,7 @@
 
 NS_GPUPIXEL_BEGIN
     typedef std::function<void(std::vector<float> landmarks)> FaceDetectorCallback;
+    typedef std::function<void(std::vector<std::vector<float>> facesArray, int facesNum)> FacesDetectorCallback;
 
     typedef enum {
         GPUPIXEL_FRAME_TYPE_UNKNOW,      /*  Unknow pixel format, as a cube */
@@ -40,9 +41,11 @@ NS_GPUPIXEL_BEGIN
                     GPUPIXEL_FRAME_TYPE type);
       
         int RegCallback(FaceDetectorCallback callback);
+        int RegFacesDetectorCallback(FacesDetectorCallback facesDetectorCallback);
     private:
         uint32_t vnn_handle_;
         int use_278pts = 0;
         std::vector<FaceDetectorCallback> _face_detector_callbacks;
+        std::vector<FacesDetectorCallback> _faces_detector_callbacks;
     };
 NS_GPUPIXEL_END

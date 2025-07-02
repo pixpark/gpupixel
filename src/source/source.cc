@@ -146,6 +146,14 @@ int Source::RegLandmarkCallback(FaceDetectorCallback callback) {
 
   return _face_detector->RegCallback(callback);
 }
+int Source::RegFacesDetectorCallback(FacesDetectorCallback facesDetectorCallback) {
+  if(_face_detector == nullptr) {
+    // init face detector
+    _face_detector = std::make_shared<FaceDetector>();
+  }
+
+  return _face_detector->RegFacesDetectorCallback(facesDetectorCallback);
+}
 
 int Source::getRotatedFramebufferHeight() const {
   if (_framebuffer) {

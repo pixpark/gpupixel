@@ -114,10 +114,13 @@ using namespace gpupixel;
     // 将图像资源加载到GPUPixel图形引擎
     [self loadImageSourceToGPUPixel];
     // 对图像进行人脸识别, 并赋值到需要人脸识别的滤镜中
-    gpuSourceImage->RegLandmarkCallback([=](std::vector<float> landmarks) {
-      lipstick_filter_->SetFaceLandmarks(landmarks);
-      blusher_filter_->SetFaceLandmarks(landmarks);
-      face_reshape_filter_->SetFaceLandmarks(landmarks);
+    gpuSourceImage->RegFacesDetectorCallback([=](std::vector<std::vector<float>> facesArray, int facesNum) {
+      NSLog(@"facesNum = %d", facesNum);
+      if (facesNum > 0) {
+        lipstick_filter_->SetFaceLandmarks(facesArray[0]);
+        blusher_filter_->SetFaceLandmarks(facesArray[0]);
+        face_reshape_filter_->SetFaceLandmarks(facesArray[0]);
+      }
     });
     
     // filter pipline

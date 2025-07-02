@@ -57,6 +57,7 @@ class Source {
       int width = 0,
       int height = 0);
   int RegLandmarkCallback(FaceDetectorCallback callback);
+  int RegFacesDetectorCallback(FacesDetectorCallback facesDetectorCallback);
  protected:
   std::shared_ptr<Framebuffer> _framebuffer;
   RotationMode _outputRotation;
