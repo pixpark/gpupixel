@@ -154,13 +154,13 @@ using namespace gpupixel;
                 uint32_t bitmapInfo = kCGImageAlphaPremultipliedFirst | kCGBitmapByteOrder32Little;
                 CGContextRef context = CGBitmapContextCreate(imageData, width, height, bitsPerComponent, bytesPerRow, space, bitmapInfo);
                 CGImageRef cgImage = CGBitmapContextCreateImage(context);
-                CIImage *ciImage = [CIImage imageWithCGImage:cgImage];
-                UIImage *resultImage = [UIImage imageWithCIImage:ciImage];
+                UIImage *resultImage = [UIImage imageWithCGImage:cgImage];
                 NSLog(@"打印UIImage图像对象 : %@", resultImage);
                 
                 //Release memory
                 CGContextRelease(context);
                 CGImageRelease(cgImage);
+                CGColorSpaceRelease(space);
                 weakSelf.isNeedSaveImage = NO;
             }
         };

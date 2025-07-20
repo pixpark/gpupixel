@@ -69,7 +69,8 @@
     CAEAGLLayer* eaglLayer = (CAEAGLLayer*)self.layer;
     eaglLayer.opaque = YES;
     eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], kEAGLDrawablePropertyRetainedBacking, kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
-    
+    //设置视图的内容比例因子
+    self.contentScaleFactor = [[UIScreen mainScreen] scale] * 3.0;
 #else
     [self setOpenGLContext:gpupixel::GPUPixelContext::getInstance()->getOpenGLContext()];
     if ([self respondsToSelector:@selector(setWantsBestResolutionOpenGLSurface:)])
