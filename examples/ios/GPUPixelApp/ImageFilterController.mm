@@ -115,7 +115,7 @@ using namespace gpupixel;
     [self loadImageSourceToGPUPixel];
     // 对图像进行人脸识别, 并赋值到需要人脸识别的滤镜中
     gpuSourceImage->RegFacesDetectorCallback([=](std::vector<std::vector<float>> facesArray, int facesNum) {
-      NSLog(@"facesNum = %d", facesNum);
+//      NSLog(@"facesNum = %d", facesNum);
       if (facesNum > 0) {
         lipstick_filter_->SetFaceLandmarks(facesArray[0]);
         blusher_filter_->SetFaceLandmarks(facesArray[0]);
@@ -130,7 +130,7 @@ using namespace gpupixel;
                     ->addTarget(beauty_face_filter_)
                     ->addTarget(gpuPixelView);
  
-    [gpuPixelView setBackgroundColor:[UIColor grayColor]];
+    [gpuPixelView setBackgroundColor:[UIColor clearColor]];
     [gpuPixelView setFillMode:(gpupixel::TargetView::PreserveAspectRatioAndFill)];
   
   });
