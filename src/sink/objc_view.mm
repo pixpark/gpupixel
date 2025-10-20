@@ -64,17 +64,17 @@ using namespace gpupixel;
 {
   inputRotation = gpupixel::NoRotation;
 #if defined(GPUPIXEL_IOS)
-  self.opaque = YES;
+  self.opaque = NO;
   self.hidden = NO;
   CAEAGLLayer* eaglLayer = (CAEAGLLayer*)self.layer;
-  eaglLayer.opaque = YES;
+  eaglLayer.opaque = NO;
   eaglLayer.drawableProperties = [NSDictionary
       dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO],
                                    kEAGLDrawablePropertyRetainedBacking,
                                    kEAGLColorFormatRGBA8,
                                    kEAGLDrawablePropertyColorFormat, nil];
   currentlayer = (CAEAGLLayer*)self.layer;
-  currentlayer.opaque = YES;
+  currentlayer.opaque = NO;
   currentlayer.drawableProperties = [NSDictionary
       dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO],
                                    kEAGLDrawablePropertyRetainedBacking,

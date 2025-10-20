@@ -157,7 +157,7 @@ const std::string kGPUImageBaseBeautyFaceFragmentShaderString = R"(
         color = mix(color, color_custom, whiten);
       }
 
-      gl_FragColor = vec4(color, 1.0);
+      gl_FragColor = vec4(color, iColor.a);
     })";
 #elif defined(GPUPIXEL_GL_SHADER)
 const std::string kGPUImageBaseBeautyFaceFragmentShaderString = R"(
