@@ -6,13 +6,36 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <android.opengl.GLSurfaceView
-        android:id="@+id/surfaceView"
+    <TextureView
+        android:id="@+id/textureView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <FrameLayout
+        android:id="@+id/fl_preview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="-183dp"
-        tools:layout_editor_absoluteY="0dp" />
+        />
+    <Button
+        android:id="@+id/btn_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="switch"/>
+    <Button
+        android:id="@+id/btn_flash"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="falsh"
+        android:layout_marginStart="16dp"
+        android:layout_toEndOf="@id/btn_switch"/>
 
+    <Button
+        android:id="@+id/btn_capture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="capture"
+        android:layout_marginStart="16dp"
+        android:layout_toEndOf="@id/btn_flash"/>
     <TextView
         android:id="@+id/mopi"
         android:layout_width="100dp"

@@ -26,7 +26,6 @@ import androidx.core.app.ActivityCompat;
 
 import com.pixpark.gpupixel.GPUPixel;
 
-import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -36,9 +35,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Camera2Helper {
     private static final String TAG = "Camera2Helper";
-    public static final int CAMERA_FACING =
-            CameraCharacteristics.LENS_FACING_FRONT; // Default to front camera
-
+    
     private Context mContext;
     private CameraDevice mCameraDevice;
     private CameraCaptureSession mCaptureSession;
@@ -49,6 +46,18 @@ public class Camera2Helper {
     private Semaphore mCameraOpenCloseLock = new Semaphore(1);
     private int mSensorOrientation;
     private FrameCallback mFrameCallback;
+    
+    // Camera facing (front or back)
+    private int mCameraFacing = CameraCharacteristics.LENS_FACING_BACK;
+    private String mCameraId;
+    private CameraManager mCameraManager;
+    private CaptureRequest.Builder mCaptureRequestBuilder;
+    
+    // Flashlight state
+    private boolean mFlashlightEnabled = false;
+    
+    // Mirror state - controls whether front camera preview should be mirrored
+    private boolean mMirrorEnabled = true;  // Default to true for front camera mirroring
 
     private boolean mIsCameraOpened = false;
 
@@ -101,16 +110,18 @@ public class Camera2Helper {
             return;
         }
 
-        CameraManager manager = (CameraManager) mContext.getSystemService(Context.CAMERA_SERVICE);
+        mCameraManager = (CameraManager) mContext.getSystemService(Context.CAMERA_SERVICE);
         try {
-            String cameraId = getCameraId(manager);
+            String cameraId = getCameraId(mCameraManager);
             if (cameraId == null) {
                 Log.e(TAG, "Failed to find appropriate camera");
                 return;
             }
+            
+            mCameraId = cameraId;
 
             // Get camera characteristics
-            CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraId);
+            CameraCharacteristics characteristics = mCameraManager.getCameraCharacteristics(cameraId);
             StreamConfigurationMap map =
                     characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
             if (map == null) {
@@ -120,10 +131,23 @@ public class Camera2Helper {
 
             // Get sensor orientation
             mSensorOrientation = characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION);
+            
+            // Reset flashlight state when switching cameras
+            // Flashlight is only available for back camera
+            if (mCameraFacing == CameraCharacteristics.LENS_FACING_BACK) {
+                Boolean flashAvailable = characteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE);
+                if (flashAvailable == null || !flashAvailable) {
+                    mFlashlightEnabled = false;
+                }
+                // Note: mFlashlightEnabled might already be false from switchCamera()
+            } else {
+                // Front camera doesn't support flashlight
+                mFlashlightEnabled = false;
+            }
 
             // Choose optimal preview size
             mPreviewSize = chooseOptimalSize(map.getOutputSizes(SurfaceTexture.class), 1280, 720);
-
+            Log.d(TAG, "Preview size: " + mPreviewSize + " sensor orientation: " + mSensorOrientation);
             // Set up ImageReader to handle preview frames
             mImageReader = ImageReader.newInstance(
                     mPreviewSize.getWidth(), mPreviewSize.getHeight(), ImageFormat.YUV_420_888, 2);
@@ -134,7 +158,7 @@ public class Camera2Helper {
                 throw new RuntimeException("Time out waiting to lock camera opening.");
             }
 
-            manager.openCamera(cameraId, mStateCallback, mBackgroundHandler);
+            mCameraManager.openCamera(cameraId, mStateCallback, mBackgroundHandler);
         } catch (CameraAccessException e) {
             Log.e(TAG, "Failed to access camera", e);
         } catch (InterruptedException e) {
@@ -147,11 +171,11 @@ public class Camera2Helper {
             for (String cameraId : manager.getCameraIdList()) {
                 CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraId);
                 Integer facing = characteristics.get(CameraCharacteristics.LENS_FACING);
-                if (facing != null && facing == CAMERA_FACING) {
+                if (facing != null && facing == mCameraFacing) {
                     return cameraId;
                 }
             }
-            // If front camera not found, try to use any available camera
+            // If requested camera not found, try to use any available camera
             if (manager.getCameraIdList().length > 0) {
                 return manager.getCameraIdList()[0];
             }
@@ -219,9 +243,9 @@ public class Camera2Helper {
             // Create session
             Surface surface = mImageReader.getSurface();
 
-            final CaptureRequest.Builder builder =
+            mCaptureRequestBuilder =
                     mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
-            builder.addTarget(surface);
+            mCaptureRequestBuilder.addTarget(surface);
 
             mCameraDevice.createCaptureSession(
                     Collections.singletonList(surface), new CameraCaptureSession.StateCallback() {
@@ -233,14 +257,22 @@ public class Camera2Helper {
                             mCaptureSession = cameraCaptureSession;
                             try {
                                 // Auto focus
-                                builder.set(CaptureRequest.CONTROL_AF_MODE,
+                                mCaptureRequestBuilder.set(CaptureRequest.CONTROL_AF_MODE,
                                         CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
-                                // Auto exposure
-                                builder.set(CaptureRequest.CONTROL_AE_MODE,
-                                        CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH);
+                                
+                                // Auto exposure and flash mode
+                                if (mFlashlightEnabled && mCameraFacing == CameraCharacteristics.LENS_FACING_BACK) {
+                                    mCaptureRequestBuilder.set(CaptureRequest.CONTROL_AE_MODE,
+                                            CaptureRequest.CONTROL_AE_MODE_ON);
+                                    mCaptureRequestBuilder.set(CaptureRequest.FLASH_MODE,
+                                            CaptureRequest.FLASH_MODE_TORCH);
+                                } else {
+                                    mCaptureRequestBuilder.set(CaptureRequest.CONTROL_AE_MODE,
+                                            CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH);
+                                }
 
                                 // Start preview
-                                CaptureRequest request = builder.build();
+                                CaptureRequest request = mCaptureRequestBuilder.build();
                                 mCaptureSession.setRepeatingRequest(
                                         request, null, mBackgroundHandler);
                             } catch (CameraAccessException e) {
@@ -278,6 +310,7 @@ public class Camera2Helper {
                 mImageReader = null;
             }
 
+            mCaptureRequestBuilder = null;
             mIsCameraOpened = false;
         } catch (InterruptedException e) {
             Log.e(TAG, "Interrupted while trying to lock camera closing", e);
@@ -321,5 +354,129 @@ public class Camera2Helper {
 
     public int getSensorOrientation() {
         return mSensorOrientation;
+    }
+
+    /**
+     * Switch between front and back camera
+     */
+    public void switchCamera() {
+        if (!mIsCameraOpened) {
+            Log.w(TAG, "Camera is not opened, cannot switch");
+            return;
+        }
+
+        // Toggle camera facing
+        if (mCameraFacing == CameraCharacteristics.LENS_FACING_BACK) {
+            mCameraFacing = CameraCharacteristics.LENS_FACING_FRONT;
+        } else {
+            mCameraFacing = CameraCharacteristics.LENS_FACING_BACK;
+        }
+
+        // Reset flashlight state when switching cameras (will be set correctly in openCamera)
+
+        // Close current camera and reopen with new facing
+        closeCamera();
+        openCamera();
+        
+        Log.d(TAG, "Switched to camera facing: " + 
+                (mCameraFacing == CameraCharacteristics.LENS_FACING_BACK ? "BACK" : "FRONT"));
+    }
+
+    /**
+     * Toggle flashlight on/off
+     * Only works for back camera
+     */
+    public void toggleFlashlight() {
+        if (!mIsCameraOpened || mCaptureSession == null || mCaptureRequestBuilder == null) {
+            Log.w(TAG, "Camera is not ready, cannot toggle flashlight");
+            return;
+        }
+
+        // Only back camera supports flashlight
+        if (mCameraFacing != CameraCharacteristics.LENS_FACING_BACK) {
+            Log.w(TAG, "Flashlight is only available for back camera");
+            return;
+        }
+
+        try {
+            mFlashlightEnabled = !mFlashlightEnabled;
+
+            if (mFlashlightEnabled) {
+                // Turn on flashlight
+                mCaptureRequestBuilder.set(CaptureRequest.CONTROL_AE_MODE,
+                        CaptureRequest.CONTROL_AE_MODE_ON);
+                mCaptureRequestBuilder.set(CaptureRequest.FLASH_MODE,
+                        CaptureRequest.FLASH_MODE_TORCH);
+                Log.d(TAG, "Flashlight turned ON");
+            } else {
+                // Turn off flashlight
+                mCaptureRequestBuilder.set(CaptureRequest.CONTROL_AE_MODE,
+                        CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH);
+                mCaptureRequestBuilder.set(CaptureRequest.FLASH_MODE,
+                        CaptureRequest.FLASH_MODE_OFF);
+                Log.d(TAG, "Flashlight turned OFF");
+            }
+
+            // Update capture request
+            CaptureRequest request = mCaptureRequestBuilder.build();
+            mCaptureSession.setRepeatingRequest(request, null, mBackgroundHandler);
+        } catch (CameraAccessException e) {
+            Log.e(TAG, "Failed to toggle flashlight", e);
+            // Revert state on error
+            mFlashlightEnabled = !mFlashlightEnabled;
+        }
+    }
+
+    /**
+     * Get current camera facing
+     * @return LENS_FACING_BACK or LENS_FACING_FRONT
+     */
+    public int getCameraFacing() {
+        return mCameraFacing;
+    }
+
+    /**
+     * Check if flashlight is currently enabled
+     * @return true if flashlight is on, false otherwise
+     */
+    public boolean isFlashlightEnabled() {
+        return mFlashlightEnabled;
+    }
+
+    /**
+     * Set whether front camera preview should be mirrored (horizontally flipped)
+     * 
+     * By default, front camera preview is mirrored (like a mirror) which is the common
+     * behavior users expect. Set this to false if you want the preview to match
+     * the actual camera sensor output (non-mirrored).
+     * 
+     * This setting only affects front camera. Back camera preview is never mirrored.
+     * 
+     * @param enabled true to enable mirroring for front camera (default), false to disable
+     */
+    public void setMirrorEnabled(boolean enabled) {
+        mMirrorEnabled = enabled;
+        Log.d(TAG, "Mirror enabled set to: " + enabled);
+    }
+
+    /**
+     * Check if mirroring is currently enabled
+     * @return true if mirroring is enabled, false otherwise
+     */
+    public boolean isMirrorEnabled() {
+        return mMirrorEnabled;
+    }
+
+    /**
+     * Check if current camera preview should be mirrored
+     * 
+     * This returns true only if:
+     * 1. Current camera is front camera (LENS_FACING_FRONT)
+     * 2. Mirror is enabled (mMirrorEnabled == true)
+     * 
+     * @return true if preview should be mirrored, false otherwise
+     */
+    public boolean shouldMirrorPreview() {
+        return mMirrorEnabled && mCameraFacing == CameraCharacteristics.LENS_FACING_FRONT;
     }
 }
