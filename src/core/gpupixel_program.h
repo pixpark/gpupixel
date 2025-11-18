@@ -30,6 +30,7 @@ class GPUPIXEL_API GPUPixelGLProgram {
   void SetUniformValue(const std::string& uniform_name, int value);
   void SetUniformValue(const std::string& uniform_name, float value);
   void SetUniformValue(const std::string& uniform_name, Vector2 value);
+  void SetUniformValue(const std::string& uniform_name, float f1, float f2, float f3, float f4); // vec4
   void SetUniformValue(const std::string& uniform_name, Matrix3 value);
   void SetUniformValue(const std::string& uniform_name, Matrix4 value);
 
@@ -40,6 +41,7 @@ class GPUPIXEL_API GPUPixelGLProgram {
   void SetUniformValue(int uniform_location, int value);
   void SetUniformValue(int uniform_location, float value);
   void SetUniformValue(int uniform_location, Vector2 value);
+  void SetUniformValue(int uniform_location, float f1, float f2, float f3, float f4); // vec4
   void SetUniformValue(int uniform_location, Matrix3 value);
   void SetUniformValue(int uniform_location, Matrix4 value);
   void SetUniformValue(int uniform_location, const void* array, int length);

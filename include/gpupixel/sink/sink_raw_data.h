@@ -62,4 +62,41 @@ class GPUPIXEL_API SinkRawData : public Sink {
   uint8_t* yuv_buffer_ = nullptr;   // YUV buffer
 };
 
+class GPUPIXEL_API SinkRawYuv : public Sink {
+ public:
+  static std::shared_ptr<SinkRawYuv> Create();
+  virtual ~SinkRawYuv();
+  void Render() override;
+
+  const uint8_t* GetI420Buffer();
+  void GetI420Buffer(uint8_t* input_buffer);
+  int GetWidth() const { return width_; }
+  int GetHeight() const { return height_; }
+
+ private:
+  int RenderToOutput(uint8_t* buffer);
+  bool InitWithShaderString(const std::string& vertex_shader_source,
+                            const std::string& fragment_shader_source);
+  void InitTextureCache(int width, int height);
+  void InitFramebuffer(int width, int height);
+  void InitOutputBuffer(int width, int height);
+
+ private:
+  SinkRawYuv();
+  std::mutex mutex_;
+  GPUPixelGLProgram* shader_program_;
+  uint32_t position_attribute_;
+  uint32_t tex_coord_attribute_;
+
+  std::shared_ptr<GPUPixelFramebuffer> framebuffer_;
+
+  // Image dimensions
+  int32_t width_ = 0;
+  int32_t height_ = 0;
+
+  uint8_t* yuv_buffer_ = nullptr;   // YUV buffer
+  uint8_t* uv_buffer_ = nullptr;   // UV reconstruct buffer
+
+};
+
 }  // namespace gpupixel
