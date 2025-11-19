@@ -99,7 +99,8 @@ set(jni_source_files
     ${CMAKE_CURRENT_SOURCE_DIR}/android/jni/jni_helpers.cc
     ${CMAKE_CURRENT_SOURCE_DIR}/android/jni/jni_source_image.cc
     ${CMAKE_CURRENT_SOURCE_DIR}/android/jni/jni_face_detector.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/android/jni/jni_sink_raw_data.cc)
+    ${CMAKE_CURRENT_SOURCE_DIR}/android/jni/jni_sink_raw_data.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/android/jni/jni_sink_raw_yuv.cc)
 
 set(lib_source_code_files ${common_source_files})
 
