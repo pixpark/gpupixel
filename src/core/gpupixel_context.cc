@@ -136,24 +136,20 @@ void GPUPixelContext::CreateContext() {
   }
   LOG_DEBUG("EGL initialized: version major:{} minor:{}", major, minor);
 
-  // Configure EGL
-  const EGLint configAttribs[] = {EGL_RED_SIZE,
-                                  8,
-                                  EGL_GREEN_SIZE,
-                                  8,
-                                  EGL_BLUE_SIZE,
-                                  8,
-                                  EGL_ALPHA_SIZE,
-                                  8,
-                                  EGL_DEPTH_SIZE,
-                                  16,
-                                  EGL_STENCIL_SIZE,
-                                  0,
-                                  EGL_SURFACE_TYPE,
-                                  EGL_PBUFFER_BIT,
-                                  EGL_RENDERABLE_TYPE,
-                                  EGL_OPENGL_ES2_BIT,
-                                  EGL_NONE};
+  // Configure EGL - support both PBUFFER (off-screen) and WINDOW (window) Surface
+  // This allows it to be used for both off-screen rendering (filter processing) and window rendering (display to screen)
+  const EGLint configAttribs[] = {
+      EGL_RED_SIZE, 8,           // 8 bits for red channel
+      EGL_GREEN_SIZE, 8,         // 8 bits for green channel
+      EGL_BLUE_SIZE, 8,          // 8 bits for blue channel
+      EGL_ALPHA_SIZE, 8,         // 8 bits for alpha channel
+      EGL_DEPTH_SIZE, 16,        // 16 bits for depth buffer
+      EGL_STENCIL_SIZE, 0,       // 0 bits for stencil buffer (not used)
+      EGL_SURFACE_TYPE,
+      EGL_PBUFFER_BIT | EGL_WINDOW_BIT,  // Key: support both off-screen and window Surface
+      EGL_RENDERABLE_TYPE,
+      EGL_OPENGL_ES2_BIT,        // Use OpenGL ES 2.0
+      EGL_NONE};
 
   EGLint numConfigs;
   if (!eglChooseConfig(egl_display_, configAttribs, &egl_config_, 1,

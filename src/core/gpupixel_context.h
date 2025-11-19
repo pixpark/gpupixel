@@ -42,6 +42,7 @@ class GPUPIXEL_API GPUPixelContext {
   EGLContext GetEglContext() const { return egl_context_; };
   EGLDisplay GetEglDisplay() const { return egl_display_; };
   EGLSurface GetEglSurface() const { return egl_surface_; };
+  EGLConfig GetEglConfig() const { return egl_config_; };
 #elif defined(GPUPIXEL_WIN) || defined(GPUPIXEL_LINUX)
   GLFWwindow* GetGLContext() const { return gl_context_; };
 #endif

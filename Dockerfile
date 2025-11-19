@@ -1,5 +1,5 @@
 # debian 10 (GLIBC 2.28)
-FROM debian:buster
+FROM debian:bullseye
 
 # Install necessary tools and libraries
 RUN apt-get update && \

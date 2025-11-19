@@ -4,15 +4,15 @@ import static android.widget.Toast.LENGTH_LONG;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.hardware.camera2.CameraCharacteristics;
-import android.opengl.GLES20;
-import android.opengl.GLSurfaceView;
+import android.graphics.Bitmap;
+import android.graphics.SurfaceTexture;
+import android.view.TextureView;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.SeekBar;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -22,36 +22,46 @@ import com.pixpark.gpupixel.FaceDetector;
 import com.pixpark.gpupixel.GPUPixel;
 import com.pixpark.gpupixel.GPUPixelFilter;
 import com.pixpark.gpupixel.GPUPixelSinkRawData;
+import com.pixpark.gpupixel.GPUPixelSinkSurface;
 import com.pixpark.gpupixel.GPUPixelSourceRawData;
-
+import android.view.Surface;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.opengles.GL10;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 200;
     private static final String TAG = "GPUPixelDemo";
 
-    private Camera2Helper mCamera2Helper;
+    Camera2Helper mCamera2Helper;
     private GPUPixelSourceRawData mSourceRawData;
     private GPUPixelFilter mBeautyFilter;
     private GPUPixelFilter mFaceReshapeFilter;
     private GPUPixelFilter mLipstickFilter;
     private FaceDetector mFaceDetector;
-    private GPUPixelSinkRawData mSinkRawData;
+    private GPUPixelSinkSurface mSinkSurface;
+    private GPUPixelSinkRawData mCaptureSinkRawData;
 
     private SeekBar mSmoothSeekbar;
     private SeekBar mWhitenessSeekbar;
     private SeekBar mThinFaceSeekbar;
     private SeekBar mBigeyeSeekbar;
     private SeekBar lipstickSeekbar;
-    private GLSurfaceView mGLSurfaceView;
-    private MyRenderer mRenderer;
+    private TextureView mTextureView;
+
+    private volatile boolean mCaptureRequested = false;
+    private ExecutorService mCaptureExecutor;
 
     private ActivityMainBinding binding;
+    //    private CainCameraWrapper cainCameraWrapper;
+    // Memory buffer for taking pictures
+    private ByteBuffer mTakePictureBuffer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,29 +69,120 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        long start = System.currentTimeMillis();
         // Get log path
         String path = getExternalFilesDir("gpupixel").getAbsolutePath();
         Log.i(TAG, "Log path: " + path);
 
         // Initialize GPUPixel
         GPUPixel.Init(this);
+        mCaptureExecutor = Executors.newSingleThreadExecutor();
+
+        // Asynchronously initialize face detector to avoid blocking main thread in setupCamera()
+        mCaptureExecutor.execute(() -> {
+            long fdStart = System.currentTimeMillis();
+            mFaceDetector = FaceDetector.Create();
+            Log.i(TAG, "FaceDetector init time: " + (System.currentTimeMillis() - fdStart));
+        });
 
         // Keep screen on
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        // Initialize UI
+        // Initialize UI first (creates TextureView listener)
         initUI();
 
+        // Setup camera (which creates mSinkSurface and connects to TextureView)
+        // But wait for permission check first
         // Check camera permission
         checkCameraPermission();
+
+        binding.btnSwitch.setOnClickListener(v -> {
+            mCamera2Helper.switchCamera();
+            // Update mirror setting after switching camera
+            updateMirrorSetting();
+        });
+
+        binding.btnFlash.setOnClickListener(v -> {
+            mCamera2Helper.toggleFlashlight();
+        });
+
+        binding.btnCapture.setOnClickListener(v -> requestCapture());
+        Log.i(TAG, "MainActivity onCreate: " + (System.currentTimeMillis() - start));
+
     }
 
+    /**
+     * Initialize UI components
+     * <p>
+     * Main tasks:
+     * 1. Get TextureView (used to display processed image)
+     * 2. Set SurfaceTextureListener, pass Surface to SinkSurface when Surface is available
+     */
     private void initUI() {
-        mGLSurfaceView = binding.surfaceView;
-        mGLSurfaceView.setEGLContextClientVersion(2);
-        mRenderer = new MyRenderer();
-        mGLSurfaceView.setRenderer(mRenderer);
+        // Try to get TextureView from binding, or find by ID
+        mTextureView = binding.textureView;
+        if (mTextureView == null) {
+            // If there's no textureView in layout, try to find or create
+            View rootView = binding.getRoot();
+            mTextureView = rootView.findViewById(android.R.id.text1); // You may need to modify this ID
+            if (mTextureView == null) {
+                // If still can't find, output warning
+                // You need to add a TextureView with id 'textureView' in layout XML
+                Log.w(TAG, "TextureView not found in layout. Please add a TextureView with id 'textureView'");
+            }
+        }
+
+        // Set SurfaceTexture listener
+        // This is key: when TextureView's Surface is available, pass it to SinkSurface for rendering
+        mTextureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
+            /**
+             * Called when Surface is first available
+             * At this time we can set Surface to SinkSurface, start rendering
+             */
+            @Override
+            public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+                if (mSinkSurface != null) {
+                    // Set Surface to SinkSurface, C layer will create EGL Window Surface
+                    mSinkSurface.SetSurface(new Surface(surface), width, height);
+                    Log.d(TAG, "TextureView surface available: " + width + "x" + height);
+                }
+            }
+
+            /**
+             * Called when Surface size changes
+             * Need to re-set Surface (because size has changed)
+             */
+            @Override
+            public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
+                if (mSinkSurface != null) {
+                    // Re-set Surface, will update EGL Surface size
+                    mSinkSurface.SetSurface(new Surface(surface), width, height);
+                    Log.d(TAG, "TextureView surface size changed: " + width + "x" + height);
+                }
+            }
+
+            /**
+             * Called when Surface is destroyed
+             * Need to release Surface resources in SinkSurface
+             */
+            @Override
+            public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+                if (mSinkSurface != null) {
+                    // Release Surface resources, destroy EGL Window Surface
+                    mSinkSurface.ReleaseSurface();
+                }
+                return false; // false means we release resources ourselves, don't need TextureView to delay destruction
+            }
+
+            /**
+             * Called when Surface content is updated
+             * No operations needed here, because rendering is controlled by SinkSurface in C layer
+             */
+            @Override
+            public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+                // Texture updated, no operation needed (rendering controlled by C layer)
+            }
+        });
 
         // Setup beauty slider
         mSmoothSeekbar = binding.smoothSeekbar;
@@ -94,10 +195,12 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
         });
 
         mWhitenessSeekbar = binding.whitenessSeekbar;
@@ -110,10 +213,12 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
         });
 
         mThinFaceSeekbar = binding.thinfaceSeekbar;
@@ -126,10 +231,12 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
         });
         mBigeyeSeekbar = binding.bigeyeSeekbar;
         mBigeyeSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -141,10 +248,12 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
         });
         lipstickSeekbar = binding.lipstickSeekbar;
         lipstickSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -156,439 +265,238 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
         });
     }
 
+    /**
+     * Setup camera and GPUPixel processing chain
+     * <p>
+     * This is the initialization method for the entire image processing pipeline:
+     * 1. Create camera helper
+     * 2. Create data source (Source)
+     * 3. Create filter chain (Filters)
+     * 4. Create output (SinkSurface) - directly render to TextureView
+     * 5. Initialize face detection
+     * 6. Set camera frame callback
+     */
     private void setupCamera() {
-        // Create and initialize camera
+        long start = System.currentTimeMillis();
+        // Create and initialize camera (using Camera2 API)
         mCamera2Helper = new Camera2Helper(this);
 
-        // Create GPUPixel processing chain
+        // Create data source for GPUPixel processing chain
+        // SourceRawData is used to receive raw RGBA data
         mSourceRawData = GPUPixelSourceRawData.Create();
 
-        // Create filters
+        // Create filters: lipstick filter -> beauty filter -> face reshaping filter
+        mLipstickFilter = GPUPixelFilter.Create(GPUPixelFilter.LIPSTICK_FILTER);
         mBeautyFilter = GPUPixelFilter.Create(GPUPixelFilter.BEAUTY_FACE_FILTER);
         mFaceReshapeFilter = GPUPixelFilter.Create(GPUPixelFilter.FACE_RESHAPE_FILTER);
-        mLipstickFilter = GPUPixelFilter.Create(GPUPixelFilter.LIPSTICK_FILTER);
 
-        // Create output sink
-        mSinkRawData = GPUPixelSinkRawData.Create();
+        // Create output - use SinkSurface for direct rendering
+        // Note: must be created before setting camera callback
+        mSinkSurface = GPUPixelSinkSurface.Create();
+        mSinkSurface.SetFillMode(GPUPixelSinkSurface.PRESERVE_ASPECT_RATIO);
 
-        // Initialize face detection
-        mFaceDetector = FaceDetector.Create();
+        // Mirror setting will be set after camera starts (in updateMirrorSetting)
+
+        // Create raw data output Sink, used for saving processed RGBA data when taking photos
+        mCaptureSinkRawData = GPUPixelSinkRawData.Create();
+
+        // If TextureView is already available, set Surface immediately
+        // Otherwise will be set in TextureView's SurfaceTextureListener callback
+        if (mTextureView != null && mTextureView.isAvailable()) {
+            SurfaceTexture surfaceTexture = mTextureView.getSurfaceTexture();
+            if (surfaceTexture != null) {
+                int width = mTextureView.getWidth();
+                int height = mTextureView.getHeight();
+                if (width > 0 && height > 0) {
+                    Log.d(TAG, "setSurfaceTexture: " + width + "x" + height);
+                    mSinkSurface.SetSurface(new Surface(surfaceTexture), width, height);
+                }
+            }
+        }
+
+        // Face detector initialized asynchronously in onCreate, not blocking here
 
         // Set camera frame callback
-        mCamera2Helper.setFrameCallback(new Camera2Helper.FrameCallback() {
-            @Override
-            public void onFrameAvailable(byte[] rgbaData, int width, int height) {
-                // Get sensor orientation
-                int sensorOrientation = mCamera2Helper.getSensorOrientation();
+        // This callback will be called whenever camera generates a frame of data
+        mCamera2Helper.setFrameCallback((rgbaData, width, height) -> {
+            // Get camera sensor orientation (different devices have different camera sensor orientations)
+            int sensorOrientation = mCamera2Helper.getSensorOrientation();
 
-                // Check if front camera
-                boolean isFrontCamera = GPUPixel.isFrontCamera(Camera2Helper.CAMERA_FACING);
+            // Check if it's front camera
+            boolean isFrontCamera = GPUPixel.isFrontCamera(mCamera2Helper.getCameraFacing());
 
-                // Calculate rotation using GPUPixel
-                int rotation = GPUPixel.calculateRotation(
-                        MainActivity.this, sensorOrientation, isFrontCamera);
+            // Use GPUPixel to calculate required image rotation angle
+            // Considering device orientation, sensor orientation, and front/back camera
+            int rotation = GPUPixel.calculateRotation(
+                    MainActivity.this,
+                    sensorOrientation,
+                    isFrontCamera
+            );
 
-                // Rotate RGBA data using GPUPixel
-                byte[] rotatedData = GPUPixel.rotateRgbaImage(rgbaData, width, height, rotation);
+            // Use GPUPixel to rotate RGBA data (C layer implementation, better performance)
+            byte[] rotatedData = GPUPixel.rotateRgbaImage(rgbaData, width, height, rotation);
 
-                // Width and height may be swapped after rotation
-                int outWidth = (rotation == 90 || rotation == 270) ? height : width;
-                int outHeight = (rotation == 90 || rotation == 270) ? width : height;
+            // After rotation width and height may be swapped (90 or 270 degree rotation)
+            int outWidth = (rotation == 90 || rotation == 270) ? height : width;
+            int outHeight = (rotation == 90 || rotation == 270) ? width : height;
 
-                // Perform face detection (using rotated data)
-                float[] landmarks = mFaceDetector.detect(rotatedData, outWidth, outHeight,
+            // Perform face detection (using rotated data) - skip if detector not ready
+            float[] landmarks = null;
+            if (mFaceDetector != null) {
+                landmarks = mFaceDetector.detect(rotatedData, outWidth, outHeight,
                         outWidth * 4, FaceDetector.GPUPIXEL_MODE_FMT_VIDEO,
                         FaceDetector.GPUPIXEL_FRAME_TYPE_RGBA);
+            }
 
-                if (landmarks != null && landmarks.length > 0) {
-                    Log.d(TAG, "Face landmarks detected: " + landmarks.length);
-                    mFaceReshapeFilter.SetProperty("face_landmark", landmarks);
-                    mLipstickFilter.SetProperty("face_landmark", landmarks);
-                }
+            // If face detected, set landmark coordinates to filters
+            if (landmarks != null && landmarks.length > 0) {
+                mFaceReshapeFilter.SetProperty("face_landmark", landmarks);
+                mLipstickFilter.SetProperty("face_landmark", landmarks);
+            }
 
-                // Process the rotated RGBA data with GPUPixelSourceRawData
-                mSourceRawData.ProcessData(rotatedData, outWidth, outHeight, outWidth * 4,
-                        GPUPixelSourceRawData.FRAME_TYPE_RGBA);
+            // Pass rotated RGBA data into GPUPixel processing chain
+            // Processing flow: Source -> lipstick filter -> beauty filter -> face reshaping filter -> SinkSurface
+            // SinkSurface will render directly in C layer EGL environment to TextureView, no Java layer intervention needed
+            mSourceRawData.ProcessData(
+                    rotatedData,
+                    outWidth,
+                    outHeight,
+                    outWidth * 4,  // Number of bytes per row (width * 4 bytes RGBA)
+                    GPUPixelSourceRawData.FRAME_TYPE_RGBA
+            );
 
-                // Get processed RGBA data
-                byte[] processedRgba = mSinkRawData.GetRgbaBuffer();
+            // Note: No need to get processed RGBA data, no need for manual rendering
+            // SinkSurface will automatically complete rendering in C layer and swap buffers to display to screen
 
-                // Set texture data and request redraw
-                if (processedRgba != null && mRenderer != null) {
-                    int rgbaWidth = mSinkRawData.GetWidth();
-                    int rgbaHeight = mSinkRawData.GetHeight();
-
-                    mRenderer.updateTextureData(processedRgba, rgbaWidth, rgbaHeight, 0);
-
-                    // Request GLSurfaceView to redraw
-                    mGLSurfaceView.requestRender();
+            if (mCaptureRequested && mCaptureSinkRawData != null) {
+                mCaptureRequested = false;
+                byte[] captureRgba = mCaptureSinkRawData.GetRgbaBuffer();
+                int captureWidth = mCaptureSinkRawData.GetWidth();
+                int captureHeight = mCaptureSinkRawData.GetHeight();
+                if (captureRgba != null
+                        && captureWidth > 0
+                        && captureHeight > 0
+                        && captureRgba.length >= captureWidth * captureHeight * 4) {
+//                    byte[] bufferCopy = captureRgba.clone();
+                    mCaptureExecutor.execute(
+                            () -> saveCapturedImage(captureRgba, captureWidth, captureHeight));
+                } else {
+                    runOnUiThread(() ->
+                            Toast.makeText(MainActivity.this, "Photo capture failed, invalid data", Toast.LENGTH_SHORT)
+                                    .show());
                 }
             }
         });
 
+        // Connect processing chain: data source -> filter1 -> filter2 -> filter3 -> output
+        // Data flow: SourceRawData -> LipstickFilter -> BeautyFilter -> FaceReshapeFilter -> SinkSurface
         mSourceRawData.AddSink(mLipstickFilter);
         mLipstickFilter.AddSink(mBeautyFilter);
         mBeautyFilter.AddSink(mFaceReshapeFilter);
-        mFaceReshapeFilter.AddSink(mSinkRawData);
+        mFaceReshapeFilter.AddSink(mSinkSurface);
+        if (mCaptureSinkRawData != null) {
+            mFaceReshapeFilter.AddSink(mCaptureSinkRawData);
+        }
 
-        // Start camera
+        // Start camera, begin capturing images
         mCamera2Helper.startCamera();
+
+        // Set initial mirror setting after camera is ready
+        // This will be called again when switching cameras
+        updateMirrorSetting();
+
+        Log.d(TAG, "setupCamera: cost " + (System.currentTimeMillis() - start));
     }
 
-    // OpenGL Renderer class
-    private class MyRenderer implements GLSurfaceView.Renderer {
-        private int mTextureID = -1;
-        private int mProgramHandle;
-        private int mPositionHandle;
-        private int mTextureCoordHandle;
-        private int mTextureSamplerHandle;
+    /**
+     * Update mirror setting
+     * <p>
+     * Update SinkSurface mirror status based on current camera type and mirror setting.
+     * Front camera defaults to enabled mirror (like looking in a mirror), back camera does not mirror.
+     */
+    private void updateMirrorSetting() {
+        if (mSinkSurface != null && mCamera2Helper != null) {
+            boolean shouldMirror = mCamera2Helper.shouldMirrorPreview();
+            mSinkSurface.SetMirror(shouldMirror);
+            Log.d(TAG, "Mirror setting updated: " + shouldMirror +
+                    " (Camera: " + (mCamera2Helper.getCameraFacing() ==
+                    android.hardware.camera2.CameraCharacteristics.LENS_FACING_FRONT ? "FRONT" : "BACK") +
+                    ", MirrorEnabled: " + mCamera2Helper.isMirrorEnabled() + ")");
+        }
+    }
 
-        private ByteBuffer mTextureData;
-        private int mTextureWidth;
-        private int mTextureHeight;
-        private int mRotation = 0; // Image rotation angle
-        private boolean mTextureNeedsUpdate = false;
-        private final Object mLock = new Object();
+    /**
+     * Request capture, mark to save after next frame processing is completed
+     */
+    private void requestCapture() {
+        if (mCaptureSinkRawData == null) {
+            Toast.makeText(this, "Photo capture function not initialized", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (mCaptureExecutor == null || mCaptureExecutor.isShutdown()) {
+            Toast.makeText(this, "Save thread not available", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (mCaptureRequested) {
+            Toast.makeText(this, "Saving in progress, please wait", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        mCaptureRequested = true;
+        Toast.makeText(this, "Saving current image", Toast.LENGTH_SHORT).show();
+    }
 
-        // Vertex coordinates
-        private final float[] VERTICES = {
-                -1.0f, -1.0f, // Bottom left
-                1.0f, -1.0f, // Bottom right
-                -1.0f, 1.0f, // Top left
-                1.0f, 1.0f // Top right
-        };
+    /**
+     * Save RGBA data as PNG file to app cache directory
+     */
+    private void saveCapturedImage(byte[] rgbaData, int width, int height) {
+        int pixelCount = width * height * 4;
+        // if size changed, clear and reallocate
+        if (mTakePictureBuffer != null && mTakePictureBuffer.capacity() != pixelCount) {
+            mTakePictureBuffer.clear();
+            mTakePictureBuffer = null;
+        }
+        if (mTakePictureBuffer == null) {
+            mTakePictureBuffer = ByteBuffer.allocateDirect(pixelCount);
+        }
+        mTakePictureBuffer.rewind();
+        mTakePictureBuffer.put(rgbaData);
+        mTakePictureBuffer.position(0);
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        bitmap.copyPixelsFromBuffer(mTakePictureBuffer);
 
-        // Texture coordinates - default (0° rotation)
-        private final float[] TEXTURE_COORDS_0 = {
-                0.0f, 1.0f, // Bottom left
-                1.0f, 1.0f, // Bottom right
-                0.0f, 0.0f, // Top left
-                1.0f, 0.0f // Top right
-        };
-
-        // Texture coordinates - 90° clockwise rotation
-        private final float[] TEXTURE_COORDS_90 = {
-                0.0f, 0.0f, // Bottom left
-                0.0f, 1.0f, // Bottom right
-                1.0f, 0.0f, // Top left
-                1.0f, 1.0f // Top right
-        };
-
-        // Texture coordinates - 180° clockwise rotation
-        private final float[] TEXTURE_COORDS_180 = {
-                1.0f, 0.0f, // Bottom left
-                0.0f, 0.0f, // Bottom right
-                1.0f, 1.0f, // Top left
-                0.0f, 1.0f // Top right
-        };
-
-        // Texture coordinates - 270° clockwise rotation
-        private final float[] TEXTURE_COORDS_270 = {
-                1.0f, 1.0f, // Bottom left
-                1.0f, 0.0f, // Bottom right
-                0.0f, 1.0f, // Top left
-                0.0f, 0.0f // Top right
-        };
-
-        // Texture coordinates for front camera mirroring - default (0° rotation)
-        private final float[] TEXTURE_COORDS_MIRROR_0 = {
-                1.0f, 1.0f, // Bottom left
-                0.0f, 1.0f, // Bottom right
-                1.0f, 0.0f, // Top left
-                0.0f, 0.0f // Top right
-        };
-
-        // Currently used texture coordinates
-        private float[] TEXTURE_COORDS = TEXTURE_COORDS_0;
-
-        private FloatBuffer mVertexBuffer;
-        private FloatBuffer mTexCoordBuffer;
-
-        // View dimension properties
-        private int mViewWidth;
-        private int mViewHeight;
-
-        @Override
-        public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-            // Set background color
-            GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-
-            // Initialize vertex coordinate buffer
-            ByteBuffer bb = ByteBuffer.allocateDirect(VERTICES.length * 4);
-            bb.order(ByteOrder.nativeOrder());
-            mVertexBuffer = bb.asFloatBuffer();
-            mVertexBuffer.put(VERTICES);
-            mVertexBuffer.position(0);
-
-            // Initialize texture coordinate buffer - using default texture coordinates
-            updateTextureCoordinates(0);
-
-            // Create vertex shader
-            String vertexShaderCode = "attribute vec2 aPosition;\n"
-                    + "attribute vec2 aTextureCoord;\n"
-                    + "varying vec2 vTextureCoord;\n"
-                    + "void main() {\n"
-                    + "  gl_Position = vec4(aPosition, 0.0, 1.0);\n"
-                    + "  vTextureCoord = aTextureCoord;\n"
-                    + "}";
-
-            // Create fragment shader
-            String fragmentShaderCode = "precision mediump float;\n"
-                    + "varying vec2 vTextureCoord;\n"
-                    + "uniform sampler2D uTexture;\n"
-                    + "void main() {\n"
-                    + "  gl_FragColor = texture2D(uTexture, vTextureCoord);\n"
-                    + "}";
-
-            // Compile shaders
-            int vertexShader = compileShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode);
-            int fragmentShader = compileShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode);
-
-            // Create program
-            mProgramHandle = GLES20.glCreateProgram();
-            GLES20.glAttachShader(mProgramHandle, vertexShader);
-            GLES20.glAttachShader(mProgramHandle, fragmentShader);
-            GLES20.glLinkProgram(mProgramHandle);
-
-            // Get attribute locations
-            mPositionHandle = GLES20.glGetAttribLocation(mProgramHandle, "aPosition");
-            mTextureCoordHandle = GLES20.glGetAttribLocation(mProgramHandle, "aTextureCoord");
-            mTextureSamplerHandle = GLES20.glGetUniformLocation(mProgramHandle, "uTexture");
-
-            // Create texture
-            int[] textures = new int[1];
-            GLES20.glGenTextures(1, textures, 0);
-            mTextureID = textures[0];
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextureID);
-
-            // Set texture parameters
-            GLES20.glTexParameteri(
-                    GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
-            GLES20.glTexParameteri(
-                    GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
-            GLES20.glTexParameteri(
-                    GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
-            GLES20.glTexParameteri(
-                    GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
+        File captureDir = new File(getCacheDir(), "captures");
+        if (!captureDir.exists() && !captureDir.mkdirs()) {
+            runOnUiThread(() ->
+                    Toast.makeText(MainActivity.this, "Failed to create cache directory", Toast.LENGTH_SHORT).show());
+            bitmap.recycle();
+            return;
         }
 
-        // Update texture coordinates based on rotation angle
-        private void updateTextureCoordinates(int rotation) {
-            boolean isFrontCamera = (mCamera2Helper != null)
-                    && (Camera2Helper.CAMERA_FACING == CameraCharacteristics.LENS_FACING_FRONT);
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
+        File outFile = new File(captureDir, "gpupixel_" + timeStamp + ".png");
 
-            // Select appropriate texture coordinates
-            switch (rotation) {
-                case 90:
-                    TEXTURE_COORDS = isFrontCamera ? TEXTURE_COORDS_270 : TEXTURE_COORDS_90;
-                    break;
-                case 180:
-                    TEXTURE_COORDS = isFrontCamera ? TEXTURE_COORDS_180 : TEXTURE_COORDS_180;
-                    break;
-                case 270:
-                    TEXTURE_COORDS = isFrontCamera ? TEXTURE_COORDS_90 : TEXTURE_COORDS_270;
-                    break;
-                default: // 0 degrees
-                    TEXTURE_COORDS = isFrontCamera ? TEXTURE_COORDS_MIRROR_0 : TEXTURE_COORDS_0;
-                    break;
-            }
-
-            // Update texture coordinate buffer
-            ByteBuffer bb = ByteBuffer.allocateDirect(TEXTURE_COORDS.length * 4);
-            bb.order(ByteOrder.nativeOrder());
-            mTexCoordBuffer = bb.asFloatBuffer();
-            mTexCoordBuffer.put(TEXTURE_COORDS);
-            mTexCoordBuffer.position(0);
-        }
-
-        @Override
-        public void onSurfaceChanged(GL10 gl, int width, int height) {
-            GLES20.glViewport(0, 0, width, height);
-
-            // Store view dimensions for later calculations
-            mViewWidth = width;
-            mViewHeight = height;
-
-            // If texture data already exists, update vertex coordinates to match texture aspect
-            // ratio
-            if (mTextureWidth > 0 && mTextureHeight > 0) {
-                updateVertexCoordinates();
-            }
-        }
-
-        // Update vertex coordinates to maintain video aspect ratio
-        private void updateVertexCoordinates() {
-            if (mViewWidth <= 0 || mViewHeight <= 0 || mTextureWidth <= 0 || mTextureHeight <= 0) {
-                return;
-            }
-
-            // Calculate view and texture aspect ratios
-            float viewAspectRatio = (float) mViewWidth / mViewHeight;
-            float textureAspectRatio;
-
-            // Consider rotation
-            if (mRotation == 90 || mRotation == 270) {
-                // Width and height are swapped after rotation
-                textureAspectRatio = (float) mTextureHeight / mTextureWidth;
-            } else {
-                textureAspectRatio = (float) mTextureWidth / mTextureHeight;
-            }
-
-            // Set vertex coordinates while maintaining texture aspect ratio
-            float[] adjustedVertices = new float[8];
-
-            if (textureAspectRatio > viewAspectRatio) {
-                // Texture is wider than view, adjust height
-                float heightRatio = viewAspectRatio / textureAspectRatio;
-                adjustedVertices[0] = -1.0f; // Bottom left x
-                adjustedVertices[1] = -heightRatio; // Bottom left y
-                adjustedVertices[2] = 1.0f; // Bottom right x
-                adjustedVertices[3] = -heightRatio; // Bottom right y
-                adjustedVertices[4] = -1.0f; // Top left x
-                adjustedVertices[5] = heightRatio; // Top left y
-                adjustedVertices[6] = 1.0f; // Top right x
-                adjustedVertices[7] = heightRatio; // Top right y
-            } else {
-                // Texture is higher than view, adjust width
-                float widthRatio = textureAspectRatio / viewAspectRatio;
-                adjustedVertices[0] = -widthRatio; // Bottom left x
-                adjustedVertices[1] = -1.0f; // Bottom left y
-                adjustedVertices[2] = widthRatio; // Bottom right x
-                adjustedVertices[3] = -1.0f; // Bottom right y
-                adjustedVertices[4] = -widthRatio; // Top left x
-                adjustedVertices[5] = 1.0f; // Top left y
-                adjustedVertices[6] = widthRatio; // Top right x
-                adjustedVertices[7] = 1.0f; // Top right y
-            }
-
-            // Update vertex buffer
-            ByteBuffer bb = ByteBuffer.allocateDirect(adjustedVertices.length * 4);
-            bb.order(ByteOrder.nativeOrder());
-            mVertexBuffer = bb.asFloatBuffer();
-            mVertexBuffer.put(adjustedVertices);
-            mVertexBuffer.position(0);
-
-            Log.d(TAG,
-                    "Video aspect ratio updated: View=" + viewAspectRatio
-                            + ", Texture=" + textureAspectRatio + ", Rotation=" + mRotation);
-        }
-
-        @Override
-        public void onDrawFrame(GL10 gl) {
-            // Clear screen
-            GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
-
-            synchronized (mLock) {
-                if (mTextureNeedsUpdate && mTextureData != null) {
-                    GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextureID);
-                    GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, mTextureWidth,
-                            mTextureHeight, 0, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE,
-                            mTextureData);
-                    mTextureNeedsUpdate = false;
-                }
-            }
-
-            // Use shader program
-            GLES20.glUseProgram(mProgramHandle);
-
-            // Set vertex coordinates
-            GLES20.glVertexAttribPointer(
-                    mPositionHandle, 2, GLES20.GL_FLOAT, false, 0, mVertexBuffer);
-            GLES20.glEnableVertexAttribArray(mPositionHandle);
-
-            // Set texture coordinates
-            GLES20.glVertexAttribPointer(
-                    mTextureCoordHandle, 2, GLES20.GL_FLOAT, false, 0, mTexCoordBuffer);
-            GLES20.glEnableVertexAttribArray(mTextureCoordHandle);
-
-            // Set texture
-            GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextureID);
-            GLES20.glUniform1i(mTextureSamplerHandle, 0);
-
-            // Draw
-            GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
-
-            // Disable vertex array
-            GLES20.glDisableVertexAttribArray(mPositionHandle);
-            GLES20.glDisableVertexAttribArray(mTextureCoordHandle);
-        }
-
-        // Update texture data and handle rotation
-        public void updateTextureData(byte[] data, int width, int height, int sensorOrientation) {
-            synchronized (mLock) {
-                boolean sizeChanged = (mTextureWidth != width || mTextureHeight != height);
-
-                if (mTextureData == null || sizeChanged) {
-                    mTextureData = ByteBuffer.allocateDirect(width * height * 4);
-                    mTextureData.order(ByteOrder.nativeOrder());
-                    mTextureWidth = width;
-                    mTextureHeight = height;
-                }
-
-                mTextureData.clear();
-                mTextureData.put(data);
-                mTextureData.position(0);
-                mTextureNeedsUpdate = true;
-
-                // When rotation changes, update texture coordinates
-                int rotation = getRotationDegrees(sensorOrientation);
-                boolean rotationChanged = (rotation != mRotation);
-
-                if (rotationChanged) {
-                    mRotation = rotation;
-                    updateTextureCoordinates(mRotation);
-                }
-
-                // If size or rotation changes, update vertex coordinates to maintain aspect ratio
-                if (sizeChanged || rotationChanged) {
-                    updateVertexCoordinates();
-                }
-            }
-        }
-
-        // Get appropriate rotation angle based on sensor orientation
-        private int getRotationDegrees(int sensorOrientation) {
-            // Determine rotation angle, considering device orientation and front/rear camera
-            int deviceOrientation = getWindowManager().getDefaultDisplay().getRotation() * 90;
-
-            // Front camera needs special handling
-            boolean isFrontCamera = (mCamera2Helper != null)
-                    && (Camera2Helper.CAMERA_FACING == CameraCharacteristics.LENS_FACING_FRONT);
-
-            int rotationDegrees;
-            if (isFrontCamera) {
-                rotationDegrees = (sensorOrientation + deviceOrientation) % 360;
-            } else {
-                rotationDegrees = (sensorOrientation - deviceOrientation + 360) % 360;
-            }
-
-            return rotationDegrees;
-        }
-
-        // Compile shader
-        private int compileShader(int type, String shaderCode) {
-            int shader = GLES20.glCreateShader(type);
-            GLES20.glShaderSource(shader, shaderCode);
-            GLES20.glCompileShader(shader);
-
-            final int[] compileStatus = new int[1];
-            GLES20.glGetShaderiv(shader, GLES20.GL_COMPILE_STATUS, compileStatus, 0);
-
-            if (compileStatus[0] == 0) {
-                Log.e(TAG, "Error compiling shader: " + GLES20.glGetShaderInfoLog(shader));
-                GLES20.glDeleteShader(shader);
-                return 0;
-            }
-
-            return shader;
+        try (FileOutputStream fos = new FileOutputStream(outFile)) {
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.flush();
+            runOnUiThread(() ->
+                    Toast.makeText(MainActivity.this,
+                            "Save successful: " + outFile.getAbsolutePath(), Toast.LENGTH_SHORT).show());
+        } catch (IOException e) {
+            Log.e(TAG, "Failed to save capture", e);
+            runOnUiThread(() ->
+                    Toast.makeText(MainActivity.this,
+                            "Save failed: " + e.getMessage(), Toast.LENGTH_LONG).show());
+        } finally {
+            bitmap.recycle();
         }
     }
 
@@ -597,7 +505,7 @@ public class MainActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
             // If no camera permission, request permission
-            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA},
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA},
                     CAMERA_PERMISSION_REQUEST_CODE);
         } else {
             // Has permission, set up camera
@@ -621,7 +529,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mGLSurfaceView.onResume();
 
         if (mCamera2Helper != null && !mCamera2Helper.isCameraOpened()) {
             mCamera2Helper.startCamera();
@@ -631,7 +538,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        mGLSurfaceView.onPause();
 
         if (mCamera2Helper != null) {
             mCamera2Helper.stopCamera();
@@ -673,11 +579,20 @@ public class MainActivity extends AppCompatActivity {
             mSourceRawData = null;
         }
 
-        if (mSinkRawData != null) {
-            mSinkRawData.Destroy();
-            mSinkRawData = null;
+        if (mCaptureSinkRawData != null) {
+            mCaptureSinkRawData.Destroy();
+            mCaptureSinkRawData = null;
         }
 
+        if (mSinkSurface != null) {
+            mSinkSurface.Destroy();
+            mSinkSurface = null;
+        }
+
+        if (mCaptureExecutor != null) {
+            mCaptureExecutor.shutdownNow();
+            mCaptureExecutor = null;
+        }
         super.onDestroy();
     }
 }

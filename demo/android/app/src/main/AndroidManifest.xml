@@ -14,8 +14,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GPUPixel">
         <activity
-            android:name="com.pixpark.GPUPixelApp.MainActivity"
-            android:exported="true">
+            android:name=".MainActivity">
+
+        </activity>
+        <activity android:name=".StartActivity"
+            android:exported="true"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
