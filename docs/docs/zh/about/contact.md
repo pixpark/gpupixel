@@ -10,17 +10,6 @@ description: 多种方式联系 GPUPixel 团队
 
 ## 社区交流
 
-### Discord 社区
-<p align="center">
-<a href="https://discord.gg/q2MjmqK4" target="_blank">
-    <img src="../../image/discord-logo-blue.svg" alt="Discord" style="width: 200px;">
-</a>
-</p>
-- 国际开发者社区
-- 实时技术讨论
-- 问题解答支持
-- [立即加入 Discord](https://discord.gg/q2MjmqK4)
-
 ### QQ 技术交流群
 <p align="center">
 <img src="../../image/qq-group.jpg" alt="QQ群" style="width: 250px;">
@@ -51,28 +40,6 @@ description: 多种方式联系 GPUPixel 团队
 - 商务合作
 - 技术支持
 - 其他咨询
-
-## 专业支持
-
-### 知识星球
-<p align="center">
-<img src="../../image/zhishixingqiu.jpg" alt="知识星球" style="width: 500px;">
-</p>
-加入我们的知识星球，获得：
-- 🚀 专业技术咨询
-- 💡 最佳实践指导
-- 🛠️ 优先问题处理
-- 📚 独家技术文档
-- 🎯 定制化方案
-
-### 企业服务
-为企业用户提供：
-- 专属技术支持
-- 定制化开发
-- 性能优化咨询
-- 商业授权
-
-如需企业级支持，请发送邮件至 [hello@pixpark.net](mailto:hello@pixpark.net)，标题注明「企业服务」。
 
 ---
 

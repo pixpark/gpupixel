@@ -66,10 +66,6 @@ function nav(): DefaultTheme.NavItem[] {
           ],
         }
       ]
-    },
-    {
-      text: 'Sponsor',
-      link: 'sponsor'
     }
   ]
 }
@@ -104,13 +100,6 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
         { text: 'Custom Output', link: 'custom/custom_target' },
       ]
     },   
-    {
-      text: 'Face Detect',
-      collapsed: false,
-      items: [
-        { text: 'Landmark', link: 'face/landmark' },
-      ]
-    },
     {
       text: 'Reference',
       collapsed: false,

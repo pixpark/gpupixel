@@ -59,14 +59,6 @@ export const shared = defineConfig({
         link: 'https://qm.qq.com/q/8NO7T58HJu',
         ariaLabel: 'QQ Group'
       },
-      {
-        icon: {
-          svg: getSocialIcons.wechat()
-        },
-        link: 'zh/about/contact#官方渠道',
-        ariaLabel: 'WeChat Official Account'
-      },
-      { icon: 'discord', link: 'https://discord.gg/q2MjmqK4'},
       { icon: 'github', link: 'https://github.com/pixpark/gpupixel' },
     ],
 

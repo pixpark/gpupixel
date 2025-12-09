@@ -95,10 +95,6 @@ function nav(): DefaultTheme.NavItem[] {
           ],
         }
       ]
-    },
-    {
-      text: '赞助',
-      link: '/zh/sponsor'
     }
   ]
 }
@@ -131,13 +127,6 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
         { text: '自定义滤镜', link: 'custom/custom_filter' },
         { text: '自定义输入', link: 'custom/custom_input' },
         { text: '自定义输出', link: 'custom/custom_target' },
-      ]
-    },
-    {
-      text: '人脸检测',
-      collapsed: false,
-      items: [
-        { text: '关键点检测', link: 'face/landmark' },
       ]
     },
     {
