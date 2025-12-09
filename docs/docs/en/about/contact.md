@@ -47,7 +47,7 @@ Welcome to connect with the GPUPixel team. We are committed to providing timely 
 - [Pull Requests](https://github.com/pixpark/gpupixel/pulls): Contribute code
 
 ### Email
-📧 [jaaronkot@gmail.com](mailto:jaaronkot@gmail.com)
+📧 [hello@pixpark.net](mailto:hello@pixpark.net)
 - Business cooperation
 - Technical support
 - General inquiries
@@ -72,7 +72,7 @@ We provide enterprise users with:
 - Performance optimization consulting
 - Commercial licensing
 
-For enterprise-level support, please email [jaaronkot@gmail.com](mailto:jaaronkot@gmail.com) with "Enterprise Services" in the subject line.
+For enterprise-level support, please email [hello@pixpark.net](mailto:hello@pixpark.net) with "Enterprise Services" in the subject line.
 
 ---
 

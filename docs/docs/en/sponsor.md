@@ -35,7 +35,7 @@ If you represent a company interested in sponsoring GPUPixel, we offer the follo
 - Company logo display
 - Commercial licensing consultation
 
-Please contact us via email at [jaaronkot@gmail.com](mailto:jaaronkot@gmail.com) with "Corporate Sponsorship" in the subject line.
+Please contact us via email at [hello@pixpark.net](mailto:hello@pixpark.net) with "Corporate Sponsorship" in the subject line.
 
 ## Sponsors
 

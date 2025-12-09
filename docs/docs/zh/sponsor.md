@@ -14,15 +14,7 @@ GPUPixel 是一个开源项目，我们致力于为开发者提供高性能的�
 - 🌍 建设开发者社区
 
 ## 赞助方式
-
-### Ko-fi 支持
-☕ [在 Ko-fi 上支持我们](https://ko-fi.com/jaaron)  
-一次性赞助，支持 PayPal 支付
-
-### Open Collective
-💝 [加入 Open Collective](https://opencollective.com/gpupixel)  
-透明的赞助平台，支持一次性或周期性赞助
-
+ 
 ### 微信赞赏
 💰 扫描下方二维码进行赞赏  
 <img src="../image/wechat_sponsor.jpg" alt="微信赞赏码" style="width: 200px; border-radius: 10px;">
@@ -35,7 +27,7 @@ GPUPixel 是一个开源项目，我们致力于为开发者提供高性能的�
 - 企业 Logo 展示
 - 商业授权咨询
 
-请通过邮件 [jaaronkot@gmail.com](mailto:jaaronkot@gmail.com) 联系我们，标题注明「企业赞助」。
+请通过邮件 [hello@pixpark.net](mailto:hello@pixpark.net) 联系我们，标题注明「企业赞助」。
 
 ## 赞助者名单
 

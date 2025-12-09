@@ -74,10 +74,8 @@ We welcome various forms of contributions, including but not limited to:
 
 ## Contact Us
 
-- 📧 Email: [jaaronkot@gmail.com](mailto:jaaronkot@gmail.com)
-- 💬 Discord: [Join Discussion](https://discord.gg/q2MjmqK4)
-- 🐦 Twitter: [@jaaronkot](https://twitter.com/jaaronkot)
-
+- 📧 Email: [hello@pixpark.net](mailto:hello@pixpark.net)
+ 
 ---
 
 💝 Thank you to all developers who have contributed to the GPUPixel project!

@@ -47,7 +47,7 @@ description: 多种方式联系 GPUPixel 团队
 - [Pull Requests](https://github.com/pixpark/gpupixel/pulls): 贡献代码
 
 ### 电子邮件
-📧 [jaaronkot@gmail.com](mailto:jaaronkot@gmail.com)
+📧 [hello@pixpark.net](mailto:hello@pixpark.net)
 - 商务合作
 - 技术支持
 - 其他咨询
@@ -72,7 +72,7 @@ description: 多种方式联系 GPUPixel 团队
 - 性能优化咨询
 - 商业授权
 
-如需企业级支持，请发送邮件至 [jaaronkot@gmail.com](mailto:jaaronkot@gmail.com)，标题注明「企业服务」。
+如需企业级支持，请发送邮件至 [hello@pixpark.net](mailto:hello@pixpark.net)，标题注明「企业服务」。
 
 ---
 

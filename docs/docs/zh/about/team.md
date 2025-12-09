@@ -74,10 +74,8 @@ GPUPixel 项目由 [Jaaron Kot](https://github.com/jaaronkot) 创建并主导开
 
 ## 联系我们
 
-- 📧 邮件：[jaaronkot@gmail.com](mailto:jaaronkot@gmail.com)
-- 💬 Discord：[加入讨论](https://discord.gg/q2MjmqK4)
-- 🐦 Twitter：[@jaaronkot](https://twitter.com/jaaronkot)
-
+- 📧 邮件：[hello@pixpark.net](mailto:hello@pixpark.net)
+ 
 ---
 
 💝 感谢所有为 GPUPixel 项目做出贡献的开发者！

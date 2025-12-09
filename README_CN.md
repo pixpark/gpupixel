@@ -124,7 +124,7 @@
 ## 联系 & 支持
 - 📚 [文档](https://gpupixel.pixpark.net/)：文档中心
 - 🐛 [提问](https://github.com/pixpark/gpupixel/issues/new/choose)：问题报告和功能请求
-- 📧 [邮件](mailto:jaaronkot@gmail.com?subject=[GitHub]Questions%20About%20GPUPixel)：联系我们
+- 📧 [邮件](mailto:hello@pixpark.net?subject=[GitHub]Questions%20About%20GPUPixel)：联系我们
 - 📞 [联系](docs/docs/zh/about/contact.md)：更多联系方式
 
 ## 感谢

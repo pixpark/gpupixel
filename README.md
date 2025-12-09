@@ -101,7 +101,7 @@ Consider sharing GPUPixel on social media and at events.
 ## Contact & Support
 - 📚 [Docs](https://gpupixel.pixpark.net/): Documentation
 - 🐛 [Issues](https://github.com/pixpark/gpupixel/issues/new/choose): Bug reports and feature requests
-- 📧 [Email](mailto:jaaronkot@gmail.com?subject=[GitHub]Questions%20About%20GPUPixel): Contact us
+- 📧 [Email](mailto:hello@pixpark.net?subject=[GitHub]Questions%20About%20GPUPixel): Contact us
 - 📞 [Contact](docs/docs/en/about/contact.md): More ways to connect
 
 ## Acknowledgements
