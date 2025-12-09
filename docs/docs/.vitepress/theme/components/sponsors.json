@@ -1,0 +1,15 @@
+{
+  "platinum": [],
+  "gold": [
+    {
+      "alt": "FaceBetter",
+      "href": "https://facebetter.net",
+      "imgSrcDark": "/fb-logo-dark.svg",
+      "imgSrcLight": "/fb-logo-light.svg",
+      "description": "Better face beauty effects sdk"
+    }
+  ],
+  "silver": [],
+  "bronze": []
+}
+

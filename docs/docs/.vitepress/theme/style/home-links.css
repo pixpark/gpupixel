@@ -1,0 +1,76 @@
+/* Style for Facebetter button in the home page */
+/* Only apply to buttons in the hero section, not sponsor links */
+
+.VPHero .actions a[href="https://facebetter.net"] {
+  height: 100%;
+  line-height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  white-space: pre;
+  min-height: 41px;
+  position: relative;
+  background-color: #2a2a2a !important;
+  color: white !important;
+  border: 1px solid transparent !important;
+  font-weight: 600;
+  font-size: 1.1em;
+  padding-left: 3rem;
+}
+
+.VPHero .actions a[href="https://facebetter.net"]::before {
+  content: '';
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  background-image: url('/favicon.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.VPHero .actions a[href="https://facebetter.net"]:hover {
+  background-color: #2a2a2a !important;
+  color: white !important;
+}
+
+.VPHero .actions a[href="https://facebetter.net"]:hover::after {
+  animation: none;
+}
+
+.VPHero .actions a[href="https://facebetter.net"]::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 1px solid #fbbf24;
+  border-radius: 20px;
+  animation: ping 3s cubic-bezier(0, 0, 0.2, 1) infinite;
+  z-index: -1;
+}
+
+@keyframes ping {
+  15%,
+  to {
+    transform: scale(1.25, 2);
+    opacity: 0;
+  }
+}
+
+html.dark .VPHero .actions a[href="https://facebetter.net"] {
+  background-color: #2a2a2a !important;
+}
+
+html.dark .VPHero .actions a[href="https://facebetter.net"]::after {
+  border-color: #fbbf24;
+}
+
+.VPHero .actions a[href="https://facebetter.net"] span {
+  color: #fbbf24 !important;
+}
+

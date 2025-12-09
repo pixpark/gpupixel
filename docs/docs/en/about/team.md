@@ -49,13 +49,7 @@ The GPUPixel project was created and is led by [Jaaron Kot](https://github.com/j
 - 📱 Cross-platform compatibility support
 - 🛠️ Developer tools improvement
 - 📖 Documentation and demo refinement
-
-## Community Contributors
-
-Thanks to the following community members for their contributions:
-
-<VPTeamMembers size="small" :members="contributors" />
-
+ 
 ## Join Us
 
 We welcome various forms of contributions, including but not limited to:

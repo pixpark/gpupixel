@@ -34,105 +34,92 @@
 
 ---
 
-> 🌟 欢迎加入我们，通过参与[讨论](https://github.com/pixpark/gpupixel/discussions)、创建[问题](https://github.com/pixpark/gpupixel/issues/new/choose)、提交[PRs](https://github.com/pixpark/gpupixel/pulls)，让GPUPixel变得更好。
+> 欢迎加入我们，通过参与[讨论](https://github.com/pixpark/gpupixel/discussions)、创建[问题](https://github.com/pixpark/gpupixel/issues/new/choose)、提交[PRs](https://github.com/pixpark/gpupixel/pulls)，让GPUPixel变得更好。
 
-> 📢 注意：从v1.3.0-beta版本开始，VNN人脸检测库已被Mars-Face替代
-
+ 
 ## 简介
 
-🚀 一个高性能、跨平台的图像和视频滤镜库，体积小巧。
+GPUPixel 是一个高性能、跨平台的图像和视频滤镜库，体积小巧。使用 C++11 和 OpenGL/ES 构建，提供美颜滤镜功能。支持 iOS、Android、Mac、Windows 和 Linux，兼容所有 OpenGL/ES 平台。
 
-💻 使用C++11和OpenGL/ES构建，提供美颜滤镜。
+## 赞助
 
-🌐 支持iOS、Android、Mac、Windows和Linux，兼容所有OpenGL/ES平台。
+<p align="center">
+  <h3 align="center">特别赞助</h3>
+</p>
+
+<p align="center">
+  我们衷心感谢 <a href="https://facebetter.net" target="_blank"><strong>Facebetter</strong></a> 对 GPUPixel 项目的慷慨赞助和支持。
+</p>
+ 
+<p align="center">
+  <a href="https://facebetter.net" target="_blank">
+    <img src="./docs/docs/public/fb-logo-light.svg" alt="Facebetter SDK" width="280" />
+  </a>
+</p>
+
+<p align="center">
+  <strong>Better face beauty effects SDK</strong> - <a href="https://facebetter.net" target="_blank">了解更多</a>
+</p>
 
 ## 效果预览
-🎬 **视频: <a href="https://youtu.be/9BY1Qx1NEPs" target="_blank">YouTube</a>**
 
-|              **原图**              |                **磨皮**                |               **美白**               |                 **瘦脸**               |
-| :--------------------------------: | :------------------------------------: | :----------------------------------: | :------------------------------------: |
-| ![origin](./docs/image/origin.gif) |   ![smooth](./docs/image/smooth.gif)   |   ![white](./docs/image/white.gif)   | ![thinface](./docs/image/thinface.gif) |
-|              **大眼**              |                **口红**                |               **腮红**               |                 **开关**               |
-| ![bigeye](./docs/image/bigeye.gif) | ![lipstick](./docs/image/lipstick.gif) | ![blusher](./docs/image/blusher.gif) |   ![on-off](./docs/image/on-off.gif)   |
- 
-## 特性对比
+https://github.com/user-attachments/assets/6b760fa6-e28f-4428-bfca-dec54a4e82d8
 
-✨ **GPUPixel**、**GPUImage**和**Android-GPUImage**功能对比：
-
-✅: 支持 | ❌: 不支持 | ✏️: 计划中
-
-|                       | [GPUPixel](https://github.com/pixpark/gpupixel) | [GPUImage](https://github.com/BradLarson/GPUImage) | [Android-GPUImage](https://github.com/cats-oss/android-gpuimage) |
-| :-------------------- | :---------------------------------------------: | :------------------------------------------------: | :----------------------------------------------------------: |
-| 📷 **滤镜：**        |                        ✅                        |                         ❌                          |                              ❌                               |
-| 磨皮                  |                        ✅                        |                         ❌                          |                              ❌                               |
-| 美白                  |                        ✅                        |                         ❌                          |                              ❌                               |
-| 瘦脸                  |                        ✅                        |                         ❌                          |                              ❌                               |
-| 大眼                  |                        ✅                        |                         ❌                          |                              ❌                               |
-| 口红                  |                        ✅                        |                         ❌                          |                              ❌                               |
-| 腮红                  |                        ✅                        |                         ❌                          |                              ❌                               |
-| 内建滤镜              |                        ✅                        |                         ✅                          |                              ✅                               |
-| 🎬 **输入格式：**    |                                                   |                                                     |                                                                |
-| YUV420P(I420)         |                        ✅                        |                         ❌                          |                              ❌                               |
-| RGBA                  |                        ✅                        |                         ✅                          |                              ✅                               |
-| JPEG                  |                        ✅                        |                         ✅                          |                              ✅                               |
-| PNG                   |                        ✅                        |                         ✅                          |                              ✅                               |
-| NV21(for Android)     |                        ✏️                        |                         ❌                          |                              ❌                               |
-| 🎥 **输出格式：**    |                                                   |                                                     |                                                                |
-| RGBA                  |                        ✅                        |                         ✅                          |                              ✅                               |
-| YUV420P(I420)         |                        ✏️                        |                         ❌                          |                              ❌                               |
-| 💻 **平台系统：**    |                                                   |                                                     |                                                                |
-| iOS                   |                        ✅                        |                         ✅                          |                              ❌                               |
-| Mac                   |                        ✅                        |                         ✅                          |                              ❌                               |
-| Android               |                        ✅                        |                         ❌                          |                              ✅                               |
-| Win                   |                        ✅                        |                         ❌                          |                              ❌                               |
-| Linux                 |                        ✅                        |                         ❌                          |                              ❌                               |
- 
 ## 开始之前
-⭐ 在GitHub上给我们点个星，获取新版本发布通知！
+
+在 GitHub 上给我们点个星，获取新版本发布通知！
 
 ![](./docs/image/give-star.gif)
 
 ## 快速开始
 
-🔍 查看文档：[简介](https://gpupixel.pixpark.net/zh/guide/build) | [编译](https://gpupixel.pixpark.net/zh/guide/build) | [示例](https://gpupixel.pixpark.net/zh/guide/demo) | [集成](https://gpupixel.pixpark.net/zh/guide/integrated)
+查看文档：[简介](https://gpupixel.pixpark.net/zh/guide/build) | [编译](https://gpupixel.pixpark.net/zh/guide/build) | [示例](https://gpupixel.pixpark.net/zh/guide/demo) | [集成](https://gpupixel.pixpark.net/zh/guide/integrated)
 
 ## 参与贡献
 
-🤝 通过参与[讨论](https://github.com/pixpark/gpupixel/discussions)、创建[问题](https://github.com/pixpark/gpupixel/issues/new/choose)或提交[PR](https://github.com/pixpark/gpupixel/pulls)来改进GPUPixel。查看我们的[贡献指南](docs/docs/zh/guide/contributing.md)了解如何开始。
+我们欢迎您的贡献！通过参与[讨论](https://github.com/pixpark/gpupixel/discussions)、创建[问题](https://github.com/pixpark/gpupixel/issues/new/choose)或提交[PR](https://github.com/pixpark/gpupixel/pulls)来改进 GPUPixel。查看我们的[贡献指南](docs/docs/zh/guide/contributing.md)了解如何开始。
 
-欢迎在社交媒体和活动中分享GPUPixel。
+我们也欢迎您在社交媒体和活动中分享 GPUPixel。
 
 ## 贡献者
- [![](https://opencollective.com/gpupixel/contributors.svg?width=890&button=false)](https://github.com/pixpark/gpupixel/graphs/contributors)
 
-## 赞助
-💖 支持本项目：
+[![](https://opencollective.com/gpupixel/contributors.svg?width=890&button=false)](https://github.com/pixpark/gpupixel/graphs/contributors)
 
-| [☕ 在 Ko-fi 上支持](docs/docs/zh/sponsor.md#ko-fi) | [💝 在 Open Collective 上支持](docs/docs/zh/sponsor.md#open-collective) | [💰 微信赞助](docs/docs/zh/sponsor.md#微信赞赏) |
-|:---:|:---:|:---:|
+## 更多赞助者
 
-## 赞助者
-🙏 感谢这些贡献者的慷慨支持：
+感谢这些贡献者的慷慨支持：
 
 <a href="https://github.com/leavenotrace">
-  <img src="https://github.com/leavenotrace.png" style="border-radius:50%; width: 50px; height: 50px;" >
+  <picture>
+    <img src="https://github.com/leavenotrace.png" width="50" height="50" style="border-radius: 50%;" alt="@leavenotrace">
+  </picture>
 </a>
 <a href="https://github.com/weiyu666">
-  <img src="https://github.com/weiyu666.png" style="border-radius: 50%; width: 50px; height: 50px;" >
+  <picture>
+    <img src="https://github.com/weiyu666.png" width="50" height="50" style="border-radius: 50%;" alt="@weiyu666">
+  </picture>
+</a>
+<a href="https://github.com/lambiengcode">
+  <picture>
+    <img src="https://github.com/lambiengcode.png" width="50" height="50" style="border-radius: 50%;" alt="@lambiengcode">
+  </picture>
 </a>
 
 ## 联系 & 支持
-- 📚 [文档](https://gpupixel.pixpark.net/)：文档中心
-- 🐛 [提问](https://github.com/pixpark/gpupixel/issues/new/choose)：问题报告和功能请求
-- 📧 [邮件](mailto:hello@pixpark.net?subject=[GitHub]Questions%20About%20GPUPixel)：联系我们
-- 📞 [联系](docs/docs/zh/about/contact.md)：更多联系方式
+
+- [文档](https://gpupixel.pixpark.net/)：完整文档和指南
+- [问题](https://github.com/pixpark/gpupixel/issues/new/choose)：错误报告和功能请求
+- [邮件](mailto:hello@pixpark.net?subject=[GitHub]Questions%20About%20GPUPixel)：直接联系我们
+- [联系页面](docs/docs/zh/about/contact.md)：更多联系方式
 
 ## 感谢
-### 🔗 参考项目
-1. [GPUImage](https://github.com/BradLarson/GPUImage) 
+
+### 参考项目
+
+1. [GPUImage](https://github.com/BradLarson/GPUImage)
 2. [GPUImage-x](https://github.com/wangyijin/GPUImage-x)
 3. [CainCamera](https://github.com/CainKernel/CainCamera)
-4. [VNN](https://github.com/joyycom/VNN)
 
 ## License
-📄 此开源项目遵从[Apache-2.0 License](https://github.com/pixpark/gpupixel?tab=Apache-2.0-1-ov-file)。
+
+此仓库基于 [Apache-2.0 License](https://github.com/pixpark/gpupixel?tab=Apache-2.0-1-ov-file) 许可。

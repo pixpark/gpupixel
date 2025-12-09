@@ -49,13 +49,7 @@ GPUPixel 项目由 [Jaaron Kot](https://github.com/jaaronkot) 创建并主导开
 - 📱 跨平台兼容性支持
 - 🛠️ 开发者工具改进
 - 📖 文档和示例完善
-
-## 社区贡献者
-
-感谢以下社区成员对项目的贡献：
-
-<VPTeamMembers size="small" :members="contributors" />
-
+ 
 ## 加入我们
 
 我们欢迎各类形式的贡献，包括但不限于：

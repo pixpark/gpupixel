@@ -5,6 +5,8 @@ import { useData } from 'vitepress'
 import DefaultTheme from 'vitepress/theme'
 import { nextTick, provide } from 'vue'
 import backtotop from "./backtotop.vue"
+import AsideSponsors from "./AsideSponsors.vue"
+import FacebetterBanner from "./FacebetterBanner.vue"
 
 const { isDark } = useData()
 
@@ -44,6 +46,12 @@ provide('toggle-appearance', async ({ clientX: x, clientY: y }: MouseEvent) => {
 
 <template>
   <DefaultTheme.Layout v-bind="$attrs">
+    <template #layout-top>
+      <FacebetterBanner />
+    </template>
+    <template #aside-top>
+      <AsideSponsors />
+    </template>
     <template #doc-footer-before>
       <backtotop />
     </template>
