@@ -75,19 +75,11 @@ function nav(): DefaultTheme.NavItem[] {
       text: '关于',
       items: [
         {
-          text: '团队',
-          link: '/zh/about/team'
-        },
-        {
           text: '联系',
           link: '/zh/about/contact'
         },
         {
           items: [
-            {
-              text: '博客',
-              link: 'https://pixpark.net'
-            },
             {
               text: '代码贡献',
               link: 'https://github.com/pixpark/gpupixel/issues/new/choose'

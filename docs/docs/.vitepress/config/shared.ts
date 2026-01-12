@@ -52,13 +52,6 @@ export const shared = defineConfig({
     logo: { src: '/logo.png', width: 24, height: 24 },
 
     socialLinks: [
-      { 
-        icon: {
-          svg: getSocialIcons.qq()
-        },
-        link: 'https://qm.qq.com/q/8NO7T58HJu',
-        ariaLabel: 'QQ Group'
-      },
       { icon: 'github', link: 'https://github.com/pixpark/gpupixel' },
     ],
 

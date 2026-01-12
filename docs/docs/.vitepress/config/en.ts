@@ -46,19 +46,11 @@ function nav(): DefaultTheme.NavItem[] {
       text: 'About',
       items: [
         {
-          text: 'Team',
-          link: '/about/team'
-        },
-        {
           text: 'Contact',
           link: 'about/contact'
         },
         {
           items: [
-            {
-              text: 'Blog',
-              link: 'https://pixpark.net' 
-            },
             {
               text: 'Contributing',
               link: 'https://github.com/pixpark/gpupixel/issues/new/choose'

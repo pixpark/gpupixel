@@ -68,34 +68,21 @@ class SinkRender : public Sink {
 
 - Supports RGBA and I420 format output
 - Uses PBO (Pixel Buffer Object) for optimized reading performance
-- Supports asynchronous callbacks
+- Data is read via getter APIs after the pipeline has run (pull model, not callbacks)
 
-Key implementation:
+Public API (call after the source has run `ProcessData` or `Render()`):
 
 ```cpp
 class SinkRawData : public Sink {
  public:
-  // Set callback functions
-  void setI420Callbck(RawOutputCallback cb);
-  void setPixelsCallbck(RawOutputCallback cb);
+  static std::shared_ptr<SinkRawData> Create();
+  void Render() override;
 
-  // Implement update method
-  void Render() override {
-    // Check input size changes
-    if (_width != width || _height != height) {
-      initPBO(width, height);
-      initFrameBuffer(width, height);
-      initOutputBuffer(width, height);
-    }
-    // Render to output
-    renderToOutput();
-    // Read pixel data using PBO
-    readPixelsWithPBO(_width, _height);
-    // Output data through callback
-    if (i420_callback_) {
-      i420_callback_(_yuvFrameBuffer, _width, _height, _frame_ts);
-    }
-  }
+  // Get output dimensions and buffers (pull model, not callbacks)
+  const uint8_t* GetRgbaBuffer();
+  const uint8_t* GetI420Buffer();
+  int GetWidth() const;
+  int GetHeight() const;
 };
 ```
 

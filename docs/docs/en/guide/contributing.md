@@ -109,7 +109,6 @@ private:
 - Follow our code of conduct
 - Give credit where due
 ## Getting Help
-- Join our Discord community
 - Ask questions in GitHub Discussions
 - Contact maintainers via email
 ## License

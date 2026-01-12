@@ -109,7 +109,6 @@ private:
 - 遵守我们的行为准则
 - 适当给予信任
 ## 获取帮助
-- 加入我们的 Discord 社区
 - 在 GitHub Discussions 中提问
 - 通过 电子邮件 联系维护者
 ## 许可证

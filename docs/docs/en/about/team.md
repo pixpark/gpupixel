@@ -63,8 +63,7 @@ We welcome various forms of contributions, including but not limited to:
 ### How to Participate
 
 1. Check our [Contribution Guide](../guide/contributing)
-2. Join our [Discord](https://discord.gg/q2MjmqK4) community
-3. Follow project updates on [GitHub](https://github.com/pixpark/gpupixel)
+2. Follow project updates on [GitHub](https://github.com/pixpark/gpupixel)
 
 ## Contact Us
 

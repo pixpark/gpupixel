@@ -63,8 +63,7 @@ GPUPixel 项目由 [Jaaron Kot](https://github.com/jaaronkot) 创建并主导开
 ### 如何参与
 
 1. 查看我们的 [贡献指南](../guide/contributing)
-2. 加入 [Discord](https://discord.gg/q2MjmqK4) 社区
-3. 关注项目 [GitHub](https://github.com/pixpark/gpupixel) 动态
+2. 关注项目 [GitHub](https://github.com/pixpark/gpupixel) 动态
 
 ## 联系我们
 

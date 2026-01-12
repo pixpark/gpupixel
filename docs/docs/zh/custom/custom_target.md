@@ -68,34 +68,21 @@ class SinkRender : public Sink {
 
 - 支持 RGBA 和 I420 格式输出
 - 使用 PBO（Pixel Buffer Object）优化读取性能
-- 支持异步回调
+- 管线执行完成后，通过拉取接口获取数据
 
-关键实现：
+对外接口（在 Source 执行 `ProcessData` 或 `Render()` 之后调用）：
 
 ```cpp
 class SinkRawData : public Sink {
  public:
-  // 设置回调函数
-  void setI420Callbck(RawOutputCallback cb);
-  void setPixelsCallbck(RawOutputCallback cb);
+  static std::shared_ptr<SinkRawData> Create();
+  void Render() override;
 
-  // 实现更新方法
-  void Render() override {
-    // 检查输入尺寸变化
-    if (_width != width || _height != height) {
-      initPBO(width, height);
-      initFrameBuffer(width, height);
-      initOutputBuffer(width, height);
-    }
-    // 渲染到帧缓冲区
-    renderToOutput();
-    // 使用 PBO 读取像素数据
-    readPixelsWithPBO(_width, _height);
-    // 通过回调函数输出数据
-    if (i420_callback_) {
-      i420_callback_(_yuvFrameBuffer, _width, _height, _frame_ts);
-    }
-  }
+  // 获取输出尺寸与缓冲区（拉取方式，非回调）
+  const uint8_t* GetRgbaBuffer();
+  const uint8_t* GetI420Buffer();
+  int GetWidth() const;
+  int GetHeight() const;
 };
 ```
 

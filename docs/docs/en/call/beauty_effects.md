@@ -23,12 +23,8 @@ For more complex effects, you can create multiple filters and chain them togethe
    face_reshape_filter_ = FaceReshapeFilter::Create();
    beauty_face_filter_ = BeautyFaceFilter::Create();
    
-   // Register face landmark callback for filters that need facial features
-   gpuPixelRawInput->RegLandmarkCallback([=](std::vector<float> landmarks) {
-      lipstick_filter_->SetFaceLandmarks(landmarks);
-      blusher_filter_->SetFaceLandmarks(landmarks);
-      face_reshape_filter_->SetFaceLandmarks(landmarks);
-   });
+   // Create face detector (requires GPUPIXEL_ENABLE_FACE_DETECTOR)
+   face_detector_ = FaceDetector::Create();
    
    // Link the filter chain
    gpuPixelRawInput->AddSink(lipstick_filter_)
@@ -36,6 +32,30 @@ For more complex effects, you can create multiple filters and chain them togethe
                   ->AddSink(face_reshape_filter_)
                   ->AddSink(beauty_face_filter_)
                   ->AddSink(target_raw_output_);
+```
+
+Before processing each frame, run face detection and pass the landmarks to filters that need facial features:
+
+```cpp
+   // Get current frame image data (width, height, stride, etc.)
+   const uint8_t* buffer = ...;  // e.g. from camera or other input
+   int width = ..., height = ..., stride = ...;
+
+   std::vector<float> landmarks = face_detector_->Detect(
+       buffer, width, height, stride,
+       GPUPIXEL_MODE_FMT_PICTURE, GPUPIXEL_FRAME_TYPE_RGBA);
+
+   if (!landmarks.empty()) {
+      lipstick_filter_->SetFaceLandmarks(landmarks);
+      blusher_filter_->SetFaceLandmarks(landmarks);
+      face_reshape_filter_->SetFaceLandmarks(landmarks);
+   }
+
+   // Then run the filter pipeline: with SourceRawData call ProcessData to feed
+   // the frame and trigger rendering; with SourceImage use GetRgbaImageBuffer()
+   // then source->Render()
+   gpuPixelRawInput->ProcessData(buffer, width, height, stride,
+                                GPUPIXEL_FRAME_TYPE_RGBA);
 ```
 
 ## Adjusting Filter Parameters
