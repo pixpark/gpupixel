@@ -18,11 +18,19 @@ using namespace gpupixel;
 @interface ImageFilterController () {
   GPUPixelView *gpuPixelView;
   std::shared_ptr<BeautyFaceFilter> beauty_face_filter_;
-  std::shared_ptr<FaceReshapeFilter> face_reshape_filter_;
-  std::shared_ptr<gpupixel::FaceMakeupFilter> lipstick_filter_;
-  std::shared_ptr<gpupixel::FaceMakeupFilter> blusher_filter_;
+  
+  std::vector<std::shared_ptr<FaceReshapeFilter>> face_reshape_filters_array_;
+  std::vector<std::shared_ptr<FaceMakeupFilter>> lipstick_filters_array_;
+  std::vector<std::shared_ptr<FaceMakeupFilter>> blusher_filters_array_;
+  
+  std::vector<std::shared_ptr<Filter>> render_filters_array_;
+  int render_filters_array_count;
+  
   std::shared_ptr<SourceImage> gpuSourceImage;
   CADisplayLink *_displayLink;
+  
+  std::vector<std::vector<float>> facesArray_;
+  int facesNum_;
 }
  
 //
@@ -39,6 +47,8 @@ using namespace gpupixel;
 @property (strong, nonatomic) UISegmentedControl *segment;
 @property (strong, nonatomic) UISegmentedControl *effectSwitch;
 @property (strong, nonatomic) UISlider *slider;
+
+@property (assign, nonatomic) BOOL isDidRecognizedFaces;
 
 @end
 
@@ -103,38 +113,66 @@ using namespace gpupixel;
   gpupixel::GPUPixelContext::getInstance()->runSync([&] {
     gpuPixelView = [[GPUPixelView alloc] initWithFrame:self.view.frame];
     [self.view addSubview:gpuPixelView];
-    
-    
-    lipstick_filter_ = LipstickFilter::create();
-    blusher_filter_ = BlusherFilter::create();
  
-   
-    beauty_face_filter_ = BeautyFaceFilter::create();
-    face_reshape_filter_ = FaceReshapeFilter::create();
     // 将图像资源加载到GPUPixel图形引擎
     [self loadImageSourceToGPUPixel];
     // 对图像进行人脸识别, 并赋值到需要人脸识别的滤镜中
     gpuSourceImage->RegFacesDetectorCallback([=](std::vector<std::vector<float>> facesArray, int facesNum) {
-//      NSLog(@"facesNum = %d", facesNum);
-      if (facesNum > 0) {
-        lipstick_filter_->SetFaceLandmarks(facesArray[0]);
-        blusher_filter_->SetFaceLandmarks(facesArray[0]);
-        face_reshape_filter_->SetFaceLandmarks(facesArray[0]);
+      if (self.isDidRecognizedFaces == NO) {
+        if (facesNum > 0) {
+          facesArray_ = facesArray;
+          facesNum_ = facesNum;
+        }
+        
+        self.isDidRecognizedFaces = YES;
       }
     });
-    
-    // filter pipline
-    gpuSourceImage->addTarget(lipstick_filter_)
-                    ->addTarget(blusher_filter_)
-                    ->addTarget(face_reshape_filter_)
-                    ->addTarget(beauty_face_filter_)
-                    ->addTarget(gpuPixelView);
  
     [gpuPixelView setBackgroundColor:[UIColor clearColor]];
     [gpuPixelView setFillMode:(gpupixel::TargetView::PreserveAspectRatioAndFill)];
-  
   });
 }
+- (void)setIsDidRecognizedFaces:(BOOL)isDidRecognizedFaces {
+  _isDidRecognizedFaces = isDidRecognizedFaces;
+  
+  for (int index = 0; index < facesNum_; index++) {
+    std::shared_ptr<FaceMakeupFilter> lipstick_filter = LipstickFilter::create();
+    lipstick_filter->SetFaceLandmarks(facesArray_[index]);
+    lipstick_filters_array_.push_back(lipstick_filter);
+    
+    std::shared_ptr<FaceMakeupFilter> blusher_filter = BlusherFilter::create();
+    blusher_filter->SetFaceLandmarks(facesArray_[index]);
+    blusher_filters_array_.push_back(blusher_filter);
+    
+    std::shared_ptr<FaceReshapeFilter> face_reshape_filter = FaceReshapeFilter::create();
+    face_reshape_filter->SetFaceLandmarks(facesArray_[index]);
+    face_reshape_filters_array_.push_back(face_reshape_filter);
+  }
+  
+  beauty_face_filter_ = BeautyFaceFilter::create();
+  [self addTarget:beauty_face_filter_];
+  
+  for (int index = 0; index < facesNum_; index++) {
+    [self addTarget:lipstick_filters_array_[index]];
+    [self addTarget:blusher_filters_array_[index]];
+    [self addTarget:face_reshape_filters_array_[index]];
+  }
+  
+  render_filters_array_.back()->addTarget(gpuPixelView);
+}
+- (void)addTarget:(std::shared_ptr<Filter>)target {
+  if (render_filters_array_count == 0) {
+    gpuSourceImage->addTarget(target);
+    render_filters_array_.push_back(target);
+    render_filters_array_count = render_filters_array_count + 1;
+    return;
+  }
+  
+  render_filters_array_.back()->addTarget(target);
+  render_filters_array_.push_back(target);
+  render_filters_array_count = render_filters_array_count + 1;
+}
+
 
 - (void)backAction {
   //销毁GPUPixel相关组件, 防止内存泄漏
@@ -148,9 +186,15 @@ using namespace gpupixel;
   _displayLink = nil;
   
   beauty_face_filter_ = nil;
-  face_reshape_filter_ = nil;
-  lipstick_filter_ = nil;
-  blusher_filter_ = nil;
+  for (int index = 0; index < facesNum_; index++) {
+    face_reshape_filters_array_[index] = nil;
+    lipstick_filters_array_[index] = nil;
+    blusher_filters_array_[index] = nil;
+  }
+  for (int index = 0; index < render_filters_array_count; index++) {
+    render_filters_array_[index] = nil;
+  }
+
   [gpuPixelView removeFromSuperview];
   gpuPixelView = nil;
   gpuSourceImage = nil;
@@ -236,22 +280,30 @@ using namespace gpupixel;
 
 - (void)setThinFaceValue:(CGFloat)value{
   _thinFaceValue = value;
-  face_reshape_filter_->setFaceSlimLevel(value/100);
+  for (int index = 0; index < facesNum_; index++) {
+    face_reshape_filters_array_[index]->setFaceSlimLevel(value/100);
+  }
 }
 
 - (void)setEyeValue:(CGFloat)value{
   _eyeValue = value;
-  face_reshape_filter_->setEyeZoomLevel(value/50);
+  for (int index = 0; index < facesNum_; index++) {
+    face_reshape_filters_array_[index]->setEyeZoomLevel(value/50);
+  }
 }
 
 - (void)setLipstickValue:(CGFloat)value{
   _lipstickValue = value;
-  lipstick_filter_->setBlendLevel(value/10);
+  for (int index = 0; index < facesNum_; index++) {
+    lipstick_filters_array_[index]->setBlendLevel(value/10);
+  }
 }
 
 - (void)setBlusherValue:(CGFloat)value{
   _blusherValue = value;
-  blusher_filter_->setBlendLevel(value/10);
+  for (int index = 0; index < facesNum_; index++) {
+    blusher_filters_array_[index]->setBlendLevel(value/10);
+  }
 }
   
 - (void)displayLinkDidFire:(CADisplayLink *)displayLink {
@@ -272,10 +324,13 @@ using namespace gpupixel;
     beauty_face_filter_->setBlurAlpha(0);
     beauty_face_filter_->setSharpen(0);
     beauty_face_filter_->setWhite(0);
-    face_reshape_filter_->setFaceSlimLevel(0);
-    face_reshape_filter_->setEyeZoomLevel(0);
-    lipstick_filter_->setBlendLevel(0);
-    blusher_filter_->setBlendLevel(0);
+    for (int index = 0; index < facesNum_; index++) {
+      face_reshape_filters_array_[index]->setFaceSlimLevel(0);
+      face_reshape_filters_array_[index]->setEyeZoomLevel(0);
+      lipstick_filters_array_[index]->setBlendLevel(0);
+      blusher_filters_array_[index]->setBlendLevel(0);
+    }
+
   }
 }
  
