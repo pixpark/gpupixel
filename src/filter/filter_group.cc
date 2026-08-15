@@ -157,13 +157,13 @@ void FilterGroup::DoUpdateSinks() {
 void FilterGroup::SetFramebuffer(
     std::shared_ptr<GPUPixelFramebuffer> fb,
     RotationMode outputRotation /* = RotationMode::NoRotation*/) {
-  // if (terminal_filter_)
-  //     terminal_filter_->SetFramebuffer(fb);
+  if (terminal_filter_)
+    terminal_filter_->SetFramebuffer(fb, outputRotation);
 }
 
 std::shared_ptr<GPUPixelFramebuffer> FilterGroup::GetFramebuffer() const {
-  // if (terminal_filter_)
-  //     return terminal_filter_->GetFramebuffer();
+  if (terminal_filter_)
+    return terminal_filter_->GetFramebuffer();
   return 0;
 }
 
