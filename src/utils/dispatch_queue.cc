@@ -54,6 +54,7 @@ void DispatchQueue::runTask(std::function<void()> task) {
 
   // Wrap the original task to set the promise when completed
   auto wrappedTask = [task, &promise]() {
+#if defined(__cpp_exceptions) || defined(_CPPUNWIND)
     try {
       task();
       promise.set_value();
@@ -64,6 +65,11 @@ void DispatchQueue::runTask(std::function<void()> task) {
         // Ignore exceptions when the promise is already set
       }
     }
+#else
+    // Exceptions are disabled, so no exception can escape the task
+    task();
+    promise.set_value();
+#endif
   };
 
   // Add the wrapped task to the queue
