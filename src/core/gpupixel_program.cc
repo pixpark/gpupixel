@@ -93,7 +93,20 @@ bool GPUPixelGLProgram::InitWithShaderString(
 
   uint32_t frag_shader;
   GL_CALL(frag_shader = glCreateShader(GL_FRAGMENT_SHADER));
-  const char* fragment_shader_source_str = fragment_shader_source.c_str();
+  // GLSL ES defines no default float precision for fragment shaders, so a
+  // fragment shader that never declares one is rejected by strict compilers
+  // (ANGLE, WebGL, some mobile drivers) even though lenient drivers accept
+  // it. Inject a mediump default for such shaders. Desktop GLSL predating
+  // 1.30 rejects the precision statement instead, so the injected line stays
+  // behind the ES-only guard.
+  std::string fragment_shader_source_precise = fragment_shader_source;
+  if (fragment_shader_source.find("precision") == std::string::npos) {
+    fragment_shader_source_precise =
+        "#ifdef GL_ES\nprecision mediump float;\n#endif\n" +
+        fragment_shader_source;
+  }
+  const char* fragment_shader_source_str =
+      fragment_shader_source_precise.c_str();
   GL_CALL(glShaderSource(frag_shader, 1, &fragment_shader_source_str, NULL));
   GL_CALL(glCompileShader(frag_shader));
 
