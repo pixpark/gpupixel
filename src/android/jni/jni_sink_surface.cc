@@ -65,9 +65,15 @@ extern "C" JNIEXPORT void JNICALL
 Java_com_pixpark_gpupixel_GPUPixelSinkSurface_nativeDestroy(JNIEnv* env,
                                                             jclass clazz,
                                                             jlong native_obj) {
-  // 释放堆上分配的shared_ptr
   auto* ptr = reinterpret_cast<std::shared_ptr<SinkSurface>*>(native_obj);
-  delete ptr;
+  if (!ptr) {
+    return;
+  }
+  // ~SinkSurface() destroys an EGL surface and deletes a GL program, so it must
+  // run on GPUPixel's GL thread with the context current. nativeDestroy is
+  // called from whatever thread owns the Java object (typically the main
+  // thread, from a lifecycle callback), so hop onto the context first.
+  GPUPixelContext::GetInstance()->SyncRunWithContext([&] { delete ptr; });
 }
 
 /**
@@ -85,8 +91,9 @@ Java_com_pixpark_gpupixel_GPUPixelSinkSurface_nativeFinalize(JNIEnv* env,
                                                             jlong native_obj) {
   auto* ptr = reinterpret_cast<std::shared_ptr<SinkSurface>*>(native_obj);
   if (ptr && *ptr) {
-    // 释放原生窗口资源（会销毁EGL Surface）
-    (*ptr)->ReleaseNativeWindow();
+    // Destroys an EGL surface; must hold the GL context. See nativeDestroy.
+    GPUPixelContext::GetInstance()->SyncRunWithContext(
+        [&] { (*ptr)->ReleaseNativeWindow(); });
   }
 }
 
@@ -145,8 +152,9 @@ Java_com_pixpark_gpupixel_GPUPixelSinkSurface_nativeReleaseSurface(
     JNIEnv* env, jclass clazz, jlong native_obj) {
   auto* ptr = reinterpret_cast<std::shared_ptr<SinkSurface>*>(native_obj);
   if (ptr && *ptr) {
-    // 释放原生窗口，会同时销毁EGL Surface
-    (*ptr)->ReleaseNativeWindow();
+    // Destroys an EGL surface; must hold the GL context. See nativeDestroy.
+    GPUPixelContext::GetInstance()->SyncRunWithContext(
+        [&] { (*ptr)->ReleaseNativeWindow(); });
   }
 }
 
