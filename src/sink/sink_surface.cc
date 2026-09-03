@@ -382,9 +382,17 @@ void SinkSurface::UpdateDisplayVertices() {
     scaled_width = inset_framebuffer_width / view_width_;
     scaled_height = inset_framebuffer_height / view_height_;
   } else if (fill_mode_ == FillMode::PreserveAspectRatioAndFill) {
-    // Preserve aspect ratio and scale to fill, may crop
-    scaled_width = view_width_ / inset_framebuffer_height;
-    scaled_height = view_height_ / inset_framebuffer_width;
+    // Preserve aspect ratio and scale to fill, may crop.
+    //
+    // The inscribed fit above touches the view on one axis and falls short on
+    // the other; cover-fill scales it up uniformly until it spans both, letting
+    // the long axis overflow (i.e. crop). Dividing by view_* converts back to
+    // the normalised device coordinates the vertices below are expressed in.
+    float cover_w = view_width_ / inset_framebuffer_width;
+    float cover_h = view_height_ / inset_framebuffer_height;
+    float cover = cover_w > cover_h ? cover_w : cover_h;
+    scaled_width = inset_framebuffer_width * cover / view_width_;
+    scaled_height = inset_framebuffer_height * cover / view_height_;
   }
   // In Stretch mode, scaled_width and scaled_height remain 1.0
 
