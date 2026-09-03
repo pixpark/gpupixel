@@ -98,10 +98,17 @@ set(jni_source_files
     ${CMAKE_CURRENT_SOURCE_DIR}/android/jni/jni_helpers.h
     ${CMAKE_CURRENT_SOURCE_DIR}/android/jni/jni_helpers.cc
     ${CMAKE_CURRENT_SOURCE_DIR}/android/jni/jni_source_image.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/android/jni/jni_face_detector.cc
     ${CMAKE_CURRENT_SOURCE_DIR}/android/jni/jni_sink_raw_data.cc
     ${CMAKE_CURRENT_SOURCE_DIR}/android/jni/jni_sink_raw_yuv.cc
     ${CMAKE_CURRENT_SOURCE_DIR}/android/jni/jni_sink_surface.cc)
+
+# The face-detector JNI includes gpupixel/face_detector/face_detector.h and
+# calls FaceDetector::Create(), neither of which exists when the feature is
+# disabled, so it has to follow the same option as the core source above.
+if(GPUPIXEL_ENABLE_FACE_DETECTOR)
+  list(APPEND jni_source_files
+       ${CMAKE_CURRENT_SOURCE_DIR}/android/jni/jni_face_detector.cc)
+endif()
 
 set(lib_source_code_files ${common_source_files})
 
