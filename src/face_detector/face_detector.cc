@@ -27,9 +27,18 @@ FaceDetector::FaceDetector() {
 
     mars_vision::FaceLandmarkerOptions landmarkerOptions;
     landmarkerOptions.model_path = path.string();
-    landmarkerOptions.running_mode = mars_vision::RunningMode::VIDEO;
+    landmarkerOptions.running_mode = mars_vision::RunningMode::IMAGE;
 
-    mars_face_detector_->Init(landmarkerOptions);
+    // Upstream discards this return code, and LOG_* goes to std::cout which is
+    // /dev/null on Android. A model that genuinely failed to load therefore
+    // looks identical to a working detector that finds no faces: zero results,
+    // no crash, no log. Surfacing it turns that into a one-line diagnosis.
+    int init_rc = mars_face_detector_->Init(landmarkerOptions);
+    if (init_rc != 0) {
+      LOG_ERROR("FaceDetector: mars Init failed, rc={}", init_rc);
+    } else {
+      LOG_INFO("FaceDetector: mars Init ok, models={}", path.string());
+    }
   } else {
     LOG_ERROR("FaceDetector: models path not found: {}", path.string());
     assert(false && "FaceDetector: models path not found");
